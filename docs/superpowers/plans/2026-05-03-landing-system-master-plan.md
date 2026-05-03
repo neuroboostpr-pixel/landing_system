@@ -16,7 +16,7 @@
 
 | # | Phase | Detailed Plan | Tasks | Estimated Time | Status |
 |---|---|---|---|---|---|
-| 1 | **Skeleton & Infrastructure** | [phase-1-skeleton.md](2026-05-03-phase-1-skeleton.md) | ~18 tasks | 4–6 ч | 🟡 Plan ready |
+| 1 | **Skeleton & Infrastructure** | [phase-1-skeleton.md](2026-05-03-phase-1-skeleton.md) | ~18 tasks | 4–6 ч | 🟢 Complete (2026-05-03) |
 | 2 | **Brainstorming Pipeline** (00–04) | TBD после Phase 1 | ~25 tasks | 6–8 ч | ⚪ Not started |
 | 3 | **Design Pipeline** (05–07) | TBD после Phase 2 | ~20 tasks | 5–6 ч | ⚪ Not started |
 | 4 | **WP Build Pipeline** (08) | TBD после Phase 3 | ~30 tasks | 8–10 ч | ⚪ Not started |
