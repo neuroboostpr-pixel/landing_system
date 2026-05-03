@@ -1,0 +1,20 @@
+# Secrets
+.env
+.env.local
+.env.*.local
+
+# Deploy snapshots (могут быть большими — храним внешне)
+09_ДЕПЛОЙ/versions/
+
+# Local
+.DS_Store
+node_modules/
+__pycache__/
+*.pyc
+
+# WP local dev
+wp-content/uploads/
+wp-content/cache/
+
+# Logs
+*.log
