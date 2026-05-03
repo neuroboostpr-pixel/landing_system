@@ -33,7 +33,7 @@ CWD="$(pwd)"
 if [ -d "$CWD/.skills/landing-project-init" ]; then
   echo "📦 Landing System (master)"
   if [ -f "$CWD/package.json" ]; then
-    VERSION=$(node -e "console.log(require('$CWD/package.json').version)" 2>/dev/null || echo "unknown")
+    VERSION=$(grep -E '"version"' "$CWD/package.json" | head -1 | sed -E 's/.*"version"[[:space:]]*:[[:space:]]*"([^"]*)".*/\1/' || echo "unknown")
     echo "   Version: $VERSION"
   fi
   echo "   Phase 1: Skeleton & Infrastructure"
@@ -58,7 +58,7 @@ if [ -d "$CWD/00_БРИФ" ] && [ -d "$CWD/08_КОД" ]; then
   STAGE=0
   [ -s "$CWD/00_БРИФ/brief.md" ] && STAGE=1
   [ -d "$CWD/01_КОНТЕКСТ" ] && [ "$(ls -A "$CWD/01_КОНТЕКСТ" 2>/dev/null)" ] && STAGE=2
-  [ -d "$CWD/02_МАТЕРИАЛЫ_КЛИЕНТА" ] && [ "$(ls -A "$CWD/02_МАТЕРИАЛЫ_КЛИЕНТА" 2>/dev/null | grep -v .gitkeep)" ] && STAGE=3
+  [ -d "$CWD/02_МАТЕРИАЛЫ_КЛИЕНТА" ] && [ "$(ls -A "$CWD/02_МАТЕРИАЛЫ_КЛИЕНТА" 2>/dev/null | grep -Fv -- '.gitkeep')" ] && STAGE=3
   [ -f "$CWD/03_РЕФЕРЕНСЫ/moodboard.md" ] && STAGE=4
   [ -f "$CWD/04_БРЕНД/brand-kit.md" ] && STAGE=5
   [ -f "$CWD/05_ДИЗАЙН-СИСТЕМА/DESIGN.md" ] && STAGE=6
