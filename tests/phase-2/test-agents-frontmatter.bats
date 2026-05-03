@@ -12,3 +12,14 @@ load '../helpers/test_helpers'
   run grep -E "^description:" "$LANDING_SYSTEM_ROOT/.agents/client-assets-collector.md"
   [ "$status" -eq 0 ]
 }
+
+@test "photo-stylist agent file exists" {
+  assert_file_exists "$LANDING_SYSTEM_ROOT/.agents/photo-stylist.md"
+}
+
+@test "photo-stylist has valid frontmatter" {
+  run grep -E "^name: photo-stylist$" "$LANDING_SYSTEM_ROOT/.agents/photo-stylist.md"
+  [ "$status" -eq 0 ]
+  run grep -E "^description:" "$LANDING_SYSTEM_ROOT/.agents/photo-stylist.md"
+  [ "$status" -eq 0 ]
+}
