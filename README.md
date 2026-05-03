@@ -1,52 +1,75 @@
 # Landing System (Neuroboost Agency)
 
-Агентская система внутри Claude Code для производства production-grade лендингов на WordPress. Полный цикл: от референсов до публикации на Бегете.
+Агентская система внутри Claude Code для производства production-grade лендингов на WordPress + Бегет. Полный цикл: от референсов до публикации.
 
-## Статус
+## Quick Start
 
-**Версия:** 1.0 (MVP, в разработке)
-**Spec-документ:** [docs/superpowers/specs/2026-05-03-landing-system-design.md](docs/superpowers/specs/2026-05-03-landing-system-design.md)
+1. **Установить зависимости:**
+   ```bash
+   bash scripts/check-deps.sh
+   ```
 
-## Быстрый старт
+2. **Заполнить глобальные секреты:**
+   ```bash
+   cp .env.local.example .env.local
+   # Отредактируй .env.local — см. spec раздел 19 для получения ключей
+   ```
 
-См. раздел **«18. Установка системы — пошагово»** в spec-документе.
+3. **Установить плагин superpowers (один раз):**
+   ```bash
+   claude
+   > /plugin install superpowers@claude-plugins-official
+   ```
+
+4. **Создать первый лендинг:**
+   ```bash
+   claude
+   > /landing-new my-first-landing
+   ```
 
 ## Структура
 
 ```
 landing-system/
-├─ .agents/                      # 18 специализированных агентов
-├─ .skills/                      # скиллы (свои + копии нужных)
-├─ .claude/
-│  ├─ commands/                  # slash-команды (/landing-*)
-│  └─ settings.json              # hooks
-├─ template/                     # шаблон проекта-лендинга
-├─ docs/superpowers/specs/       # этот spec
-├─ scripts/                      # bash-скрипты
-├─ README.md                     # этот файл
-├─ CLAUDE.md                     # инструкции для Claude
-├─ .env.local.example            # шаблон глобальных секретов
-└─ .gitignore
+├─ .agents/              # 18 специализированных агентов (по фазам)
+├─ .skills/              # наши скиллы (landing-project-init и др.)
+├─ .claude/commands/     # slash-команды
+├─ template/             # каноничный шаблон проекта-лендинга
+├─ docs/superpowers/     # spec и planы реализации
+├─ tests/                # bats-тесты (по фазам)
+├─ scripts/              # bash-утилиты
+├─ CLAUDE.md             # инструкции для Claude в этой папке
+├─ README.md             # этот файл
+└─ .env.local.example    # шаблон глобальных секретов
 ```
+
+## Команды
+
+| Команда | Назначение |
+|---|---|
+| `/landing-new <slug>` | Новый проект с нуля |
+| `/landing-from-context <slug>` | Из родительской папки агентства |
+| `/landing-clone <src> --as <new>` | A/B-копия независимого лендинга |
+| `/landing-status` | Состояние системы и проектов |
+| `/landing-help` | Справка по всем командам |
 
 ## Документация
 
-Полное техническое задание и инструкции — в [spec-документе](docs/superpowers/specs/2026-05-03-landing-system-design.md):
+- **Полное ТЗ:** [docs/superpowers/specs/2026-05-03-landing-system-design.md](docs/superpowers/specs/2026-05-03-landing-system-design.md)
+- **Master plan:** [docs/superpowers/plans/2026-05-03-landing-system-master-plan.md](docs/superpowers/plans/2026-05-03-landing-system-master-plan.md)
 
-1. Архитектура и решения
-2. Workflow одного лендинга (12 этапов)
-3. Карта 18 агентов
-4. Скиллы и MCP-серверы
-5. Frontend-стек и cinematic-режим
-6. Slash-команды
-7. Деплой на Бегет (SSH + WP-CLI + rsync)
-8. DNS-автоматизация
-9. Версионирование и A/B-копии
-10. Хранение секретов
-11. Установка системы — пошагово
-12. **Получение всех API-ключей — где и как**
-13. Типовые сценарии использования
-14. Roadmap (плагин → SaaS)
+## Тестирование
+
+```bash
+npm test              # все тесты
+npm run test:phase-1  # только Phase 1
+```
+
+## Статус
+
+**Phase 1 — Skeleton & Infrastructure** (в разработке)
+
+Полный roadmap см. в master plan.
 
 ## License
 
