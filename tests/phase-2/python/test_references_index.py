@@ -55,3 +55,30 @@ def test_list_by_status(tmp_path):
 
     all_refs = mod.list_refs(str(refs_dir))
     assert len(all_refs) == 3
+
+
+def test_remove_ref(tmp_path):
+    mod = _load()
+    refs_dir = tmp_path / "03_РЕФЕРЕНСЫ"
+    refs_dir.mkdir()
+    mod.add_ref(str(refs_dir), "https://example.com/to-remove", "url", "candidate")
+    data = yaml.safe_load((refs_dir / "index.yaml").read_text())
+    ref_id = data["references"][0]["id"]
+
+    mod.remove_ref(str(refs_dir), ref_id)
+    data = yaml.safe_load((refs_dir / "index.yaml").read_text())
+    assert len(data["references"]) == 0
+
+
+def test_show_ref(tmp_path):
+    mod = _load()
+    refs_dir = tmp_path / "03_РЕФЕРЕНСЫ"
+    refs_dir.mkdir()
+    mod.add_ref(str(refs_dir), "https://example.com/show-me", "url", "approved")
+    data = yaml.safe_load((refs_dir / "index.yaml").read_text())
+    ref_id = data["references"][0]["id"]
+
+    ref = mod.show_ref(str(refs_dir), ref_id)
+    assert ref["value"] == "https://example.com/show-me"
+    assert ref["status"] == "approved"
+    assert ref["id"] == ref_id
