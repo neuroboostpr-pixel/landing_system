@@ -6,16 +6,20 @@
 
 **Architecture:** Smart agents + thin Python tools. Каждый агент = markdown spec в `.agents/`. Реальная работа делегируется Python-скриптам в `.skills/<skill>/scripts/`. HTML preview генерируется через единый Jinja2-template движок. Все внешние API вызовы (Firecrawl, WhatTheFont, Iconify) изолированы в адаптерах для удобного mocking в тестах.
 
-**Tech Stack:**
-- Python 3.10+ (image-pipeline, color/font/icon extraction)
+**Tech Stack (полностью бесплатный, без API-ключей):**
+- Python 3.10+ (image-pipeline, color/icon extraction)
 - Pillow + colorthief (палитра)
 - Iconify HTTP API (иконки, без ключа)
-- WhatTheFont API + Claude vision fallback (шрифты)
-- Firecrawl API (парсинг отзывов)
+- **trafilatura** (парсинг статичных страниц — open source Python, как Mozilla Readability)
+- **Playwright + headless Chromium** (парсинг динамичных страниц: Я.Карты, 2GIS, Otzovik; DOM CSS inspection для точного font-detection)
+- **Claude Vision** (через Read tool у агента — определение шрифта по скриншоту, fallback)
+- BeautifulSoup4 (HTML postprocessing)
 - rembg или Pillow (фото-cutout)
 - Jinja2 (HTML preview templates)
 - pytest для Python, bats для shell glue
 - requests + responses (HTTP-моки)
+
+**Принцип:** **0 ₽ навсегда, без API-ключей**. Ученики и сотрудники работают сразу после распаковки ZIP — ничего не регистрировать, ничего не оплачивать. Trade-off: парсинг чуть медленнее (Chromium локально), Я.Карты могут rate-limit'ить — mitigations описаны в соответствующих задачах.
 
 **Spec source:** [`docs/superpowers/specs/2026-05-03-landing-system-design.md`](../specs/2026-05-03-landing-system-design.md) (разделы 4 этапы 00–04, 5 этапы 00–04, 6 агенты 1–7, 7.2 MCP, 8.4 Iconify/Fontshare)
 
@@ -84,10 +88,9 @@ landing-system/
 │  ├─ __init__.py
 │  ├─ adapters/
 │  │  ├─ __init__.py
-│  │  ├─ firecrawl.py                   # HTTP wrapper for Firecrawl API
-│  │  ├─ whatthefont.py                 # HTTP wrapper for WhatTheFont
-│  │  ├─ iconify.py                     # HTTP wrapper for Iconify (free)
-│  │  └─ font_downloader.py             # Google/Bunny/Fontshare CDN
+│  │  ├─ web_scraper.py                 # trafilatura (static) + playwright (dynamic)
+│  │  ├─ iconify.py                     # HTTP wrapper for Iconify (free, no key)
+│  │  └─ font_downloader.py             # Google/Bunny/Fontshare CDN (no key)
 │  ├─ html/
 │  │  ├─ __init__.py
 │  │  ├─ render.py                      # Jinja2 setup + base helpers
@@ -114,8 +117,7 @@ landing-system/
       ├─ test-commands-phase2.bats      # 3 new slash commands valid
       ├─ test-skills-phase2.bats        # 6 new skills valid
       ├─ python/
-      │  ├─ test_adapters_firecrawl.py
-      │  ├─ test_adapters_whatthefont.py
+      │  ├─ test_adapters_web_scraper.py
       │  ├─ test_adapters_iconify.py
       │  ├─ test_adapters_font_downloader.py
       │  ├─ test_extract_palette.py
@@ -160,15 +162,23 @@ Pillow>=10
 colorthief>=0.2.1
 PyYAML>=6
 Jinja2>=3.1
-rembg>=2.0          # optional, photo cutout
+trafilatura>=1.6        # static page extraction (Mozilla Readability)
+playwright>=1.40        # dynamic page parsing + DOM CSS inspection
+beautifulsoup4>=4.12    # HTML postprocessing
+rembg>=2.0              # optional, photo cutout
 pytest>=7
-responses>=0.24     # HTTP mocking
+responses>=0.24         # HTTP mocking
 ```
 
-API-ключи (из `.env.local`):
-- `FIRECRAWL_API_KEY` — обязателен для парсинга отзывов
-- `WHATTHEFONT_API_KEY` — опционально, fallback на Claude vision
-- Iconify, Google Fonts, Bunny Fonts — без ключей
+После `pip install`: один разовый шаг — `playwright install chromium` (~150 МБ).
+
+**API-ключи: НЕ требуются.** Все источники бесплатны и без авторизации:
+- Iconify HTTP API — open, no key
+- Google Fonts / Bunny Fonts / Fontshare — публичные CDN
+- Web scraping — trafilatura + Playwright локально, без чужих API
+- Font detection — Playwright DOM (для веб-референсов) + Claude Vision (для скриншотов)
+
+**Optional** (если у пользователя есть и хочет ускорить парсинг — fallback layer, не требуется): `FIRECRAWL_API_KEY` в `.env.local` — если установлен, web_scraper его использует; если нет — Playwright/trafilatura.
 
 ---
 
@@ -206,16 +216,22 @@ Pillow>=10
 colorthief>=0.2.1
 PyYAML>=6
 Jinja2>=3.1
+trafilatura>=1.6
+playwright>=1.40
+beautifulsoup4>=4.12
 rembg>=2.0
 pytest>=7
 responses>=0.24
 ```
 
-- [ ] **Step 0.2: Установить deps**
+- [ ] **Step 0.2: Установить deps + Chromium для Playwright**
 
 ```bash
 pip3 install -r requirements.txt
+python3 -m playwright install chromium
 ```
+
+(Chromium качается один раз, ~150 МБ — нужен для парсинга динамичных страниц типа Я.Карты.)
 
 - [ ] **Step 0.3: Создать `tests/phase-2/conftest.py`**
 
@@ -242,21 +258,19 @@ def temp_project(tmp_path):
 
 
 @pytest.fixture
-def mock_firecrawl(monkeypatch):
-    """Mock FIRECRAWL_API_KEY env var."""
-    monkeypatch.setenv("FIRECRAWL_API_KEY", "fc-test-key")
-
-
-@pytest.fixture
-def mock_whatthefont(monkeypatch):
-    monkeypatch.setenv("WHATTHEFONT_API_KEY", "wtf-test-key")
-
-
-@pytest.fixture
 def http_mock():
-    """Wrap responses.RequestsMock for declarative HTTP mocking."""
+    """Wrap responses.RequestsMock for declarative HTTP mocking
+    (used for Iconify and font-CDN tests)."""
     with resp_lib.RequestsMock() as rsps:
         yield rsps
+
+
+@pytest.fixture
+def fixture_html():
+    """Sample HTML page content for trafilatura tests."""
+    return """<!DOCTYPE html><html><head><title>Test</title></head>
+    <body><article><h1>Отзыв 1</h1><p>5 звёзд. Отлично!</p>
+    <h1>Отзыв 2</h1><p>4 звезды. Хорошо.</p></article></body></html>"""
 ```
 
 - [ ] **Step 0.4: Создать `tests/phase-2/test-deps.bats`**
@@ -282,8 +296,16 @@ load '../helpers/test_helpers'
   assert_file_contains "$LANDING_SYSTEM_ROOT/requirements.txt" "Pillow"
   assert_file_contains "$LANDING_SYSTEM_ROOT/requirements.txt" "colorthief"
   assert_file_contains "$LANDING_SYSTEM_ROOT/requirements.txt" "Jinja2"
+  assert_file_contains "$LANDING_SYSTEM_ROOT/requirements.txt" "trafilatura"
+  assert_file_contains "$LANDING_SYSTEM_ROOT/requirements.txt" "playwright"
+  assert_file_contains "$LANDING_SYSTEM_ROOT/requirements.txt" "beautifulsoup4"
   assert_file_contains "$LANDING_SYSTEM_ROOT/requirements.txt" "pytest"
   assert_file_contains "$LANDING_SYSTEM_ROOT/requirements.txt" "responses"
+}
+
+@test "playwright Chromium installed" {
+  run python3 -c "from playwright.sync_api import sync_playwright; p=sync_playwright().start(); b=p.chromium.launch(); b.close(); p.stop()"
+  [ "$status" -eq 0 ]
 }
 
 @test "pytest can discover phase-2 tests folder" {
@@ -521,102 +543,193 @@ git commit -m "feat(phase-2): add tools.logger for stderr structured output"
 
 ---
 
-### Task 3: HTTP adapters — Firecrawl
+### Task 3: Web scraper adapter — trafilatura (static) + Playwright (dynamic)
 
 **Files:**
 - Create: `tools/adapters/__init__.py` (empty)
-- Create: `tools/adapters/firecrawl.py`
-- Create: `tests/phase-2/python/test_adapters_firecrawl.py`
+- Create: `tools/adapters/web_scraper.py`
+- Create: `tests/phase-2/python/test_adapters_web_scraper.py`
 
 - [ ] **Step 3.1: Создать тест**
 
 ```python
-"""Tests for tools.adapters.firecrawl."""
-import pytest
-import responses
-from tools.adapters.firecrawl import scrape, FirecrawlError
+"""Tests for tools.adapters.web_scraper.
+
+trafilatura strategy is unit-tested directly (no network).
+Playwright strategy is integration-tested with a tiny local HTTP server
+or by mocking the Page object.
+"""
+from unittest.mock import patch, MagicMock
+from tools.adapters.web_scraper import (
+    extract_static, get_page_fonts, ScrapeError
+)
 
 
-def test_scrape_returns_markdown(mock_firecrawl, http_mock):
-    http_mock.add(
-        responses.POST,
-        "https://api.firecrawl.dev/v1/scrape",
-        json={
-            "success": True,
-            "data": {"markdown": "# Test page\n\nContent.", "metadata": {"title": "Test"}}
-        },
-        status=200,
-    )
-    result = scrape("https://example.com")
-    assert "# Test page" in result["markdown"]
-    assert result["metadata"]["title"] == "Test"
+def test_extract_static_from_html(fixture_html):
+    """trafilatura: from raw HTML string, extract clean text."""
+    result = extract_static(html=fixture_html)
+    assert "Отзыв 1" in result["text"]
+    assert "5 звёзд" in result["text"]
+    assert result["title"] == "Test" or "Test" in result.get("title", "")
 
 
-def test_scrape_raises_on_api_error(mock_firecrawl, http_mock):
-    http_mock.add(
-        responses.POST,
-        "https://api.firecrawl.dev/v1/scrape",
-        json={"success": False, "error": "Rate limit"},
-        status=429,
-    )
-    with pytest.raises(FirecrawlError) as exc:
-        scrape("https://example.com")
-    assert "Rate limit" in str(exc.value) or "429" in str(exc.value)
+def test_extract_static_handles_empty_html():
+    result = extract_static(html="<html><body></body></html>")
+    # trafilatura returns None for empty content; adapter should normalize
+    assert result["text"] == "" or result["text"] is None
 
 
-def test_scrape_raises_when_no_key(monkeypatch):
-    monkeypatch.delenv("FIRECRAWL_API_KEY", raising=False)
-    with pytest.raises(KeyError):
-        scrape("https://example.com")
+def test_get_page_fonts_extracts_computed_font_family():
+    """Mock Playwright page.evaluate to return computed font-family."""
+    with patch("tools.adapters.web_scraper._launch_chromium") as mock_launch:
+        page_mock = MagicMock()
+        page_mock.evaluate.return_value = [
+            "Inter, system-ui, sans-serif",
+            "Cabinet Grotesk, serif",
+        ]
+        ctx_mock = MagicMock()
+        ctx_mock.new_page.return_value = page_mock
+        browser_mock = MagicMock()
+        browser_mock.new_context.return_value = ctx_mock
+        mock_launch.return_value = (MagicMock(), browser_mock)
+
+        fonts = get_page_fonts("https://example.com")
+        assert "Inter" in fonts[0]
+        assert "Cabinet Grotesk" in fonts[1]
+        page_mock.goto.assert_called_once_with("https://example.com", wait_until="networkidle", timeout=30000)
+
+
+def test_get_page_fonts_handles_failure():
+    with patch("tools.adapters.web_scraper._launch_chromium") as mock_launch:
+        mock_launch.side_effect = RuntimeError("chromium not installed")
+        try:
+            get_page_fonts("https://example.com")
+            assert False, "should raise"
+        except ScrapeError as e:
+            assert "chromium" in str(e)
 ```
 
 - [ ] **Step 3.2: Run test, expect FAIL**
 
 - [ ] **Step 3.3: Создать `tools/adapters/__init__.py`** (empty)
 
-- [ ] **Step 3.4: Создать `tools/adapters/firecrawl.py`**
+- [ ] **Step 3.4: Создать `tools/adapters/web_scraper.py`**
 
 ```python
-"""Firecrawl API adapter — single-page scrape only (Phase 2 scope)."""
-from typing import Any, Dict
-import requests
-from tools.env import get_required
+"""Web scraper — pure-Python, no API keys.
+
+Two strategies:
+1. extract_static() — fast, uses trafilatura (Mozilla Readability port).
+   Good for blogs, news, product pages with server-rendered HTML.
+2. extract_dynamic() — uses Playwright headless Chromium.
+   Good for SPAs (Я.Карты, 2GIS, Otzovik) where content is JS-loaded.
+3. get_page_fonts() — uses Playwright + DOM CSS inspection to read the
+   actual computed font-family used on a page. More accurate than image
+   recognition for web references.
+
+All three are deterministic, free, and don't require API keys.
+"""
+from typing import List, Dict, Any, Optional
+import trafilatura
 
 
-class FirecrawlError(RuntimeError):
+class ScrapeError(RuntimeError):
     pass
 
 
-def scrape(url: str, timeout: float = 30.0) -> Dict[str, Any]:
-    """Scrape a URL and return the page content as markdown + metadata.
+def extract_static(url: Optional[str] = None, html: Optional[str] = None) -> Dict[str, Any]:
+    """Extract clean text+metadata from a static HTML page.
 
-    Raises:
-      KeyError if FIRECRAWL_API_KEY is missing.
-      FirecrawlError on API failure (network, 4xx, 5xx, success=False).
+    Pass either `url` (will fetch) or `html` (already fetched).
+    Returns {"text": str, "title": str, "raw_html": str}.
     """
-    api_key = get_required("FIRECRAWL_API_KEY")
+    if url is None and html is None:
+        raise ValueError("Pass either url= or html=")
+    if url and not html:
+        html = trafilatura.fetch_url(url)
+        if html is None:
+            raise ScrapeError(f"failed to fetch {url}")
+
+    text = trafilatura.extract(html, include_comments=False, include_tables=True) or ""
+    metadata = trafilatura.extract_metadata(html)
+    title = metadata.title if metadata and metadata.title else ""
+    return {"text": text, "title": title, "raw_html": html}
+
+
+def _launch_chromium():
+    """Lazy import + launch. Returns (playwright_instance, browser)."""
     try:
-        resp = requests.post(
-            "https://api.firecrawl.dev/v1/scrape",
-            json={"url": url, "formats": ["markdown"]},
-            headers={"Authorization": f"Bearer {api_key}"},
-            timeout=timeout,
+        from playwright.sync_api import sync_playwright
+    except ImportError as e:
+        raise ScrapeError(f"playwright not installed: {e}") from e
+    try:
+        p = sync_playwright().start()
+        browser = p.chromium.launch(headless=True)
+        return p, browser
+    except Exception as e:
+        raise ScrapeError(f"chromium launch failed: {e}") from e
+
+
+def extract_dynamic(url: str, wait_for: Optional[str] = None,
+                    timeout_ms: int = 30000) -> Dict[str, Any]:
+    """Render `url` in headless Chromium and extract text via trafilatura on
+    the rendered DOM.
+
+    Args:
+      url: page to load
+      wait_for: optional CSS selector to wait for before extraction
+        (e.g. ".review-card" for Я.Карты)
+      timeout_ms: navigation timeout
+
+    Returns same shape as extract_static.
+    """
+    p, browser = _launch_chromium()
+    try:
+        ctx = browser.new_context(
+            user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 14) AppleWebKit/605"
         )
-    except requests.RequestException as exc:
-        raise FirecrawlError(f"network error: {exc}") from exc
+        page = ctx.new_page()
+        page.goto(url, wait_until="networkidle", timeout=timeout_ms)
+        if wait_for:
+            page.wait_for_selector(wait_for, timeout=timeout_ms)
+        rendered_html = page.content()
+        return extract_static(html=rendered_html)
+    finally:
+        browser.close()
+        p.stop()
 
-    if resp.status_code >= 400:
-        try:
-            payload = resp.json()
-            err = payload.get("error", str(resp.status_code))
-        except Exception:
-            err = f"HTTP {resp.status_code}"
-        raise FirecrawlError(f"firecrawl: {err}")
 
-    payload = resp.json()
-    if not payload.get("success"):
-        raise FirecrawlError(f"firecrawl: {payload.get('error', 'unknown')}")
-    return payload["data"]
+def get_page_fonts(url: str, timeout_ms: int = 30000) -> List[str]:
+    """Open `url` and return distinct font-family strings used on the page.
+
+    Reads computed style of every visible element and returns unique
+    font-family declarations sorted by frequency. This is more accurate than
+    image-based detection for web references.
+    """
+    p, browser = _launch_chromium()
+    try:
+        ctx = browser.new_context()
+        page = ctx.new_page()
+        page.goto(url, wait_until="networkidle", timeout=timeout_ms)
+        fonts = page.evaluate("""
+        () => {
+          const counts = new Map();
+          document.querySelectorAll('*').forEach(el => {
+            const cs = window.getComputedStyle(el);
+            const ff = cs.fontFamily;
+            if (ff && el.offsetParent !== null) {
+              counts.set(ff, (counts.get(ff) || 0) + 1);
+            }
+          });
+          return Array.from(counts.entries())
+            .sort((a, b) => b[1] - a[1])
+            .map(([family, _count]) => family);
+        }
+        """)
+        return list(fonts)
+    finally:
+        browser.close()
+        p.stop()
 ```
 
 - [ ] **Step 3.5: Run test, expect PASS**
@@ -624,19 +737,17 @@ def scrape(url: str, timeout: float = 30.0) -> Dict[str, Any]:
 - [ ] **Step 3.6: Commit**
 
 ```bash
-git add tools/adapters/__init__.py tools/adapters/firecrawl.py tests/phase-2/python/test_adapters_firecrawl.py
-git commit -m "feat(phase-2): add Firecrawl adapter with mocked tests"
+git add tools/adapters/__init__.py tools/adapters/web_scraper.py tests/phase-2/python/test_adapters_web_scraper.py
+git commit -m "feat(phase-2): add free web_scraper adapter (trafilatura + Playwright)"
 ```
 
 ---
 
-### Task 4: HTTP adapters — Iconify (no key) + WhatTheFont (with fallback flag)
+### Task 4: Iconify adapter (no key, fully free)
 
 **Files:**
 - Create: `tools/adapters/iconify.py`
-- Create: `tools/adapters/whatthefont.py`
 - Create: `tests/phase-2/python/test_adapters_iconify.py`
-- Create: `tests/phase-2/python/test_adapters_whatthefont.py`
 
 - [ ] **Step 4.1: Создать iconify adapter**
 
@@ -718,101 +829,16 @@ def test_search_with_prefix_filter(http_mock):
 
 - [ ] **Step 4.3: Run iconify tests, expect PASS**
 
-- [ ] **Step 4.4: Создать whatthefont adapter**
-
-`tools/adapters/whatthefont.py`:
-
-```python
-"""WhatTheFont API adapter — font identification by image."""
-from pathlib import Path
-from typing import List, Dict, Any
-import base64
-import requests
-from tools.env import get_optional
-
-
-class WhatTheFontError(RuntimeError):
-    pass
-
-
-def identify(image_path: str, max_results: int = 5) -> List[Dict[str, Any]]:
-    """Identify fonts in an image. Returns up to N candidate matches.
-
-    Returns [] if WHATTHEFONT_API_KEY is missing — caller should fall back
-    to Claude vision in that case.
-
-    Each result: {"family": str, "confidence": float, "url": str}.
-    """
-    api_key = get_optional("WHATTHEFONT_API_KEY")
-    if not api_key:
-        return []
-
-    img_bytes = Path(image_path).read_bytes()
-    img_b64 = base64.b64encode(img_bytes).decode("ascii")
-    try:
-        resp = requests.post(
-            "https://www.myfonts.com/api/whatthefont/v2/identify",
-            json={"image": img_b64, "max_results": max_results},
-            headers={"Authorization": f"Bearer {api_key}"},
-            timeout=30,
-        )
-    except requests.RequestException as exc:
-        raise WhatTheFontError(f"network: {exc}") from exc
-    if resp.status_code >= 400:
-        raise WhatTheFontError(f"HTTP {resp.status_code}")
-    payload = resp.json()
-    return [
-        {"family": m["family"], "confidence": float(m.get("confidence", 0)), "url": m.get("url", "")}
-        for m in payload.get("matches", [])
-    ]
-```
-
-- [ ] **Step 4.5: Создать тест whatthefont**
-
-`tests/phase-2/python/test_adapters_whatthefont.py`:
-
-```python
-from pathlib import Path
-import pytest
-import responses
-from tools.adapters.whatthefont import identify
-
-
-def test_identify_returns_empty_when_no_key(monkeypatch, tmp_path):
-    monkeypatch.delenv("WHATTHEFONT_API_KEY", raising=False)
-    img = tmp_path / "test.png"
-    img.write_bytes(b"PNG_FAKE")
-    assert identify(str(img)) == []
-
-
-def test_identify_parses_response(mock_whatthefont, http_mock, tmp_path):
-    img = tmp_path / "test.png"
-    img.write_bytes(b"PNG_FAKE")
-    http_mock.add(
-        responses.POST,
-        "https://www.myfonts.com/api/whatthefont/v2/identify",
-        json={
-            "matches": [
-                {"family": "Cabinet Grotesk", "confidence": 0.94, "url": "https://fontshare.com/cg"},
-                {"family": "Inter", "confidence": 0.31, "url": "https://fonts.google.com/inter"}
-            ]
-        },
-        status=200,
-    )
-    results = identify(str(img))
-    assert len(results) == 2
-    assert results[0]["family"] == "Cabinet Grotesk"
-    assert results[0]["confidence"] == pytest.approx(0.94)
-```
-
-- [ ] **Step 4.6: Run all adapter tests, expect PASS**
-
-- [ ] **Step 4.7: Commit**
+- [ ] **Step 4.4: Commit**
 
 ```bash
-git add tools/adapters/iconify.py tools/adapters/whatthefont.py tests/phase-2/python/test_adapters_iconify.py tests/phase-2/python/test_adapters_whatthefont.py
-git commit -m "feat(phase-2): add Iconify (free) and WhatTheFont adapters"
+git add tools/adapters/iconify.py tests/phase-2/python/test_adapters_iconify.py
+git commit -m "feat(phase-2): add Iconify (free) icon search adapter"
 ```
+
+**Note:** Font identification doesn't get its own adapter — it lives across two paths:
+1. **Web reference (URL)** → `web_scraper.get_page_fonts()` (already in Task 3) — reads computed CSS, very accurate.
+2. **Image reference (screenshot)** → handled by the `style-extractor` agent itself via Claude Vision (Read tool + reasoning) — no separate Python script needed.
 
 ---
 
@@ -1079,7 +1105,7 @@ PHASE2_AGENTS=(
 ```markdown
 ---
 name: client-assets-collector
-description: Use during stage 02 to collect client photos, videos, and reviews from external sources (Yandex Maps, 2GIS, Otzovik). Builds 02_МАТЕРИАЛЫ_КЛИЕНТА/ with assets-manifest.yaml.
+description: Use during stage 02 to collect client photos, videos, and reviews from external sources (Yandex Maps, 2GIS, Otzovik). Uses free local scraping (trafilatura + Playwright) — no API keys required. Builds 02_МАТЕРИАЛЫ_КЛИЕНТА/ with assets-manifest.yaml.
 ---
 
 # client-assets-collector
@@ -1136,7 +1162,8 @@ description: Use during stage 02 to scaffold client materials folder, parse exte
 ## What I do
 
 - Initialize `02_МАТЕРИАЛЫ_КЛИЕНТА/` subfolders if not present.
-- Run `parse-reviews.py` to scrape Yandex Maps / 2GIS / Otzovik via Firecrawl.
+- Run `parse-reviews.py` to scrape Я.Карты / 2GIS / Otzovik using free local
+  Playwright + trafilatura (no API keys).
 - Run `collect.py` to build manifest + HTML gallery.
 
 ## Scripts
@@ -1156,82 +1183,26 @@ git commit -m "feat(phase-2): scaffold client-assets-collector agent and skill"
 
 ---
 
-### Task 7: `parse-reviews.py` — Firecrawl-based review parser
+### Task 7: `parse-reviews.py` — review parser via web_scraper
 
 **Files:**
 - Create: `.skills/client-assets-collection/scripts/parse-reviews.py`
 - Create: `tests/phase-2/python/test_parse_reviews.py`
 
+Strategy: detect source from URL → choose `extract_static` (blog-like) or `extract_dynamic` (Я.Карты/2GIS/Otzovik — JS-heavy). Tests mock the adapter, not the network.
+
 - [ ] **Step 7.1: Создать тест**
 
 ```python
-"""Tests for parse-reviews.py — uses subprocess + responses to mock Firecrawl."""
-import json
-import sys
-from pathlib import Path
-import responses
-from importlib import import_module
+"""Tests for parse-reviews.py.
 
-# We import the module path directly so we can call its functions in-process.
-# The script is at .skills/client-assets-collection/scripts/parse-reviews.py
-# which isn't a normal package path. We invoke via runpy or subprocess.
-
-import subprocess
-
-
-PARSE_SCRIPT = Path(__file__).resolve().parent.parent.parent.parent / ".skills" / "client-assets-collection" / "scripts" / "parse-reviews.py"
-
-
-def test_script_exists_and_executable():
-    assert PARSE_SCRIPT.exists()
-    # Python file, doesn't need executable bit
-
-
-def test_parse_yandex_maps_url(mock_firecrawl, http_mock, tmp_path):
-    http_mock.add(
-        responses.POST,
-        "https://api.firecrawl.dev/v1/scrape",
-        json={
-            "success": True,
-            "data": {
-                "markdown": "## Отзыв 1\n\n5 звёзд. Отлично!\n\n## Отзыв 2\n\n4 звезды. Хорошо.",
-                "metadata": {"title": "Yandex Maps — Test"}
-            }
-        },
-        status=200,
-    )
-
-    out_dir = tmp_path / "yandex-maps"
-    result = subprocess.run(
-        [sys.executable, str(PARSE_SCRIPT),
-         "https://yandex.ru/maps/-/test", str(out_dir)],
-        capture_output=True, text=True,
-        env={**__import__("os").environ, "FIRECRAWL_API_KEY": "fc-test"},
-    )
-    assert result.returncode == 0, f"stderr: {result.stderr}"
-
-    # Verify output
-    assert out_dir.exists()
-    json_files = list(out_dir.glob("*.json"))
-    assert len(json_files) >= 1
-    payload = json.loads(json_files[0].read_text())
-    assert "source" in payload
-    assert "url" in payload
-    assert "reviews" in payload
-```
-
-(Note: this test mocks the responses library at the module level — but parse-reviews.py runs in a subprocess and won't see our mock. We need to mock at the network layer OR rewrite the test to call `parse_reviews()` as a function instead of CLI. Recommendation: refactor `parse-reviews.py` to expose a `parse_reviews(url, out_dir)` function and a thin `if __name__ == "__main__":` block — then test the function directly.)
-
-- [ ] **Step 7.2: Refactor approach — decide CLI vs library API.**
-
-Use library-first design. Test imports `parse_reviews()` directly.
-
-Update test to import the script as a module:
-
-```python
+Uses importlib to import the script as a module, then mocks
+tools.adapters.web_scraper at the module level.
+"""
 import importlib.util
 import sys
 from pathlib import Path
+from unittest.mock import patch
 
 PARSE_SCRIPT = (Path(__file__).resolve().parent.parent.parent.parent
                 / ".skills" / "client-assets-collection" / "scripts" / "parse-reviews.py")
@@ -1245,40 +1216,62 @@ def _load():
     return mod
 
 
-def test_parse_returns_reviews_list(mock_firecrawl, http_mock, tmp_path):
-    http_mock.add(
-        responses.POST,
-        "https://api.firecrawl.dev/v1/scrape",
-        json={
-            "success": True,
-            "data": {
-                "markdown": "## Отзыв 1\n\n5★\nОтлично!\n\n## Отзыв 2\n\n4★\nХорошо.",
-                "metadata": {"title": "Test"}
-            }
-        },
-        status=200,
-    )
+def test_detect_source_yandex_maps():
     mod = _load()
+    assert mod.detect_source("https://yandex.ru/maps/-/test") == "yandex-maps"
+    assert mod.detect_source("https://2gis.ru/moscow/firm/123") == "2gis"
+    assert mod.detect_source("https://otzovik.com/review_1.html") == "otzovik"
+    assert mod.detect_source("https://example.com") == "other"
+
+
+def test_parse_returns_reviews_list_dynamic(tmp_path):
+    """For Я.Карты, parser uses extract_dynamic (Playwright)."""
+    mod = _load()
+    fake_extract = {
+        "text": "Отзыв 1\n5 звёзд. Отлично!\n\nОтзыв 2\n4 звезды. Хорошо.",
+        "title": "Yandex Maps — Test",
+        "raw_html": "",
+    }
     out = tmp_path / "yandex-maps"
-    result = mod.parse_reviews("https://yandex.ru/maps/test", str(out))
+
+    with patch.object(mod, "extract_dynamic", return_value=fake_extract) as m:
+        result = mod.parse_reviews("https://yandex.ru/maps/test", str(out))
+        m.assert_called_once()
+
     assert "reviews" in result
     assert len(result["reviews"]) >= 1
-    # Manifest written
     json_files = list(out.glob("*.json"))
     assert len(json_files) == 1
+
+
+def test_parse_uses_static_for_blog_sites(tmp_path):
+    """For Otzovik/iRecommend/blog-like sources, parser uses extract_static."""
+    mod = _load()
+    fake_extract = {
+        "text": "Long article body with reviews scattered.",
+        "title": "Otzovik review page",
+        "raw_html": "",
+    }
+    out = tmp_path / "otzovik"
+
+    with patch.object(mod, "extract_static", return_value=fake_extract) as m:
+        mod.parse_reviews("https://otzovik.com/review_1.html", str(out))
+        m.assert_called_once()
 ```
 
-- [ ] **Step 7.3: Run test, expect FAIL**
+- [ ] **Step 7.2: Run test, expect FAIL**
 
-- [ ] **Step 7.4: Создать `parse-reviews.py`**
+- [ ] **Step 7.3: Создать `parse-reviews.py`**
 
 ```python
 #!/usr/bin/env python3
-"""Parse public reviews from Yandex Maps / 2GIS / Otzovik via Firecrawl.
+"""Parse public reviews from Я.Карты / 2GIS / Otzovik / Flamp.
+
+Free, no API keys: uses trafilatura (static) + Playwright (dynamic) under
+the hood via tools.adapters.web_scraper.
 
 CLI:  python3 parse-reviews.py <URL> <OUTPUT_DIR>
-
-Library: from parse_reviews import parse_reviews
+Lib:  from parse_reviews_mod import parse_reviews
 """
 import json
 import re
@@ -1291,14 +1284,21 @@ from urllib.parse import urlparse
 # Make tools/ importable when invoked as script
 sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 
-from tools.adapters.firecrawl import scrape, FirecrawlError
-from tools.logger import info, error, success
+from tools.adapters.web_scraper import (
+    extract_static, extract_dynamic, ScrapeError
+)
+from tools.logger import info, error, success, warn
+
+
+# Sources that need JS rendering (SPA, dynamic content)
+DYNAMIC_HOSTS = ("yandex.ru/maps", "yandex.com/maps", "2gis.ru", "2gis.com")
+# Sources that work with static extraction (server-rendered HTML)
+STATIC_HOSTS = ("otzovik.com", "irecommend.ru", "flamp.ru", "yell.ru")
 
 
 def detect_source(url: str) -> str:
-    """Return source name from URL host."""
     host = urlparse(url).hostname or ""
-    if "yandex" in host or "maps.yandex" in host:
+    if "yandex" in host:
         return "yandex-maps"
     if "2gis" in host:
         return "2gis"
@@ -1308,27 +1308,46 @@ def detect_source(url: str) -> str:
         return "flamp"
     if "irecommend" in host:
         return "irecommend"
+    if "yell" in host:
+        return "yell"
     return "other"
 
 
-_REVIEW_HEADER = re.compile(r"^##+\s+", re.MULTILINE)
+def needs_dynamic(url: str) -> bool:
+    return any(h in url for h in DYNAMIC_HOSTS)
 
 
-def split_reviews(markdown: str) -> list:
-    """Naive splitter: Firecrawl markdown of review pages typically uses
-    ## or ### headers per review. We split on those and yield non-empty chunks.
+_REVIEW_SPLIT = re.compile(r"\n\n+", re.MULTILINE)
+
+
+def split_reviews(text: str) -> list:
+    """Split a text blob into review-sized chunks.
+
+    Reviews are typically separated by blank lines after trafilatura's
+    cleanup. Filter chunks shorter than 20 chars (likely UI noise).
     """
-    parts = _REVIEW_HEADER.split(markdown)
-    return [p.strip() for p in parts if p.strip() and len(p.strip()) > 20]
+    parts = _REVIEW_SPLIT.split(text or "")
+    return [p.strip() for p in parts if len(p.strip()) >= 20]
 
 
-def parse_reviews(url: str, out_dir: str) -> Dict[str, Any]:
-    """Scrape URL, extract reviews, write JSON manifest. Return result dict."""
+def parse_reviews(url: str, out_dir: str,
+                  wait_for: str = None) -> Dict[str, Any]:
+    """Fetch URL, extract reviews, write JSON manifest. Return result dict.
+
+    If url is a dynamic site (Я.Карты/2GIS), uses Playwright.
+    Otherwise uses trafilatura.
+    """
     info(f"Scraping {url}")
-    data = scrape(url)
-    md = data.get("markdown", "")
-    reviews = split_reviews(md)
+    if needs_dynamic(url):
+        try:
+            data = extract_dynamic(url, wait_for=wait_for)
+        except ScrapeError as exc:
+            warn(f"dynamic extract failed: {exc}; falling back to static")
+            data = extract_static(url=url)
+    else:
+        data = extract_static(url=url)
 
+    reviews = split_reviews(data.get("text", ""))
     source = detect_source(url)
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
@@ -1338,12 +1357,15 @@ def parse_reviews(url: str, out_dir: str) -> Dict[str, Any]:
         "source": source,
         "url": url,
         "scraped_at": datetime.utcnow().isoformat(),
-        "title": data.get("metadata", {}).get("title", ""),
+        "title": data.get("title", ""),
         "reviews": reviews,
         "review_count": len(reviews),
     }
     file_path = out / f"{source}-{timestamp}.json"
-    file_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+    file_path.write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
     success(f"Wrote {len(reviews)} reviews to {file_path}")
     return manifest
 
@@ -1356,8 +1378,10 @@ def main(argv: list) -> int:
     try:
         parse_reviews(url, out_dir)
         return 0
-    except (FirecrawlError, KeyError) as exc:
+    except ScrapeError as exc:
         error(str(exc))
+        error("Tip: if Я.Карты blocks the request, take a screenshot manually")
+        error("and drop it into 02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/yandex-maps/")
         return 2
 
 
@@ -1365,13 +1389,13 @@ if __name__ == "__main__":
     sys.exit(main(sys.argv))
 ```
 
-- [ ] **Step 7.5: Run test, expect PASS**
+- [ ] **Step 7.4: Run test, expect PASS**
 
-- [ ] **Step 7.6: Commit**
+- [ ] **Step 7.5: Commit**
 
 ```bash
 git add .skills/client-assets-collection/scripts/parse-reviews.py tests/phase-2/python/test_parse_reviews.py
-git commit -m "feat(phase-2): add parse-reviews.py for Firecrawl-based review scraping"
+git commit -m "feat(phase-2): add parse-reviews.py using free web_scraper (no API keys)"
 ```
 
 ---
@@ -2494,25 +2518,157 @@ if __name__ == "__main__":
 
 ---
 
-### Task 18: `identify-fonts.py` (WhatTheFont + fallback metadata)
+### Task 18: `identify-fonts.py` — DOM-based font detection (free, no API)
 
-Similar pattern. Calls `tools.adapters.whatthefont.identify()`. If empty, returns a stub entry asking for manual identification.
+For **web references (URL)** the script reads the actual computed font-family from the rendered DOM via `web_scraper.get_page_fonts()`. This is more accurate than image recognition because the browser tells us exactly what was loaded.
 
-Output `fonts.yaml`:
-```yaml
-source_image: ref-1.png
-candidates:
-  - family: Cabinet Grotesk
-    confidence: 0.94
-    source: WhatTheFont
-    download_url: https://fontshare.com/...
-  - family: Inter
-    confidence: 0.31
-    source: WhatTheFont
-manual_review_required: false
+For **image references (screenshot)** there's no Python script — the `style-extractor` agent does this directly via Claude Vision (Read tool + reasoning), since it has multimodal capability built-in.
+
+**Files:**
+- Create: `.skills/style-decomposition/scripts/identify-fonts.py`
+- Create: `tests/phase-2/python/test_identify_fonts.py`
+
+- [ ] **Step 18.1: Создать тест**
+
+```python
+import importlib.util
+import yaml
+from pathlib import Path
+from unittest.mock import patch
+
+IDENT_SCRIPT = (Path(__file__).resolve().parent.parent.parent.parent
+                / ".skills" / "style-decomposition" / "scripts" / "identify-fonts.py")
+
+
+def _load():
+    spec = importlib.util.spec_from_file_location("idfont_mod", IDENT_SCRIPT)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_identify_from_url_uses_get_page_fonts(tmp_path):
+    mod = _load()
+    fake_fonts = [
+        '"Cabinet Grotesk", serif',
+        "Inter, system-ui, sans-serif",
+        "monospace",
+    ]
+    out = tmp_path / "fonts.yaml"
+    with patch.object(mod, "get_page_fonts", return_value=fake_fonts):
+        mod.identify_url("https://example.com", str(out))
+
+    data = yaml.safe_load(out.read_text(encoding="utf-8"))
+    families = [c["family"] for c in data["candidates"]]
+    # Primary family extracted from the stack — quotes stripped
+    assert "Cabinet Grotesk" in families
+    assert "Inter" in families
+
+
+def test_parse_font_stack_extracts_primary():
+    mod = _load()
+    assert mod.parse_font_stack('"Cabinet Grotesk", serif') == "Cabinet Grotesk"
+    assert mod.parse_font_stack("Inter, system-ui, sans-serif") == "Inter"
+    assert mod.parse_font_stack("monospace") == "monospace"
 ```
 
-- [ ] Test, impl, commit: `feat(phase-2): add font identification via WhatTheFont with fallback metadata`
+- [ ] **Step 18.2: Run, expect FAIL**
+
+- [ ] **Step 18.3: Создать `identify-fonts.py`**
+
+```python
+#!/usr/bin/env python3
+"""Identify fonts from a web reference (URL) via DOM CSS inspection.
+
+For image references, the style-extractor agent uses Claude Vision
+directly — no script needed.
+
+CLI: python3 identify-fonts.py <URL> <output-yaml>
+"""
+import argparse
+import re
+import sys
+from pathlib import Path
+from typing import List
+import yaml
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
+
+from tools.adapters.web_scraper import get_page_fonts
+from tools.logger import success, error
+
+
+_GENERIC_FAMILIES = {
+    "serif", "sans-serif", "monospace", "cursive", "fantasy",
+    "system-ui", "ui-serif", "ui-sans-serif", "ui-monospace",
+    "ui-rounded", "math", "emoji", "fangsong",
+}
+
+
+def parse_font_stack(stack: str) -> str:
+    """Extract the primary font family from a CSS font-family stack.
+
+    `"Cabinet Grotesk", serif` -> `Cabinet Grotesk`
+    `Inter, system-ui` -> `Inter`
+    `monospace` -> `monospace`
+    """
+    first = stack.split(",")[0].strip().strip('"').strip("'")
+    return first
+
+
+def identify_url(url: str, out_path: str) -> None:
+    """Read computed font-families from URL's DOM, write fonts.yaml."""
+    stacks = get_page_fonts(url)
+    candidates = []
+    seen = set()
+    for stack in stacks:
+        primary = parse_font_stack(stack)
+        if primary in _GENERIC_FAMILIES or primary in seen or not primary:
+            continue
+        seen.add(primary)
+        candidates.append({
+            "family": primary,
+            "full_stack": stack,
+            "source": "DOM computed style",
+            "confidence": 1.0,  # DOM tells us exactly what's loaded
+        })
+
+    out = Path(out_path)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(yaml.safe_dump({
+        "source_url": url,
+        "method": "DOM CSS inspection (Playwright)",
+        "candidates": candidates,
+        "manual_review_required": len(candidates) == 0,
+    }, allow_unicode=True, sort_keys=False), encoding="utf-8")
+
+
+def main(argv: list) -> int:
+    p = argparse.ArgumentParser()
+    p.add_argument("url")
+    p.add_argument("output_yaml")
+    args = p.parse_args(argv[1:])
+    try:
+        identify_url(args.url, args.output_yaml)
+        success(f"Wrote {args.output_yaml}")
+        return 0
+    except Exception as exc:
+        error(f"font identification failed: {exc}")
+        return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))
+```
+
+- [ ] **Step 18.4: Run test, expect PASS**
+
+- [ ] **Step 18.5: Commit**
+
+```bash
+git add .skills/style-decomposition/scripts/identify-fonts.py tests/phase-2/python/test_identify_fonts.py
+git commit -m "feat(phase-2): add identify-fonts.py via DOM CSS inspection (free, no API)"
+```
 
 ---
 
@@ -2677,7 +2833,7 @@ Same pattern. Each: 4 assertions (file exists, description, mentions correspondi
 Integration test:
 1. Create new project via `init.sh` into temp dir
 2. Drop fixture images into `02_МАТЕРИАЛЫ_КЛИЕНТА/photos/original/`
-3. Mock Firecrawl + WhatTheFont + Iconify (via setup of env vars + responses or by setting test fixture URLs that are recorded)
+3. Mock the web_scraper (trafilatura + Playwright) via patching `extract_static`/`extract_dynamic`/`get_page_fonts`; mock Iconify via `responses` (no real network calls)
 4. Run scripts in sequence: collect.py → references/index.py add → moodboard/render.py → style-extractor (palette only — fonts/icons may need separate fixture setup) → brand-architect/build.py → render-html.py
 5. Assert all expected output files exist with non-empty content
 
@@ -2695,8 +2851,8 @@ Note: end-to-end with real APIs is out of scope; we use a "fast-path" with all-l
 - ✅ Spec § 4 etapes 02, 03, 04 — папки и файлы создаются Tasks 8, 12, 25
 - ✅ Spec § 5 этапы 02, 03, 04 — все 6 агентов реализованы
 - ✅ Spec § 6 агенты 2–7 (`client-assets-collector`, `photo-stylist`, `references-curator`, `moodboard-composer`, `style-extractor`, `brand-architect`) — Tasks 6, 9, 11, 12, 16, 23
-- ✅ Spec § 7.2 MCP Firecrawl — обёрнут в `tools.adapters.firecrawl`
-- ✅ Spec § 8.4 Iconify, Fontshare, WhatTheFont — все в адаптерах
+- ✅ Spec § 7.2 MCP Firecrawl — заменён на `tools.adapters.web_scraper` (trafilatura + Playwright, бесплатно)
+- ✅ Spec § 8.4 Iconify (без ключа), Fontshare (без ключа). WhatTheFont — заменён DOM-based detection (точнее) + Claude Vision (для image refs)
 - ✅ Provenance в brand-kit.md — Task 24
 - ✅ HTML preview на каждом этапе — assets-gallery, moodboard, brand-kit
 
