@@ -45,3 +45,14 @@ load '../helpers/test_helpers'
   run grep -E "^description:" "$LANDING_SYSTEM_ROOT/.agents/moodboard-composer.md"
   [ "$status" -eq 0 ]
 }
+
+@test "style-extractor agent file exists" {
+  assert_file_exists "$LANDING_SYSTEM_ROOT/.agents/style-extractor.md"
+}
+
+@test "style-extractor has valid frontmatter" {
+  run grep -E "^name: style-extractor$" "$LANDING_SYSTEM_ROOT/.agents/style-extractor.md"
+  [ "$status" -eq 0 ]
+  run grep -E "^description:" "$LANDING_SYSTEM_ROOT/.agents/style-extractor.md"
+  [ "$status" -eq 0 ]
+}
