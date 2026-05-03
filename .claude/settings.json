@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(bash scripts/check-deps.sh)",
+      "Bash(bash .skills/landing-project-init/scripts/init.sh:*)",
+      "Bash(bash .skills/landing-from-context/scripts/from-context.sh:*)",
+      "Bash(bats tests/**/*.bats)",
+      "Bash(bats tests/phase-1/*.bats)",
+      "Bash(npm test)",
+      "Bash(npm run test:phase-1)",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)"
+    ]
+  },
+  "hooks": {}
+}

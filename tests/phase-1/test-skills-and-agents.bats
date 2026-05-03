@@ -46,3 +46,12 @@ load '../helpers/test_helpers'
 @test "landing-orchestrator mentions HARD GATE" {
   assert_file_contains "$LANDING_SYSTEM_ROOT/.agents/landing-orchestrator.md" "HARD GATE"
 }
+
+@test ".claude/settings.json exists" {
+  assert_file_exists "$LANDING_SYSTEM_ROOT/.claude/settings.json"
+}
+
+@test ".claude/settings.json is valid JSON" {
+  run node -e "JSON.parse(require('fs').readFileSync('$LANDING_SYSTEM_ROOT/.claude/settings.json', 'utf8'))"
+  [ "$status" -eq 0 ]
+}
