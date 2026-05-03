@@ -61,3 +61,35 @@ def test_parse_uses_static_for_blog_sites(tmp_path):
     with patch.object(mod, "extract_static", return_value=fake_extract) as m:
         mod.parse_reviews("https://otzovik.com/review_1.html", str(out))
         m.assert_called_once()
+
+
+def test_parse_warns_on_zero_reviews(tmp_path):
+    """parse_reviews must call warn() (not success()) when 0 reviews extracted."""
+    mod = _load()
+    fake_extract = {"text": "", "title": "empty", "raw_html": ""}
+    out = tmp_path / "empty"
+
+    with patch.object(mod, "extract_static", return_value=fake_extract):
+        with patch.object(mod, "warn") as mock_warn, \
+             patch.object(mod, "success") as mock_success:
+            result = mod.parse_reviews("https://otzovik.com/empty.html", str(out))
+            assert mock_warn.called, "warn() should be called when 0 reviews"
+            mock_success.assert_not_called()
+            assert result["review_count"] == 0
+
+
+def test_split_reviews_falls_back_to_single_newline_for_unstructured_blob():
+    mod = _load()
+    # Each line is 120+ chars so 5 lines joined by single \n exceed the 500-char threshold
+    line = "This is a review with plenty of content so the total blob exceeds five hundred characters easily."
+    text = "\n".join([f"{line} Review #{i}." for i in range(5)])
+    assert len(text) > 500, "test data must exceed 500 chars to trigger fallback"
+    result = mod.split_reviews(text)
+    assert len(result) == 5
+
+
+def test_needs_dynamic_ignores_query_string_yandex():
+    """needs_dynamic must not match 'yandex.ru/maps' appearing only in a query param."""
+    mod = _load()
+    assert mod.needs_dynamic("https://yandex.ru/maps/some-org") is True
+    assert mod.needs_dynamic("https://example.com/?ref=yandex.ru/maps") is False

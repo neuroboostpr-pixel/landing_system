@@ -47,30 +47,25 @@ def crop_aspect(src: str, dst: str, aspect: str) -> None:
 
 
 def cutout(src: str, dst: str) -> None:
-    """Remove background. Uses rembg if installed, else simple alpha heuristic."""
+    """Remove background using rembg.
+
+    Raises ImportError with install hint if rembg not installed —
+    naive fallback was removed because it produced garbage on real photos.
+    """
     try:
         from rembg import remove
-        with open(src, "rb") as f:
-            input_bytes = f.read()
-        output_bytes = remove(input_bytes)
-        with open(dst, "wb") as f:
-            f.write(output_bytes)
-        return
     except ImportError:
-        info("rembg not installed, using Pillow fallback (less accurate)")
+        raise ImportError(
+            "rembg required for cutout. Install with:\n"
+            "  pip install rembg\n"
+            "Or use --mode resize/crop/cleanup for non-cutout operations."
+        )
 
-    # Fallback: convert to RGBA and use crude near-white-to-transparent
-    img = Image.open(src).convert("RGBA")
-    pixels = img.getdata()
-    new_pixels = []
-    for r, g, b, a in pixels:
-        # Crude: pixels close to white become transparent
-        if r > 240 and g > 240 and b > 240:
-            new_pixels.append((r, g, b, 0))
-        else:
-            new_pixels.append((r, g, b, a))
-    img.putdata(new_pixels)
-    img.save(dst, "PNG")
+    with open(src, "rb") as f:
+        input_bytes = f.read()
+    output_bytes = remove(input_bytes)
+    with open(dst, "wb") as f:
+        f.write(output_bytes)
 
 
 def cleanup(src: str, dst: str) -> None:

@@ -31,6 +31,7 @@ Process raw client photos for use in landing scenes. Identity-safe rules apply a
 3. For each photo to process: run `python3 .skills/photo-styling/scripts/style.py <input> <output> --mode cutout` (or other allowed modes).
 4. Output to `02_МАТЕРИАЛЫ_КЛИЕНТА/photos/processed/`.
 5. Update `02_МАТЕРИАЛЫ_КЛИЕНТА/photos/stylesheet.md` with rules applied per photo.
+6. **CRITICAL CONSTRAINT — only style.py:** You may ONLY invoke `python3 .skills/photo-styling/scripts/style.py` for image processing in this stage. Do NOT use any other image tooling (no PIL directly, no external editors, no AI image services, no curl/wget to upload-and-modify). If you think you need a different operation, STOP and ask the user — don't invent a workaround. This constraint is what makes the "Forbidden" list above architecturally enforceable.
 
 ## HARD GATE
 
@@ -38,4 +39,4 @@ Before stage 03 — user reviews `assets-gallery.html` (rebuilt) showing both or
 
 ## Tools
 
-Bash, Read, Write, Glob. Calls Python `style.py`.
+Bash, Read, Write, Edit, Glob. Calls Python `style.py`.

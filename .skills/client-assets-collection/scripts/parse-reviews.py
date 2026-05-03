@@ -48,20 +48,33 @@ def detect_source(url: str) -> str:
 
 
 def needs_dynamic(url: str) -> bool:
-    return any(h in url for h in DYNAMIC_HOSTS)
+    parsed = urlparse(url)
+    host = (parsed.hostname or "")
+    path = parsed.path or ""
+    host_path = f"{host}{path}"
+    return any(h in host_path for h in DYNAMIC_HOSTS)
 
 
-_REVIEW_SPLIT = re.compile(r"\n\n+", re.MULTILINE)
+_REVIEW_DOUBLE = re.compile(r"\n\n+", re.MULTILINE)
+_REVIEW_SINGLE = re.compile(r"\n", re.MULTILINE)
+MIN_REVIEW_LENGTH = 20
 
 
 def split_reviews(text: str) -> list:
-    """Split a text blob into review-sized chunks.
-
-    Reviews are typically separated by blank lines after trafilatura's
-    cleanup. Filter chunks shorter than 20 chars (likely UI noise).
+    """Split text into review-sized chunks.
+    Try double-newline split first; if it returns one big blob, fall back to single-newline.
     """
-    parts = _REVIEW_SPLIT.split(text or "")
-    return [p.strip() for p in parts if len(p.strip()) >= 20]
+    if not text:
+        return []
+    parts = _REVIEW_DOUBLE.split(text)
+    parts = [p.strip() for p in parts if len(p.strip()) >= MIN_REVIEW_LENGTH]
+
+    # If we got 1 big blob, try single-newline split
+    if len(parts) == 1 and len(parts[0]) > 500:
+        parts = _REVIEW_SINGLE.split(parts[0])
+        parts = [p.strip() for p in parts if len(p.strip()) >= MIN_REVIEW_LENGTH]
+
+    return parts
 
 
 def parse_reviews(url: str, out_dir: str,
@@ -100,7 +113,12 @@ def parse_reviews(url: str, out_dir: str,
         json.dumps(manifest, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
-    success(f"Wrote {len(reviews)} reviews to {file_path}")
+    if len(reviews) == 0:
+        warn(f"Wrote manifest with 0 reviews to {file_path}")
+        warn("Tip: if Я.Карты blocked the request, take a screenshot manually")
+        warn("and drop into 02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/<source>/ as text")
+    else:
+        success(f"Wrote {len(reviews)} reviews to {file_path}")
     return manifest
 
 

@@ -1,4 +1,5 @@
 import importlib.util
+import inspect
 from pathlib import Path
 from PIL import Image
 import io
@@ -48,5 +49,13 @@ def test_cutout_returns_rgba_png(tmp_path):
     dst = tmp_path / "out.png"
     mod.cutout(str(src), str(dst))
     out = Image.open(str(dst))
-    # Output must have alpha channel
-    assert out.mode in ("RGBA", "LA") or "A" in out.mode
+    # Output must be RGBA
+    assert out.mode == "RGBA"
+
+
+def test_cutout_function_documents_rembg_requirement():
+    """Cutout function must mention rembg in its source and raise ImportError if missing."""
+    mod = _load()
+    src = inspect.getsource(mod.cutout)
+    assert "rembg" in src
+    assert "ImportError" in src or "raise" in src

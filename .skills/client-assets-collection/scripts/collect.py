@@ -12,7 +12,7 @@ import yaml
 sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 
 from tools.html.render import render
-from tools.logger import info, success
+from tools.logger import info, success, warn
 
 
 PHOTO_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".heic"}
@@ -49,7 +49,8 @@ def build_manifest(materials_dir: Path) -> Dict[str, Any]:
                         "file": str(j.relative_to(materials_dir)),
                         "review_count": payload.get("review_count", 0)
                     })
-                except Exception:
+                except Exception as exc:
+                    warn(f"skipping malformed testimonial {j}: {exc}")
                     continue
 
     return {"photos": photos, "videos": videos, "testimonials": testimonials}
