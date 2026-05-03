@@ -34,3 +34,23 @@ EXPECTED_DIRS=(
     assert_file_exists "$LANDING_SYSTEM_ROOT/template/$dir/.gitkeep" || return 1
   done
 }
+
+@test "template/README.md exists" {
+  assert_file_exists "$LANDING_SYSTEM_ROOT/template/README.md"
+}
+
+@test "template/README.md has Quick Start section" {
+  assert_file_contains "$LANDING_SYSTEM_ROOT/template/README.md" "Quick Start"
+}
+
+@test "template/.gitignore exists" {
+  assert_file_exists "$LANDING_SYSTEM_ROOT/template/.gitignore"
+}
+
+@test "template/.gitignore ignores .env" {
+  assert_file_contains "$LANDING_SYSTEM_ROOT/template/.gitignore" ".env"
+}
+
+@test "template/.gitignore ignores versions/" {
+  assert_file_contains "$LANDING_SYSTEM_ROOT/template/.gitignore" "versions"
+}
