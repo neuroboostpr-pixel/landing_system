@@ -23,3 +23,25 @@ load '../helpers/test_helpers'
   run grep -E "^description:" "$LANDING_SYSTEM_ROOT/.agents/photo-stylist.md"
   [ "$status" -eq 0 ]
 }
+
+@test "references-curator agent file exists" {
+  assert_file_exists "$LANDING_SYSTEM_ROOT/.agents/references-curator.md"
+}
+
+@test "references-curator has valid frontmatter" {
+  run grep -E "^name: references-curator$" "$LANDING_SYSTEM_ROOT/.agents/references-curator.md"
+  [ "$status" -eq 0 ]
+  run grep -E "^description:" "$LANDING_SYSTEM_ROOT/.agents/references-curator.md"
+  [ "$status" -eq 0 ]
+}
+
+@test "moodboard-composer agent file exists" {
+  assert_file_exists "$LANDING_SYSTEM_ROOT/.agents/moodboard-composer.md"
+}
+
+@test "moodboard-composer has valid frontmatter" {
+  run grep -E "^name: moodboard-composer$" "$LANDING_SYSTEM_ROOT/.agents/moodboard-composer.md"
+  [ "$status" -eq 0 ]
+  run grep -E "^description:" "$LANDING_SYSTEM_ROOT/.agents/moodboard-composer.md"
+  [ "$status" -eq 0 ]
+}
