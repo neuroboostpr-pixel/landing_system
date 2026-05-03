@@ -27,3 +27,15 @@ load '../helpers/test_helpers'
 @test "landing-from-context references from-context.sh" {
   assert_file_contains "$LANDING_SYSTEM_ROOT/.claude/commands/landing-from-context.md" "from-context.sh"
 }
+
+@test "landing-help command exists" {
+  assert_file_exists "$LANDING_SYSTEM_ROOT/.claude/commands/landing-help.md"
+}
+
+@test "landing-help lists landing-new" {
+  assert_file_contains "$LANDING_SYSTEM_ROOT/.claude/commands/landing-help.md" "/landing-new"
+}
+
+@test "landing-help lists landing-status" {
+  assert_file_contains "$LANDING_SYSTEM_ROOT/.claude/commands/landing-help.md" "/landing-status"
+}
