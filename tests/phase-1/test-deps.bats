@@ -1,5 +1,7 @@
 #!/usr/bin/env bats
 
+load '../helpers/test_helpers'
+
 @test "bats-core installed" {
   run bats --version
   [ "$status" -eq 0 ]
@@ -24,10 +26,10 @@
 }
 
 @test "check-deps.sh exists and executable" {
-  [ -x "scripts/check-deps.sh" ]
+  [ -x "$LANDING_SYSTEM_ROOT/scripts/check-deps.sh" ]
 }
 
 @test "check-deps.sh exits 0 when all deps present" {
-  run scripts/check-deps.sh
+  run "$LANDING_SYSTEM_ROOT/scripts/check-deps.sh"
   [ "$status" -eq 0 ]
 }

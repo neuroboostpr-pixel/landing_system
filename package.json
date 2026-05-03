@@ -4,7 +4,7 @@
   "description": "Agency landing system for Claude Code (WordPress + Бегет)",
   "private": true,
   "scripts": {
-    "test": "bats tests/**/*.bats",
+    "test": "bats -r tests",
     "test:phase-1": "bats tests/phase-1/*.bats",
     "check-deps": "bash scripts/check-deps.sh"
   },
