@@ -39,3 +39,11 @@ load '../helpers/test_helpers'
 @test "landing-help lists landing-status" {
   assert_file_contains "$LANDING_SYSTEM_ROOT/.claude/commands/landing-help.md" "/landing-status"
 }
+
+@test "landing-status command exists" {
+  assert_file_exists "$LANDING_SYSTEM_ROOT/.claude/commands/landing-status.md"
+}
+
+@test "landing-status mentions Phase 1" {
+  assert_file_contains "$LANDING_SYSTEM_ROOT/.claude/commands/landing-status.md" "Phase 1"
+}
