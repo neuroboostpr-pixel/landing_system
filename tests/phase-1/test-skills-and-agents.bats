@@ -28,3 +28,21 @@ load '../helpers/test_helpers'
   run grep -E "^name: landing-from-context$" "$LANDING_SYSTEM_ROOT/.skills/landing-from-context/SKILL.md"
   [ "$status" -eq 0 ]
 }
+
+@test "landing-orchestrator agent exists" {
+  assert_file_exists "$LANDING_SYSTEM_ROOT/.agents/landing-orchestrator.md"
+}
+
+@test "landing-orchestrator has frontmatter name" {
+  run grep -E "^name: landing-orchestrator$" "$LANDING_SYSTEM_ROOT/.agents/landing-orchestrator.md"
+  [ "$status" -eq 0 ]
+}
+
+@test "landing-orchestrator has description" {
+  run grep -E "^description:" "$LANDING_SYSTEM_ROOT/.agents/landing-orchestrator.md"
+  [ "$status" -eq 0 ]
+}
+
+@test "landing-orchestrator mentions HARD GATE" {
+  assert_file_contains "$LANDING_SYSTEM_ROOT/.agents/landing-orchestrator.md" "HARD GATE"
+}
