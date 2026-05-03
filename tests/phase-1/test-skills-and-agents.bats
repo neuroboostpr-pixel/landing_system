@@ -19,3 +19,12 @@ load '../helpers/test_helpers'
 @test "landing-project-init mentions init.sh" {
   assert_file_contains "$LANDING_SYSTEM_ROOT/.skills/landing-project-init/SKILL.md" "init.sh"
 }
+
+@test "landing-from-context SKILL.md exists" {
+  assert_file_exists "$LANDING_SYSTEM_ROOT/.skills/landing-from-context/SKILL.md"
+}
+
+@test "landing-from-context frontmatter ok" {
+  run grep -E "^name: landing-from-context$" "$LANDING_SYSTEM_ROOT/.skills/landing-from-context/SKILL.md"
+  [ "$status" -eq 0 ]
+}
