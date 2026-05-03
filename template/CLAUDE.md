@@ -47,4 +47,4 @@
 
 ## Источник правды
 
-Все системные правила и архитектура: [мастер-spec](../../landing-system/docs/superpowers/specs/2026-05-03-landing-system-design.md)
+Все системные правила и архитектура: см. spec-документ в master-system (`landing-system/docs/superpowers/specs/`).
