@@ -33,8 +33,24 @@ def extract_static(url: Optional[str] = None, html: Optional[str] = None) -> Dic
             raise ScrapeError(f"failed to fetch {url}")
 
     text = trafilatura.extract(html, include_comments=False, include_tables=True) or ""
-    metadata = trafilatura.extract_metadata(html)
-    title = metadata.title if metadata and metadata.title else ""
+
+    # Prefer <title> tag from raw HTML over trafilatura's h1 fallback (trafilatura 2.x
+    # falls back to first <h1> when <title> is absent — risky for review pages).
+    title = ""
+    try:
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(html, "html.parser")
+        if soup.title and soup.title.string:
+            title = soup.title.string.strip()
+    except Exception:
+        pass
+
+    # Fall back to trafilatura metadata if no <title> found
+    if not title:
+        metadata = trafilatura.extract_metadata(html)
+        if metadata and metadata.title:
+            title = metadata.title
+
     return {"text": text, "title": title, "raw_html": html}
 
 
@@ -88,10 +104,7 @@ def get_page_fonts(url: str, timeout_ms: int = 30000) -> List[str]:
     font-family declarations sorted by frequency. This is more accurate than
     image-based detection for web references.
     """
-    try:
-        p, browser = _launch_chromium()
-    except Exception as e:
-        raise ScrapeError(f"chromium not installed: {e}") from e
+    p, browser = _launch_chromium()
     try:
         ctx = browser.new_context()
         page = ctx.new_page()
