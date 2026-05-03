@@ -48,3 +48,42 @@ teardown() {
 
   [ -f "$PROJECT/03_РЕФЕРЕНСЫ/moodboard.md" ]
 }
+
+@test "INTEGRATION: style-extractor orchestrate produces 5 output files" {
+  cd "$LANDING_SYSTEM_ROOT"
+
+  # Create fixture images using Pillow
+  python3 - <<'PYEOF'
+from PIL import Image
+import sys, os
+project = os.environ["PROJECT"]
+imgs_dir = project + "/03_РЕФЕРЕНСЫ/images"
+os.makedirs(imgs_dir, exist_ok=True)
+# Three simple colored images
+Image.new("RGB", (50, 50), (200, 50, 50)).save(imgs_dir + "/ref-red.png")
+Image.new("RGB", (50, 50), (50, 100, 200)).save(imgs_dir + "/ref-blue.png")
+PYEOF
+
+  # Run orchestrate without URL (no network)
+  python3 .skills/style-decomposition/scripts/orchestrate.py \
+    "$PROJECT" \
+    --images "$PROJECT/03_РЕФЕРЕНСЫ/images/ref-red.png" \
+              "$PROJECT/03_РЕФЕРЕНСЫ/images/ref-blue.png"
+
+  # Assert all 5 output files exist and are non-empty
+  EXTRACTED="$PROJECT/04_БРЕНД/extracted"
+  [ -f "$EXTRACTED/palette.yaml" ]
+  [ -s "$EXTRACTED/palette.yaml" ]
+
+  [ -f "$EXTRACTED/fonts.yaml" ]
+  [ -s "$EXTRACTED/fonts.yaml" ]
+
+  [ -f "$EXTRACTED/icons.yaml" ]
+  [ -s "$EXTRACTED/icons.yaml" ]
+
+  [ -f "$EXTRACTED/grid.md" ]
+  [ -s "$EXTRACTED/grid.md" ]
+
+  [ -f "$EXTRACTED/motion.md" ]
+  [ -s "$EXTRACTED/motion.md" ]
+}
