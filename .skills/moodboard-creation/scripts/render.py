@@ -7,6 +7,7 @@ import argparse
 import sys
 from pathlib import Path
 import yaml
+import markdown as md_lib
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 
@@ -28,8 +29,10 @@ def render_moodboard(refs_dir: str, narrative_md: str = "", project_name: str = 
     if narrative_md:
         narrative_path = Path(narrative_md)
         if narrative_path.exists():
-            # Lightweight md -> html: just paragraphs
-            narrative_html = "<p>" + narrative_path.read_text(encoding="utf-8").replace("\n\n", "</p><p>") + "</p>"
+            md_text = narrative_path.read_text(encoding="utf-8")
+            # markdown library escapes raw HTML in source by default,
+            # so {{ narrative | safe }} in the template is genuinely safe.
+            narrative_html = md_lib.markdown(md_text, extensions=["extra", "sane_lists"])
 
     html = render("moodboard.html.j2", {
         "approved": approved,

@@ -82,3 +82,23 @@ def test_show_ref(tmp_path):
     assert ref["value"] == "https://example.com/show-me"
     assert ref["status"] == "approved"
     assert ref["id"] == ref_id
+
+
+def test_add_ref_returns_existing_entry_on_duplicate(tmp_path):
+    """When adding a duplicate, return the EXISTING entry (with original timestamp),
+    not a freshly-built dict."""
+    import time
+    mod = _load()
+    refs_dir = tmp_path / "03_РЕФЕРЕНСЫ"
+    refs_dir.mkdir()
+
+    first = mod.add_ref(str(refs_dir), "https://example.com/a", status="candidate")
+    first_timestamp = first["added_at"]
+
+    # Ensure clock has moved so a new entry would have a different timestamp
+    time.sleep(0.05)
+    second = mod.add_ref(str(refs_dir), "https://example.com/a", status="candidate")
+
+    # Should be the same entry (same timestamp), not a freshly-built one
+    assert second["added_at"] == first_timestamp
+    assert second["id"] == first["id"]

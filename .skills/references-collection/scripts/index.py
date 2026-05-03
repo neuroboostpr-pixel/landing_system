@@ -12,7 +12,7 @@ import argparse
 import hashlib
 import json
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 import yaml
@@ -45,17 +45,24 @@ def add_ref(refs_dir: str, ref: str, ref_type: str = "url", status: str = "candi
     refs = Path(refs_dir)
     refs.mkdir(parents=True, exist_ok=True)
     data = _load(refs)
+
+    new_id = _ref_id(ref)
+
+    # Check if already exists — return existing entry unchanged
+    for existing in data["references"]:
+        if existing["id"] == new_id:
+            return existing  # Return what's actually in the file
+
+    # New entry
     entry = {
-        "id": _ref_id(ref),
+        "id": new_id,
         "value": ref,
         "type": ref_type,
         "status": status,
-        "added_at": datetime.utcnow().isoformat() + "Z",
+        "added_at": datetime.now(timezone.utc).isoformat(),
     }
-    # Idempotency: skip if same id already there
-    if not any(r["id"] == entry["id"] for r in data["references"]):
-        data["references"].append(entry)
-        _save(refs, data)
+    data["references"].append(entry)
+    _save(refs, data)
     return entry
 
 
@@ -67,7 +74,7 @@ def update_status(refs_dir: str, ref_id: str, new_status: str) -> None:
     for r in data["references"]:
         if r["id"] == ref_id:
             r["status"] = new_status
-            r["updated_at"] = datetime.utcnow().isoformat() + "Z"
+            r["updated_at"] = datetime.now(timezone.utc).isoformat()
             _save(refs, data)
             return
     raise KeyError(f"ref {ref_id} not found")

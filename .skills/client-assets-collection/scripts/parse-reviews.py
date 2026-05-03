@@ -10,7 +10,7 @@ Lib:  from parse_reviews_mod import parse_reviews
 import json
 import re
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, Any
 from urllib.parse import urlparse
@@ -99,11 +99,11 @@ def parse_reviews(url: str, out_dir: str,
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
 
-    timestamp = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
+    timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     manifest = {
         "source": source,
         "url": url,
-        "scraped_at": datetime.utcnow().isoformat(),
+        "scraped_at": datetime.now(timezone.utc).isoformat(),
         "title": data.get("title", ""),
         "reviews": reviews,
         "review_count": len(reviews),
