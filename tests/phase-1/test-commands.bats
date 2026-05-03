@@ -19,3 +19,11 @@ load '../helpers/test_helpers'
   run grep -E "^argument-hint:" "$LANDING_SYSTEM_ROOT/.claude/commands/landing-new.md"
   [ "$status" -eq 0 ]
 }
+
+@test "landing-from-context command exists" {
+  assert_file_exists "$LANDING_SYSTEM_ROOT/.claude/commands/landing-from-context.md"
+}
+
+@test "landing-from-context references from-context.sh" {
+  assert_file_contains "$LANDING_SYSTEM_ROOT/.claude/commands/landing-from-context.md" "from-context.sh"
+}
