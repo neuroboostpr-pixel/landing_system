@@ -6,6 +6,8 @@
   "scripts": {
     "test": "bats -r tests",
     "test:phase-1": "bats tests/phase-1/*.bats",
+    "test:python": "python3 -m pytest tests/phase-2/python -q",
+    "test:phase-2": "bats tests/phase-2/*.bats && python3 -m pytest tests/phase-2/python -q",
     "check-deps": "bash scripts/check-deps.sh"
   },
   "engines": {
