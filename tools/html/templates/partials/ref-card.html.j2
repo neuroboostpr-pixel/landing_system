@@ -1,0 +1,18 @@
+<div class="card ref-card status-{{ ref.status }}">
+  <div class="ref-meta">
+    <span class="status-badge status-{{ ref.status }}">{{ ref.status }}</span>
+    <span class="ref-type">{{ ref.type }}</span>
+  </div>
+  <div class="ref-value">
+    {% if ref.type == "url" %}
+      <a href="{{ ref.value }}" target="_blank" rel="noopener">{{ ref.value }}</a>
+    {% else %}
+      <code>{{ ref.value }}</code>
+    {% endif %}
+  </div>
+  {% if ref.tags is defined and ref.tags %}
+    <div class="ref-tags">
+      {% for t in ref.tags %}<span class="tag">{{ t }}</span>{% endfor %}
+    </div>
+  {% endif %}
+</div>

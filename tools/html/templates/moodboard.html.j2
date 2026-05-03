@@ -1,0 +1,40 @@
+{% extends "base.html.j2" %}
+{% block title %}Moodboard — {{ project_name }}{% endblock %}
+{% block heading %}Moodboard — {{ project_name }}{% endblock %}
+
+{% block extra_styles %}
+.ref-card { border-left: 4px solid #999; }
+.ref-card.status-approved { border-left-color: #22c55e; }
+.ref-card.status-rejected { border-left-color: #ef4444; opacity: 0.5; }
+.ref-card.status-candidate { border-left-color: #f59e0b; }
+.status-badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+.status-approved { background: #dcfce7; color: #166534; }
+.status-rejected { background: #fee2e2; color: #991b1b; }
+.status-candidate { background: #fef3c7; color: #92400e; }
+.ref-meta { display: flex; gap: 8px; margin-bottom: 8px; }
+.ref-type { font-size: 0.85rem; color: #666; }
+.ref-value { word-break: break-all; }
+.ref-tags { margin-top: 8px; }
+.tag { display: inline-block; background: #f3f4f6; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; margin-right: 4px; }
+{% endblock %}
+
+{% block content %}
+{% if narrative %}
+<div class="card">
+  <h2>Direction</h2>
+  {{ narrative | safe }}
+</div>
+{% endif %}
+
+<h2>Approved ({{ approved|length }})</h2>
+<div class="grid">
+  {% for ref in approved %}{% include "partials/ref-card.html.j2" %}{% endfor %}
+</div>
+
+{% if rejected %}
+<h2>Rejected ({{ rejected|length }})</h2>
+<div class="grid">
+  {% for ref in rejected %}{% include "partials/ref-card.html.j2" %}{% endfor %}
+</div>
+{% endif %}
+{% endblock %}
