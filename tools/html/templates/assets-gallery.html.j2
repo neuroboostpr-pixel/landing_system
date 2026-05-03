@@ -1,0 +1,42 @@
+{% extends "base.html.j2" %}
+{% block title %}Client Assets Gallery{% endblock %}
+{% block heading %}Client Assets — материалы клиента{% endblock %}
+
+{% block content %}
+<h2>Photos ({{ manifest.photos|length }})</h2>
+{% if manifest.photos %}
+<div class="grid">
+  {% for p in manifest.photos %}
+  <div class="card">
+    <strong>{{ p.filename }}</strong>
+    <div class="meta">use: {{ p.use }}</div>
+    <div class="meta">{{ p.path }}</div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<p class="meta">No photos yet — drop files into photos/original/</p>
+{% endif %}
+
+<h2>Videos ({{ manifest.videos|length }})</h2>
+{% if manifest.videos %}
+<ul>
+  {% for v in manifest.videos %}
+  <li>{{ v.filename }} <span class="meta">— {{ v.path }}</span></li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="meta">No videos yet</p>
+{% endif %}
+
+<h2>Testimonials ({{ manifest.testimonials|length }})</h2>
+{% if manifest.testimonials %}
+<ul>
+  {% for t in manifest.testimonials %}
+  <li><strong>{{ t.source }}</strong>: {{ t.review_count }} review(s) — <span class="meta">{{ t.file }}</span></li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="meta">No testimonials parsed yet</p>
+{% endif %}
+{% endblock %}
