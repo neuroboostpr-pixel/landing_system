@@ -1,0 +1,33 @@
+# Secrets
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/settings.json
+.idea/
+
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Build artifacts
+dist/
+build/
+*.zip
+
+# Claude Code
+.claude/settings.local.json
+
+# Project versions (snapshot folders inside projects)
+**/09_ДЕПЛОЙ/versions/
+
+# Logs
+*.log
