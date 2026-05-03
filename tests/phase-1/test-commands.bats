@@ -47,3 +47,15 @@ load '../helpers/test_helpers'
 @test "landing-status mentions Phase 1" {
   assert_file_contains "$LANDING_SYSTEM_ROOT/.claude/commands/landing-status.md" "Phase 1"
 }
+
+@test "landing-status STAGE detection uses .gitkeep filter for all stage folders" {
+  # Verify the helper function is present for stage folder checks
+  run grep -E "dir_has_real_content" "$LANDING_SYSTEM_ROOT/.claude/commands/landing-status.md"
+  [ "$status" -eq 0 ]
+  # Verify 01_КОНТЕКСТ is checked via the helper (not raw ls -A)
+  run grep -E "dir_has_real_content.*01_КОНТЕКСТ" "$LANDING_SYSTEM_ROOT/.claude/commands/landing-status.md"
+  [ "$status" -eq 0 ]
+  # Negative: bare ls -A on 01_КОНТЕКСТ without gitkeep filter must not exist
+  run grep -E 'ls -A "\$CWD/01_КОНТЕКСТ"' "$LANDING_SYSTEM_ROOT/.claude/commands/landing-status.md"
+  [ "$status" -ne 0 ]
+}

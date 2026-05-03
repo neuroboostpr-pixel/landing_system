@@ -43,7 +43,13 @@ PROJECT_NAME="$(basename "$TARGET")"
 echo "📦 Copying template to $TARGET ..."
 mkdir -p "$TARGET"
 # Copy contents (including hidden files via .gitkeep, .env.example, .gitignore)
-cp -R "$TEMPLATE_DIR/." "$TARGET/"
+# Filter out macOS Finder droppings and editor leftovers
+if command -v rsync >/dev/null 2>&1; then
+  rsync -a --exclude='.DS_Store' --exclude='._*' --exclude='*.bak' "$TEMPLATE_DIR/" "$TARGET/"
+else
+  cp -R "$TEMPLATE_DIR/." "$TARGET/"
+  find "$TARGET" -type f \( -name '.DS_Store' -o -name '._*' -o -name '*.bak' \) -delete
+fi
 
 # --- Substitute placeholders ---
 echo "✏️  Substituting placeholders..."

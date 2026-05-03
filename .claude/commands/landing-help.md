@@ -37,7 +37,7 @@ OPERATIONS (Phase 5):
 SERVICE:
   /landing-status                  — current state
   /landing-help                    — this help
-  /landing-update                  — update master system
+  /landing-update                  — update master system (Phase 6+ — еще не реализован)
 
 Phase 1 of MVP is in progress. Most stage commands return "not yet implemented".
 See docs/superpowers/plans/ for roadmap.

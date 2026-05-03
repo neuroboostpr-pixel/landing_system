@@ -31,7 +31,7 @@
 
 ```
 landing-system/
-├─ .agents/              # 18 специализированных агентов (по фазам)
+├─ .agents/              # 1 агент сейчас (landing-orchestrator); ~18 запланировано к Phase 5
 ├─ .skills/              # наши скиллы (landing-project-init и др.)
 ├─ .claude/commands/     # slash-команды
 ├─ template/             # каноничный шаблон проекта-лендинга
@@ -67,7 +67,7 @@ npm run test:phase-1  # только Phase 1
 
 ## Статус
 
-**Phase 1 — Skeleton & Infrastructure** (в разработке)
+**Phase 1 — Skeleton & Infrastructure** ✅ Complete (2026-05-03). Phase 2 — Brainstorming Pipeline (next).
 
 Полный roadmap см. в master plan.
 

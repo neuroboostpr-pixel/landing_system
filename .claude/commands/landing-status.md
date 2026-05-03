@@ -29,6 +29,11 @@ Show the current state of the master system and any active project in the cwd.
 ```bash
 CWD="$(pwd)"
 
+# Helper: returns true only if dir exists and has files other than .gitkeep
+dir_has_real_content() {
+  [ -d "$1" ] && [ -n "$(ls -A "$1" 2>/dev/null | grep -Fv -- '.gitkeep')" ]
+}
+
 # Master system?
 if [ -d "$CWD/.skills/landing-project-init" ]; then
   echo "📦 Landing System (master)"
@@ -57,8 +62,8 @@ if [ -d "$CWD/00_БРИФ" ] && [ -d "$CWD/08_КОД" ]; then
   echo "🏗  Landing Project: $(basename "$CWD")"
   STAGE=0
   [ -s "$CWD/00_БРИФ/brief.md" ] && STAGE=1
-  [ -d "$CWD/01_КОНТЕКСТ" ] && [ "$(ls -A "$CWD/01_КОНТЕКСТ" 2>/dev/null)" ] && STAGE=2
-  [ -d "$CWD/02_МАТЕРИАЛЫ_КЛИЕНТА" ] && [ "$(ls -A "$CWD/02_МАТЕРИАЛЫ_КЛИЕНТА" 2>/dev/null | grep -Fv -- '.gitkeep')" ] && STAGE=3
+  dir_has_real_content "$CWD/01_КОНТЕКСТ" && STAGE=2
+  dir_has_real_content "$CWD/02_МАТЕРИАЛЫ_КЛИЕНТА" && STAGE=3
   [ -f "$CWD/03_РЕФЕРЕНСЫ/moodboard.md" ] && STAGE=4
   [ -f "$CWD/04_БРЕНД/brand-kit.md" ] && STAGE=5
   [ -f "$CWD/05_ДИЗАЙН-СИСТЕМА/DESIGN.md" ] && STAGE=6

@@ -52,3 +52,10 @@ teardown() {
   run grep "{{PROJECT_NAME}}" "$TARGET_DIR/README.md"
   [ "$status" -ne 0 ]  # placeholder gone
 }
+
+@test "init.sh does not propagate .DS_Store to new project" {
+  run "$LANDING_SYSTEM_ROOT/.skills/landing-project-init/scripts/init.sh" "$TARGET_DIR"
+  [ "$status" -eq 0 ]
+  run find "$TARGET_DIR" -name '.DS_Store'
+  [ -z "$output" ]
+}

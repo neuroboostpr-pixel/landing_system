@@ -260,13 +260,12 @@ Phase 1: Skeleton
 
 ## Status
 
-**Текущий статус:** Phase 1 plan готов, ожидается утверждение пользователя для запуска реализации.
+**Текущий статус:** Phase 1 — Skeleton & Infrastructure **completed (2026-05-03)**, tag `phase-1-complete`.
 
 **Следующий шаг:**
-1. Пользователь читает [Phase 1 plan](2026-05-03-phase-1-skeleton.md)
-2. Утверждает или просит правки
-3. После «утверждаю» — запуск `subagent-driven-development` для реализации Phase 1
-4. После завершения Phase 1 — пишу детальный план Phase 2
+1. Phase 2 (Brainstorming Pipeline, этапы 00–04) — детальный план будет написан перед стартом
+2. Реализация Phase 2 через `subagent-driven-development`
+3. После Phase 2 — Phase 3 plan, и так до Phase 6
 
 ---
 
