@@ -65,6 +65,39 @@ def test_functions_php_has_swiper_enqueue(wp_built_project):
     assert "swiper" in fp.lower()
 
 
+def test_js_enqueue_is_idempotent(wp_built_project):
+    mod = _load()
+    mod.main(["generate-js-init.py", str(wp_built_project)])
+    mod.main(["generate-js-init.py", str(wp_built_project)])
+    fp = (wp_built_project / "08_КОД" / "wp-theme" / "functions.php").read_text(encoding="utf-8")
+    assert fp.count("generate-js-init") == 1
+
+
+def test_no_optional_files_when_no_libs(tmp_path):
+    # Project with design-stack.yaml but all libraries disabled
+    stack_dir = tmp_path / "06_СТЕК"
+    stack_dir.mkdir()
+    (stack_dir / "design-stack.yaml").write_text(
+        "js_libraries: []\nui_libraries:\n  swiper: false\n  fancybox: false\n  countup: false\n",
+        encoding="utf-8"
+    )
+    theme = tmp_path / "08_КОД" / "wp-theme"
+    theme.mkdir(parents=True)
+    (theme / "functions.php").write_text("<?php\n", encoding="utf-8")
+
+    mod = _load()
+    assert mod.main(["generate-js-init.py", str(tmp_path)]) == 0
+    # main.js always created
+    assert (theme / "assets" / "js" / "main.js").exists()
+    # no optional files
+    assert not (theme / "assets" / "js" / "sliders.js").exists()
+    assert not (theme / "assets" / "js" / "counters.js").exists()
+    assert not (theme / "assets" / "js" / "smooth-scroll.js").exists()
+    assert not (theme / "assets" / "js" / "animations.js").exists()
+    # functions.php not touched (no libs to enqueue)
+    assert "generate-js-init" not in (theme / "functions.php").read_text(encoding="utf-8")
+
+
 def test_missing_stack_returns_one(tmp_path):
     mod = _load()
     assert mod.main(["generate-js-init.py", str(tmp_path)]) == 1

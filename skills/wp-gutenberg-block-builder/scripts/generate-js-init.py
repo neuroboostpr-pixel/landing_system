@@ -148,10 +148,10 @@ def main(argv: list) -> int:
     try:
         project = _find_project_root(Path(argv[1]))
         stack = _load_stack(project)
-        js_libs = [l.lower() for l in (stack.get("js_libraries") or [])]
+        js_libs = [lib.lower() for lib in (stack.get("js_libraries") or [])]
         ui_libs_cfg = stack.get("ui_libraries") or {}
         ui_libs = [k for k, v in ui_libs_cfg.items() if v]
-        all_libs = js_libs + [l for l in ui_libs if l not in js_libs]
+        all_libs = js_libs + [lib for lib in ui_libs if lib not in js_libs]
 
         theme_js = project / "08_КОД" / "wp-theme" / "assets" / "js"
         theme_js.mkdir(parents=True, exist_ok=True)
