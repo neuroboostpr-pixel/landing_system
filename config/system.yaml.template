@@ -1,0 +1,33 @@
+# config/system.yaml.template
+# Заполняется командой /landing-setup (один раз на всю систему).
+# Скопируй в config/system.yaml и заполни вместе с агентом.
+
+crm:
+  amocrm:
+    enabled: false
+    subdomain: ""          # example.amocrm.ru
+  bitrix24:
+    enabled: false
+    webhook_url: ""        # env: BITRIX24_WEBHOOK_URL
+  telegram:
+    enabled: false
+    bot_token: ""          # env: TG_BOT_TOKEN
+    chat_id: ""            # env: TG_CHAT_ID  (число, для группы со знаком минус)
+
+analytics:
+  yandex_metrika:
+    enabled: false
+    counter_id: ""         # 8-значное число из metrika.yandex.ru
+  gtm:
+    enabled: false
+    container_id: ""       # GTM-XXXXXXX
+
+ui_libraries:
+  swiper: true             # слайдеры / карусели
+  fancybox: true           # лайтбокс для фото / видео
+  countup: true            # анимированные цифры
+  typed: false             # эффект печатающегося текста
+
+popups:
+  enabled: true
+  style: minimal           # minimal | fullscreen
