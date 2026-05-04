@@ -6,6 +6,18 @@ allowed-tools: Bash, Read, Write, Edit, Task
 
 # /landing-new
 
+## Pre-flight
+
+1. Run `bash scripts/setup-flag.sh is_complete`. If exit 1 → reply "Onboarding не пройден. Запусти /landing-onboarding" and stop.
+2. Continue with existing flow below.
+
+## Post-creation
+
+After project folder is created from template:
+1. Copy `template/.landing-state.yaml` to `<project>/.landing-state.yaml`
+2. Set `project: <slug>` and `created: <ISO timestamp>` fields via yq
+3. Run `bash scripts/gate-check.sh --stage 00_brief --project <project>` to verify brief.md exists.
+
 Create a new landing project from scratch using the `landing-project-init` skill.
 
 ## Argument

@@ -5,6 +5,19 @@ allowed-tools: Bash, Read, Write, Edit, Glob
 
 # /landing-brand
 
+## Pre-flight
+
+1. Run `bash scripts/setup-flag.sh is_complete`. If exit 1 → reply "Onboarding не пройден. Запусти /landing-onboarding" and stop.
+2. Determine project dir from `<project>` argument or current `landing.project` config.
+3. Run: `bash scripts/gate-check.sh --stage 04_brand --project <project>`.
+   If exit 1 → relay the gate error to the user (which previous stage is missing) and stop.
+4. Continue with existing flow below.
+
+## Post-completion
+
+When the agent reports stage finished and user approves, run:
+`bash scripts/gate-check.sh --stage 04_brand --project <project> --approve`
+
 Run within a landing project after `style-extractor` has produced `04_БРЕНД/extracted/*.yaml`.
 
 ## What I do
