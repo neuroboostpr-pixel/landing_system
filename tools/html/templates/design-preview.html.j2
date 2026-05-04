@@ -1,0 +1,125 @@
+{% extends "base.html.j2" %}
+
+{% block title %}Design Preview{% endblock %}
+
+{% block extra_styles %}
+.swatch-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; }
+.swatch { width: 120px; }
+.swatch-color { width: 120px; height: 80px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.08); }
+.swatch-label { font-size: 0.75rem; color: #555; margin-top: 6px; }
+.swatch-hex { font-family: monospace; font-weight: 600; font-size: 0.8rem; }
+.font-specimen { padding: 16px; background: white; border-radius: 8px; margin-bottom: 12px; }
+.font-specimen h3 { margin: 0 0 4px; font-size: 1rem; color: #888; }
+.type-scale { display: grid; gap: 8px; }
+.type-row { display: flex; align-items: baseline; gap: 12px; }
+.type-token { font-family: monospace; font-size: 0.75rem; color: #888; min-width: 120px; }
+.space-scale { display: flex; align-items: flex-end; gap: 8px; flex-wrap: wrap; }
+.space-block { background: #e8f4fd; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 4px; }
+.space-label { font-size: 0.65rem; color: #555; text-align: center; }
+.motion-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.motion-card { background: white; border-radius: 8px; padding: 12px; }
+.mono { font-family: monospace; font-size: 0.8rem; }
+{% endblock %}
+
+{% block heading %}Design Preview{% endblock %}
+
+{% block meta %}
+<p class="meta">Токены из <code>05_ДИЗАЙН-СИСТЕМА/tokens.json</code></p>
+{% endblock %}
+
+{% block content %}
+
+{% set colors = tokens.get("colors", {}) %}
+{% set typography = tokens.get("typography", {}) %}
+{% set spacing = tokens.get("spacing", {}) %}
+{% set motion = tokens.get("motion", {}) %}
+{% set grid = tokens.get("grid", {}) %}
+
+{% if colors %}
+<h2>Цвета</h2>
+<div class="swatch-grid">
+  {% for name, color in colors.items() %}
+  <div class="swatch">
+    <div class="swatch-color" style="background: {{ color.hex }};"></div>
+    <div class="swatch-label">
+      <div class="swatch-hex">{{ color.hex }}</div>
+      <div>--color-{{ name }}</div>
+      {% if color.source %}<div style="color:#aaa;font-size:0.65rem">{{ color.source }}</div>{% endif %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% if typography %}
+<h2>Типографика</h2>
+{% set display = typography.get("display", {}) %}
+{% set body = typography.get("body", {}) %}
+{% set sizes = typography.get("sizes", {}) %}
+
+{% if display %}
+<div class="font-specimen">
+  <h3>Display — {{ display.family }} ({{ display.source }})</h3>
+  <div style="font-family: '{{ display.family }}', sans-serif; font-weight: {{ display.weight }}; font-size: 2.5rem; line-height: 1.1;">
+    Заголовок лендинга
+  </div>
+</div>
+{% endif %}
+
+{% if body %}
+<div class="font-specimen">
+  <h3>Body — {{ body.family }} ({{ body.source }})</h3>
+  <div style="font-family: '{{ body.family }}', sans-serif; font-weight: {{ body.weight }}; font-size: 1rem; line-height: 1.6;">
+    Основной текст лендинга. Описание продукта, преимуществ и отзывов клиентов.
+  </div>
+</div>
+{% endif %}
+
+{% if sizes %}
+<div class="card">
+  <h3 style="margin-top:0">Масштаб размеров</h3>
+  <div class="type-scale">
+    {% for name, val in sizes.items() %}
+    <div class="type-row">
+      <span class="type-token">--size-{{ name }}</span>
+      <span style="font-size: {{ val }}; line-height: 1.2; font-family: '{{ display.family if display else 'sans-serif' }}', sans-serif; white-space: nowrap;">{{ val }}</span>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+{% endif %}
+
+{% if spacing %}
+<h2>Отступы</h2>
+<div class="card">
+  <div class="space-scale">
+    {% for name, val in spacing.items() %}
+    <div class="space-block" style="width: {{ val }}; height: {{ val }}; min-width: 16px; min-height: 16px;">
+      <span class="space-label">{{ name }}<br>{{ val }}</span>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+{% if grid %}
+<h2>Сетка</h2>
+<div class="card">
+  <p class="mono">Колонки: {{ grid.columns }} | Gap: {{ grid.gap }} | Max-width: {{ grid.max_width }}</p>
+</div>
+{% endif %}
+
+{% if motion %}
+<h2>Motion</h2>
+<div class="motion-grid">
+  {% for name, val in motion.items() %}
+  <div class="motion-card">
+    <div style="color:#888;font-size:0.75rem">--{{ name.replace("_", "-") }}</div>
+    <div class="mono" style="font-weight:600">{{ val }}</div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% endblock %}
