@@ -1,0 +1,56 @@
+{% extends "base.html.j2" %}
+{% block title %}Brand Kit — {{ brand.meta.project }}{% endblock %}
+{% block heading %}Brand Kit — {{ brand.meta.project }}{% endblock %}
+
+{% block extra_styles %}
+.swatch { width: 100%; height: 80px; border-radius: 8px; margin-bottom: 8px; }
+.swatch-label { font-size: 0.85rem; font-weight: 600; }
+.swatch-source { font-size: 0.75rem; color: #666; }
+.font-specimen { font-size: 2rem; margin: 8px 0; }
+.font-meta { font-size: 0.8rem; color: #666; }
+.icon-grid { display: flex; flex-wrap: wrap; gap: 12px; }
+.icon-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 0.75rem; color: #666; }
+.icon-img { width: 32px; height: 32px; }
+{% endblock %}
+
+{% block content %}
+<div class="meta">Generated: {{ brand.meta.created }} · References: {{ brand.meta.references_used }}</div>
+
+<h2>Colors</h2>
+<div class="grid">
+  {% for role, color in brand.colors.items() %}
+  <div class="card">
+    <div class="swatch" style="background: {{ color.hex }};"></div>
+    <div class="swatch-label">{{ role | title }}: {{ color.hex }}</div>
+    <div class="swatch-source">{{ color.source }}</div>
+  </div>
+  {% endfor %}
+</div>
+
+<h2>Typography</h2>
+<div class="grid">
+  {% for role, font in brand.typography.items() %}
+  <div class="card">
+    <div class="font-specimen" style="font-family: '{{ font.family }}', sans-serif;">Aa Бб</div>
+    <div class="swatch-label">{{ role | title }}: {{ font.family }}</div>
+    <div class="font-meta">confidence: {{ font.confidence }} · {{ font.source }}</div>
+  </div>
+  {% endfor %}
+</div>
+
+<h2>Icons — {{ brand.icons.library }}</h2>
+<div class="icon-grid">
+  {% for icon in brand.icons.selected %}
+  <div class="icon-item">
+    <img class="icon-img" src="https://api.iconify.design/{{ icon.id }}.svg" alt="{{ icon.name }}" />
+    <span>{{ icon.id }}</span>
+  </div>
+  {% endfor %}
+</div>
+
+<h2>Motion</h2>
+<div class="card">{{ brand.motion.notes }}</div>
+
+<h2>Grid</h2>
+<div class="card">{{ brand.grid.notes }}</div>
+{% endblock %}
