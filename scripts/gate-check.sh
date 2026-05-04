@@ -25,6 +25,14 @@ done
 
 [ -z "$stage" ] && { echo "ERROR: --stage required" >&2; exit 2; }
 [ -z "$project" ] && { echo "ERROR: --project required" >&2; exit 2; }
+
+# Verify yq (mikefarah/yq) is installed
+if ! command -v yq >/dev/null 2>&1; then
+    echo "❌ yq not installed. Install: brew install yq" >&2
+    echo "   (need mikefarah/yq Go-based, not Python yq)" >&2
+    exit 3
+fi
+
 [ -f "$GATES_YAML" ] || { echo "ERROR: $GATES_YAML missing" >&2; exit 2; }
 
 # Load .env
