@@ -18,7 +18,7 @@
 |---|---|---|---|---|---|
 | 1 | **Skeleton & Infrastructure** | [phase-1-skeleton.md](2026-05-03-phase-1-skeleton.md) | ~18 tasks | 4–6 ч | 🟢 Complete (2026-05-03) |
 | 2 | **Brainstorming Pipeline** (00–04) | TBD после Phase 1 | ~25 tasks | 6–8 ч | 🟢 Complete (2026-05-04) |
-| 3 | **Design Pipeline** (05–07) | TBD после Phase 2 | ~20 tasks | 5–6 ч | ⚪ Not started |
+| 3 | **Design Pipeline** (05–07) | [phase-3-design-pipeline.md](2026-05-04-phase-3-design-pipeline.md) | ~20 tasks | 5–6 ч | 🟢 Complete (2026-05-04) |
 | 4 | **WP Build Pipeline** (08) | TBD после Phase 3 | ~30 tasks | 8–10 ч | ⚪ Not started |
 | 5 | **Deploy & Operations** (09–12) | TBD после Phase 4 | ~25 tasks | 6–8 ч | ⚪ Not started |
 | 6 | **Packaging & Pilot** | TBD после Phase 5 | ~10 tasks | 2–3 ч | ⚪ Not started |
@@ -262,15 +262,16 @@ Phase 1: Skeleton
 
 ## Status
 
-**Текущий статус:** Phase 2 — Brainstorming Pipeline **completed (2026-05-04)**, tag `phase-2-complete`.
+**Текущий статус:** Phase 3 — Design Pipeline **completed (2026-05-04)**, tag `phase-3-complete`.
 
 **Предыдущие фазы:**
 - Phase 1 — Skeleton & Infrastructure **completed (2026-05-03)**, tag `phase-1-complete`
+- Phase 2 — Brainstorming Pipeline **completed (2026-05-04)**, tag `phase-2-complete`
 
 **Следующий шаг:**
-1. Phase 3 (Design Pipeline, этапы 05–07) — детальный план будет написан перед стартом
-2. Реализация Phase 3 через `subagent-driven-development`
-3. После Phase 3 — Phase 4 plan, и так до Phase 6
+1. Phase 4 (WP Build Pipeline, этап 08) — написать детальный план перед стартом
+2. Реализация Phase 4 через `subagent-driven-development`
+3. После Phase 4 — Phase 5 plan, и так до Phase 6
 
 ---
 

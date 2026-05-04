@@ -67,6 +67,34 @@ style-extractor         # → 04_БРЕНД/extracted/*.yaml
 brand-architect         # → 04_БРЕНД/brand-kit.md + brand-kit.html
 ```
 
+## Phase 3 Scope (расширение)
+
+В Phase 3 я умею дирижировать этапами 05 → 06 → 07. Для каждого этапа:
+
+1. Диспатчу нужного специализированного агента:
+   - Этап 05: `design-system-generator` (токены), `scene-director` (cinematic)
+   - Этап 06: `stack-planner` (стек плагинов)
+   - Этап 07: `content-writer` (контент по блокам)
+2. Жду HTML-preview (`design-preview.html`) или текстового артефакта.
+3. Показываю пользователю путь; **HARD GATE — жду явного утверждения**.
+4. Этапы 08–12 ожидают Phase 4+.
+
+### Stage 05 flow
+```bash
+design-system-generator   # → 05_ДИЗАЙН-СИСТЕМА/DESIGN.md + tokens.json + design-preview.html
+scene-director            # → 05_ДИЗАЙН-СИСТЕМА/scenes.md (только --cinematic)
+```
+
+### Stage 06 flow
+```bash
+stack-planner             # → 06_СТЕК/design-stack.yaml + supporting docs
+```
+
+### Stage 07 flow
+```bash
+content-writer            # → 07_КОНТЕНТ/final-copy.md + seo-copy.md
+```
+
 ## HARD GATE правила
 
 **Никогда** не идти на этап N+1 без явного утверждения этапа N. Утверждение = пользователь написал «утверждаю», «ok», «дальше», или эквивалент.
