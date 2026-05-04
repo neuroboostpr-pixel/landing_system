@@ -55,3 +55,35 @@ def test_generic_families_are_filtered(tmp_path):
     # All are generic — candidates list must be empty
     assert data["candidates"] == []
     assert data["manual_review_required"] is True
+
+
+def test_vendor_fonts_have_lower_confidence(tmp_path):
+    mod = _load()
+    fake_fonts = [
+        "-apple-system",
+        "BlinkMacSystemFont",
+        "Inter, system-ui",
+    ]
+    out = tmp_path / "fonts.yaml"
+    with patch.object(mod, "get_page_fonts", return_value=fake_fonts):
+        mod.identify_url("https://example.com", str(out))
+
+    data = yaml.safe_load(out.read_text(encoding="utf-8"))
+    by_family = {c["family"]: c for c in data["candidates"]}
+    # Vendor fonts get confidence < 0.9
+    assert by_family["-apple-system"]["confidence"] < 0.9
+    assert by_family["BlinkMacSystemFont"]["confidence"] < 0.9
+    # Inter is a web font — confidence should be 0.9
+    assert by_family["Inter"]["confidence"] == 0.9
+
+
+def test_confidence_is_not_one(tmp_path):
+    mod = _load()
+    fake_fonts = ["Inter, system-ui, sans-serif"]
+    out = tmp_path / "fonts.yaml"
+    with patch.object(mod, "get_page_fonts", return_value=fake_fonts):
+        mod.identify_url("https://example.com", str(out))
+
+    data = yaml.safe_load(out.read_text(encoding="utf-8"))
+    for c in data["candidates"]:
+        assert c["confidence"] != 1.0, "confidence 1.0 misleads — use 0.9 for DOM-confirmed fonts"

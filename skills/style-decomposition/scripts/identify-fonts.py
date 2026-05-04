@@ -24,6 +24,13 @@ _GENERIC_FAMILIES = {
     "ui-rounded", "math", "emoji", "fangsong",
 }
 
+_VENDOR_TOKENS = {
+    "-apple-system", "blinkmacsystemfont", "segoe ui", "segoe",
+    "helvetica neue", "helvetica", "arial", "verdana", "georgia",
+    "times new roman", "times", "courier new", "courier",
+    "lucida grande", "tahoma", "trebuchet ms",
+}
+
 
 def parse_font_stack(stack: str) -> str:
     """Extract the primary font family from a CSS font-family stack.
@@ -46,11 +53,17 @@ def identify_url(url: str, out_path: str) -> None:
         if primary in _GENERIC_FAMILIES or primary in seen or not primary:
             continue
         seen.add(primary)
+        if primary.lower() in _VENDOR_TOKENS:
+            confidence = 0.7
+            source_note = "DOM computed style (system/vendor font)"
+        else:
+            confidence = 0.9
+            source_note = "DOM computed style"
         candidates.append({
             "family": primary,
             "full_stack": stack,
-            "source": "DOM computed style",
-            "confidence": 1.0,  # DOM tells us exactly what's loaded
+            "source": source_note,
+            "confidence": confidence,
         })
 
     out = Path(out_path)

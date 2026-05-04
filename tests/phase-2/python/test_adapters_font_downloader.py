@@ -30,3 +30,10 @@ def test_download_woff2(http_mock, tmp_path):
     assert out.exists()
     assert out.read_bytes() == b"WOFF2_BYTES"
     assert out.name == "inter-400.woff2"
+
+
+def test_google_fonts_url_no_double_encoding():
+    url = google_fonts_css_url("Cabinet Grotesk", [400])
+    # Should contain "Cabinet+Grotesk", NOT "Cabinet%2BGrotesk"
+    assert "Cabinet+Grotesk" in url
+    assert "%2B" not in url

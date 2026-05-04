@@ -4,7 +4,6 @@ Bunny Fonts is GDPR/RU-friendly mirror of Google Fonts.
 """
 from pathlib import Path
 from typing import List, Optional
-from urllib.parse import quote
 import requests
 
 
@@ -14,7 +13,7 @@ class FontDownloadError(RuntimeError):
 
 def google_fonts_css_url(family: str, weights: List[int]) -> str:
     """Build a Bunny Fonts CSS URL for a Google font."""
-    family_q = quote(family.replace(" ", "+"))
+    family_q = family.replace(" ", "+")
     weights_str = ";".join(str(w) for w in sorted(weights))
     return f"https://fonts.bunny.net/css?family={family_q}:wght@{weights_str}"
 

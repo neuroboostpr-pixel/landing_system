@@ -15,7 +15,8 @@ from tools.logger import success
 
 
 def rgb_to_hex(rgb):
-    return "#{:02x}{:02x}{:02x}".format(*rgb)
+    r, g, b = (max(0, min(255, v)) for v in rgb)
+    return "#{:02x}{:02x}{:02x}".format(r, g, b)
 
 
 def extract(image_path: str, count: int = 5) -> list:
@@ -43,6 +44,16 @@ def extract(image_path: str, count: int = 5) -> list:
             "rgb": list(rgb),
             "source_pixel": list(coord) if coord else None,
         })
+
+    # Deduplicate by hex value, keeping first occurrence
+    seen_hex = set()
+    deduped = []
+    for entry in results:
+        if entry["hex"] not in seen_hex:
+            seen_hex.add(entry["hex"])
+            deduped.append(entry)
+    results = deduped
+
     return results
 
 
