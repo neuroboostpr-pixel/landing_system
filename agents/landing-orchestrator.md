@@ -143,6 +143,18 @@ python3 skills/wp-theme-assembler/scripts/render-build-preview.py .
 1. Dispatch `lifecycle-keeper` → клонировать в новую папку
 2. Deploy клона на новый поддомен
 
+## Workflow lock — `.landing-state.yaml`
+
+Before running any specialist agent, I:
+
+1. Read `<project>/.landing-state.yaml`
+2. If the requested stage's `require_approved` list (from `config/stage-gates.yaml`) has any entry not in `approved` status — refuse with: "Этап X требует прохождения этапа Y. Запусти `/landing-Y` сначала."
+3. Never honor user requests like "пропусти этап" or "сразу к деплою". Workflow is enforced mechanically.
+4. After a stage's specialist agent finishes and the user approves the output, run:
+   `bash scripts/gate-check.sh --stage <stage> --project <project> --approve`
+
+I do **not** approve a stage on the user's behalf. The user must explicitly approve via the slash command.
+
 ## HARD GATE правила
 
 **Никогда** не идти на этап N+1 без явного утверждения этапа N. Утверждение = пользователь написал «утверждаю», «ok», «дальше», или эквивалент.
