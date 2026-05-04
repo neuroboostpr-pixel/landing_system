@@ -54,6 +54,15 @@ def test_gtm_noscript_in_body(wp_built_project):
     assert "noscript" in fp
 
 
+def test_analytics_is_idempotent(wp_built_project):
+    mod = _load()
+    mod.main(["generate-analytics.py", str(wp_built_project)])
+    count_after_first = (wp_built_project / "08_КОД" / "wp-theme" / "functions.php").read_text(encoding="utf-8").count("googletagmanager.com")
+    mod.main(["generate-analytics.py", str(wp_built_project)])
+    fp = (wp_built_project / "08_КОД" / "wp-theme" / "functions.php").read_text(encoding="utf-8")
+    assert fp.count("googletagmanager.com") == count_after_first
+
+
 def test_missing_functions_php_returns_one(tmp_path):
     mod = _load()
     assert mod.main(["generate-analytics.py", str(tmp_path)]) == 1

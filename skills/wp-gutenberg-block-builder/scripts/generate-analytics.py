@@ -75,11 +75,10 @@ def main(argv: list) -> int:
         return 1
     try:
         start = Path(argv[1])
-        fp_candidates = list(start.rglob("08_КОД/wp-theme/functions.php"))
-        if not fp_candidates:
+        fp = start / "08_КОД" / "wp-theme" / "functions.php"
+        if not fp.exists():
             raise FileNotFoundError("functions.php not found — run /landing-build first")
-        fp = fp_candidates[0]
-        project = fp.parents[2]
+        project = start
 
         brief_path = project / "00_БРИФ" / "brief.md"
         brief_text = brief_path.read_text(encoding="utf-8") if brief_path.exists() else ""
@@ -93,7 +92,7 @@ def main(argv: list) -> int:
         else:
             warn("YM счётчик не найден в brief.md — пропускаю")
 
-        if gtm_id:
+        if gtm_id and "googletagmanager.com" not in current:
             current += "\n" + _gtm_head_code(gtm_id)
         else:
             warn("GTM контейнер не найден в brief.md — пропускаю")
