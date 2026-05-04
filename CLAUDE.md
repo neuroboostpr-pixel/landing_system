@@ -50,3 +50,14 @@
 
 Spec-документ: [`docs/superpowers/specs/2026-05-03-landing-system-design.md`](docs/superpowers/specs/2026-05-03-landing-system-design.md)
 Master plan: [`docs/superpowers/plans/2026-05-03-landing-system-master-plan.md`](docs/superpowers/plans/2026-05-03-landing-system-master-plan.md)
+
+## Workflow Lock (новое)
+
+С 2026-05-04 система использует принудительный workflow:
+
+- Перед `/landing-*` командой нужен пройденный onboarding (`~/.landing-system/setup_complete`)
+- Каждый проект имеет `.landing-state.yaml`, фиксирующий статус 13 этапов
+- `scripts/gate-check.sh` проверяет каждый этап (hard+soft checks)
+- `landing-orchestrator` НЕ пропускает этапы, даже если пользователь просит
+
+Подробнее: [`docs/SETUP.md`](docs/SETUP.md), [`docs/superpowers/specs/2026-05-04-stage-gates-onboarding-mcp-design.md`](docs/superpowers/specs/2026-05-04-stage-gates-onboarding-mcp-design.md)
