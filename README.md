@@ -47,6 +47,31 @@ cp .env.example .env
 # В Claude Code: /landing-new my-first-landing
 ```
 
+## Первый запуск (onboarding)
+
+После клонирования репо запусти:
+
+```bash
+bash scripts/wizard.sh
+# или внутри Claude Code:
+/landing-onboarding
+```
+
+Onboarding:
+- проверяет локальные зависимости (wp-cli, ssh, rsync, python, jq)
+- проверяет, что плагин `superpowers` установлен
+- проверяет, что Firecrawl MCP настроен
+- создаёт `.env` и валидирует все API-ключи
+- создаёт флаг `~/.landing-system/setup_complete`
+
+Без пройденного onboarding'а команды `/landing-*` не запускаются.
+
+## Workflow Lock
+
+Каждый проект содержит `.landing-state.yaml`, который фиксирует статус 13 этапов. `/landing-build` не запустится без одобренных 02–07; `/landing-deploy` — без одобренного 08. Этапы перепрыгивать нельзя.
+
+Полный гайд: [`docs/SETUP.md`](docs/SETUP.md)
+
 ## Команды
 
 | Команда | Назначение |
