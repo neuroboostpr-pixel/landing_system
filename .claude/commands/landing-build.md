@@ -49,6 +49,34 @@ Run `render-build-preview.py` to create static `08_КОД/build-preview.html`.
 python3 <landing-system>/skills/wp-theme-assembler/scripts/render-build-preview.py .
 ```
 
+### Step 10 — Popup System
+Run `generate-popup.py` to add built-in popup (JS + CSS + PHP overlay).
+
+```bash
+python3 <landing-system>/skills/wp-gutenberg-block-builder/scripts/generate-popup.py .
+```
+
+### Step 11 — JS Library Initialization
+Run `generate-js-init.py` to create main.js, sliders.js, animations.js, counters.js.
+
+```bash
+python3 <landing-system>/skills/wp-gutenberg-block-builder/scripts/generate-js-init.py .
+```
+
+### Step 12 — Analytics (Yandex Metrika + GTM)
+Run `generate-analytics.py` to inject YM counter and GTM container from brief.md.
+
+```bash
+python3 <landing-system>/skills/wp-gutenberg-block-builder/scripts/generate-analytics.py .
+```
+
+### Step 13 — CRM Integrations
+Run `generate-integrations.py` to inject Fluent Forms webhook (AmoCRM / Bitrix24 / Telegram).
+
+```bash
+python3 <landing-system>/skills/wp-gutenberg-block-builder/scripts/generate-integrations.py .
+```
+
 ### Step 9 — HARD GATE
 Show path to `08_КОД/build-preview.html`. Wait for user approval before proceeding to stage 09 (deploy).
 
@@ -71,6 +99,9 @@ Show path to `08_КОД/build-preview.html`. Wait for user approval before proce
 - `08_КОД/acf-fields.json` — ACF field configuration
 - `08_КОД/gutenberg-blocks/` — custom Gutenberg blocks
 - `08_КОД/generateblocks-templates.json` — GenerateBlocks template export
+- `08_КОД/wp-theme/assets/js/popup.js` — popup system
+- `08_КОД/wp-theme/assets/js/main.js`, `sliders.js`, `animations.js`, `counters.js` — JS init
+- `08_КОД/integrations/` — CRM setup instructions
 - `08_КОД/build-preview.html` — static preview for approval
 - `11_АНАЛИТИКА/metrika-config.md`, `goals-and-events.json`, `utm-templates.md`
 - `12_SEO/meta-tags.yaml`, `structured-data.json`, `robots.txt`, `keywords.md`
