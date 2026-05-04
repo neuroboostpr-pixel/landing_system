@@ -99,6 +99,10 @@ def main(argv: list) -> int:
         fp = _find_functions_php(start)
         theme = fp.parent
 
+        (theme / "assets" / "js").mkdir(parents=True, exist_ok=True)
+        (theme / "assets" / "css").mkdir(parents=True, exist_ok=True)
+        (theme / "template-parts").mkdir(parents=True, exist_ok=True)
+
         (theme / "assets" / "js" / "popup.js").write_text(_POPUP_JS, encoding="utf-8")
         (theme / "assets" / "css" / "popup.css").write_text(_POPUP_CSS, encoding="utf-8")
         (theme / "template-parts" / "popup-overlay.php").write_text(_POPUP_PHP, encoding="utf-8")

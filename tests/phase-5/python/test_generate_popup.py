@@ -58,6 +58,14 @@ def test_functions_php_has_popup_enqueue(wp_built_project):
     assert "popup.css" in fp
 
 
+def test_popup_enqueue_is_idempotent(wp_built_project):
+    mod = _load()
+    mod.main(["generate-popup.py", str(wp_built_project)])
+    mod.main(["generate-popup.py", str(wp_built_project)])
+    fp = (wp_built_project / "08_КОД" / "wp-theme" / "functions.php").read_text(encoding="utf-8")
+    assert fp.count("// Popup system") == 1
+
+
 def test_missing_functions_php_returns_one(tmp_path):
     mod = _load()
     assert mod.main(["generate-popup.py", str(tmp_path)]) == 1
