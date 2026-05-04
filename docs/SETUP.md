@@ -1,0 +1,82 @@
+# Landing System — Setup Guide
+
+Полный гайд по первой установке landing-system на новой машине.
+
+## 1. Что такое landing-system
+
+Агентская система для производства WordPress-лендингов. Пайплайн из 12 этапов: бриф → ресёрч → бренд → дизайн → контент → код → деплой → QA. Каждый этап ведёт специализированный агент.
+
+## 2. Как устроены агенты
+
+- `landing-orchestrator` — главный дирижёр, проводит через все этапы
+- 18 специализированных агентов (один на этап / задачу)
+- Каждый агент работает в режиме HARD GATE: не идёт дальше без явного approve пользователя
+
+## 3. Как работает workflow lock
+
+В каждом проекте есть файл `.landing-state.yaml` — фиксирует статус каждого этапа (`locked` / `in_progress` / `approved`).
+
+`/landing-build` проверяет, что этапы 02–07 имеют статус `approved`. Если хотя бы один не пройден — команда падает с ошибкой. **Перепрыгивать этапы нельзя**, даже по явной просьбе.
+
+## 4. Зачем onboarding
+
+Все API-ключи нужны до старта первого проекта. Если запустить `/landing-new` без onboarding'а, команда направит на `/landing-onboarding`.
+
+Onboarding делает:
+- Проверяет локальные зависимости (`wp-cli`, `ssh`, `rsync`, `python`, `jq`)
+- Проверяет, что плагин `superpowers` установлен
+- Проверяет, что Firecrawl MCP настроен в `~/.claude/settings.json`
+- Создаёт `.env` из `.env.example` и просит заполнить
+- Валидирует каждый API-ключ тестовым запросом
+- Создаёт флаг `~/.landing-system/setup_complete`
+
+## 5. Быстрый старт
+
+```bash
+git clone https://github.com/neuroboostpr-pixel/landing_system.git
+cd landing_system
+bash scripts/wizard.sh
+# или внутри Claude Code:
+/landing-onboarding
+```
+
+## 6. Команды (краткая справка)
+
+| Команда | Назначение |
+|---|---|
+| `/landing-onboarding` | Первичная настройка (один раз на машину) |
+| `/landing-new <slug>` | Создать новый проект |
+| `/landing-references` | Этап 03: референсы |
+| `/landing-brand` | Этап 04: бренд-кит |
+| `/landing-design` | Этап 05: дизайн-система |
+| `/landing-stack` | Этап 06: стек |
+| `/landing-content` | Этап 07: контент |
+| `/landing-build` | Этап 08: WP-сборка |
+| `/landing-deploy` | Этап 09: деплой |
+| `/landing-qa` | Этап 10: QA |
+| `/landing-status` | Статус проекта |
+
+## 7. Список API (все бесплатные free tier)
+
+| Сервис | Зачем | Где взять |
+|---|---|---|
+| Firecrawl | Парсинг сайтов и отзывов | https://firecrawl.dev |
+| Pexels | Стоковые фото | https://www.pexels.com/api/ |
+| Unsplash | Стоковые фото (alt) | https://unsplash.com/developers |
+| Pixabay | Стоковые фото + векторы | https://pixabay.com/api/docs/ |
+| HuggingFace | Генерация картинок (опц.) | https://huggingface.co/settings/tokens |
+| WhatTheFont | Определение шрифтов | https://www.myfonts.com/pages/whatthefont-api |
+| Yandex Wordstat | SEO | https://oauth.yandex.ru |
+| Yandex Metrika | Аналитика | https://metrika.yandex.ru |
+| Telegram Bot | Уведомления | @BotFather |
+| amoCRM / Bitrix24 | CRM | https://amocrm.ru / https://bitrix24.ru |
+| Beget API | DNS, SSH | https://beget.com/ru/kb/api |
+| Cloudflare | DNS (опц.) | https://dash.cloudflare.com |
+| Reg.ru | DNS (опц.) | https://www.reg.ru |
+
+## 8. Troubleshooting
+
+- `wp-cli` отсутствует → `brew install wp-cli` (macOS)
+- Python пакеты не найдены → `pip install -r requirements.txt`
+- SSH к Бегету не работает → проверь `ssh-copy-id user@srv.beget.ru`
+- Onboarding застрял → удали `~/.landing-system/setup_complete` и запусти заново
