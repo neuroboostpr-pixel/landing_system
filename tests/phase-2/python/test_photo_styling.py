@@ -5,7 +5,7 @@ from PIL import Image
 import io
 
 STYLE_SCRIPT = (Path(__file__).resolve().parent.parent.parent.parent
-                / ".skills" / "photo-styling" / "scripts" / "style.py")
+                / "skills" / "photo-styling" / "scripts" / "style.py")
 
 
 def _load():

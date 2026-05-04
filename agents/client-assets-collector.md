@@ -21,7 +21,7 @@ Stage 02 of the landing workflow. Collect every piece of client-supplied content
 2. For each photo: copy into `02_МАТЕРИАЛЫ_КЛИЕНТА/photos/original/`. Don't modify (photo-stylist owns processing).
 3. For each video: copy into `02_МАТЕРИАЛЫ_КЛИЕНТА/videos/`. Note duration.
 4. For each review URL:
-   - Run `python3 .skills/client-assets-collection/scripts/parse-reviews.py <url> <target-folder>`
+   - Run `python3 skills/client-assets-collection/scripts/parse-reviews.py <url> <target-folder>`
    - Output goes into `02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/<source>/`
 5. Generate `02_МАТЕРИАЛЫ_КЛИЕНТА/assets-manifest.yaml` listing every collected file with its planned use (hero / about / proof).
 6. Render `02_МАТЕРИАЛЫ_КЛИЕНТА/assets-gallery.html` so user can review the haul.

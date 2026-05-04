@@ -4,7 +4,7 @@ from pathlib import Path
 from unittest.mock import patch, MagicMock
 
 DOWNLOAD_SCRIPT = (Path(__file__).resolve().parent.parent.parent.parent
-                   / ".skills" / "style-decomposition" / "scripts" / "download-fonts.py")
+                   / "skills" / "style-decomposition" / "scripts" / "download-fonts.py")
 
 
 def _load():

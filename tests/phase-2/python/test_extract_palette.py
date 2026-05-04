@@ -4,7 +4,7 @@ from pathlib import Path
 from PIL import Image
 
 PALETTE_SCRIPT = (Path(__file__).resolve().parent.parent.parent.parent
-                  / ".skills" / "style-decomposition" / "scripts" / "extract-palette.py")
+                  / "skills" / "style-decomposition" / "scripts" / "extract-palette.py")
 
 
 def _load():

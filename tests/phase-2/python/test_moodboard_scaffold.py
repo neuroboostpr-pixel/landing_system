@@ -1,10 +1,10 @@
-"""Tests for .skills/moodboard-creation/scripts/scaffold.py."""
+"""Tests for skills/moodboard-creation/scripts/scaffold.py."""
 import importlib.util
 import yaml
 from pathlib import Path
 
 SCAFFOLD_SCRIPT = (Path(__file__).resolve().parent.parent.parent.parent
-                   / ".skills" / "moodboard-creation" / "scripts" / "scaffold.py")
+                   / "skills" / "moodboard-creation" / "scripts" / "scaffold.py")
 
 
 def _load():

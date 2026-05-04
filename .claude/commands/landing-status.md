@@ -9,7 +9,7 @@ Show the current state of the master system and any active project in the cwd.
 
 ## Algorithm
 
-1. **Master system check** (cwd is `landing-system/` or contains `.skills/landing-project-init/`):
+1. **Master system check** (cwd is `landing-system/` or contains `skills/landing-project-init/`):
    - Print version (from `package.json`).
    - Print current Phase status: "Phase 1 — Skeleton & Infrastructure (in progress / complete)".
    - List installed skills and agents.
@@ -35,7 +35,7 @@ dir_has_real_content() {
 }
 
 # Master system?
-if [ -d "$CWD/.skills/landing-project-init" ]; then
+if [ -d "$CWD/skills/landing-project-init" ]; then
   echo "📦 Landing System (master)"
   if [ -f "$CWD/package.json" ]; then
     VERSION=$(grep -E '"version"' "$CWD/package.json" | head -1 | sed -E 's/.*"version"[[:space:]]*:[[:space:]]*"([^"]*)".*/\1/' || echo "unknown")
@@ -44,13 +44,13 @@ if [ -d "$CWD/.skills/landing-project-init" ]; then
   echo "   Phase 1: Skeleton & Infrastructure"
   echo ""
   echo "   Skills:"
-  for skill in "$CWD"/.skills/*/SKILL.md; do
+  for skill in "$CWD"/skills/*/SKILL.md; do
     name=$(basename "$(dirname "$skill")")
     echo "     - $name"
   done
   echo ""
   echo "   Agents:"
-  for agent in "$CWD"/.agents/*.md; do
+  for agent in "$CWD"/agents/*.md; do
     name=$(basename "$agent" .md)
     echo "     - $name"
   done

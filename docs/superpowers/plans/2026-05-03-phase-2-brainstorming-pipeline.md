@@ -4,7 +4,7 @@
 
 **Goal:** Реализовать первые 5 этапов workflow одного лендинга (00 Бриф → 01 Контекст → 02 Материалы → 03 Референсы → 04 Бренд) через 6 специализированных агентов и набор Python/Bash инструментов. На выходе агент строит `brand-kit.md` с полной трассировкой источников + HTML preview-артефакты на каждом этапе.
 
-**Architecture:** Smart agents + thin Python tools. Каждый агент = markdown spec в `.agents/`. Реальная работа делегируется Python-скриптам в `.skills/<skill>/scripts/`. HTML preview генерируется через единый Jinja2-template движок. Все внешние API вызовы (Firecrawl, WhatTheFont, Iconify) изолированы в адаптерах для удобного mocking в тестах.
+**Architecture:** Smart agents + thin Python tools. Каждый агент = markdown spec в `agents/`. Реальная работа делегируется Python-скриптам в `skills/<skill>/scripts/`. HTML preview генерируется через единый Jinja2-template движок. Все внешние API вызовы (Firecrawl, WhatTheFont, Iconify) изолированы в адаптерах для удобного mocking в тестах.
 
 **Tech Stack (полностью бесплатный, без API-ключей):**
 - Python 3.10+ (image-pipeline, color/icon extraction)
@@ -39,7 +39,7 @@ Phase 2 содержит **6 связанных подсистем** (по од�
 
 ```
 landing-system/
-├─ .agents/
+├─ agents/
 │  ├─ landing-orchestrator.md           # MODIFY — расширяем для этапов 00-04
 │  ├─ client-assets-collector.md        # NEW
 │  ├─ photo-stylist.md                  # NEW
@@ -53,7 +53,7 @@ landing-system/
 │  ├─ landing-moodboard.md              # NEW
 │  └─ landing-brand.md                  # NEW
 │
-├─ .skills/
+├─ skills/
 │  ├─ client-assets-collection/         # NEW
 │  │  ├─ SKILL.md
 │  │  └─ scripts/
@@ -1062,8 +1062,8 @@ git commit -m "feat(phase-2): add font downloader and Jinja2 HTML renderer base"
 ### Task 6: `client-assets-collector` agent + SKILL.md scaffold
 
 **Files:**
-- Create: `.agents/client-assets-collector.md`
-- Create: `.skills/client-assets-collection/SKILL.md`
+- Create: `agents/client-assets-collector.md`
+- Create: `skills/client-assets-collection/SKILL.md`
 - Create: `tests/phase-2/test-agents-frontmatter.bats`
 
 - [ ] **Step 6.1: Создать тест frontmatter**
@@ -1085,13 +1085,13 @@ PHASE2_AGENTS=(
 )
 
 @test "client-assets-collector agent file exists" {
-  assert_file_exists "$LANDING_SYSTEM_ROOT/.agents/client-assets-collector.md"
+  assert_file_exists "$LANDING_SYSTEM_ROOT/agents/client-assets-collector.md"
 }
 
 @test "client-assets-collector has valid frontmatter" {
-  run grep -E "^name: client-assets-collector$" "$LANDING_SYSTEM_ROOT/.agents/client-assets-collector.md"
+  run grep -E "^name: client-assets-collector$" "$LANDING_SYSTEM_ROOT/agents/client-assets-collector.md"
   [ "$status" -eq 0 ]
-  run grep -E "^description:" "$LANDING_SYSTEM_ROOT/.agents/client-assets-collector.md"
+  run grep -E "^description:" "$LANDING_SYSTEM_ROOT/agents/client-assets-collector.md"
   [ "$status" -eq 0 ]
 }
 ```
@@ -1100,7 +1100,7 @@ PHASE2_AGENTS=(
 
 - [ ] **Step 6.2: Run, expect FAIL**
 
-- [ ] **Step 6.3: Создать `.agents/client-assets-collector.md`**
+- [ ] **Step 6.3: Создать `agents/client-assets-collector.md`**
 
 ```markdown
 ---
@@ -1126,7 +1126,7 @@ Stage 02 of the landing workflow. Collect every piece of client-supplied content
 2. For each photo: copy into `02_МАТЕРИАЛЫ_КЛИЕНТА/photos/original/`. Don't modify (photo-stylist owns processing).
 3. For each video: copy into `02_МАТЕРИАЛЫ_КЛИЕНТА/videos/`. Note duration.
 4. For each review URL:
-   - Run `python3 .skills/client-assets-collection/scripts/parse-reviews.py <url> <target-folder>`
+   - Run `python3 skills/client-assets-collection/scripts/parse-reviews.py <url> <target-folder>`
    - Output goes into `02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/<source>/`
 5. Generate `02_МАТЕРИАЛЫ_КЛИЕНТА/assets-manifest.yaml` listing every collected file with its planned use (hero / about / proof).
 6. Render `02_МАТЕРИАЛЫ_КЛИЕНТА/assets-gallery.html` so user can review the haul.
@@ -1149,7 +1149,7 @@ Stage 02 of the landing workflow. Collect every piece of client-supplied content
 Bash, Read, Write, Edit, Glob. Calls Python scripts via Bash.
 ```
 
-- [ ] **Step 6.4: Создать `.skills/client-assets-collection/SKILL.md`**
+- [ ] **Step 6.4: Создать `skills/client-assets-collection/SKILL.md`**
 
 ```markdown
 ---
@@ -1177,7 +1177,7 @@ description: Use during stage 02 to scaffold client materials folder, parse exte
 - [ ] **Step 6.6: Commit**
 
 ```bash
-git add .agents/client-assets-collector.md .skills/client-assets-collection/SKILL.md tests/phase-2/test-agents-frontmatter.bats
+git add agents/client-assets-collector.md skills/client-assets-collection/SKILL.md tests/phase-2/test-agents-frontmatter.bats
 git commit -m "feat(phase-2): scaffold client-assets-collector agent and skill"
 ```
 
@@ -1186,7 +1186,7 @@ git commit -m "feat(phase-2): scaffold client-assets-collector agent and skill"
 ### Task 7: `parse-reviews.py` — review parser via web_scraper
 
 **Files:**
-- Create: `.skills/client-assets-collection/scripts/parse-reviews.py`
+- Create: `skills/client-assets-collection/scripts/parse-reviews.py`
 - Create: `tests/phase-2/python/test_parse_reviews.py`
 
 Strategy: detect source from URL → choose `extract_static` (blog-like) or `extract_dynamic` (Я.Карты/2GIS/Otzovik — JS-heavy). Tests mock the adapter, not the network.
@@ -1394,7 +1394,7 @@ if __name__ == "__main__":
 - [ ] **Step 7.5: Commit**
 
 ```bash
-git add .skills/client-assets-collection/scripts/parse-reviews.py tests/phase-2/python/test_parse_reviews.py
+git add skills/client-assets-collection/scripts/parse-reviews.py tests/phase-2/python/test_parse_reviews.py
 git commit -m "feat(phase-2): add parse-reviews.py using free web_scraper (no API keys)"
 ```
 
@@ -1403,7 +1403,7 @@ git commit -m "feat(phase-2): add parse-reviews.py using free web_scraper (no AP
 ### Task 8: `collect.py` — assets manifest + gallery
 
 **Files:**
-- Create: `.skills/client-assets-collection/scripts/collect.py`
+- Create: `skills/client-assets-collection/scripts/collect.py`
 - Create: `tools/html/templates/assets-gallery.html.j2`
 - Create: `tests/phase-2/python/test_collect_assets.py`
 
@@ -1614,7 +1614,7 @@ if __name__ == "__main__":
 - [ ] **Step 8.6: Commit**
 
 ```bash
-git add .skills/client-assets-collection/scripts/collect.py tools/html/templates/assets-gallery.html.j2 tests/phase-2/python/test_collect_assets.py
+git add skills/client-assets-collection/scripts/collect.py tools/html/templates/assets-gallery.html.j2 tests/phase-2/python/test_collect_assets.py
 git commit -m "feat(phase-2): add collect.py and assets-gallery.html.j2"
 ```
 
@@ -1623,13 +1623,13 @@ git commit -m "feat(phase-2): add collect.py and assets-gallery.html.j2"
 ### Task 9: `photo-stylist` agent + skill scaffold
 
 **Files:**
-- Create: `.agents/photo-stylist.md`
-- Create: `.skills/photo-styling/SKILL.md`
+- Create: `agents/photo-stylist.md`
+- Create: `skills/photo-styling/SKILL.md`
 - Extend: `tests/phase-2/test-agents-frontmatter.bats`
 
 - [ ] **Step 9.1: Расширить test, добавить 2 assertions** для photo-stylist (file exists, frontmatter ok). **Run, expect FAIL.**
 
-- [ ] **Step 9.2: Создать `.agents/photo-stylist.md`**
+- [ ] **Step 9.2: Создать `agents/photo-stylist.md`**
 
 ```markdown
 ---
@@ -1662,7 +1662,7 @@ Process raw client photos for use in landing scenes. Identity-safe rules apply a
 
 1. List photos in `02_МАТЕРИАЛЫ_КЛИЕНТА/photos/original/`.
 2. For each photo, ask user about intended use (hero / about / proof).
-3. For each photo to process: run `python3 .skills/photo-styling/scripts/style.py <input> <output> --mode cutout` (or other allowed modes).
+3. For each photo to process: run `python3 skills/photo-styling/scripts/style.py <input> <output> --mode cutout` (or other allowed modes).
 4. Output to `02_МАТЕРИАЛЫ_КЛИЕНТА/photos/processed/`.
 5. Update `02_МАТЕРИАЛЫ_КЛИЕНТА/photos/stylesheet.md` with rules applied per photo.
 
@@ -1675,7 +1675,7 @@ Before stage 03 — user reviews `assets-gallery.html` (rebuilt) showing both or
 Bash, Read, Write, Glob. Calls Python `style.py`.
 ```
 
-- [ ] **Step 9.3: Создать `.skills/photo-styling/SKILL.md`**
+- [ ] **Step 9.3: Создать `skills/photo-styling/SKILL.md`**
 
 ```markdown
 ---
@@ -1700,7 +1700,7 @@ See [scripts/style.py](scripts/style.py).
 - [ ] **Step 9.5: Commit**
 
 ```bash
-git add .agents/photo-stylist.md .skills/photo-styling/SKILL.md tests/phase-2/test-agents-frontmatter.bats
+git add agents/photo-stylist.md skills/photo-styling/SKILL.md tests/phase-2/test-agents-frontmatter.bats
 git commit -m "feat(phase-2): scaffold photo-stylist agent and photo-styling skill"
 ```
 
@@ -1709,7 +1709,7 @@ git commit -m "feat(phase-2): scaffold photo-stylist agent and photo-styling ski
 ### Task 10: `style.py` — cutout + cleanup + resize
 
 **Files:**
-- Create: `.skills/photo-styling/scripts/style.py`
+- Create: `skills/photo-styling/scripts/style.py`
 - Create: `tests/phase-2/python/test_photo_styling.py`
 
 - [ ] **Step 10.1: Создать тест**
@@ -1890,7 +1890,7 @@ if __name__ == "__main__":
 - [ ] **Step 10.5: Commit**
 
 ```bash
-git add .skills/photo-styling/scripts/style.py tests/phase-2/python/test_photo_styling.py
+git add skills/photo-styling/scripts/style.py tests/phase-2/python/test_photo_styling.py
 git commit -m "feat(phase-2): add identity-safe photo styling (cutout/cleanup/crop/resize)"
 ```
 
@@ -1901,15 +1901,15 @@ git commit -m "feat(phase-2): add identity-safe photo styling (cutout/cleanup/cr
 ### Task 11: `references-curator` agent + skill + index.py
 
 **Files:**
-- Create: `.agents/references-curator.md`
-- Create: `.skills/references-collection/SKILL.md`
-- Create: `.skills/references-collection/scripts/index.py`
+- Create: `agents/references-curator.md`
+- Create: `skills/references-collection/SKILL.md`
+- Create: `skills/references-collection/scripts/index.py`
 - Extend: `tests/phase-2/test-agents-frontmatter.bats`
 - Create: `tests/phase-2/python/test_references_index.py`
 
 - [ ] **Step 11.1: Расширить bats** (2 new assertions for references-curator). Test fail expected.
 
-- [ ] **Step 11.2: Создать `.agents/references-curator.md`**
+- [ ] **Step 11.2: Создать `agents/references-curator.md`**
 
 ```markdown
 ---
@@ -1928,7 +1928,7 @@ Stage 03 first half. Build the reference index with statuses.
 1. Ask user for references: URLs to sites, Behance / Dribbble files, drag-drop screenshots into `03_РЕФЕРЕНСЫ/refs/`.
 2. For each URL, capture screenshot if possible (Phase 5 will add headless browser support; Phase 2 stores URL only).
 3. For each reference, prompt user for status: candidate / approved / rejected.
-4. Maintain `03_РЕФЕРЕНСЫ/index.yaml` via `python3 .skills/references-collection/scripts/index.py add|update|list`.
+4. Maintain `03_РЕФЕРЕНСЫ/index.yaml` via `python3 skills/references-collection/scripts/index.py add|update|list`.
 5. **HARD GATE**: minimum 3 references with status `approved` before moodboard-composer takes over.
 
 ## Tools
@@ -1936,7 +1936,7 @@ Stage 03 first half. Build the reference index with statuses.
 Bash, Read, Write, Glob. Calls index.py.
 ```
 
-- [ ] **Step 11.3: Создать `.skills/references-collection/SKILL.md`**
+- [ ] **Step 11.3: Создать `skills/references-collection/SKILL.md`**
 
 ```markdown
 ---
@@ -2019,7 +2019,7 @@ def test_list_by_status(tmp_path):
 
 - [ ] **Step 11.5: Run test, expect FAIL**
 
-- [ ] **Step 11.6: Создать `.skills/references-collection/scripts/index.py`**
+- [ ] **Step 11.6: Создать `skills/references-collection/scripts/index.py`**
 
 ```python
 #!/usr/bin/env python3
@@ -2144,7 +2144,7 @@ if __name__ == "__main__":
 - [ ] **Step 11.8: Commit**
 
 ```bash
-git add .agents/references-curator.md .skills/references-collection/ tests/phase-2/test-agents-frontmatter.bats tests/phase-2/python/test_references_index.py
+git add agents/references-curator.md skills/references-collection/ tests/phase-2/test-agents-frontmatter.bats tests/phase-2/python/test_references_index.py
 git commit -m "feat(phase-2): add references-curator agent and references-collection skill with index.py"
 ```
 
@@ -2153,9 +2153,9 @@ git commit -m "feat(phase-2): add references-curator agent and references-collec
 ### Task 12: `moodboard-composer` agent + skill + render.py + HTML template
 
 **Files:**
-- Create: `.agents/moodboard-composer.md`
-- Create: `.skills/moodboard-creation/SKILL.md`
-- Create: `.skills/moodboard-creation/scripts/render.py`
+- Create: `agents/moodboard-composer.md`
+- Create: `skills/moodboard-creation/SKILL.md`
+- Create: `skills/moodboard-creation/scripts/render.py`
 - Create: `tools/html/templates/moodboard.html.j2`
 - Create: `tools/html/templates/partials/ref-card.html.j2`
 - Extend: `tests/phase-2/test-agents-frontmatter.bats`
@@ -2165,7 +2165,7 @@ git commit -m "feat(phase-2): add references-curator agent and references-collec
 
 - [ ] **Step 12.2: Создать agent + skill md.** Content:
 
-`.agents/moodboard-composer.md`:
+`agents/moodboard-composer.md`:
 ```markdown
 ---
 name: moodboard-composer
@@ -2183,7 +2183,7 @@ Compose `03_РЕФЕРЕНСЫ/moodboard.md` (text narrative explaining the visu
 1. Read `03_РЕФЕРЕНСЫ/index.yaml`, get all refs with status `approved`.
 2. For each: prompt user for tags (e.g. "split-screen", "warm-palette", "premium-typography").
 3. Write `moodboard.md` describing the chosen direction (palette feel, typography character, motion vibe, what we adopt and reject).
-4. Run `python3 .skills/moodboard-creation/scripts/render.py <refs-dir>` to build `moodboard.html`.
+4. Run `python3 skills/moodboard-creation/scripts/render.py <refs-dir>` to build `moodboard.html`.
 5. **HARD GATE**: user opens moodboard.html, approves direction. Then style-extractor takes over.
 
 ## Tools
@@ -2191,7 +2191,7 @@ Compose `03_РЕФЕРЕНСЫ/moodboard.md` (text narrative explaining the visu
 Bash, Read, Write, Glob. Calls render.py.
 ```
 
-`.skills/moodboard-creation/SKILL.md`:
+`skills/moodboard-creation/SKILL.md`:
 ```markdown
 ---
 name: moodboard-creation
@@ -2391,7 +2391,7 @@ def test_render_with_narrative(tmp_path):
 - [ ] **Step 12.8: Commit**
 
 ```bash
-git add .agents/moodboard-composer.md .skills/moodboard-creation/ tools/html/templates/moodboard.html.j2 tools/html/templates/partials/ref-card.html.j2 tests/phase-2/test-agents-frontmatter.bats tests/phase-2/python/test_moodboard_render.py
+git add agents/moodboard-composer.md skills/moodboard-creation/ tools/html/templates/moodboard.html.j2 tools/html/templates/partials/ref-card.html.j2 tests/phase-2/test-agents-frontmatter.bats tests/phase-2/python/test_moodboard_render.py
 git commit -m "feat(phase-2): add moodboard-composer agent + render.py + moodboard.html.j2"
 ```
 
@@ -2408,8 +2408,8 @@ For brevity, the remaining Block C tasks 13, 14, 15 are similar in pattern to Ta
 Each follows the same TDD pattern (test fail → impl → test pass → commit).
 
 **File changes summarized:**
-- `.skills/references-collection/scripts/index.py` (gains 2 subcommands)
-- `.skills/moodboard-creation/scripts/scaffold.py` (NEW)
+- `skills/references-collection/scripts/index.py` (gains 2 subcommands)
+- `skills/moodboard-creation/scripts/scaffold.py` (NEW)
 - `tests/phase-2/python/test_references_index.py` (extended)
 - `tests/phase-2/python/test_moodboard_scaffold.py` (NEW)
 - `tests/phase-2/integration/test-phase2-pipeline.bats` (NEW, partial)
@@ -2426,8 +2426,8 @@ Commits:
 ### Task 16: `style-extractor` agent
 
 **Files:**
-- Create: `.agents/style-extractor.md`
-- Create: `.skills/style-decomposition/SKILL.md`
+- Create: `agents/style-extractor.md`
+- Create: `skills/style-decomposition/SKILL.md`
 - Extend: `tests/phase-2/test-agents-frontmatter.bats`
 
 - [ ] Создать markdown agent + skill per design from spec section 6 row 6, with HARD GATE: must produce 5 outputs (palette.yaml, fonts.yaml, icons.yaml, grid.md, motion.md) before brand-architect runs.
@@ -2439,7 +2439,7 @@ Commits:
 ### Task 17: `extract-palette.py`
 
 **Files:**
-- Create: `.skills/style-decomposition/scripts/extract-palette.py`
+- Create: `skills/style-decomposition/scripts/extract-palette.py`
 - Create: `tests/phase-2/python/test_extract_palette.py`
 
 - [ ] **Step 17.1: Test** — given a 100×100 image with known colors, palette.yaml has 5 dominant colors with hex codes and pixel-source coordinates.
@@ -2525,7 +2525,7 @@ For **web references (URL)** the script reads the actual computed font-family fr
 For **image references (screenshot)** there's no Python script — the `style-extractor` agent does this directly via Claude Vision (Read tool + reasoning), since it has multimodal capability built-in.
 
 **Files:**
-- Create: `.skills/style-decomposition/scripts/identify-fonts.py`
+- Create: `skills/style-decomposition/scripts/identify-fonts.py`
 - Create: `tests/phase-2/python/test_identify_fonts.py`
 
 - [ ] **Step 18.1: Создать тест**
@@ -2666,7 +2666,7 @@ if __name__ == "__main__":
 - [ ] **Step 18.5: Commit**
 
 ```bash
-git add .skills/style-decomposition/scripts/identify-fonts.py tests/phase-2/python/test_identify_fonts.py
+git add skills/style-decomposition/scripts/identify-fonts.py tests/phase-2/python/test_identify_fonts.py
 git commit -m "feat(phase-2): add identify-fonts.py via DOM CSS inspection (free, no API)"
 ```
 
@@ -2724,8 +2724,8 @@ End-to-end bats test that uses fixture images and asserts all 3 yaml files (pale
 ### Task 23: `brand-architect` agent
 
 **Files:**
-- Create: `.agents/brand-architect.md`
-- Create: `.skills/brand-kit-build/SKILL.md`
+- Create: `agents/brand-architect.md`
+- Create: `skills/brand-kit-build/SKILL.md`
 - Extend: `tests/phase-2/test-agents-frontmatter.bats`
 
 Agent description: synthesizes `brand-kit.md` from `04_БРЕНД/extracted/*.yaml`, with provenance (every choice traces to its source). Then invokes brand-kit HTML renderer.
@@ -2789,7 +2789,7 @@ End-to-end: from fixture extracted/ files, build brand-kit.md and brand-kit.html
 ### Task 27: Extend `landing-orchestrator` for stages 02–04
 
 **Files:**
-- Modify: `.agents/landing-orchestrator.md`
+- Modify: `agents/landing-orchestrator.md`
 - Extend: `tests/phase-1/test-skills-and-agents.bats` (or create `test-orchestrator-phase2.bats`)
 
 Update the agent body. New "## Phase 2 Scope" section replaces (or amends) "## Phase 1 Scope":

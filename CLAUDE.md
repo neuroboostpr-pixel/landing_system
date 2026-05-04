@@ -18,16 +18,16 @@
 
 Эта система использует:
 - **superpowers** plugin (brainstorming, writing-plans, executing-plans, subagent-driven-development)
-- Скиллы из `.skills/` (landing-project-init, landing-from-context)
-- Агентов из `.agents/` (landing-orchestrator)
+- Скиллы из `skills/` (landing-project-init, landing-from-context)
+- Агентов из `agents/` (landing-orchestrator)
 
 Перед работой проверь: `scripts/check-deps.sh`.
 
 ## Структура
 
 - `template/` — каноничный шаблон проекта-лендинга (13 папок 00–12)
-- `.skills/` — наши специализированные скиллы
-- `.agents/` — специализированные агенты
+- `skills/` — наши специализированные скиллы
+- `agents/` — специализированные агенты
 - `.claude/commands/` — slash-команды
 - `docs/superpowers/` — спецификации и планы реализации
 

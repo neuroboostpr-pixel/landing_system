@@ -4,7 +4,7 @@ from pathlib import Path
 from unittest.mock import patch, MagicMock
 
 ORCH_SCRIPT = (Path(__file__).resolve().parent.parent.parent.parent
-               / ".skills" / "style-decomposition" / "scripts" / "orchestrate.py")
+               / "skills" / "style-decomposition" / "scripts" / "orchestrate.py")
 
 
 def _load():

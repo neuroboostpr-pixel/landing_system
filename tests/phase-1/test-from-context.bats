@@ -21,12 +21,12 @@ teardown() {
 }
 
 @test "from-context.sh exists and executable" {
-  [ -x "$LANDING_SYSTEM_ROOT/.skills/landing-from-context/scripts/from-context.sh" ]
+  [ -x "$LANDING_SYSTEM_ROOT/skills/landing-from-context/scripts/from-context.sh" ]
 }
 
 @test "from-context.sh creates project and copies parent context" {
   cd "$PARENT_DIR"
-  run "$LANDING_SYSTEM_ROOT/.skills/landing-from-context/scripts/from-context.sh" "$TARGET_DIR"
+  run "$LANDING_SYSTEM_ROOT/skills/landing-from-context/scripts/from-context.sh" "$TARGET_DIR"
   [ "$status" -eq 0 ]
 
   # Project structure exists
@@ -40,21 +40,21 @@ teardown() {
 
 @test "from-context.sh copies research subfolder" {
   cd "$PARENT_DIR"
-  run "$LANDING_SYSTEM_ROOT/.skills/landing-from-context/scripts/from-context.sh" "$TARGET_DIR"
+  run "$LANDING_SYSTEM_ROOT/skills/landing-from-context/scripts/from-context.sh" "$TARGET_DIR"
   [ "$status" -eq 0 ]
   assert_file_exists "$TARGET_DIR/01_КОНТЕКСТ/исследования/audience.md"
 }
 
 @test "from-context.sh copies prototype to 07_КОНТЕНТ" {
   cd "$PARENT_DIR"
-  run "$LANDING_SYSTEM_ROOT/.skills/landing-from-context/scripts/from-context.sh" "$TARGET_DIR"
+  run "$LANDING_SYSTEM_ROOT/skills/landing-from-context/scripts/from-context.sh" "$TARGET_DIR"
   [ "$status" -eq 0 ]
   assert_file_exists "$TARGET_DIR/07_КОНТЕНТ/prototype.md"
 }
 
 @test "from-context.sh writes source-references.yaml" {
   cd "$PARENT_DIR"
-  run "$LANDING_SYSTEM_ROOT/.skills/landing-from-context/scripts/from-context.sh" "$TARGET_DIR"
+  run "$LANDING_SYSTEM_ROOT/skills/landing-from-context/scripts/from-context.sh" "$TARGET_DIR"
   [ "$status" -eq 0 ]
   assert_file_exists "$TARGET_DIR/01_КОНТЕКСТ/source-references.yaml"
   run grep "parent_path" "$TARGET_DIR/01_КОНТЕКСТ/source-references.yaml"
@@ -66,7 +66,7 @@ teardown() {
   mkdir -p "$PARENT_WITH_QUOTE/01_контекст"
   echo "data" > "$PARENT_WITH_QUOTE/01_контекст/file.md"
   cd "$PARENT_WITH_QUOTE"
-  run "$LANDING_SYSTEM_ROOT/.skills/landing-from-context/scripts/from-context.sh" "$TARGET_DIR"
+  run "$LANDING_SYSTEM_ROOT/skills/landing-from-context/scripts/from-context.sh" "$TARGET_DIR"
   [ "$status" -eq 0 ]
   # If python3 is available, parse and ensure valid YAML
   if command -v python3 >/dev/null; then
@@ -79,7 +79,7 @@ teardown() {
   EMPTY_PARENT="$TEST_TEMP/empty-parent"
   mkdir -p "$EMPTY_PARENT"
   cd "$EMPTY_PARENT"
-  run "$LANDING_SYSTEM_ROOT/.skills/landing-from-context/scripts/from-context.sh" "$TARGET_DIR"
+  run "$LANDING_SYSTEM_ROOT/skills/landing-from-context/scripts/from-context.sh" "$TARGET_DIR"
   [ "$status" -eq 0 ]
   # Manifest should NOT claim 01_контекст was copied
   run grep "source: 01_контекст" "$TARGET_DIR/01_КОНТЕКСТ/source-references.yaml"
@@ -92,7 +92,7 @@ teardown() {
   echo "v1" > "$MULTI_PARENT/04_документы/прототип-a.md"
   echo "v2" > "$MULTI_PARENT/04_документы/прототип-b.md"
   cd "$MULTI_PARENT"
-  run "$LANDING_SYSTEM_ROOT/.skills/landing-from-context/scripts/from-context.sh" "$TARGET_DIR"
+  run "$LANDING_SYSTEM_ROOT/skills/landing-from-context/scripts/from-context.sh" "$TARGET_DIR"
   [ "$status" -eq 0 ]
   [[ "$output" =~ "Multiple" ]] || [[ "$output" =~ "multiple" ]] || [[ "$output" =~ "Несколько" ]]
 }

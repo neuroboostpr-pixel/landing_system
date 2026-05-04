@@ -12,16 +12,16 @@ teardown() {
 }
 
 @test "init.sh exists and executable" {
-  [ -x "$LANDING_SYSTEM_ROOT/.skills/landing-project-init/scripts/init.sh" ]
+  [ -x "$LANDING_SYSTEM_ROOT/skills/landing-project-init/scripts/init.sh" ]
 }
 
 @test "init.sh fails without arguments" {
-  run "$LANDING_SYSTEM_ROOT/.skills/landing-project-init/scripts/init.sh"
+  run "$LANDING_SYSTEM_ROOT/skills/landing-project-init/scripts/init.sh"
   [ "$status" -ne 0 ]
 }
 
 @test "init.sh creates project from template" {
-  run "$LANDING_SYSTEM_ROOT/.skills/landing-project-init/scripts/init.sh" "$TARGET_DIR"
+  run "$LANDING_SYSTEM_ROOT/skills/landing-project-init/scripts/init.sh" "$TARGET_DIR"
   [ "$status" -eq 0 ]
   assert_dir_exists "$TARGET_DIR"
   assert_dir_exists "$TARGET_DIR/00_БРИФ"
@@ -33,7 +33,7 @@ teardown() {
 }
 
 @test "init.sh initializes git in new project" {
-  run "$LANDING_SYSTEM_ROOT/.skills/landing-project-init/scripts/init.sh" "$TARGET_DIR"
+  run "$LANDING_SYSTEM_ROOT/skills/landing-project-init/scripts/init.sh" "$TARGET_DIR"
   [ "$status" -eq 0 ]
   assert_dir_exists "$TARGET_DIR/.git"
 }
@@ -41,20 +41,20 @@ teardown() {
 @test "init.sh refuses to overwrite existing project" {
   mkdir -p "$TARGET_DIR"
   touch "$TARGET_DIR/some-file"
-  run "$LANDING_SYSTEM_ROOT/.skills/landing-project-init/scripts/init.sh" "$TARGET_DIR"
+  run "$LANDING_SYSTEM_ROOT/skills/landing-project-init/scripts/init.sh" "$TARGET_DIR"
   [ "$status" -ne 0 ]
   [[ "$output" =~ "exists" ]] || [[ "$output" =~ "уже" ]]
 }
 
 @test "init.sh substitutes PROJECT_NAME placeholder in README" {
-  run "$LANDING_SYSTEM_ROOT/.skills/landing-project-init/scripts/init.sh" "$TARGET_DIR"
+  run "$LANDING_SYSTEM_ROOT/skills/landing-project-init/scripts/init.sh" "$TARGET_DIR"
   [ "$status" -eq 0 ]
   run grep "{{PROJECT_NAME}}" "$TARGET_DIR/README.md"
   [ "$status" -ne 0 ]  # placeholder gone
 }
 
 @test "init.sh does not propagate .DS_Store to new project" {
-  run "$LANDING_SYSTEM_ROOT/.skills/landing-project-init/scripts/init.sh" "$TARGET_DIR"
+  run "$LANDING_SYSTEM_ROOT/skills/landing-project-init/scripts/init.sh" "$TARGET_DIR"
   [ "$status" -eq 0 ]
   run find "$TARGET_DIR" -name '.DS_Store'
   [ -z "$output" ]

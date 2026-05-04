@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 
 COLLECT_SCRIPT = (Path(__file__).resolve().parent.parent.parent.parent
-                  / ".skills" / "client-assets-collection" / "scripts" / "collect.py")
+                  / "skills" / "client-assets-collection" / "scripts" / "collect.py")
 
 
 def _load():

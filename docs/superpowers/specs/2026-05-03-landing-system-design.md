@@ -204,8 +204,8 @@
 │  ├─ robots.txt
 │  └─ seo-audit-report.md
 │
-├─ .agents/                         # локальные агенты этого проекта
-├─ .skills/                         # локальные скиллы этого проекта
+├─ agents/                         # локальные агенты этого проекта
+├─ skills/                         # локальные скиллы этого проекта
 ├─ .specs/                          # superpowers spec-документы проекта
 │
 ├─ .claude/
@@ -437,7 +437,7 @@
 - `audience-research-analyzer` — анализ аудитории
 - `bulletproof` — устойчивые workflow
 - `pptx-brand-deck-builder` — брендовые презентации
-- `anthropic-skills:yandex-wordstat` — Wordstat (улучшенная версия пользователя добавляется в `.skills/yandex-wordstat/`)
+- `anthropic-skills:yandex-wordstat` — Wordstat (улучшенная версия пользователя добавляется в `skills/yandex-wordstat/`)
 
 #### Свои скиллы (создаём 10 штук)
 
@@ -884,8 +884,8 @@ CRM_WEBHOOK_URL=
 Содержимое:
 ```
 landing-system/
-├─ .agents/                # 18 агентов
-├─ .skills/                # все наши + копии нужных
+├─ agents/                # 18 агентов
+├─ skills/                # все наши + копии нужных
 ├─ .claude/
 │  ├─ commands/            # slash-команды
 │  └─ settings.json        # hooks
@@ -1386,7 +1386,7 @@ claude
 
 ### Агенты
 
-- [ ] Все 18 агентов в `.agents/` с правильными manifest.json
+- [ ] Все 18 агентов в `agents/` с правильными manifest.json
 - [ ] У каждого: описание, инструменты, скиллы
 
 ### Команды

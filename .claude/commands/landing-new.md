@@ -39,7 +39,7 @@ case "$SLUG" in
 esac
 
 # Run skill script
-SCRIPT="${CLAUDE_PROJECT_DIR:-.}/.skills/landing-project-init/scripts/init.sh"
+SCRIPT="${CLAUDE_PROJECT_DIR:-.}/skills/landing-project-init/scripts/init.sh"
 bash "$SCRIPT" "$TARGET" "${@:2}"
 ```
 

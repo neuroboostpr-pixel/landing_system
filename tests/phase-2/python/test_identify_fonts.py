@@ -4,7 +4,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 IDENT_SCRIPT = (Path(__file__).resolve().parent.parent.parent.parent
-                / ".skills" / "style-decomposition" / "scripts" / "identify-fonts.py")
+                / "skills" / "style-decomposition" / "scripts" / "identify-fonts.py")
 
 
 def _load():

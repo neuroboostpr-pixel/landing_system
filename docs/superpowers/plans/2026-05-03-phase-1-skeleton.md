@@ -26,7 +26,7 @@ landing-system/
 ├─ package.json                           # NEW — для node-зависимостей
 ├─ .gitignore                             # EXISTS — уже создан
 │
-├─ .agents/
+├─ agents/
 │  └─ landing-orchestrator.md             # NEW — главный агент (Phase 1 stub)
 │
 ├─ .claude/
@@ -37,7 +37,7 @@ landing-system/
 │     ├─ landing-help.md                  # NEW
 │     └─ landing-status.md                # NEW
 │
-├─ .skills/
+├─ skills/
 │  ├─ landing-project-init/
 │  │  ├─ SKILL.md                         # NEW
 │  │  └─ scripts/init.sh                  # NEW
@@ -82,8 +82,8 @@ landing-system/
 
 **Принцип организации:**
 - `template/` — каноничный шаблон. Скрипты копируют его в новую папку проекта.
-- `.skills/<name>/` — каждый скилл = папка с `SKILL.md` + опциональные `scripts/`.
-- `.agents/<name>.md` — один файл на агента.
+- `skills/<name>/` — каждый скилл = папка с `SKILL.md` + опциональные `scripts/`.
+- `agents/<name>.md` — один файл на агента.
 - `.claude/commands/<name>.md` — slash-команда = один markdown с frontmatter.
 - `tests/phase-N/` — тесты группируются по фазам (для параллельных запусков).
 
@@ -396,16 +396,16 @@ bats tests/phase-1/test-master-claude-md.bats
 
 Эта система использует:
 - **superpowers** plugin (brainstorming, writing-plans, executing-plans, subagent-driven-development)
-- Скиллы из `.skills/` (landing-project-init, landing-from-context)
-- Агентов из `.agents/` (landing-orchestrator)
+- Скиллы из `skills/` (landing-project-init, landing-from-context)
+- Агентов из `agents/` (landing-orchestrator)
 
 Перед работой проверь: `scripts/check-deps.sh`.
 
 ## Структура
 
 - `template/` — каноничный шаблон проекта-лендинга (13 папок 00–12)
-- `.skills/` — наши специализированные скиллы
-- `.agents/` — специализированные агенты
+- `skills/` — наши специализированные скиллы
+- `agents/` — специализированные агенты
 - `.claude/commands/` — slash-команды
 - `docs/superpowers/` — спецификации и планы реализации
 
@@ -776,7 +776,7 @@ load '../helpers/test_helpers'
 ## Главный агент
 
 `landing-orchestrator` ведёт через все 12 этапов. На каждом этапе:
-1. Дёргает специализированных агентов (см. master-system `.agents/`)
+1. Дёргает специализированных агентов (см. master-system `agents/`)
 2. Генерирует визуальный артефакт (`.html` preview в соответствующей папке)
 3. **HARD GATE**: ждёт явного утверждения от пользователя перед переходом на следующий этап
 
@@ -1109,8 +1109,8 @@ load '../helpers/test_helpers'
 
 ```
 landing-system/
-├─ .agents/              # 18 специализированных агентов (по фазам)
-├─ .skills/              # наши скиллы (landing-project-init и др.)
+├─ agents/              # 18 специализированных агентов (по фазам)
+├─ skills/              # наши скиллы (landing-project-init и др.)
 ├─ .claude/commands/     # slash-команды
 ├─ template/             # каноничный шаблон проекта-лендинга
 ├─ docs/superpowers/     # spec и planы реализации
@@ -1170,7 +1170,7 @@ git commit -m "docs(phase-1): rewrite master README with Quick Start"
 ### Task 11: Скилл `landing-project-init` — SKILL.md
 
 **Files:**
-- Create: `.skills/landing-project-init/SKILL.md`
+- Create: `skills/landing-project-init/SKILL.md`
 - Test: `tests/phase-1/test-skills-and-agents.bats`
 
 - [ ] **Step 11.1: Создать тест**
@@ -1182,27 +1182,27 @@ git commit -m "docs(phase-1): rewrite master README with Quick Start"
 load '../helpers/test_helpers'
 
 @test "landing-project-init SKILL.md exists" {
-  assert_file_exists "$LANDING_SYSTEM_ROOT/.skills/landing-project-init/SKILL.md"
+  assert_file_exists "$LANDING_SYSTEM_ROOT/skills/landing-project-init/SKILL.md"
 }
 
 @test "landing-project-init has frontmatter with name" {
-  run grep -E "^name: landing-project-init$" "$LANDING_SYSTEM_ROOT/.skills/landing-project-init/SKILL.md"
+  run grep -E "^name: landing-project-init$" "$LANDING_SYSTEM_ROOT/skills/landing-project-init/SKILL.md"
   [ "$status" -eq 0 ]
 }
 
 @test "landing-project-init has frontmatter with description" {
-  run grep -E "^description:" "$LANDING_SYSTEM_ROOT/.skills/landing-project-init/SKILL.md"
+  run grep -E "^description:" "$LANDING_SYSTEM_ROOT/skills/landing-project-init/SKILL.md"
   [ "$status" -eq 0 ]
 }
 
 @test "landing-project-init mentions init.sh" {
-  assert_file_contains "$LANDING_SYSTEM_ROOT/.skills/landing-project-init/SKILL.md" "init.sh"
+  assert_file_contains "$LANDING_SYSTEM_ROOT/skills/landing-project-init/SKILL.md" "init.sh"
 }
 ```
 
 - [ ] **Step 11.2: Run test, expect FAIL**
 
-- [ ] **Step 11.3: Создать `.skills/landing-project-init/SKILL.md`**
+- [ ] **Step 11.3: Создать `skills/landing-project-init/SKILL.md`**
 
 ```markdown
 ---
@@ -1254,7 +1254,7 @@ description: Use when user wants to create a new landing project from scratch. C
 - [ ] **Step 11.5: Commit**
 
 ```bash
-git add .skills/landing-project-init/SKILL.md tests/phase-1/test-skills-and-agents.bats
+git add skills/landing-project-init/SKILL.md tests/phase-1/test-skills-and-agents.bats
 git commit -m "feat(phase-1): add landing-project-init skill"
 ```
 
@@ -1263,7 +1263,7 @@ git commit -m "feat(phase-1): add landing-project-init skill"
 ### Task 12: Скрипт `init.sh`
 
 **Files:**
-- Create: `.skills/landing-project-init/scripts/init.sh`
+- Create: `skills/landing-project-init/scripts/init.sh`
 - Test: `tests/phase-1/test-project-init.bats`
 
 - [ ] **Step 12.1: Создать тест**
@@ -1284,16 +1284,16 @@ teardown() {
 }
 
 @test "init.sh exists and executable" {
-  [ -x "$LANDING_SYSTEM_ROOT/.skills/landing-project-init/scripts/init.sh" ]
+  [ -x "$LANDING_SYSTEM_ROOT/skills/landing-project-init/scripts/init.sh" ]
 }
 
 @test "init.sh fails without arguments" {
-  run "$LANDING_SYSTEM_ROOT/.skills/landing-project-init/scripts/init.sh"
+  run "$LANDING_SYSTEM_ROOT/skills/landing-project-init/scripts/init.sh"
   [ "$status" -ne 0 ]
 }
 
 @test "init.sh creates project from template" {
-  run "$LANDING_SYSTEM_ROOT/.skills/landing-project-init/scripts/init.sh" "$TARGET_DIR"
+  run "$LANDING_SYSTEM_ROOT/skills/landing-project-init/scripts/init.sh" "$TARGET_DIR"
   [ "$status" -eq 0 ]
   assert_dir_exists "$TARGET_DIR"
   assert_dir_exists "$TARGET_DIR/00_БРИФ"
@@ -1305,7 +1305,7 @@ teardown() {
 }
 
 @test "init.sh initializes git in new project" {
-  run "$LANDING_SYSTEM_ROOT/.skills/landing-project-init/scripts/init.sh" "$TARGET_DIR"
+  run "$LANDING_SYSTEM_ROOT/skills/landing-project-init/scripts/init.sh" "$TARGET_DIR"
   [ "$status" -eq 0 ]
   assert_dir_exists "$TARGET_DIR/.git"
 }
@@ -1313,13 +1313,13 @@ teardown() {
 @test "init.sh refuses to overwrite existing project" {
   mkdir -p "$TARGET_DIR"
   touch "$TARGET_DIR/some-file"
-  run "$LANDING_SYSTEM_ROOT/.skills/landing-project-init/scripts/init.sh" "$TARGET_DIR"
+  run "$LANDING_SYSTEM_ROOT/skills/landing-project-init/scripts/init.sh" "$TARGET_DIR"
   [ "$status" -ne 0 ]
   [[ "$output" =~ "exists" ]] || [[ "$output" =~ "уже" ]]
 }
 
 @test "init.sh substitutes PROJECT_NAME placeholder in README" {
-  run "$LANDING_SYSTEM_ROOT/.skills/landing-project-init/scripts/init.sh" "$TARGET_DIR"
+  run "$LANDING_SYSTEM_ROOT/skills/landing-project-init/scripts/init.sh" "$TARGET_DIR"
   [ "$status" -eq 0 ]
   run grep "{{PROJECT_NAME}}" "$TARGET_DIR/README.md"
   [ "$status" -ne 0 ]  # placeholder gone
@@ -1418,7 +1418,7 @@ echo "  > /landing-status     # see what's next"
 - [ ] **Step 12.4: chmod + run test, expect PASS**
 
 ```bash
-chmod +x .skills/landing-project-init/scripts/init.sh
+chmod +x skills/landing-project-init/scripts/init.sh
 bats tests/phase-1/test-project-init.bats
 # Expected: 6 passed
 ```
@@ -1426,7 +1426,7 @@ bats tests/phase-1/test-project-init.bats
 - [ ] **Step 12.5: Commit**
 
 ```bash
-git add .skills/landing-project-init/scripts/init.sh tests/phase-1/test-project-init.bats
+git add skills/landing-project-init/scripts/init.sh tests/phase-1/test-project-init.bats
 git commit -m "feat(phase-1): add init.sh that creates project from template"
 ```
 
@@ -1435,25 +1435,25 @@ git commit -m "feat(phase-1): add init.sh that creates project from template"
 ### Task 13: Скилл `landing-from-context` — SKILL.md
 
 **Files:**
-- Create: `.skills/landing-from-context/SKILL.md`
+- Create: `skills/landing-from-context/SKILL.md`
 
 - [ ] **Step 13.1: Расширить test-skills-and-agents.bats**
 
 Добавить:
 ```bash
 @test "landing-from-context SKILL.md exists" {
-  assert_file_exists "$LANDING_SYSTEM_ROOT/.skills/landing-from-context/SKILL.md"
+  assert_file_exists "$LANDING_SYSTEM_ROOT/skills/landing-from-context/SKILL.md"
 }
 
 @test "landing-from-context frontmatter ok" {
-  run grep -E "^name: landing-from-context$" "$LANDING_SYSTEM_ROOT/.skills/landing-from-context/SKILL.md"
+  run grep -E "^name: landing-from-context$" "$LANDING_SYSTEM_ROOT/skills/landing-from-context/SKILL.md"
   [ "$status" -eq 0 ]
 }
 ```
 
 - [ ] **Step 13.2: Run test, expect FAIL**
 
-- [ ] **Step 13.3: Создать `.skills/landing-from-context/SKILL.md`**
+- [ ] **Step 13.3: Создать `skills/landing-from-context/SKILL.md`**
 
 ```markdown
 ---
@@ -1507,7 +1507,7 @@ description: Use when starting a new landing project inside an existing parent a
 - [ ] **Step 13.5: Commit**
 
 ```bash
-git add .skills/landing-from-context/SKILL.md tests/phase-1/test-skills-and-agents.bats
+git add skills/landing-from-context/SKILL.md tests/phase-1/test-skills-and-agents.bats
 git commit -m "feat(phase-1): add landing-from-context skill"
 ```
 
@@ -1516,7 +1516,7 @@ git commit -m "feat(phase-1): add landing-from-context skill"
 ### Task 14: Скрипт `from-context.sh`
 
 **Files:**
-- Create: `.skills/landing-from-context/scripts/from-context.sh`
+- Create: `skills/landing-from-context/scripts/from-context.sh`
 - Test: `tests/phase-1/test-from-context.bats`
 
 - [ ] **Step 14.1: Создать тест**
@@ -1546,12 +1546,12 @@ teardown() {
 }
 
 @test "from-context.sh exists and executable" {
-  [ -x "$LANDING_SYSTEM_ROOT/.skills/landing-from-context/scripts/from-context.sh" ]
+  [ -x "$LANDING_SYSTEM_ROOT/skills/landing-from-context/scripts/from-context.sh" ]
 }
 
 @test "from-context.sh creates project and copies parent context" {
   cd "$PARENT_DIR"
-  run "$LANDING_SYSTEM_ROOT/.skills/landing-from-context/scripts/from-context.sh" "$TARGET_DIR"
+  run "$LANDING_SYSTEM_ROOT/skills/landing-from-context/scripts/from-context.sh" "$TARGET_DIR"
   [ "$status" -eq 0 ]
 
   # Project structure exists
@@ -1565,21 +1565,21 @@ teardown() {
 
 @test "from-context.sh copies research subfolder" {
   cd "$PARENT_DIR"
-  run "$LANDING_SYSTEM_ROOT/.skills/landing-from-context/scripts/from-context.sh" "$TARGET_DIR"
+  run "$LANDING_SYSTEM_ROOT/skills/landing-from-context/scripts/from-context.sh" "$TARGET_DIR"
   [ "$status" -eq 0 ]
   assert_file_exists "$TARGET_DIR/01_КОНТЕКСТ/исследования/audience.md"
 }
 
 @test "from-context.sh copies prototype to 07_КОНТЕНТ" {
   cd "$PARENT_DIR"
-  run "$LANDING_SYSTEM_ROOT/.skills/landing-from-context/scripts/from-context.sh" "$TARGET_DIR"
+  run "$LANDING_SYSTEM_ROOT/skills/landing-from-context/scripts/from-context.sh" "$TARGET_DIR"
   [ "$status" -eq 0 ]
   assert_file_exists "$TARGET_DIR/07_КОНТЕНТ/prototype.md"
 }
 
 @test "from-context.sh writes source-references.yaml" {
   cd "$PARENT_DIR"
-  run "$LANDING_SYSTEM_ROOT/.skills/landing-from-context/scripts/from-context.sh" "$TARGET_DIR"
+  run "$LANDING_SYSTEM_ROOT/skills/landing-from-context/scripts/from-context.sh" "$TARGET_DIR"
   [ "$status" -eq 0 ]
   assert_file_exists "$TARGET_DIR/01_КОНТЕКСТ/source-references.yaml"
   run grep "parent_path" "$TARGET_DIR/01_КОНТЕКСТ/source-references.yaml"
@@ -1615,7 +1615,7 @@ done
 PARENT="$(pwd)"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SYSTEM_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
-INIT_SH="$SYSTEM_ROOT/.skills/landing-project-init/scripts/init.sh"
+INIT_SH="$SYSTEM_ROOT/skills/landing-project-init/scripts/init.sh"
 
 if [ ! -x "$INIT_SH" ]; then
   echo "❌ landing-project-init/init.sh not found or not executable"
@@ -1691,7 +1691,7 @@ echo "  > /landing-status"
 - [ ] **Step 14.4: chmod + run test, expect PASS**
 
 ```bash
-chmod +x .skills/landing-from-context/scripts/from-context.sh
+chmod +x skills/landing-from-context/scripts/from-context.sh
 bats tests/phase-1/test-from-context.bats
 # Expected: 5 passed
 ```
@@ -1699,7 +1699,7 @@ bats tests/phase-1/test-from-context.bats
 - [ ] **Step 14.5: Commit**
 
 ```bash
-git add .skills/landing-from-context/scripts/from-context.sh tests/phase-1/test-from-context.bats
+git add skills/landing-from-context/scripts/from-context.sh tests/phase-1/test-from-context.bats
 git commit -m "feat(phase-1): add from-context.sh that snapshots parent context"
 ```
 
@@ -1708,7 +1708,7 @@ git commit -m "feat(phase-1): add from-context.sh that snapshots parent context"
 ### Task 15: Агент `landing-orchestrator` (Phase 1 stub)
 
 **Files:**
-- Create: `.agents/landing-orchestrator.md`
+- Create: `agents/landing-orchestrator.md`
 
 В Phase 1 это **stub** — он умеет принять контроль после init.sh и сказать «следующий этап будет в Phase 2». Полная функциональность придёт в Phase 2.
 
@@ -1716,27 +1716,27 @@ git commit -m "feat(phase-1): add from-context.sh that snapshots parent context"
 
 ```bash
 @test "landing-orchestrator agent exists" {
-  assert_file_exists "$LANDING_SYSTEM_ROOT/.agents/landing-orchestrator.md"
+  assert_file_exists "$LANDING_SYSTEM_ROOT/agents/landing-orchestrator.md"
 }
 
 @test "landing-orchestrator has frontmatter name" {
-  run grep -E "^name: landing-orchestrator$" "$LANDING_SYSTEM_ROOT/.agents/landing-orchestrator.md"
+  run grep -E "^name: landing-orchestrator$" "$LANDING_SYSTEM_ROOT/agents/landing-orchestrator.md"
   [ "$status" -eq 0 ]
 }
 
 @test "landing-orchestrator has description" {
-  run grep -E "^description:" "$LANDING_SYSTEM_ROOT/.agents/landing-orchestrator.md"
+  run grep -E "^description:" "$LANDING_SYSTEM_ROOT/agents/landing-orchestrator.md"
   [ "$status" -eq 0 ]
 }
 
 @test "landing-orchestrator mentions HARD GATE" {
-  assert_file_contains "$LANDING_SYSTEM_ROOT/.agents/landing-orchestrator.md" "HARD GATE"
+  assert_file_contains "$LANDING_SYSTEM_ROOT/agents/landing-orchestrator.md" "HARD GATE"
 }
 ```
 
 - [ ] **Step 15.2: Run test, expect FAIL**
 
-- [ ] **Step 15.3: Создать `.agents/landing-orchestrator.md`**
+- [ ] **Step 15.3: Создать `agents/landing-orchestrator.md`**
 
 ```markdown
 ---
@@ -1826,7 +1826,7 @@ description: Master orchestrator for landing projects. Owns the 12-stage workflo
 - [ ] **Step 15.5: Commit**
 
 ```bash
-git add .agents/landing-orchestrator.md tests/phase-1/test-skills-and-agents.bats
+git add agents/landing-orchestrator.md tests/phase-1/test-skills-and-agents.bats
 git commit -m "feat(phase-1): add landing-orchestrator agent (Phase 1 stub)"
 ```
 
@@ -1913,7 +1913,7 @@ case "$SLUG" in
 esac
 
 # Run skill script
-SCRIPT="${CLAUDE_PROJECT_DIR:-.}/.skills/landing-project-init/scripts/init.sh"
+SCRIPT="${CLAUDE_PROJECT_DIR:-.}/skills/landing-project-init/scripts/init.sh"
 bash "$SCRIPT" "$TARGET" "${@:2}"
 ```
 
@@ -1990,7 +1990,7 @@ case "$SLUG" in
   *) TARGET="$HOME/Lendings/$SLUG" ;;
 esac
 
-SCRIPT="${CLAUDE_PROJECT_DIR:-.}/.skills/landing-from-context/scripts/from-context.sh"
+SCRIPT="${CLAUDE_PROJECT_DIR:-.}/skills/landing-from-context/scripts/from-context.sh"
 bash "$SCRIPT" "$TARGET" "${@:2}"
 ```
 
@@ -2126,7 +2126,7 @@ Show the current state of the master system and any active project in the cwd.
 
 ## Algorithm
 
-1. **Master system check** (cwd is `landing-system/` or contains `.skills/landing-project-init/`):
+1. **Master system check** (cwd is `landing-system/` or contains `skills/landing-project-init/`):
    - Print version (from `package.json`).
    - Print current Phase status: "Phase 1 — Skeleton & Infrastructure (in progress / complete)".
    - List installed skills and agents.
@@ -2147,7 +2147,7 @@ Show the current state of the master system and any active project in the cwd.
 CWD="$(pwd)"
 
 # Master system?
-if [ -d "$CWD/.skills/landing-project-init" ]; then
+if [ -d "$CWD/skills/landing-project-init" ]; then
   echo "📦 Landing System (master)"
   if [ -f "$CWD/package.json" ]; then
     VERSION=$(node -e "console.log(require('$CWD/package.json').version)" 2>/dev/null || echo "unknown")
@@ -2156,13 +2156,13 @@ if [ -d "$CWD/.skills/landing-project-init" ]; then
   echo "   Phase 1: Skeleton & Infrastructure"
   echo ""
   echo "   Skills:"
-  for skill in "$CWD"/.skills/*/SKILL.md; do
+  for skill in "$CWD"/skills/*/SKILL.md; do
     name=$(basename "$(dirname "$skill")")
     echo "     - $name"
   done
   echo ""
   echo "   Agents:"
-  for agent in "$CWD"/.agents/*.md; do
+  for agent in "$CWD"/agents/*.md; do
     name=$(basename "$agent" .md)
     echo "     - $name"
   done
@@ -2243,8 +2243,8 @@ git commit -m "feat(phase-1): add /landing-status slash command"
   "permissions": {
     "allow": [
       "Bash(bash scripts/check-deps.sh)",
-      "Bash(bash .skills/landing-project-init/scripts/init.sh:*)",
-      "Bash(bash .skills/landing-from-context/scripts/from-context.sh:*)",
+      "Bash(bash skills/landing-project-init/scripts/init.sh:*)",
+      "Bash(bash skills/landing-from-context/scripts/from-context.sh:*)",
       "Bash(bats tests/**/*.bats)",
       "Bash(bats tests/phase-1/*.bats)",
       "Bash(npm test)",
@@ -2296,7 +2296,7 @@ teardown() {
   TARGET="$TEST_TEMP/integration-project"
 
   # 1. Run init.sh
-  run "$LANDING_SYSTEM_ROOT/.skills/landing-project-init/scripts/init.sh" "$TARGET"
+  run "$LANDING_SYSTEM_ROOT/skills/landing-project-init/scripts/init.sh" "$TARGET"
   [ "$status" -eq 0 ]
 
   # 2. All 13 stage folders exist
@@ -2325,7 +2325,7 @@ teardown() {
 
   TARGET="$TEST_TEMP/from-ctx-project"
   cd "$PARENT"
-  run "$LANDING_SYSTEM_ROOT/.skills/landing-from-context/scripts/from-context.sh" "$TARGET"
+  run "$LANDING_SYSTEM_ROOT/skills/landing-from-context/scripts/from-context.sh" "$TARGET"
   [ "$status" -eq 0 ]
 
   # Project skeleton intact
@@ -2342,7 +2342,7 @@ teardown() {
 }
 
 @test "INTEGRATION: all skills have valid SKILL.md" {
-  for skill_dir in "$LANDING_SYSTEM_ROOT"/.skills/*/; do
+  for skill_dir in "$LANDING_SYSTEM_ROOT"/skills/*/; do
     skill_md="$skill_dir/SKILL.md"
     [ -f "$skill_md" ] || { echo "missing SKILL.md in $skill_dir"; return 1; }
     grep -qE "^name:" "$skill_md" || { echo "no name in $skill_md"; return 1; }
@@ -2351,7 +2351,7 @@ teardown() {
 }
 
 @test "INTEGRATION: all agents have valid frontmatter" {
-  for agent_md in "$LANDING_SYSTEM_ROOT"/.agents/*.md; do
+  for agent_md in "$LANDING_SYSTEM_ROOT"/agents/*.md; do
     grep -qE "^name:" "$agent_md" || { echo "no name in $agent_md"; return 1; }
     grep -qE "^description:" "$agent_md" || { echo "no description in $agent_md"; return 1; }
   done

@@ -14,7 +14,7 @@ teardown() {
   TARGET="$TEST_TEMP/integration-project"
 
   # 1. Run init.sh
-  run "$LANDING_SYSTEM_ROOT/.skills/landing-project-init/scripts/init.sh" "$TARGET"
+  run "$LANDING_SYSTEM_ROOT/skills/landing-project-init/scripts/init.sh" "$TARGET"
   [ "$status" -eq 0 ]
 
   # 2. All 13 stage folders exist
@@ -43,7 +43,7 @@ teardown() {
 
   TARGET="$TEST_TEMP/from-ctx-project"
   cd "$PARENT"
-  run "$LANDING_SYSTEM_ROOT/.skills/landing-from-context/scripts/from-context.sh" "$TARGET"
+  run "$LANDING_SYSTEM_ROOT/skills/landing-from-context/scripts/from-context.sh" "$TARGET"
   [ "$status" -eq 0 ]
 
   # Project skeleton intact
@@ -60,7 +60,7 @@ teardown() {
 }
 
 @test "INTEGRATION: all skills have valid SKILL.md" {
-  for skill_dir in "$LANDING_SYSTEM_ROOT"/.skills/*/; do
+  for skill_dir in "$LANDING_SYSTEM_ROOT"/skills/*/; do
     skill_md="$skill_dir/SKILL.md"
     [ -f "$skill_md" ] || { echo "missing SKILL.md in $skill_dir"; return 1; }
     grep -qE "^name:" "$skill_md" || { echo "no name in $skill_md"; return 1; }
@@ -69,7 +69,7 @@ teardown() {
 }
 
 @test "INTEGRATION: all agents have valid frontmatter" {
-  for agent_md in "$LANDING_SYSTEM_ROOT"/.agents/*.md; do
+  for agent_md in "$LANDING_SYSTEM_ROOT"/agents/*.md; do
     grep -qE "^name:" "$agent_md" || { echo "no name in $agent_md"; return 1; }
     grep -qE "^description:" "$agent_md" || { echo "no description in $agent_md"; return 1; }
   done

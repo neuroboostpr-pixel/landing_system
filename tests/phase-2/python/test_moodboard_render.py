@@ -1,10 +1,10 @@
-"""Tests for .skills/moodboard-creation/scripts/render.py."""
+"""Tests for skills/moodboard-creation/scripts/render.py."""
 import importlib.util
 from pathlib import Path
 import yaml
 
 RENDER_SCRIPT = (Path(__file__).resolve().parent.parent.parent.parent
-                 / ".skills" / "moodboard-creation" / "scripts" / "render.py")
+                 / "skills" / "moodboard-creation" / "scripts" / "render.py")
 
 
 def _load():

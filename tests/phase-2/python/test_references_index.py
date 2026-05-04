@@ -1,10 +1,10 @@
-"""Tests for .skills/references-collection/scripts/index.py."""
+"""Tests for skills/references-collection/scripts/index.py."""
 import importlib.util
 import yaml
 from pathlib import Path
 
 INDEX_SCRIPT = (Path(__file__).resolve().parent.parent.parent.parent
-                / ".skills" / "references-collection" / "scripts" / "index.py")
+                / "skills" / "references-collection" / "scripts" / "index.py")
 
 
 def _load():

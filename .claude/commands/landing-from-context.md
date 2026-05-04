@@ -35,7 +35,7 @@ case "$SLUG" in
   *) TARGET="$HOME/Lendings/$SLUG" ;;
 esac
 
-SCRIPT="${CLAUDE_PROJECT_DIR:-.}/.skills/landing-from-context/scripts/from-context.sh"
+SCRIPT="${CLAUDE_PROJECT_DIR:-.}/skills/landing-from-context/scripts/from-context.sh"
 bash "$SCRIPT" "$TARGET" "${@:2}"
 ```
 

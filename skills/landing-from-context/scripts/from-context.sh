@@ -21,7 +21,7 @@ done
 PARENT="$(pwd)"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SYSTEM_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
-INIT_SH="$SYSTEM_ROOT/.skills/landing-project-init/scripts/init.sh"
+INIT_SH="$SYSTEM_ROOT/skills/landing-project-init/scripts/init.sh"
 
 if [ ! -x "$INIT_SH" ]; then
   echo "❌ landing-project-init/init.sh not found or not executable"

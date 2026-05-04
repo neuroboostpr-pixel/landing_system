@@ -4,7 +4,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 ICONS_SCRIPT = (Path(__file__).resolve().parent.parent.parent.parent
-                / ".skills" / "style-decomposition" / "scripts" / "match-icons.py")
+                / "skills" / "style-decomposition" / "scripts" / "match-icons.py")
 
 
 def _load():

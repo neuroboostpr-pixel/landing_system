@@ -31,8 +31,8 @@
 
 ```
 landing-system/
-├─ .agents/              # 1 агент сейчас (landing-orchestrator); ~18 запланировано к Phase 5
-├─ .skills/              # наши скиллы (landing-project-init и др.)
+├─ agents/              # 1 агент сейчас (landing-orchestrator); ~18 запланировано к Phase 5
+├─ skills/              # наши скиллы (landing-project-init и др.)
 ├─ .claude/commands/     # slash-команды
 ├─ template/             # каноничный шаблон проекта-лендинга
 ├─ docs/superpowers/     # spec и planы реализации

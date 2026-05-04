@@ -9,7 +9,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 PARSE_SCRIPT = (Path(__file__).resolve().parent.parent.parent.parent
-                / ".skills" / "client-assets-collection" / "scripts" / "parse-reviews.py")
+                / "skills" / "client-assets-collection" / "scripts" / "parse-reviews.py")
 
 
 def _load():
