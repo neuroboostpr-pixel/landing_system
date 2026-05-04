@@ -20,7 +20,7 @@
 | 2 | **Brainstorming Pipeline** (00–04) | TBD после Phase 1 | ~25 tasks | 6–8 ч | 🟢 Complete (2026-05-04) |
 | 3 | **Design Pipeline** (05–07) | [phase-3-design-pipeline.md](2026-05-04-phase-3-design-pipeline.md) | ~20 tasks | 5–6 ч | 🟢 Complete (2026-05-04) |
 | 4 | **WP Build Pipeline** (08) | [phase-4-wp-build-pipeline.md](2026-05-04-phase-4-wp-build-pipeline.md) | ~50 steps | 8–10 ч | 🟢 Complete (2026-05-04) |
-| 5 | **Deploy & Operations** (09–12) | TBD после Phase 4 | ~25 tasks | 6–8 ч | ⚪ Not started |
+| 5 | **Deploy & Operations** (09–12) | [phase-5-deploy-operations.md](2026-05-04-phase-5-deploy-operations.md) | ~55 steps | 6–8 ч | 🟢 Complete (2026-05-04) |
 | 6 | **Packaging & Pilot** | TBD после Phase 5 | ~10 tasks | 2–3 ч | ⚪ Not started |
 
 **Итого:** ~128 bite-sized tasks по 2–5 минут × 6 фаз ≈ **30–40 часов реализации MVP** (с учётом ревью и отладки).
@@ -262,14 +262,15 @@ Phase 1: Skeleton
 
 ## Status
 
-**Текущий статус:** Phase 4 — WP Build Pipeline **completed (2026-05-04)**, tag `phase-4-complete`.
+**Текущий статус:** Phase 5 — Deploy & Operations **completed (2026-05-04)**, tag `phase-5-complete`.
 
 **Предыдущие фазы:**
 - Phase 1 — Skeleton & Infrastructure **completed (2026-05-03)**, tag `phase-1-complete`
 - Phase 2 — Brainstorming Pipeline **completed (2026-05-04)**, tag `phase-2-complete`
 - Phase 3 — Design Pipeline **completed (2026-05-04)**, tag `phase-3-complete`
+- Phase 4 — WP Build Pipeline **completed (2026-05-04)**, tag `phase-4-complete`
 
-**Следующий шаг:** Phase 5 (Deploy & Operations, этапы 09–12) — написать детальный план перед стартом.
+**Следующий шаг:** Phase 6 (Packaging & Pilot) — собрать ZIP, прогнать pilot-проект.
 
 ---
 

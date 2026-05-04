@@ -118,6 +118,31 @@ python3 skills/wp-theme-assembler/scripts/bundle-assets.py .
 python3 skills/wp-theme-assembler/scripts/render-build-preview.py .
 ```
 
+## Phase 5 Scope (Stages 09–12 — Деплой, QA, Версионирование)
+
+### /landing-setup (один раз на систему):
+1. Run `scripts/preflight.sh` — проверка окружения
+2. Configure `.env` — API ключи
+3. Configure `config/system.yaml` — CRM, аналитика, библиотеки
+4. Report: что готово, что не настроено
+
+### /landing-deploy:
+1. Run `scripts/preflight.sh`
+2. Run `scripts/deploy.sh .` → rsync + wp theme activate + ACF import
+3. HARD GATE: проверить URL, дождаться утверждения
+
+### /landing-qa:
+1. Dispatch `qa-auditor` → 7 критериев → `10_QA/qa-report.md`
+2. HARD GATE: показать отчёт, ждать утверждения
+
+### /landing-rollback <version>:
+1. Dispatch `lifecycle-keeper` → откатить к версии из `09_ВЕРСИИ/`
+2. Redeploy
+
+### /landing-clone <new-slug>:
+1. Dispatch `lifecycle-keeper` → клонировать в новую папку
+2. Deploy клона на новый поддомен
+
 ## HARD GATE правила
 
 **Никогда** не идти на этап N+1 без явного утверждения этапа N. Утверждение = пользователь написал «утверждаю», «ok», «дальше», или эквивалент.
