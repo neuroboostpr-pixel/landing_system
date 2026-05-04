@@ -26,6 +26,10 @@ def _safe_family(value: str) -> str:
     return _FAMILY_RE.sub('', str(value)).strip() or "sans-serif"
 
 
+def _safe_source(value: str) -> str:
+    return str(value).replace("|", "–").replace("\n", " ").strip()
+
+
 def _load_brand_kit(project_dir: Path) -> dict:
     md_path = project_dir / "04_БРЕНД" / "brand-kit.md"
     if not md_path.exists():
@@ -115,10 +119,7 @@ def build_tokens(bk: dict) -> dict:
     }
 
 
-def _write_design_md(project_dir: Path, tokens: dict) -> None:
-    design_dir = project_dir / "05_ДИЗАЙН-СИСТЕМА"
-    design_dir.mkdir(parents=True, exist_ok=True)
-
+def _write_design_md(design_dir: Path, tokens: dict) -> None:
     colors = tokens["colors"]
     typo = tokens["typography"]
     spacing = tokens["spacing"]
@@ -130,10 +131,10 @@ def _write_design_md(project_dir: Path, tokens: dict) -> None:
     md = f"---\n{frontmatter}---\n\n# Design System\n\n"
     md += "## Цвета\n\n| Токен | Hex | Источник |\n|---|---|---|\n"
     for name, color in colors.items():
-        md += f"| `--color-{name}` | `{color['hex']}` | {color['source']} |\n"
+        md += f"| `--color-{name}` | `{color['hex']}` | {_safe_source(color['source'])} |\n"
     md += "\n## Типографика\n\n| Токен | Значение | Источник |\n|---|---|---|\n"
-    md += f"| `--font-display` | {typo['display']['family']} | {typo['display']['source']} |\n"
-    md += f"| `--font-body` | {typo['body']['family']} | {typo['body']['source']} |\n"
+    md += f"| `--font-display` | {typo['display']['family']} | {_safe_source(typo['display']['source'])} |\n"
+    md += f"| `--font-body` | {typo['body']['family']} | {_safe_source(typo['body']['source'])} |\n"
     for size_name, size_val in typo["sizes"].items():
         md += f"| `--size-{size_name}` | {size_val} | generated |\n"
     md += "\n## Отступы\n\n| Токен | Значение |\n|---|---|\n"
@@ -147,9 +148,7 @@ def _write_design_md(project_dir: Path, tokens: dict) -> None:
     (design_dir / "DESIGN.md").write_text(md, encoding="utf-8")
 
 
-def _write_tokens_json(project_dir: Path, tokens: dict) -> None:
-    design_dir = project_dir / "05_ДИЗАЙН-СИСТЕМА"
-    design_dir.mkdir(parents=True, exist_ok=True)
+def _write_tokens_json(design_dir: Path, tokens: dict) -> None:
     (design_dir / "tokens.json").write_text(
         json.dumps(tokens, ensure_ascii=False, indent=2), encoding="utf-8"
     )
@@ -161,11 +160,13 @@ def main(argv: list) -> int:
     args = p.parse_args(argv[1:])
     try:
         project_dir = Path(args.project_dir)
+        design_dir = project_dir / "05_ДИЗАЙН-СИСТЕМА"
+        design_dir.mkdir(parents=True, exist_ok=True)
         bk = _load_brand_kit(project_dir)
         tokens = build_tokens(bk)
-        _write_design_md(project_dir, tokens)
-        _write_tokens_json(project_dir, tokens)
-        success(f"DESIGN.md + tokens.json → {project_dir / '05_ДИЗАЙН-СИСТЕМА'}")
+        _write_design_md(design_dir, tokens)
+        _write_tokens_json(design_dir, tokens)
+        success(f"DESIGN.md + tokens.json → {design_dir}")
         return 0
     except Exception as exc:
         error(f"build-tokens failed: {exc}")
