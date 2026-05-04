@@ -1,8 +1,8 @@
 {
   "name": "landing-system",
-  "version": "0.1.0-mvp",
-  "description": "Agency landing system for Claude Code (WordPress + Бегет)",
-  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Agency landing production system for Claude Code (WordPress + Бегет)",
   "scripts": {
     "test": "bats -r tests",
     "test:phase-1": "bats tests/phase-1/*.bats",

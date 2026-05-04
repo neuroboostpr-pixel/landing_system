@@ -1,0 +1,19 @@
+{
+  "name": "landing-system",
+  "owner": {
+    "name": "Kirill Bezikov",
+    "email": "neuroboostpr@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "landing-system",
+      "description": "Agency landing production system: full cycle from brief to live WordPress site on Beget. Includes 12-stage workflow, 19 specialized agents, all slash commands.",
+      "version": "1.0.0",
+      "source": "./",
+      "author": {
+        "name": "Kirill Bezikov",
+        "email": "neuroboostpr@gmail.com"
+      }
+    }
+  ]
+}

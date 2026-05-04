@@ -1,0 +1,20 @@
+{
+  "name": "landing-system",
+  "description": "Agency landing production system: WordPress + Gutenberg + Beget. Full cycle: brief → moodboard → brand-kit → DESIGN.md → code → deploy → QA → SEO.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Kirill Bezikov",
+    "email": "neuroboostpr@gmail.com"
+  },
+  "homepage": "https://github.com/neuroboostpr-pixel/landing_system",
+  "repository": "https://github.com/neuroboostpr-pixel/landing_system",
+  "license": "UNLICENSED",
+  "keywords": [
+    "wordpress",
+    "landing",
+    "gutenberg",
+    "beget",
+    "agency",
+    "leadgen"
+  ]
+}
