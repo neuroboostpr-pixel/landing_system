@@ -1,0 +1,22 @@
+# Workflow lock for landing project. Updated by scripts/gate-check.sh.
+# Statuses: locked → in_progress → approved | failed
+# Editing this file by hand will trigger validation errors.
+
+project: ""           # filled by /landing-new
+created: ""           # ISO 8601, filled by /landing-new
+schema_version: 1
+
+stages:
+  "00_brief":      {status: in_progress, timestamp: ""}
+  "01_context":    {status: locked, timestamp: ""}
+  "02_assets":     {status: locked, timestamp: ""}
+  "03_references": {status: locked, timestamp: ""}
+  "04_brand":      {status: locked, timestamp: ""}
+  "05_design":     {status: locked, timestamp: ""}
+  "06_stack":      {status: locked, timestamp: ""}
+  "07_content":    {status: locked, timestamp: ""}
+  "08_build":      {status: locked, timestamp: ""}
+  "09_deploy":     {status: locked, timestamp: ""}
+  "10_qa":         {status: locked, timestamp: ""}
+  "11_analytics":  {status: locked, timestamp: ""}
+  "12_seo":        {status: locked, timestamp: ""}
