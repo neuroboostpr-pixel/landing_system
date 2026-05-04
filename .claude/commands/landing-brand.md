@@ -14,6 +14,12 @@ Run within a landing project after `style-extractor` has produced `04_БРЕНД
 3. Render `04_БРЕНД/brand-kit.html` visual preview.
 4. **HARD GATE**: show the preview path, wait for user approval before proceeding to stage 05.
 
+## Usage
+
+Run: `/landing-brand`
+
+Requires `04_БРЕНД/extracted/*.yaml` files produced by `style-extractor` (run after `/landing-moodboard` is approved).
+
 ## Output
 
 - `04_БРЕНД/brand-kit.md` — canonical brand kit with provenance

@@ -13,6 +13,12 @@ Run within a landing project after references are approved in `03_РЕФЕРЕН
 2. Render `03_РЕФЕРЕНСЫ/moodboard.html` from approved references in `index.yaml`.
 3. **HARD GATE**: show the preview path, wait for user approval before proceeding to style extraction.
 
+## Usage
+
+Run: `/landing-moodboard`
+
+Requires approved references in `03_РЕФЕРЕНСЫ/index.yaml` (set status to `approved` via `/landing-references` first).
+
 ## Output
 
 - `03_РЕФЕРЕНСЫ/moodboard.html` — visual moodboard HTML preview
