@@ -9,17 +9,7 @@ cd "$REPO_ROOT"
 [ -f .env ] && set -a && . ./.env && set +a
 
 if [ "${1:-}" = "--service" ] && [ -n "${2:-}" ]; then
-    python3 -c "
-import sys
-from tools.api_validators.aggregate import run_all
-results = run_all(only=['$2'])
-failed = 0
-for r in results:
-    print(r)
-    if not r.is_valid:
-        failed += 1
-sys.exit(1 if failed else 0)
-"
+    python3 -m tools.api_validators.aggregate --only "$2"
 else
     python3 -m tools.api_validators.aggregate
 fi

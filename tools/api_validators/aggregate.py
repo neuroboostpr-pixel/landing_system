@@ -47,7 +47,12 @@ def run_all(only: list[str] | None = None) -> list[ValidationResult]:
 
 
 def main() -> int:
-    results = run_all()
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--only", help="Comma-separated service names")
+    args = parser.parse_args()
+    only = args.only.split(",") if args.only else None
+    results = run_all(only=only)
     failed = 0
     for r in results:
         print(r)
