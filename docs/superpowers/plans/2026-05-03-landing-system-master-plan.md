@@ -17,7 +17,7 @@
 | # | Phase | Detailed Plan | Tasks | Estimated Time | Status |
 |---|---|---|---|---|---|
 | 1 | **Skeleton & Infrastructure** | [phase-1-skeleton.md](2026-05-03-phase-1-skeleton.md) | ~18 tasks | 4–6 ч | 🟢 Complete (2026-05-03) |
-| 2 | **Brainstorming Pipeline** (00–04) | TBD после Phase 1 | ~25 tasks | 6–8 ч | ⚪ Not started |
+| 2 | **Brainstorming Pipeline** (00–04) | TBD после Phase 1 | ~25 tasks | 6–8 ч | 🟢 Complete (2026-05-04) |
 | 3 | **Design Pipeline** (05–07) | TBD после Phase 2 | ~20 tasks | 5–6 ч | ⚪ Not started |
 | 4 | **WP Build Pipeline** (08) | TBD после Phase 3 | ~30 tasks | 8–10 ч | ⚪ Not started |
 | 5 | **Deploy & Operations** (09–12) | TBD после Phase 4 | ~25 tasks | 6–8 ч | ⚪ Not started |
@@ -74,6 +74,8 @@ Phase 1: Skeleton
 ---
 
 ## Phase 2 — Brainstorming Pipeline (этапы 00–04)
+
+**Completed: 2026-05-04**
 
 **Цель:** агенты, которые обрабатывают первые 5 этапов workflow одного лендинга (бриф → контекст → материалы клиента → референсы → бренд-кит).
 
@@ -260,12 +262,15 @@ Phase 1: Skeleton
 
 ## Status
 
-**Текущий статус:** Phase 1 — Skeleton & Infrastructure **completed (2026-05-03)**, tag `phase-1-complete`.
+**Текущий статус:** Phase 2 — Brainstorming Pipeline **completed (2026-05-04)**, tag `phase-2-complete`.
+
+**Предыдущие фазы:**
+- Phase 1 — Skeleton & Infrastructure **completed (2026-05-03)**, tag `phase-1-complete`
 
 **Следующий шаг:**
-1. Phase 2 (Brainstorming Pipeline, этапы 00–04) — детальный план будет написан перед стартом
-2. Реализация Phase 2 через `subagent-driven-development`
-3. После Phase 2 — Phase 3 plan, и так до Phase 6
+1. Phase 3 (Design Pipeline, этапы 05–07) — детальный план будет написан перед стартом
+2. Реализация Phase 3 через `subagent-driven-development`
+3. После Phase 3 — Phase 4 plan, и так до Phase 6
 
 ---
 
