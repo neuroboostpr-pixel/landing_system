@@ -28,7 +28,7 @@ def test_fluent_webhook_placeholder_replaced(wp_built_project):
     mod.main(["generate-integrations.py", str(wp_built_project)])
     fp = (wp_built_project / "08_КОД" / "wp-theme" / "functions.php").read_text(encoding="utf-8")
     assert "// [FLUENT_WEBHOOK]" not in fp
-    assert "fluentform" in fp.lower() or "fluent" in fp.lower()
+    assert "fluentform/submission_inserted" in fp
 
 
 def test_telegram_code_injected_when_enabled(wp_built_project):
@@ -52,6 +52,14 @@ def test_telegram_instruction_created(wp_built_project):
     mod.main(["generate-integrations.py", str(wp_built_project)])
     inst = wp_built_project / "08_КОД" / "integrations" / "telegram-setup.md"
     assert inst.exists()
+
+
+def test_fluent_webhook_not_doubled_on_rerun(wp_built_project):
+    mod = _load()
+    mod.main(["generate-integrations.py", str(wp_built_project)])
+    mod.main(["generate-integrations.py", str(wp_built_project)])
+    content = (wp_built_project / "08_КОД" / "wp-theme" / "functions.php").read_text(encoding="utf-8")
+    assert content.count("fluentform/submission_inserted") == 1
 
 
 def test_parse_integrations_from_brief():
