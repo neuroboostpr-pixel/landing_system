@@ -144,8 +144,8 @@ def test_render_html_has_provenance_for_color(tmp_path):
     render_mod = _load(RENDER_SCRIPT)
     render_mod.main(["prog", str(tmp_path)])
     html = (tmp_path / "04_БРЕНД" / "brand-kit.html").read_text(encoding="utf-8")
-    # Source provenance should appear in HTML (from palette.yaml source_pixel or source_image)
-    assert "ref1.png" in html or "source_pixel" in html or "[10, 20]" in html or "10" in html
+    # Source image name must appear in HTML as provenance (set in fixture palette.yaml)
+    assert "ref1.png" in html
 
 
 def test_build_graceful_with_missing_icons(tmp_path):
@@ -157,3 +157,58 @@ def test_build_graceful_with_missing_icons(tmp_path):
     assert result == 0
     content = (tmp_path / "04_БРЕНД" / "brand-kit.md").read_text(encoding="utf-8")
     assert "brand_kit" in content
+
+
+# ---------------------------------------------------------------------------
+# Quality fix regression tests (Critical #1/#2, Important #3/#4)
+# ---------------------------------------------------------------------------
+
+def test_load_yaml_handles_non_dict_yaml(tmp_path):
+    """Critical #1: _load_yaml must return {} for list/scalar YAML, not crash callers."""
+    mod = _load(BUILD_SCRIPT)
+    # Write a valid but non-dict YAML (a list)
+    bad_yaml = tmp_path / "bad.yaml"
+    bad_yaml.write_text("- item1\n- item2\n", encoding="utf-8")
+    result = mod._load_yaml(bad_yaml)
+    assert result == {}, f"Expected {{}} for list YAML, got {result!r}"
+
+
+def test_count_approved_refs_handles_non_list_refs(tmp_path):
+    """Critical #2: _count_approved_refs returns 0 when refs is a mapping, not a list."""
+    import yaml as _yaml
+    mod = _load(BUILD_SCRIPT)
+    index = tmp_path / "index.yaml"
+    # refs as a dict (not a list) — should not crash
+    index.write_text(_yaml.dump({"refs": {"approved": "yes"}}), encoding="utf-8")
+    assert mod._count_approved_refs(index) == 0
+
+
+def test_safe_hex_rejects_css_injection(tmp_path):
+    """Important #3: malformed hex values are replaced with #000000."""
+    mod = _load(BUILD_SCRIPT)
+    assert mod._safe_hex("#ff5733") == "#ff5733"
+    assert mod._safe_hex("#fff") == "#fff"
+    assert mod._safe_hex("#ff5733; } body { color: red") == "#000000"
+    assert mod._safe_hex("red") == "#000000"
+    assert mod._safe_hex("") == "#000000"
+
+
+def test_safe_family_strips_css_injection(tmp_path):
+    """Important #3: CSS-unsafe chars are stripped from font family names."""
+    mod = _load(BUILD_SCRIPT)
+    assert mod._safe_family("Cabinet Grotesk") == "Cabinet Grotesk"
+    assert mod._safe_family("Inter") == "Inter"
+    # Injection attempt: strip everything after the quote
+    result = mod._safe_family('Inter"; font-family: evil')
+    assert '"' not in result
+    assert ';' not in result
+
+
+def test_build_with_malformed_palette_yaml_returns_zero(tmp_path):
+    """Critical #1 end-to-end: non-dict palette.yaml doesn't crash build."""
+    _make_fixture(tmp_path)
+    bad = tmp_path / "04_БРЕНД" / "extracted" / "palette.yaml"
+    bad.write_text("- this is a list\n", encoding="utf-8")
+    mod = _load(BUILD_SCRIPT)
+    result = mod.main(["prog", str(tmp_path)])
+    assert result == 0  # must complete gracefully with defaults

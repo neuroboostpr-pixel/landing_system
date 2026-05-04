@@ -1,23 +1,41 @@
 #!/usr/bin/env python3
 """Synthesize brand-kit.md from extracted style data with full provenance."""
 import argparse
+import re
 import sys
 from datetime import date
 from pathlib import Path
 
 import yaml
 
+_HEX_RE = re.compile(r'^#[0-9a-fA-F]{3,8}$')
+_FAMILY_RE = re.compile(r'[^a-zA-Z0-9 _\-]')
+
+
+def _safe_hex(value: str) -> str:
+    """Return value if it looks like a CSS hex color, else '#000000'."""
+    return value if _HEX_RE.match(value) else "#000000"
+
+
+def _safe_family(value: str) -> str:
+    """Strip non-CSS-safe characters from a font-family name."""
+    return _FAMILY_RE.sub('', value).strip() or "sans-serif"
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 
-from tools.logger import success, warn
+from tools.logger import success, warn, error
 
 
 def _load_yaml(path: Path) -> dict:
-    """Load a YAML file, returning empty dict if absent."""
+    """Load a YAML file, returning empty dict if absent or non-dict."""
     if not path.exists():
         warn(f"Missing: {path} — using defaults")
         return {}
-    return yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    result = yaml.safe_load(path.read_text(encoding="utf-8"))
+    if not isinstance(result, dict):
+        warn(f"Malformed YAML (expected dict, got {type(result).__name__}): {path} — using defaults")
+        return {}
+    return result
 
 
 def _load_text_first_line(path: Path, default: str) -> str:
@@ -35,7 +53,9 @@ def _count_approved_refs(index_path: Path) -> int:
     """Count refs with status == 'approved' in index.yaml."""
     data = _load_yaml(index_path)
     refs = data.get("refs", [])
-    return sum(1 for r in refs if r.get("status") == "approved")
+    if not isinstance(refs, list):
+        return 0
+    return sum(1 for r in refs if isinstance(r, dict) and r.get("status") == "approved")
 
 
 def build_brand_kit(project_dir: str) -> Path:
@@ -63,7 +83,7 @@ def build_brand_kit(project_dir: str) -> Path:
             pixel = entry.get("source_pixel", [])
             source = f"{source_image}@{pixel}" if pixel else source_image
             return {
-                "hex": entry.get("hex", "#000000"),
+                "hex": _safe_hex(entry.get("hex", "#000000")),
                 "role": role,
                 "source": source,
                 "extracted_by": "color-thief",
@@ -83,7 +103,7 @@ def build_brand_kit(project_dir: str) -> Path:
         if idx < len(candidates):
             c = candidates[idx]
             return {
-                "family": c.get("family", "sans-serif"),
+                "family": _safe_family(c.get("family", "sans-serif")),
                 "confidence": c.get("confidence", 0.0),
                 "source": c.get("source", "unknown"),
             }
@@ -91,7 +111,7 @@ def build_brand_kit(project_dir: str) -> Path:
         if candidates:
             c = candidates[0]
             return {
-                "family": c.get("family", "sans-serif"),
+                "family": _safe_family(c.get("family", "sans-serif")),
                 "confidence": c.get("confidence", 0.0),
                 "source": c.get("source", "unknown"),
             }
@@ -191,7 +211,6 @@ def main(argv: list) -> int:
         success(f"Wrote {out}")
         return 0
     except Exception as exc:
-        from tools.logger import error
         error(f"build failed: {exc}")
         return 1
 
