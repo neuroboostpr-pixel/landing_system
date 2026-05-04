@@ -16,7 +16,6 @@ import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 
-from tools.adapters.font_downloader import FontDownloadError
 from tools.logger import success, error, warn
 
 
@@ -33,7 +32,7 @@ def _bunny_woff2_url(family: str, weight: int = 400) -> str:
 def download_fonts(fonts_yaml: str, output_dir: str) -> List[Path]:
     """Read fonts.yaml candidates and download WOFF2 for each.
 
-    Two-step process per font:
+    Three-step process per font:
     1. Fetch CSS from Bunny Fonts CDN.
     2. Parse all woff2 URLs from the CSS with a regex.
     3. Fetch each binary and validate the wOF2 magic bytes.
@@ -89,11 +88,9 @@ def download_fonts(fonts_yaml: str, output_dir: str) -> List[Path]:
                 continue
 
             content = bin_resp.content
-            # Validate magic bytes: first 4 bytes must be b"wOF2"
+            # Validate magic bytes before writing: first 4 bytes must be b"wOF2"
             if content[:4] != b"wOF2":
                 warn(f"Skipped {family}: invalid WOFF2 magic bytes in {woff2_url}")
-                if out_path.exists():
-                    out_path.unlink()
                 continue
 
             out_path.write_bytes(content)

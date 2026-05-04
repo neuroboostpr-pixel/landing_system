@@ -3,7 +3,6 @@ import importlib.util
 import re
 import yaml
 from pathlib import Path
-from unittest.mock import patch, MagicMock
 import responses as resp_lib
 import pytest
 
