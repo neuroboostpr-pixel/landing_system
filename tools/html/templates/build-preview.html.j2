@@ -1,0 +1,153 @@
+{% extends "base.html.j2" %}
+
+{% block title %}Build Preview — {{ project_name }}{% endblock %}
+
+{% block extra_styles %}
+.swatch-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; }
+.swatch { width: 120px; }
+.swatch-color { width: 120px; height: 80px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.08); }
+.swatch-label { font-size: 0.75rem; color: #555; margin-top: 6px; }
+.swatch-hex { font-family: monospace; font-weight: 600; font-size: 0.8rem; }
+.badge { display: inline-block; background: #e8f0fe; color: #1a56db; border-radius: 6px; padding: 4px 10px; font-size: 0.8rem; font-family: monospace; margin: 4px; }
+.badge-neutral { background: #f0f0f0; color: #444; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 6px 0; border-bottom: 1px solid #f0f0f0; font-size: 0.85rem; }
+.field-row:last-child { border-bottom: none; }
+.field-key { font-family: monospace; color: #888; font-size: 0.75rem; }
+.field-type { color: #1a56db; font-size: 0.75rem; }
+.stack-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.stack-item { background: white; border-radius: 8px; padding: 12px; }
+.stack-item-label { font-size: 0.7rem; color: #888; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+.stack-item-value { font-family: monospace; font-size: 0.85rem; font-weight: 600; color: #1a1a1f; }
+details { margin-bottom: 12px; }
+summary { cursor: pointer; font-weight: 600; padding: 10px 0; user-select: none; }
+summary:hover { color: #1a56db; }
+{% endblock %}
+
+{% block heading %}{{ project_name }} — Stage 08: Build{% endblock %}
+
+{% block meta %}
+<p class="meta">WP Theme scaffold overview: tokens, stack, template parts, ACF groups.</p>
+{% endblock %}
+
+{% block content %}
+
+{% set colors = tokens.get("colors", {}) %}
+{% set typography = tokens.get("typography", {}) %}
+
+{% if colors %}
+<h2>Color Tokens</h2>
+<div class="swatch-grid">
+  {% for name, color in colors.items() %}
+  <div class="swatch">
+    <div class="swatch-color" style="background: {{ color.hex }};"></div>
+    <div class="swatch-label">
+      <div class="swatch-hex">{{ color.hex }}</div>
+      <div>--color-{{ name }}</div>
+      {% if color.role %}<div style="color:#aaa;font-size:0.65rem">{{ color.role }}</div>{% endif %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% if typography %}
+<h2>Typography Tokens</h2>
+<div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
+  {% for role, spec in typography.items() %}
+  <div class="card">
+    <div style="color:#888;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">{{ role }}</div>
+    <div style="font-size:1.1rem;font-weight:600;margin-bottom:4px;">{{ spec.family }}</div>
+    <div style="font-size:0.8rem;color:#555;">
+      {{ spec.size }} &bull; weight {{ spec.weight }} &bull; lh {{ spec.line_height }}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% if stack %}
+<h2>Stack Summary</h2>
+<div class="stack-grid">
+  <div class="stack-item">
+    <div class="stack-item-label">Mode</div>
+    <div class="stack-item-value">{{ stack.mode | default("standard") }}</div>
+  </div>
+  {% if stack.wordpress %}
+  <div class="stack-item">
+    <div class="stack-item-label">WP Theme</div>
+    <div class="stack-item-value">{{ stack.wordpress.theme | default("—") }}</div>
+  </div>
+  {% endif %}
+  {% if stack.icons %}
+  <div class="stack-item">
+    <div class="stack-item-label">Icons</div>
+    <div class="stack-item-value">{{ stack.icons.library | default("—") }}</div>
+  </div>
+  {% endif %}
+  {% if stack.fonts %}
+  <div class="stack-item">
+    <div class="stack-item-label">Font CDN</div>
+    <div class="stack-item-value">{{ stack.fonts.cdn | default("—") }}</div>
+  </div>
+  {% endif %}
+</div>
+{% if stack.wordpress and stack.wordpress.plugins %}
+<div class="card">
+  <h3 style="margin-top:0;font-size:1rem;">Plugins</h3>
+  {% for plugin in stack.wordpress.plugins %}
+  <span class="badge">{{ plugin }}</span>
+  {% endfor %}
+</div>
+{% endif %}
+{% if stack.js_libraries %}
+<div class="card">
+  <h3 style="margin-top:0;font-size:1rem;">JS Libraries</h3>
+  {% for lib in stack.js_libraries %}
+  <span class="badge badge-neutral">{{ lib }}</span>
+  {% endfor %}
+</div>
+{% else %}
+<div class="card">
+  <h3 style="margin-top:0;font-size:1rem;">JS Libraries</h3>
+  <span style="color:#aaa;font-size:0.85rem;">None (standard mode)</span>
+</div>
+{% endif %}
+{% endif %}
+
+{% if template_parts %}
+<h2>Template Parts</h2>
+<div class="card">
+  {% for part in template_parts %}
+  <span class="badge">{{ part }}</span>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% if acf_groups %}
+<h2>ACF Field Groups</h2>
+{% for group in acf_groups %}
+<div class="card">
+  <details>
+    <summary>{{ group.title }} <span style="color:#aaa;font-size:0.75rem;font-weight:400;margin-left:8px;">{{ group.key }}</span></summary>
+    {% if group.fields %}
+    <div style="margin-top:12px;">
+      <div class="field-row" style="font-weight:600;color:#888;font-size:0.7rem;text-transform:uppercase;border-bottom:2px solid #eee;">
+        <div>Label</div><div>Name</div><div>Type</div>
+      </div>
+      {% for field in group.fields %}
+      <div class="field-row">
+        <div>{{ field.label }}</div>
+        <div class="field-key">{{ field.name }}</div>
+        <div class="field-type">{{ field.type }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p style="color:#aaa;font-size:0.85rem;margin:12px 0 0;">No fields defined.</p>
+    {% endif %}
+  </details>
+</div>
+{% endfor %}
+{% endif %}
+
+{% endblock %}
