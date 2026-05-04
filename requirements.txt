@@ -1,12 +1,6 @@
+pyyaml>=6.0
+jinja2>=3.1
 requests>=2.31
-Pillow>=10
-colorthief>=0.2.1
-PyYAML>=6
-Jinja2>=3.1
-trafilatura>=1.6
-playwright>=1.40
-beautifulsoup4>=4.12
-rembg>=2.0
-pytest>=7
+pillow>=10.0
+pytest>=7.4
 responses>=0.24
-markdown>=3.5
