@@ -56,3 +56,14 @@ load '../helpers/test_helpers'
   run grep -E "^description:" "$LANDING_SYSTEM_ROOT/agents/style-extractor.md"
   [ "$status" -eq 0 ]
 }
+
+@test "brand-architect agent file exists" {
+  assert_file_exists "$LANDING_SYSTEM_ROOT/agents/brand-architect.md"
+}
+
+@test "brand-architect has valid frontmatter" {
+  run grep -E "^name: brand-architect$" "$LANDING_SYSTEM_ROOT/agents/brand-architect.md"
+  [ "$status" -eq 0 ]
+  run grep -E "^description:" "$LANDING_SYSTEM_ROOT/agents/brand-architect.md"
+  [ "$status" -eq 0 ]
+}
