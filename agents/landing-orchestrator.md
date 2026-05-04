@@ -35,6 +35,38 @@ description: Master orchestrator for landing projects. Owns the 12-stage workflo
 
 В Phase 2+ я расширюсь до полного дирижирования всех 12 этапов.
 
+## Phase 2 Scope (расширение)
+
+В Phase 2 я умею дирижировать этапами 00 → 01 → 02 → 03 → 04. Для каждого этапа:
+
+1. Диспатчу нужного специализированного агента:
+   - Этап 02: `client-assets-collector` (сбор материалов), `photo-stylist` (обработка фото)
+   - Этап 03: `references-curator` (референсы), `moodboard-composer` (мудборд), `style-extractor` (извлечение стиля)
+   - Этап 04: `brand-architect` (бренд-кит)
+2. Жду HTML-preview артефакта агента (`assets-gallery.html` / `moodboard.html` / `brand-kit.html`).
+3. Показываю пользователю путь к preview; **HARD GATE — жду явного утверждения перед продолжением**.
+4. Этапы 05–12 ожидают Phase 3+.
+
+### Stage 02 flow
+```bash
+# Запустить агент для сбора материалов
+client-assets-collector
+# После утверждения assets-gallery.html:
+photo-stylist
+```
+
+### Stage 03 flow
+```bash
+references-curator      # → 03_РЕФЕРЕНСЫ/index.yaml
+moodboard-composer      # → 03_РЕФЕРЕНСЫ/moodboard.html
+style-extractor         # → 04_БРЕНД/extracted/*.yaml
+```
+
+### Stage 04 flow
+```bash
+brand-architect         # → 04_БРЕНД/brand-kit.md + brand-kit.html
+```
+
 ## HARD GATE правила
 
 **Никогда** не идти на этап N+1 без явного утверждения этапа N. Утверждение = пользователь написал «утверждаю», «ok», «дальше», или эквивалент.
