@@ -137,7 +137,23 @@ npm run test:python     # python тесты (Phase 2+)
 
 ## Статус
 
-Phase 1–5 завершены ✅. Phase 6 (Packaging & Pilot) — в работе.
+Здесь две разные нумерации, не путать:
+
+- **Stages (этапы 00–12)** — пользовательский workflow внутри одного лендинга (бриф → … → деплой → QA → SEO). Зафиксированы в `.landing-state.yaml` каждого проекта, охраняются `gate-check.sh`.
+- **Phases (фазы 1–6)** — этапы разработки самой системы (см. [master plan](docs/superpowers/plans/2026-05-03-landing-system-master-plan.md)).
+
+Текущее состояние разработки системы:
+
+| Phase | Что входит | Статус |
+|---|---|---|
+| 1. Skeleton & Infrastructure | каркас, `template/`, `/landing-new` | ✅ |
+| 2. Brainstorming Pipeline (stages 00–04) | бриф, материалы, референсы, бренд-кит | ✅ |
+| 3. Design Pipeline (stages 05–07) | DESIGN.md, токены, стек, контент | ✅ |
+| 4. WP Build Pipeline (stage 08) | Gutenberg-блоки, ACF, тема, аналитика, SEO | ✅ |
+| 5. Deploy & Operations (stages 09–12) | `wp-deployer`, `/landing-deploy`, QA, rollback, A/B, DNS | ✅ |
+| 6. Packaging & Pilot | `build-zip.sh`, pilot-прогон, student-guide | ⏳ в работе |
+
+Функциональность деплоя реализована в Phase 5. Phase 6 — это упаковка системы для раздачи и пилотный прогон, а не дописывание деплоя. Backlog поверх MVP — в [docs/BACKLOG.md](docs/BACKLOG.md).
 
 ## License
 
