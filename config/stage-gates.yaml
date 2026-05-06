@@ -11,9 +11,40 @@ stages:
         required: true
         fix_hint: "Create 00_БРИФ/brief.md with project requirements"
 
+  "01a_niche_analysis":
+    name: "Niche analysis"
+    require_approved: ["00_brief"]
+    hard_checks:
+      - id: niche_analysis_md
+        type: file_exists
+        path: "{project}/01a_АНАЛИЗ_НИШИ/niche-analysis.md"
+        required: true
+        fix_hint: "niche-analyst agent creates this"
+      - id: competitors_yaml
+        type: file_exists
+        path: "{project}/01a_АНАЛИЗ_НИШИ/competitors.yaml"
+        required: true
+        fix_hint: "niche-analyst agent creates this"
+      - id: positioning_md
+        type: file_exists
+        path: "{project}/01a_АНАЛИЗ_НИШИ/positioning.md"
+        required: true
+        fix_hint: "niche-analyst agent creates this"
+      - id: competitors_schema
+        type: script
+        script: "skills/niche-analysis/scripts/validate-competitors.py"
+        args: ["{project}/01a_АНАЛИЗ_НИШИ/competitors.yaml"]
+        required: true
+        fix_hint: "Fix competitors.yaml — see script output for issues"
+    soft_checks:
+      - id: positioning_max_2_angles
+        prompt: "В positioning.md ровно 1 или 2 угла отстройки (не больше)? (yes / no)"
+      - id: competitors_count_15_25
+        prompt: "В competitors.yaml 15–25 записей? (yes / no)"
+
   "02_assets":
     name: "Materials collection"
-    require_approved: ["00_brief", "01_context"]
+    require_approved: ["00_brief", "01_context", "01a_niche_analysis"]
     hard_checks:
       - id: stock_photo_api
         type: api_validator_any_of

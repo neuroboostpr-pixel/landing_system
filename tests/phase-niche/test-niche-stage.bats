@@ -25,3 +25,22 @@ setup() {
 @test "landing-state 01a is locked initially" {
   grep -E '"01a_niche_analysis":\s+\{status: locked' "$TEMPLATE_DIR/.landing-state.yaml"
 }
+
+@test "stage-gates has 01a_niche_analysis block" {
+  GATES="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../config" && pwd)/stage-gates.yaml"
+  grep -q '"01a_niche_analysis":' "$GATES"
+}
+
+@test "stage-gates 02_assets requires 01a_niche_analysis approved" {
+  GATES="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../config" && pwd)/stage-gates.yaml"
+  # Convert POSIX path to Windows path for Python on Windows
+  WIN_GATES="$(cygpath -w "$GATES" 2>/dev/null || echo "$GATES" | sed 's|^/\([a-z]\)/|\1:/|')"
+  python -c "import yaml,sys; d=yaml.safe_load(open(r'$WIN_GATES',encoding='utf-8')); sys.exit(0 if '01a_niche_analysis' in d['stages']['02_assets'].get('require_approved',[]) else 1)"
+}
+
+@test "stage-gates 01a hard checks include three artifacts" {
+  GATES="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../config" && pwd)/stage-gates.yaml"
+  grep -q "niche-analysis.md" "$GATES"
+  grep -q "competitors.yaml" "$GATES"
+  grep -q "positioning.md" "$GATES"
+}
