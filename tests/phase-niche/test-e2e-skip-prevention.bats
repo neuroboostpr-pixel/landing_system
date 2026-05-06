@@ -95,3 +95,24 @@ EOF
   status_value="$(yq -r '.stages."01a_niche_analysis".status' "$NEW/.landing-state.yaml")"
   [ "$status_value" = "locked" ]
 }
+
+@test "gate-check 01a fails when visual-requirements.md is missing (other 3 artifacts present)" {
+  REPO="$(cd "$(dirname "$BATS_TEST_FILENAME")/../.." && pwd)"
+  PROJECT="$BATS_TEST_TMPDIR/test-vr-missing"
+  mkdir -p "$PROJECT"
+  cp -r "$REPO/template/." "$PROJECT/"
+  if command -v yq >/dev/null 2>&1; then
+    yq -i '.stages."00_brief".status = "approved"' "$PROJECT/.landing-state.yaml"
+  else
+    skip "yq not installed"
+  fi
+  # Provide 3 of 4 artifacts; visual-requirements.md missing
+  mkdir -p "$PROJECT/01a_АНАЛИЗ_НИШИ"
+  printf "# stub\n" > "$PROJECT/01a_АНАЛИЗ_НИШИ/niche-analysis.md"
+  printf "competitors: []\n" > "$PROJECT/01a_АНАЛИЗ_НИШИ/competitors.yaml"
+  printf "# stub\n" > "$PROJECT/01a_АНАЛИЗ_НИШИ/positioning.md"
+
+  run bash "$REPO/scripts/gate-check.sh" --stage 01a_niche_analysis --project "$PROJECT" --auto
+  [ "$status" -ne 0 ]
+  [[ "$output" == *"visual-requirements"* ]] || [[ "$output" == *"visual_requirements"* ]]
+}
