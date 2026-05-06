@@ -135,3 +135,18 @@ setup() {
   AGENT="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../agents" && pwd)/seo-optimizer.md"
   grep -q "competitors.yaml\|01a_АНАЛИЗ_НИШИ" "$AGENT"
 }
+
+@test "root README mentions /landing-niche command" {
+  README="$(cd "$(dirname "$BATS_TEST_FILENAME")/../.." && pwd)/README.md"
+  grep -q "/landing-niche" "$README"
+}
+
+@test "template CLAUDE.md mentions stage 01a" {
+  CL="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../template" && pwd)/CLAUDE.md"
+  grep -q "01a_АНАЛИЗ_НИШИ\|01a" "$CL"
+}
+
+@test "package.json has test:phase-niche script" {
+  PKG="$(cd "$(dirname "$BATS_TEST_FILENAME")/../.." && pwd)/package.json"
+  grep -q "test:phase-niche" "$PKG"
+}

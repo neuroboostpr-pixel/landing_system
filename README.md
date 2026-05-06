@@ -78,6 +78,7 @@ Onboarding:
 |---|---|
 | `/landing-new <slug>` | Новый проект с нуля |
 | `/landing-from-context <slug>` | Из родительской папки агентства |
+| `/landing-niche` | Анализ ниши и конкурентов (этап 01a) |
 | `/landing-references` | Референсы и мудборд (этап 03) |
 | `/landing-brand` | Бренд-кит из референсов (этап 04) |
 | `/landing-design` | Дизайн-система и токены (этап 05) |
@@ -139,7 +140,7 @@ npm run test:python     # python тесты (Phase 2+)
 
 Здесь две разные нумерации, не путать:
 
-- **Stages (этапы 00–12)** — пользовательский workflow внутри одного лендинга (бриф → … → деплой → QA → SEO). Зафиксированы в `.landing-state.yaml` каждого проекта, охраняются `gate-check.sh`.
+- **Stages (этапы 00–12 + 01a)** — пользовательский workflow внутри одного лендинга (бриф → … → деплой → QA → SEO). Зафиксированы в `.landing-state.yaml` каждого проекта, охраняются `gate-check.sh`.
 - **Phases (фазы 1–6)** — этапы разработки самой системы (см. [master plan](docs/superpowers/plans/2026-05-03-landing-system-master-plan.md)).
 
 Текущее состояние разработки системы:
