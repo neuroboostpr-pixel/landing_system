@@ -67,3 +67,35 @@ setup() {
   AGENT="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../agents" && pwd)/niche-analyst.md"
   grep -qi "zero-touch\|никаких вопросов\|без вопросов" "$AGENT"
 }
+
+@test "landing-niche command exists in commands/" {
+  CMD="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../commands" && pwd)/landing-niche.md"
+  [ -f "$CMD" ]
+}
+
+@test "landing-niche command exists in .claude/commands/" {
+  CMD="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../.claude/commands" && pwd)/landing-niche.md"
+  [ -f "$CMD" ]
+}
+
+@test "landing-niche command files are identical" {
+  A="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../commands" && pwd)/landing-niche.md"
+  B="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../.claude/commands" && pwd)/landing-niche.md"
+  diff -q "$A" "$B"
+}
+
+@test "landing-niche invokes niche-analyst agent" {
+  CMD="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../commands" && pwd)/landing-niche.md"
+  grep -q "niche-analyst" "$CMD"
+}
+
+@test "niche-analysis SKILL.md exists" {
+  SKILL="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../skills" && pwd)/niche-analysis/SKILL.md"
+  [ -f "$SKILL" ]
+}
+
+@test "niche-analysis SKILL has frontmatter" {
+  SKILL="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../skills" && pwd)/niche-analysis/SKILL.md"
+  grep -q "^name:" "$SKILL"
+  grep -q "^description:" "$SKILL"
+}
