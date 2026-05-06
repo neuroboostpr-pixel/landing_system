@@ -44,3 +44,26 @@ setup() {
   grep -q "competitors.yaml" "$GATES"
   grep -q "positioning.md" "$GATES"
 }
+
+@test "niche-analyst agent file exists" {
+  AGENT="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../agents" && pwd)/niche-analyst.md"
+  [ -f "$AGENT" ]
+}
+
+@test "niche-analyst has frontmatter with name and description" {
+  AGENT="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../agents" && pwd)/niche-analyst.md"
+  grep -q "^name: niche-analyst" "$AGENT"
+  grep -q "^description:" "$AGENT"
+}
+
+@test "niche-analyst mentions all 7 roles" {
+  AGENT="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../agents" && pwd)/niche-analyst.md"
+  for role in direct local_dealer manufacturer analog category_leader local_competitor indirect; do
+    grep -q "$role" "$AGENT" || { echo "missing role: $role"; return 1; }
+  done
+}
+
+@test "niche-analyst documents zero-touch principle" {
+  AGENT="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../agents" && pwd)/niche-analyst.md"
+  grep -qi "zero-touch\|никаких вопросов\|без вопросов" "$AGENT"
+}
