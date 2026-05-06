@@ -5,13 +5,18 @@ set -euo pipefail
 
 PROJECT="$(realpath "${1:?Usage: deploy.sh <project-dir>}")"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SKIP_PREFLIGHT="${2:-}"
 
 echo "=== Landing Deploy: $(basename "$PROJECT") ==="
 echo ""
 
 # Preflight
-echo "▶ Preflight check"
-bash "$SCRIPT_DIR/preflight.sh" || exit 1
+if [ "$SKIP_PREFLIGHT" != "--skip-preflight" ]; then
+  echo "▶ Preflight check"
+  bash "$SCRIPT_DIR/preflight.sh" || exit 1
+else
+  echo "⚠ Preflight skipped"
+fi
 
 # Validate build exists
 [ -f "$PROJECT/08_КОД/wp-theme/functions.php" ] \

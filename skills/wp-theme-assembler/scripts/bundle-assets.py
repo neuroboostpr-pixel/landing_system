@@ -35,7 +35,7 @@ def _note_fonts(project: Path, stack: dict) -> list:
     cdn = stack.get("fonts", {}).get("cdn", "bunny")
     noted = []
     for font in families:
-        name = font["name"]
+        name = font.get("name", font.get("family", "unknown"))
         weights = font.get("weights", [400])
         slug = name.lower().replace(" ", "-")
         (fonts_dir / f"{slug}.txt").write_text(

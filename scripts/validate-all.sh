@@ -8,8 +8,10 @@ cd "$REPO_ROOT"
 # Load .env if present
 [ -f .env ] && set -a && . ./.env && set +a
 
+PYTHON="${PYTHON:-$(command -v python3 2>/dev/null || command -v python)}"
+
 if [ "${1:-}" = "--service" ] && [ -n "${2:-}" ]; then
-    python3 -m tools.api_validators.aggregate --only "$2"
+    "$PYTHON" -m tools.api_validators.aggregate --only "$2"
 else
-    python3 -m tools.api_validators.aggregate
+    "$PYTHON" -m tools.api_validators.aggregate
 fi

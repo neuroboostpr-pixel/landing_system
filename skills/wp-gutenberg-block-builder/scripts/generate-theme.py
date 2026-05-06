@@ -75,7 +75,7 @@ def _write_functions_php(theme_dir: Path, stack: dict) -> None:
 
     base_url = "https://fonts.bunny.net/css" if cdn == "bunny" else "https://fonts.googleapis.com/css2"
     font_query = "|".join(
-        f"{f['name'].lower().replace(' ', '-')}:{','.join(str(w) for w in f.get('weights', [400]))}"
+        f"{f.get('name', f.get('family', 'inter')).lower().replace(' ', '-')}:{','.join(str(w) for w in f.get('weights', [400]))}"
         for f in families
     )
     font_url = f"{base_url}?family={font_query}" if font_query else f"{base_url}?family=inter:400"

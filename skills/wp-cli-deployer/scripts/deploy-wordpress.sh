@@ -21,11 +21,19 @@ ENV_FILE="$SCRIPT_DIR/../../../.env"
 REMOTE_THEME="${BEGET_PATH}/wp-content/themes/lp-${PROJECT_SLUG}"
 
 echo "▶ Синхронизация темы → $BEGET_HOST:$REMOTE_THEME"
-rsync -avz --delete \
-  --exclude=".git" \
-  --exclude="*.map" \
-  "$THEME_DIR/" \
-  "${BEGET_USER}@${BEGET_HOST}:${REMOTE_THEME}/"
+# Create remote dir
+ssh "${BEGET_USER}@${BEGET_HOST}" "mkdir -p ${REMOTE_THEME}"
+# Use scp if rsync not available
+if command -v rsync >/dev/null 2>&1; then
+  rsync -avz --delete \
+    --exclude=".git" \
+    --exclude="*.map" \
+    "$THEME_DIR/" \
+    "${BEGET_USER}@${BEGET_HOST}:${REMOTE_THEME}/"
+else
+  echo "  (rsync not found, using scp)"
+  scp -r "$THEME_DIR/." "${BEGET_USER}@${BEGET_HOST}:${REMOTE_THEME}/"
+fi
 
 echo "▶ Активация темы"
 ssh "${BEGET_USER}@${BEGET_HOST}" \
