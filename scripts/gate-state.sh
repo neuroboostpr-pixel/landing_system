@@ -43,7 +43,7 @@ case "$cmd" in
         missing=()
         for s in "${arr[@]}"; do
             status="$(yq -r ".stages.\"$s\".status // \"locked\"" "$state_file")"
-            [ "$status" != "approved" ] && missing+=("$s")
+            [ "$status" != "approved" ] && [ "$status" != "skipped" ] && missing+=("$s")
         done
         if [ ${#missing[@]} -eq 0 ]; then
             exit 0

@@ -104,6 +104,19 @@ for i in $(seq 0 $((checks_count - 1))); do
                 fail=1
             fi
             ;;
+        script)
+            script_path="$(yq -r ".stages.\"$stage\".hard_checks[$i].script" "$GATES_YAML")"
+            args_raw="$(yq -r ".stages.\"$stage\".hard_checks[$i].args[] // \"\"" "$GATES_YAML" | sed "s|{project}|$project|g")"
+            # shellcheck disable=SC2086
+            if python "$REPO_ROOT/$script_path" $args_raw >/dev/null 2>&1; then
+                echo "  ✅ $check_id ($script_path)"
+            else
+                echo "  ❌ $check_id: script $script_path failed"
+                python "$REPO_ROOT/$script_path" $args_raw 2>&1 | sed 's/^/     /' || true
+                [ -n "$fix_hint" ] && echo "     → $fix_hint"
+                fail=1
+            fi
+            ;;
         *)
             echo "  ⚠️  $check_id: unknown type $check_type" >&2
             ;;
