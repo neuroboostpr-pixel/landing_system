@@ -1,0 +1,16 @@
+competitors:
+  - {name: "Y1",  role: NOT_A_REAL_ROLE, url: "u", region: "r", positioning: "p", target_audience: "a", price_range: "x", key_messages: ["m"], visual_notes: "n", notes_for_us: "u", source: "s", confidence: high}
+  - {name: "Y2",  role: direct,    url: "u", region: "r", positioning: "p", target_audience: "a", price_range: "x", key_messages: ["m"], visual_notes: "n", notes_for_us: "u", source: "s", confidence: high}
+  - {name: "Y3",  role: direct,    url: "u", region: "r", positioning: "p", target_audience: "a", price_range: "x", key_messages: ["m"], visual_notes: "n", notes_for_us: "u", source: "s", confidence: high}
+  - {name: "Y4",  role: analog,    url: "u", region: "r", positioning: "p", target_audience: "a", price_range: "x", key_messages: ["m"], visual_notes: "n", notes_for_us: "u", source: "s", confidence: high}
+  - {name: "Y5",  role: analog,    url: "u", region: "r", positioning: "p", target_audience: "a", price_range: "x", key_messages: ["m"], visual_notes: "n", notes_for_us: "u", source: "s", confidence: high}
+  - {name: "Y6",  role: indirect,  url: "u", region: "r", positioning: "p", target_audience: "a", price_range: "x", key_messages: ["m"], visual_notes: "n", notes_for_us: "u", source: "s", confidence: high}
+  - {name: "Y7",  role: indirect,  url: "u", region: "r", positioning: "p", target_audience: "a", price_range: "x", key_messages: ["m"], visual_notes: "n", notes_for_us: "u", source: "s", confidence: high}
+  - {name: "Y8",  role: manufacturer, url: "u", region: "r", positioning: "p", target_audience: "a", price_range: "x", key_messages: ["m"], visual_notes: "n", notes_for_us: "u", source: "s", confidence: high}
+  - {name: "Y9",  role: local_dealer, url: "u", region: "r", positioning: "p", target_audience: "a", price_range: "x", key_messages: ["m"], visual_notes: "n", notes_for_us: "u", source: "s", confidence: high}
+  - {name: "Y10", role: category_leader, url: "u", region: "r", positioning: "p", target_audience: "a", price_range: "x", key_messages: ["m"], visual_notes: "n", notes_for_us: "u", source: "s", confidence: high}
+  - {name: "Y11", role: local_competitor, url: "u", region: "r", positioning: "p", target_audience: "a", price_range: "x", key_messages: ["m"], visual_notes: "n", notes_for_us: "u", source: "s", confidence: high}
+  - {name: "Y12", role: local_competitor, url: "u", region: "r", positioning: "p", target_audience: "a", price_range: "x", key_messages: ["m"], visual_notes: "n", notes_for_us: "u", source: "s", confidence: high}
+  - {name: "Y13", role: direct,    url: "u", region: "r", positioning: "p", target_audience: "a", price_range: "x", key_messages: ["m"], visual_notes: "n", notes_for_us: "u", source: "s", confidence: high}
+  - {name: "Y14", role: local_competitor, url: "u", region: "r", positioning: "p", target_audience: "a", price_range: "x", key_messages: ["m"], visual_notes: "n", notes_for_us: "u", source: "s", confidence: high}
+  - {name: "Y15", role: local_competitor, url: "u", region: "r", positioning: "p", target_audience: "a", price_range: "x", key_messages: ["m"], visual_notes: "n", notes_for_us: "u", source: "s", confidence: high}

@@ -1,0 +1,11 @@
+competitors:
+  - {name: "X1", role: direct, url: "u", region: "r", positioning: "p", target_audience: "a", price_range: "x", key_messages: ["m"], visual_notes: "n", notes_for_us: "u", source: "s", confidence: high}
+  - {name: "X2", role: direct, url: "u", region: "r", positioning: "p", target_audience: "a", price_range: "x", key_messages: ["m"], visual_notes: "n", notes_for_us: "u", source: "s", confidence: high}
+  - {name: "X3", role: direct, url: "u", region: "r", positioning: "p", target_audience: "a", price_range: "x", key_messages: ["m"], visual_notes: "n", notes_for_us: "u", source: "s", confidence: high}
+  - {name: "X4", role: direct, url: "u", region: "r", positioning: "p", target_audience: "a", price_range: "x", key_messages: ["m"], visual_notes: "n", notes_for_us: "u", source: "s", confidence: high}
+  - {name: "X5", role: direct, url: "u", region: "r", positioning: "p", target_audience: "a", price_range: "x", key_messages: ["m"], visual_notes: "n", notes_for_us: "u", source: "s", confidence: high}
+  - {name: "X6", role: direct, url: "u", region: "r", positioning: "p", target_audience: "a", price_range: "x", key_messages: ["m"], visual_notes: "n", notes_for_us: "u", source: "s", confidence: high}
+  - {name: "X7", role: direct, url: "u", region: "r", positioning: "p", target_audience: "a", price_range: "x", key_messages: ["m"], visual_notes: "n", notes_for_us: "u", source: "s", confidence: high}
+  - {name: "X8", role: direct, url: "u", region: "r", positioning: "p", target_audience: "a", price_range: "x", key_messages: ["m"], visual_notes: "n", notes_for_us: "u", source: "s", confidence: high}
+  - {name: "X9", role: direct, url: "u", region: "r", positioning: "p", target_audience: "a", price_range: "x", key_messages: ["m"], visual_notes: "n", notes_for_us: "u", source: "s", confidence: high}
+  - {name: "X10", role: direct, url: "u", region: "r", positioning: "p", target_audience: "a", price_range: "x", key_messages: ["m"], visual_notes: "n", notes_for_us: "u", source: "s", confidence: high}
