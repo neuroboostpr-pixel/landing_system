@@ -1,0 +1,118 @@
+# Visual rules per niche category.
+# Read by niche-analyst agent (step 9) to populate visual-requirements.md.
+# Spec: docs/superpowers/specs/2026-05-06-visual-requirements-design.md
+
+schema_version: 1
+
+categories:
+  premium_automotive:
+    description: "Премиум-автодилеры (EV, гибриды, luxury ICE)"
+    examples: ["BMW dealer", "Mercedes dealer", "Lixiang Dubai", "Tesla showroom"]
+    hero_focal: product
+    hero_composition: "Машина 50–70% кадра, фон — нейтральный или тёмный premium. Без городских пейзажей и driving shots."
+    photography: studio
+    people: optional
+    people_note: "Если есть — family-интерьерные сцены, не sport-водительские"
+    product_treatment: studio
+    background_allowed:
+      - studio_neutral
+      - dark_premium
+      - warm_interior
+    universal_red_flags:
+      - "Stock cityscape backgrounds (cheap dealer signal)"
+      - "Highway driving shots (generic dealership template)"
+      - "Off-road dramatic landscapes (Range Rover territory)"
+      - "Sport-lifestyle shots (Tesla/Zeekr territory unless brand is sport-positioned)"
+    universal_preferences:
+      - "Studio shots с нейтральным или тёмным premium-фоном"
+      - "Interior detail shots premium-материалов"
+      - "Family moments внутри салона (если family-positioned brand)"
+
+  local_services:
+    description: "Локальные услуги: ремонт, бурение, монтаж, мастера"
+    examples: ["бурение скважин", "ремонт квартир", "натяжные потолки", "клининг"]
+    hero_focal: person_or_process
+    hero_composition: "Реальный человек делает работу или готовый результат. Не stock-актёры."
+    photography: documentary
+    people: yes
+    people_note: "Реальная команда клиента, а не stock smiling actors"
+    product_treatment: context
+    background_allowed:
+      - real_workplace
+      - finished_result
+      - geo_local
+    universal_red_flags:
+      - "Stock smiling actors в касках (low trust signal)"
+      - "Generic abstract icons в Hero вместо реальных людей/процесса"
+      - "Tools/equipment вне контекста использования"
+      - "Photoshop-составные коллажи"
+    universal_preferences:
+      - "Real team photos с лицами"
+      - "Before/after или process shots"
+      - "Geo-cues локального рынка (виды конкретного города/района)"
+
+  professional_services:
+    description: "Профессиональные услуги: медицина, право, консалтинг, образование"
+    examples: ["частная стоматология", "адвокатский кабинет", "психолог", "репетитор-онлайн"]
+    hero_focal: person_or_environment
+    hero_composition: "Портрет эксперта или среда профессии. Trust signal на первом месте."
+    photography: lifestyle_or_studio
+    people: yes
+    people_note: "Реальный эксперт/команда, не stock business meeting"
+    product_treatment: hybrid
+    background_allowed:
+      - real_office
+      - real_clinic
+      - portrait_studio
+      - documentary_moment
+    universal_red_flags:
+      - "Stock 'business meeting' photos"
+      - "Generic handshakes"
+      - "Suit-and-tie cliche shots"
+      - "Stock medical actors (особенно для клиник)"
+    universal_preferences:
+      - "Real expert portraits с подписями (имя, регалии)"
+      - "Environment, signaling competence (реальная клиника, реальный кабинет)"
+      - "Documentary moments из работы"
+
+  b2c_consumer:
+    description: "B2C-товары: e-commerce, FMCG, товары через лендинги"
+    examples: ["косметика DTC", "одежда", "электроника", "БАДы"]
+    hero_focal: product_or_usage
+    hero_composition: "Продукт в использовании или hero shot. Lifestyle-контекст допускается."
+    photography: lifestyle_or_studio
+    people: optional
+    people_note: "Если есть — diverse, authentic, не stock-модели"
+    product_treatment: context_or_studio
+    background_allowed:
+      - studio_neutral
+      - lifestyle_context
+      - in_use
+    universal_red_flags:
+      - "Pure abstract gradients без продукта"
+      - "Mock UI с fake данными (для физических товаров)"
+      - "Чрезмерно ретушированные модели"
+    universal_preferences:
+      - "Продукт в реальном использовании"
+      - "Diverse, authentic модели если люди в кадре"
+      - "Размер/масштаб продукта понятен"
+
+  default:
+    description: "Шаблон по умолчанию когда категория не определена"
+    examples: []
+    hero_focal: product_or_person
+    hero_composition: "Понятный focal point. Без stock-подделок."
+    photography: documentary_or_studio
+    people: optional
+    product_treatment: hybrid
+    background_allowed:
+      - studio_neutral
+      - relevant_context
+    universal_red_flags:
+      - "Stock photos без relevance к нише"
+      - "Generic abstract gradients вместо контента"
+      - "Mismatch между обещанием и визуалом"
+    universal_preferences:
+      - "Authentic content над stock"
+      - "Focal point должен быть понятен за 1 секунду"
+      - "Соответствие обещанию из брифа"
