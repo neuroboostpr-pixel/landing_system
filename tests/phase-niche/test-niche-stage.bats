@@ -17,3 +17,11 @@ setup() {
   grep -q "competitors.yaml" "$TEMPLATE_DIR/01a_АНАЛИЗ_НИШИ/README.md"
   grep -q "positioning.md" "$TEMPLATE_DIR/01a_АНАЛИЗ_НИШИ/README.md"
 }
+
+@test "landing-state template has 01a_niche_analysis stage" {
+  grep -q '"01a_niche_analysis"' "$TEMPLATE_DIR/.landing-state.yaml"
+}
+
+@test "landing-state 01a is locked initially" {
+  grep -E '"01a_niche_analysis":\s+\{status: locked' "$TEMPLATE_DIR/.landing-state.yaml"
+}

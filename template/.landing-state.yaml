@@ -8,8 +8,9 @@ schema_version: 1
 
 stages:
   "00_brief":      {status: in_progress, timestamp: ""}
-  "01_context":    {status: locked, timestamp: ""}
-  "02_assets":     {status: locked, timestamp: ""}
+  "01_context":           {status: locked, timestamp: ""}
+  "01a_niche_analysis":   {status: locked, timestamp: ""}
+  "02_assets":            {status: locked, timestamp: ""}
   "03_references": {status: locked, timestamp: ""}
   "04_brand":      {status: locked, timestamp: ""}
   "05_design":     {status: locked, timestamp: ""}
