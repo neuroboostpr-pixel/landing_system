@@ -24,3 +24,4 @@ Bash, Read, Write, Glob. Calls render.py.
 ## Inputs from earlier stages
 
 - `01a_АНАЛИЗ_НИШИ/niche-analysis.md` — обязательный input. Section 6 «Что брать с собой в следующие этапы» определяет, какой визуальный язык уместен.
+- `01a_АНАЛИЗ_НИШИ/visual-requirements.md` — обязательный input. Sections 1, 2, 3, 5, 6 определяют визуальный язык референсов. Если референс попадает в red flag (Section 6) — не сохранять.

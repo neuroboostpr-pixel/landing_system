@@ -23,6 +23,7 @@ Stage 01a (между 01_КОНТЕКСТ и 02_МАТЕРИАЛЫ_КЛИЕНТ�
 1. `niche-analysis.md` — 400–800 слов: тип бренда, описание ниши, рекомендация «на что давим», список допущений.
 2. `competitors.yaml` — 15–25 записей в 7 ролях: direct, local_dealer, manufacturer, analog, category_leader, local_competitor, indirect. Схема в `skills/niche-analysis/scripts/validate-competitors.py`.
 3. `positioning.md` — core promise, tone of voice, 1–2 угла отстройки, чего избегать.
+4. `visual-requirements.md` — визуальные требования к лендингу: hero focal, photography style, product treatment, background palette, red flags. Структура и валидатор: `skills/niche-analysis/scripts/validate-visual-requirements.py`. Справочник по категориям: `config/niche-visual-rules.yaml`.
 
 ## Алгоритм
 
@@ -56,7 +57,15 @@ Stage 01a (между 01_КОНТЕКСТ и 02_МАТЕРИАЛЫ_КЛИЕНТ�
 
 7. **Запись артефактов** в `01a_АНАЛИЗ_НИШИ/`. Все значения и тексты на русском, имена ключей и брендов как есть.
 
-8. **Самопроверка.** Запустить `python skills/niche-analysis/scripts/validate-competitors.py 01a_АНАЛИЗ_НИШИ/competitors.yaml`. Если errors — исправить и повторить.
+8. **Самопроверка competitors.** Запустить `python skills/niche-analysis/scripts/validate-competitors.py 01a_АНАЛИЗ_НИШИ/competitors.yaml`. Если errors — исправить и повторить.
+
+9. **Визуальные требования.**
+   1. **Классификация категории:** на основе бренда/продукта/категории из брифа сопоставить с `categories[].examples` в `config/niche-visual-rules.yaml`. Если совпадение явное (Lixiang Dubai → premium_automotive) — берём `category_key`. Если неоднозначное — выбираем по доминирующему сигналу. Если нет совпадения — `category_key = default` + пометка `[ДОПУЩЕНИЕ] категория не в справочнике`.
+   2. **Базовые правила:** скопировать из `categories[category_key]`: `hero_focal`, `hero_composition`, `photography`, `people`, `product_treatment`, `background_allowed`, `universal_red_flags`, `universal_preferences`.
+   3. **Derive из конкурентов:** прочитать `competitors.yaml`, поле `visual_notes` каждой записи. Для `role=direct` и `role=local_competitor` найти повторяющиеся визуальные коды (≥2 конкурента упоминают похожее) → добавить в red_flags «занятая поляна <имя>». Найти gaps → добавить в preferences. Для `role=manufacturer` и `role=local_dealer` отметить визуальные коды как «наследовать» в preferences.
+   4. **Запись `visual-requirements.md`** с 7 секциями (см. `skills/niche-analysis/scripts/validate-visual-requirements.py`).
+   5. **Sanity-check:** Section 6 должна содержать минимум 3 ❌ и 3 ✅, каждый ❌ — с обоснованием (категорийное правило или ссылка на конкурента).
+   6. **Валидация:** запустить `python skills/niche-analysis/scripts/validate-visual-requirements.py 01a_АНАЛИЗ_НИШИ/visual-requirements.md`. Если errors — исправить и повторить.
 
 ## Tools
 

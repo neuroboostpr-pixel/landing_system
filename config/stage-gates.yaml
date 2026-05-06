@@ -36,6 +36,17 @@ stages:
         args: ["{project}/01a_АНАЛИЗ_НИШИ/competitors.yaml"]
         required: true
         fix_hint: "Fix competitors.yaml — see script output for issues"
+      - id: visual_requirements_md
+        type: file_exists
+        path: "{project}/01a_АНАЛИЗ_НИШИ/visual-requirements.md"
+        required: true
+        fix_hint: "niche-analyst agent creates this (step 9)"
+      - id: visual_requirements_schema
+        type: script
+        script: "skills/niche-analysis/scripts/validate-visual-requirements.py"
+        args: ["{project}/01a_АНАЛИЗ_НИШИ/visual-requirements.md"]
+        required: true
+        fix_hint: "Fix visual-requirements.md sections — see script output"
     soft_checks:
       - id: positioning_max_2_angles
         prompt: "В positioning.md ровно 1 или 2 угла отстройки (не больше)? (yes / no)"

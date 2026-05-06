@@ -7,6 +7,7 @@
 - `niche-analysis.md` — нарративный отчёт (400–800 слов): тип бренда, описание ниши, рекомендация «на что давим», список допущений.
 - `competitors.yaml` — машиночитаемая база 15–25 игроков в 7 ролях: direct, local_dealer, manufacturer, analog, category_leader, local_competitor, indirect.
 - `positioning.md` — единый источник истины для следующих этапов: core promise, tone of voice, 1–2 угла отстройки, чего избегать.
+- `visual-requirements.md` — визуальные требования: hero focal point, photography style, product treatment, фоны, red flags для конкретной ниши. Источник правил: `config/niche-visual-rules.yaml` + derive из competitors.yaml.
 
 ## Кто пишет
 
@@ -24,6 +25,8 @@
 - `brand-architect` (этап 04) — `positioning.md`
 - `content-writer` (этап 07) — `positioning.md` + `competitors.yaml`
 - `seo-optimizer` (этап 12) — `competitors.yaml`
+- `client-assets-collector` (этап 02) — `visual-requirements.md`
+- `wp-builder` (этап 08) — `visual-requirements.md` (sanity-checks)
 
 ## Принцип
 

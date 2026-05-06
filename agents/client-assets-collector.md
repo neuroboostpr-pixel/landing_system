@@ -42,3 +42,7 @@ Stage 02 of the landing workflow. Collect every piece of client-supplied content
 ## Tools
 
 Bash, Read, Write, Edit, Glob. Calls Python scripts via Bash.
+
+## Inputs from earlier stages
+
+- `01a_АНАЛИЗ_НИШИ/visual-requirements.md` — обязательный input. Sections 1, 2, 3, 4, 6 определяют, какие фото запрашивать у клиента и каких фото запрашивать НЕ нужно. Перед запросом материалов клиенту прочитать red flags (Section 6) и явно указать в брифе, что не подходит.

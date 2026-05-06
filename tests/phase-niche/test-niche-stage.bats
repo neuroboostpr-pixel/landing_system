@@ -150,3 +150,43 @@ setup() {
   PKG="$(cd "$(dirname "$BATS_TEST_FILENAME")/../.." && pwd)/package.json"
   grep -q "test:phase-niche" "$PKG"
 }
+
+@test "niche-analyst documents step 9 visual requirements" {
+  AGENT="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../agents" && pwd)/niche-analyst.md"
+  grep -q "visual-requirements.md\|niche-visual-rules.yaml" "$AGENT"
+}
+
+@test "niche-analyst lists visual-requirements.md in outputs" {
+  AGENT="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../agents" && pwd)/niche-analyst.md"
+  grep -q "visual-requirements.md" "$AGENT"
+}
+
+@test "stage-gates 01a includes visual_requirements_md hard check" {
+  GATES="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../config" && pwd)/stage-gates.yaml"
+  grep -q "visual_requirements_md\|visual-requirements.md" "$GATES"
+}
+
+@test "client-assets-collector reads visual-requirements.md" {
+  AGENT="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../agents" && pwd)/client-assets-collector.md"
+  grep -q "visual-requirements.md" "$AGENT"
+}
+
+@test "moodboard-composer reads visual-requirements.md" {
+  AGENT="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../agents" && pwd)/moodboard-composer.md"
+  grep -q "visual-requirements.md" "$AGENT"
+}
+
+@test "references-curator reads visual-requirements.md" {
+  AGENT="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../agents" && pwd)/references-curator.md"
+  grep -q "visual-requirements.md" "$AGENT"
+}
+
+@test "wp-builder has visual sanity-checks section" {
+  AGENT="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../agents" && pwd)/wp-builder.md"
+  grep -q "visual-requirements.md\|Visual sanity" "$AGENT"
+}
+
+@test "template 01a README mentions visual-requirements.md" {
+  README="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../template/01a_АНАЛИЗ_НИШИ" && pwd)/README.md"
+  grep -q "visual-requirements.md" "$README"
+}

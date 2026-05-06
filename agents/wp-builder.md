@@ -85,3 +85,13 @@ $bg_url     = $bg_image ? esc_url($bg_image['url']) : '';
 - ❌ Никаких inline-стилей кроме dynamic (background-image из ACF)
 - ✅ Каждый PHP-файл начинается с provenance-комментария
 - ✅ Все user-facing строки через `esc_html()` или `wp_kses_post()`
+
+## Visual sanity-checks
+
+Перед сборкой темы и финальной упаковкой ассетов:
+
+1. **Прочитать `01a_АНАЛИЗ_НИШИ/visual-requirements.md`** (Sections 1, 4, 5).
+2. **Hero asset check:** если Section 1 говорит `hero_focal: product`, проверить главный hero-кандидат в `02_МАТЕРИАЛЫ_КЛИЕНТА/`. Если имя файла или метаданные содержат паттерны из Section 5 «Запрещённые» (например, `cityscape`, `landscape`, `highway`) — warning в build log, рекомендовать замену.
+3. **Catalog assets check:** если Section 4 говорит `studio`, проверить файлы моделей. Файлы с landscape-фоном — warning.
+4. **Запрет fallback на stock:** в коде темы (`block-hero.php`, `block-models.php` и т.д.) запрещены fallback-картинки на сторонние URL (Pexels, Unsplash и т.п.) без явного разрешения в visual-requirements. Если fallback нужен — должен быть локальный файл, проверенный против Section 5.
+5. **Code review:** grep по теме на признаки запрещённых паттернов (например, имена файлов `*-stock-*`, `*-pexels-*`).

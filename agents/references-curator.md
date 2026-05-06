@@ -24,3 +24,4 @@ Bash, Read, Write, Glob. Calls index.py.
 ## Inputs from earlier stages
 
 - `01a_АНАЛИЗ_НИШИ/competitors.yaml` — обязательный input. Поле `visual_notes` каждого конкурента читать перед поиском референсов: не клонировать визуал лидеров категории, искать gaps.
+- `01a_АНАЛИЗ_НИШИ/visual-requirements.md` — Section 6 (red flags) обязательна к проверке. При оценке любого референса (от пользователя или moodboard-composer) сравнивать с red flags. Референсы, попадающие в запреты, отвергать со ссылкой на конкретный пункт visual-requirements.md.
