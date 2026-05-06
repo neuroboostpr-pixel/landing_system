@@ -37,3 +37,7 @@ Stage 04 of the landing workflow. Synthesize all extracted style data into a coh
 ## Tools
 
 Bash, Read, Write, Glob. Calls Python scripts via Bash.
+
+## Inputs from earlier stages
+
+- `01a_АНАЛИЗ_НИШИ/positioning.md` — обязательный input. Это единый источник истины: core promise, tone of voice, углы отстройки. Не переизобретать позиционирование, использовать готовое.

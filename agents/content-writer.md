@@ -30,3 +30,8 @@ allowed-tools: Bash, Read, Write
 
 - `07_КОНТЕНТ/final-copy.md`
 - `07_КОНТЕНТ/seo-copy.md`
+
+## Inputs from earlier stages
+
+- `01a_АНАЛИЗ_НИШИ/positioning.md` — обязательный input. Использовать сообщения углов отстройки в текстах блоков.
+- `01a_АНАЛИЗ_НИШИ/competitors.yaml` — поле `key_messages` каждой записи. Не повторять сообщения, которые говорят все конкуренты (см. секцию «Чего избегать» в positioning.md).

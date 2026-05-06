@@ -20,3 +20,7 @@ Compose `03_РЕФЕРЕНСЫ/moodboard.md` (text narrative explaining the visu
 ## Tools
 
 Bash, Read, Write, Glob. Calls render.py.
+
+## Inputs from earlier stages
+
+- `01a_АНАЛИЗ_НИШИ/niche-analysis.md` — обязательный input. Section 6 «Что брать с собой в следующие этапы» определяет, какой визуальный язык уместен.

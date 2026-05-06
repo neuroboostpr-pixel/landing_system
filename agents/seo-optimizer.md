@@ -69,3 +69,7 @@ add_action('wp_head', 'lp_schema_org');
 - `12_SEO/structured-data.json`
 - `12_SEO/robots.txt`
 - `12_SEO/keywords.md`
+
+## Inputs from earlier stages
+
+- `01a_АНАЛИЗ_НИШИ/competitors.yaml` — поле `key_messages`. Использовать как источник семантики и ключевых слов.

@@ -20,3 +20,7 @@ Stage 03 first half. Build the reference index with statuses.
 ## Tools
 
 Bash, Read, Write, Glob. Calls index.py.
+
+## Inputs from earlier stages
+
+- `01a_АНАЛИЗ_НИШИ/competitors.yaml` — обязательный input. Поле `visual_notes` каждого конкурента читать перед поиском референсов: не клонировать визуал лидеров категории, искать gaps.

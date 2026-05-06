@@ -99,3 +99,39 @@ setup() {
   grep -q "^name:" "$SKILL"
   grep -q "^description:" "$SKILL"
 }
+
+@test "orchestrator knows about 01a_niche_analysis" {
+  ORC="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../agents" && pwd)/landing-orchestrator.md"
+  grep -q "01a_niche_analysis\|01a_АНАЛИЗ_НИШИ" "$ORC"
+}
+
+@test "orchestrator references niche-analyst" {
+  ORC="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../agents" && pwd)/landing-orchestrator.md"
+  grep -q "niche-analyst" "$ORC"
+}
+
+@test "references-curator reads competitors.yaml" {
+  AGENT="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../agents" && pwd)/references-curator.md"
+  grep -q "competitors.yaml\|01a_АНАЛИЗ_НИШИ" "$AGENT"
+}
+
+@test "moodboard-composer reads niche-analysis.md" {
+  AGENT="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../agents" && pwd)/moodboard-composer.md"
+  grep -q "niche-analysis.md\|01a_АНАЛИЗ_НИШИ" "$AGENT"
+}
+
+@test "brand-architect reads positioning.md" {
+  AGENT="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../agents" && pwd)/brand-architect.md"
+  grep -q "positioning.md\|01a_АНАЛИЗ_НИШИ" "$AGENT"
+}
+
+@test "content-writer reads positioning.md and competitors.yaml" {
+  AGENT="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../agents" && pwd)/content-writer.md"
+  grep -q "positioning.md" "$AGENT"
+  grep -q "competitors.yaml" "$AGENT"
+}
+
+@test "seo-optimizer reads competitors.yaml" {
+  AGENT="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../agents" && pwd)/seo-optimizer.md"
+  grep -q "competitors.yaml\|01a_АНАЛИЗ_НИШИ" "$AGENT"
+}

@@ -13,6 +13,7 @@ description: Master orchestrator for landing projects. Owns the 12-stage workflo
 |---|---|---|
 | 00 | Бриф | self |
 | 01 | Контекст | self |
+| 01a | Анализ ниши | niche-analyst |
 | 02 | Материалы клиента | client-assets-collector, photo-stylist |
 | 03 | Референсы | references-curator, moodboard-composer, style-extractor |
 | 04 | Бренд | brand-architect |
@@ -35,9 +36,17 @@ description: Master orchestrator for landing projects. Owns the 12-stage workflo
 
 В Phase 2+ я расширюсь до полного дирижирования всех 12 этапов.
 
+## Stage 01a transition
+
+После одобрения этапа 01_context → запустить `niche-analyst` (этап 01a_АНАЛИЗ_НИШИ / `01a_niche_analysis`). После одобрения 01a → этап 02_assets.
+
+```bash
+niche-analyst   # → 01a_АНАЛИЗ_НИШИ/niche-analysis.md + competitors.yaml + positioning.md
+```
+
 ## Phase 2 Scope (расширение)
 
-В Phase 2 я умею дирижировать этапами 00 → 01 → 02 → 03 → 04. Для каждого этапа:
+В Phase 2 я умею дирижировать этапами 00 → 01 → 01a → 02 → 03 → 04. Для каждого этапа:
 
 1. Диспатчу нужного специализированного агента:
    - Этап 02: `client-assets-collector` (сбор материалов), `photo-stylist` (обработка фото)
