@@ -78,7 +78,7 @@ Onboarding:
 |---|---|
 | `/landing-new <slug>` | Новый проект с нуля |
 | `/landing-from-context <slug>` | Из родительской папки агентства |
-| `/landing-niche` | Анализ ниши и конкурентов (этап 01a) |
+| `/landing-niche` | Анализ ниши, типа бренда, режима позиционирования и конкурентов (этап 01a, v2: 6 артефактов, 3 режима) |
 | `/landing-references` | Референсы и мудборд (этап 03) |
 | `/landing-brand` | Бренд-кит из референсов (этап 04) |
 | `/landing-design` | Дизайн-система и токены (этап 05) |
@@ -135,6 +135,7 @@ npm run test:python     # python тесты (Phase 2+)
 
 - **Полное ТЗ:** [docs/superpowers/specs/2026-05-03-landing-system-design.md](docs/superpowers/specs/2026-05-03-landing-system-design.md)
 - **Master plan:** [docs/superpowers/plans/2026-05-03-landing-system-master-plan.md](docs/superpowers/plans/2026-05-03-landing-system-master-plan.md)
+- **Niche analysis v2** (3 режима позиционирования, market profile, landing structure): [docs/superpowers/specs/2026-05-06-niche-analysis-v2-design.md](docs/superpowers/specs/2026-05-06-niche-analysis-v2-design.md)
 
 ## Статус
 
