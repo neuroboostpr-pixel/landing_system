@@ -31,7 +31,7 @@ def validate(path):
 
     if not re.search(r">\s*Тип\s+бренда:\s*[123]", text, re.IGNORECASE):
         errors.append("Header missing: > Тип бренда: 1|2|3")
-    if not re.search(r">\s*Режим:\s*[a-z_+:]+", text, re.IGNORECASE):
+    if not re.search(r">\s*Режим:\s*[a-z0-9_+:]+", text, re.IGNORECASE):
         errors.append("Header missing: > Режим: <mode>")
 
     text_lower = text.lower()

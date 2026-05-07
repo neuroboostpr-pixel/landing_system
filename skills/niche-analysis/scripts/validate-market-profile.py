@@ -48,7 +48,7 @@ def validate(path):
         if tier not in VALID_TIERS:
             errors.append(f"Invalid accessibility tier: '{tier}'. Valid: {sorted(VALID_TIERS)}")
 
-    mode_match = re.search(r"\*\*Predicted mode:\*\*\s*([a-z_+:]+)", text, re.IGNORECASE)
+    mode_match = re.search(r"\*\*Predicted mode:\*\*\s*([a-z0-9_+:]+)", text, re.IGNORECASE)
     if mode_match:
         mode = mode_match.group(1).strip().lower()
         if not VALID_MODES_PATTERN.match(mode):

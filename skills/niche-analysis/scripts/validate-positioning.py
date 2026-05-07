@@ -45,7 +45,7 @@ def validate(path):
     errors = []
     text = path.read_text(encoding="utf-8")
 
-    mode_match = re.search(r"^\*\*Mode:\*\*\s*([a-z_+:]+)", text, re.MULTILINE | re.IGNORECASE)
+    mode_match = re.search(r"^\*\*Mode:\*\*\s*([a-z0-9_+:]+)", text, re.MULTILINE | re.IGNORECASE)
     if not mode_match:
         return ["Missing **Mode:** header"]
     mode_raw = mode_match.group(1).strip().lower()
