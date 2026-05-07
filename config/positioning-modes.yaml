@@ -1,0 +1,115 @@
+# Positioning modes registry + selection matrix.
+# Read by niche-analyst (step 7) to classify positioning mode.
+# Spec: docs/superpowers/specs/2026-05-06-niche-analysis-v2-design.md §10
+
+schema_version: 1
+
+modes:
+  rational:
+    description: "Продажа через функциональный benefit, метрики, ROI"
+    template_sections:
+      - "Job statement"
+      - "Desired outcomes"
+      - "Metrics that matter"
+      - "Functional benefit ladder"
+      - "Чего избегать"
+    typical_categories:
+      - "b2b_saas"
+      - "utility_services"
+      - "tools"
+      - "commodity"
+
+  emotional_aspiration:
+    description: "Продажа через статус, эмоцию, identity"
+    template_sections:
+      - "Character"
+      - "Problem"
+      - "Guide"
+      - "Plan"
+      - "Call to Action"
+      - "Success vision"
+      - "Failure vision"
+      - "Tone of voice"
+      - "Чего избегать"
+    typical_categories:
+      - "luxury"
+      - "premium_consumer"
+      - "lifestyle"
+      - "fashion"
+      - "premium_automotive"
+
+  trust_authority:
+    description: "Продажа через доверие и снятие риска"
+    template_sections:
+      - "Authority signals"
+      - "Process transparency"
+      - "Social proof tiers"
+      - "Risk reversal"
+      - "Чего избегать"
+    typical_categories:
+      - "medical"
+      - "legal"
+      - "financial"
+      - "premium_services"
+      - "local_services_high_trust"
+
+mode_prediction_matrix:
+  - if:
+      accessibility_tier: ["utility_essential", "mass_consumer"]
+      regulated: false
+    predict: "rational"
+
+  - if:
+      accessibility_tier: ["mass_consumer", "mid_premium"]
+      regulated: true
+    predict: "trust_authority"
+
+  - if:
+      accessibility_tier: ["mid_premium"]
+      emotional_load: "high"
+    predict: "hybrid:emotional_aspiration+trust_authority"
+
+  - if:
+      accessibility_tier: ["premium", "luxury_status", "ultra_luxury"]
+      regulated: false
+    predict: "emotional_aspiration"
+
+  - if:
+      accessibility_tier: ["premium"]
+      regulated: true
+    predict: "hybrid:trust_authority+emotional_aspiration"
+
+  - if:
+      accessibility_tier: ["luxury_status", "ultra_luxury"]
+      regulated: true
+    predict: "hybrid:emotional_aspiration+trust_authority"
+
+brief_indicators:
+  rational:
+    - "экономия"
+    - "гарантия"
+    - "дешевле"
+    - "KPI"
+    - "срок"
+    - "ROI"
+    - "эффективность"
+    - "fixed price"
+    - "transparent"
+  emotional_aspiration:
+    - "премиум"
+    - "эксклюзив"
+    - "статус"
+    - "династия"
+    - "безупречный"
+    - "culture"
+    - "lifestyle"
+    - "luxury"
+  trust_authority:
+    - "сертификат"
+    - "опыт"
+    - "отзывы"
+    - "лицензия"
+    - "врач"
+    - "лет на рынке"
+    - "клиника"
+    - "credentials"
