@@ -57,3 +57,28 @@ for name, words in ind.items():
     assert len(words) >= 5, f"{name}: only {len(words)} indicator words"
 EOF
 }
+
+@test "matrix predicts known cases correctly" {
+  python <<EOF
+import yaml
+d = yaml.safe_load(open('$PY_RULES', encoding='utf-8'))
+matrix = d['mode_prediction_matrix']
+
+def predict(tier, regulated, emotional_load=None):
+    for rule in matrix:
+        cond = rule['if']
+        if tier not in cond.get('accessibility_tier', []):
+            continue
+        if 'regulated' in cond and cond['regulated'] != regulated:
+            continue
+        if 'emotional_load' in cond and cond['emotional_load'] != emotional_load:
+            continue
+        return rule['predict']
+    return None
+
+assert predict('premium', False) == 'emotional_aspiration', f"got {predict('premium', False)}"
+assert predict('utility_essential', False) == 'rational', f"got {predict('utility_essential', False)}"
+assert predict('mid_premium', True) == 'trust_authority', f"got {predict('mid_premium', True)}"
+assert predict('premium', True) == 'hybrid:trust_authority+emotional_aspiration', f"got {predict('premium', True)}"
+EOF
+}
