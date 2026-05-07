@@ -190,3 +190,28 @@ setup() {
   README="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../template/01a_АНАЛИЗ_НИШИ" && pwd)/README.md"
   grep -q "visual-requirements.md" "$README"
 }
+
+@test "stage-gates 01a includes market_profile_md hard check" {
+  GATES="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../config" && pwd)/stage-gates.yaml"
+  grep -q "market_profile_md\|market-profile.md" "$GATES"
+}
+
+@test "stage-gates 01a includes market_profile_schema validator" {
+  GATES="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../config" && pwd)/stage-gates.yaml"
+  grep -q "validate-market-profile.py" "$GATES"
+}
+
+@test "stage-gates 01a includes positioning_schema validator" {
+  GATES="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../config" && pwd)/stage-gates.yaml"
+  grep -q "validate-positioning.py" "$GATES"
+}
+
+@test "stage-gates 01a includes landing_structure_md hard check" {
+  GATES="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../config" && pwd)/stage-gates.yaml"
+  grep -q "landing_structure_md\|landing-structure.md" "$GATES"
+}
+
+@test "stage-gates 01a includes landing_structure_schema validator" {
+  GATES="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../config" && pwd)/stage-gates.yaml"
+  grep -q "validate-landing-structure.py" "$GATES"
+}

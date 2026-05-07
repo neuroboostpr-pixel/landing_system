@@ -40,13 +40,41 @@ stages:
         type: file_exists
         path: "{project}/01a_АНАЛИЗ_НИШИ/visual-requirements.md"
         required: true
-        fix_hint: "niche-analyst agent creates this (step 9)"
+        fix_hint: "niche-analyst agent creates this (step 11)"
       - id: visual_requirements_schema
         type: script
         script: "skills/niche-analysis/scripts/validate-visual-requirements.py"
         args: ["{project}/01a_АНАЛИЗ_НИШИ/visual-requirements.md"]
         required: true
         fix_hint: "Fix visual-requirements.md sections — see script output"
+      - id: market_profile_md
+        type: file_exists
+        path: "{project}/01a_АНАЛИЗ_НИШИ/market-profile.md"
+        required: true
+        fix_hint: "niche-analyst agent creates this (step 7)"
+      - id: market_profile_schema
+        type: script
+        script: "skills/niche-analysis/scripts/validate-market-profile.py"
+        args: ["{project}/01a_АНАЛИЗ_НИШИ/market-profile.md"]
+        required: true
+        fix_hint: "Fix market-profile.md — see script output"
+      - id: positioning_schema
+        type: script
+        script: "skills/niche-analysis/scripts/validate-positioning.py"
+        args: ["{project}/01a_АНАЛИЗ_НИШИ/positioning.md"]
+        required: true
+        fix_hint: "Fix positioning.md — must have **Mode:** header and template sections for that mode"
+      - id: landing_structure_md
+        type: file_exists
+        path: "{project}/01a_АНАЛИЗ_НИШИ/landing-structure.md"
+        required: true
+        fix_hint: "niche-analyst agent creates this (step 10)"
+      - id: landing_structure_schema
+        type: script
+        script: "skills/niche-analysis/scripts/validate-landing-structure.py"
+        args: ["{project}/01a_АНАЛИЗ_НИШИ/landing-structure.md"]
+        required: true
+        fix_hint: "Fix landing-structure.md — see script output"
     soft_checks:
       - id: positioning_max_2_angles
         prompt: "В positioning.md ровно 1 или 2 угла отстройки (не больше)? (yes / no)"
