@@ -17,22 +17,43 @@ allowed-tools: Bash, Read, Write, Edit
 - `05_ДИЗАЙН-СИСТЕМА/tokens.json` — токены
 - `07_КОНТЕНТ/final-copy.md` — финальный текст по блокам
 - `06_СТЕК/design-stack.yaml` — стек и режим (standard/cinematic)
+- `01a_АНАЛИЗ_НИШИ/landing-structure.md` — **источник истины** для списка template-parts. Раздел «Контракт с wp-builder» содержит точный список .php-файлов, которые нужно сгенерировать. Лишних блоков не создавать, отсутствующих не пропускать.
+- `01a_АНАЛИЗ_НИШИ/market-profile.md` — для адаптации поведения блоков (см. ниже).
+- `01a_АНАЛИЗ_НИШИ/positioning.md` — заголовок `**Mode:** <режим>` определяет приоритеты блоков.
 
 ## What I do
 
-1. Читаю `07_КОНТЕНТ/final-copy.md` — извлекаю текст каждой секции.
-2. Читаю `05_ДИЗАЙН-СИСТЕМА/tokens.json` — цвета, типографику, отступы, радиус.
-3. Читаю `06_СТЕК/design-stack.yaml` — режим, иконки, JS-библиотеки.
-4. Читаю `08_КОД/acf-fields.json` — какие поля доступны через ACF.
-5. Для каждой секции пишу `template-parts/section-{name}.php`:
+1. Читаю `01a_АНАЛИЗ_НИШИ/landing-structure.md` → секция «Контракт с wp-builder». Это **полный** список template-parts, которые надо создать. Если в final-copy.md есть блок, которого нет в landing-structure — игнорировать; если в landing-structure есть блок, которого нет в final-copy — warning + создать заглушку.
+2. Читаю `01a_АНАЛИЗ_НИШИ/positioning.md` → `**Mode:** <режим>` для Mode-aware behavior (см. ниже).
+3. Читаю `01a_АНАЛИЗ_НИШИ/market-profile.md` → `accessibility_tier` для price-display поведения.
+4. Читаю `07_КОНТЕНТ/final-copy.md` — извлекаю текст каждой секции.
+5. Читаю `05_ДИЗАЙН-СИСТЕМА/tokens.json` — цвета, типографику, отступы, радиус.
+6. Читаю `06_СТЕК/design-stack.yaml` — режим, иконки, JS-библиотеки.
+7. Читаю `08_КОД/acf-fields.json` — какие поля доступны через ACF.
+8. Для каждой секции из landing-structure пишу `template-parts/section-{name}.php`:
    - Использует `get_field()` из ACF для редактируемых полей
    - CSS-классы только через `--token-name` переменные (без хардкода цветов)
    - Каждый файл начинается с комментария `/* wp-builder: source=DESIGN.md, token=... */`
-6. Пишу `assets/css/main.css` — стили всех блоков через CSS-переменные.
-7. Пишу `assets/js/main.js` — базовые интеракции (аккордеон FAQ, scroll-to-form).
-   - Если режим `cinematic`: добавляю GSAP ScrollTrigger анимации по scenes.md.
-8. Пишу `08_КОД/generateblocks-templates.json` — шаблон для импорта в GenerateBlocks.
-9. **HARD GATE**: показываю список созданных файлов, жду утверждения.
+9. Пишу `assets/css/main.css` — стили всех блоков через CSS-переменные.
+10. Пишу `assets/js/main.js` — базовые интеракции (аккордеон FAQ, scroll-to-form).
+    - Если режим `cinematic`: добавляю GSAP ScrollTrigger анимации по scenes.md.
+11. Пишу `08_КОД/generateblocks-templates.json` — шаблон для импорта в GenerateBlocks.
+12. **HARD GATE**: показываю список созданных файлов, жду утверждения.
+
+## Mode-aware behavior
+
+- **`emotional_aspiration`**: Hero — fullscreen image-driven, цена скрыта или в FAQ. Featured/Catalog — крупная сетка с минимумом текста. Trust-блоки компактные.
+- **`trust_authority`**: Hero — заголовок + ключевая trust-метрика крупно, фото эксперта/команды. Process/Reviews/Risk-reversal блоки — приоритетные, с явной разметкой schema.org (Review, Person).
+- **`rational`**: Hero — заголовок + ключевая цифра, spec-table сразу под Hero. Pricing — прозрачно, без скрытий.
+- **`hybrid:X+Y`**: primary mode задаёт основные блоки, secondary добавляет 1–2 поддерживающих.
+- **`legacy_v1`**: работать как раньше, без mode-аугментации.
+
+## Accessibility tier behavior
+
+Из `market-profile.md` поле `Tier:`:
+- `luxury_status` / `ultra_luxury` → **не показывать price prominently в Hero**. Цена доступна только в Catalog или по запросу. CTA — «Связаться» / «Тест-драйв», не «Купить».
+- `premium` → цена допустима, но через `<del>` (старая) и accent-color (новая) только если есть скидка; иначе нейтрально.
+- `mid_premium` / `mass_consumer` / `utility_essential` → цена prominently в Hero/Catalog, как ключевой sales-driver.
 
 ## PHP Block Rules
 

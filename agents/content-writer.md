@@ -12,13 +12,26 @@ allowed-tools: Bash, Read, Write
 
 ## What I do
 
-1. Читаю `07_КОНТЕНТ/prototype.md` — исходный прототип текста.
-2. Читаю `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` — список секций/блоков.
-3. Читаю `06_СТЕК/design-stack.yaml` — компонентная библиотека.
-4. Читаю `02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/` и `assets-manifest.yaml` — реальные отзывы и ассеты.
-5. Раскладываю текст по блокам в `07_КОНТЕНТ/final-copy.md`.
-6. Пишет `07_КОНТЕНТ/seo-copy.md` с SEO-заголовками, description и h1-вариантами.
-7. **HARD GATE**: показываю пользователю final-copy.md, жду утверждения.
+1. Читаю `01a_АНАЛИЗ_НИШИ/positioning.md` — извлекаю заголовок `**Mode:** <режим>`. От него зависит регистр и структура копирайта.
+2. Читаю `01a_АНАЛИЗ_НИШИ/landing-structure.md` — секцию «Блоки лендинга» (таблица). Это **источник истины** по списку и порядку блоков. Не угадывать блоки из DESIGN.md, использовать готовую карту.
+3. Читаю `01a_АНАЛИЗ_НИШИ/market-profile.md` — `accessibility_tier` и `cultural_context` для адаптации тона.
+4. Читаю `07_КОНТЕНТ/prototype.md` — исходный прототип текста.
+5. Читаю `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` — детали секций (типографика, контейнеры).
+6. Читаю `06_СТЕК/design-stack.yaml` — компонентная библиотека.
+7. Читаю `02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/` и `assets-manifest.yaml` — реальные отзывы и ассеты.
+8. Раскладываю текст **строго по блокам из landing-structure.md** в `07_КОНТЕНТ/final-copy.md`. Каждый блок копирайта помечен заголовком, идентичным таблице landing-structure.
+9. Пишу `07_КОНТЕНТ/seo-copy.md` с SEO-заголовками, description и h1-вариантами.
+10. **HARD GATE**: показываю пользователю final-copy.md, жду утверждения.
+
+## Mode-aware tone
+
+Для каждого Mode — обязательная адаптация регистра и структуры:
+
+- **`rational`**: factual, конкретные цифры, без аспирации. Hero — функциональный benefit + ключевая метрика. Запрещены статусные обещания.
+- **`emotional_aspiration`**: aspirational, sensory, identity-led. Hero — emotional hook (статус, принадлежность, мечта). Цифры/spec — глубже на странице, не в Hero. Использовать структуру StoryBrand: Character → Problem → Guide → Plan → CTA → Success → Failure.
+- **`trust_authority`**: confident, transparent, evidence-based. Hero — главный trust-signal (опыт, лицензия, число успешных кейсов). Каждый claim сопровождается доказательством (имя, число, дата).
+- **`hybrid:X+Y`**: основной тон по primary, secondary встроен 1–2 блоками поддержки.
+- **`legacy_v1`** (старые проекты до 2026-05-06): использовать positioning как есть, без mode-аугментации.
 
 ## Rules
 

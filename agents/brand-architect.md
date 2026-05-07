@@ -41,3 +41,12 @@ Bash, Read, Write, Glob. Calls Python scripts via Bash.
 ## Inputs from earlier stages
 
 - `01a_АНАЛИЗ_НИШИ/positioning.md` — обязательный input. Это единый источник истины: core promise, tone of voice, углы отстройки. Не переизобретать позиционирование, использовать готовое.
+  - Прочитать заголовок `**Mode:** <режим>`. От него зависит палитра/типографика:
+    - `emotional_aspiration` → premium-палитра, контраст, статусные шрифты
+    - `trust_authority` → сдержанная палитра, читаемый sans-serif, без декоративности
+    - `rational` → высокий контраст, технический sans-serif, минимум декора
+    - `legacy_v1` → работать как раньше, без mode-аугментации
+- `01a_АНАЛИЗ_НИШИ/market-profile.md` — обязательный input. Использовать:
+  - `accessibility_tier` — определяет уровень премиальности визуала (`luxury_status` / `ultra_luxury` → строгая монохромная палитра; `mass_consumer` → яркие акценты допустимы)
+  - `cultural_context` — табу/предпочтения по цвету и формам (например, для арабских рынков — без алкогольных метафор, акцент на geometric patterns)
+- `01a_АНАЛИЗ_НИШИ/landing-structure.md` — обязательный input. Прочитать раздел «Контракт с wp-builder» (список template-parts) — brand-kit обязан покрыть **все** перечисленные блоки. Если в landing-structure есть `Lifestyle/Experience` — palette должна включать lifestyle-нейтрали; если есть `Reviews` — типографика должна иметь quote-стиль.
