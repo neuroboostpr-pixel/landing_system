@@ -38,7 +38,7 @@ def section_to_pattern(title):
     Allows numbered (## 1. Title) or unnumbered (## Title) headings.
     """
     escaped = re.escape(title).replace(r"\ ", r"\s+")
-    return rf"^##\s+(?:\d+(?:\.\d+)?\.\s+)?{escaped}\s*$"
+    return rf"^##\s+(?:\d+(?:\.\d+)?\.\s+)?{escaped}\b.*$"
 
 
 def validate(path):
