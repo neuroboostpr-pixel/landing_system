@@ -52,3 +52,19 @@ EOF
 @test "schema_version is 1" {
   python -c "import yaml; d=yaml.safe_load(open('$PY_RULES', encoding='utf-8')); assert d.get('schema_version') == 1"
 }
+
+@test "every category has default_positioning_mode" {
+  python <<EOF
+import yaml
+d = yaml.safe_load(open('$PY_RULES', encoding='utf-8'))
+valid_modes = {'rational', 'emotional_aspiration', 'trust_authority',
+               'hybrid:emotional_aspiration+trust_authority',
+               'hybrid:trust_authority+emotional_aspiration',
+               'hybrid:emotional_aspiration+rational',
+               'hybrid:trust_authority+rational'}
+for name, cat in d['categories'].items():
+    mode = cat.get('default_positioning_mode')
+    assert mode is not None, f"{name}: no default_positioning_mode"
+    assert mode in valid_modes, f"{name}: invalid mode '{mode}'"
+EOF
+}

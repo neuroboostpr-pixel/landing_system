@@ -7,6 +7,7 @@ schema_version: 1
 categories:
   premium_automotive:
     description: "Премиум-автодилеры (EV, гибриды, luxury ICE)"
+    default_positioning_mode: "emotional_aspiration"
     examples: ["BMW dealer", "Mercedes dealer", "Lixiang Dubai", "Tesla showroom"]
     hero_focal: product
     hero_composition: "Машина 50–70% кадра, фон — нейтральный или тёмный premium. Без городских пейзажей и driving shots."
@@ -30,6 +31,7 @@ categories:
 
   local_services:
     description: "Локальные услуги: ремонт, бурение, монтаж, мастера"
+    default_positioning_mode: "trust_authority"
     examples: ["бурение скважин", "ремонт квартир", "натяжные потолки", "клининг"]
     hero_focal: person_or_process
     hero_composition: "Реальный человек делает работу или готовый результат. Не stock-актёры."
@@ -53,6 +55,7 @@ categories:
 
   professional_services:
     description: "Профессиональные услуги: медицина, право, консалтинг, образование"
+    default_positioning_mode: "trust_authority"
     examples: ["частная стоматология", "адвокатский кабинет", "психолог", "репетитор-онлайн"]
     hero_focal: person_or_environment
     hero_composition: "Портрет эксперта или среда профессии. Trust signal на первом месте."
@@ -77,6 +80,7 @@ categories:
 
   b2c_consumer:
     description: "B2C-товары: e-commerce, FMCG, товары через лендинги"
+    default_positioning_mode: "hybrid:emotional_aspiration+rational"
     examples: ["косметика DTC", "одежда", "электроника", "БАДы"]
     hero_focal: product_or_usage
     hero_composition: "Продукт в использовании или hero shot. Lifestyle-контекст допускается."
@@ -99,6 +103,7 @@ categories:
 
   default:
     description: "Шаблон по умолчанию когда категория не определена"
+    default_positioning_mode: "trust_authority"
     examples: []
     hero_focal: product_or_person
     hero_composition: "Понятный focal point. Без stock-подделок."
