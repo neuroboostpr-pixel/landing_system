@@ -1,0 +1,127 @@
+/* Parallax hero — layer styling.
+   Drop into a project's stylesheet. Layer images expected at:
+     assets/background.png   assets/far.png   assets/near.png   assets/subject.png
+   The 4 CSS variables set by parallax.js drive the transforms. */
+
+.lp-hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 640px;
+  overflow: hidden;
+  isolation: isolate;
+  background: #000;
+}
+
+.lp-hero__layer {
+  position: absolute;
+  inset: 0;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.lp-hero__layer--bg {
+  background-image: url("../assets/background.png");
+  z-index: 1;
+  filter: blur(2px);
+  transform:
+    translate3d(calc(var(--scroll-x, 0) * 0.05px), calc(var(--scroll-y, 0) * 0.10px), 0)
+    scale(calc(1.05 + var(--scale-add, 0) * 0.0001));
+}
+
+.lp-hero__layer--far {
+  background-image: url("../assets/far.png");
+  z-index: 2;
+  filter: blur(0.5px);
+  transform:
+    translate3d(
+      calc(var(--scroll-x, 0) * 0.15px + var(--move-x, 0) * 0.08px + var(--float-x, 0) * 4px),
+      calc(var(--scroll-y, 0) * 0.20px + var(--float-y, 0) * 3px),
+      0);
+}
+
+.lp-hero__title {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 3;
+  pointer-events: none;
+  font-family: var(--font-display, "Geologica", system-ui, sans-serif);
+  font-weight: 300;
+  font-size: clamp(64px, 10vw, 220px);
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  color: rgba(255, 255, 255, 0.10);
+  text-align: center;
+  text-transform: uppercase;
+  user-select: none;
+  transform: translate3d(0, calc(var(--scroll-y, 0) * 0.12px), 0);
+}
+
+.lp-hero__layer--subject {
+  background-image: url("../assets/subject.png");
+  z-index: 4;
+  transform:
+    translate3d(
+      calc(var(--scroll-x, 0) * -0.25px + var(--move-x, 0) * 0.18px),
+      calc(var(--scroll-y, 0) * -0.15px + var(--move-y, 0) * 0.10px),
+      0)
+    rotate(calc(var(--scroll-rotate, 0) * 0.02deg));
+}
+
+.lp-hero__layer--near {
+  background-image: url("../assets/near.png");
+  background-size: 100% auto;
+  background-position: center bottom;
+  z-index: 5;
+  transform:
+    translate3d(
+      calc(var(--scroll-x, 0) * 0.40px + var(--float-x, 0) * 6px),
+      calc(var(--scroll-y, 0) * 0.45px + var(--float-y, 0) * 5px),
+      0);
+}
+
+.lp-hero__content {
+  position: relative;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  height: 100%;
+  padding: 5vw 6vw;
+  color: var(--text-primary, #fff);
+}
+
+.lp-hero__h1 {
+  font-family: var(--font-display, "Geologica", system-ui, sans-serif);
+  font-weight: 300;
+  font-size: clamp(40px, 6vw, 88px);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  max-width: 14ch;
+  margin: 0 0 24px;
+}
+
+.lp-hero__sub {
+  font-family: var(--font-body, "Roboto", system-ui, sans-serif);
+  font-size: clamp(16px, 1.5vw, 20px);
+  line-height: 1.5;
+  max-width: 60ch;
+  margin: 0 0 32px;
+  opacity: 0.85;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-hero__layer,
+  .lp-hero__title { transform: none !important; transition: none !important; }
+}
+
+@media (max-width: 768px) {
+  .lp-hero__title { font-size: clamp(48px, 14vw, 110px); }
+  .lp-hero__layer--bg { filter: blur(1px); }
+}
