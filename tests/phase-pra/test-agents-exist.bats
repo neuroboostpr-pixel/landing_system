@@ -30,3 +30,11 @@ setup() {
 @test "landing-wireframe command file exists" {
   [ -f "$ROOT/commands/landing-wireframe.md" ]
 }
+
+@test "block-composer agent file exists" {
+  [ -f "$ROOT/agents/block-composer.md" ]
+}
+
+@test "landing-compose command file exists" {
+  [ -f "$ROOT/commands/landing-compose.md" ]
+}
