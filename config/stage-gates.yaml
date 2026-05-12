@@ -136,6 +136,10 @@ stages:
         type: file_exists
         path: "{project}/05_ДИЗАЙН-СИСТЕМА/tokens.json"
         required: true
+    # No automated post-approve hook mechanism yet (Path B).
+    # After this stage is approved, run manually:
+    manual_post_approve_steps:
+      - "Run: python scripts/export-palettes-to-library.py --project <project> --library presets/palettes.yaml"
 
   "06_stack":
     name: "Stack selection"
