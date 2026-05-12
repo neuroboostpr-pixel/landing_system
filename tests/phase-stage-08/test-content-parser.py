@@ -140,3 +140,30 @@ def test_validate_rejects_empty_block():
     blocks = ContentParser.parse(str(FIXTURES / "empty-block.md"))
     with pytest.raises(ContentParseError, match="no parsable fields"):
         ContentParser.validate(blocks)
+
+
+def _parse_inline(md_text: str, tmp_path) -> list[Block]:
+    p = tmp_path / "_inline.md"
+    p.write_text(md_text, encoding="utf-8")
+    return ContentParser.parse(str(p))
+
+
+def test_slug_english_passthrough(tmp_path):
+    blocks = _parse_inline("## Audience\n\nSome text\n", tmp_path)
+    assert blocks[0].slug == "audience"
+
+
+def test_slug_emoji_stripped(tmp_path):
+    blocks = _parse_inline("## 🎯 Hero\n\nText\n", tmp_path)
+    assert blocks[0].slug == "hero"
+
+
+def test_slug_transliteration_no_alias(tmp_path):
+    # "Особый блок" has no alias → transliterate to "osobyy-blok"
+    blocks = _parse_inline("## Особый блок\n\nText\n", tmp_path)
+    assert blocks[0].slug == "osobyy-blok"
+
+
+def test_slug_aliases_for_pricing(tmp_path):
+    blocks = _parse_inline("## Стоимость\n\nText\n", tmp_path)
+    assert blocks[0].slug == "pricing"
