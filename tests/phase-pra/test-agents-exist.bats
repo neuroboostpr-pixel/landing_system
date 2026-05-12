@@ -13,3 +13,12 @@ setup() {
   [[ "$output" == *"name: prototype-importer"* ]]
   [[ "$output" == *"description:"* ]]
 }
+
+@test "landing-prototype command file exists" {
+  [ -f "$ROOT/commands/landing-prototype.md" ]
+}
+
+@test "landing-prototype command has description frontmatter" {
+  run head -3 "$ROOT/commands/landing-prototype.md"
+  [[ "$output" == *"description:"* ]]
+}
