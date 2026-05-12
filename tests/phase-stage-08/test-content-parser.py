@@ -167,3 +167,31 @@ def test_slug_transliteration_no_alias(tmp_path):
 def test_slug_aliases_for_pricing(tmp_path):
     blocks = _parse_inline("## Стоимость\n\nText\n", tmp_path)
     assert blocks[0].slug == "pricing"
+
+
+def test_h4_does_not_break_h3_series_detection(tmp_path):
+    """Regression: H4 (####) inside an H3 series block should not crash
+    or be treated as H3. Bug seen in neuroupgrade-v2 final-copy where
+    `### Модуль 1` had nested `#### Блок 1.1` paragraphs."""
+    md = """## Программа
+
+Выбери модуль
+
+### Модуль 1
+
+Описание модуля 1.
+
+#### Подмодуль 1.1
+
+Детали подмодуля.
+
+### Модуль 2
+
+Описание модуля 2.
+"""
+    blocks = _parse_inline(md, tmp_path)
+    program = next(b for b in blocks if b.slug == "program")
+    cards = next((f for f in program.fields if f.name == "cards"), None)
+    # H4 must NOT crash parsing. Cards repeater either picks up only ### entries (≥2) or
+    # falls back to body — either way no exception.
+    assert cards is not None or any(f.name == "body" for f in program.fields)

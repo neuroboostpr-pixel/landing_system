@@ -137,8 +137,9 @@ def _detect_fields(body: str, slug: str) -> list[Field]:
             used_field_names.add(f.name)
             fields.append(f)
 
-    # First pass: detect H3 series (≥2 H3 in this body → repeater cards)
-    h3_paragraphs = [p for p in paragraphs if p.splitlines()[0].startswith("###")]
+    # First pass: detect H3 series (≥2 H3 in this body → repeater cards).
+    # Must match _H3_RE exactly — startswith("###") would also catch H4/H5/H6.
+    h3_paragraphs = [p for p in paragraphs if _H3_RE.match(p.splitlines()[0])]
     if len(h3_paragraphs) >= 2:
         cards = []
         for p in h3_paragraphs:
