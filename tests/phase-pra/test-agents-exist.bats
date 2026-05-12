@@ -22,3 +22,11 @@ setup() {
   run head -3 "$ROOT/commands/landing-prototype.md"
   [[ "$output" == *"description:"* ]]
 }
+
+@test "ux-composer agent file exists" {
+  [ -f "$ROOT/agents/ux-composer.md" ]
+}
+
+@test "landing-wireframe command file exists" {
+  [ -f "$ROOT/commands/landing-wireframe.md" ]
+}
