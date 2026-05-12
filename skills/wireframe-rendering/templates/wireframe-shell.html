@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Wireframe — {{project_slug}}</title>
+<style>
+  body { margin: 0; font-family: system-ui, sans-serif; background: #f0f0f0; }
+  .block-slot { margin: 24px; background: #fff; padding: 16px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  .variant-picker { border: none; padding: 0; margin: 0 0 16px; }
+  .variant-picker legend { font-weight: 600; font-size: 14px; margin-bottom: 8px; color: #333; }
+  .variant-picker label { display: inline-block; padding: 6px 12px; margin-right: 8px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; }
+  .variants-stage { display: block; }
+  .variant { display: none; gap: 24px; flex-wrap: wrap; }
+  .device { border: 1px solid #ddd; background: #fff; }
+  .device.desktop { width: 1280px; max-width: 100%; }
+  .device.mobile { width: 375px; }
+  .device-label { font-size: 11px; color: #888; padding: 4px 8px; background: #fafafa; }
+  .device iframe { width: 100%; border: none; display: block; }
+
+  {{checked_rules}}
+
+  .confirm-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #111; color: #fff; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+  .confirm-bar button { padding: 12px 24px; background: #fff; color: #111; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
+</style>
+</head>
+<body>
+<h1 style="padding: 24px;">Wireframe — {{project_slug}}</h1>
+<p style="padding: 0 24px; color: #666;">Выбери вариант композиции для каждого блока с помощью radio-кнопок. Когда закончишь — нажми «Confirm selections» внизу.</p>
+
+{{blocks_html}}
+
+<div class="confirm-bar">
+  <span>Выбери варианты для всех блоков, затем подтверди.</span>
+  <button onclick="confirmSelections()">Confirm selections</button>
+</div>
+
+<script>
+function confirmSelections() {
+  const radios = document.querySelectorAll('input[type=radio]:checked');
+  const sel = [];
+  radios.forEach(r => {
+    sel.push({
+      block_position: parseInt(r.getAttribute('data-position'), 10),
+      chosen_variant: r.value,
+    });
+  });
+  sel.sort((a, b) => a.block_position - b.block_position);
+  const now = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
+  let yaml = `project_slug: {{project_slug}}\nselections:\n`;
+  sel.forEach(s => {
+    yaml += `  - block_position: ${s.block_position}\n    chosen_variant: ${s.chosen_variant}\n`;
+  });
+  yaml += `confirmed_at: "${now}"\n`;
+  const blob = new Blob([yaml], {type: 'text/yaml'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'selections.yaml';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+</script>
+</body>
+</html>
