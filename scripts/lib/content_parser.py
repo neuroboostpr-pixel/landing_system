@@ -120,28 +120,69 @@ class ContentParser:
 
 _ITALIC_RE = re.compile(r"^\*([^*]+)\*\s*$")
 _QUOTE_RE = re.compile(r"^>\s+(.+?)\s*$")
+_LINK_RE = re.compile(r"^\[([^\]]+)\]\(([^)]+)\)\s*$")
+_IMG_RE = re.compile(r"^!\[([^\]]*)\]\(([^)]+)\)\s*$")
+_H3_RE = re.compile(r"^###\s+(.+?)\s*$")
 
 
 def _detect_fields(body: str, slug: str) -> list[Field]:
     fields: list[Field] = []
     used_field_names: set[str] = set()
     paragraphs = [p.strip() for p in re.split(r"\n\s*\n", body) if p.strip()]
-
     title_assigned = False
+    image_counter = 0
 
-    def add(f: Field):
-        if f.name in used_field_names:
-            return
-        used_field_names.add(f.name)
-        fields.append(f)
+    def add(f: Field) -> None:
+        if f.name not in used_field_names:
+            used_field_names.add(f.name)
+            fields.append(f)
+
+    # First pass: detect H3 series (≥2 H3 in this body → repeater cards)
+    h3_paragraphs = [p for p in paragraphs if p.splitlines()[0].startswith("###")]
+    if len(h3_paragraphs) >= 2:
+        cards = []
+        for p in h3_paragraphs:
+            lines = p.splitlines()
+            h3_title = _H3_RE.match(lines[0]).group(1)
+            card_body = "\n".join(lines[1:]).strip()
+            cards.append({"title": h3_title, "body": card_body})
+        add(Field(
+            name="cards",
+            label="Cards",
+            type="repeater",
+            subfields=[
+                Field(name="title", label="Title", type="text"),
+                Field(name="body", label="Body", type="textarea"),
+            ],
+            defaults=cards,
+        ))
 
     for idx, para in enumerate(paragraphs):
         first_line = para.splitlines()[0].strip()
 
-        # Eyebrow: italic-only line OR blockquote, only at start
+        # Skip H3 paragraphs (handled above)
+        if first_line.startswith("###"):
+            continue
+
+        # Eyebrow: italic-only or blockquote at start
         if idx == 0 and (_ITALIC_RE.match(first_line) or _QUOTE_RE.match(first_line)):
             m = _ITALIC_RE.match(first_line) or _QUOTE_RE.match(first_line)
             add(Field(name="eyebrow", label="Eyebrow", type="text", default=m.group(1)))
+            continue
+
+        # Standalone image paragraph
+        img_m = _IMG_RE.match(first_line) if len(para.splitlines()) == 1 else None
+        if img_m:
+            image_counter += 1
+            fname = f"image-{image_counter}" if image_counter > 1 else "image"
+            add(Field(name=fname, label=fname.replace("-", " ").capitalize(), type="image", default=img_m.group(2)))
+            continue
+
+        # Standalone CTA link [Label](url)
+        link_m = _LINK_RE.match(first_line) if len(para.splitlines()) == 1 else None
+        if link_m:
+            add(Field(name="cta-label", label="CTA Label", type="text", default=link_m.group(1)))
+            add(Field(name="cta-url", label="CTA URL", type="url", default=link_m.group(2)))
             continue
 
         # Bullet list → repeater(text)
@@ -161,22 +202,17 @@ def _detect_fields(body: str, slug: str) -> list[Field]:
                 ))
             continue
 
-        # Skip ### subheadings — handled in a later task
-        if first_line.startswith("###"):
-            continue
-
-        # Title: first non-italic, non-list prose line (short enough to be a title)
+        # Title: first non-italic, non-list, non-link, non-image prose line (≤80 chars)
         single_line_check = " ".join(para.split())
         if not title_assigned and len(single_line_check) <= 80:
             add(Field(name="title", label="Title", type="text", default=first_line))
             title_assigned = True
-            # Remaining lines of this paragraph (if any) go to body/lede via next iteration
             remainder = "\n".join(para.splitlines()[1:]).strip()
             if remainder:
                 paragraphs.insert(idx + 1, remainder)
             continue
 
-        # Short paragraph → lede; long → body
+        # Short → lede, long → body
         single_line = " ".join(para.split())
         if len(single_line) <= 80:
             add(Field(name="lede", label="Lede", type="text", default=single_line))

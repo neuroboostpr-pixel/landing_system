@@ -86,3 +86,34 @@ def test_bullets_default_rows():
     assert bullets.defaults is not None
     assert len(bullets.defaults) >= 3
     assert all("text" in row for row in bullets.defaults)
+
+
+def test_cta_label_and_url():
+    blocks = ContentParser.parse(str(FIXTURES / "all-field-types.md"))
+    hero = next(b for b in blocks if b.slug == "hero")
+    cta_label = next((f for f in hero.fields if f.name == "cta-label"), None)
+    cta_url = next((f for f in hero.fields if f.name == "cta-url"), None)
+    assert cta_label is not None and cta_label.type == "text"
+    assert cta_label.default == "ХОЧУ НА КУРС"
+    assert cta_url is not None and cta_url.type == "url"
+    assert cta_url.default == "#pricing"
+
+
+def test_image_field():
+    blocks = ContentParser.parse(str(FIXTURES / "all-field-types.md"))
+    hero = next(b for b in blocks if b.slug == "hero")
+    img = next((f for f in hero.fields if f.type == "image"), None)
+    assert img is not None
+    assert img.default is not None and img.default.endswith(".png")
+
+
+def test_repeater_cards_from_h3_series():
+    blocks = ContentParser.parse(str(FIXTURES / "repeater-blocks.md"))
+    pricing = next(b for b in blocks if b.slug == "pricing")
+    tiers = next((f for f in pricing.fields if f.type == "repeater" and f.name != "bullets"), None)
+    assert tiers is not None
+    assert tiers.subfields is not None
+    sub_names = [sf.name for sf in tiers.subfields]
+    assert "title" in sub_names
+    assert "body" in sub_names
+    assert tiers.defaults is not None and len(tiers.defaults) >= 2
