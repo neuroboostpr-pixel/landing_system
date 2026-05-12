@@ -40,10 +40,21 @@ ssh "${BEGET_USER}@${BEGET_HOST}" \
   "wp theme activate lp-${PROJECT_SLUG} --path=${BEGET_PATH} --allow-root"
 
 if [ -f "$ACF_JSON" ]; then
-  echo "▶ Импорт ACF полей"
-  ACF_CONTENT="$(cat "$ACF_JSON")"
-  ssh "${BEGET_USER}@${BEGET_HOST}" \
-    "echo '${ACF_CONTENT}' | wp acf import --json - --path=${BEGET_PATH} --allow-root" 2>/dev/null || true
+    echo "▶ Проверяю что ACF активен на сервере"
+    if ! ssh "${BEGET_USER}@${BEGET_HOST}" \
+        "wp plugin is-active advanced-custom-fields --path=${BEGET_PATH} --allow-root" 2>/dev/null; then
+        echo "❌ Плагин ACF не активен на сервере."
+        echo "   Сначала установите и активируйте его:"
+        echo "   ssh ${BEGET_USER}@${BEGET_HOST} \"wp plugin install advanced-custom-fields --activate --path=${BEGET_PATH} --allow-root\""
+        exit 1
+    fi
+    echo "▶ Импорт ACF полей"
+    ACF_CONTENT="$(cat "$ACF_JSON")"
+    if ! ssh "${BEGET_USER}@${BEGET_HOST}" \
+        "echo '${ACF_CONTENT}' | wp acf import --json - --path=${BEGET_PATH} --allow-root"; then
+        echo "❌ wp acf import не прошёл. Проверьте формат $ACF_JSON и доступ ACF на сервере."
+        exit 1
+    fi
 fi
 
 echo "▶ Очистка кэша"
