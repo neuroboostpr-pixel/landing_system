@@ -23,13 +23,17 @@
   will-change: transform;
 }
 
+/* Coefficients in REAL pixels — engine sets vars in [-1..+1] range,
+   so e.g. 30px coefficient gives ±30px of parallax travel. Boilerplate
+   originally shipped with 0.05-0.5px values (movement was invisible). */
+
 .lp-hero__layer--bg {
   background-image: url("../assets/background.png");
   z-index: 1;
   filter: blur(2px);
   transform:
-    translate3d(calc(var(--scroll-x, 0) * 0.05px), calc(var(--scroll-y, 0) * 0.10px), 0)
-    scale(calc(1.05 + var(--scale-add, 0) * 0.0001));
+    translate3d(calc(var(--scroll-x, 0) * 20px), calc(var(--scroll-y, 0) * 30px), 0)
+    scale(1.08);
 }
 
 .lp-hero__layer--far {
@@ -38,8 +42,8 @@
   filter: blur(0.5px);
   transform:
     translate3d(
-      calc(var(--scroll-x, 0) * 0.15px + var(--move-x, 0) * 0.08px + var(--float-x, 0) * 4px),
-      calc(var(--scroll-y, 0) * 0.20px + var(--float-y, 0) * 3px),
+      calc(var(--scroll-x, 0) * 40px + var(--move-x, 0) * 15px + var(--float-x, 0) * 8px),
+      calc(var(--scroll-y, 0) * 50px + var(--float-y, 0) * 6px),
       0);
 }
 
@@ -59,7 +63,7 @@
   text-align: center;
   text-transform: uppercase;
   user-select: none;
-  transform: translate3d(0, calc(var(--scroll-y, 0) * 0.12px), 0);
+  transform: translate3d(0, calc(var(--scroll-y, 0) * 25px), 0);
 }
 
 .lp-hero__layer--subject {
@@ -67,10 +71,9 @@
   z-index: 4;
   transform:
     translate3d(
-      calc(var(--scroll-x, 0) * -0.25px + var(--move-x, 0) * 0.18px),
-      calc(var(--scroll-y, 0) * -0.15px + var(--move-y, 0) * 0.10px),
-      0)
-    rotate(calc(var(--scroll-rotate, 0) * 0.02deg));
+      calc(var(--scroll-x, 0) * -60px + var(--move-x, 0) * 30px),
+      calc(var(--scroll-y, 0) * -40px + var(--move-y, 0) * 20px),
+      0);
 }
 
 .lp-hero__layer--near {
@@ -80,8 +83,8 @@
   z-index: 5;
   transform:
     translate3d(
-      calc(var(--scroll-x, 0) * 0.40px + var(--float-x, 0) * 6px),
-      calc(var(--scroll-y, 0) * 0.45px + var(--float-y, 0) * 5px),
+      calc(var(--scroll-x, 0) * 100px + var(--float-x, 0) * 12px),
+      calc(var(--scroll-y, 0) * 120px + var(--float-y, 0) * 10px),
       0);
 }
 
