@@ -1,0 +1,13 @@
+id: ru-hero-01-services-calc
+category: hero
+ru_market: true
+use_cases: [services]
+description: "Hero с фото объекта на фоне + оффер слева + кнопка расчёта"
+slots:
+  - {type: photo, name: hero-bg, ratio: "16:9", mobile_ratio: "9:16", required: true}
+  - {type: text, name: headline, max_chars: 60, required: true}
+  - {type: cta, name: primary, default_text: "Рассчитать стоимость", required: true}
+conversion_notes: "Sticky CTA, контраст 7:1, плашка 'от X ₽'"
+source: manual
+source_attribution: ""
+created: 2026-05-12

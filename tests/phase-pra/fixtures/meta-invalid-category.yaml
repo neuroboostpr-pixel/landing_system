@@ -1,0 +1,8 @@
+id: ru-something-bad
+category: foobar
+ru_market: true
+use_cases: [services]
+description: "Bad category"
+slots: []
+source: manual
+created: 2026-05-12
