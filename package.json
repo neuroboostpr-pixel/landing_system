@@ -9,6 +9,7 @@
     "test:python": "python3 -m pytest tests/phase-2/python -q",
     "test:phase-2": "bats tests/phase-2/*.bats && python3 -m pytest tests/phase-2/python -q",
     "test:phase-niche": "bats tests/phase-niche/ && python -m pytest tests/phase-niche/test-validate-competitors.py tests/phase-niche/test-validate-visual-requirements.py tests/phase-niche/test-validate-market-profile.py tests/phase-niche/test-validate-positioning.py tests/phase-niche/test-validate-landing-structure.py -v",
+    "test:phase-preview-panel": "bats tests/phase-preview-panel/",
     "check-deps": "bash scripts/check-deps.sh"
   },
   "engines": {
