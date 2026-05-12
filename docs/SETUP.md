@@ -80,3 +80,23 @@ bash scripts/wizard.sh
 - Python пакеты не найдены → `pip install -r requirements.txt`
 - SSH к Бегету не работает → проверь `ssh-copy-id user@srv.beget.ru`
 - Onboarding застрял → удали `~/.landing-system/setup_complete` и запусти заново
+
+## ACF and Gutenberg blocks for managers
+
+After deployment, the landing page exposes every text-editable element as an ACF field in the WordPress block sidebar. Managers can:
+
+1. Open `/wp-admin`, navigate to the page.
+2. Click any landing block in the editor canvas.
+3. Use the right-hand sidebar form to edit headings, body text, button labels, prices, etc.
+4. Repeater fields (e.g., pricing tiers, program modules) show as a list with **+ Add** and drag handles.
+5. Click **Update** to publish.
+
+No PHP edits required. To learn what fields each block has, see `08_КОД/acf-fields.json` in the project repo.
+
+### When fields are missing
+
+If the WordPress editor shows an empty block sidebar:
+
+1. Verify ACF plugin is active: WP admin → Plugins → Advanced Custom Fields → Active.
+2. Verify the ACF JSON was imported: WP admin → ACF → Field Groups → there should be groups named after each landing section (Hero, Pricing, etc.).
+3. If groups are missing, re-import: from the project folder run `bash skills/wp-cli-deployer/scripts/deploy-wordpress.sh <project-dir>` — the deploy script now imports ACF fields and fails loudly if it can not.
