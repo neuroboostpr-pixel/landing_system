@@ -13,6 +13,68 @@ import yaml
 sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 from tools.logger import error, info, success
 
+_REPO_ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(_REPO_ROOT / "scripts" / "lib"))
+
+from content_parser import ContentParser, ContentParseError  # noqa: E402
+
+
+def _write_block_parts(project_dir: Path) -> int:
+    """Write template-parts/block-<slug>.php for each block from final-copy.md.
+
+    Never overwrites an existing file. Returns count of files written.
+    """
+    md = project_dir / "07_КОНТЕНТ" / "final-copy.md"
+    blocks = ContentParser.parse(str(md))
+    ContentParser.validate(blocks)
+    parts_dir = project_dir / "08_КОД" / "wp-theme" / "template-parts"
+    parts_dir.mkdir(parents=True, exist_ok=True)
+    written = 0
+    for b in blocks:
+        dest = parts_dir / f"block-{b.slug}.php"
+        if dest.exists():
+            continue
+        lines = [
+            "<?php",
+            f"/**",
+            f" * Block — {b.title}.",
+            f" * Auto-scaffolded by generate-theme.py --blocks-only.",
+            f" * Edit safely; will not be overwritten on regeneration.",
+            f" */",
+            "if ( ! defined( 'ABSPATH' ) ) { exit; }",
+            "",
+        ]
+        for f in b.fields:
+            default = (f.default or "").replace("'", "\\'") if f.default else ""
+            if f.type == "repeater":
+                lines.append(f"$nu_{f.name.replace('-', '_')} = nu_field_array( '{f.name}', array() );")
+            else:
+                lines.append(f"$nu_{f.name.replace('-', '_')} = nu_field( '{f.name}', '{default}' );")
+        lines.append("?>")
+        lines.append(f"<section id=\"{b.slug}\" class=\"lp-block lp-block--{b.slug}\">")
+        for f in b.fields:
+            if f.type in {"text", "textarea", "wysiwyg"}:
+                lines.append(f"    <div class=\"lp-block__{f.name}\"><?php echo esc_html( $nu_{f.name.replace('-', '_')} ); ?></div>")
+        lines.append("</section>")
+        dest.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
+        written += 1
+    return written
+
+
+def _maybe_blocks_only() -> bool:
+    if "--blocks-only" in sys.argv:
+        # Find --project or assume first positional
+        try:
+            i = sys.argv.index("--project")
+            project = sys.argv[i + 1]
+        except (ValueError, IndexError):
+            print("ERROR: --blocks-only requires --project <path>", file=sys.stderr)
+            sys.exit(2)
+        n = _write_block_parts(Path(project))
+        print(f"wrote {n} block template part(s)")
+        sys.exit(0)
+    return False
+
 
 def _find_project_root(start: Path) -> Path:
     for parent in [start, *start.parents]:
@@ -199,4 +261,6 @@ def main(argv: list) -> int:
 
 
 if __name__ == "__main__":
+    _maybe_blocks_only()
+    # ...existing script logic continues below (only reached if --blocks-only NOT in argv)...
     sys.exit(main(sys.argv))
