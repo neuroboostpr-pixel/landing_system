@@ -21,7 +21,7 @@ hero/ru-hero-01-services-calc/
 
 `<market>-<category>-<NN>-<descriptor>` в kebab-case. Примеры:
 - `ru-hero-01-services-calc`
-- `ru-quiz-step-card`
+- `ru-quiz-01-step-card`
 
 **Иммутабельность:** существующие блоки НЕ редактируются. Изменение = новый id с суффиксом `-v2`, например `ru-hero-01-services-calc-v2`.
 
