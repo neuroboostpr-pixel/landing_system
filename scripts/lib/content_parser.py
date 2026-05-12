@@ -118,14 +118,59 @@ class ContentParser:
                 )
 
 
+_ITALIC_RE = re.compile(r"^\*([^*]+)\*\s*$")
+_QUOTE_RE = re.compile(r"^>\s+(.+?)\s*$")
+
+
 def _detect_fields(body: str, slug: str) -> list[Field]:
-    """Minimal field detection — extended in later tasks."""
-    # Stub: return [title field with first non-empty line as default]
-    for line in body.splitlines():
-        line = line.strip()
-        if line and not line.startswith("#"):
-            return [Field(name="title", label="Title", type="text", default=line)]
-    return []
+    fields: list[Field] = []
+    used_field_names: set[str] = set()
+    paragraphs = [p.strip() for p in re.split(r"\n\s*\n", body) if p.strip()]
+
+    title_assigned = False
+
+    def add(f: Field):
+        if f.name in used_field_names:
+            return
+        used_field_names.add(f.name)
+        fields.append(f)
+
+    for idx, para in enumerate(paragraphs):
+        first_line = para.splitlines()[0].strip()
+
+        # Eyebrow: italic-only line OR blockquote, only at start
+        if idx == 0 and (_ITALIC_RE.match(first_line) or _QUOTE_RE.match(first_line)):
+            m = _ITALIC_RE.match(first_line) or _QUOTE_RE.match(first_line)
+            add(Field(name="eyebrow", label="Eyebrow", type="text", default=m.group(1)))
+            continue
+
+        # Skip list paragraphs — handled in a later task
+        if first_line.startswith("- ") or first_line.startswith("* "):
+            continue
+
+        # Skip ### subheadings — handled in a later task
+        if first_line.startswith("###"):
+            continue
+
+        # Title: first non-italic, non-list prose line (short enough to be a title)
+        single_line_check = " ".join(para.split())
+        if not title_assigned and len(single_line_check) <= 80:
+            add(Field(name="title", label="Title", type="text", default=first_line))
+            title_assigned = True
+            # Remaining lines of this paragraph (if any) go to body/lede via next iteration
+            remainder = "\n".join(para.splitlines()[1:]).strip()
+            if remainder:
+                paragraphs.insert(idx + 1, remainder)
+            continue
+
+        # Short paragraph → lede; long → body
+        single_line = " ".join(para.split())
+        if len(single_line) <= 80:
+            add(Field(name="lede", label="Lede", type="text", default=single_line))
+        else:
+            add(Field(name="body", label="Body", type="textarea", default=para))
+
+    return fields
 
 
 if __name__ == "__main__":
