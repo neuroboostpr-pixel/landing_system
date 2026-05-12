@@ -1,0 +1,91 @@
+/* ---- Palette H — Бумажный (cream + emerald) ---- */
+body.theme-h {
+  --bg-base: #F8F7F4;
+  --bg-section: #FFFFFF;
+  --bg-elevated: #FFFFFF;
+  --border-subtle: #E7E5E0;
+  --border-strong: #CBD5E1;
+  --text-primary: #0F172A;
+  --text-soft: #334155;
+  --text-dim: #64748B;
+  --accent-mint: #047857;
+  --accent-teal: #047857;
+  --accent-coral: #047857;
+  --accent-coral-hover: #065F46;
+  --accent-coral-text: #FFFFFF;
+  --accent-rgb-mint: 4, 120, 87;
+  --accent-rgb-coral: 4, 120, 87;
+  --card-bg: #FFFFFF;
+  --card-border: #E7E5E0;
+  --card-border-hover: #047857;
+  --accent-cta-glow-opacity: 0.15;
+}
+
+/* ---- Palette I — Тихий-тёмный (graphite + emerald) — DEFAULT ---- */
+body.theme-i {
+  --bg-base: #0A0A0B;
+  --bg-section: #171718;
+  --bg-elevated: #262627;
+  --border-subtle: #262627;
+  --border-strong: #3A3A3B;
+  --text-primary: #F5F5F4;
+  --text-soft: #D4D4D4;
+  --text-dim: #737373;
+  --accent-mint: #10B981;
+  --accent-teal: #10B981;
+  --accent-coral: #10B981;
+  --accent-coral-hover: #34D399;
+  --accent-coral-text: #0A0A0B;
+  --accent-rgb-mint: 16, 185, 129;
+  --accent-rgb-coral: 16, 185, 129;
+  --card-bg: #171718;
+  --card-border: #262627;
+  --card-border-hover: #3A3A3B;
+  --accent-cta-glow-opacity: 0.15;
+}
+
+/* ---- Palette J — Бежево-чернильный (cream + terracotta) ---- */
+body.theme-j {
+  --bg-base: #FBF7F0;
+  --bg-section: #FFFFFF;
+  --bg-elevated: #FFFFFF;
+  --border-subtle: #F0EBE0;
+  --border-strong: #CBD5E1;
+  --text-primary: #1E293B;
+  --text-soft: #475569;
+  --text-dim: #94A3B8;
+  --accent-mint: #DC2626;
+  --accent-teal: #DC2626;
+  --accent-coral: #DC2626;
+  --accent-coral-hover: #B91C1C;
+  --accent-coral-text: #FFFFFF;
+  --accent-rgb-mint: 220, 38, 38;
+  --accent-rgb-coral: 220, 38, 38;
+  --card-bg: #FFFFFF;
+  --card-border: #F0EBE0;
+  --card-border-hover: #DC2626;
+  --accent-cta-glow-opacity: 0.15;
+}
+
+/* ---- Palette K — IQIDO Guideline (current dark teal) ---- */
+body.theme-k {
+  --bg-base: #0E2B30;
+  --bg-section: #143A3F;
+  --bg-elevated: #1B4A50;
+  --border-subtle: #1F4C53;
+  --border-strong: #2E6F77;
+  --text-primary: #FFFFFF;
+  --text-soft: #D6E8E8;
+  --text-dim: #8FB3B5;
+  --accent-mint: #77D9D9;
+  --accent-teal: #32A3B2;
+  --accent-coral: #E85E48;
+  --accent-coral-hover: #F37155;
+  --accent-coral-text: #FFFFFF;
+  --accent-rgb-mint: 119, 217, 217;
+  --accent-rgb-coral: 232, 94, 72;
+  --card-bg: rgba(27, 74, 80, 0.55);
+  --card-border: rgba(119, 217, 217, 0.15);
+  --card-border-hover: rgba(119, 217, 217, 0.4);
+  --accent-cta-glow-opacity: 0.55;
+}
