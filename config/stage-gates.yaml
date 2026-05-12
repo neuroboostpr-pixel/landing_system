@@ -183,6 +183,21 @@ stages:
         type: file_exists
         path: "{project}/07_КОНТЕНТ/final-copy.md"
         required: true
+      - id: wp_theme_dir
+        type: file_exists
+        path: "{project}/08_КОД/wp-theme"
+        required: true
+        fix_hint: "Run /landing-build to generate the wp-theme scaffold."
+      - id: block_registration
+        type: script
+        script: "scripts/lib/check-block-registration.sh"
+        args: ["{project}"]
+        fix_hint: "block registration missing: no register_block_type found in functions.php. Run: python scripts/generate-wp-blocks.py --project {project}"
+      - id: acf_and_blocks_structure
+        type: script
+        script: "scripts/lib/stage_08_helper.py"
+        args: ["{project}"]
+        fix_hint: "Run: python scripts/generate-wp-blocks.py --project {project}"
     soft_checks:
       - id: legal_blocks
         prompt: "152-ФЗ блок и cookie-баннер присутствуют в HTML? (yes / no / partial)"

@@ -1,0 +1,21 @@
+{
+  "apiVersion": 3,
+  "name": "acf/lp-pricing",
+  "title": "Тарифы",
+  "description": "Тарифы block (auto-generated from 07_КОНТЕНТ/final-copy.md)",
+  "category": "lp-blocks",
+  "icon": "tag",
+  "keywords": [
+    "pricing",
+    "lp"
+  ],
+  "acf": {
+    "mode": "preview",
+    "renderTemplate": "template-parts/block-pricing.php"
+  },
+  "supports": {
+    "align": false,
+    "anchor": true,
+    "html": false
+  }
+}

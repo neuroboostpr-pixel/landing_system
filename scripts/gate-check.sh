@@ -52,7 +52,13 @@ fi
 
 # 2. Run hard_checks
 fail=0
-checks_count="$(yq -r ".stages.\"$stage\".hard_checks // [] | length" "$GATES_YAML")"
+# Legacy bypass: skip all hard checks if .landing-state.yaml contains "legacy: true"
+if [ -f "$project/.landing-state.yaml" ] && grep -q "^[[:space:]]*legacy:[[:space:]]*true" "$project/.landing-state.yaml" 2>/dev/null; then
+    echo "  ⚠ legacy:true — skipping all hard checks for $stage"
+    checks_count=0
+else
+    checks_count="$(yq -r ".stages.\"$stage\".hard_checks // [] | length" "$GATES_YAML")"
+fi
 for i in $(seq 0 $((checks_count - 1))); do
     check_id="$(yq -r ".stages.\"$stage\".hard_checks[$i].id" "$GATES_YAML")"
     check_type="$(yq -r ".stages.\"$stage\".hard_checks[$i].type" "$GATES_YAML")"
@@ -107,12 +113,17 @@ for i in $(seq 0 $((checks_count - 1))); do
         script)
             script_path="$(yq -r ".stages.\"$stage\".hard_checks[$i].script" "$GATES_YAML")"
             args_raw="$(yq -r ".stages.\"$stage\".hard_checks[$i].args[] // \"\"" "$GATES_YAML" | sed "s|{project}|$project|g")"
+            # Determine runner by extension
+            case "$script_path" in
+                *.sh) runner="bash" ;;
+                *)    runner="python" ;;
+            esac
             # shellcheck disable=SC2086
-            if python "$REPO_ROOT/$script_path" $args_raw >/dev/null 2>&1; then
+            if $runner "$REPO_ROOT/$script_path" $args_raw >/dev/null 2>&1; then
                 echo "  ✅ $check_id ($script_path)"
             else
                 echo "  ❌ $check_id: script $script_path failed"
-                python "$REPO_ROOT/$script_path" $args_raw 2>&1 | sed 's/^/     /' || true
+                $runner "$REPO_ROOT/$script_path" $args_raw 2>&1 | sed 's/^/     /' || true
                 [ -n "$fix_hint" ] && echo "     → $fix_hint"
                 fail=1
             fi
