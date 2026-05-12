@@ -117,3 +117,26 @@ def test_repeater_cards_from_h3_series():
     assert "title" in sub_names
     assert "body" in sub_names
     assert tiers.defaults is not None and len(tiers.defaults) >= 2
+
+
+def test_validate_passes_on_minimal():
+    blocks = ContentParser.parse(str(FIXTURES / "minimal.md"))
+    ContentParser.validate(blocks)  # should not raise
+
+
+def test_validate_rejects_zero_h2():
+    blocks = ContentParser.parse(str(FIXTURES / "empty.md"))
+    with pytest.raises(ContentParseError, match="no H2 sections"):
+        ContentParser.validate(blocks)
+
+
+def test_validate_rejects_slug_collision():
+    blocks = ContentParser.parse(str(FIXTURES / "slug-collision.md"))
+    with pytest.raises(ContentParseError, match="slug collision"):
+        ContentParser.validate(blocks)
+
+
+def test_validate_rejects_empty_block():
+    blocks = ContentParser.parse(str(FIXTURES / "empty-block.md"))
+    with pytest.raises(ContentParseError, match="no parsable fields"):
+        ContentParser.validate(blocks)
