@@ -1,0 +1,10 @@
+id: <kebab-case-id>
+category: <hero|features|social-proof|process|pricing|trust|cta|faq|quiz>
+ru_market: true
+use_cases: [services, b2c, local]
+description: ""
+slots: []
+conversion_notes: ""
+source: manual
+source_attribution: ""
+created: 2026-05-12
