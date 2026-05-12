@@ -65,3 +65,24 @@ def test_body_long_paragraph():
     assert body is not None
     assert body.type == "textarea"
     assert len(body.default) > 80
+
+
+def test_bullets_become_repeater():
+    blocks = ContentParser.parse(str(FIXTURES / "all-field-types.md"))
+    hero = next(b for b in blocks if b.slug == "hero")
+    bullets = next((f for f in hero.fields if f.name == "bullets"), None)
+    assert bullets is not None
+    assert bullets.type == "repeater"
+    assert bullets.subfields is not None
+    assert len(bullets.subfields) == 1
+    assert bullets.subfields[0].name == "text"
+    assert bullets.subfields[0].type == "text"
+
+
+def test_bullets_default_rows():
+    blocks = ContentParser.parse(str(FIXTURES / "all-field-types.md"))
+    hero = next(b for b in blocks if b.slug == "hero")
+    bullets = next(f for f in hero.fields if f.name == "bullets")
+    assert bullets.defaults is not None
+    assert len(bullets.defaults) >= 3
+    assert all("text" in row for row in bullets.defaults)

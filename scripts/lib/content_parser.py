@@ -144,8 +144,21 @@ def _detect_fields(body: str, slug: str) -> list[Field]:
             add(Field(name="eyebrow", label="Eyebrow", type="text", default=m.group(1)))
             continue
 
-        # Skip list paragraphs — handled in a later task
+        # Bullet list → repeater(text)
         if first_line.startswith("- ") or first_line.startswith("* "):
+            items = []
+            for line in para.splitlines():
+                line = line.strip()
+                if line.startswith(("- ", "* ")):
+                    items.append(line[2:].strip())
+            if items:
+                add(Field(
+                    name="bullets",
+                    label="Bullets",
+                    type="repeater",
+                    subfields=[Field(name="text", label="Text", type="text")],
+                    defaults=[{"text": it} for it in items],
+                ))
             continue
 
         # Skip ### subheadings — handled in a later task
