@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>ru-testimonials-02-text-photo — desktop</title>
+<style>
+  :root {
+    --color-bg: #fff;
+    --color-fg: #111;
+    --color-accent: #333;
+    --color-border: #ccc;
+    --font-display: system-ui, sans-serif;
+    --font-body: system-ui, sans-serif;
+    --spacing-md: 16px;
+    --spacing-lg: 32px;
+  }
+  body { margin: 0; font-family: var(--font-body); background: var(--color-bg); color: var(--color-fg); }
+  .testimonials { padding: 64px var(--spacing-lg); max-width: 1100px; margin: 0 auto; }
+  .section-headline { font-family: var(--font-display); font-size: 36px; text-align: center; margin: 0 0 48px; }
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .card { border: 1px solid var(--color-border); border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+  .card-top { display: flex; gap: 16px; align-items: flex-start; }
+  .client-photo { width: 72px; height: 72px; border-radius: 8px; background: #ddd; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #888; flex-shrink: 0; }
+  .client-quote { font-size: 15px; color: #333; line-height: 1.6; margin: 0; font-style: italic; }
+  .card-footer { border-top: 1px solid var(--color-border); padding-top: 12px; }
+  .client-name { font-weight: 700; font-size: 15px; margin: 0 0 2px; }
+  .client-role { font-size: 13px; color: #777; margin: 0; }
+</style>
+</head>
+<body>
+  <section class="testimonials" data-block-id="ru-testimonials-02-text-photo">
+    <h2 class="section-headline" data-slot="headline">[HEADLINE: отзывы клиентов]</h2>
+    <div class="cards">
+      <div class="card">
+        <div class="card-top">
+          <div class="client-photo" data-slot="testimonial-1-photo">photo · 1:1</div>
+          <p class="client-quote" data-slot="testimonial-1-quote">[Цитата клиента 1 — конкретный результат]</p>
+        </div>
+        <div class="card-footer">
+          <p class="client-name" data-slot="testimonial-1-name">[Имя Клиента 1]</p>
+          <p class="client-role" data-slot="testimonial-1-role">[Роль / профессия]</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="client-photo" data-slot="testimonial-2-photo">photo · 1:1</div>
+          <p class="client-quote" data-slot="testimonial-2-quote">[Цитата клиента 2]</p>
+        </div>
+        <div class="card-footer">
+          <p class="client-name" data-slot="testimonial-2-name">[Имя Клиента 2]</p>
+          <p class="client-role" data-slot="testimonial-2-role">[Роль / профессия]</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="client-photo" data-slot="testimonial-3-photo">photo · 1:1</div>
+          <p class="client-quote" data-slot="testimonial-3-quote">[Цитата клиента 3]</p>
+        </div>
+        <div class="card-footer">
+          <p class="client-name" data-slot="testimonial-3-name">[Имя Клиента 3]</p>
+          <p class="client-role" data-slot="testimonial-3-role">[Роль / профессия]</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <div class="client-photo" data-slot="testimonial-4-photo">photo · 1:1</div>
+          <p class="client-quote" data-slot="testimonial-4-quote">[Цитата клиента 4]</p>
+        </div>
+        <div class="card-footer">
+          <p class="client-name" data-slot="testimonial-4-name">[Имя Клиента 4]</p>
+          <p class="client-role" data-slot="testimonial-4-role">[Роль / профессия]</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

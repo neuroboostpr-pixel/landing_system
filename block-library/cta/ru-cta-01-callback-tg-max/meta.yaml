@@ -1,0 +1,15 @@
+id: ru-cta-01-callback-tg-max
+category: cta
+ru_market: true
+use_cases: [services, b2c, local]
+description: "CTA-блок: заголовок + 3 кнопки Telegram / Max / Перезвоните. БЕЗ WhatsApp (запрещён в РФ)."
+slots:
+  - {type: text, name: headline, max_chars: 80, required: true}
+  - {type: text, name: subhead, max_chars: 140, required: false}
+  - {type: cta, name: tg-cta, default_text: "Написать в Telegram", required: true}
+  - {type: cta, name: max-cta, default_text: "Написать в Max", required: true}
+  - {type: cta, name: callback-cta, default_text: "Перезвоните мне", required: true}
+conversion_notes: "3 варианта связи повышают конверсию. WhatsApp убран. Max обязателен для РФ-аудитории."
+source: manual
+source_attribution: ""
+created: 2026-05-12

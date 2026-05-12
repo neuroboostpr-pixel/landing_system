@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>ru-trust-01-guarantees-docs — mobile</title>
+<style>
+  :root {
+    --color-bg: #fff; --color-fg: #111; --color-accent: #333; --color-border: #ccc;
+    --font-display: system-ui, sans-serif; --font-body: system-ui, sans-serif;
+    --spacing-md: 16px; --spacing-lg: 32px;
+  }
+  body { margin: 0; font-family: var(--font-body); background: var(--color-bg); color: var(--color-fg); width: 375px; }
+  .trust { padding: 40px 16px; }
+  .section-headline { font-family: var(--font-display); font-size: 24px; text-align: center; margin: 0 0 28px; }
+  .badges { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .badge { border: 1px solid var(--color-border); border-radius: 10px; padding: 16px 12px; display: flex; flex-direction: column; gap: 8px; }
+  .badge-icon { width: 36px; height: 36px; border: 2px solid var(--color-border); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #999; }
+  .badge-title { font-family: var(--font-display); font-size: 15px; font-weight: 700; margin: 0; }
+  .badge-text { font-size: 12px; color: #555; margin: 0; line-height: 1.4; }
+</style>
+</head>
+<body>
+  <section class="trust" data-block-id="ru-trust-01-guarantees-docs">
+    <h2 class="section-headline" data-slot="headline">[HEADLINE]</h2>
+    <div class="badges">
+      <div class="badge">
+        <div class="badge-icon" data-slot="trust-1-icon">icon</div>
+        <h3 class="badge-title" data-slot="trust-1-title">[Договор]</h3>
+        <p class="badge-text" data-slot="trust-1-text">[Описание 1]</p>
+      </div>
+      <div class="badge">
+        <div class="badge-icon" data-slot="trust-2-icon">icon</div>
+        <h3 class="badge-title" data-slot="trust-2-title">[Лицензия]</h3>
+        <p class="badge-text" data-slot="trust-2-text">[Описание 2]</p>
+      </div>
+      <div class="badge">
+        <div class="badge-icon" data-slot="trust-3-icon">icon</div>
+        <h3 class="badge-title" data-slot="trust-3-title">[Гарантия]</h3>
+        <p class="badge-text" data-slot="trust-3-text">[Описание 3]</p>
+      </div>
+      <div class="badge">
+        <div class="badge-icon" data-slot="trust-4-icon">icon</div>
+        <h3 class="badge-title" data-slot="trust-4-title">[Возврат]</h3>
+        <p class="badge-text" data-slot="trust-4-text">[Описание 4]</p>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

@@ -1,3 +1,114 @@
 version: 1
-updated: 2026-05-12
-blocks: []
+updated: '2026-05-12'
+blocks:
+- id: ru-hero-01-services-calc
+  path: hero/ru-hero-01-services-calc/
+  category: hero
+  use_cases:
+  - services
+- id: ru-hero-02-b2c-expert
+  path: hero/ru-hero-02-b2c-expert/
+  category: hero
+  use_cases:
+  - b2c
+- id: ru-hero-03-local-interior
+  path: hero/ru-hero-03-local-interior/
+  category: hero
+  use_cases:
+  - local
+- id: ru-features-01-3col-icons
+  path: features/ru-features-01-3col-icons/
+  category: features
+  use_cases:
+  - services
+  - b2c
+  - local
+- id: ru-features-02-bento-grid
+  path: features/ru-features-02-bento-grid/
+  category: features
+  use_cases:
+  - services
+  - b2c
+  - local
+- id: ru-testimonials-01-video-circles
+  path: social-proof/ru-testimonials-01-video-circles/
+  category: social-proof
+  use_cases:
+  - services
+  - b2c
+  - local
+- id: ru-testimonials-02-text-photo
+  path: social-proof/ru-testimonials-02-text-photo/
+  category: social-proof
+  use_cases:
+  - services
+  - b2c
+  - local
+- id: ru-process-01-4steps-icons
+  path: process/ru-process-01-4steps-icons/
+  category: process
+  use_cases:
+  - services
+  - local
+- id: ru-pricing-01-rub-from
+  path: pricing/ru-pricing-01-rub-from/
+  category: pricing
+  use_cases:
+  - services
+  - b2c
+  - local
+- id: ru-trust-01-guarantees-docs
+  path: trust/ru-trust-01-guarantees-docs/
+  category: trust
+  use_cases:
+  - services
+  - local
+- id: ru-cta-01-callback-tg-max
+  path: cta/ru-cta-01-callback-tg-max/
+  category: cta
+  use_cases:
+  - services
+  - b2c
+  - local
+- id: ru-faq-01-accordion
+  path: faq/ru-faq-01-accordion/
+  category: faq
+  use_cases:
+  - services
+  - b2c
+  - local
+- id: ru-quiz-01-step-card
+  path: quiz/ru-quiz-01-step-card/
+  category: quiz
+  use_cases:
+  - services
+  - b2c
+  - local
+- id: ru-quiz-02-progress-top
+  path: quiz/ru-quiz-02-progress-top/
+  category: quiz
+  use_cases:
+  - services
+  - b2c
+  - local
+- id: ru-quiz-03-intermediate
+  path: quiz/ru-quiz-03-intermediate/
+  category: quiz
+  use_cases:
+  - services
+  - b2c
+  - local
+- id: ru-quiz-04-lead-form
+  path: quiz/ru-quiz-04-lead-form/
+  category: quiz
+  use_cases:
+  - services
+  - b2c
+  - local
+- id: ru-quiz-05-thankyou
+  path: quiz/ru-quiz-05-thankyou/
+  category: quiz
+  use_cases:
+  - services
+  - b2c
+  - local

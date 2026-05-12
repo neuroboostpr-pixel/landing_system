@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>ru-hero-01-services-calc — mobile</title>
+<style>
+  :root {
+    --color-bg: #fff; --color-fg: #111; --color-accent: #333; --color-border: #ccc;
+    --font-display: system-ui, sans-serif; --font-body: system-ui, sans-serif;
+    --spacing-md: 16px; --spacing-lg: 32px;
+  }
+  body { margin: 0; font-family: var(--font-body); background: var(--color-bg); color: var(--color-fg); width: 375px; }
+  .hero-photo { aspect-ratio: 9/16; background: #ddd; position: relative; }
+  .hero-photo .slot-label { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 11px; color: #666; }
+  .hero-text { padding: 20px; }
+  .headline { font-family: var(--font-display); font-size: 28px; line-height: 1.15; margin: 0 0 12px; }
+  .subhead { font-size: 15px; color: #444; margin: 0 0 16px; }
+  .price-tag { display: inline-block; background: #f4f4f4; padding: 6px 12px; border-radius: 4px; font-weight: 600; margin-bottom: 16px; }
+  .cta { display: block; padding: 14px; background: var(--color-accent); color: #fff; text-align: center; text-decoration: none; border-radius: 6px; font-weight: 600; }
+</style>
+</head>
+<body>
+  <section class="hero" data-block-id="ru-hero-01-services-calc">
+    <div class="hero-photo" data-slot="hero-bg">
+      <div class="slot-label">photo · 9:16 · hero-bg</div>
+    </div>
+    <div class="hero-text">
+      <h1 class="headline" data-slot="headline">[HEADLINE]</h1>
+      <p class="subhead" data-slot="subhead">[SUBHEAD]</p>
+      <div class="price-tag" data-slot="price-tag">[от X ₽]</div>
+      <a class="cta" data-slot="primary-cta" href="#quiz">[Рассчитать стоимость]</a>
+    </div>
+  </section>
+</body>
+</html>

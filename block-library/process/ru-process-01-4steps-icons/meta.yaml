@@ -1,0 +1,23 @@
+id: ru-process-01-4steps-icons
+category: process
+ru_market: true
+use_cases: [services, local]
+description: "4 шага работы с большими цифрами, иконками, заголовками и кратким описанием каждого шага."
+slots:
+  - {type: text, name: headline, max_chars: 60, required: true}
+  - {type: icon, name: step-1-icon, required: false}
+  - {type: text, name: step-1-title, max_chars: 30, required: true}
+  - {type: text, name: step-1-text, max_chars: 100, required: true}
+  - {type: icon, name: step-2-icon, required: false}
+  - {type: text, name: step-2-title, max_chars: 30, required: true}
+  - {type: text, name: step-2-text, max_chars: 100, required: true}
+  - {type: icon, name: step-3-icon, required: false}
+  - {type: text, name: step-3-title, max_chars: 30, required: true}
+  - {type: text, name: step-3-text, max_chars: 100, required: true}
+  - {type: icon, name: step-4-icon, required: false}
+  - {type: text, name: step-4-title, max_chars: 30, required: true}
+  - {type: text, name: step-4-text, max_chars: 100, required: true}
+conversion_notes: "Большие цифры снижают тревожность клиента. 4 шага — оптимальная длина процесса."
+source: manual
+source_attribution: ""
+created: 2026-05-12

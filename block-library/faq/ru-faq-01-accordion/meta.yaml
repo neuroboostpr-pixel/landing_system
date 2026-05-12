@@ -1,0 +1,23 @@
+id: ru-faq-01-accordion
+category: faq
+ru_market: true
+use_cases: [services, b2c, local]
+description: "6 вопросов-ответов через native HTML <details>-аккордеон. Без JavaScript. SEO-friendly."
+slots:
+  - {type: text, name: headline, max_chars: 60, required: true}
+  - {type: text, name: faq-1-q, max_chars: 100, required: true}
+  - {type: text, name: faq-1-a, max_chars: 400, required: true}
+  - {type: text, name: faq-2-q, max_chars: 100, required: true}
+  - {type: text, name: faq-2-a, max_chars: 400, required: true}
+  - {type: text, name: faq-3-q, max_chars: 100, required: true}
+  - {type: text, name: faq-3-a, max_chars: 400, required: true}
+  - {type: text, name: faq-4-q, max_chars: 100, required: false}
+  - {type: text, name: faq-4-a, max_chars: 400, required: false}
+  - {type: text, name: faq-5-q, max_chars: 100, required: false}
+  - {type: text, name: faq-5-a, max_chars: 400, required: false}
+  - {type: text, name: faq-6-q, max_chars: 100, required: false}
+  - {type: text, name: faq-6-a, max_chars: 400, required: false}
+conversion_notes: "Native details — без JS, SEO-friendly. Частые возражения первыми. 6 вопросов — оптимально."
+source: manual
+source_attribution: ""
+created: 2026-05-12

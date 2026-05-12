@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>ru-features-01-3col-icons — desktop</title>
+<style>
+  :root {
+    --color-bg: #fff;
+    --color-fg: #111;
+    --color-accent: #333;
+    --color-border: #ccc;
+    --font-display: system-ui, sans-serif;
+    --font-body: system-ui, sans-serif;
+    --spacing-md: 16px;
+    --spacing-lg: 32px;
+  }
+  body { margin: 0; font-family: var(--font-body); background: var(--color-bg); color: var(--color-fg); }
+  .features { padding: 64px var(--spacing-lg); max-width: 1100px; margin: 0 auto; }
+  .section-headline { font-family: var(--font-display); font-size: 36px; text-align: center; margin: 0 0 48px; }
+  .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  .col { display: flex; flex-direction: column; align-items: flex-start; }
+  .icon-placeholder { width: 48px; height: 48px; border: 2px solid var(--color-border); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #999; margin-bottom: 16px; flex-shrink: 0; }
+  .feature-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; margin: 0 0 8px; }
+  .feature-text { font-size: 15px; color: #555; margin: 0; line-height: 1.5; }
+</style>
+</head>
+<body>
+  <section class="features" data-block-id="ru-features-01-3col-icons">
+    <h2 class="section-headline" data-slot="headline">[HEADLINE: заголовок секции]</h2>
+    <div class="cols">
+      <div class="col">
+        <div class="icon-placeholder" data-slot="feature-1-icon">icon</div>
+        <h3 class="feature-title" data-slot="feature-1-title">[Преимущество 1]</h3>
+        <p class="feature-text" data-slot="feature-1-text">[Описание первого преимущества — конкретно и кратко]</p>
+      </div>
+      <div class="col">
+        <div class="icon-placeholder" data-slot="feature-2-icon">icon</div>
+        <h3 class="feature-title" data-slot="feature-2-title">[Преимущество 2]</h3>
+        <p class="feature-text" data-slot="feature-2-text">[Описание второго преимущества — конкретно и кратко]</p>
+      </div>
+      <div class="col">
+        <div class="icon-placeholder" data-slot="feature-3-icon">icon</div>
+        <h3 class="feature-title" data-slot="feature-3-title">[Преимущество 3]</h3>
+        <p class="feature-text" data-slot="feature-3-text">[Описание третьего преимущества — конкретно и кратко]</p>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

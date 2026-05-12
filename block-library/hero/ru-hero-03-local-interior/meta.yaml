@@ -1,0 +1,14 @@
+id: ru-hero-03-local-interior
+category: hero
+ru_market: true
+use_cases: [local]
+description: "RU hero локальный: full-width фото интерьера, overlay, заголовок, плашка часов работы, CTA 'Записаться'"
+slots:
+  - {type: photo, name: interior-bg, ratio: "16:9", required: true}
+  - {type: text, name: headline, max_chars: 60, required: true}
+  - {type: text, name: hours-tag, max_chars: 20, required: false}
+  - {type: cta, name: primary-cta, default_text: "Записаться", required: true}
+conversion_notes: "Full-width фото с overlay. Часы работы снижают барьер. CTA на форму записи."
+source: manual
+source_attribution: ""
+created: 2026-05-12
