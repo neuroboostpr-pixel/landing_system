@@ -14,6 +14,28 @@
 - `/landing-status` — статус системы и текущих проектов
 - `/landing-help` — справка по всем командам
 
+## Новые команды PR-A (Прототип + Wireframe + Compose)
+
+- `/landing-prototype` — импорт пользовательского прототипа (PDF/MD) → prototype.{md,yaml}
+- `/landing-wireframe` — интерактивный wireframe.html с 2-3 вариантами на блок
+- `/landing-compose` — composed.html с tokens + текстами, placeholders для визуала
+
+**Workflow PR-A:**
+1. Положи `prototype.pdf` или `.md` в `<project>/07_ПРОТОТИП/source/`
+2. Запусти `/landing-prototype` → проверь `prototype.md`, поправь если нужно
+3. Запусти `/landing-wireframe` → открой `07a_WIREFRAME/wireframe.html`, выбери варианты, нажми «Confirm» — скачается `selections.yaml`, положи его в `07a_WIREFRAME/`
+4. Запусти `/landing-compose` → `07b_COMPOSED/composed.html` готов
+
+**NOTE:** PR-A команды вызываются ВРУЧНУЮ, не через `landing-orchestrator`. Интеграция в оркестратор — задача PR-D.
+
+## Block Library
+
+Общая библиотека wireframe-блоков: `block-library/`. См. `block-library/README.md`.
+
+## Атрибуция
+
+См. `THIRD_PARTY_NOTICES.md` — мы используем фрагменты OpenDesign (Apache-2.0).
+
 ## Зависимости
 
 Эта система использует:
