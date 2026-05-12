@@ -42,3 +42,40 @@ python3 skills/wp-theme-assembler/scripts/render-build-preview.py <project-dir>
 6. Run render-build-preview.py → генерируем preview
 7. HARD GATE: показываем build-preview.html пользователю
 ```
+
+## lp-preview-panel integration
+
+During theme assembly:
+
+1. Copy plugin source:
+
+   ```bash
+   cp -r "$LANDING_SYSTEM_ROOT/template/08_КОД/plugins/lp-preview-panel" \
+         "$PROJECT_ROOT/08_КОД/plugins/"
+   ```
+
+2. Generate palette CSS:
+
+   ```bash
+   python scripts/generate-palette-css.py --project "$PROJECT_ROOT"
+   ```
+
+   Output: `$PROJECT_ROOT/08_КОД/wp-theme/assets/css/palettes.css`.
+   Include this file in the theme's main stylesheet enqueue.
+
+3. Generate axes filter PHP:
+
+   ```bash
+   python scripts/generate-axes-filter.py \
+       --project "$PROJECT_ROOT" \
+       --default-palette <chosen-palette-id> \
+       --hero static,parallax \
+       --default-hero static
+   ```
+
+   Output: `$PROJECT_ROOT/08_КОД/wp-theme/inc/lp-preview-panel-axes.php`.
+   In `functions.php` add: `require_once get_template_directory() . '/inc/lp-preview-panel-axes.php';`
+
+4. Theme contract: any block whose visibility depends on hero variant must use
+   `body.hero--<id>` selectors, with both variants present in DOM (visibility
+   toggled by CSS). Non-active hero assets should use `loading="lazy"`.

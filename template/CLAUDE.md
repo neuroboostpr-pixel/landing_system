@@ -52,3 +52,15 @@
 ## Источник правды
 
 Все системные правила и архитектура: см. spec-документ в master-system (`landing-system/docs/superpowers/specs/`).
+
+## Reserved body classes (lp-preview-panel)
+
+These class prefixes are reserved by the `lp-preview-panel` plugin:
+
+- `body.theme-<id>` — palette axis. CSS tokens live under each block.
+- `body.hero--<id>` — hero variant axis. Theme controls visibility per block.
+
+Do NOT add or remove these classes from theme code. The plugin's JS owns them.
+For hero variants, keep both DOM subtrees rendered and toggle visibility via
+`body.hero--<id>` selectors in CSS. Non-active hero assets must use
+`loading="lazy"`.
