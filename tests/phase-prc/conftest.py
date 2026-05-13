@@ -24,3 +24,13 @@ for script in ["slot-scanner", "prompt-picker", "visual-cache"]:
     if p.exists():
         mod = _load_module(f"skills.visual_generation.scripts.{script.replace('-', '_')}", p)
         sys.modules[f"skills.visual_generation.scripts.{script.replace('-', '_')}"] = mod
+
+# Pre-register block_composition namespace so inject_content is importable from phase-prc tests
+_bc_mod = sys.modules.setdefault("skills.block_composition", type(sys)("skills.block_composition"))
+_bc_scripts_mod = type(sys)("skills.block_composition.scripts")
+sys.modules["skills.block_composition.scripts"] = _bc_scripts_mod
+
+_INJECT_PATH = REPO_ROOT / "skills" / "block-composition" / "scripts" / "inject-content.py"
+if _INJECT_PATH.exists():
+    _inj_mod = _load_module("skills.block_composition.scripts.inject_content", _INJECT_PATH)
+    sys.modules["skills.block_composition.scripts.inject_content"] = _inj_mod

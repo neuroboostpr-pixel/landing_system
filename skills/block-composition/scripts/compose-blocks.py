@@ -36,6 +36,10 @@ def main() -> None:
     photo_selections_path = project / "07c_PHOTOS" / "selections.yaml"
     photo_selections_arg = str(photo_selections_path) if photo_selections_path.exists() else None
 
+    # PR-C: detect 07d_VISUALS/ for icon + infographic substitution (backward compatible)
+    visuals_dir = project / "07d_VISUALS"
+    visuals_dir_arg = str(visuals_dir) if visuals_dir.exists() else None
+
     desktop_parts: list[str] = []
     mobile_parts: list[str] = []
     desktop_styles: list[str] = []
@@ -71,6 +75,8 @@ def main() -> None:
                 ]
                 if photo_selections_arg:
                     inject_cmd += ["--selections", photo_selections_arg]
+                if visuals_dir_arg:
+                    inject_cmd += ["--visuals-dir", visuals_dir_arg]
                 subprocess.run(inject_cmd, check=True)
 
                 content = stage2.read_text()
