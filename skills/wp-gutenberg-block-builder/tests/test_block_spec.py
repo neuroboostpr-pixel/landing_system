@@ -112,3 +112,35 @@ def test_unknown_control_type_rejected(tmp_path):
     spec = load(bad)
     with pytest.raises(BlockSpecError, match="type"):
         validate(spec)
+
+
+def test_non_list_blocks_rejected(tmp_path):
+    bad = tmp_path / "bad.yaml"
+    bad.write_text(
+        "version: 1\n"
+        "page: { title: T, slug: home }\n"
+        "blocks: not-a-list\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(BlockSpecError, match="blocks.*list"):
+        load(bad)
+
+
+def test_non_dict_block_entry_rejected(tmp_path):
+    bad = tmp_path / "bad.yaml"
+    bad.write_text(
+        "version: 1\n"
+        "page: { title: T, slug: home }\n"
+        "blocks:\n"
+        "  - just-a-string\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(BlockSpecError, match="mapping"):
+        load(bad)
+
+
+def test_yaml_parse_error_wrapped(tmp_path):
+    bad = tmp_path / "bad.yaml"
+    bad.write_text("version: 1\nblocks: [unclosed\n", encoding="utf-8")
+    with pytest.raises(BlockSpecError, match="YAML parse error"):
+        load(bad)

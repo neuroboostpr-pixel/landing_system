@@ -78,13 +78,20 @@ def load(path: Path | str) -> BlockSpec:
     p = Path(path)
     if not p.exists():
         raise BlockSpecError(f"block-spec.yaml not found: {p}")
-    data = yaml.safe_load(p.read_text(encoding="utf-8"))
+    try:
+        data = yaml.safe_load(p.read_text(encoding="utf-8"))
+    except yaml.YAMLError as e:
+        raise BlockSpecError(f"YAML parse error in {p}: {e}") from e
     if not isinstance(data, dict):
         raise BlockSpecError("block-spec.yaml must be a mapping at top level")
     page = data.get("page") or {}
     blocks_raw = data.get("blocks") or []
+    if not isinstance(blocks_raw, list):
+        raise BlockSpecError("'blocks' must be a list")
     blocks = []
     for b in blocks_raw:
+        if not isinstance(b, dict):
+            raise BlockSpecError(f"block entry must be a mapping, got {type(b).__name__}")
         card_raw = b.get("card")
         card = None
         if card_raw:
