@@ -230,3 +230,22 @@ add_action('lzb/init', function() {   // ← lzb/init, НЕ init и НЕ plugins
 1. Локальная мини-репро среда: чистый WP + Lazy Blocks Free + один тестовый блок (через UI), экспорт → разбор JSON формата, разбор theme-template папки.
 2. Написать минимальный пример `lzb/register_blocks` для одного блока с одним RichText control и рендер-файлом — проверить что работает на фронте.
 3. После working repro — обновить `writing-plans` план миграции stage-08 generators, согласовать с пользователем, далее TDD-имплементация.
+
+---
+
+## Closing note (2026-05-13)
+
+Миграция реализована по [`docs/superpowers/plans/2026-05-13-stage08-lazy-blocks-migration.md`](../plans/2026-05-13-stage08-lazy-blocks-migration.md). Pipeline проверен end-to-end локально на canonical example и на реальном neuroupgrade-v2 (12 блоков, 18 сгенерированных `block.php`, 6 section+card display:contents правил). Браузерная проверка после deploy — отдельный ручной шаг.
+
+**Существующие задеплоенные лендинги (`lixiang-dubai`, `neuroupgrade` старый):** намеренно НЕ мигрируются. Их фронт рендерится через файлы `front-page.php`, которые уже лежат на проде, — они продолжат работать до следующей регенерации соответствующих проектов. При следующей регенерации они автоматически получат новый Lazy Blocks-пайплайн (генератор темы уже не пишет `front-page.php`, оркестратор не запускает удалённые ACF-генераторы). Отдельный backport-скрипт не предоставляется.
+
+**Сводка артефактов миграции** (commits на `feat/stage08-lazy-blocks`, отсчёт от `06e3e79`):
+- Спецификация `block-spec.yaml` + canonical example
+- Loader/validator `block_spec.py` (10 тестов)
+- 4 новых генератора: `generate-lzb-registration.py`, `generate-lzb-templates.py`, `generate-css-patches.py`, `generate-page-content.py` (5+8+4+5 тестов)
+- Удалены: `generate-acf.py`, `generate-block-json.py`, `generate-block-registration.py`, `--blocks-only`, `front-page.php` writer
+- `deploy-wordpress.sh` теперь ставит Lazy Blocks, импортит картинки в Media Library, seed'ит front-page через `wp post create` + `page_on_front` (8 bats-тестов)
+- Preflight гейтит установку `lazy-blocks` через `validate-all.sh` (3 bats-теста)
+- Orchestrator `scripts/generate-wp-blocks.py` дёргает все 5 шагов в правильном порядке
+- SKILL.md (wp-gutenberg-block-builder, wp-cli-deployer) переписаны; landing-build, landing-orchestrator, wp-builder обновлены
+- Project template получил `wp-theme/blocks/.gitkeep` и `block-spec.example.yaml`
