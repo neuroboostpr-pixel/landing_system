@@ -64,3 +64,17 @@ Original repo: YouMind-OpenLab/awesome-gpt-image-2 (CC-BY-4.0 wrapper).
 Use locations in this codebase:
 - `skills/visual-generation/scripts/prompt-picker.py` — selects + adapts prompts
 - `skills/visual-generation/templates/infographic-prompt.md` — fallback template inspired by open-design style
+
+## Lucide icons (ISC License) — PR-D integration
+
+PR-D (2026-05-13) integrates Lucide icons (https://lucide.dev) as the first-step
+bypass in icon generation waterfall — for any icon row in `icons.csv` where
+`Library=Lucide`, the SVG is fetched directly from the official GitHub repo,
+rendered to a brand-colored PNG, and used as-is (no codex call).
+
+Source: https://github.com/lucide-icons/lucide
+License: ISC
+Use locations:
+- `skills/visual-generation/scripts/lucide-fetcher.py` — download + render
+- `skills/visual-generation/scripts/prompt-picker.py` — Lucide branch in waterfall
+Cache: `~/.cache/landing-system/lucide/` (offline-friendly after first download)

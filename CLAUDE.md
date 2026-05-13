@@ -69,6 +69,33 @@
 
 См. [spec](docs/superpowers/specs/2026-05-13-visual-generation-design.md) и [plan](docs/superpowers/plans/2026-05-13-visual-generation-plan.md).
 
+## Новая команда PR-D (Orchestrator Integration)
+
+- `/landing-go` — **главная** команда: single entry point. Читает `.landing-state.yaml`, диспатчит следующий этап через `landing-orchestrator`.
+
+**Workflow PR-D (prototype-first):**
+1. Положи `prototype.pdf` в `<project>/07_ПРОТОТИП/source/`.
+2. Запусти `/landing-go`.
+3. Следуй подсказкам — оркестратор сам ведёт через все этапы:
+   - 07a prototype parse (авто)
+   - 03 references → 04 brand → 05 design (user-interactive)
+   - 06 stack → 07 content (авто)
+   - 07b wireframe (user picks variants) → 07c composed (авто)
+   - **07d photos ⇆ 07e visuals параллельно**
+   - 07f composed final → 08 build → 09 deploy → 10-12
+
+**Auto-fix:** при падении гейта оркестратор предлагает фикс и применяет на `yes`.
+
+**Этапы 00/01/01a/02 помечены `n/a`** — они происходят до landing-system (prototype-first).
+
+**Установка codex CLI:** `bash scripts/install-codex.sh` (в onboarding).
+
+**Lucide icons:** простые иконки берутся бесплатно из Lucide вместо codex API.
+
+**Migration:** для существующих проектов — `bash scripts/migrate-state-for-prd.sh <project>/.landing-state.yaml`.
+
+См. [spec](docs/superpowers/specs/2026-05-13-pr-d-orchestrator-integration-design.md), [plan](docs/superpowers/plans/2026-05-13-pr-d-orchestrator-integration-plan.md).
+
 ## Block Library
 
 Общая библиотека wireframe-блоков: `block-library/`. См. `block-library/README.md`.
