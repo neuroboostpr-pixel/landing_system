@@ -1,16 +1,35 @@
 id: ru-hero-03-local-interior
 category: hero
 ru_market: true
-use_cases: [local]
-description: "RU hero локальный: full-width фото интерьера, overlay, заголовок, плашка часов работы, CTA 'Записаться'"
-display_name_ru: "🏠 Локальный бизнес — фото интерьера"
-layout_summary_ru: "Полноширинное фото интерьера с тёмным overlay, заголовок и плашка часов работы по центру, кнопка 'Записаться' внизу. Один чёткий призыв."
+use_cases:
+- local
+description: 'RU hero локальный: full-width фото интерьера, overlay, заголовок, плашка
+  часов работы, CTA ''Записаться'''
+display_name_ru: 🏠 Локальный бизнес — фото интерьера
+layout_summary_ru: Полноширинное фото интерьера с тёмным overlay, заголовок и плашка
+  часов работы по центру, кнопка 'Записаться' внизу. Один чёткий призыв.
 slots:
-  - {type: photo, name: interior-bg, ratio: "16:9", required: true}
-  - {type: text, name: headline, max_chars: 60, required: true}
-  - {type: text, name: hours-tag, max_chars: 20, required: false}
-  - {type: cta, name: primary-cta, default_text: "Записаться", required: true}
-conversion_notes: "Full-width фото с overlay. Часы работы снижают барьер. CTA на форму записи."
+- type: photo
+  name: interior-bg
+  ratio: '16:9'
+  required: true
+- type: text
+  name: headline
+  max_chars: 60
+  required: true
+- type: text
+  name: hours-tag
+  max_chars: 20
+  required: false
+- type: cta
+  name: primary-cta
+  default_text: Записаться
+  required: true
+conversion_notes: Full-width фото с overlay. Часы работы снижают барьер. CTA на форму
+  записи.
 source: manual
-source_attribution: ""
+source_attribution: ''
 created: 2026-05-12
+recommended_styles_ru:
+- Photography-Forward
+- Minimalism & Swiss Style

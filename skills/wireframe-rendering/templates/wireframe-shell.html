@@ -40,6 +40,19 @@
   .ux-rules-list { font-size: 13px; line-height: 1.6; padding-left: 20px; margin-top: 8px; }
   .ux-rule-critical { color: #c00; }
   .ux-rule-high { color: #d80; }
+  .palettes-panel, .typography-panel { margin: 24px; background: #fff; padding: 16px 24px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  .palettes-panel summary, .typography-panel summary { font-weight: 600; font-size: 14px; cursor: pointer; color: #333; }
+  .palettes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin-top: 12px; }
+  .palette-card { border: 1px solid #e0e0e0; padding: 12px; border-radius: 6px; background: #fafafa; }
+  .palette-name { font-weight: 600; font-size: 13px; margin-bottom: 8px; }
+  .palette-swatches { display: flex; gap: 6px; margin-bottom: 6px; }
+  .palette-hex { font-size: 11px; color: #888; }
+  .typography-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin-top: 12px; }
+  .typo-card { border: 1px solid #e0e0e0; padding: 12px; border-radius: 6px; background: #fafafa; }
+  .typo-name { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px; }
+  .typo-heading { font-size: 18px; font-weight: 700; margin-bottom: 2px; }
+  .typo-body { font-size: 13px; color: #666; margin-bottom: 4px; }
+  .typo-mood { font-size: 11px; color: #999; }
 </style>
 </head>
 <body>
@@ -60,10 +73,24 @@
 </details>
 
 <details class="ux-rules-panel">
-  <summary>⚠️ Критические UX-правила (accessibility, conversion)</summary>
+  <summary>⚠️ Критические UX-правила (ux-guidelines + web-interface, ui-ux-pro-max)</summary>
   <ul class="ux-rules-list">
     {{ux_rules_html}}
   </ul>
+</details>
+
+<details class="palettes-panel">
+  <summary>🎨 Рекомендованные палитры для ниши (ui-ux-pro-max colors.csv)</summary>
+  <div class="palettes-grid">
+    {{palettes_html}}
+  </div>
+</details>
+
+<details class="typography-panel">
+  <summary>✍️ Рекомендованные пары шрифтов (ui-ux-pro-max typography.csv)</summary>
+  <div class="typography-grid">
+    {{typography_html}}
+  </div>
 </details>
 
 {{blocks_html}}

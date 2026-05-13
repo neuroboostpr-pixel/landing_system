@@ -46,3 +46,40 @@ EOF
   [ "$status" -ne 0 ]
   [[ "$output" == *"display_name_ru"* ]]
 }
+
+@test "accepts meta with valid recommended_styles_ru" {
+  cat > "$BATS_TMPDIR/meta-styles-valid.yaml" <<EOF
+id: ru-hero-99-test
+category: hero
+ru_market: true
+use_cases: [services]
+description: "Test block with styles"
+display_name_ru: "Test hero"
+layout_summary_ru: "Тест блок с рекомендациями по стилям для проверки валидатора."
+recommended_styles_ru: ["Minimalism & Swiss Style", "Glassmorphism"]
+slots: []
+source: manual
+created: 2026-05-13
+EOF
+  run python3 "$VALIDATOR" "$BATS_TMPDIR/meta-styles-valid.yaml"
+  [ "$status" -eq 0 ]
+}
+
+@test "rejects meta with recommended_styles_ru that is not a list" {
+  cat > "$BATS_TMPDIR/meta-styles-bad.yaml" <<EOF
+id: ru-hero-99-test2
+category: hero
+ru_market: true
+use_cases: [services]
+description: "Test block"
+display_name_ru: "Test hero"
+layout_summary_ru: "Тест блок с некорректными стилями для проверки валидатора."
+recommended_styles_ru: "not-a-list"
+slots: []
+source: manual
+created: 2026-05-13
+EOF
+  run python3 "$VALIDATOR" "$BATS_TMPDIR/meta-styles-bad.yaml"
+  [ "$status" -ne 0 ]
+  [[ "$output" == *"recommended_styles_ru"* ]]
+}

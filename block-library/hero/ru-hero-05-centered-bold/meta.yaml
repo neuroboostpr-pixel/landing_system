@@ -5,15 +5,34 @@ use_cases:
 - services
 - b2c
 - local
-description: "Центрированный hero с гигантской типографикой (64px desktop, 36px mobile), декоративными линиями и одной CTA. Без фото — типографика IS the design."
-display_name_ru: "🎨 Центрированный hero с крупной типографикой"
-layout_summary_ru: "Гигантский заголовок 64px по центру, декоративные линии сверху/снизу, tagline мелко сверху, одна CTA внизу. Без фото — типографика это дизайн."
+description: Центрированный hero с гигантской типографикой (64px desktop, 36px mobile),
+  декоративными линиями и одной CTA. Без фото — типографика IS the design.
+display_name_ru: 🎨 Центрированный hero с крупной типографикой
+layout_summary_ru: Гигантский заголовок 64px по центру, декоративные линии сверху/снизу,
+  tagline мелко сверху, одна CTA внизу. Без фото — типографика это дизайн.
 slots:
-  - {type: text, name: tagline, max_chars: 30, required: false}
-  - {type: text, name: headline, max_chars: 80, required: true}
-  - {type: text, name: subhead, max_chars: 160, required: false}
-  - {type: cta, name: primary-cta, default_text: "Начать сотрудничество", required: true}
-conversion_notes: "Apple/Stripe-стиль: минимализм + сила слова. Единственная CTA не конкурирует ни с чем. Tagline (uppercase, мелкий) добавляет контекст без загрязления. Декоративные линии создают ритм без графики."
+- type: text
+  name: tagline
+  max_chars: 30
+  required: false
+- type: text
+  name: headline
+  max_chars: 80
+  required: true
+- type: text
+  name: subhead
+  max_chars: 160
+  required: false
+- type: cta
+  name: primary-cta
+  default_text: Начать сотрудничество
+  required: true
+conversion_notes: 'Apple/Stripe-стиль: минимализм + сила слова. Единственная CTA не
+  конкурирует ни с чем. Tagline (uppercase, мелкий) добавляет контекст без загрязления.
+  Декоративные линии создают ритм без графики.'
 source: manual
 source_attribution: ''
 created: '2026-05-13'
+recommended_styles_ru:
+- Brutalism
+- Bold Typography

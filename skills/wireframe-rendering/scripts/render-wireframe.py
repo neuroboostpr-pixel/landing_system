@@ -67,23 +67,149 @@ def load_ux_patterns(rules_dir: Path, niche: str) -> list[dict]:
 
 
 def load_ux_rules(rules_dir: Path, block_types: list[str]) -> list[dict]:
-    """Load critical + high severity UX rules from ux-guidelines.csv."""
-    guidelines_csv = rules_dir / "ux-guidelines.csv"
-    if not guidelines_csv.exists():
-        print(
-            f"WARNING: ui-ux-pro-max ux-guidelines.csv not found at {guidelines_csv}.",
-            file=sys.stderr,
-        )
-        return []
-
+    """Load critical + high severity UX rules from ux-guidelines.csv AND web-interface.csv (merged, deduped by Issue)."""
     rules: list[dict] = []
-    with guidelines_csv.open(newline="", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            severity = row.get("Severity", "").strip().lower()
-            if severity in ("critical", "high"):
-                rules.append(row)
+    seen_issues: set[str] = set()
+
+    for csv_name in ("ux-guidelines.csv", "web-interface.csv"):
+        csv_path = rules_dir / csv_name
+        if not csv_path.exists():
+            print(
+                f"WARNING: ui-ux-pro-max {csv_name} not found at {csv_path}.",
+                file=sys.stderr,
+            )
+            continue
+        with csv_path.open(newline="", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                severity = (row.get("Severity") or "").strip().lower()
+                if severity in ("critical", "high"):
+                    issue_key = (row.get("Issue") or "").strip()
+                    if issue_key not in seen_issues:
+                        seen_issues.add(issue_key)
+                        rules.append(row)
+
     return rules
+
+
+def load_colors(rules_dir: Path, niche: str) -> list[dict]:
+    """Load top 3 palette rows from colors.csv filtered by niche keywords."""
+    colors_csv = rules_dir / "colors.csv"
+    if not colors_csv.exists():
+        return []
+    niche_lower = niche.lower().replace("-", " ").replace("_", " ")
+    niche_words = set(niche_lower.split())
+    with colors_csv.open(newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        rows = list(reader)
+
+    matched: list[dict] = []
+    unmatched: list[dict] = []
+    for row in rows:
+        product_type = row.get("Product Type", "").lower()
+        if any(w in product_type for w in niche_words):
+            matched.append(row)
+        else:
+            unmatched.append(row)
+    return (matched + unmatched)[:3]
+
+
+def load_typography(rules_dir: Path, niche: str) -> list[dict]:
+    """Load top 3 font pairs from typography.csv filtered by niche."""
+    typo_csv = rules_dir / "typography.csv"
+    if not typo_csv.exists():
+        return []
+    niche_lower = niche.lower().replace("-", " ").replace("_", " ")
+    niche_words = set(niche_lower.split())
+    with typo_csv.open(newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        rows = list(reader)
+
+    matched: list[dict] = []
+    unmatched: list[dict] = []
+    for row in rows:
+        keywords = row.get("Mood/Style Keywords", "").lower()
+        best_for = row.get("Best For", "").lower()
+        combined = keywords + " " + best_for
+        if any(w in combined for w in niche_words):
+            matched.append(row)
+        else:
+            unmatched.append(row)
+    return (matched + unmatched)[:3]
+
+
+def load_styles(rules_dir: Path) -> list[dict]:
+    """Load all styles from styles.csv for per-block style hint lookup."""
+    styles_csv = rules_dir / "styles.csv"
+    if not styles_csv.exists():
+        return []
+    with styles_csv.open(newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        return list(reader)
+
+
+def render_palettes_html(palettes: list[dict]) -> str:
+    """Render top color palettes as swatch cards."""
+    if not palettes:
+        return "<p style='color:#999;font-size:13px;'>colors.csv не найден</p>"
+    parts: list[str] = []
+    for p in palettes:
+        product = html.escape(p.get("Product Type", "—"))
+        primary = html.escape(p.get("Primary (Hex)", "#ccc"))
+        secondary = html.escape(p.get("Secondary (Hex)", "#eee"))
+        cta = html.escape(p.get("CTA (Hex)", "#666"))
+        bg = html.escape(p.get("Background (Hex)", "#fff"))
+        text_c = html.escape(p.get("Text (Hex)", "#000"))
+        swatches = "".join(
+            f'<div style="width:32px;height:32px;border-radius:6px;background:{c};border:1px solid rgba(0,0,0,.1);title={c}"></div>'
+            for c in [bg, primary, secondary, cta, text_c]
+        )
+        parts.append(
+            f'<div class="palette-card">'
+            f'<div class="palette-name">{product}</div>'
+            f'<div class="palette-swatches">{swatches}</div>'
+            f'<div class="palette-hex">Accent: {primary} | CTA: {cta}</div>'
+            f'</div>'
+        )
+    return "\n".join(parts)
+
+
+def render_typography_html(pairs: list[dict]) -> str:
+    """Render typography pairs as sample cards."""
+    if not pairs:
+        return "<p style='color:#999;font-size:13px;'>typography.csv не найден</p>"
+    parts: list[str] = []
+    for p in pairs:
+        name = html.escape(p.get("Font Pairing Name", "—"))
+        heading = html.escape(p.get("Heading Font", "—"))
+        body = html.escape(p.get("Body Font", "—"))
+        mood = html.escape(p.get("Mood/Style Keywords", "—")[:60])
+        parts.append(
+            f'<div class="typo-card">'
+            f'<div class="typo-name">{name}</div>'
+            f'<div class="typo-heading" style="font-size:18px;font-weight:700;">{heading}</div>'
+            f'<div class="typo-body" style="font-size:13px;color:#666;">{body}</div>'
+            f'<div class="typo-mood" style="font-size:11px;color:#999;">{mood}</div>'
+            f'</div>'
+        )
+    return "\n".join(parts)
+
+
+def get_style_hint_for_block(block_meta: dict, all_styles: list[dict]) -> str:
+    """Return a style recommendation string for a block based on recommended_styles_ru."""
+    rsr = block_meta.get("recommended_styles_ru", [])
+    if not rsr:
+        return ""
+    hints: list[str] = []
+    for style_name in rsr[:2]:
+        for s in all_styles:
+            if style_name.lower() in s.get("Style Category", "").lower():
+                keywords = s.get("AI Prompt Keywords", "")[:80]
+                hints.append(f"<strong>{html.escape(style_name)}</strong>: {html.escape(keywords)}")
+                break
+        else:
+            hints.append(f"<strong>{html.escape(style_name)}</strong>")
+    return " | ".join(hints)
 
 
 def render_ux_patterns_html(patterns: list[dict]) -> str:
@@ -180,17 +306,26 @@ def main() -> None:
     patterns = load_ux_patterns(rules_dir, niche)
     block_types = [b["type"] for b in proto.get("blocks", [])]
     rules = load_ux_rules(rules_dir, block_types)
+    palettes = load_colors(rules_dir, niche)
+    typo_pairs = load_typography(rules_dir, niche)
+    all_styles = load_styles(rules_dir)
 
     ux_available = (rules_dir / "landing.csv").exists()
     if not ux_available:
         ux_patterns_html = UX_NOT_AVAILABLE_BANNER
         ux_rules_html = ""
+        palettes_html = ""
+        typography_html = ""
     else:
         ux_patterns_html = render_ux_patterns_html(patterns)
         ux_rules_html = render_ux_rules_html(rules)
+        palettes_html = render_palettes_html(palettes)
+        typography_html = render_typography_html(typo_pairs)
 
     print(
-        f"INFO: ui-ux-pro-max — {len(patterns)} patterns, {len(rules)} rules loaded.",
+        f"INFO: ui-ux-pro-max — {len(patterns)} patterns, {len(rules)} rules, "
+        f"{len(palettes)} palettes, {len(typo_pairs)} typo pairs, "
+        f"{len(all_styles)} styles loaded.",
         file=sys.stderr,
     )
 
@@ -296,8 +431,21 @@ def main() -> None:
             checked_rules.append(CHECKED_TPL.format(rid=rid))
 
         hint = hint_for_block(btype, patterns)
+        # Use last candidate's meta for style hint (first variant, position 0)
+        last_meta: dict = {}
+        if candidate_ids:
+            last_block_dir = Path(args.library) / _category_for(args.library, candidate_ids[0]) / candidate_ids[0]
+            last_meta_path = last_block_dir / "meta.yaml"
+            if last_meta_path.exists():
+                last_meta = yaml.safe_load(last_meta_path.read_text()) or {}
+        style_hint = get_style_hint_for_block(last_meta, all_styles)
+        hint_parts = []
+        if hint:
+            hint_parts.append(html.escape(hint))
+        if style_hint:
+            hint_parts.append(f"🎨 Стиль: {style_hint}")
         hint_html = (
-            f'<div class="block-ux-hint">{html.escape(hint)}</div>' if hint else ''
+            f'<div class="block-ux-hint">{"<br>".join(hint_parts)}</div>' if hint_parts else ''
         )
         section = (
             f'<section class="block-slot" data-block-position="{position}">'
@@ -320,6 +468,8 @@ def main() -> None:
         .replace("{{checked_rules}}", "\n".join(checked_rules))
         .replace("{{ux_patterns_html}}", ux_patterns_html)
         .replace("{{ux_rules_html}}", ux_rules_html)
+        .replace("{{palettes_html}}", palettes_html)
+        .replace("{{typography_html}}", typography_html)
     )
     out_html = project_dir / "07a_WIREFRAME" / "wireframe.html"
     out_html.parent.mkdir(parents=True, exist_ok=True)

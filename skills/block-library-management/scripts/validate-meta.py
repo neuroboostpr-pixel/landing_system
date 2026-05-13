@@ -10,8 +10,11 @@ REQUIRED_KEYS = {
     "description", "slots", "source", "created",
     "display_name_ru", "layout_summary_ru",
 }
+# Optional keys that are allowed (and validated if present)
+OPTIONAL_KEYS = {"recommended_styles_ru", "conversion_notes", "source_attribution"}
 DISPLAY_NAME_RU_MAX = 60
 LAYOUT_SUMMARY_RU_MAX = 200
+RECOMMENDED_STYLES_RU_MAX_ITEMS = 3
 VALID_CATEGORIES = {
     "hero", "features", "social-proof", "process",
     "pricing", "trust", "cta", "faq", "quiz",
@@ -52,6 +55,16 @@ def main(path: str) -> None:
         fail("layout_summary_ru must be a non-empty string")
     if len(ls) > LAYOUT_SUMMARY_RU_MAX:
         fail(f"layout_summary_ru exceeds {LAYOUT_SUMMARY_RU_MAX} chars (got {len(ls)})")
+    # Validate optional recommended_styles_ru if present
+    rsr = data.get("recommended_styles_ru")
+    if rsr is not None:
+        if not isinstance(rsr, list):
+            fail("recommended_styles_ru must be a list if present")
+        if len(rsr) > RECOMMENDED_STYLES_RU_MAX_ITEMS:
+            fail(f"recommended_styles_ru: max {RECOMMENDED_STYLES_RU_MAX_ITEMS} items (got {len(rsr)})")
+        for item in rsr:
+            if not isinstance(item, str) or not item.strip():
+                fail("recommended_styles_ru items must be non-empty strings")
     if not isinstance(data["slots"], list):
         fail("slots must be a list (may be empty)")
     for i, slot in enumerate(data["slots"]):
