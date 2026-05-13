@@ -31,10 +31,10 @@ blocks:
       controls:
         - { id: c_name,    name: name,    type: text,    label: "Название", default: "Базовый" }
         - { id: c_price,   name: price,   type: text,    label: "Цена",     default: "29 000" }
-        - { id: c_popular, name: popular, type: toggle,  label: "Популярный?", default: "false" }
+        - { id: c_popular, name: popular, type: toggle,  label: "Популярный?", default: false }
         - { id: c_feats,   name: features, type: repeater, label: "Фичи" }
         - { id: c_feats_text, name: text, type: text, label: "Текст", default: "", child_of: c_feats }
       template:
         - { name: "Базовый",     price: "29 000" }
-        - { name: "Продвинутый", price: "59 000", popular: "true" }
+        - { name: "Продвинутый", price: "59 000", popular: true }
         - { name: "ВИП",         price: "129 000" }

@@ -19,7 +19,6 @@ blocks:
     icon: "star-filled"    # имя dashicon
     category: "lp-blocks"
     controls: [...]        # см. ниже
-    section_grid_class: null   # только для type=section-card; CSS-класс обёртки InnerBlocks
   - slug: tarify
     type: section-card
     title: "Тарифы — секция"
@@ -38,6 +37,8 @@ blocks:
         - { name: "ВИП" }
 ```
 
+**Inheritance:** Внутри `card:` поля `icon` и `category` не задаются — генератор регистрации (`generate-lzb-registration.py`) копирует их из родительской section.
+
 ## Схема controls
 
 Запись одного control:
@@ -47,7 +48,7 @@ blocks:
   name: heading                # имя атрибута в $attributes
   type: text                   # обязательное; см. список ниже
   label: "Заголовок"           # обязательное
-  default: "..."               # опционально; зависит от type (string для text/url; int для number; URL/имя файла для image)
+  default: "..."               # опционально; зависит от type (string для text/url; int для number; bool для toggle/checkbox; URL/имя файла для image)
   child_of: c_parent           # опционально; ID родительского repeater control (только для nested)
   options:                     # опционально; type-specific extras (например select choices)
     choices: ["a", "b"]
