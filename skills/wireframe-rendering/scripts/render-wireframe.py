@@ -267,7 +267,8 @@ def main() -> None:
     p.add_argument("--project", required=True)
     p.add_argument("--library", required=True)
     p.add_argument("--template", required=True)
-    p.add_argument("--top", type=int, default=3)
+    p.add_argument("--top", type=int, default=5,
+                   help="Max candidates shown per block (default: 5, was 3)")
     p.add_argument(
         "--ux-rules",
         default=str(Path.home() / ".claude" / "skills" / "ui-ux-pro-max" / "data"),
