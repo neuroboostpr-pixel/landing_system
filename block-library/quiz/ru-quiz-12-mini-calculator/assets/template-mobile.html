@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>ru-quiz-12-mini-calculator — mobile</title>
+<style>
+  :root {
+    --color-bg: #fff; --color-fg: #111; --color-accent: #333; --color-border: #ccc;
+    --font-display: system-ui, sans-serif; --font-body: system-ui, sans-serif;
+    --spacing-md: 16px; --spacing-lg: 32px;
+  }
+  body { margin: 0; font-family: var(--font-body); background: #f5f5f5; color: var(--color-fg); width: 375px; }
+  .calc-card { background: var(--color-bg); min-height: 100vh; padding: 28px 16px 40px; box-sizing: border-box; }
+  .headline { font-family: var(--font-display); font-size: 20px; font-weight: 700; margin: 0 0 24px; text-align: center; }
+  .param-group { margin-bottom: 20px; }
+  .param-label { font-size: 14px; font-weight: 600; margin-bottom: 8px; display: block; }
+  .radio-options { display: flex; gap: 8px; flex-wrap: wrap; }
+  .radio-opt input[type=radio] { position: absolute; opacity: 0; width: 0; height: 0; }
+  .radio-opt label { display: block; padding: 10px 14px; border: 2px solid var(--color-border); border-radius: 8px; cursor: pointer; font-size: 13px; }
+  .radio-opt input[type=radio]:checked + label { border-color: var(--color-accent); background: #f8f8f8; font-weight: 600; }
+  .result-box { border: 2px dashed var(--color-accent); border-radius: 12px; padding: 18px 20px; margin: 20px 0; text-align: center; }
+  .result-prefix { font-size: 13px; color: #666; margin-bottom: 4px; }
+  .result-value { font-family: var(--font-display); font-size: 28px; font-weight: 900; color: var(--color-accent); }
+  .result-note { font-size: 11px; color: #999; margin-top: 4px; }
+  .cta-button { display: block; background: var(--color-accent); color: #fff; font-size: 16px; font-weight: 700; padding: 16px; border-radius: 10px; text-decoration: none; text-align: center; }
+</style>
+</head>
+<body>
+  <div class="calc-card" data-block-id="ru-quiz-12-mini-calculator">
+    <h2 class="headline" data-slot="headline">📐 Рассчитайте стоимость</h2>
+    <div class="param-group">
+      <span class="param-label" data-slot="param-1-label">Тип помещения</span>
+      <div class="radio-options">
+        <div class="radio-opt"><input type="radio" name="room" id="mr1" value="small" checked><label for="mr1" data-slot="param-1-opt-1">до 50 м²</label></div>
+        <div class="radio-opt"><input type="radio" name="room" id="mr2" value="large"><label for="mr2" data-slot="param-1-opt-2">50–100 м²</label></div>
+      </div>
+    </div>
+    <div class="param-group">
+      <span class="param-label" data-slot="param-2-label">Тип покрытия</span>
+      <div class="radio-options">
+        <div class="radio-opt"><input type="radio" name="cover" id="mc1" value="laminate" checked><label for="mc1" data-slot="param-2-opt-1">Ламинат</label></div>
+        <div class="radio-opt"><input type="radio" name="cover" id="mc2" value="parquet"><label for="mc2" data-slot="param-2-opt-2">Паркет</label></div>
+      </div>
+    </div>
+    <div class="result-box">
+      <div class="result-prefix" data-slot="result-prefix">Ориентировочно:</div>
+      <div class="result-value">от 45 000 ₽</div>
+      <div class="result-note">Точный расчёт — после звонка</div>
+    </div>
+    <a class="cta-button" href="#" data-slot="cta-button">Уточнить точную цену →</a>
+  </div>
+</body>
+</html>

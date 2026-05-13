@@ -1,0 +1,21 @@
+id: ru-quiz-12-mini-calculator
+category: quiz
+ru_market: true
+use_cases: [services, b2c, local]
+description: "Мини-калькулятор стоимости внутри квиза: пользователь видит ориентировочную цену до отправки контактов."
+display_name_ru: "🧮 Квиз — мини-калькулятор стоимости"
+layout_summary_ru: "Несколько нативных radio/range без JS. Под вопросами — поле «Ваша стоимость: от X ₽». Статичное значение (диапазон по выбору). Калькуляция через CSS :checked."
+slots:
+  - {type: text, name: headline, max_chars: 100, required: true}
+  - {type: text, name: param-1-label, max_chars: 60, required: true}
+  - {type: text, name: param-1-opt-1, max_chars: 50, required: true}
+  - {type: text, name: param-1-opt-2, max_chars: 50, required: true}
+  - {type: text, name: param-2-label, max_chars: 60, required: false}
+  - {type: text, name: param-2-opt-1, max_chars: 50, required: false}
+  - {type: text, name: param-2-opt-2, max_chars: 50, required: false}
+  - {type: text, name: result-prefix, max_chars: 40, required: true}
+  - {type: text, name: cta-button, max_chars: 50, required: true}
+conversion_notes: "Показ ориентировочной цены мотивирует оставить контакт — человек хочет уточнить точную цифру. Источники: Marquiz (калькулятор), Skillbox (calculator quiz)."
+source: manual
+source_attribution: "marquiz.ru/blog/kak-otstroitsya-ot-konkurentov; skillbox.ru/media/marketing/chto-takoe-kvizy"
+created: '2026-05-13'

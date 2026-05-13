@@ -1,0 +1,18 @@
+id: ru-quiz-08-slider-range
+category: quiz
+ru_market: true
+use_cases: [services, b2c, local]
+description: "Вопрос квиза со слайдером: пользователь задаёт бюджет, площадь или другой числовой параметр."
+display_name_ru: "📊 Квиз — вопрос со слайдером диапазона"
+layout_summary_ru: "Нативный input[type=range] без JS. Текущее значение и единица измерения под слайдером. Прогресс-бар сверху. Для бюджета, площади, срока."
+slots:
+  - {type: text, name: question-text, max_chars: 120, required: true}
+  - {type: text, name: unit-label, max_chars: 20, required: true}
+  - {type: text, name: min-label, max_chars: 30, required: true}
+  - {type: text, name: max-label, max_chars: 30, required: true}
+  - {type: text, name: question-comment, max_chars: 100, required: false}
+  - {type: text, name: progress-label, max_chars: 60, required: false}
+conversion_notes: "Слайдер сегментирует аудиторию по бюджету без ввода с клавиатуры. Снижает трение. Источники: Tilda Education, Skillbox (calculator quiz)."
+source: manual
+source_attribution: "tilda.education/how-to-create-marketing-quiz; skillbox.ru/media/marketing/chto-takoe-kvizy"
+created: '2026-05-13'

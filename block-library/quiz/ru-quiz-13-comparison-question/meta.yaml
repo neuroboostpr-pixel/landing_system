@@ -1,0 +1,19 @@
+id: ru-quiz-13-comparison-question
+category: quiz
+ru_market: true
+use_cases: [services, b2c, local]
+description: "Вопрос-сравнение «что важнее: А или Б»: две большие карточки, пользователь выбирает приоритет."
+display_name_ru: "⚖️ Квиз — вопрос-сравнение «А или Б»"
+layout_summary_ru: "Два варианта на весь экран: карточка А и карточка Б. Заголовок + иконка + описание. Radio CSS без JS. Помогает выявить приоритеты клиента для точного предложения."
+slots:
+  - {type: text, name: question-text, max_chars: 120, required: true}
+  - {type: text, name: option-a-title, max_chars: 50, required: true}
+  - {type: text, name: option-a-description, max_chars: 100, required: false}
+  - {type: text, name: option-b-title, max_chars: 50, required: true}
+  - {type: text, name: option-b-description, max_chars: 100, required: false}
+  - {type: text, name: question-comment, max_chars: 80, required: false}
+  - {type: text, name: progress-label, max_chars: 60, required: false}
+conversion_notes: "Бинарный выбор выявляет ключевой приоритет клиента — цена vs качество, скорость vs надёжность. Источник: Marquiz (подбор по параметрам для дифференциации)."
+source: manual
+source_attribution: "marquiz.ru/blog/kak-otstroitsya-ot-konkurentov"
+created: '2026-05-13'

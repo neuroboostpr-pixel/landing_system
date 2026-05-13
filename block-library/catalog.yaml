@@ -1,6 +1,5 @@
 version: 1
 updated: '2026-05-13'
-# 35 original + 20 new blocks from design-templates (Apache-2.0)
 blocks:
 - id: ru-hero-01-services-calc
   path: hero/ru-hero-01-services-calc/
@@ -400,3 +399,59 @@ blocks:
   - b2c
   - local
   source: opendesign
+- id: ru-quiz-06-welcome-screen
+  path: quiz/ru-quiz-06-welcome-screen/
+  category: quiz
+  use_cases:
+  - services
+  - b2c
+  - local
+- id: ru-quiz-07-image-choice
+  path: quiz/ru-quiz-07-image-choice/
+  category: quiz
+  use_cases:
+  - services
+  - b2c
+  - local
+- id: ru-quiz-08-slider-range
+  path: quiz/ru-quiz-08-slider-range/
+  category: quiz
+  use_cases:
+  - services
+  - b2c
+  - local
+- id: ru-quiz-09-multi-select
+  path: quiz/ru-quiz-09-multi-select/
+  category: quiz
+  use_cases:
+  - services
+  - b2c
+  - local
+- id: ru-quiz-10-loader-analyzing
+  path: quiz/ru-quiz-10-loader-analyzing/
+  category: quiz
+  use_cases:
+  - services
+  - b2c
+  - local
+- id: ru-quiz-11-discount-bonus
+  path: quiz/ru-quiz-11-discount-bonus/
+  category: quiz
+  use_cases:
+  - services
+  - b2c
+  - local
+- id: ru-quiz-12-mini-calculator
+  path: quiz/ru-quiz-12-mini-calculator/
+  category: quiz
+  use_cases:
+  - services
+  - b2c
+  - local
+- id: ru-quiz-13-comparison-question
+  path: quiz/ru-quiz-13-comparison-question/
+  category: quiz
+  use_cases:
+  - services
+  - b2c
+  - local
