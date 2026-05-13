@@ -68,8 +68,8 @@ def test_image_placeholder_is_unquoted_in_json(tmp_path):
     project = _make_project(tmp_path)
     spec = (project / "08_КОД" / "block-spec.yaml").read_text(encoding="utf-8")
     spec = spec.replace(
-        "      - { id: c_h, name: heading, type: text, label: \"H\", default: \"Hi\" }",
-        "      - { id: c_h, name: heading, type: text, label: \"H\", default: \"Hi\" }\n"
+        "      - { id: c_h, name: heading, type: text, label: \"H\", default: \"Hi\", css_class: \"hero__title\", element: h1 }",
+        "      - { id: c_h, name: heading, type: text, label: \"H\", default: \"Hi\", css_class: \"hero__title\", element: h1 }\n"
         "      - { id: c_img, name: hero_image, type: image, label: \"Img\", default: \"hero.png\" }",
     )
     (project / "08_КОД" / "block-spec.yaml").write_text(spec, encoding="utf-8")
@@ -85,8 +85,8 @@ def test_image_attachment_placeholder(tmp_path):
     project = _make_project(tmp_path)
     spec = (project / "08_КОД" / "block-spec.yaml").read_text(encoding="utf-8")
     spec = spec.replace(
-        "      - { id: c_h, name: heading, type: text, label: \"H\", default: \"Hi\" }",
-        "      - { id: c_h, name: heading, type: text, label: \"H\", default: \"Hi\" }\n"
+        "      - { id: c_h, name: heading, type: text, label: \"H\", default: \"Hi\", css_class: \"hero__title\", element: h1 }",
+        "      - { id: c_h, name: heading, type: text, label: \"H\", default: \"Hi\", css_class: \"hero__title\", element: h1 }\n"
         "      - { id: c_img, name: hero_image, type: image, label: \"Img\", default: \"hero.png\" }",
     )
     (project / "08_КОД" / "block-spec.yaml").write_text(spec, encoding="utf-8")

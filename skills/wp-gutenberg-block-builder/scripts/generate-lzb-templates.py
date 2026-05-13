@@ -6,21 +6,17 @@ CLI: python generate-lzb-templates.py --project <path>
 Never overwrites an existing block.php — render templates are user-editable
 after first generation (Lazy Blocks reads $attributes the same way regardless).
 
-Semantic HTML heuristics (per-control, by name convention):
-  - title / heading / h1 → <h1 class="lp-h1">  (in `single` blocks)
-  - heading              → <h2 class="lp-h2">  (in `section-card` blocks)
-  - subtitle             → <h2 class="lp-h2">
-  - lede                 → <p  class="lp-lede">
-  - eyebrow / tag / *pill_tag* → <span class="lp-eyebrow">
-  - note / anchor_note / caption → <small class="lp-caption">
-  - <base>_text / <base>_label paired with a sibling <base>_url url-control
-    → <a class="lp-btn" href="<url>">text</a>  (and url emits nothing standalone)
-  - card-level `name` → <h3 class="lp-h3">
-  - card-level `popular` toggle → folded into the card wrapper class
-    (lp-card--popular), skipping its own div
+Rendering is **spec-driven** (no name-based heuristics):
+  * Per-block wrapper: ``b.element`` + ``b.css_class``, or ``b.wrapper_open_html``
+    / ``b.wrapper_close_html`` for arbitrary layouts (e.g. hero 2-col grid).
+    Default: ``<section class="lp-block lp-block--<slug>">``.
+  * Per-control element + class come from spec (``element``, ``css_class``);
+    default class is ``lp-field--<name>``, default element by type.
+  * CTA pair: a control with ``href_from: <url_control_name>`` becomes
+    ``<a class="..." href="...">text</a>``; the referenced url control emits
+    nothing.
 """
 import argparse
-import re
 import sys
 from pathlib import Path
 
@@ -29,123 +25,69 @@ sys.path.insert(0, str(Path(__file__).resolve().parent / "lib"))
 from block_spec import Block, BlockSpecError, Card, Control, load, validate  # noqa: E402
 
 
-# ---------- name-based classification helpers ----------
+# Default element per control.type when spec doesn't override.
+_DEFAULT_ELEMENT = {
+    "text":      "span",
+    "textarea":  "p",
+    "rich-text": "div",
+    "classic-editor": "div",
+    "url":       "a",
+    "image":     "img",
+    "email":     "span",
+    "number":    "span",
+    "select":    "span",
+}
 
-_RE_TITLE_LIKE = re.compile(r"^(title|heading|h1)$", re.I)
-_RE_H2_TEXT    = re.compile(r"^(subtitle|h2)$", re.I)
-_RE_LEDE       = re.compile(r"^lede$", re.I)
-_RE_EYEBROW    = re.compile(r"^(eyebrow|tag|.*pill_tag.*)$", re.I)
-_RE_CAPTION    = re.compile(r"^(anchor_note|note|caption)$", re.I)
-_RE_CTA_TEXT   = re.compile(r"^(.*)(?:_text|_label)$|^button$", re.I)
-
-
-def _is_text_like(c: Control) -> bool:
-    return c.type in ("text", "textarea", "rich-text", "classic-editor")
-
-
-def _find_cta_pairs(controls: list) -> dict:
-    """Return mapping {text_control_name: url_control_name} for CTA pairs.
-
-    Pair = a text-type control named <base>_text or <base>_label, when there's a
-    sibling url-type control named <base>_url.
-    """
-    by_name = {c.name: c for c in controls if c.child_of is None}
-    pairs = {}
-    for c in controls:
-        if c.child_of is not None or not _is_text_like(c):
-            continue
-        m = _RE_CTA_TEXT.match(c.name)
-        if not m:
-            continue
-        if c.name == "button":
-            # accept a bare `button_url` sibling
-            url_name = "button_url"
-        else:
-            base = m.group(1)
-            if not base:
-                continue
-            url_name = f"{base}_url"
-        sibling = by_name.get(url_name)
-        if sibling is not None and sibling.type == "url":
-            pairs[c.name] = url_name
-    return pairs
-
-
-# ---------- per-element renderers ----------
 
 def _echo_text(key: str) -> str:
     return f"<?php echo esc_html($attributes['{key}'] ?? ''); ?>"
 
 
-def _render_cta_anchor(text_c: Control, url_name: str) -> str:
+def _control_class(c: Control) -> str:
+    return c.css_class if c.css_class else f"lp-field--{c.name}"
+
+
+def _control_element(c: Control) -> str:
+    return c.element if c.element else _DEFAULT_ELEMENT.get(c.type, "div")
+
+
+def _render_text_like(c: Control, key: str, tag: str, cls: str) -> str:
+    if c.type == "textarea":
+        echo = f"<?php echo nl2br(esc_html($attributes['{key}'] ?? '')); ?>"
+    elif c.type in ("rich-text", "classic-editor"):
+        echo = f"<?php echo wp_kses_post($attributes['{key}'] ?? ''); ?>"
+    else:  # text, email, etc.
+        echo = _echo_text(key)
+    return f'    <{tag} class="{cls}">{echo}</{tag}>'
+
+
+def _render_cta_anchor(c: Control, url_name: str, cls: str) -> str:
     return (
-        f'    <a class="lp-btn lp-btn--{text_c.name}" '
+        f'    <a class="{cls}" '
         f'href="<?php echo esc_url($attributes[\'{url_name}\'] ?? \'#\'); ?>">'
-        f'{_echo_text(text_c.name)}</a>'
+        f'{_echo_text(c.name)}</a>'
     )
 
 
-def _render_text_semantic(c: Control, block_type: str) -> str:
-    """Return semantic HTML for a text-like control, or empty string for default."""
-    name = c.name
+def _render_control_output(c: Control) -> str:
+    """Return one PHP fragment that emits this control's markup.
+
+    Caller is responsible for skipping controls listed in the consumed-set
+    (those targeted by another control's ``href_from``).
+    """
     key = c.name
+    cls = _control_class(c)
+    tag = _control_element(c)
 
-    if _RE_TITLE_LIKE.match(name):
-        if name == "title" or block_type == "single":
-            return f'    <h1 class="lp-h1">{_echo_text(key)}</h1>'
-        # section-card etc. → h2
-        return f'    <h2 class="lp-h2">{_echo_text(key)}</h2>'
+    # CTA pair declaration: text control points at a sibling url control.
+    if c.href_from:
+        return _render_cta_anchor(c, c.href_from, cls)
 
-    if _RE_H2_TEXT.match(name):
-        return f'    <h2 class="lp-h2">{_echo_text(key)}</h2>'
-
-    if _RE_LEDE.match(name):
-        return f'    <p class="lp-lede">{_echo_text(key)}</p>'
-
-    if _RE_EYEBROW.match(name):
-        return f'    <span class="lp-eyebrow">{_echo_text(key)}</span>'
-
-    if _RE_CAPTION.match(name):
-        return f'    <small class="lp-caption">{_echo_text(key)}</small>'
-
-    return ""
-
-
-def _render_control_output(
-    c: Control,
-    all_controls: list,
-    block_type: str,
-    consumed_names: set,
-    is_card: bool = False,
-) -> str:
-    """Return one PHP block that echoes/prints the field within the block markup."""
-    if c.name in consumed_names:
-        return ""
-
-    key = c.name
-    cls = f"lp-field--{c.name}"
-
-    # Card-level semantic: `name` → <h3>
-    if is_card and c.name == "name" and _is_text_like(c):
-        return f'    <h3 class="lp-h3">{_echo_text(key)}</h3>'
-
-    # Card-level `popular` toggle is folded into wrapper — emit nothing.
-    if is_card and c.name == "popular" and c.type == "toggle":
-        return ""
-
-    if _is_text_like(c):
-        # Try semantic first
-        sem = _render_text_semantic(c, block_type)
-        if sem:
-            return sem
-        if c.type == "text":
-            return f'    <div class="{cls}">{_echo_text(key)}</div>'
-        if c.type == "textarea":
-            return f'    <div class="{cls}"><?php echo nl2br(esc_html($attributes[\'{key}\'] ?? \'\')); ?></div>'
-        # rich-text / classic-editor
-        return f'    <div class="{cls}"><?php echo wp_kses_post($attributes[\'{key}\'] ?? \'\'); ?></div>'
+    if c.type in ("text", "textarea", "rich-text", "classic-editor", "email", "number", "select"):
+        return _render_text_like(c, key, tag, cls)
 
     if c.type == "url":
+        # Standalone url control — generic anchor, empty body.
         return f'    <a class="{cls}" href="<?php echo esc_url($attributes[\'{key}\'] ?? \'#\'); ?>"></a>'
 
     if c.type == "image":
@@ -166,21 +108,22 @@ def _render_control_output(
         )
 
     if c.type == "repeater":
-        return ""  # handled by caller (nested loop)
+        return ""  # rendered by _render_repeater
 
     return f'    <div class="{cls}"><?php echo esc_html((string)($attributes[\'{key}\'] ?? \'\')); ?></div>'
 
 
 def _repeater_child_output(ch: Control) -> str:
-    cls = f"lp-rep-item lp-rep-item--{ch.name}"
+    cls = ch.css_class if ch.css_class else f"lp-rep-item lp-rep-item--{ch.name}"
+    tag = ch.element if ch.element else "li"
     key = ch.name
     if ch.type in ("rich-text", "classic-editor"):
-        return f'        <li class="{cls}"><?php echo wp_kses_post($row[\'{key}\'] ?? \'\'); ?></li>'
+        return f'        <{tag} class="{cls}"><?php echo wp_kses_post($row[\'{key}\'] ?? \'\'); ?></{tag}>'
     if ch.type == "url":
-        return f'        <li class="{cls}"><a href="<?php echo esc_url($row[\'{key}\'] ?? \'#\'); ?>"></a></li>'
+        return f'        <{tag} class="{cls}"><a href="<?php echo esc_url($row[\'{key}\'] ?? \'#\'); ?>"></a></{tag}>'
     if ch.type == "textarea":
-        return f'        <li class="{cls}"><?php echo nl2br(esc_html($row[\'{key}\'] ?? \'\')); ?></li>'
-    return f'        <li class="{cls}"><?php echo esc_html((string)($row[\'{key}\'] ?? \'\')); ?></li>'
+        return f'        <{tag} class="{cls}"><?php echo nl2br(esc_html($row[\'{key}\'] ?? \'\')); ?></{tag}>'
+    return f'        <{tag} class="{cls}"><?php echo esc_html((string)($row[\'{key}\'] ?? \'\')); ?></{tag}>'
 
 
 def _render_repeater(c: Control, all_controls: list) -> str:
@@ -191,8 +134,9 @@ def _render_repeater(c: Control, all_controls: list) -> str:
             continue
         item_lines.append(_repeater_child_output(ch))
     items = "\n".join(item_lines)
+    cls = c.css_class if c.css_class else f"lp-rep lp-rep--{c.name}"
     return (
-        f'    <ul class="lp-rep lp-rep--{c.name}">\n'
+        f'    <ul class="{cls}">\n'
         f'    <?php foreach ((array)($attributes[\'{c.name}\'] ?? []) as $row): ?>\n'
         f'{items}\n'
         f'    <?php endforeach; ?>\n'
@@ -200,14 +144,30 @@ def _render_repeater(c: Control, all_controls: list) -> str:
     )
 
 
-def _cta_emit_for_text(text_c: Control, pairs: dict, all_controls: list) -> str:
-    url_name = pairs[text_c.name]
-    return _render_cta_anchor(text_c, url_name)
+def _consumed_names(controls: list) -> set:
+    """Names of url controls absorbed by sibling text controls via ``href_from``."""
+    return {c.href_from for c in controls if c.href_from}
+
+
+def _wrapper_open_default(slug: str, css_class: str | None, element: str | None) -> str:
+    tag = element or "section"
+    cls = css_class or f"lp-block lp-block--{slug}"
+    return f'<{tag} class="{cls}">'
+
+
+def _wrapper_close_default(element: str | None) -> str:
+    return f"</{element or 'section'}>"
 
 
 def _render_block_php(b: Block) -> str:
-    pairs = _find_cta_pairs(b.controls)
-    consumed = set(pairs.values())  # url controls absorbed into anchors
+    consumed = _consumed_names(b.controls)
+    if b.wrapper_open_html:
+        open_html = b.wrapper_open_html.rstrip("\n")
+        close_html = (b.wrapper_close_html or _wrapper_close_default(b.element)).rstrip("\n")
+    else:
+        open_html = _wrapper_open_default(b.slug, b.css_class, b.element)
+        close_html = _wrapper_close_default(b.element)
+
     lines = [
         "<?php",
         f"/**",
@@ -216,18 +176,17 @@ def _render_block_php(b: Block) -> str:
         f" */",
         "if (!defined('ABSPATH')) { exit; }",
         "?>",
-        f'<section class="lp-block lp-block--{b.slug} nu-section nu-section--{b.slug}">',
+        open_html,
     ]
     for c in b.controls:
         if c.child_of is not None:
             continue
+        if c.name in consumed:
+            continue
         if c.type == "repeater":
             lines.append(_render_repeater(c, b.controls))
             continue
-        if c.name in pairs:
-            lines.append(_cta_emit_for_text(c, pairs, b.controls))
-            continue
-        out = _render_control_output(c, b.controls, b.type, consumed, is_card=False)
+        out = _render_control_output(c)
         if out:
             lines.append(out)
     if b.type == "section-card" and b.card is not None:
@@ -237,26 +196,20 @@ def _render_block_php(b: Block) -> str:
             f'        <InnerBlocks allowedBlocks="[\'lazyblock/{b.card.slug}\']" template="{tmpl_php}" />'
         )
         lines.append("    </div>")
-    lines.append("</section>")
+    lines.append(close_html)
     return "\n".join(lines) + "\n"
 
 
-def _has_popular_toggle(card: Card) -> bool:
-    return any(c.name == "popular" and c.type == "toggle" for c in card.controls)
-
-
 def _render_card_php(b: Block, card: Card) -> str:
-    pairs = _find_cta_pairs(card.controls)
-    consumed = set(pairs.values())
-
-    if _has_popular_toggle(card):
-        wrapper = (
-            f'<article class="lp-card lp-card--{card.slug} nu-card'
-            f'<?php echo !empty($attributes[\'popular\']) ? \' lp-card--popular\' : \'\'; ?>"'
-            f'<?php echo !empty($attributes[\'popular\']) ? \' data-popular="1"\' : \'\'; ?>>'
-        )
+    consumed = _consumed_names(card.controls)
+    if card.wrapper_open_html:
+        open_html = card.wrapper_open_html.rstrip("\n")
+        close_html = (card.wrapper_close_html or _wrapper_close_default(card.element or "article")).rstrip("\n")
     else:
-        wrapper = f'<article class="lp-card lp-card--{card.slug} nu-card">'
+        tag = card.element or "article"
+        cls = card.css_class or f"lp-card lp-card--{card.slug}"
+        open_html = f'<{tag} class="{cls}">'
+        close_html = f"</{tag}>"
 
     lines = [
         "<?php",
@@ -265,25 +218,20 @@ def _render_card_php(b: Block, card: Card) -> str:
         f" */",
         "if (!defined('ABSPATH')) { exit; }",
         "?>",
-        wrapper,
+        open_html,
     ]
-    # cards live inside a section-card → headings inside a card are h3-ish; we
-    # already special-case `name` to h3. For `heading`/`title` inside a card we
-    # treat block_type as "section-card" so they emit <h2>; cards usually don't
-    # have those, but if they do, h2 is still semantically valid inside section.
     for c in card.controls:
         if c.child_of is not None:
+            continue
+        if c.name in consumed:
             continue
         if c.type == "repeater":
             lines.append(_render_repeater(c, card.controls))
             continue
-        if c.name in pairs:
-            lines.append(_cta_emit_for_text(c, pairs, card.controls))
-            continue
-        out = _render_control_output(c, card.controls, "section-card", consumed, is_card=True)
+        out = _render_control_output(c)
         if out:
             lines.append(out)
-    lines.append("</article>")
+    lines.append(close_html)
     return "\n".join(lines) + "\n"
 
 
