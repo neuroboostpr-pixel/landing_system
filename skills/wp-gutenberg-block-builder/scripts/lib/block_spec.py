@@ -27,6 +27,14 @@ class Control:
     default: Optional[object] = None  # accepts str, bool, int — YAML-native types
     child_of: Optional[str] = None
     options: dict = field(default_factory=dict)
+    # stage-08/2026-05-13: spec-driven rendering. Optional; if absent, generator
+    # falls back to ``lp-field--<name>`` + type-based element default.
+    css_class: Optional[str] = None
+    element: Optional[str] = None
+    # CTA pair declaration: when set on a text-like control, the generator
+    # emits ``<a href="<value-of-href_from>">text</a>`` and skips the referenced
+    # url control. Replaces the old name-based heuristic.
+    href_from: Optional[str] = None
 
 
 @dataclass
@@ -35,6 +43,10 @@ class Card:
     title: str
     controls: list[Control] = field(default_factory=list)
     template: list[dict] = field(default_factory=list)
+    css_class: Optional[str] = None
+    element: Optional[str] = None
+    wrapper_open_html: Optional[str] = None
+    wrapper_close_html: Optional[str] = None
 
 
 @dataclass
@@ -47,6 +59,10 @@ class Block:
     controls: list[Control] = field(default_factory=list)
     section_grid_class: Optional[str] = None
     card: Optional[Card] = None
+    css_class: Optional[str] = None
+    element: Optional[str] = None
+    wrapper_open_html: Optional[str] = None
+    wrapper_close_html: Optional[str] = None
 
 
 @dataclass
@@ -71,6 +87,9 @@ def _control_from(raw: dict) -> Control:
         default=raw.get("default"),
         child_of=raw.get("child_of"),
         options=raw.get("options") or {},
+        css_class=raw.get("css_class"),
+        element=raw.get("element"),
+        href_from=raw.get("href_from"),
     )
 
 
@@ -100,6 +119,10 @@ def load(path: Path | str) -> BlockSpec:
                 title=card_raw["title"],
                 controls=[_control_from(c) for c in (card_raw.get("controls") or [])],
                 template=list(card_raw.get("template") or []),
+                css_class=card_raw.get("css_class"),
+                element=card_raw.get("element"),
+                wrapper_open_html=card_raw.get("wrapper_open_html"),
+                wrapper_close_html=card_raw.get("wrapper_close_html"),
             )
         blocks.append(Block(
             slug=b["slug"],
@@ -110,6 +133,10 @@ def load(path: Path | str) -> BlockSpec:
             controls=[_control_from(c) for c in (b.get("controls") or [])],
             section_grid_class=b.get("section_grid_class"),
             card=card,
+            css_class=b.get("css_class"),
+            element=b.get("element"),
+            wrapper_open_html=b.get("wrapper_open_html"),
+            wrapper_close_html=b.get("wrapper_close_html"),
         ))
     return BlockSpec(
         version=int(data.get("version", 0)),

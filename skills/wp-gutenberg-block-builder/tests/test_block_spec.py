@@ -139,6 +139,43 @@ def test_non_dict_block_entry_rejected(tmp_path):
         load(bad)
 
 
+def test_css_class_and_href_from_roundtrip(tmp_path):
+    """stage-08/2026-05-13: spec carries explicit BEM classes + CTA pair refs."""
+    f = tmp_path / "spec.yaml"
+    f.write_text(
+        "version: 1\n"
+        "page: { title: T, slug: home }\n"
+        "blocks:\n"
+        "  - slug: hero\n"
+        "    type: single\n"
+        "    title: Hero\n"
+        "    icon: star-filled\n"
+        "    category: lp-blocks\n"
+        "    element: section\n"
+        "    css_class: 'hero section'\n"
+        "    wrapper_open_html: '<section class=\"hero section\">'\n"
+        "    wrapper_close_html: '</section>'\n"
+        "    controls:\n"
+        "      - { id: c_t, name: title, type: text, label: T, default: Hi, css_class: 'hero__title', element: h1 }\n"
+        "      - { id: c_cta, name: cta_label, type: text, label: C, default: Go, css_class: 'hero__cta', element: 'a-btn', href_from: cta_url }\n"
+        "      - { id: c_url, name: cta_url, type: url, label: U, default: '#' }\n"
+        "    card: null\n",
+        encoding="utf-8",
+    )
+    spec = load(f)
+    h = spec.blocks[0]
+    assert h.css_class == "hero section"
+    assert h.element == "section"
+    assert h.wrapper_open_html.startswith("<section")
+    assert h.wrapper_close_html == "</section>"
+    c_title = h.controls[0]
+    assert c_title.css_class == "hero__title"
+    assert c_title.element == "h1"
+    c_cta = h.controls[1]
+    assert c_cta.href_from == "cta_url"
+    assert c_cta.element == "a-btn"
+
+
 def test_yaml_parse_error_wrapped(tmp_path):
     bad = tmp_path / "bad.yaml"
     bad.write_text("version: 1\nblocks: [unclosed\n", encoding="utf-8")
