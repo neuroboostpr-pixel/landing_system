@@ -17,7 +17,18 @@ description: Use during stage 07a (UX Wireframe) to compose an interactive wiref
 2. `<project>/05_ДИЗАЙН-СИСТЕМА/tokens.json` — целиком (для будущей compose-фазы)
 3. `<project>/04_БРЕНД/brand-kit.md` — целиком
 4. `block-library/catalog.yaml` — список доступных блоков
-5. `ui-ux-pro-max/data/landing.csv` — релевантные RU-паттерны
+5. `~/.claude/skills/ui-ux-pro-max/data/landing.csv` — **ОБЯЗАТЕЛЬНО** — 30 UX-паттернов для лендингов
+6. `~/.claude/skills/ui-ux-pro-max/data/ux-guidelines.csv` — **ОБЯЗАТЕЛЬНО** — критические UX-правила (Critical + High severity)
+7. `vendor/opendesign-extracts/design-systems-refs/` — прочитать 2–3 релевантных DESIGN.md как reference (например `stripe--DESIGN.md`, `minimal--DESIGN.md`, `elegant--DESIGN.md`)
+
+**Проверка ui-ux-pro-max перед запуском:**
+```bash
+test -f ~/.claude/skills/ui-ux-pro-max/data/landing.csv || echo "MISSING"
+```
+Если файл отсутствует — **ОСТАНОВИСЬ** и сообщи пользователю:
+> ui-ux-pro-max не установлен. Это обязательная зависимость.
+> Установи: `git clone https://github.com/nextlevelbuilder/ui-ux-pro-max-skill ~/.claude/skills/ui-ux-pro-max`
+> После установки повтори команду `/landing-wireframe`.
 
 **Правило железное:** агент НЕ ПРИДУМЫВАЕТ блоки. Если для блока прототипа ни один блок из library не подходит — агент возвращает `needs_new_block: true` с reasoning. Это сигнал пользователю либо переписать прототип, либо добавить новый блок в library через `scaffold-block.py`.
 

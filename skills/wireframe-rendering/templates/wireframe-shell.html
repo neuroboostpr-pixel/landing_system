@@ -29,6 +29,16 @@
   .device.desktop iframe { height: 720px; }
   .device.mobile iframe { height: 720px; }
   body { padding-bottom: 90px; }
+
+  .ux-panel, .ux-rules-panel { margin: 24px; background: #fff; padding: 16px 24px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  .ux-panel summary, .ux-rules-panel summary { font-weight: 600; font-size: 14px; cursor: pointer; color: #333; }
+  .ux-patterns-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-top: 12px; }
+  .ux-pattern { border: 1px solid #e0e0e0; padding: 12px; border-radius: 6px; background: #fafafa; }
+  .ux-pattern-title { font-weight: 600; margin-bottom: 6px; }
+  .ux-pattern-detail { font-size: 12px; color: #555; margin-top: 4px; }
+  .ux-rules-list { font-size: 13px; line-height: 1.6; padding-left: 20px; margin-top: 8px; }
+  .ux-rule-critical { color: #c00; }
+  .ux-rule-high { color: #d80; }
 </style>
 </head>
 <body>
@@ -39,6 +49,20 @@
   <summary>📄 Прототип-источник (что хотел клиент)</summary>
   <pre>{{prototype_source}}</pre>
   <div class="proto-meta">Если нужно подправить — отредактируй <code>07_ПРОТОТИП/source/prototype.md</code> и перезапусти <code>/landing-prototype</code> → <code>/landing-wireframe</code>.</div>
+</details>
+
+<details class="ux-panel" open>
+  <summary>🎯 Рекомендованные UX-паттерны для ниши (ui-ux-pro-max)</summary>
+  <div class="ux-patterns-grid">
+    {{ux_patterns_html}}
+  </div>
+</details>
+
+<details class="ux-rules-panel">
+  <summary>⚠️ Критические UX-правила (accessibility, conversion)</summary>
+  <ul class="ux-rules-list">
+    {{ux_rules_html}}
+  </ul>
 </details>
 
 {{blocks_html}}

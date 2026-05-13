@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Render <project>/07a_WIREFRAME/wireframe.html from prototype.yaml + block-library."""
 import argparse
+import csv
 import html
 import json
 import subprocess
@@ -14,10 +15,114 @@ CHECKED_TPL = (
     "#{rid}:checked ~ .variants-stage [data-variant=\"{rid}\"] {{ display: flex; }}"
 )
 
+UX_NOT_AVAILABLE_BANNER = (
+    '<div style="margin:24px; padding:16px 24px; background:#fffbe6; border:1px solid #ffe58f; '
+    'border-radius:8px; color:#7d4e00; font-size:14px;">'
+    '<strong>⚠️ ui-ux-pro-max не найден</strong> — установи по адресу '
+    '<code>~/.claude/skills/ui-ux-pro-max/</code> для получения рекомендаций по UX-паттернам. '
+    'Инструкция: <a href="https://github.com/nextlevelbuilder/ui-ux-pro-max-skill" target="_blank">'
+    'github.com/nextlevelbuilder/ui-ux-pro-max-skill</a></div>'
+)
+
 
 def fail(m: str) -> None:
     print(f"ERROR: {m}", file=sys.stderr)
     sys.exit(1)
+
+
+def load_ux_patterns(rules_dir: Path, niche: str) -> list[dict]:
+    """Load top-5 landing patterns from landing.csv, filtered by niche keywords."""
+    landing_csv = rules_dir / "landing.csv"
+    if not landing_csv.exists():
+        print(
+            f"WARNING: ui-ux-pro-max landing.csv not found at {landing_csv}. "
+            "Install ui-ux-pro-max at ~/.claude/skills/ui-ux-pro-max/ for pattern recommendations.",
+            file=sys.stderr,
+        )
+        return []
+
+    patterns: list[dict] = []
+    niche_lower = niche.lower()
+    niche_words = set(niche_lower.replace("-", " ").replace("_", " ").split())
+
+    with landing_csv.open(newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        all_rows = list(reader)
+
+    # Find niche-relevant patterns first
+    matched: list[dict] = []
+    unmatched: list[dict] = []
+    for row in all_rows:
+        keywords_str = row.get("Keywords", "").lower()
+        keywords_set = set(k.strip() for k in keywords_str.replace(",", " ").split())
+        if niche_words & keywords_set or any(
+            w in keywords_str for w in niche_words
+        ):
+            matched.append(row)
+        else:
+            unmatched.append(row)
+
+    selected = (matched + unmatched)[:5]
+    return selected
+
+
+def load_ux_rules(rules_dir: Path, block_types: list[str]) -> list[dict]:
+    """Load critical + high severity UX rules from ux-guidelines.csv."""
+    guidelines_csv = rules_dir / "ux-guidelines.csv"
+    if not guidelines_csv.exists():
+        print(
+            f"WARNING: ui-ux-pro-max ux-guidelines.csv not found at {guidelines_csv}.",
+            file=sys.stderr,
+        )
+        return []
+
+    rules: list[dict] = []
+    with guidelines_csv.open(newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            severity = row.get("Severity", "").strip().lower()
+            if severity in ("critical", "high"):
+                rules.append(row)
+    return rules
+
+
+def render_ux_patterns_html(patterns: list[dict]) -> str:
+    """Render patterns list as HTML cards."""
+    if not patterns:
+        return ""
+    parts: list[str] = []
+    for p in patterns:
+        name = html.escape(p.get("Pattern Name", "—"))
+        section_order = html.escape(p.get("Section Order", "—"))
+        cta = html.escape(p.get("Primary CTA Placement", "—"))
+        conversion = html.escape(p.get("Conversion Optimization", "—"))
+        parts.append(
+            f'<div class="ux-pattern">'
+            f'<div class="ux-pattern-title">{name}</div>'
+            f'<div class="ux-pattern-detail"><strong>Section order:</strong> {section_order}</div>'
+            f'<div class="ux-pattern-detail"><strong>CTA placement:</strong> {cta}</div>'
+            f'<div class="ux-pattern-detail"><strong>Conversion:</strong> {conversion}</div>'
+            f'</div>'
+        )
+    return "\n".join(parts)
+
+
+def render_ux_rules_html(rules: list[dict]) -> str:
+    """Render rules list as HTML list items."""
+    if not rules:
+        return ""
+    parts: list[str] = []
+    for r in rules:
+        severity = r.get("Severity", "").strip().lower()
+        category = html.escape(r.get("Category", "—"))
+        issue = html.escape(r.get("Issue", "—"))
+        description = html.escape(r.get("Description", "—"))
+        parts.append(
+            f'<li class="ux-rule ux-rule-{severity}">'
+            f'<strong>{category}:</strong> {issue} — {description}'
+            f'</li>'
+        )
+    return "\n".join(parts)
 
 
 def main() -> None:
@@ -26,6 +131,11 @@ def main() -> None:
     p.add_argument("--library", required=True)
     p.add_argument("--template", required=True)
     p.add_argument("--top", type=int, default=3)
+    p.add_argument(
+        "--ux-rules",
+        default=str(Path.home() / ".claude" / "skills" / "ui-ux-pro-max" / "data"),
+        help="Path to ui-ux-pro-max/data/ directory (default: ~/.claude/skills/ui-ux-pro-max/data/)",
+    )
     args = p.parse_args()
 
     project_dir = Path(args.project)
@@ -53,6 +163,25 @@ def main() -> None:
             "(prototype.md not found — showing parsed YAML instead)\n\n"
             + yaml.dump(proto, sort_keys=False, allow_unicode=True)
         )
+
+    # --- Load ui-ux-pro-max data ---
+    rules_dir = Path(args.ux_rules).expanduser()
+    patterns = load_ux_patterns(rules_dir, niche)
+    block_types = [b["type"] for b in proto.get("blocks", [])]
+    rules = load_ux_rules(rules_dir, block_types)
+
+    ux_available = (rules_dir / "landing.csv").exists()
+    if not ux_available:
+        ux_patterns_html = UX_NOT_AVAILABLE_BANNER
+        ux_rules_html = ""
+    else:
+        ux_patterns_html = render_ux_patterns_html(patterns)
+        ux_rules_html = render_ux_rules_html(rules)
+
+    print(
+        f"INFO: ui-ux-pro-max — {len(patterns)} patterns, {len(rules)} rules loaded.",
+        file=sys.stderr,
+    )
 
     blocks_html_parts: list[str] = []
     checked_rules: list[str] = []
@@ -165,6 +294,8 @@ def main() -> None:
         .replace("{{prototype_source}}", html.escape(prototype_source_text))
         .replace("{{blocks_html}}", "\n".join(blocks_html_parts))
         .replace("{{checked_rules}}", "\n".join(checked_rules))
+        .replace("{{ux_patterns_html}}", ux_patterns_html)
+        .replace("{{ux_rules_html}}", ux_rules_html)
     )
     out_html = project_dir / "07a_WIREFRAME" / "wireframe.html"
     out_html.parent.mkdir(parents=True, exist_ok=True)
