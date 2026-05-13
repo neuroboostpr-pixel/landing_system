@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>ru-pricing-02-comparison-table — mobile</title>
+<style>
+  :root {
+    --color-bg: #fff;
+    --color-fg: #111;
+    --color-accent: #2563eb;
+    --color-border: #e5e7eb;
+    --font-display: system-ui, sans-serif;
+    --font-body: system-ui, sans-serif;
+    --spacing-md: 16px;
+    --spacing-lg: 32px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font-body); background: var(--color-bg); color: var(--color-fg); width: 375px; }
+
+  .pricing-table-section {
+    padding: var(--spacing-lg) 20px;
+    text-align: center;
+  }
+
+  .section-headline {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 800;
+    margin: 0 0 var(--spacing-lg);
+    line-height: 1.2;
+    text-align: left;
+  }
+
+  /* Horizontal scroll on mobile for the table */
+  .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 480px;
+    font-size: 14px;
+  }
+
+  thead th {
+    padding: 14px 10px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    border-bottom: 2px solid var(--color-border);
+    vertical-align: bottom;
+  }
+  thead th:first-child {
+    text-align: left;
+    font-size: 12px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+    min-width: 120px;
+  }
+
+  .tier-name {
+    display: block;
+    font-size: 14px;
+    color: var(--color-fg);
+    margin-bottom: 2px;
+  }
+  .tier-price {
+    display: block;
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--color-fg);
+  }
+
+  tbody tr { border-bottom: 1px solid var(--color-border); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody td {
+    padding: 10px;
+    vertical-align: middle;
+    text-align: center;
+  }
+  tbody td:first-child { text-align: left; color: #444; }
+
+  thead th.col-premium,
+  tbody td.col-premium {
+    background: #eff6ff;
+    border-left: 2px solid var(--color-accent);
+    border-right: 2px solid var(--color-accent);
+  }
+  thead th.col-premium {
+    border-top: 2px solid var(--color-accent);
+    border-radius: 8px 8px 0 0;
+  }
+  tbody tr:last-child td.col-premium {
+    border-bottom: 2px solid var(--color-accent);
+    border-radius: 0 0 8px 8px;
+  }
+
+  .check { color: #16a34a; font-weight: 700; }
+  .cross { color: #d1d5db; }
+
+  .cta-row td { padding: 14px 10px; border-bottom: none; }
+  .tier-cta-btn {
+    display: inline-block;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 13px;
+    text-decoration: none;
+    background: var(--color-border);
+    color: var(--color-fg);
+  }
+  .tier-cta-btn.accent {
+    background: var(--color-accent);
+    color: #fff;
+  }
+</style>
+</head>
+<body>
+  <section class="pricing-table-section" data-block-id="ru-pricing-02-comparison-table">
+
+    <h2 class="section-headline" data-slot="headline">[HEADLINE: выберите тариф]</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Функции</th>
+            <th>
+              <span class="tier-name" data-slot="tier-1-name">[Базовый]</span>
+              <span class="tier-price" data-slot="tier-1-price">[9 900 ₽]</span>
+            </th>
+            <th class="col-premium">
+              <span class="tier-name" data-slot="tier-2-name">[Стандарт]</span>
+              <span class="tier-price" data-slot="tier-2-price">[19 900 ₽]</span>
+            </th>
+            <th>
+              <span class="tier-name" data-slot="tier-3-name">[Премиум]</span>
+              <span class="tier-price" data-slot="tier-3-price">[39 900 ₽]</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-slot="feature-row-1">[Функция 1]</td>
+            <td><span class="check">✓</span></td>
+            <td class="col-premium"><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td data-slot="feature-row-2">[Функция 2]</td>
+            <td><span class="cross">✗</span></td>
+            <td class="col-premium"><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td data-slot="feature-row-3">[Функция 3]</td>
+            <td><span class="cross">✗</span></td>
+            <td class="col-premium"><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td data-slot="feature-row-4">[Функция 4]</td>
+            <td><span class="cross">✗</span></td>
+            <td class="col-premium"><span class="cross">✗</span></td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td data-slot="feature-row-5">[Функция 5]</td>
+            <td><span class="cross">✗</span></td>
+            <td class="col-premium"><span class="cross">✗</span></td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td data-slot="feature-row-6">[Функция 6]</td>
+            <td>Базовая</td>
+            <td class="col-premium">Расширенная</td>
+            <td>Приоритетная</td>
+          </tr>
+          <tr class="cta-row">
+            <td></td>
+            <td><a class="tier-cta-btn" data-slot="tier-1-cta" href="#order-1">[Выбрать]</a></td>
+            <td class="col-premium"><a class="tier-cta-btn accent" data-slot="tier-2-cta" href="#order-2">[Выбрать]</a></td>
+            <td><a class="tier-cta-btn" data-slot="tier-3-cta" href="#order-3">[Выбрать]</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </section>
+</body>
+</html>

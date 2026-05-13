@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>ru-cta-02-banner-stripe — mobile</title>
+<style>
+  :root {
+    --color-bg: #fff;
+    --color-fg: #111;
+    --color-accent: #2563eb;
+    --color-border: #ccc;
+    --font-display: system-ui, sans-serif;
+    --font-body: system-ui, sans-serif;
+    --spacing-md: 16px;
+    --spacing-lg: 32px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font-body); background: var(--color-bg); color: var(--color-fg); width: 375px; }
+
+  .cta-banner {
+    background-color: var(--color-accent);
+    background-image: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 14px,
+      rgba(255, 255, 255, 0.04) 14px,
+      rgba(255, 255, 255, 0.04) 28px
+    );
+    padding: calc(var(--spacing-lg) * 2) 20px;
+    text-align: center;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+  }
+
+  .banner-headline {
+    font-family: var(--font-display);
+    font-size: 30px;
+    font-weight: 900;
+    line-height: 1.15;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  .banner-subhead {
+    font-size: 16px;
+    opacity: 0.88;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .banner-cta {
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+    padding: 16px;
+    background: #fff;
+    color: var(--color-accent);
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 800;
+    font-size: 16px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+  <section class="cta-banner" data-block-id="ru-cta-02-banner-stripe">
+
+    <h2 class="banner-headline" data-slot="headline">[HEADLINE: призыв к действию]</h2>
+
+    <p class="banner-subhead" data-slot="subhead">[SUBHEAD: снятие возражения / уточнение оффера]</p>
+
+    <a class="banner-cta" data-slot="primary-cta" href="#contact">[Оставить заявку]</a>
+
+  </section>
+</body>
+</html>

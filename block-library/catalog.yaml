@@ -1,5 +1,5 @@
 version: 1
-updated: '2026-05-12'
+updated: '2026-05-13'
 blocks:
 - id: ru-hero-01-services-calc
   path: hero/ru-hero-01-services-calc/
@@ -49,6 +49,7 @@ blocks:
   category: process
   use_cases:
   - services
+  - b2c
   - local
 - id: ru-pricing-01-rub-from
   path: pricing/ru-pricing-01-rub-from/
@@ -62,6 +63,7 @@ blocks:
   category: trust
   use_cases:
   - services
+  - b2c
   - local
 - id: ru-cta-01-callback-tg-max
   path: cta/ru-cta-01-callback-tg-max/
@@ -108,6 +110,40 @@ blocks:
 - id: ru-quiz-05-thankyou
   path: quiz/ru-quiz-05-thankyou/
   category: quiz
+  use_cases:
+  - services
+  - b2c
+  - local
+- id: ru-hero-04-split-form
+  path: hero/ru-hero-04-split-form/
+  category: hero
+  use_cases:
+  - services
+  - b2c
+- id: ru-hero-05-centered-bold
+  path: hero/ru-hero-05-centered-bold/
+  category: hero
+  use_cases:
+  - services
+  - b2c
+  - local
+- id: ru-trust-02-numbers-row
+  path: trust/ru-trust-02-numbers-row/
+  category: trust
+  use_cases:
+  - services
+  - b2c
+  - local
+- id: ru-pricing-02-comparison-table
+  path: pricing/ru-pricing-02-comparison-table/
+  category: pricing
+  use_cases:
+  - services
+  - b2c
+  - local
+- id: ru-cta-02-banner-stripe
+  path: cta/ru-cta-02-banner-stripe/
+  category: cta
   use_cases:
   - services
   - b2c

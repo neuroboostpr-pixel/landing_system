@@ -1,0 +1,22 @@
+id: ru-trust-02-numbers-row
+category: trust
+ru_market: true
+use_cases:
+- services
+- b2c
+- local
+description: "Полноширинная полоса с 4 KPI-числами в ряд: гигантское число (56px desktop, 36px mobile) + uppercase метка. Альтернатива иконочным плашкам доверия."
+slots:
+  - {type: text, name: headline, max_chars: 60, required: false}
+  - {type: text, name: stat-1-number, max_chars: 10, required: true}
+  - {type: text, name: stat-1-label, max_chars: 20, required: true}
+  - {type: text, name: stat-2-number, max_chars: 10, required: true}
+  - {type: text, name: stat-2-label, max_chars: 20, required: true}
+  - {type: text, name: stat-3-number, max_chars: 10, required: true}
+  - {type: text, name: stat-3-label, max_chars: 20, required: true}
+  - {type: text, name: stat-4-number, max_chars: 10, required: true}
+  - {type: text, name: stat-4-label, max_chars: 20, required: true}
+conversion_notes: "Числа как социальное доказательство: конкретика убедительнее иконок. Размер шрифта 56px делает числа визуальным акцентом без дополнительной графики. Разделители-линии между ячейками сохраняют структуру."
+source: manual
+source_attribution: ''
+created: '2026-05-13'

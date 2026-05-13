@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>ru-trust-02-numbers-row — desktop</title>
+<style>
+  :root {
+    --color-bg: #f8f8f8;
+    --color-fg: #111;
+    --color-accent: #333;
+    --color-border: #e0e0e0;
+    --font-display: system-ui, sans-serif;
+    --font-body: system-ui, sans-serif;
+    --spacing-md: 16px;
+    --spacing-lg: 32px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font-body); background: var(--color-bg); color: var(--color-fg); }
+
+  .trust-numbers {
+    padding: var(--spacing-lg) calc(var(--spacing-lg) * 2);
+    text-align: center;
+  }
+
+  .section-headline {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #777;
+    margin: 0 0 var(--spacing-lg);
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+
+  .stat-cell {
+    padding: var(--spacing-lg) var(--spacing-md);
+    border-right: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .stat-cell:last-child { border-right: none; }
+
+  .stat-number {
+    font-family: var(--font-display);
+    font-size: 56px;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--color-fg);
+    margin: 0;
+  }
+
+  .stat-label {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #666;
+    margin: 0;
+    line-height: 1.4;
+  }
+</style>
+</head>
+<body>
+  <section class="trust-numbers" data-block-id="ru-trust-02-numbers-row">
+
+    <p class="section-headline" data-slot="headline">[HEADLINE: в цифрах — опционально]</p>
+
+    <div class="stats-row">
+      <div class="stat-cell">
+        <p class="stat-number" data-slot="stat-1-number">[12 лет]</p>
+        <p class="stat-label" data-slot="stat-1-label">[на рынке]</p>
+      </div>
+      <div class="stat-cell">
+        <p class="stat-number" data-slot="stat-2-number">[500+]</p>
+        <p class="stat-label" data-slot="stat-2-label">[клиентов]</p>
+      </div>
+      <div class="stat-cell">
+        <p class="stat-number" data-slot="stat-3-number">[5 лет]</p>
+        <p class="stat-label" data-slot="stat-3-label">[гарантии]</p>
+      </div>
+      <div class="stat-cell">
+        <p class="stat-number" data-slot="stat-4-number">[24/7]</p>
+        <p class="stat-label" data-slot="stat-4-label">[поддержка]</p>
+      </div>
+    </div>
+
+  </section>
+</body>
+</html>
