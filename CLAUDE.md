@@ -28,6 +28,25 @@
 
 **NOTE:** PR-A команды вызываются ВРУЧНУЮ, не через `landing-orchestrator`. Интеграция в оркестратор — задача PR-D.
 
+## Новые команды PR-B (Photo Pipeline)
+
+- `/landing-photos` — обработка клиентских фоток: AI-classify через codex, matching к слотам, generative fallback для пустых слотов. **Stage 07c.**
+
+**Workflow PR-B:**
+1. Утверди этапы 05 (design-system) и 07a (wireframe).
+2. Положи фотки клиента в `<project>/07c_PHOTOS/inbox/`. Подсказка: открой `07c_PHOTOS/README.md` — там описаны 7 подпапок по типу фото (`портреты_и_команда/`, `процесс_работы/` и т.д.).
+3. Запусти `/landing-photos`.
+4. Открой `07c_PHOTOS/photo-board.html` — расставь фотки drag-drop, нажми «Подтвердить и скачать selections.yaml».
+5. Положи скачанный `selections.yaml` обратно в `07c_PHOTOS/`.
+6. Открой `07c_PHOTOS/photo-preview.html` — проверь как фото лягут в макет.
+7. После approve — `composed.html` перерендерится с реальными фото (placeholders заменятся на `<img>` или `<picture>` с mobile-вариантом).
+
+**Идентичность-safe:** клиентские фото никогда не репеинтятся AI; AI-генерация лиц для testimonial/expert/team слотов требует явной галочки `ai_approved_by_user`.
+
+**NOTE:** PR-B команда вызывается ВРУЧНУЮ, не через `landing-orchestrator`. Интеграция в orchestrator + stage-gates — задача PR-D.
+
+См. [spec](docs/superpowers/specs/2026-05-13-photo-pipeline-design.md) и [plan](docs/superpowers/plans/2026-05-13-photo-pipeline-plan.md).
+
 ## Block Library
 
 Общая библиотека wireframe-блоков: `block-library/`. См. `block-library/README.md`.
