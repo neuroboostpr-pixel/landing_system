@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>ru-cta-04-lead-magnet — desktop wireframe</title>
+<style>
+  /* Wireframe: ч/б, CSS-only, no external deps.
+     CSS vars in :root are MANDATORY — block-composition/inject-tokens.py relies on these names. */
+  :root {
+    --color-bg: #fff;
+    --color-fg: #111;
+    --color-accent: #333;
+    --color-border: #ccc;
+    --font-display: system-ui, sans-serif;
+    --font-body: system-ui, sans-serif;
+    --spacing-md: 16px;
+    --spacing-lg: 32px;
+  }
+  body { margin: 0; font-family: var(--font-body); background: var(--color-bg); color: var(--color-fg); }
+  .lead-magnet { background: #f0f7ff; padding: 64px var(--spacing-lg); }
+  .lm-inner { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: 1fr 380px; gap: 48px; align-items: center; }
+  .lm-left {}
+  .lm-badge { display: inline-block; background: var(--color-accent); color: #fff; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 10px; border-radius: 3px; margin: 0 0 16px; }
+  .lm-title { font-family: var(--font-display); font-size: 32px; font-weight: 700; margin: 0 0 16px; line-height: 1.2; }
+  .lm-description { font-size: 16px; color: #444; line-height: 1.6; margin: 0; }
+  .lm-form { background: #fff; border: 1px solid var(--color-border); border-radius: 8px; padding: 28px; }
+  .lm-form-title { font-weight: 700; font-size: 18px; margin: 0 0 20px; }
+  .lm-input {
+    width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 12px;
+    font-size: 16px;
+    margin: 0 0 12px;
+    box-sizing: border-box;
+    background: #f9f9f9;
+    color: #999;
+  }
+  .lm-btn {
+    width: 100%;
+    background: var(--color-accent);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .lm-agree { font-size: 11px; color: #999; margin: 10px 0 0; text-align: center; }
+</style>
+</head>
+<body>
+  <section class="lead-magnet" data-block-id="ru-cta-04-lead-magnet">
+    <div class="lm-inner">
+      <div class="lm-left">
+        <span class="lm-badge">Бесплатно</span>
+        <h2 class="lm-title" data-slot="freebie-title">[Получите бесплатный чек-лист]</h2>
+        <p class="lm-description" data-slot="freebie-description">[Описание лид-магнита: что получит клиент, какую пользу принесёт, конкретный формат (PDF, консультация, занятие)]</p>
+      </div>
+      <div class="lm-form">
+        <p class="lm-form-title">Куда отправить?</p>
+        <div class="lm-input" data-slot="phone-input">+7 (___) ___-__-__</div>
+        <button class="lm-btn" data-slot="primary-cta">Получить бесплатно</button>
+        <p class="lm-agree" data-slot="agreement-text">[Нажимая, вы соглашаетесь на обработку данных]</p>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

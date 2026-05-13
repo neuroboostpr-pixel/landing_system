@@ -148,3 +148,45 @@ blocks:
   - services
   - b2c
   - local
+- id: ru-faq-02-why-us
+  path: faq/ru-faq-02-why-us/
+  category: faq
+  use_cases:
+  - services
+  - b2c
+  - local
+- id: ru-social-proof-03-client-logos
+  path: social-proof/ru-social-proof-03-client-logos/
+  category: social-proof
+  use_cases:
+  - services
+  - b2c
+  - local
+- id: ru-cta-03-urgency-scarcity
+  path: cta/ru-cta-03-urgency-scarcity/
+  category: cta
+  use_cases:
+  - services
+  - b2c
+  - local
+- id: ru-social-proof-04-authority-cases
+  path: social-proof/ru-social-proof-04-authority-cases/
+  category: social-proof
+  use_cases:
+  - services
+  - b2c
+  - local
+- id: ru-cta-04-lead-magnet
+  path: cta/ru-cta-04-lead-magnet/
+  category: cta
+  use_cases:
+  - services
+  - b2c
+  - local
+- id: ru-trust-03-descriptor-header
+  path: trust/ru-trust-03-descriptor-header/
+  category: trust
+  use_cases:
+  - services
+  - b2c
+  - local

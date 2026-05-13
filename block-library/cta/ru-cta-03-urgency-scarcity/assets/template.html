@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>ru-cta-03-urgency-scarcity — desktop wireframe</title>
+<style>
+  /* Wireframe: ч/б, CSS-only, no external deps.
+     CSS vars in :root are MANDATORY — block-composition/inject-tokens.py relies on these names. */
+  :root {
+    --color-bg: #fff;
+    --color-fg: #111;
+    --color-accent: #333;
+    --color-border: #ccc;
+    --font-display: system-ui, sans-serif;
+    --font-body: system-ui, sans-serif;
+    --spacing-md: 16px;
+    --spacing-lg: 32px;
+  }
+  body { margin: 0; font-family: var(--font-body); background: var(--color-bg); color: var(--color-fg); }
+  .urgency { background: #d4380d; color: #fff; padding: 32px var(--spacing-lg); text-align: center; }
+  .urgency-label { font-family: var(--font-display); font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.9; margin: 0 0 8px; }
+  .urgency-count { font-family: var(--font-display); font-size: 56px; font-weight: 900; line-height: 1; margin: 0 0 4px; }
+  .urgency-deadline { font-size: 18px; opacity: 0.85; margin: 0 0 16px; }
+  .urgency-subhead { font-size: 15px; opacity: 0.8; margin: 0 0 24px; }
+  .urgency-cta {
+    display: inline-block;
+    background: #fff;
+    color: #d4380d;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 14px 36px;
+    border-radius: 4px;
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+  <section class="urgency" data-block-id="ru-cta-03-urgency-scarcity">
+    <p class="urgency-label" data-slot="urgency-label">[Осталось мест на этой неделе]</p>
+    <div class="urgency-count" data-slot="seats-count">7</div>
+    <div class="urgency-deadline" data-slot="deadline-date">[Акция до 20 мая 2026]</div>
+    <p class="urgency-subhead" data-slot="subhead">[Успейте записаться по специальной цене]</p>
+    <a href="#" class="urgency-cta" data-slot="primary-cta">Успеть получить</a>
+  </section>
+</body>
+</html>
