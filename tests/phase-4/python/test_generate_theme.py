@@ -145,3 +145,106 @@ def test_main_missing_tokens_returns_one(tmp_path):
     mod = _load()
     result = mod.main(["prog", str(tmp_path)])
     assert result == 1
+
+
+# --- design-tokens.org nested schema support ---
+
+@pytest.fixture
+def nested_tokens():
+    return {
+        "color": {
+            "bg": {
+                "base":     {"value": "#0E2B30"},
+                "section":  {"value": "#143A3F"},
+            },
+            "accent": {
+                "mint":  {"value": "#77D9D9"},
+                "coral": {"value": "#E85E48"},
+            },
+            "semantic": {
+                "focus": {"value": "{color.accent.mint}"},
+                "error": {"value": "{color.accent.coral}"},
+            },
+        },
+        "font": {
+            "family": {
+                "display": {"value": "Geologica, system-ui, sans-serif"},
+                "body":    {"value": "Roboto, sans-serif"},
+            },
+            "weight": {
+                "regular": {"value": 400},
+                "bold":    {"value": 700},
+            },
+            "size": {
+                "h1":   {"value": "clamp(2.5rem, 1.5rem + 4vw, 6rem)"},
+                "body": {"value": "1rem"},
+            },
+            "lineHeight": {
+                "display": {"value": 1.10},
+                "body":    {"value": 1.30},
+            },
+            "letterSpacing": {
+                "eyebrow": {"value": "0.18em"},
+            },
+        },
+        "space": {
+            "0": {"value": "0"},
+            "4": {"value": "16px"},
+            "9": {"value": "64px"},
+        },
+        "radius": {
+            "md":   {"value": "8px"},
+            "pill": {"value": "9999px"},
+        },
+        "shadow": {
+            "md": {"value": "0 4px 12px rgba(0,0,0,0.32)"},
+        },
+        "zIndex": {
+            "modal": {"value": 100},
+        },
+    }
+
+
+def test_css_variables_resolves_design_tokens_org_format(nested_tokens):
+    mod = _load()
+    css = mod._css_variables(nested_tokens)
+    assert "--color-bg-base: #0E2B30" in css
+    assert "--color-accent-mint: #77D9D9" in css
+    assert "--font-size-h1: clamp(2.5rem, 1.5rem + 4vw, 6rem)" in css
+    assert "--font-family-display:" in css
+    assert "Geologica" in css
+    assert "--font-weight-bold: 700" in css
+    assert "--font-line-height-display: 1.1" in css
+    assert "--font-letter-spacing-eyebrow: 0.18em" in css
+    assert "--space-4: 16px" in css
+    assert "--radius-md: 8px" in css
+    assert "--shadow-md: 0 4px 12px rgba(0,0,0,0.32)" in css
+    assert "--z-modal: 100" in css
+
+
+def test_css_variables_resolves_token_references(nested_tokens):
+    mod = _load()
+    css = mod._css_variables(nested_tokens)
+    # {color.accent.mint} should resolve to #77D9D9
+    assert "--color-semantic-focus: #77D9D9" in css
+    assert "--color-semantic-error: #E85E48" in css
+
+
+def test_css_variables_handles_both_schemas(sample_tokens, nested_tokens):
+    mod = _load()
+    flat_css = mod._css_variables(sample_tokens)
+    assert "--color-primary: #ff5733" in flat_css
+    nested_css = mod._css_variables(nested_tokens)
+    assert "--color-bg-base: #0E2B30" in nested_css
+
+
+def test_main_creates_main_css_with_baseline(wp_theme_project):
+    mod = _load()
+    mod.main(["prog", str(wp_theme_project)])
+    main_css = wp_theme_project / "08_КОД" / "wp-theme" / "assets" / "css" / "main.css"
+    assert main_css.exists()
+    body = main_css.read_text(encoding="utf-8")
+    assert "var(--color-bg-base" in body
+    assert ".nu-tier-grid" in body
+    assert ".lp-card" in body
+    assert "display: grid" in body

@@ -30,26 +30,197 @@ def _load_stack(project: Path) -> dict:
     return yaml.safe_load(p.read_text(encoding="utf-8")) if p.exists() else {}
 
 
+_REF_RE = __import__("re").compile(r"^\{([^}]+)\}$")
+
+
+def _resolve(value, root_tokens, depth: int = 0):
+    """Resolve design-tokens.org reference strings like '{color.accent.mint}'.
+
+    Follows chains recursively up to depth 10; if cycle/too deep, returns literal.
+    Non-string values pass through unchanged.
+    """
+    if depth > 10 or not isinstance(value, str):
+        return value
+    m = _REF_RE.match(value.strip())
+    if not m:
+        return value
+    path = m.group(1).split(".")
+    node = root_tokens
+    for part in path:
+        if not isinstance(node, dict) or part not in node:
+            return value  # unresolvable — emit literal
+        node = node[part]
+    # Resolved node should be a leaf {"value": ...}
+    if isinstance(node, dict) and "value" in node:
+        return _resolve(node["value"], root_tokens, depth + 1)
+    return _resolve(node, root_tokens, depth + 1) if isinstance(node, str) else value
+
+
+def _is_leaf(node) -> bool:
+    return isinstance(node, dict) and "value" in node and not isinstance(node["value"], dict)
+
+
+def _emit_nested(lines: list, prefix: str, node: dict, root: dict) -> None:
+    """Walk a nested design-tokens.org group, emitting --{prefix}-{key...}: value;."""
+    for key, sub in node.items():
+        css_key = str(key)
+        if _is_leaf(sub):
+            val = _resolve(sub["value"], root)
+            lines.append(f"  --{prefix}-{css_key}: {val};")
+        elif isinstance(sub, dict):
+            _emit_nested(lines, f"{prefix}-{css_key}", sub, root)
+
+
+def _camel_to_kebab(s: str) -> str:
+    out = []
+    for ch in s:
+        if ch.isupper():
+            out.append("-")
+            out.append(ch.lower())
+        else:
+            out.append(ch)
+    return "".join(out)
+
+
 def _css_variables(tokens: dict) -> str:
     lines = [":root {"]
-    for name, props in tokens.get("colors", {}).items():
-        hex_val = props["hex"] if isinstance(props, dict) else str(props)
-        lines.append(f"  --color-{name}: {hex_val};")
-    for role, props in tokens.get("typography", {}).items():
-        if not isinstance(props, dict):
-            continue
-        lines.append(f"  --font-{role}-family: '{props.get('family', 'sans-serif')}', sans-serif;")
-        lines.append(f"  --font-{role}-size: {props.get('size', '1rem')};")
-        lines.append(f"  --font-{role}-weight: {props.get('weight', '400')};")
-        lines.append(f"  --font-{role}-line-height: {props.get('line_height', '1.5')};")
-    for key, val in tokens.get("spacing", {}).items():
-        lines.append(f"  --space-{key}: {val};")
-    for key, val in tokens.get("radius", {}).items():
-        lines.append(f"  --radius-{key}: {val};")
-    for key, val in tokens.get("shadow", {}).items():
-        lines.append(f"  --shadow-{key}: {val};")
+
+    # Detect schema: design-tokens.org nested uses singular keys
+    has_nested = any(k in tokens for k in ("color", "font", "space")) and not any(
+        k in tokens for k in ("colors", "typography", "spacing")
+    )
+
+    if has_nested:
+        if isinstance(tokens.get("color"), dict):
+            _emit_nested(lines, "color", tokens["color"], tokens)
+        if isinstance(tokens.get("font"), dict):
+            for sub_key, sub_node in tokens["font"].items():
+                if not isinstance(sub_node, dict):
+                    continue
+                # font.family / font.weight / font.size / font.lineHeight / font.letterSpacing
+                prefix = f"font-{_camel_to_kebab(sub_key)}"
+                _emit_nested(lines, prefix, sub_node, tokens)
+        if isinstance(tokens.get("space"), dict):
+            _emit_nested(lines, "space", tokens["space"], tokens)
+        if isinstance(tokens.get("radius"), dict):
+            _emit_nested(lines, "radius", tokens["radius"], tokens)
+        if isinstance(tokens.get("shadow"), dict):
+            _emit_nested(lines, "shadow", tokens["shadow"], tokens)
+        if isinstance(tokens.get("zIndex"), dict):
+            _emit_nested(lines, "z", tokens["zIndex"], tokens)
+    else:
+        for name, props in tokens.get("colors", {}).items():
+            hex_val = props["hex"] if isinstance(props, dict) else str(props)
+            lines.append(f"  --color-{name}: {hex_val};")
+        for role, props in tokens.get("typography", {}).items():
+            if not isinstance(props, dict):
+                continue
+            lines.append(f"  --font-{role}-family: '{props.get('family', 'sans-serif')}', sans-serif;")
+            lines.append(f"  --font-{role}-size: {props.get('size', '1rem')};")
+            lines.append(f"  --font-{role}-weight: {props.get('weight', '400')};")
+            lines.append(f"  --font-{role}-line-height: {props.get('line_height', '1.5')};")
+        for key, val in tokens.get("spacing", {}).items():
+            lines.append(f"  --space-{key}: {val};")
+        for key, val in tokens.get("radius", {}).items():
+            lines.append(f"  --radius-{key}: {val};")
+        for key, val in tokens.get("shadow", {}).items():
+            lines.append(f"  --shadow-{key}: {val};")
     lines.append("}")
     return "\n".join(lines)
+
+
+_BASELINE_MAIN_CSS = """/* Block styles — generated by wp-builder agent */
+:root { color-scheme: light dark; }
+body {
+    margin: 0;
+    font-family: var(--font-family-body, system-ui, sans-serif);
+    background: var(--color-bg-base, #fff);
+    color: var(--color-text-primary, #111);
+    font-size: var(--font-size-body, 1rem);
+    line-height: var(--font-line-height-body, 1.3);
+}
+.lp-main { display: flex; flex-direction: column; }
+
+/* Section defaults */
+.lp-block { padding: var(--space-9, 64px) var(--space-5, 24px); }
+.lp-block + .lp-block { background: var(--color-bg-section, transparent); }
+
+/* Typography */
+h1, .nu-h1 {
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-h1);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--font-line-height-display);
+    letter-spacing: var(--font-letter-spacing-display);
+    margin: 0 0 var(--space-5) 0;
+}
+h2 {
+    font-size: var(--font-size-h2);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--font-line-height-display);
+    margin: 0 0 var(--space-5) 0;
+}
+h3 {
+    font-size: var(--font-size-h3);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--font-line-height-h3);
+    margin: 0 0 var(--space-4) 0;
+}
+h4 {
+    font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--font-line-height-h4);
+    margin: 0 0 var(--space-3) 0;
+}
+p { margin: 0 0 var(--space-4) 0; }
+a { color: var(--color-accent-coral, currentColor); text-decoration: none; }
+a:hover { color: var(--color-accent-coral-hover, var(--color-accent-coral)); }
+
+/* Grids commonly used by section-card blocks (nu-* convention) */
+.nu-tier-grid,
+.nu-module-grid,
+.nu-cases-grid,
+.nu-reviews-grid,
+.nu-audience-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-5, 24px);
+    margin-top: var(--space-6, 32px);
+}
+.nu-faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4, 16px);
+    margin-top: var(--space-6);
+}
+
+/* Card defaults — children of section-card grids */
+.lp-card {
+    background: var(--color-bg-elevated, rgba(255,255,255,0.04));
+    border: 1px solid var(--color-border-subtle, rgba(255,255,255,0.08));
+    border-radius: var(--radius-lg, 16px);
+    padding: var(--space-6, 32px);
+    box-shadow: var(--shadow-md, 0 4px 12px rgba(0,0,0,0.32));
+}
+.lp-card--tarify-card { display: flex; flex-direction: column; }
+.lp-card--pricing-tier { display: flex; flex-direction: column; }
+
+/* CTA convention */
+.lp-block--final-cta { text-align: center; }
+.lp-block--final-cta .lp-field--cta_text,
+.lp-block--final-cta .lp-field--cta_label {
+    display: inline-block;
+    padding: var(--space-4) var(--space-6);
+    background: var(--color-accent-coral, #e85e48);
+    color: var(--color-accent-coral-text, #fff);
+    border-radius: var(--radius-pill, 9999px);
+    font-weight: var(--font-weight-semibold, 600);
+}
+
+/* Repeater lists */
+.lp-rep { list-style: none; padding: 0; margin: var(--space-4) 0; }
+.lp-rep li { padding: var(--space-2) 0; }
+"""
 
 
 def _write_style_css(theme_dir: Path, project_name: str, tokens: dict) -> None:
@@ -187,7 +358,7 @@ def main(argv: list) -> int:
     )
 
     (theme_dir / "assets" / "css" / "main.css").write_text(
-        "/* Block styles — generated by wp-builder agent */\n", encoding="utf-8"
+        _BASELINE_MAIN_CSS, encoding="utf-8"
     )
     (theme_dir / "assets" / "js" / "main.js").write_text(
         "// Landing scripts — generated by wp-builder agent\n", encoding="utf-8"
