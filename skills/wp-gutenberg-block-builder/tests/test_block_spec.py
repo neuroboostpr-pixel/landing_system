@@ -1,0 +1,114 @@
+import sys
+from pathlib import Path
+import pytest
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts" / "lib"))
+
+from block_spec import load, validate, BlockSpecError  # noqa: E402
+
+FIX = ROOT / "tests" / "fixtures"
+
+
+def test_load_minimal_parses_two_blocks():
+    spec = load(FIX / "block-spec.minimal.yaml")
+    assert spec.version == 1
+    assert spec.page.slug == "home"
+    assert len(spec.blocks) == 2
+    assert spec.blocks[0].slug == "hero"
+    assert spec.blocks[0].type == "single"
+    assert spec.blocks[1].type == "section-card"
+    assert spec.blocks[1].card.slug == "tarify-card"
+    assert spec.blocks[1].section_grid_class == "nu-tier-grid"
+
+
+def test_load_minimal_passes_validation():
+    spec = load(FIX / "block-spec.minimal.yaml")
+    validate(spec)  # без исключения
+
+
+def test_nested_repeater_is_rejected():
+    spec = load(FIX / "block-spec.invalid.yaml")
+    with pytest.raises(BlockSpecError, match="nested repeater"):
+        validate(spec)
+
+
+def test_reserved_attribute_name_rejected(tmp_path):
+    bad = tmp_path / "bad.yaml"
+    bad.write_text(
+        "version: 1\n"
+        "page: { title: T, slug: home }\n"
+        "blocks:\n"
+        "  - slug: x\n"
+        "    type: single\n"
+        "    title: X\n"
+        "    icon: star-filled\n"
+        "    category: lp-blocks\n"
+        "    controls:\n"
+        "      - { id: c1, name: anchor, type: text, label: L, default: '' }\n",
+        encoding="utf-8",
+    )
+    spec = load(bad)
+    with pytest.raises(BlockSpecError, match="reserved"):
+        validate(spec)
+
+
+def test_section_card_missing_card_rejected(tmp_path):
+    bad = tmp_path / "bad.yaml"
+    bad.write_text(
+        "version: 1\n"
+        "page: { title: T, slug: home }\n"
+        "blocks:\n"
+        "  - slug: x\n"
+        "    type: section-card\n"
+        "    title: X\n"
+        "    icon: star-filled\n"
+        "    category: lp-blocks\n"
+        "    section_grid_class: grid\n"
+        "    controls: []\n",
+        encoding="utf-8",
+    )
+    spec = load(bad)
+    with pytest.raises(BlockSpecError, match="card"):
+        validate(spec)
+
+
+def test_child_of_must_reference_repeater(tmp_path):
+    bad = tmp_path / "bad.yaml"
+    bad.write_text(
+        "version: 1\n"
+        "page: { title: T, slug: home }\n"
+        "blocks:\n"
+        "  - slug: x\n"
+        "    type: single\n"
+        "    title: X\n"
+        "    icon: i\n"
+        "    category: lp-blocks\n"
+        "    controls:\n"
+        "      - { id: c1, name: heading, type: text, label: L, default: '' }\n"
+        "      - { id: c2, name: sub, type: text, label: L, default: '', child_of: c1 }\n",
+        encoding="utf-8",
+    )
+    spec = load(bad)
+    with pytest.raises(BlockSpecError, match="child_of.*repeater"):
+        validate(spec)
+
+
+def test_unknown_control_type_rejected(tmp_path):
+    bad = tmp_path / "bad.yaml"
+    bad.write_text(
+        "version: 1\n"
+        "page: { title: T, slug: home }\n"
+        "blocks:\n"
+        "  - slug: x\n"
+        "    type: single\n"
+        "    title: X\n"
+        "    icon: i\n"
+        "    category: lp-blocks\n"
+        "    controls:\n"
+        "      - { id: c1, name: heading, type: phantom, label: L }\n",
+        encoding="utf-8",
+    )
+    spec = load(bad)
+    with pytest.raises(BlockSpecError, match="type"):
+        validate(spec)
