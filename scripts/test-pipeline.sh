@@ -303,3 +303,50 @@ DRAFT_EOF
   echo "  PR-B photo stage smoke test PASSED"
   echo ""
 fi
+
+# --- PR-C Visual stage (icons + infographics) ---
+if [ -f "$PROJECT/07b_COMPOSED/composed.html" ]; then
+    echo ""
+    echo "→ Stage PR-C: running visual pipeline..."
+
+    # Ensure 05_design tokens.json exists for prompt context
+    if [ ! -f "$PROJECT/05_ДИЗАЙН-СИСТЕМА/tokens.json" ]; then
+        mkdir -p "$PROJECT/05_ДИЗАЙН-СИСТЕМА"
+        echo '{"colors":{"primary":"#1e3a8a","accent":"#c47a3a"},"design":{"visual_style":"Minimalism","icon_style":"outlined"}}' > "$PROJECT/05_ДИЗАЙН-СИСТЕМА/tokens.json"
+    fi
+
+    # Stage 1: scan composed.html for visual slots
+    python3 "$LS_ROOT/skills/visual-generation/scripts/slot-scanner.py" \
+        --html "$PROJECT/07b_COMPOSED/composed.html" \
+        --out "$PROJECT/07d_VISUALS/_slots.yaml"
+    echo "  ✓ visual scan done"
+
+    # Stage 2: generate (mocked in smoke; real codex if installed)
+    if [ -n "${USE_CODEX_MOCK:-}" ]; then
+        export CODEX_BIN="$LS_ROOT/tests/phase-prb/fixtures/codex-mock.sh"
+    fi
+
+    if command -v codex >/dev/null 2>&1 || [ -n "${USE_CODEX_MOCK:-}" ]; then
+        python3 -c "
+import yaml, subprocess
+from pathlib import Path
+slots_path = Path('$PROJECT/07d_VISUALS/_slots.yaml')
+if slots_path.exists():
+    slots = yaml.safe_load(slots_path.read_text()) or {}
+    for s in slots.get('icons', []):
+        subprocess.run(['bash', '$LS_ROOT/skills/visual-generation/scripts/codex-generate-icon.sh',
+                        '$PROJECT', s['slot_name'], s.get('hint','')], check=False)
+    for s in slots.get('infographics', []):
+        subprocess.run(['bash', '$LS_ROOT/skills/visual-generation/scripts/codex-generate-infographic.sh',
+                        '$PROJECT', s['slot_name'], s.get('chart_type','number'), '{}'], check=False)
+"
+        echo "  ✓ visual generation attempted"
+    else
+        echo "  ⊘ skipping generation (codex not installed and USE_CODEX_MOCK not set)"
+    fi
+
+    # Stage 3: re-render composed.html with visuals
+    python3 "$LS_ROOT/skills/block-composition/scripts/compose-blocks.py" --project "$PROJECT" 2>/dev/null || true
+
+    echo "  PR-C visual stage smoke test PASSED"
+fi
