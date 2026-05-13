@@ -192,7 +192,7 @@ stages:
         type: script
         script: "scripts/lib/check-block-registration.sh"
         args: ["{project}"]
-        fix_hint: "block registration missing: no register_block_type found in functions.php. Run: python scripts/generate-wp-blocks.py --project {project}"
+        fix_hint: "block registration missing: functions.php needs lzb/init + lazyblocks()->add_block(. Run: python scripts/generate-wp-blocks.py --project {project}"
       - id: acf_and_blocks_structure
         type: script
         script: "scripts/lib/stage_08_helper.py"

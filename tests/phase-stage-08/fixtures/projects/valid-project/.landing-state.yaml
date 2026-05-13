@@ -1,11 +1,12 @@
 project: "valid-project"
 stages:
-  "00_brief": {status: approved, timestamp: "2026-01-01T00:00:00Z"}
-  "01a_niche_analysis": {status: approved, timestamp: "2026-01-01T00:00:00Z"}
-  "02_assets": {status: approved, timestamp: "2026-01-01T00:00:00Z"}
-  "03_references": {status: approved, timestamp: "2026-01-01T00:00:00Z"}
-  "04_brand": {status: approved, timestamp: "2026-01-01T00:00:00Z"}
-  "05_design": {status: approved, timestamp: "2026-01-01T00:00:00Z"}
-  "06_stack": {status: approved, timestamp: "2026-01-01T00:00:00Z"}
-  "07_content": {status: approved, timestamp: "2026-01-01T00:00:00Z"}
-  "08_build": {status: in_progress, timestamp: "2026-05-12T14:55:41Z"}
+  "00_brief": {status: approved}
+  "01_context": {status: approved}
+  "01a_niche_analysis": {status: approved}
+  "02_assets": {status: approved}
+  "03_references": {status: approved}
+  "04_brand": {status: approved}
+  "05_design": {status: approved}
+  "06_stack": {status: approved}
+  "07_content": {status: approved}
+  "08_build": {status: in_progress}

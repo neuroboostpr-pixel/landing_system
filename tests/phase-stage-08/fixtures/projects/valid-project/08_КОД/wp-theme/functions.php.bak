@@ -1,3 +1,0 @@
-<?php
-function nu_field($k,$d=""){return $d;}
-function nu_field_array($k,$d=array()){return $d;}

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Hard-check #2: at least one register_block_type call in functions.php.
-# Bypassed by legacy:true in .landing-state.yaml.
+# Hard-check: Lazy Blocks registration present in functions.php.
+# We register via lazyblocks()->add_block( inside an lzb/init action hook,
+# not register_block_type. Bypassed by legacy:true in .landing-state.yaml.
 set -u
 
 PROJECT="${1:?project path required}"
@@ -14,8 +15,8 @@ if [ ! -f "$FN" ]; then
     echo "functions.php not found at $FN — no block registration possible" >&2
     exit 1
 fi
-if grep -qE "register_block_type" "$FN"; then
+if grep -q "lzb/init" "$FN" && grep -q "lazyblocks()->add_block(" "$FN"; then
     exit 0
 fi
-echo "no register_block_type call found in functions.php" >&2
+echo "block registration missing: functions.php must contain both 'lzb/init' action and 'lazyblocks()->add_block(' call" >&2
 exit 1

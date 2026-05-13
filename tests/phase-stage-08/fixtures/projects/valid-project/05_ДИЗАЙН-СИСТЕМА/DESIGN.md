@@ -1,3 +1,3 @@
-# Design System
+# DESIGN
 
-Minimal design system for test fixture.
+Minimal design notes for fixture.

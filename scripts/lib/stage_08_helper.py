@@ -1,94 +1,115 @@
 #!/usr/bin/env python3
-"""Stage-08 structural check (called from gate-check.sh as type=script).
+"""Stage-08 structural check for the Lazy Blocks pipeline.
 
-Runs checks 4 (JSON valid), 5 (ACF group per H2), 6 (each group ≥1 field),
-7 (block-<slug>.php exists), 8 (block.json per registered block), and 9
-(block.json has recommended fields → warning).
+Called from gate-check.sh as type=script. Validates that the project has the
+required Lazy Blocks artifacts (no longer ACF Blocks JSON / template-parts /
+gutenberg-blocks/<slug>/block.json — those belong to the deprecated pipeline).
 
-Exit 0 = pass. Exit 1 = hard fail. Warnings printed to stderr but do not
-affect exit code unless --strict-warnings is passed.
+Required artifacts (hard fail if missing/invalid):
+  - 08_КОД/block-spec.yaml exists and validates via block_spec.load + validate
+  - 08_КОД/wp-theme/functions.php contains both `lzb/init` and
+    `lazyblocks()->add_block(`
+  - 08_КОД/wp-theme/blocks/ exists and contains AT LEAST one
+    lazyblock-*/block.php
+  - 08_КОД/page-content.html exists
+
+Soft (warn-only):
+  - if block-spec.yaml has any section-card blocks, the AUTO-GENERATED
+    lzb-inner-blocks marker should be present in assets/css/main.css.
+
+Exit 0 = pass. Exit 1 = hard fail.
 
 Usage: python stage_08_helper.py <project-root>
 """
-import json
+from __future__ import annotations
+
 import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO_ROOT / "scripts" / "lib"))
-
-from content_parser import ContentParser, ContentParseError  # noqa: E402
+# block_spec lives inside the wp-gutenberg-block-builder skill
+sys.path.insert(
+    0,
+    str(REPO_ROOT / "skills" / "wp-gutenberg-block-builder" / "scripts" / "lib"),
+)
 
 
 def check(project: Path) -> int:
     errors: list[str] = []
     warnings: list[str] = []
 
-    # Bypass if legacy
+    # Legacy bypass
     state = project / ".landing-state.yaml"
     if state.exists() and "legacy: true" in state.read_text(encoding="utf-8"):
         print("stage-08: legacy:true — skipping hard checks", file=sys.stderr)
         return 0
 
-    md = project / "07_КОНТЕНТ" / "final-copy.md"
-    try:
-        blocks = ContentParser.parse(str(md))
-        ContentParser.validate(blocks)
-    except (ContentParseError, FileNotFoundError) as e:
-        errors.append(f"final-copy.md unparseable: {e}")
-        for e in errors:
-            print(f"❌ {e}", file=sys.stderr)
-        return 1
+    code_dir = project / "08_КОД"
 
-    expected_slugs = {b.slug for b in blocks}
-
-    acf_path = project / "08_КОД" / "acf-fields.json"
-    if not acf_path.exists():
-        errors.append("acf-fields.json missing")
+    # 1. block-spec.yaml exists + validates
+    spec_path = code_dir / "block-spec.yaml"
+    spec = None
+    if not spec_path.exists():
+        errors.append("block-spec.yaml missing at 08_КОД/block-spec.yaml")
     else:
         try:
-            acf_data = json.load(acf_path.open(encoding="utf-8"))
-        except json.JSONDecodeError as e:
-            errors.append(f"acf-fields.json invalid JSON: {e}")
-            acf_data = None
+            from block_spec import load as spec_load, validate as spec_validate  # noqa: E402
+            spec = spec_load(spec_path)
+            spec_validate(spec)
+        except Exception as e:  # BlockSpecError, yaml errors, import errors
+            errors.append(f"block-spec.yaml validation failed: {e}")
 
-        if acf_data is not None:
-            if not isinstance(acf_data, list):
-                acf_data = [acf_data]
-            acf_slugs = set()
-            for g in acf_data:
-                loc = (g.get("location") or [[{}]])[0][0] if g.get("location") else {}
-                val = loc.get("value", "")
-                if val.startswith("acf/lp-"):
-                    slug = val.removeprefix("acf/lp-")
-                    acf_slugs.add(slug)
-                    if not g.get("fields"):
-                        errors.append(f"ACF group '{slug}' has no fields (#6)")
-            for slug in expected_slugs - acf_slugs:
-                errors.append(f"ACF group missing for block '{slug}' (#5)")
+    # 2. functions.php contains lzb/init + lazyblocks()->add_block(
+    fn = code_dir / "wp-theme" / "functions.php"
+    if not fn.exists():
+        errors.append("wp-theme/functions.php missing")
+    else:
+        text = fn.read_text(encoding="utf-8", errors="replace")
+        if "lzb/init" not in text:
+            errors.append("functions.php missing 'lzb/init' action hook")
+        if "lazyblocks()->add_block(" not in text:
+            errors.append(
+                "functions.php missing 'lazyblocks()->add_block(' registration call"
+            )
 
-    # Per-block file checks
-    for slug in expected_slugs:
-        part = project / "08_КОД" / "wp-theme" / "template-parts" / f"block-{slug}.php"
-        if not part.exists():
-            errors.append(f"template-parts/block-{slug}.php missing (#7)")
-        bj = project / "08_КОД" / "gutenberg-blocks" / slug / "block.json"
-        if not bj.exists():
-            errors.append(f"gutenberg-blocks/{slug}/block.json missing (#8)")
-        else:
-            try:
-                d = json.load(bj.open(encoding="utf-8"))
-                missing = [k for k in ("title", "description", "category", "icon") if not d.get(k)]
-                if missing:
-                    warnings.append(f"block.json for '{slug}' missing recommended fields: {missing}")
-            except json.JSONDecodeError as e:
-                errors.append(f"block.json for '{slug}' invalid: {e}")
+    # 3. blocks/ dir with at least one lazyblock-*/block.php
+    blocks_dir = code_dir / "wp-theme" / "blocks"
+    if not blocks_dir.is_dir():
+        errors.append("wp-theme/blocks/ directory missing")
+    else:
+        any_block = False
+        for child in blocks_dir.iterdir():
+            if child.is_dir() and child.name.startswith("lazyblock-"):
+                if (child / "block.php").exists():
+                    any_block = True
+                    break
+        if not any_block:
+            errors.append(
+                "wp-theme/blocks/ has no lazyblock-*/block.php (run generate-lzb-templates)"
+            )
 
-    # manual review warning
-    if state.exists():
-        st = state.read_text(encoding="utf-8")
-        if "manual_field_review_needed:" in st:
-            warnings.append(f"manual_field_review_needed flag set in state.yaml — verify generated fields")
+    # 4. page-content.html exists
+    page = code_dir / "page-content.html"
+    if not page.exists():
+        errors.append("page-content.html missing at 08_КОД/page-content.html")
+
+    # Soft: section-card blocks should yield AUTO-GENERATED CSS marker
+    if spec is not None:
+        has_section_card = any(
+            getattr(b, "type", None) == "section-card" for b in getattr(spec, "blocks", [])
+        )
+        if has_section_card:
+            css = code_dir / "wp-theme" / "assets" / "css" / "main.css"
+            if not css.exists():
+                warnings.append(
+                    "assets/css/main.css missing — section-card blocks need display:contents patches"
+                )
+            else:
+                ctext = css.read_text(encoding="utf-8", errors="replace")
+                if "AUTO-GENERATED" not in ctext:
+                    warnings.append(
+                        "assets/css/main.css lacks AUTO-GENERATED lzb-inner-blocks marker"
+                    )
 
     for w in warnings:
         print(f"⚠ {w}", file=sys.stderr)
