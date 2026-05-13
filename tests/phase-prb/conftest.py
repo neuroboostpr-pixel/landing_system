@@ -36,3 +36,8 @@ _SVG_PATH = REPO_ROOT / "skills" / "photo-curation" / "scripts" / "svg-placehold
 if _SVG_PATH.exists():
     _svg_mod = _load_module("skills.photo_curation.scripts.svg_placeholder", _SVG_PATH)
     sys.modules["skills.photo_curation.scripts.svg_placeholder"] = _svg_mod
+
+_GALLERY_PATH = REPO_ROOT / "skills" / "photo-curation" / "scripts" / "gallery-render.py"
+if _GALLERY_PATH.exists():
+    _gallery_mod = _load_module("skills.photo_curation.scripts.gallery_render", _GALLERY_PATH)
+    sys.modules["skills.photo_curation.scripts.gallery_render"] = _gallery_mod
