@@ -49,6 +49,7 @@ for layer in "${LAYERS[@]}"; do
   cp "$src" "$tmp"
 
   args=(--input "$tmp" --out "$src" \
+        --force \
         --soft-matte \
         --transparent-threshold 12 \
         --opaque-threshold 220 \
