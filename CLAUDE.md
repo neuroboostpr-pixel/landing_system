@@ -47,6 +47,28 @@
 
 См. [spec](docs/superpowers/specs/2026-05-13-photo-pipeline-design.md) и [plan](docs/superpowers/plans/2026-05-13-photo-pipeline-plan.md).
 
+## Новые команды PR-C (Visual Generation)
+
+- `/landing-visuals` — AI-генерация иконок и инфографики через codex image_gen. **Stage 07d.**
+
+**Workflow PR-C:**
+1. Утверди этап 05 (design-system) и убедись что есть `07b_COMPOSED/composed.html` (PR-A).
+2. Запусти `/landing-visuals`. Без флагов = и иконки, и инфографика.
+3. Codex генерит PNG под брендинг (цвета из `tokens.json`, ниша из `market-profile.md`).
+4. Кэш по hash(hint + style + brand_color + niche) — повторный прогон НЕ зовёт codex для тех же слотов.
+5. `composed.html` перерендерится — placeholders `[SLOT: feature-1-icon]` заменятся на `<img class="lp-icon">`.
+
+**Опциональные флаги:**
+- `--type icons` или `--type infographics` — частичный прогон
+- `--force` — игнорировать кэш
+- `--slot <name>` — один конкретный слот
+
+**Identity-safe** НЕ применяется (в иконках/чартах нет людей).
+
+**NOTE:** PR-C команда вызывается ВРУЧНУЮ, не через `landing-orchestrator`. Интеграция — задача PR-D.
+
+См. [spec](docs/superpowers/specs/2026-05-13-visual-generation-design.md) и [plan](docs/superpowers/plans/2026-05-13-visual-generation-plan.md).
+
 ## Block Library
 
 Общая библиотека wireframe-блоков: `block-library/`. См. `block-library/README.md`.

@@ -45,3 +45,22 @@ https://github.com/nexu-io/open-design (Apache-2.0):
 
 License: Apache-2.0. Full text:
 https://github.com/nexu-io/open-design/blob/main/LICENSE
+
+## OpenDesign image-prompts — PR-C Visual Generation (CC-BY-4.0 main + per-prompt)
+
+PR-C (2026-05-13) uses 90 image-prompt JSON templates from
+`vendor/opendesign-extracts/prompt-templates/image/` (Apache-2.0 wrapper repo,
+per-prompt licenses in `source.license` field — mostly CC-BY-4.0, some MIT).
+
+When PR-C selects a prompt for infographic generation, the per-prompt
+attribution is preserved in `07d_VISUALS/prompts.yaml` with fields:
+- `id` — prompt ID
+- `license` — per-prompt license (e.g. CC-BY-4.0)
+- `author` — original creator
+- `url` — original URL
+
+Original repo: YouMind-OpenLab/awesome-gpt-image-2 (CC-BY-4.0 wrapper).
+
+Use locations in this codebase:
+- `skills/visual-generation/scripts/prompt-picker.py` — selects + adapts prompts
+- `skills/visual-generation/templates/infographic-prompt.md` — fallback template inspired by open-design style
