@@ -6,6 +6,8 @@ use_cases:
 - b2c
 - local
 description: "Центрированный hero с гигантской типографикой (64px desktop, 36px mobile), декоративными линиями и одной CTA. Без фото — типографика IS the design."
+display_name_ru: "🎨 Центрированный hero с крупной типографикой"
+layout_summary_ru: "Гигантский заголовок 64px по центру, декоративные линии сверху/снизу, tagline мелко сверху, одна CTA внизу. Без фото — типографика это дизайн."
 slots:
   - {type: text, name: tagline, max_chars: 30, required: false}
   - {type: text, name: headline, max_chars: 80, required: true}

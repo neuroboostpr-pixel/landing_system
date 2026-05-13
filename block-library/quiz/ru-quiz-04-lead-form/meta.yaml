@@ -3,6 +3,8 @@ category: quiz
 ru_market: true
 use_cases: [services, b2c, local]
 description: "Финальный экран квиза. Telegram + Max + звонок. Только разрешённые в РФ мессенджеры. Согласие на ПД."
+display_name_ru: "📋 Квиз — финальная форма захвата"
+layout_summary_ru: "Последний экран квиза: заголовок, поле телефона, выбор мессенджера (Telegram / Max / Звонок), кнопка 'Получить расчёт'. Согласие на ПД (152-ФЗ)."
 slots:
   - {type: text, name: headline, max_chars: 80, required: true}
   - {type: text, name: subhead, max_chars: 140, required: false}

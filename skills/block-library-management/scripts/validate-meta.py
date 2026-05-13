@@ -8,7 +8,10 @@ from pathlib import Path
 REQUIRED_KEYS = {
     "id", "category", "ru_market", "use_cases",
     "description", "slots", "source", "created",
+    "display_name_ru", "layout_summary_ru",
 }
+DISPLAY_NAME_RU_MAX = 60
+LAYOUT_SUMMARY_RU_MAX = 200
 VALID_CATEGORIES = {
     "hero", "features", "social-proof", "process",
     "pricing", "trust", "cta", "faq", "quiz",
@@ -39,6 +42,16 @@ def main(path: str) -> None:
     for uc in data["use_cases"]:
         if uc not in VALID_USE_CASES:
             fail(f"invalid use_case: {uc!r}")
+    dn = data.get("display_name_ru", "")
+    if not isinstance(dn, str) or not dn.strip():
+        fail("display_name_ru must be a non-empty string")
+    if len(dn) > DISPLAY_NAME_RU_MAX:
+        fail(f"display_name_ru exceeds {DISPLAY_NAME_RU_MAX} chars (got {len(dn)})")
+    ls = data.get("layout_summary_ru", "")
+    if not isinstance(ls, str) or not ls.strip():
+        fail("layout_summary_ru must be a non-empty string")
+    if len(ls) > LAYOUT_SUMMARY_RU_MAX:
+        fail(f"layout_summary_ru exceeds {LAYOUT_SUMMARY_RU_MAX} chars (got {len(ls)})")
     if not isinstance(data["slots"], list):
         fail("slots must be a list (may be empty)")
     for i, slot in enumerate(data["slots"]):

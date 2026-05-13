@@ -6,6 +6,8 @@ use_cases:
 - b2c
 - local
 description: "Полноширинный баннер-CTA: акцентный фон с диагональным stripe-паттерном, белый текст, крупный заголовок + подзаголовок + одна большая белая кнопка."
+display_name_ru: "🟧 Баннер-CTA на акцентном фоне"
+layout_summary_ru: "Полноширинный баннер с диагональным stripe-паттерном: белый заголовок, подзаголовок и одна большая белая кнопка. Максимальная контрастность."
 slots:
   - {type: text, name: headline, max_chars: 70, required: true}
   - {type: text, name: subhead, max_chars: 120, required: false}

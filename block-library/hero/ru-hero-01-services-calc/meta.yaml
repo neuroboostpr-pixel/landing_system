@@ -3,6 +3,8 @@ category: hero
 ru_market: true
 use_cases: [services]
 description: "RU hero для услуг: фоновое фото объекта, оффер слева, кнопка 'Рассчитать стоимость', плашка 'от X ₽'"
+display_name_ru: "🏗️ Услуги — фото фона + расчёт стоимости"
+layout_summary_ru: "Полноэкранное фото объекта на фоне, оффер с подзаголовком слева, плашка 'от X ₽' и кнопка 'Рассчитать стоимость'. На mobile — вертикальный stack."
 slots:
   - {type: photo, name: hero-bg, ratio: "16:9", mobile_ratio: "9:16", required: true}
   - {type: text, name: headline, max_chars: 60, required: true}

@@ -3,5 +3,7 @@ category: hero
 ru_market: true
 use_cases: [services]
 description: "Broken"
+display_name_ru: "❌ Нет слотов"
+layout_summary_ru: "Тестовый блок без слотов для проверки валидатора."
 source: manual
 created: 2026-05-12

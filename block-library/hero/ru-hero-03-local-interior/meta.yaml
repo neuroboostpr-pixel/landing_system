@@ -3,6 +3,8 @@ category: hero
 ru_market: true
 use_cases: [local]
 description: "RU hero локальный: full-width фото интерьера, overlay, заголовок, плашка часов работы, CTA 'Записаться'"
+display_name_ru: "🏠 Локальный бизнес — фото интерьера"
+layout_summary_ru: "Полноширинное фото интерьера с тёмным overlay, заголовок и плашка часов работы по центру, кнопка 'Записаться' внизу. Один чёткий призыв."
 slots:
   - {type: photo, name: interior-bg, ratio: "16:9", required: true}
   - {type: text, name: headline, max_chars: 60, required: true}

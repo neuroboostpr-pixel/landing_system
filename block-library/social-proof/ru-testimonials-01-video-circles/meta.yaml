@@ -3,6 +3,8 @@ category: social-proof
 ru_market: true
 use_cases: [services, b2c, local]
 description: "5 отзывов в формате круглых кружков (Reels/Stories): фото клиента в круге, имя и цитата."
+display_name_ru: "🎬 Отзывы в круглых кружках (Reels-стиль)"
+layout_summary_ru: "5 круглых фото клиентов в ряд, под каждым имя и цитата 100 символов. Визуальный язык Stories/Reels — высокое доверие у RU-аудитории."
 slots:
   - {type: text, name: headline, max_chars: 60, required: true}
   - {type: photo, name: testimonial-1-photo, ratio: "1:1", required: true}

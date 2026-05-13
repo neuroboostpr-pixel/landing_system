@@ -3,6 +3,8 @@ category: faq
 ru_market: true
 use_cases: [services, b2c, local]
 description: "6 вопросов-ответов через native HTML <details>-аккордеон. Без JavaScript. SEO-friendly."
+display_name_ru: "❓ FAQ-аккордеон 6 вопросов"
+layout_summary_ru: "6 вопросов-ответов через нативный HTML details-аккордеон без JavaScript. SEO-friendly, часто закрывает ключевые возражения о цене и сроках."
 slots:
   - {type: text, name: headline, max_chars: 60, required: true}
   - {type: text, name: faq-1-q, max_chars: 100, required: true}

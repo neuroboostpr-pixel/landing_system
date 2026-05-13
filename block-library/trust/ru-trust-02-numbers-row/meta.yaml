@@ -6,6 +6,8 @@ use_cases:
 - b2c
 - local
 description: "Полноширинная полоса с 4 KPI-числами в ряд: гигантское число (56px desktop, 36px mobile) + uppercase метка. Альтернатива иконочным плашкам доверия."
+display_name_ru: "📈 Полоса с 4 KPI-числами"
+layout_summary_ru: "Горизонтальная полоса с четырьмя гигантскими числами (56px) и uppercase метками под ними. Конкретные цифры убедительнее иконок."
 slots:
   - {type: text, name: headline, max_chars: 60, required: false}
   - {type: text, name: stat-1-number, max_chars: 10, required: true}

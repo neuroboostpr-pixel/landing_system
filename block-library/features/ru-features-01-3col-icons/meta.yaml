@@ -3,6 +3,8 @@ category: features
 ru_market: true
 use_cases: [services, b2c, local]
 description: "3 колонки преимуществ с иконками, заголовками и текстом. Универсальный для всех ниш."
+display_name_ru: "✅ 3 преимущества с иконками"
+layout_summary_ru: "Три колонки в ряд: иконка вверху, жирный заголовок, описание 80 символов. Универсальный блок для любой ниши. На mobile — 1 колонка стек."
 slots:
   - {type: text, name: headline, max_chars: 60, required: true}
   - {type: icon, name: feature-1-icon, required: false}

@@ -3,6 +3,8 @@ category: pricing
 ru_market: true
 use_cases: [services, b2c, local]
 description: "3 тарифа в ряд (Базовый/Стандарт/Премиум) с ценой 'от X ₽', 5 пунктов с галочками, CTA 'Выбрать'."
+display_name_ru: "💰 3 тарифа с ценой 'от X ₽'"
+layout_summary_ru: "Три тарифных карточки в ряд: название, цена 'от X ₽', 5 пунктов с галочками, кнопка 'Выбрать'. Средний тариф подсвечен как популярный."
 slots:
   - {type: text, name: headline, max_chars: 60, required: true}
   - {type: text, name: tier-1-name, max_chars: 20, required: true}

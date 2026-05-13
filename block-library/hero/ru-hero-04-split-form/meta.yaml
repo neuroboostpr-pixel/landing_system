@@ -5,6 +5,8 @@ use_cases:
 - services
 - b2c
 description: "Hero 60/40: текст + буллеты слева, форма захвата лида справа (телефон + Telegram/Max/звонок). Без фото."
+display_name_ru: "📝 Текст слева + лид-форма справа"
+layout_summary_ru: "60/40 split: оффер с 3 буллетами слева, форма захвата (телефон + Telegram/Max/звонок) справа. Без фото — форма и есть визуал. На mobile — форма под текстом."
 slots:
   - {type: text, name: headline, max_chars: 60, required: true}
   - {type: text, name: bullet-1-text, max_chars: 80, required: true}

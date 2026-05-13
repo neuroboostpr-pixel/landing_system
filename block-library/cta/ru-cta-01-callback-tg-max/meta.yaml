@@ -3,6 +3,8 @@ category: cta
 ru_market: true
 use_cases: [services, b2c, local]
 description: "CTA-блок: заголовок + 3 кнопки Telegram / Max / Перезвоните. БЕЗ WhatsApp (запрещён в РФ)."
+display_name_ru: "📞 CTA: Telegram / Max / Перезвоните"
+layout_summary_ru: "Заголовок + подзаголовок + три кнопки связи: Telegram, Max и 'Перезвоните мне'. WhatsApp отсутствует — только разрешённые в РФ каналы."
 slots:
   - {type: text, name: headline, max_chars: 80, required: true}
   - {type: text, name: subhead, max_chars: 140, required: false}

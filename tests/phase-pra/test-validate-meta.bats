@@ -30,6 +30,8 @@ category: hero
 ru_market: true
 use_cases: [services]
 description: "bad id"
+display_name_ru: "❌ Плохой ID"
+layout_summary_ru: "Тестовый блок с невалидным ID для проверки валидатора."
 slots: []
 source: manual
 created: 2026-05-12
@@ -37,4 +39,10 @@ EOF
   run python3 "$VALIDATOR" "$BATS_TMPDIR/bad-id.yaml"
   [ "$status" -ne 0 ]
   [[ "$output" == *"kebab-case"* ]]
+}
+
+@test "rejects meta missing display_name_ru" {
+  run python3 "$VALIDATOR" "$FIXTURES/meta-missing-display-name.yaml"
+  [ "$status" -ne 0 ]
+  [[ "$output" == *"display_name_ru"* ]]
 }

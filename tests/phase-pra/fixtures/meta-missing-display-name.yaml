@@ -3,7 +3,6 @@ category: hero
 ru_market: true
 use_cases: [services]
 description: "Hero с фото объекта на фоне + оффер слева + кнопка расчёта"
-display_name_ru: "🎯 Услуги — фото + оффер + расчёт"
 layout_summary_ru: "Фото объекта на фоне, оффер слева, плашка 'от X ₽' справа, sticky CTA"
 slots:
   - {type: photo, name: hero-bg, ratio: "16:9", mobile_ratio: "9:16", required: true}

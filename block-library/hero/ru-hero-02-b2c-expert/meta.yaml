@@ -3,6 +3,8 @@ category: hero
 ru_market: true
 use_cases: [b2c]
 description: "RU hero B2C: фото эксперта в круге, имя, регалии, оффер, CTA 'Подобрать программу'"
+display_name_ru: "🧑‍💼 Эксперт слева + оффер справа"
+layout_summary_ru: "Фото эксперта в круге слева, имя и регалии под фото, оффер с подзаголовком и CTA 'Подобрать программу' справа. На mobile — эксперт над оффером."
 slots:
   - {type: photo, name: expert-photo, ratio: "1:1", required: true}
   - {type: text, name: expert-name, max_chars: 30, required: true}

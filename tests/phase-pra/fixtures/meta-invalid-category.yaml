@@ -3,6 +3,8 @@ category: foobar
 ru_market: true
 use_cases: [services]
 description: "Bad category"
+display_name_ru: "❌ Плохая категория"
+layout_summary_ru: "Тестовый блок с невалидной категорией для проверки валидатора."
 slots: []
 source: manual
 created: 2026-05-12
