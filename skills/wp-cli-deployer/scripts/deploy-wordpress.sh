@@ -37,7 +37,6 @@ echo "▶ Activate theme"
 ssh_run "$WP theme activate lp-${PROJECT_SLUG}"
 
 echo "▶ Ensure lazy-blocks plugin"
-# Runs: wp plugin install lazy-blocks --activate (via $WP wrapper).
 ssh_run "$WP plugin is-installed lazy-blocks 2>/dev/null || $WP plugin install lazy-blocks --activate"
 ssh_run "$WP plugin is-active lazy-blocks || $WP plugin activate lazy-blocks"
 
@@ -46,7 +45,6 @@ echo "▶ Ensure ACF Free (optional, for page-level meta)"
 ssh_run "$WP plugin is-installed advanced-custom-fields 2>/dev/null || $WP plugin install advanced-custom-fields --activate" || true
 
 echo "▶ Import theme images into Media Library"
-# Per-image: wp media import <path> --porcelain (via $WP wrapper).
 declare -A IMG_IDS=()
 if [ -d "$THEME_DIR/assets/img" ]; then
     for img in "$THEME_DIR/assets/img"/*; do
@@ -84,7 +82,6 @@ if [ -f "$PAGE_HTML" ]; then
     REMOTE_HTML="${BEGET_PATH}/wp-content/themes/lp-${PROJECT_SLUG}/.page-content.html"
     scp "$TMP_HTML" "${BEGET_USER}@${BEGET_HOST}:${REMOTE_HTML}"
 
-    # Front-page seed: wp post create --post_type=page (via $WP wrapper).
     existing_page_id="$(ssh_run "$WP post list --post_type=page --name=${PAGE_SLUG} --field=ID" | head -n1 || true)"
     if [ -n "$existing_page_id" ]; then
         ssh_run "$WP post update ${existing_page_id} --post_content=\"\$(cat ${REMOTE_HTML})\" --post_status=publish"

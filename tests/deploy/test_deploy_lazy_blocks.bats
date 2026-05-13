@@ -6,7 +6,7 @@ setup() {
 }
 
 @test "installs lazy-blocks plugin" {
-  run grep -q "wp plugin install lazy-blocks" "$DEPLOY"
+  run grep -qE '\$WP[[:space:]]+plugin[[:space:]]+install[[:space:]]+lazy-blocks' "$DEPLOY"
   [ "$status" -eq 0 ]
 }
 
@@ -16,12 +16,12 @@ setup() {
 }
 
 @test "imports images via wp media import" {
-  run grep -q "wp media import" "$DEPLOY"
+  run grep -qE '\$WP[[:space:]]+media[[:space:]]+import' "$DEPLOY"
   [ "$status" -eq 0 ]
 }
 
 @test "creates front page via wp post create" {
-  run grep -q "wp post create" "$DEPLOY"
+  run grep -qE '\$WP[[:space:]]+post[[:space:]]+create' "$DEPLOY"
   [ "$status" -eq 0 ]
 }
 
@@ -42,6 +42,6 @@ setup() {
 
 @test "preflight passes after this deploy script lands" {
   cd "$REPO"
-  run bash -c "grep -q 'wp plugin install lazy-blocks' skills/wp-cli-deployer/scripts/deploy-wordpress.sh"
+  run bash -c "grep -qE '(\\\$WP|wp)[[:space:]]+plugin[[:space:]]+install[[:space:]]+lazy-blocks' skills/wp-cli-deployer/scripts/deploy-wordpress.sh"
   [ "$status" -eq 0 ]
 }

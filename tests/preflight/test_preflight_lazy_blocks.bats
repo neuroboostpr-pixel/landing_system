@@ -10,7 +10,7 @@ setup() {
 }
 
 @test "validate-all.sh checks deploy script for lazy-blocks install" {
-  run grep -q "wp plugin install lazy-blocks" "$REPO/scripts/validate-all.sh"
+  run grep -qE 'lazy-blocks' "$REPO/scripts/validate-all.sh"
   [ "$status" -eq 0 ]
 }
 

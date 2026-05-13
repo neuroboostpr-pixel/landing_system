@@ -11,7 +11,7 @@ cd "$REPO_ROOT"
 PYTHON="${PYTHON:-$(command -v python3 2>/dev/null || command -v python)}"
 
 echo "▶ Checking deploy-wordpress.sh installs lazy-blocks plugin"
-if ! grep -q "wp plugin install lazy-blocks" skills/wp-cli-deployer/scripts/deploy-wordpress.sh; then
+if ! grep -qE '(\$WP|wp)[[:space:]]+plugin[[:space:]]+install[[:space:]]+lazy-blocks' skills/wp-cli-deployer/scripts/deploy-wordpress.sh; then
     echo "❌ deploy-wordpress.sh does not install lazy-blocks plugin — stage-08 won't work on prod"
     exit 1
 fi
