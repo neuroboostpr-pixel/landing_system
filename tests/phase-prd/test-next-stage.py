@@ -60,3 +60,45 @@ def test_handles_failed_status_by_returning_that_stage(tmp_path):
         "07b_wireframe": {"status": "locked"},
     })
     assert _run(proj) == "07a_prototype"
+
+
+def test_in_progress_takes_priority_over_locked(tmp_path):
+    """Template-shape: 03_references=locked, 07a_prototype=in_progress → next=07a_prototype."""
+    proj = _make_state(tmp_path, {
+        "00_brief": {"status": "n/a"},
+        "03_references": {"status": "locked"},
+        "04_brand": {"status": "locked"},
+        "07a_prototype": {"status": "in_progress"},
+        "07b_wireframe": {"status": "locked"},
+    })
+    assert _run(proj) == "07a_prototype"
+
+
+def test_failed_takes_priority_over_locked(tmp_path):
+    proj = _make_state(tmp_path, {
+        "03_references": {"status": "locked"},
+        "07a_prototype": {"status": "failed"},
+    })
+    assert _run(proj) == "07a_prototype"
+
+
+def test_in_progress_takes_priority_over_failed(tmp_path):
+    proj = _make_state(tmp_path, {
+        "03_references": {"status": "in_progress"},
+        "07a_prototype": {"status": "failed"},
+    })
+    assert _run(proj) == "03_references"
+
+
+def test_real_template_returns_07a_prototype(tmp_path):
+    """Use the actual template/.landing-state.yaml as input."""
+    import shutil
+    from pathlib import Path
+
+    REPO = Path(__file__).resolve().parents[2]
+    template = REPO / "template" / ".landing-state.yaml"
+    proj = tmp_path / "real"
+    proj.mkdir()
+    shutil.copy(template, proj / ".landing-state.yaml")
+
+    assert _run(proj) == "07a_prototype"

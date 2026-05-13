@@ -21,13 +21,38 @@ STAGE_ORDER = [
 
 
 def next_stage(state_yaml: dict) -> str:
+    """Return next actionable stage.
+
+    Priority order (high to low):
+    1. First `in_progress` stage in STAGE_ORDER
+    2. First `failed` stage in STAGE_ORDER (treat as needs attention)
+    3. First `locked` stage in STAGE_ORDER
+    Skip `approved` and `n/a` stages.
+    """
     stages = state_yaml.get("stages", {})
+
+    in_progress_stages = []
+    failed_stages = []
+    locked_stages = []
+
     for stage_id in STAGE_ORDER:
         entry = stages.get(stage_id, {})
         status = entry.get("status") if isinstance(entry, dict) else None
         if status in ("approved", "n/a", None):
             continue
-        return stage_id
+        if status == "in_progress":
+            in_progress_stages.append(stage_id)
+        elif status == "failed":
+            failed_stages.append(stage_id)
+        else:  # locked or other
+            locked_stages.append(stage_id)
+
+    if in_progress_stages:
+        return in_progress_stages[0]
+    if failed_stages:
+        return failed_stages[0]
+    if locked_stages:
+        return locked_stages[0]
     return "DONE"
 
 
