@@ -1,6 +1,6 @@
 version: 1
 updated: '2026-05-13'
-# 7 blocks extracted from OpenDesign templates (Apache-2.0)
+# 35 original + 20 new blocks from design-templates (Apache-2.0)
 blocks:
 - id: ru-hero-01-services-calc
   path: hero/ru-hero-01-services-calc/
@@ -240,6 +240,161 @@ blocks:
 - id: ru-process-02-next-steps
   path: process/ru-process-02-next-steps/
   category: process
+  use_cases:
+  - services
+  - b2c
+  - local
+  source: opendesign
+- id: ru-hero-07-editorial-serif
+  path: hero/ru-hero-07-editorial-serif/
+  category: hero
+  use_cases:
+  - services
+  - b2c
+  - local
+  source: opendesign
+- id: ru-hero-08-centered-emailcap
+  path: hero/ru-hero-08-centered-emailcap/
+  category: hero
+  use_cases:
+  - b2c
+  - services
+  source: opendesign
+- id: ru-hero-09-kami-serif
+  path: hero/ru-hero-09-kami-serif/
+  category: hero
+  use_cases:
+  - services
+  - b2c
+  source: opendesign
+- id: ru-hero-10-deck-cover
+  path: hero/ru-hero-10-deck-cover/
+  category: hero
+  use_cases:
+  - services
+  - b2c
+  - local
+  source: opendesign
+- id: ru-features-04-numbered-list
+  path: features/ru-features-04-numbered-list/
+  category: features
+  use_cases:
+  - services
+  - b2c
+  - local
+  source: opendesign
+- id: ru-features-05-method-steps
+  path: features/ru-features-05-method-steps/
+  category: features
+  use_cases:
+  - services
+  - b2c
+  - local
+  source: opendesign
+- id: ru-features-06-cards-2x2
+  path: features/ru-features-06-cards-2x2/
+  category: features
+  use_cases:
+  - services
+  - b2c
+  - local
+  source: opendesign
+- id: ru-features-07-2col-split
+  path: features/ru-features-07-2col-split/
+  category: features
+  use_cases:
+  - services
+  - b2c
+  - local
+  source: opendesign
+- id: ru-social-proof-06-editorial-quote
+  path: social-proof/ru-social-proof-06-editorial-quote/
+  category: social-proof
+  use_cases:
+  - services
+  - b2c
+  - local
+  source: opendesign
+- id: ru-social-proof-07-logo-ticker
+  path: social-proof/ru-social-proof-07-logo-ticker/
+  category: social-proof
+  use_cases:
+  - services
+  - b2c
+  - local
+  source: opendesign
+- id: ru-social-proof-08-stats-deck
+  path: social-proof/ru-social-proof-08-stats-deck/
+  category: social-proof
+  use_cases:
+  - services
+  - b2c
+  - local
+  source: opendesign
+- id: ru-pricing-03-3tier-saas
+  path: pricing/ru-pricing-03-3tier-saas/
+  category: pricing
+  use_cases:
+  - services
+  - b2c
+  source: opendesign
+- id: ru-pricing-04-tiers-faq
+  path: pricing/ru-pricing-04-tiers-faq/
+  category: pricing
+  use_cases:
+  - services
+  - b2c
+  source: opendesign
+- id: ru-trust-05-manifesto-text
+  path: trust/ru-trust-05-manifesto-text/
+  category: trust
+  use_cases:
+  - services
+  - b2c
+  - local
+  source: opendesign
+- id: ru-trust-06-labs-showcase
+  path: trust/ru-trust-06-labs-showcase/
+  category: trust
+  use_cases:
+  - services
+  - b2c
+  - local
+  source: opendesign
+- id: ru-trust-07-partner-logos
+  path: trust/ru-trust-07-partner-logos/
+  category: trust
+  use_cases:
+  - services
+  - b2c
+  - local
+  source: opendesign
+- id: ru-cta-06-editorial-paper
+  path: cta/ru-cta-06-editorial-paper/
+  category: cta
+  use_cases:
+  - services
+  - b2c
+  - local
+  source: opendesign
+- id: ru-cta-07-accent-bg
+  path: cta/ru-cta-07-accent-bg/
+  category: cta
+  use_cases:
+  - services
+  - b2c
+  source: opendesign
+- id: ru-process-03-4steps-numbered
+  path: process/ru-process-03-4steps-numbered/
+  category: process
+  use_cases:
+  - services
+  - b2c
+  - local
+  source: opendesign
+- id: ru-faq-04-pricing-faq
+  path: faq/ru-faq-04-pricing-faq/
+  category: faq
   use_cases:
   - services
   - b2c

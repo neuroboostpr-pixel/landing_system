@@ -12,8 +12,8 @@ setup() {
   [ "$status" -eq 0 ]
 }
 
-@test "all 35 seed blocks present and meta valid" {
-  expected_count=35
+@test "all 55 seed blocks present and meta valid" {
+  expected_count=55
   count=0
   for d in "$LIB"/*/*/meta.yaml; do
     run python3 "$METAVAL" "$d"

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<!-- Source: github.com/nexu-io/open-design @ main | design-templates/saas-landing/example.html | License: Apache-2.0 -->
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>ru-features-04-numbered-list — desktop</title>
+<style>
+  :root {
+    --color-bg: #fafaf9;
+    --color-fg: #1c1b1a;
+    --color-accent: #c96442;
+    --color-border: #e6e4e0;
+    --color-surface: #ffffff;
+    --color-muted: #6b6964;
+    --font-display: system-ui, sans-serif;
+    --font-body: system-ui, sans-serif;
+    --spacing-md: 16px;
+    --spacing-lg: 32px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-body); background: var(--color-bg); color: var(--color-fg); }
+  .features-section {
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    padding: 80px 0;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
+  .section-label {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-muted);
+    margin-bottom: 48px;
+    text-align: center;
+  }
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+  .feature-num {
+    font-family: ui-monospace, monospace;
+    color: var(--color-accent);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: block;
+    font-weight: 600;
+  }
+  .feature h3 {
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+  .feature p {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 14.5px;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+  <section class="features-section" data-block-id="ru-features-04-numbered-list">
+    <div class="wrap">
+      <p class="section-label" data-slot="section-label">[Раздел / Преимущества]</p>
+      <div class="feature-grid">
+        <div class="feature">
+          <span class="feature-num" data-slot="feat-1-num">01</span>
+          <h3 data-slot="feat-1-title">[Первое преимущество]</h3>
+          <p data-slot="feat-1-desc">[Описание первого ключевого преимущества для клиента. Конкретно и без воды.]</p>
+        </div>
+        <div class="feature">
+          <span class="feature-num" data-slot="feat-2-num">02</span>
+          <h3 data-slot="feat-2-title">[Второе преимущество]</h3>
+          <p data-slot="feat-2-desc">[Описание второго ключевого преимущества. Что конкретно получает клиент.]</p>
+        </div>
+        <div class="feature">
+          <span class="feature-num" data-slot="feat-3-num">03</span>
+          <h3 data-slot="feat-3-title">[Третье преимущество]</h3>
+          <p data-slot="feat-3-desc">[Описание третьего преимущества. Лучше использовать измеримые результаты.]</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

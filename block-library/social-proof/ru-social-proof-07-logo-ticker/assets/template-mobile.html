@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<!-- Source: github.com/nexu-io/open-design @ main | design-templates/open-design-landing/example.html | License: Apache-2.0 -->
+<html lang="ru"><head><meta charset="UTF-8"><title>ru-social-proof-07-logo-ticker — mobile</title>
+<style>
+  :root { --color-bg:#efe7d2; --color-fg:#15140f; --color-accent:#ed6f5c; --color-border:rgba(21,20,15,0.16); --font-body:'Inter Tight',system-ui,sans-serif; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:var(--font-body); background:var(--color-bg); color:var(--color-fg); width:375px; }
+  .ticker-section { border-top:1px solid var(--color-border); border-bottom:1px solid var(--color-border); padding:20px 0; overflow:hidden; }
+  .ticker-label { font-size:10px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:rgba(21,20,15,0.45); text-align:center; padding:0 20px 14px; border-bottom:1px solid var(--color-border); margin-bottom:14px; }
+  .ticker-row { overflow:hidden; mask-image:linear-gradient(90deg, transparent, black 5%, black 95%, transparent); }
+  .marquee-track { display:inline-flex; align-items:center; gap:32px; width:max-content; white-space:nowrap; animation:marquee 24s linear infinite; }
+  @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  .logo-item { display:inline-flex; align-items:center; gap:6px; font-size:14px; font-weight:600; color:rgba(21,20,15,0.6); flex-shrink:0; }
+  .sep { color:var(--color-accent); }
+</style></head>
+<body>
+  <section class="ticker-section" data-block-id="ru-social-proof-07-logo-ticker">
+    <div class="ticker-label" data-slot="ticker-label">[Нам доверяют]</div>
+    <div class="ticker-row" aria-hidden="true">
+      <div class="marquee-track">
+        <span class="logo-item"><span class="sep">·</span><span>[Клиент 1]</span></span>
+        <span class="logo-item"><span class="sep">·</span><span>[Клиент 2]</span></span>
+        <span class="logo-item"><span class="sep">·</span><span>[Клиент 3]</span></span>
+        <span class="logo-item"><span class="sep">·</span><span>[Клиент 4]</span></span>
+        <span class="logo-item"><span class="sep">·</span><span>[Клиент 5]</span></span>
+        <span class="logo-item"><span class="sep">·</span><span>[Клиент 6]</span></span>
+        <span class="logo-item"><span class="sep">·</span><span>[Клиент 1]</span></span>
+        <span class="logo-item"><span class="sep">·</span><span>[Клиент 2]</span></span>
+        <span class="logo-item"><span class="sep">·</span><span>[Клиент 3]</span></span>
+        <span class="logo-item"><span class="sep">·</span><span>[Клиент 4]</span></span>
+        <span class="logo-item"><span class="sep">·</span><span>[Клиент 5]</span></span>
+        <span class="logo-item"><span class="sep">·</span><span>[Клиент 6]</span></span>
+      </div>
+    </div>
+  </section>
+</body></html>

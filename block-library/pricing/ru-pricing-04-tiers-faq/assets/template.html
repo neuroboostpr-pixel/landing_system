@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<!-- Source: github.com/nexu-io/open-design @ main | design-templates/pricing-page/example.html | License: Apache-2.0 -->
+<html lang="ru"><head><meta charset="UTF-8"><title>ru-pricing-04-tiers-faq — desktop</title>
+<style>
+  :root { --color-bg:#ffffff; --color-fg:#111110; --color-accent:#2563eb; --color-border:#e5e7eb; --color-surface:#f9fafb; --color-muted:#6b7280; --font-body:system-ui,sans-serif; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:var(--font-body); background:var(--color-bg); color:var(--color-fg); }
+  .section { padding:80px 0; }
+  .wrap { max-width:1080px; margin:0 auto; padding:0 32px; }
+  .tiers-head { text-align:center; margin-bottom:48px; }
+  .tiers-head h2 { font-size:clamp(28px,3.5vw,42px); font-weight:700; letter-spacing:-0.02em; margin-bottom:10px; }
+  .tiers-head p { color:var(--color-muted); font-size:16px; }
+  .tiers { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-bottom:80px; }
+  .tier { border:1px solid var(--color-border); border-radius:12px; padding:28px; }
+  .tier.featured { border-color:var(--color-accent); box-shadow:0 0 0 1px var(--color-accent); }
+  .tier-badge { display:inline-block; background:var(--color-accent); color:#fff; font-size:11px; font-weight:600; padding:3px 10px; border-radius:999px; margin-bottom:12px; }
+  .tier-name { font-size:17px; font-weight:600; margin-bottom:6px; }
+  .tier-price { font-size:38px; font-weight:700; letter-spacing:-0.02em; margin-bottom:4px; }
+  .tier-price small { font-size:14px; color:var(--color-muted); font-weight:400; }
+  .tier-desc { color:var(--color-muted); font-size:14px; margin-bottom:20px; }
+  .tier-btn { display:block; width:100%; padding:11px 18px; border-radius:8px; font:inherit; font-weight:500; cursor:pointer; text-align:center; text-decoration:none; font-size:15px; }
+  .btn-primary { background:var(--color-accent); color:#fff; border:none; }
+  .btn-outline { background:transparent; color:var(--color-fg); border:1px solid var(--color-border); }
+  .faq-head { margin-bottom:32px; }
+  .faq-head h3 { font-size:24px; font-weight:700; letter-spacing:-0.01em; }
+  .faq-item { border-top:1px solid var(--color-border); padding:18px 0; }
+  .faq-q { font-size:15px; font-weight:600; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
+  .faq-q::after { content:"+"; font-size:20px; font-weight:400; color:var(--color-muted); flex-shrink:0; }
+  .faq-a { font-size:14px; line-height:1.6; color:var(--color-muted); }
+</style></head>
+<body>
+  <section class="section" data-block-id="ru-pricing-04-tiers-faq">
+    <div class="wrap">
+      <div class="tiers-head">
+        <h2 data-slot="headline">[Тарифы]</h2>
+        <p data-slot="subhead">[Описание условий и ценовой политики]</p>
+      </div>
+      <div class="tiers">
+        <div class="tier">
+          <div class="tier-name" data-slot="tier-1-name">[Базовый]</div>
+          <div class="tier-price" data-slot="tier-1-price">[X ₽<small>/мес</small>]</div>
+          <div class="tier-desc" data-slot="tier-1-desc">[Для кого этот тариф]</div>
+          <a class="tier-btn btn-outline" data-slot="tier-1-cta" href="#contact">[Начать]</a>
+        </div>
+        <div class="tier featured">
+          <div class="tier-badge">Популярный</div>
+          <div class="tier-name" data-slot="tier-2-name">[Профи]</div>
+          <div class="tier-price" data-slot="tier-2-price">[Y ₽<small>/мес</small>]</div>
+          <div class="tier-desc" data-slot="tier-2-desc">[Для кого этот тариф]</div>
+          <a class="tier-btn btn-primary" data-slot="tier-2-cta" href="#contact">[Выбрать Профи]</a>
+        </div>
+        <div class="tier">
+          <div class="tier-name" data-slot="tier-3-name">[Enterprise]</div>
+          <div class="tier-price" data-slot="tier-3-price">[Индивидуально]</div>
+          <div class="tier-desc" data-slot="tier-3-desc">[Для крупных компаний]</div>
+          <a class="tier-btn btn-outline" data-slot="tier-3-cta" href="#contact">[Связаться]</a>
+        </div>
+      </div>
+      <div class="faq-head">
+        <h3 data-slot="faq-headline">[Частые вопросы о стоимости]</h3>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" data-slot="faq-1-q">[Как работает оплата?]</div>
+        <div class="faq-a" data-slot="faq-1-a">[Ответ на первый вопрос о стоимости]</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" data-slot="faq-2-q">[Можно ли изменить тариф?]</div>
+        <div class="faq-a" data-slot="faq-2-a">[Ответ на второй вопрос]</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" data-slot="faq-3-q">[Есть ли пробный период?]</div>
+        <div class="faq-a" data-slot="faq-3-a">[Ответ на третий вопрос]</div>
+      </div>
+    </div>
+  </section>
+</body></html>
