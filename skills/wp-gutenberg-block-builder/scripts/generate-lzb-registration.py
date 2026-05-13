@@ -5,7 +5,6 @@ CLI: python generate-lzb-registration.py --project <path>
 """
 import argparse
 import re
-import shutil
 import sys
 from pathlib import Path
 
@@ -28,6 +27,18 @@ def _php_str(s) -> str:
     return "'" + s.replace("\\", "\\\\").replace("'", "\\'") + "'"
 
 
+def _php_val(v) -> str:
+    if v is None:
+        return "''"
+    if isinstance(v, bool):
+        return "true" if v else "false"
+    if isinstance(v, int):
+        return str(v)
+    if isinstance(v, float):
+        return repr(v)
+    return _php_str(v)
+
+
 def _render_controls(controls: list) -> str:
     if not controls:
         return "array()"
@@ -39,7 +50,7 @@ def _render_controls(controls: list) -> str:
             f"'label' => {_php_str(c.label)}",
         ]
         if c.default is not None:
-            parts.append(f"'default' => {_php_str(c.default)}")
+            parts.append(f"'default' => {_php_val(c.default)}")
         if c.child_of is not None:
             parts.append(f"'child_of' => {_php_str(c.child_of)}")
         lines.append(f"            {_php_str(c.id)} => array({', '.join(parts)}),")
@@ -95,7 +106,6 @@ def main() -> int:
         print(f"ERROR: {fn_php} not found", file=sys.stderr)
         return 1
 
-    shutil.copy2(fn_php, fn_php.with_suffix(".php.bak"))
     src = fn_php.read_text(encoding="utf-8")
     section = _render_section(spec)
     if SECTION_RE.search(src):

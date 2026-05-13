@@ -75,3 +75,68 @@ def test_fails_when_block_spec_missing(tmp_path):
     r = _run(project)
     assert r.returncode != 0
     assert "block-spec.yaml" in (r.stderr + r.stdout)
+
+
+def test_boolean_default_renders_as_php_boolean(tmp_path):
+    project = tmp_path / "proj"
+    (project / "08_КОД" / "wp-theme").mkdir(parents=True)
+    (project / "08_КОД" / "block-spec.yaml").write_text(
+        "version: 1\n"
+        "page: { title: T, slug: home }\n"
+        "blocks:\n"
+        "  - slug: hero\n"
+        "    type: single\n"
+        "    title: Hero\n"
+        "    icon: star-filled\n"
+        "    category: lp-blocks\n"
+        "    controls:\n"
+        "      - { id: c_t, name: enabled, type: toggle, label: E, default: true }\n"
+        "      - { id: c_f, name: visible, type: toggle, label: V, default: false }\n",
+        encoding="utf-8",
+    )
+    (project / "08_КОД" / "wp-theme" / "functions.php").write_text("<?php\n", encoding="utf-8")
+    r = subprocess.run(
+        [sys.executable, str(SCRIPT), "--project", str(project)],
+        capture_output=True, text=True,
+    )
+    assert r.returncode == 0, r.stderr
+    out = (project / "08_КОД" / "wp-theme" / "functions.php").read_text(encoding="utf-8")
+    # Must be unquoted PHP literals, not quoted strings
+    assert "'default' => true" in out
+    assert "'default' => false" in out
+    assert "'default' => 'True'" not in out
+    assert "'default' => 'False'" not in out
+
+
+def test_integer_default_renders_as_php_integer(tmp_path):
+    project = tmp_path / "proj"
+    (project / "08_КОД" / "wp-theme").mkdir(parents=True)
+    (project / "08_КОД" / "block-spec.yaml").write_text(
+        "version: 1\n"
+        "page: { title: T, slug: home }\n"
+        "blocks:\n"
+        "  - slug: hero\n"
+        "    type: single\n"
+        "    title: Hero\n"
+        "    icon: star-filled\n"
+        "    category: lp-blocks\n"
+        "    controls:\n"
+        "      - { id: c_r, name: opacity, type: range, label: O, default: 75 }\n",
+        encoding="utf-8",
+    )
+    (project / "08_КОД" / "wp-theme" / "functions.php").write_text("<?php\n", encoding="utf-8")
+    r = subprocess.run(
+        [sys.executable, str(SCRIPT), "--project", str(project)],
+        capture_output=True, text=True,
+    )
+    assert r.returncode == 0, r.stderr
+    out = (project / "08_КОД" / "wp-theme" / "functions.php").read_text(encoding="utf-8")
+    assert "'default' => 75" in out
+    assert "'default' => '75'" not in out
+
+
+def test_no_bak_file_created(tmp_path):
+    project = _make_project(tmp_path)
+    _run(project)
+    bak = project / "08_КОД" / "wp-theme" / "functions.php.bak"
+    assert not bak.exists(), "generator must not create .bak file"
