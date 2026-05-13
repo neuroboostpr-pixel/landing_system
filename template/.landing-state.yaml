@@ -1,23 +1,43 @@
 # Workflow lock for landing project. Updated by scripts/gate-check.sh.
-# Statuses: locked → in_progress → approved | failed
+# Statuses: locked → in_progress → approved | failed | n/a
+# - "n/a" = stage not applicable to this flow (e.g. prototype-first skips 00/01/01a/02)
 # Editing this file by hand will trigger validation errors.
 
 project: ""           # filled by /landing-new
 created: ""           # ISO 8601, filled by /landing-new
-schema_version: 1
+schema_version: 2     # bumped from 1 for PR-D
 
 stages:
-  "00_brief":      {status: in_progress, timestamp: ""}
-  "01_context":           {status: locked, timestamp: ""}
-  "01a_niche_analysis":   {status: locked, timestamp: ""}
-  "02_assets":            {status: locked, timestamp: ""}
-  "03_references": {status: locked, timestamp: ""}
-  "04_brand":      {status: locked, timestamp: ""}
-  "05_design":     {status: locked, timestamp: ""}
-  "06_stack":      {status: locked, timestamp: ""}
-  "07_content":    {status: locked, timestamp: ""}
-  "08_build":      {status: locked, timestamp: ""}
-  "09_deploy":     {status: locked, timestamp: ""}
-  "10_qa":         {status: locked, timestamp: ""}
-  "11_analytics":  {status: locked, timestamp: ""}
-  "12_seo":        {status: locked, timestamp: ""}
+  # Upstream stages (n/a in prototype-first flow)
+  "00_brief":             {status: n/a, timestamp: ""}
+  "01_context":           {status: n/a, timestamp: ""}
+  "01a_niche_analysis":   {status: n/a, timestamp: ""}
+  "02_assets":            {status: n/a, timestamp: ""}
+
+  # User-interactive design stages
+  "03_references":        {status: locked, timestamp: ""}
+  "04_brand":             {status: locked, timestamp: ""}
+  "05_design":            {status: locked, timestamp: ""}
+
+  # Auto stages
+  "06_stack":             {status: locked, timestamp: ""}
+  "07_content":           {status: locked, timestamp: ""}
+
+  # PR-A artifacts (new in state tracking)
+  "07a_prototype":        {status: in_progress, timestamp: ""}
+  "07b_wireframe":        {status: locked, timestamp: ""}
+  "07c_composed":         {status: locked, timestamp: ""}
+
+  # PR-B + PR-C (parallel)
+  "07d_photos":           {status: locked, timestamp: ""}
+  "07e_visuals":          {status: locked, timestamp: ""}
+
+  # Final re-render after photos + visuals
+  "07f_composed_final":   {status: locked, timestamp: ""}
+
+  # Build / deploy / qa / analytics / seo (existing)
+  "08_build":             {status: locked, timestamp: ""}
+  "09_deploy":            {status: locked, timestamp: ""}
+  "10_qa":                {status: locked, timestamp: ""}
+  "11_analytics":         {status: locked, timestamp: ""}
+  "12_seo":               {status: locked, timestamp: ""}
