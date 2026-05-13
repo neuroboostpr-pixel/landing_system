@@ -151,9 +151,8 @@ def main(argv: list) -> int:
 
     theme_dir = project / "08_КОД" / "wp-theme"
     theme_dir.mkdir(parents=True, exist_ok=True)
-    for sub in ["assets/css", "assets/js", "assets/fonts", "assets/icons", "assets/images"]:
+    for sub in ["assets/css", "assets/js", "assets/fonts", "assets/icons", "assets/images", "blocks"]:
         (theme_dir / sub).mkdir(parents=True, exist_ok=True)
-    (project / "08_КОД" / "gutenberg-blocks").mkdir(parents=True, exist_ok=True)
 
     _write_style_css(theme_dir, project_name, tokens)
     _write_functions_php(theme_dir, stack)

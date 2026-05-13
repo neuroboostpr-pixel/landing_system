@@ -116,10 +116,19 @@ def test_main_creates_index_php(wp_theme_project):
     assert (wp_theme_project / "08_КОД" / "wp-theme" / "index.php").exists()
 
 
-def test_main_creates_gutenberg_blocks_dir(wp_theme_project):
+def test_main_creates_blocks_dir(wp_theme_project):
+    """wp-theme/blocks/ is where generate-lzb-templates.py writes block.php files."""
     mod = _load()
     mod.main(["prog", str(wp_theme_project)])
-    assert (wp_theme_project / "08_КОД" / "gutenberg-blocks").is_dir()
+    assert (wp_theme_project / "08_КОД" / "wp-theme" / "blocks").is_dir()
+
+
+def test_main_does_not_create_legacy_dirs(wp_theme_project):
+    """No more template-parts/ or 08_КОД/gutenberg-blocks/ — those were ACF Blocks era."""
+    mod = _load()
+    mod.main(["prog", str(wp_theme_project)])
+    assert not (wp_theme_project / "08_КОД" / "wp-theme" / "template-parts").exists()
+    assert not (wp_theme_project / "08_КОД" / "gutenberg-blocks").exists()
 
 
 def test_main_missing_tokens_returns_one(tmp_path):
