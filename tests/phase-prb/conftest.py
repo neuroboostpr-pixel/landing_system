@@ -26,3 +26,8 @@ _RP_PATH = REPO_ROOT / "skills" / "photo-curation" / "scripts" / "render-prompt.
 if _RP_PATH.exists():
     _mod = _load_module("skills.photo_curation.scripts.render_prompt", _RP_PATH)
     sys.modules["skills.photo_curation.scripts.render_prompt"] = _mod
+
+_INTAKE_PATH = REPO_ROOT / "skills" / "photo-curation" / "scripts" / "intake.py"
+if _INTAKE_PATH.exists():
+    _intake_mod = _load_module("skills.photo_curation.scripts.intake", _INTAKE_PATH)
+    sys.modules["skills.photo_curation.scripts.intake"] = _intake_mod
