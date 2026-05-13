@@ -86,7 +86,7 @@ PR-B не модифицирует stages 00-07a и 08+. Только новые
 | Агент | Триггер | Что делает | Выход |
 |---|---|---|---|
 | `photo-curator` | `/landing-photos` | Оркестратор PR-B. Intake (HEIC→JPEG sips, EXIF strip, hash dedupe, folder-tag detection). Запускает остальных 3. Рендерит HTML галерею. Ждёт user approve. Управляет `STATE.yaml` | `07c_PHOTOS/photo-board.html`, `STATE.yaml` |
-| `photo-classifier` | от curator | Batch tagging через `codex exec --image` для файлов в `_свалка/` (под-папки уже имеют folder-tag). Chunks по 5 фоток для rate-limit | `07c_PHOTOS/catalog.yaml` |
+| `photo-classifier` | от curator | Batch tagging через codex CLI с image input для файлов в `_свалка/` (под-папки уже имеют folder-tag). Chunks по 5 фоток для rate-limit. ⚠️ См. Known risks ниже про точный механизм image input | `07c_PHOTOS/catalog.yaml` |
 | `photo-matcher` | от curator | Codex читает `catalog.yaml` + `prototype.yaml` slots + `wireframe selections.yaml` + `tokens.json` + `01a/positioning.md`. Рекомендует top-3 фотки на каждый слот. Mark `ai_fallback_needed` | `07c_PHOTOS/selections.draft.yaml` |
 | `photo-preview-board` | от curator после selections.yaml утверждён | Запускает `style.py` per slot (crop/resize под ratio+mobile_ratio из meta.yaml) + codex `image_gen` для AI fallback. Собирает `photo-preview.html` «фото в макетных местах» используя block templates | `07c_PHOTOS/processed/`, `photo-preview.html` |
 
@@ -165,6 +165,12 @@ skills/photo-curation/
 ├── STATE.yaml                             ← статусы этапов (intake/classify/match/preview/approved)
 └── .logs/                                 ← все codex prompt+response для аудита
 ```
+
+### Жизненный цикл selections (draft → canonical)
+
+1. `photo-matcher` пишет `selections.draft.yaml`. В draft каждый слот имеет дополнительное поле `required_user_approval: bool` (для identity-safe слотов = true если требуется AI fallback).
+2. Пользователь открывает `photo-board.html`, видит pre-filled выбор. Для слотов с `required_user_approval: true` — отдельный modal «Согласен на AI face?» с обязательной галочкой.
+3. После Confirm → `selections.yaml` (canonical) **без** поля `required_user_approval` — оно заменяется на `ai_approved_by_user: bool` (что пользователь решил по факту).
 
 ### Структура `selections.yaml` (canonical, после user approve)
 
@@ -465,7 +471,8 @@ TDD per CLAUDE.md: сначала падающий тест, потом код.
 - PR-A артефакты (`07a_WIREFRAME/`, `07b_COMPOSED/`, `prototype.yaml`) — без изменений.
 - `compose-blocks.py` расширяется, не переписывается: если `07c_PHOTOS/selections.yaml` не существует — старое placeholder поведение.
 - `block-library/` метаданные блоков — без изменений (slots[].ratio уже есть в meta.yaml).
-- Существующий `agents/photo-stylist.md` остаётся (стадия 02 raw photo intake), новый `photo-curator` работает поверх него на стадии 07c.
+- Существующий `agents/photo-stylist.md` остаётся (стадия 02 raw photo intake в `02_МАТЕРИАЛЫ_КЛИЕНТА/photos/`), новый `photo-curator` работает поверх него на стадии 07c (`07c_PHOTOS/inbox/`).
+- **Dual-path intake**: `photo-curator` при запуске сканирует **оба** места — `02_МАТЕРИАЛЫ_КЛИЕНТА/photos/original/` (старый путь) и `07c_PHOTOS/inbox/` (новый). Фотки из старого пути копируются в `07c_PHOTOS/inbox/_свалка/` (или соответствующую под-папку если можно вывести из имени файла). Это позволяет плавную миграцию — старые проекты с фотками в `02_` не сломаются.
 - Существующий `skills/photo-styling/` расширяется флагом `--target-ratio`, текущий API сохраняется.
 
 ---
@@ -494,6 +501,41 @@ nexu-io/open-design (https://github.com/nexu-io/open-design):
 License: Apache-2.0. Full text at:
 https://github.com/nexu-io/open-design/blob/main/LICENSE
 ```
+
+---
+
+## Known risks
+
+### R1 — Codex CLI image input mechanism (HIGH)
+
+`paralaximus-codex` использует codex только для **генерации** изображений через built-in `image_gen` tool. Для классификации (PR-B) нам нужен обратный путь — **отдать фотку codex'у на анализ**. Точный синтаксис codex CLI для image input не подтверждён на момент написания spec.
+
+**Mitigation plan** (research → fallback chain):
+
+1. **Research-первая задача в implementation plan:** проверить codex CLI v0.125+ docs / `codex exec --help` на флаги `--image`, `--attach`, `--read-files`, или возможность передать `file://path/to/image.jpg` в prompt.
+2. Если codex CLI поддерживает image input нативно → используем как первый вариант (single dependency).
+3. Если codex CLI не поддерживает или поддерживает плохо → fallback A: дать codex'у промпт с filesystem instructions «прочитай файл X через свой read tool и опиши». Codex имеет read access по умолчанию.
+4. Если fallback A не работает → fallback B: для classifier-агента (только!) использовать Anthropic SDK напрямую с `messages.create` + image base64 content blocks + prompt caching. Это **единственное исключение** из D1 «всё через codex CLI», ограниченное только классификатором. Документируется в SKILL.md.
+
+**Решение о fallback принимается на спайке в начале implementation** (1-2 часа research перед основным кодом).
+
+### R2 — codex exec rate limits на batch operations
+
+`generate-atlas.sh` пока вызывался по 1 разу за хеллоу. PR-B вызывает codex до 50+ раз подряд (по 5 фоток × N батчей для classify + N слотов для match/generate). Возможны rate-limits.
+
+**Mitigation:** chunk by 5 photos для classifier, sleep 2s между batches; для generative fallback — последовательно, не параллельно; expone-backoff в `call-codex.sh` обёртке.
+
+### R3 — HEIC формат на не-macOS
+
+`sips` есть только на macOS. Linux/WSL пользователи получат warning и должны вручную конвертить HEIC.
+
+**Mitigation:** документация в `07c_PHOTOS/inbox/README.md` + опциональная зависимость `pillow-heif` (если установлен — используем; иначе skip+warn).
+
+### R4 — codex sandbox refuses to write into project
+
+Уже знакомая проблема из paralaximus (codex генерит в `~/.codex/generated_images/`, не может скопировать в проект из-за своей же sandbox-политики).
+
+**Mitigation:** копируем `generate-atlas.sh` snapshot+comm паттерн в все 3 codex-обёртки PR-B. Уже решено архитектурно.
 
 ---
 
