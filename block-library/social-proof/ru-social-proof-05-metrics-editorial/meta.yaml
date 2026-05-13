@@ -1,0 +1,20 @@
+id: ru-social-proof-05-metrics-editorial
+category: social-proof
+ru_market: true
+use_cases: [services, b2c, local]
+description: "Редакционный блок с крупной цифрой-метрикой + 2 карточки дополнительных показателей. Органическая, сеточная композиция. Вдохновлён Field Notes."
+display_name_ru: "📈 Доказательства — редакционные метрики"
+layout_summary_ru: "Большая героическая карточка с % / числом + цитатой, два сателлита с числами. Тёплый фон, округлые карточки."
+recommended_styles_ru: ["Editorial", "Neumorphism"]
+slots:
+  - {type: text, name: hero-metric, max_chars: 10, required: true}
+  - {type: text, name: hero-context, max_chars: 160, required: true}
+  - {type: text, name: metric-2-label, max_chars: 40, required: true}
+  - {type: text, name: metric-2-value, max_chars: 12, required: true}
+  - {type: text, name: metric-3-label, max_chars: 40, required: true}
+  - {type: text, name: metric-3-value, max_chars: 12, required: true}
+  - {type: text, name: headline, max_chars: 60, required: true}
+conversion_notes: "Крупная цифра + контекст = мгновенная доверительность. Редакционный стиль воспринимается как объективный, не рекламный."
+source: opendesign
+source_attribution: "/tmp/open-design/skills/field-notes-editorial-template/example.html"
+created: 2026-05-13

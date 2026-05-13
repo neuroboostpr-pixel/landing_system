@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<!-- Source: /tmp/open-design/skills/swiss-creative-mode-template/example.html (Apache-2.0, adapted for RU block-library schema) -->
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>ru-features-03-swiss-cards — desktop</title>
+<style>
+  :root {
+    --color-bg: #f3efe4;
+    --color-fg: #0b0b0b;
+    --color-accent: #ff7f2a;
+    --color-border: #0b0b0b;
+    --font-display: system-ui, sans-serif;
+    --font-body: system-ui, sans-serif;
+    --spacing-md: 16px;
+    --spacing-lg: 32px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-body); background: var(--color-bg); color: var(--color-fg); }
+  .swiss-wrap { padding: 60px var(--spacing-lg); max-width: 1100px; margin: 0 auto; }
+  .headline { font-family: var(--font-display); font-size: clamp(36px, 6vw, 80px); line-height: .95; text-transform: uppercase; letter-spacing: -.03em; margin-bottom: 32px; }
+  .headline span { color: var(--color-accent); }
+  .cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .card { border: 3px solid var(--color-border); min-height: 220px; padding: 20px; box-shadow: 6px 6px 0 var(--color-border); display: flex; flex-direction: column; gap: 10px; }
+  .card-c1 { background: #fff; }
+  .card-c2 { background: #f28cc2; }
+  .card-c3 { background: #f1cb3c; }
+  .card-c4 { background: #188f5a; color: #f3efe4; }
+  .card-num { font-size: 2.8rem; font-weight: 900; line-height: 1; }
+  .card-title { font-size: 1.4rem; font-weight: 900; text-transform: uppercase; letter-spacing: .08em; }
+  .card-text { font-size: .95rem; line-height: 1.45; font-weight: 600; opacity: .85; }
+</style>
+</head>
+<body>
+  <section class="swiss-wrap" data-block-id="ru-features-03-swiss-cards">
+    <h2 class="headline" data-slot="headline">[HEADLINE: <span>преимущества</span>]</h2>
+    <div class="cards-grid">
+      <article class="card card-c1">
+        <div class="card-num">01</div>
+        <div class="card-title" data-slot="card-1-title">[Преимущество 1]</div>
+        <p class="card-text" data-slot="card-1-text">[Описание первого преимущества — конкретно и с выгодой]</p>
+      </article>
+      <article class="card card-c2">
+        <div class="card-num">02</div>
+        <div class="card-title" data-slot="card-2-title">[Преимущество 2]</div>
+        <p class="card-text" data-slot="card-2-text">[Описание второго преимущества]</p>
+      </article>
+      <article class="card card-c3">
+        <div class="card-num">03</div>
+        <div class="card-title" data-slot="card-3-title">[Преимущество 3]</div>
+        <p class="card-text" data-slot="card-3-text">[Описание третьего преимущества]</p>
+      </article>
+      <article class="card card-c4">
+        <div class="card-num">04</div>
+        <div class="card-title" data-slot="card-4-title">[Преимущество 4]</div>
+        <p class="card-text" data-slot="card-4-text">[Описание четвёртого преимущества]</p>
+      </article>
+    </div>
+  </section>
+</body>
+</html>

@@ -1,5 +1,6 @@
 version: 1
 updated: '2026-05-13'
+# 7 blocks extracted from OpenDesign templates (Apache-2.0)
 blocks:
 - id: ru-hero-01-services-calc
   path: hero/ru-hero-01-services-calc/
@@ -190,3 +191,57 @@ blocks:
   - services
   - b2c
   - local
+- id: ru-faq-03-searchable
+  path: faq/ru-faq-03-searchable/
+  category: faq
+  use_cases:
+  - services
+  - b2c
+  - local
+  source: opendesign
+- id: ru-cta-05-login-cta
+  path: cta/ru-cta-05-login-cta/
+  category: cta
+  use_cases:
+  - services
+  - b2c
+  source: opendesign
+- id: ru-hero-06-swiss-metrics
+  path: hero/ru-hero-06-swiss-metrics/
+  category: hero
+  use_cases:
+  - services
+  - b2c
+  source: opendesign
+- id: ru-features-03-swiss-cards
+  path: features/ru-features-03-swiss-cards/
+  category: features
+  use_cases:
+  - services
+  - b2c
+  - local
+  source: opendesign
+- id: ru-trust-04-principles-grid
+  path: trust/ru-trust-04-principles-grid/
+  category: trust
+  use_cases:
+  - services
+  - b2c
+  - local
+  source: opendesign
+- id: ru-social-proof-05-metrics-editorial
+  path: social-proof/ru-social-proof-05-metrics-editorial/
+  category: social-proof
+  use_cases:
+  - services
+  - b2c
+  - local
+  source: opendesign
+- id: ru-process-02-next-steps
+  path: process/ru-process-02-next-steps/
+  category: process
+  use_cases:
+  - services
+  - b2c
+  - local
+  source: opendesign

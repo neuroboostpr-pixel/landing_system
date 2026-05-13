@@ -1,0 +1,19 @@
+id: ru-cta-05-login-cta
+category: cta
+ru_market: true
+use_cases: [services, b2c]
+description: "CTA-блок в стиле формы входа: email/телефон + кнопка + доверительная подпись. Для онлайн-сервисов и записи."
+display_name_ru: "🔐 CTA — форма регистрации/записи"
+layout_summary_ru: "Центрированная карточка с лого/иконкой, заголовком, полем ввода телефона или email, кнопкой-CTA и подписью-гарантией. Стиль — минималистичный, доверие через дизайн."
+recommended_styles_ru: ["Minimalism & Swiss Style", "Glassmorphism"]
+slots:
+  - {type: icon, name: brand-icon, required: false}
+  - {type: text, name: headline, max_chars: 50, required: true}
+  - {type: text, name: subhead, max_chars: 120, required: true}
+  - {type: text, name: input-placeholder, max_chars: 40, required: true}
+  - {type: cta, name: primary-cta, default_text: "Получить доступ", required: true}
+  - {type: text, name: trust-note, max_chars: 80, required: false}
+conversion_notes: "Форма входа — высочайшее доверие (пользователь уже решил). Одно поле + CTA. Trust note снимает тревогу о спаме."
+source: opendesign
+source_attribution: "/tmp/open-design/skills/login-flow/example.html"
+created: 2026-05-13

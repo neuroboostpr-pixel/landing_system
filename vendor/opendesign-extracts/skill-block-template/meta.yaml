@@ -1,8 +1,10 @@
 id: <kebab-case-id>
-category: <hero|features|social-proof|process|pricing|trust|cta|faq|quiz>
+category: hero
 ru_market: true
 use_cases: [services, b2c, local]
-description: ""
+description: "Описание блока — что делает, для какой ниши"
+display_name_ru: "Блок — название на русском"
+layout_summary_ru: "Краткое описание макета для wireframe-выбора (до 200 символов)."
 slots: []
 conversion_notes: ""
 source: manual

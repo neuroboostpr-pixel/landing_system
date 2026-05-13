@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<!-- Source: /tmp/open-design/skills/editorial-burgundy-principles-template/example.html (Apache-2.0, adapted for RU block-library schema) -->
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ru-trust-04-principles-grid — mobile</title>
+<style>
+  :root {
+    --color-bg: #f8f5ef;
+    --color-fg: #111;
+    --color-accent: #1a1a1a;
+    --color-border: rgba(17,17,17,.15);
+    --font-display: system-ui, sans-serif;
+    --font-body: system-ui, sans-serif;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-body); background: var(--color-bg); color: var(--color-fg); width: 375px; padding: 32px 16px; }
+  .headline { font-family: var(--font-display); font-size: 1.8rem; letter-spacing: -.02em; margin-bottom: 24px; }
+  .headline em { font-style: italic; opacity: .6; }
+  .principles-grid { display: flex; flex-direction: column; gap: 10px; }
+  .principle-card { border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+  .pc-dark { background: var(--color-accent); color: #f5f1ea; }
+  .pc-light { background: rgba(0,0,0,.06); }
+  .pc-accent { background: var(--color-fg); color: #f5f1ea; }
+  .pc-warm { background: #e8dfc8; }
+  .principle-num { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; opacity: .65; }
+  .principle-title { font-size: 1.2rem; font-weight: 700; line-height: 1.05; }
+  .principle-text { font-size: .875rem; line-height: 1.45; opacity: .85; }
+</style>
+</head>
+<body>
+  <section data-block-id="ru-trust-04-principles-grid">
+    <h2 class="headline" data-slot="headline">[<em>Наши принципы</em>]</h2>
+    <div class="principles-grid">
+      <article class="principle-card pc-dark">
+        <div class="principle-num">/ 01</div>
+        <div class="principle-title" data-slot="p1-title">[Принцип 1]</div>
+        <p class="principle-text" data-slot="p1-text">[Описание 1]</p>
+      </article>
+      <article class="principle-card pc-light">
+        <div class="principle-num">/ 02</div>
+        <div class="principle-title" data-slot="p2-title">[Принцип 2]</div>
+        <p class="principle-text" data-slot="p2-text">[Описание 2]</p>
+      </article>
+      <article class="principle-card pc-warm">
+        <div class="principle-num">/ 03</div>
+        <div class="principle-title" data-slot="p3-title">[Принцип 3]</div>
+        <p class="principle-text" data-slot="p3-text">[Описание 3]</p>
+      </article>
+      <article class="principle-card pc-accent">
+        <div class="principle-num">/ 04</div>
+        <div class="principle-title" data-slot="p4-title">[Принцип 4]</div>
+        <p class="principle-text" data-slot="p4-text">[Описание 4]</p>
+      </article>
+    </div>
+  </section>
+</body>
+</html>
