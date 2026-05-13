@@ -22,6 +22,17 @@ sys.modules.setdefault("skills", _skills_mod)
 sys.modules["skills.photo_curation"] = _pc_mod
 sys.modules["skills.photo_curation.scripts"] = _pc_scripts_mod
 
+# Pre-register namespace modules so `from skills.block_composition...` works
+_bc_mod = type(sys)("skills.block_composition")
+_bc_scripts_mod = type(sys)("skills.block_composition.scripts")
+sys.modules["skills.block_composition"] = _bc_mod
+sys.modules["skills.block_composition.scripts"] = _bc_scripts_mod
+
+_INJECT_PATH = REPO_ROOT / "skills" / "block-composition" / "scripts" / "inject-content.py"
+if _INJECT_PATH.exists():
+    _inj_mod = _load_module("skills.block_composition.scripts.inject_content", _INJECT_PATH)
+    sys.modules["skills.block_composition.scripts.inject_content"] = _inj_mod
+
 _RP_PATH = REPO_ROOT / "skills" / "photo-curation" / "scripts" / "render-prompt.py"
 if _RP_PATH.exists():
     _mod = _load_module("skills.photo_curation.scripts.render_prompt", _RP_PATH)

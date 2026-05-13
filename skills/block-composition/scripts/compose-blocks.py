@@ -32,6 +32,10 @@ def main() -> None:
     inject_tokens = scripts_dir / "inject-tokens.py"
     inject_content = scripts_dir / "inject-content.py"
 
+    # PR-B: load photo selections if 07c_PHOTOS/selections.yaml is present (backward compatible)
+    photo_selections_path = project / "07c_PHOTOS" / "selections.yaml"
+    photo_selections_arg = str(photo_selections_path) if photo_selections_path.exists() else None
+
     desktop_parts: list[str] = []
     mobile_parts: list[str] = []
     desktop_styles: list[str] = []
@@ -58,14 +62,16 @@ def main() -> None:
                     ["python3", str(inject_tokens), str(src), str(tokens_path), str(stage1)],
                     check=True,
                 )
-                subprocess.run(
-                    ["python3", str(inject_content),
-                     "--template", str(stage1),
-                     "--prototype", str(project / "07_ПРОТОТИП" / "prototype.yaml"),
-                     "--position", str(position),
-                     "--output", str(stage2)],
-                    check=True,
-                )
+                inject_cmd = [
+                    "python3", str(inject_content),
+                    "--template", str(stage1),
+                    "--prototype", str(project / "07_ПРОТОТИП" / "prototype.yaml"),
+                    "--position", str(position),
+                    "--output", str(stage2),
+                ]
+                if photo_selections_arg:
+                    inject_cmd += ["--selections", photo_selections_arg]
+                subprocess.run(inject_cmd, check=True)
 
                 content = stage2.read_text()
 
