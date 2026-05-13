@@ -21,11 +21,25 @@
 
   .confirm-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #111; color: #fff; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
   .confirm-bar button { padding: 12px 24px; background: #fff; color: #111; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
+
+  .proto-panel { margin: 24px; background: #fff; padding: 20px 24px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  .proto-panel summary { font-weight: 600; font-size: 14px; cursor: pointer; padding: 4px 0; color: #333; }
+  .proto-panel pre { background: #fafafa; border: 1px solid #eee; border-radius: 6px; padding: 16px; font-size: 13px; line-height: 1.5; white-space: pre-wrap; max-height: 480px; overflow: auto; margin: 12px 0 0; }
+  .proto-meta { color: #777; font-size: 12px; margin-top: 8px; }
+  .device.desktop iframe { height: 720px; }
+  .device.mobile iframe { height: 720px; }
+  body { padding-bottom: 90px; }
 </style>
 </head>
 <body>
-<h1 style="padding: 24px;">Wireframe — {{project_slug}}</h1>
-<p style="padding: 0 24px; color: #666;">Выбери вариант композиции для каждого блока с помощью radio-кнопок. Когда закончишь — нажми «Confirm selections» внизу.</p>
+<h1 style="padding: 24px 24px 8px;">Wireframe — {{project_slug}} <span style="font-size: 14px; color: #888; font-weight: 400;">niche: {{niche}}</span></h1>
+<p style="padding: 0 24px; color: #666;">Слева — что хотел клиент (прототип). Снизу — варианты, как это может выглядеть. Выбери вариант композиции для каждого блока radio-кнопками. Когда закончишь — нажми «Confirm selections» внизу.</p>
+
+<details class="proto-panel" open>
+  <summary>📄 Прототип-источник (что хотел клиент)</summary>
+  <pre>{{prototype_source}}</pre>
+  <div class="proto-meta">Если нужно подправить — отредактируй <code>07_ПРОТОТИП/source/prototype.md</code> и перезапусти <code>/landing-prototype</code> → <code>/landing-wireframe</code>.</div>
+</details>
 
 {{blocks_html}}
 

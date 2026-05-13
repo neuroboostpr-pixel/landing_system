@@ -5,6 +5,7 @@ import html
 import json
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 import yaml
@@ -36,6 +37,22 @@ def main() -> None:
     slug = proto["project"]["slug"]
 
     matcher_script = Path(__file__).parent / "match-candidates.py"
+    inject_content_script = (
+        Path(__file__).parent.parent.parent
+        / "block-composition" / "scripts" / "inject-content.py"
+    )
+    if not inject_content_script.exists():
+        fail(f"inject-content.py not found at {inject_content_script}")
+
+    # Read prototype.md for top-of-page preview (fall back to YAML dump if missing)
+    proto_md_path = project_dir / "07_ПРОТОТИП" / "prototype.md"
+    if proto_md_path.exists():
+        prototype_source_text = proto_md_path.read_text()
+    else:
+        prototype_source_text = (
+            "(prototype.md not found — showing parsed YAML instead)\n\n"
+            + yaml.dump(proto, sort_keys=False, allow_unicode=True)
+        )
 
     blocks_html_parts: list[str] = []
     checked_rules: list[str] = []
@@ -79,8 +96,39 @@ def main() -> None:
         for i, cid in enumerate(candidate_ids):
             cat = _category_for(args.library, cid)
             block_dir = Path(args.library) / cat / cid
-            tmpl_d = (block_dir / "assets" / "template.html").read_text()
-            tmpl_m = (block_dir / "assets" / "template-mobile.html").read_text()
+
+            # Inject content from prototype into each template before iframe embedding.
+            # Uses inject-content.py from block-composition skill — same script as 07b Compose.
+            with tempfile.TemporaryDirectory() as tmp:
+                tmp_p = Path(tmp)
+                injected_d = tmp_p / f"{cid}-desktop.html"
+                injected_m = tmp_p / f"{cid}-mobile.html"
+                for src_name, out_path in (
+                    ("template.html", injected_d),
+                    ("template-mobile.html", injected_m),
+                ):
+                    src_html = block_dir / "assets" / src_name
+                    try:
+                        subprocess.run(
+                            [
+                                "python3", str(inject_content_script),
+                                "--template", str(src_html),
+                                "--prototype", str(proto_path),
+                                "--position", str(position),
+                                "--output", str(out_path),
+                            ],
+                            capture_output=True, text=True, check=True,
+                        )
+                    except subprocess.CalledProcessError as e:
+                        # Fall back to raw template if injection fails
+                        print(
+                            f"WARN: inject-content failed for {cid}/{src_name}: "
+                            f"{e.stderr.strip()}",
+                            file=sys.stderr,
+                        )
+                        out_path.write_text(src_html.read_text())
+                tmpl_d = injected_d.read_text()
+                tmpl_m = injected_m.read_text()
 
             rid = f"b{position}-v{i}"
             checked = "checked" if i == 0 else ""
@@ -113,6 +161,8 @@ def main() -> None:
     shell = Path(args.template).read_text()
     out = (
         shell.replace("{{project_slug}}", slug)
+        .replace("{{niche}}", niche)
+        .replace("{{prototype_source}}", html.escape(prototype_source_text))
         .replace("{{blocks_html}}", "\n".join(blocks_html_parts))
         .replace("{{checked_rules}}", "\n".join(checked_rules))
     )

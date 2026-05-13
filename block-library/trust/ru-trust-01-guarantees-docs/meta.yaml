@@ -1,23 +1,63 @@
 id: ru-trust-01-guarantees-docs
 category: trust
 ru_market: true
-use_cases: [services, local]
-description: "4 плашки доверия: договор, лицензия, гарантия, возврат — с иконками и кратким текстом."
+use_cases:
+- b2c
+- local
+- services
+description: '4 плашки доверия: договор, лицензия, гарантия, возврат — с иконками
+  и кратким текстом.'
 slots:
-  - {type: text, name: headline, max_chars: 60, required: true}
-  - {type: icon, name: trust-1-icon, required: false}
-  - {type: text, name: trust-1-title, max_chars: 20, required: true}
-  - {type: text, name: trust-1-text, max_chars: 80, required: true}
-  - {type: icon, name: trust-2-icon, required: false}
-  - {type: text, name: trust-2-title, max_chars: 20, required: true}
-  - {type: text, name: trust-2-text, max_chars: 80, required: true}
-  - {type: icon, name: trust-3-icon, required: false}
-  - {type: text, name: trust-3-title, max_chars: 20, required: true}
-  - {type: text, name: trust-3-text, max_chars: 80, required: true}
-  - {type: icon, name: trust-4-icon, required: false}
-  - {type: text, name: trust-4-title, max_chars: 20, required: true}
-  - {type: text, name: trust-4-text, max_chars: 80, required: true}
-conversion_notes: "Договор + лицензия — юридическая защита. Гарантия + возврат — финансовая защита клиента."
+- type: text
+  name: headline
+  max_chars: 60
+  required: true
+- type: icon
+  name: trust-1-icon
+  required: false
+- type: text
+  name: trust-1-title
+  max_chars: 20
+  required: true
+- type: text
+  name: trust-1-text
+  max_chars: 80
+  required: true
+- type: icon
+  name: trust-2-icon
+  required: false
+- type: text
+  name: trust-2-title
+  max_chars: 20
+  required: true
+- type: text
+  name: trust-2-text
+  max_chars: 80
+  required: true
+- type: icon
+  name: trust-3-icon
+  required: false
+- type: text
+  name: trust-3-title
+  max_chars: 20
+  required: true
+- type: text
+  name: trust-3-text
+  max_chars: 80
+  required: true
+- type: icon
+  name: trust-4-icon
+  required: false
+- type: text
+  name: trust-4-title
+  max_chars: 20
+  required: true
+- type: text
+  name: trust-4-text
+  max_chars: 80
+  required: true
+conversion_notes: Договор + лицензия — юридическая защита. Гарантия + возврат — финансовая
+  защита клиента.
 source: manual
-source_attribution: ""
+source_attribution: ''
 created: 2026-05-12
