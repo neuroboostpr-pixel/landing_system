@@ -157,8 +157,32 @@ def main(argv: list) -> int:
     _write_style_css(theme_dir, project_name, tokens)
     _write_functions_php(theme_dir, stack)
 
+    # Minimal WP template: emits enqueued head/footer + post content. Front page
+    # is a Gutenberg page set via page_on_front; the_content() renders its blocks.
     (theme_dir / "index.php").write_text(
-        "<?php\n// Silence is golden.\n",
+        "<?php if (!defined('ABSPATH')) { exit; } ?>\n"
+        "<!DOCTYPE html>\n"
+        "<html <?php language_attributes(); ?>>\n"
+        "<head>\n"
+        "    <meta charset=\"<?php bloginfo('charset'); ?>\">\n"
+        "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n"
+        "    <?php wp_head(); ?>\n"
+        "</head>\n"
+        "<body <?php body_class(); ?>>\n"
+        "<?php wp_body_open(); ?>\n"
+        "<main id=\"main\" class=\"lp-main\">\n"
+        "<?php\n"
+        "if (have_posts()) {\n"
+        "    while (have_posts()) {\n"
+        "        the_post();\n"
+        "        the_content();\n"
+        "    }\n"
+        "}\n"
+        "?>\n"
+        "</main>\n"
+        "<?php wp_footer(); ?>\n"
+        "</body>\n"
+        "</html>\n",
         encoding="utf-8",
     )
 

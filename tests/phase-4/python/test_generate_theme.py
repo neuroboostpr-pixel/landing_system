@@ -111,9 +111,19 @@ def test_main_creates_assets_dirs(wp_theme_project):
 
 
 def test_main_creates_index_php(wp_theme_project):
+    """index.php must be a functional WP template that calls the_content() —
+    front page is now a Gutenberg page (page_on_front), not a hand-crafted
+    front-page.php, so index.php must render it."""
     mod = _load()
     mod.main(["prog", str(wp_theme_project)])
-    assert (wp_theme_project / "08_КОД" / "wp-theme" / "index.php").exists()
+    idx = wp_theme_project / "08_КОД" / "wp-theme" / "index.php"
+    assert idx.exists()
+    body = idx.read_text(encoding="utf-8")
+    assert "the_content()" in body
+    assert "wp_head()" in body
+    assert "wp_footer()" in body
+    # Must NOT be the old plugin-style stub
+    assert "Silence is golden" not in body
 
 
 def test_main_creates_blocks_dir(wp_theme_project):
