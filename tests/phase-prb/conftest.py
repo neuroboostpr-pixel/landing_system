@@ -46,3 +46,8 @@ _PREVIEW_PATH = REPO_ROOT / "skills" / "photo-curation" / "scripts" / "preview-r
 if _PREVIEW_PATH.exists():
     _preview_mod = _load_module("skills.photo_curation.scripts.preview_render", _PREVIEW_PATH)
     sys.modules["skills.photo_curation.scripts.preview_render"] = _preview_mod
+
+_SELVAL_PATH = REPO_ROOT / "skills" / "photo-curation" / "scripts" / "selections-validator.py"
+if _SELVAL_PATH.exists():
+    _selval_mod = _load_module("skills.photo_curation.scripts.selections_validator", _SELVAL_PATH)
+    sys.modules["skills.photo_curation.scripts.selections_validator"] = _selval_mod
