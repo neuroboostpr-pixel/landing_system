@@ -1,0 +1,49 @@
+id: ru-features-08-kpi-metrics
+category: features
+ru_market: true
+use_cases:
+  - services
+  - b2c
+description: '4 KPI-метрики с инфографикой: % успеха, лет на рынке, клиентов, проектов'
+display_name_ru: 📊 4 KPI-метрики (87% / 12 лет / 1000+ клиентов)
+layout_summary_ru: Четыре крупные метрики в одной линии, каждая с infographic-визуалом сверху и подписью снизу. Mobile — 2x2 grid.
+slots:
+  - type: infographic
+    name: kpi-1
+    chart_type: number
+    data:
+      value: 87
+      label: '%'
+      caption: 'успешных проектов'
+    required: true
+  - type: infographic
+    name: kpi-2
+    chart_type: number
+    data:
+      value: 12
+      label: 'лет'
+      caption: 'на рынке'
+    required: true
+  - type: infographic
+    name: kpi-3
+    chart_type: number
+    data:
+      value: 1000
+      label: '+'
+      caption: 'клиентов'
+    required: true
+  - type: infographic
+    name: kpi-4
+    chart_type: number
+    data:
+      value: 500
+      label: '+'
+      caption: 'завершённых проектов'
+    required: false
+conversion_notes: KPI-блок повышает доверие. Числа должны быть честными — проверь с клиентом.
+source: manual
+source_attribution: ''
+created: 2026-05-13
+recommended_styles_ru:
+  - Minimalism & Swiss Style
+  - Flat Design 2.0
