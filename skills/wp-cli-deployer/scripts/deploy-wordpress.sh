@@ -76,8 +76,14 @@ if [ -f "$PAGE_HTML" ]; then
         sed -i.bak "s|__IMAGE_ATTACHMENT_ID__${fname}__|${id}|g" "$TMP_HTML"
     done
 
-    PAGE_SLUG="$(python3 -c "import sys,yaml; d=yaml.safe_load(open(r'$SPEC',encoding='utf-8')); print((d.get('page') or {}).get('slug') or 'home')")"
-    PAGE_TITLE="$(python3 -c "import sys,yaml; d=yaml.safe_load(open(r'$SPEC',encoding='utf-8')); print((d.get('page') or {}).get('title') or 'Home')")"
+    # Resolve a working Python (Windows ships `python`, Linux/mac ship `python3`)
+    if command -v python3 >/dev/null 2>&1 && python3 -c '' >/dev/null 2>&1; then
+        PY=python3
+    else
+        PY=python
+    fi
+    PAGE_SLUG="$($PY -c "import sys,yaml; d=yaml.safe_load(open(r'$SPEC',encoding='utf-8')); print((d.get('page') or {}).get('slug') or 'home')")"
+    PAGE_TITLE="$($PY -c "import sys,yaml; d=yaml.safe_load(open(r'$SPEC',encoding='utf-8')); print((d.get('page') or {}).get('title') or 'Home')")"
 
     REMOTE_HTML="${BEGET_PATH}/wp-content/themes/lp-${PROJECT_SLUG}/.page-content.html"
     scp "$TMP_HTML" "${BEGET_USER}@${BEGET_HOST}:${REMOTE_HTML}"
