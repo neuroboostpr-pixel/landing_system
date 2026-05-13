@@ -1,8 +1,16 @@
 #!/usr/bin/env python3
 """Generate Gutenberg block markup (page-content.html) seeded with defaults
-from block-spec.yaml. Deploy step substitutes image-attachment placeholders."""
+from block-spec.yaml. Deploy step substitutes image-attachment placeholders.
+
+**Deploy contract:** image-id placeholders are emitted UNQUOTED in JSON
+(`"id": __IMAGE_ATTACHMENT_ID__hero.png__`). Deploy MUST replace the entire
+placeholder token with a JSON integer literal (no surrounding quotes) so that
+Lazy Blocks receives `"id": 42` not `"id": "42"`. The deploy script's `sed`
+expression must therefore not include surrounding quotes either.
+"""
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 from urllib.parse import quote
@@ -50,8 +58,15 @@ def _build_attrs(controls: list[Control], override: dict | None = None) -> dict:
     return attrs
 
 
+_PLACEHOLDER_QUOTED_RE = re.compile(r'"(__IMAGE_ATTACHMENT_ID__[^"]+__)"')
+
+
 def _render_block(slug: str, attrs: dict, inner_html: str = "") -> str:
     attr_json = json.dumps(attrs, ensure_ascii=False)
+    # Strip the surrounding quotes around image-id placeholders so that
+    # after deploy sed-replaces the token with a numeric attachment id,
+    # the result is valid JSON (`"id": 42`, not `"id": "42"`).
+    attr_json = _PLACEHOLDER_QUOTED_RE.sub(r'\1', attr_json)
     if inner_html:
         return f'<!-- wp:lazyblock/{slug} {attr_json} -->\n{inner_html}\n<!-- /wp:lazyblock/{slug} -->'
     return f'<!-- wp:lazyblock/{slug} {attr_json} /-->'
