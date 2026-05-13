@@ -39,7 +39,7 @@ def test_creates_section_with_inner_blocks_tag(tmp_path):
     section = (project / "08_КОД" / "wp-theme" / "blocks" / "lazyblock-tarify" / "block.php").read_text(encoding="utf-8")
     assert "<InnerBlocks" in section
     assert "lazyblock/tarify-card" in section
-    assert 'class="nu-tier-grid"' in section
+    assert "nu-tier-grid" in section
 
 
 def test_creates_card_block_php(tmp_path):
@@ -75,4 +75,65 @@ def test_image_control_uses_attachment_src_helper(tmp_path):
     (project / "08_КОД" / "block-spec.yaml").write_text(spec, encoding="utf-8")
     _run(project)
     body = (project / "08_КОД" / "wp-theme" / "blocks" / "lazyblock-hero" / "block.php").read_text(encoding="utf-8")
-    assert "wp_get_attachment_image" in body or "['url']" in body
+    assert "wp_get_attachment_image" in body
+    assert "['url']" in body
+
+
+def test_toggle_emits_visible_conditional(tmp_path):
+    project = tmp_path / "proj"
+    (project / "08_КОД" / "wp-theme" / "blocks").mkdir(parents=True)
+    (project / "08_КОД" / "block-spec.yaml").write_text(
+        "version: 1\n"
+        "page: { title: T, slug: home }\n"
+        "blocks:\n"
+        "  - slug: hero\n"
+        "    type: single\n"
+        "    title: Hero\n"
+        "    icon: star-filled\n"
+        "    category: lp-blocks\n"
+        "    controls:\n"
+        "      - { id: c_t, name: featured, type: toggle, label: F, default: false }\n",
+        encoding="utf-8",
+    )
+    r = subprocess.run([sys.executable, str(SCRIPT), "--project", str(project)], capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr
+    body = (project / "08_КОД" / "wp-theme" / "blocks" / "lazyblock-hero" / "block.php").read_text(encoding="utf-8")
+    # No dead PHP comment; an actual conditional users can hook CSS to
+    assert "if (!empty($attributes['featured']))" in body
+    assert "lp-field--featured" in body
+    # No nested <?php inside /* */ artefact
+    assert "/* toggle" not in body
+
+
+def test_repeater_url_child_uses_esc_url(tmp_path):
+    project = tmp_path / "proj"
+    (project / "08_КОД" / "wp-theme" / "blocks").mkdir(parents=True)
+    (project / "08_КОД" / "block-spec.yaml").write_text(
+        "version: 1\n"
+        "page: { title: T, slug: home }\n"
+        "blocks:\n"
+        "  - slug: hero\n"
+        "    type: single\n"
+        "    title: Hero\n"
+        "    icon: star-filled\n"
+        "    category: lp-blocks\n"
+        "    controls:\n"
+        "      - { id: c_lst, name: links, type: repeater, label: L }\n"
+        "      - { id: c_url, name: href, type: url, label: U, default: '#', child_of: c_lst }\n"
+        "      - { id: c_rich, name: html, type: rich-text, label: H, default: '', child_of: c_lst }\n",
+        encoding="utf-8",
+    )
+    r = subprocess.run([sys.executable, str(SCRIPT), "--project", str(project)], capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr
+    body = (project / "08_КОД" / "wp-theme" / "blocks" / "lazyblock-hero" / "block.php").read_text(encoding="utf-8")
+    # url child uses esc_url, not esc_html
+    assert "esc_url($row['href']" in body
+    # rich-text child uses wp_kses_post
+    assert "wp_kses_post($row['html']" in body
+
+
+def test_section_grid_class_is_escaped(tmp_path):
+    project = _make_project(tmp_path)
+    _run(project)
+    body = (project / "08_КОД" / "wp-theme" / "blocks" / "lazyblock-tarify" / "block.php").read_text(encoding="utf-8")
+    assert "esc_attr('nu-tier-grid')" in body

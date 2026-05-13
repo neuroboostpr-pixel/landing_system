@@ -37,10 +37,26 @@ def _render_control_output(c: Control) -> str:
             f'    <?php endif; ?>'
         )
     if c.type == "toggle":
-        return f'    <?php /* toggle {key}: <?php echo !empty($attributes[\'{key}\']) ? \'1\' : \'0\'; ?> */ ?>'
+        return (
+            f'    <?php if (!empty($attributes[\'{key}\'])): ?>\n'
+            f'        <div class="{cls} {cls}--on"></div>\n'
+            f'    <?php endif; ?>'
+        )
     if c.type == "repeater":
         return ""  # handled by caller (nested loop)
     return f'    <div class="{cls}"><?php echo esc_html((string)($attributes[\'{key}\'] ?? \'\')); ?></div>'
+
+
+def _repeater_child_output(ch: Control) -> str:
+    cls = f"lp-rep-item lp-rep-item--{ch.name}"
+    key = ch.name
+    if ch.type in ("rich-text", "classic-editor"):
+        return f'        <li class="{cls}"><?php echo wp_kses_post($row[\'{key}\'] ?? \'\'); ?></li>'
+    if ch.type == "url":
+        return f'        <li class="{cls}"><a href="<?php echo esc_url($row[\'{key}\'] ?? \'#\'); ?>"></a></li>'
+    if ch.type == "textarea":
+        return f'        <li class="{cls}"><?php echo nl2br(esc_html($row[\'{key}\'] ?? \'\')); ?></li>'
+    return f'        <li class="{cls}"><?php echo esc_html((string)($row[\'{key}\'] ?? \'\')); ?></li>'
 
 
 def _render_repeater(c: Control, all_controls: list) -> str:
@@ -49,10 +65,7 @@ def _render_repeater(c: Control, all_controls: list) -> str:
     for ch in children:
         if ch.type == "repeater":
             continue
-        item_lines.append(
-            f'        <li class="lp-rep-item lp-rep-item--{ch.name}">'
-            f'<?php echo esc_html($row[\'{ch.name}\'] ?? \'\'); ?></li>'
-        )
+        item_lines.append(_repeater_child_output(ch))
     items = "\n".join(item_lines)
     return (
         f'    <ul class="lp-rep lp-rep--{c.name}">\n'
@@ -85,7 +98,7 @@ def _render_block_php(b: Block) -> str:
                 lines.append(out)
     if b.type == "section-card" and b.card is not None:
         tmpl_php = "[" + ",".join(f"['lazyblock/{b.card.slug}']" for _ in (b.card.template or [{}])) + "]"
-        lines.append(f'    <div class="{b.section_grid_class}">')
+        lines.append(f'    <div class="<?php echo esc_attr(\'{b.section_grid_class}\'); ?>">')
         lines.append(
             f'        <InnerBlocks allowedBlocks="[\'lazyblock/{b.card.slug}\']" template="{tmpl_php}" />'
         )
