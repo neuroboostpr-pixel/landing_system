@@ -107,6 +107,17 @@ def render_ux_patterns_html(patterns: list[dict]) -> str:
     return "\n".join(parts)
 
 
+def hint_for_block(btype: str, ux_patterns: list[dict]) -> str:
+    """Find a UX pattern hint for a block type from landing.csv."""
+    for p in ux_patterns:
+        kw = p.get("Keywords", "").lower()
+        if btype.replace("-", " ") in kw or btype in kw:
+            name = p.get("Pattern Name", "")
+            conversion = p.get("Conversion Optimization", "")[:120]
+            return f"💡 UX-паттерн: {name} — {conversion}"
+    return ""
+
+
 def render_ux_rules_html(rules: list[dict]) -> str:
     """Render rules list as HTML list items."""
     if not rules:
@@ -261,10 +272,18 @@ def main() -> None:
 
             rid = f"b{position}-v{i}"
             checked = "checked" if i == 0 else ""
+            # Load Russian display name and layout summary from meta.yaml
+            meta_path = block_dir / "meta.yaml"
+            meta = yaml.safe_load(meta_path.read_text()) if meta_path.exists() else {}
+            display_name = html.escape(meta.get("display_name_ru", cid))
+            layout_summary = html.escape(meta.get("layout_summary_ru", ""))
             radios.append(
                 f'<input type="radio" name="b{position}" id="{rid}" '
                 f'value="{cid}" data-position="{position}" {checked}>'
-                f'<label for="{rid}">{html.escape(cid)}</label>'
+                f'<label for="{rid}" title="{layout_summary}">'
+                f'{display_name}'
+                f'<span style="color:#999;font-size:11px;margin-left:6px;">({html.escape(cid)})</span>'
+                f'</label>'
             )
             variants.append(
                 f'<div class="variant" data-variant="{rid}">'
@@ -276,12 +295,17 @@ def main() -> None:
             )
             checked_rules.append(CHECKED_TPL.format(rid=rid))
 
+        hint = hint_for_block(btype, patterns)
+        hint_html = (
+            f'<div class="block-ux-hint">{html.escape(hint)}</div>' if hint else ''
+        )
         section = (
             f'<section class="block-slot" data-block-position="{position}">'
             f'<fieldset class="variant-picker">'
-            f'<legend>Block {position} — {btype} — выбери композицию:</legend>'
+            f'<legend>Блок {position} — {btype} — выбери вариант:</legend>'
             f'{"".join(radios)}'
             f'</fieldset>'
+            f'{hint_html}'
             f'<div class="variants-stage">{"".join(variants)}</div>'
             f'</section>'
         )
