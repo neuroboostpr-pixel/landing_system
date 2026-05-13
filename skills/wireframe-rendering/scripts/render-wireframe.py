@@ -334,17 +334,27 @@ def main() -> None:
     checked_rules: list[str] = []
     candidates_log: dict = {"project_slug": slug, "blocks": []}
 
+    # Check if enrichment-log.md exists alongside prototype.yaml
+    enrichment_log_path = project_dir / "07_ПРОТОТИП" / "enrichment-log.md"
+    enrichment_log_content = ""
+    if enrichment_log_path.exists():
+        enrichment_log_content = enrichment_log_path.read_text()
+
     for block in proto["blocks"]:
         position = block["position"]
         btype = block["type"]
+        quiz_role = block.get("quiz_role", "")
+        matcher_cmd = [
+            "python3", str(matcher_script),
+            "--library", args.library,
+            "--type", btype,
+            "--niche", niche,
+            "--top", str(args.top),
+        ]
+        if quiz_role:
+            matcher_cmd += ["--quiz-role", quiz_role]
         res = subprocess.run(
-            [
-                "python3", str(matcher_script),
-                "--library", args.library,
-                "--type", btype,
-                "--niche", niche,
-                "--top", str(args.top),
-            ],
+            matcher_cmd,
             capture_output=True, text=True, check=True,
         )
         candidate_ids = json.loads(res.stdout)
@@ -460,6 +470,17 @@ def main() -> None:
         )
         blocks_html_parts.append(section)
 
+    # Build enrichment panel HTML if log exists
+    if enrichment_log_content:
+        enrichment_panel_html = (
+            '<details class="enrichment-panel" open>'
+            '<summary>Квиз-фаннел расширен по best-practices (Marquiz / Tilda / Skillbox)</summary>'
+            f'<pre>{html.escape(enrichment_log_content)}</pre>'
+            '</details>'
+        )
+    else:
+        enrichment_panel_html = ""
+
     shell = Path(args.template).read_text()
     out = (
         shell.replace("{{project_slug}}", slug)
@@ -471,6 +492,7 @@ def main() -> None:
         .replace("{{ux_rules_html}}", ux_rules_html)
         .replace("{{palettes_html}}", palettes_html)
         .replace("{{typography_html}}", typography_html)
+        .replace("{{enrichment_panel_html}}", enrichment_panel_html)
     )
     out_html = project_dir / "07a_WIREFRAME" / "wireframe.html"
     out_html.parent.mkdir(parents=True, exist_ok=True)

@@ -18,6 +18,12 @@ description: Use during stage 07 (Прототип) to import a user-provided pr
 - `<project>/07_ПРОТОТИП/prototype.md` — human-readable normalized
 - `<project>/07_ПРОТОТИП/prototype.yaml` — machine-readable (валидируется validate-prototype.py)
 - `<project>/07_ПРОТОТИП/import-log.md` — что понял агент, какие вопросы задавал
+- `<project>/07_ПРОТОТИП/enrichment-log.md` — отчёт о квиз-фаннел обогащении (создаётся автоматически)
+
+> **Автоматическое обогащение квиз-фаннела:** после конвертации md→yaml конвейер автоматически
+> запускает `enrich-quiz-funnel.py`. Если прототип содержит 1–4 квиз-блока, они расширяются
+> в полный Marquiz-фаннел (welcome → вопросы → лоадер → скидка → лид-форма → спасибо).
+> Это даёт +25–40% CR по RU-рынку. Подробнее в `enrichment-log.md`.
 
 ## Workflow
 

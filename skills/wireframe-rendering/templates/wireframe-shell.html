@@ -53,11 +53,18 @@
   .typo-heading { font-size: 18px; font-weight: 700; margin-bottom: 2px; }
   .typo-body { font-size: 13px; color: #666; margin-bottom: 4px; }
   .typo-mood { font-size: 11px; color: #999; }
+
+  /* Enrichment panel */
+  .enrichment-panel { margin: 24px; background: #f0faf0; padding: 16px 24px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #3a9e3a; }
+  .enrichment-panel summary { font-weight: 600; font-size: 14px; cursor: pointer; color: #1a5c1a; }
+  .enrichment-panel pre { background: #e8f5e8; border: 1px solid #b2d8b2; border-radius: 6px; padding: 16px; font-size: 12px; line-height: 1.6; white-space: pre-wrap; max-height: 400px; overflow: auto; margin: 12px 0 0; color: #1a3a1a; }
 </style>
 </head>
 <body>
 <h1 style="padding: 24px 24px 8px;">Wireframe — {{project_slug}} <span style="font-size: 14px; color: #888; font-weight: 400;">niche: {{niche}}</span></h1>
 <p style="padding: 0 24px; color: #666;">Слева — что хотел клиент (прототип). Снизу — варианты, как это может выглядеть. Выбери вариант композиции для каждого блока radio-кнопками. Когда закончишь — нажми «Confirm selections» внизу.</p>
+
+{{enrichment_panel_html}}
 
 <details class="proto-panel" open>
   <summary>📄 Прототип-источник (что хотел клиент)</summary>

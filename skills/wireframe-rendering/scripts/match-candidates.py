@@ -16,12 +16,39 @@ from pathlib import Path
 import yaml
 
 
+# Mapping from quiz_role to the preferred block ID (top match).
+# These IDs must exist in the catalog.
+QUIZ_ROLE_TOP: dict[str, str] = {
+    "welcome":      "ru-quiz-06-welcome-screen",
+    "question":     "ru-quiz-01-step-card",       # primary question variant
+    "intermediate": "ru-quiz-03-intermediate",
+    "progress":     "ru-quiz-02-progress-top",
+    "loader":       "ru-quiz-10-loader-analyzing",
+    "discount":     "ru-quiz-11-discount-bonus",
+    "lead-form":    "ru-quiz-04-lead-form",
+    "thankyou":     "ru-quiz-05-thankyou",
+}
+
+# For question role, offer additional question variants after the primary
+QUIZ_QUESTION_EXTRAS = [
+    "ru-quiz-07-image-choice",
+    "ru-quiz-13-comparison-question",
+    "ru-quiz-09-multi-select",
+]
+
+
+def _ids_in_catalog(catalog: dict) -> set[str]:
+    return {b["id"] for b in catalog.get("blocks", [])}
+
+
 def main() -> None:
     p = argparse.ArgumentParser()
     p.add_argument("--library", required=True)
     p.add_argument("--type", required=True)
     p.add_argument("--niche", required=True)
     p.add_argument("--top", type=int, default=3)
+    p.add_argument("--quiz-role", default="", dest="quiz_role",
+                   help="Optional quiz_role field from prototype block (welcome|question|...)")
     args = p.parse_args()
 
     cat_path = Path(args.library) / "catalog.yaml"
@@ -29,7 +56,32 @@ def main() -> None:
         print(f"ERROR: no catalog.yaml in {args.library}", file=sys.stderr)
         sys.exit(1)
     catalog = yaml.safe_load(cat_path.read_text())
+    known_ids = _ids_in_catalog(catalog)
 
+    # If this is a quiz block with a quiz_role, return role-specific candidates
+    if args.type == "quiz" and args.quiz_role in QUIZ_ROLE_TOP:
+        top_id = QUIZ_ROLE_TOP[args.quiz_role]
+        result: list[str] = []
+        if top_id in known_ids:
+            result.append(top_id)
+
+        # For question role, add extra question variants
+        if args.quiz_role == "question":
+            for extra in QUIZ_QUESTION_EXTRAS:
+                if extra in known_ids and extra not in result:
+                    result.append(extra)
+
+        # Fill remaining slots with any other quiz blocks (generic fallback)
+        for block in catalog.get("blocks", []):
+            if len(result) >= args.top:
+                break
+            if block["category"] == "quiz" and block["id"] not in result:
+                result.append(block["id"])
+
+        print(json.dumps(result[: args.top]))
+        return
+
+    # Generic path (no quiz_role, or non-quiz block)
     scored: list[tuple[int, str]] = []
     for block in catalog.get("blocks", []):
         if block["category"] != args.type:

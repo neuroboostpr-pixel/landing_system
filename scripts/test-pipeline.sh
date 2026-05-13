@@ -131,6 +131,15 @@ fi
   exit 0
 }
 
+# --- Step 3b: Enrich quiz funnel ---
+echo ""
+echo "▸ Step 3b: Quiz-funnel enrichment (Marquiz/Tilda/Skillbox best-practices)"
+python3 "$LS_ROOT/skills/wireframe-rendering/scripts/enrich-quiz-funnel.py" \
+  --input "$PROJECT/07_ПРОТОТИП/prototype.yaml" \
+  --output "$PROJECT/07_ПРОТОТИП/prototype.yaml" \
+  --log "$PROJECT/07_ПРОТОТИП/enrichment-log.md"
+echo "   ✓ Enrichment done (see enrichment-log.md for details)"
+
 # Validate
 echo ""
 echo "▸ Validating prototype schema..."

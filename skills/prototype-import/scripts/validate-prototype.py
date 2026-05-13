@@ -9,6 +9,10 @@ VALID_BLOCK_TYPES = {
     "hero", "features", "social-proof", "process",
     "pricing", "trust", "cta", "faq", "quiz",
 }
+VALID_QUIZ_ROLES = {
+    "welcome", "question", "intermediate", "progress",
+    "loader", "discount", "lead-form", "thankyou",
+}
 
 
 def fail(m: str) -> None:
@@ -45,6 +49,12 @@ def main(path: str) -> None:
             fail(f"block #{i} missing type")
         if block["type"] not in VALID_BLOCK_TYPES:
             fail(f"block #{i} invalid type: {block['type']!r}")
+        # quiz_role is optional; if present it must be a valid value and block must be type quiz
+        if "quiz_role" in block:
+            if block["type"] != "quiz":
+                fail(f"block #{i} has quiz_role but type is {block['type']!r} (quiz_role only valid on quiz blocks)")
+            if block["quiz_role"] not in VALID_QUIZ_ROLES:
+                fail(f"block #{i} invalid quiz_role: {block['quiz_role']!r}. Valid: {sorted(VALID_QUIZ_ROLES)}")
     print("OK")
 
 
