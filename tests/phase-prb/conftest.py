@@ -41,3 +41,8 @@ _GALLERY_PATH = REPO_ROOT / "skills" / "photo-curation" / "scripts" / "gallery-r
 if _GALLERY_PATH.exists():
     _gallery_mod = _load_module("skills.photo_curation.scripts.gallery_render", _GALLERY_PATH)
     sys.modules["skills.photo_curation.scripts.gallery_render"] = _gallery_mod
+
+_PREVIEW_PATH = REPO_ROOT / "skills" / "photo-curation" / "scripts" / "preview-render.py"
+if _PREVIEW_PATH.exists():
+    _preview_mod = _load_module("skills.photo_curation.scripts.preview_render", _PREVIEW_PATH)
+    sys.modules["skills.photo_curation.scripts.preview_render"] = _preview_mod
