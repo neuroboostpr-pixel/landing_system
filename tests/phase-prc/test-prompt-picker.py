@@ -24,8 +24,8 @@ def test_pick_icon_matches_icons_csv_by_keyword(tmp_path):
     icons_csv = tmp_path / "icons.csv"
     icons_csv.write_text(
         "No,Category,Icon Name,Keywords,Library,Import Code,Usage,Best For,Style\n"
-        '1,Navigation,menu,hamburger menu navigation toggle bars,Lucide,import { Menu },"<Menu />",Mobile drawer,Outline\n'
-        '2,Action,shield,shield protect security warranty guarantee,Lucide,import { Shield },"<Shield />",Trust block,Outline\n'
+        '1,Navigation,menu,hamburger menu navigation toggle bars,Heroicons,import { MenuIcon },"<MenuIcon />",Mobile drawer,Outline\n'
+        '2,Action,shield,shield protect security warranty guarantee,Heroicons,import { ShieldIcon },"<ShieldIcon />",Trust block,Outline\n'
     )
     result = pick_icon_prompt(
         hint="shield",

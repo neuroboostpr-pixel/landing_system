@@ -16,6 +16,7 @@ from typing import Optional
 
 
 class PromptSource(Enum):
+    LUCIDE = "lucide"
     OPENDESIGN = "opendesign"
     ICONS_CSV = "icons_csv"
     GENERIC = "generic"
@@ -26,6 +27,7 @@ class PickedPrompt:
     prompt: str
     source: PromptSource
     attribution: Optional[dict] = None
+    lucide_icon_name: Optional[str] = None  # set when source == PromptSource.LUCIDE
 
 
 GENERIC_ICON_TEMPLATE = """Use the built-in image_gen tool. Generate ONE PNG, 1024x1024,
@@ -116,6 +118,17 @@ def pick_icon_prompt(
     niche = brand_context.get("NICHE", "")
 
     row = _icons_csv_match(hint, icons_csv) if icons_csv else None
+
+    # STEP 1: Library=Lucide → bypass codex entirely, return svg component reference
+    if row and row.get("Library", "").strip().lower() == "lucide":
+        return PickedPrompt(
+            prompt="",
+            source=PromptSource.LUCIDE,
+            attribution={"source": "Lucide", "license": "ISC", "url": "https://lucide.dev"},
+            lucide_icon_name=row["Icon Name"].strip(),
+        )
+
+    # STEP 2: icons.csv match (non-Lucide) → codex generic with hint enrichment
     if row:
         first_kw = row.get("Keywords", "").split()[0] if row.get("Keywords") else ""
         prompt = GENERIC_ICON_TEMPLATE.format(
@@ -128,6 +141,7 @@ def pick_icon_prompt(
         )
         return PickedPrompt(prompt=prompt, source=PromptSource.ICONS_CSV)
 
+    # STEP 3: generic fallback
     prompt = GENERIC_ICON_TEMPLATE.format(
         chroma=chroma,
         hint=hint if hint else "abstract minimalist icon",
