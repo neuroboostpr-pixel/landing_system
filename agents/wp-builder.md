@@ -12,8 +12,8 @@ allowed-tools: Bash, Read, Write, Edit
 
 ## Prerequisites
 
-- `08_КОД/wp-theme/` уже создан `generate-theme.py` (scaffold готов)
-- `08_КОД/acf-fields.json` уже создан `generate-acf.py`
+- `08_КОД/wp-theme/` уже создан `scripts/generate-wp-blocks.py` (Lazy Blocks scaffold готов: theme + blocks/lazyblock-<slug>/block.php + lzb/init в functions.php + page-content.html)
+- `08_КОД/block-spec.yaml` — источник правды для Lazy Blocks контролов (НЕ `acf-fields.json` — ACF Blocks deprecated)
 - `05_ДИЗАЙН-СИСТЕМА/tokens.json` — токены
 - `07_КОНТЕНТ/final-copy.md` — финальный текст по блокам
 - `06_СТЕК/design-stack.yaml` — стек и режим (standard/cinematic)
