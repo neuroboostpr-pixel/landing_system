@@ -36,19 +36,27 @@ def main(argv: list) -> int:
     stack_path = project / "06_СТЕК" / "design-stack.yaml"
     stack = yaml.safe_load(stack_path.read_text(encoding="utf-8")) if stack_path.exists() else {}
 
-    acf_path = project / "08_КОД" / "acf-fields.json"
-    acf = json.loads(acf_path.read_text(encoding="utf-8")) if acf_path.exists() else {"groups": []}
+    # Lazy Blocks era: block-spec.yaml is source of truth for controls,
+    # and blocks live under wp-theme/blocks/lazyblock-<slug>/.
+    spec_path = project / "08_КОД" / "block-spec.yaml"
+    spec = yaml.safe_load(spec_path.read_text(encoding="utf-8")) if spec_path.exists() else {}
+    lazy_blocks_spec = spec.get("blocks", []) if isinstance(spec, dict) else []
 
     theme_dir = project / "08_КОД" / "wp-theme"
-    tp_dir = theme_dir / "template-parts"
-    template_parts = sorted(f.stem for f in tp_dir.iterdir() if f.suffix == ".php") if tp_dir.exists() else []
+    blocks_dir = theme_dir / "blocks"
+    lazy_blocks = []
+    if blocks_dir.exists():
+        lazy_blocks = sorted(
+            d.name for d in blocks_dir.iterdir()
+            if d.is_dir() and d.name.startswith("lazyblock-")
+        )
 
     context = {
         "project_name": project.name,
         "tokens": tokens,
         "stack": stack,
-        "acf_groups": acf.get("groups", []),
-        "template_parts": template_parts,
+        "lazy_blocks": lazy_blocks,
+        "lazy_blocks_spec": lazy_blocks_spec,
     }
 
     html = render.render("build-preview.html.j2", context)

@@ -26,7 +26,7 @@ summary:hover { color: #1a56db; }
 {% block heading %}{{ project_name }} — Stage 08: Build{% endblock %}
 
 {% block meta %}
-<p class="meta">WP Theme scaffold overview: tokens, stack, template parts, ACF groups.</p>
+<p class="meta">WP Theme scaffold overview: tokens, stack, Lazy Blocks, block-spec controls.</p>
 {% endblock %}
 
 {% block content %}
@@ -114,36 +114,36 @@ summary:hover { color: #1a56db; }
 {% endif %}
 {% endif %}
 
-{% if template_parts %}
-<h2>Template Parts</h2>
+{% if lazy_blocks %}
+<h2>Lazy Blocks</h2>
 <div class="card">
-  {% for part in template_parts %}
-  <span class="badge">{{ part }}</span>
+  {% for block in lazy_blocks %}
+  <span class="badge">{{ block }}</span>
   {% endfor %}
 </div>
 {% endif %}
 
-{% if acf_groups %}
-<h2>ACF Field Groups</h2>
-{% for group in acf_groups %}
+{% if lazy_blocks_spec %}
+<h2>Block Controls (block-spec.yaml)</h2>
+{% for block in lazy_blocks_spec %}
 <div class="card">
   <details>
-    <summary>{{ group.title }} <span style="color:#aaa;font-size:0.75rem;font-weight:400;margin-left:8px;">{{ group.key }}</span></summary>
-    {% if group.fields %}
+    <summary>{{ block.title | default(block.slug) }} <span style="color:#aaa;font-size:0.75rem;font-weight:400;margin-left:8px;">lazyblock/{{ block.slug }}</span></summary>
+    {% if block.controls %}
     <div style="margin-top:12px;">
       <div class="field-row" style="font-weight:600;color:#888;font-size:0.7rem;text-transform:uppercase;border-bottom:2px solid #eee;">
         <div>Label</div><div>Name</div><div>Type</div>
       </div>
-      {% for field in group.fields %}
+      {% for control in block.controls %}
       <div class="field-row">
-        <div>{{ field.label }}</div>
-        <div class="field-key">{{ field.name }}</div>
-        <div class="field-type">{{ field.type }}</div>
+        <div>{{ control.label | default(control.name) }}</div>
+        <div class="field-key">{{ control.name }}</div>
+        <div class="field-type">{{ control.type }}</div>
       </div>
       {% endfor %}
     </div>
     {% else %}
-    <p style="color:#aaa;font-size:0.85rem;margin:12px 0 0;">No fields defined.</p>
+    <p style="color:#aaa;font-size:0.85rem;margin:12px 0 0;">No controls defined.</p>
     {% endif %}
   </details>
 </div>

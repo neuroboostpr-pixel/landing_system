@@ -53,9 +53,10 @@ body.lp-popup-lock { overflow: hidden; }
 
 _POPUP_PHP = """\
 <?php
-// template-parts/popup-overlay.php
-// Использование: <button data-popup="lead-form">Записаться</button>
-// Добавь этот файл через get_template_part() в front-page.php после форм
+// wp-theme/popup.php
+// Включается автоматически через wp_footer (см. lp_render_popup в functions.php).
+// Триггер из любой ссылки/кнопки: <button data-popup="lead-form">Записаться</button>
+if (!defined('ABSPATH')) { exit; }
 ?>
 <div class="lp-popup" id="lead-form">
   <div class="lp-popup__overlay"></div>
@@ -76,6 +77,13 @@ add_action('wp_enqueue_scripts', function () {
     wp_enqueue_style('lp-popup', get_template_directory_uri() . '/assets/css/popup.css');
     wp_enqueue_script('lp-popup', get_template_directory_uri() . '/assets/js/popup.js', [], null, true);
 });
+if (!function_exists('lp_render_popup')) {
+    function lp_render_popup() {
+        $popup = get_template_directory() . '/popup.php';
+        if (file_exists($popup)) { include $popup; }
+    }
+}
+add_action('wp_footer', 'lp_render_popup');
 """
 
 
@@ -101,11 +109,10 @@ def main(argv: list) -> int:
 
         (theme / "assets" / "js").mkdir(parents=True, exist_ok=True)
         (theme / "assets" / "css").mkdir(parents=True, exist_ok=True)
-        (theme / "template-parts").mkdir(parents=True, exist_ok=True)
 
         (theme / "assets" / "js" / "popup.js").write_text(_POPUP_JS, encoding="utf-8")
         (theme / "assets" / "css" / "popup.css").write_text(_POPUP_CSS, encoding="utf-8")
-        (theme / "template-parts" / "popup-overlay.php").write_text(_POPUP_PHP, encoding="utf-8")
+        (theme / "popup.php").write_text(_POPUP_PHP, encoding="utf-8")
 
         current = fp.read_text(encoding="utf-8")
         if "lp-popup" not in current:

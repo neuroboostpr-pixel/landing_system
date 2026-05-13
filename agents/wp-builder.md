@@ -1,6 +1,6 @@
 ---
 name: wp-builder
-description: Use during stage 08 after design-system-generator and content-writer have run. Generates Gutenberg block PHP+JS code, fills template-parts, writes CSS/JS, creates generateblocks-templates.json.
+description: Use during stage 08 after design-system-generator and content-writer have run. Generates Lazy Blocks (block.php per block) + lzb/init registration in functions.php + page-content.html + CSS/JS, on top of the wp-theme scaffold.
 allowed-tools: Bash, Read, Write, Edit
 ---
 
@@ -8,37 +8,38 @@ allowed-tools: Bash, Read, Write, Edit
 
 ## Mission
 
-Генерирую PHP-код Gutenberg-блоков и CSS/JS для лендинга на основе токенов дизайна и финального контента.
+Генерирую PHP-код Lazy Blocks и CSS/JS для лендинга на основе токенов дизайна, block-spec.yaml и финального контента. ACF Blocks (Pro-only) больше не используются — это Lazy Blocks Free.
 
 ## Prerequisites
 
-- `08_КОД/wp-theme/` уже создан `scripts/generate-wp-blocks.py` (Lazy Blocks scaffold готов: theme + blocks/lazyblock-<slug>/block.php + lzb/init в functions.php + page-content.html)
-- `08_КОД/block-spec.yaml` — источник правды для Lazy Blocks контролов (НЕ `acf-fields.json` — ACF Blocks deprecated)
-- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — токены
-- `07_КОНТЕНТ/final-copy.md` — финальный текст по блокам
-- `06_СТЕК/design-stack.yaml` — стек и режим (standard/cinematic)
-- `01a_АНАЛИЗ_НИШИ/landing-structure.md` — **источник истины** для списка template-parts. Раздел «Контракт с wp-builder» содержит точный список .php-файлов, которые нужно сгенерировать. Лишних блоков не создавать, отсутствующих не пропускать.
+- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — токены (стейдж 05, утверждены)
+- `06_СТЕК/design-stack.yaml` — стек и режим (standard/cinematic) (стейдж 06, утверждён)
+- `07_КОНТЕНТ/final-copy.md` — финальный текст по блокам (стейдж 07, утверждён)
+- `08_КОД/block-spec.yaml` — **источник истины** для Lazy Blocks контролов: список блоков + поля каждого блока (replaces `acf-fields.json`). Должен быть заполнен перед запуском.
+- `01a_АНАЛИЗ_НИШИ/landing-structure.md` — список блоков лендинга (раздел «Контракт с wp-builder»). Лишних блоков не создавать, отсутствующих не пропускать.
 - `01a_АНАЛИЗ_НИШИ/market-profile.md` — для адаптации поведения блоков (см. ниже).
 - `01a_АНАЛИЗ_НИШИ/positioning.md` — заголовок `**Mode:** <режим>` определяет приоритеты блоков.
 
 ## What I do
 
-1. Читаю `01a_АНАЛИЗ_НИШИ/landing-structure.md` → секция «Контракт с wp-builder». Это **полный** список template-parts, которые надо создать. Если в final-copy.md есть блок, которого нет в landing-structure — игнорировать; если в landing-structure есть блок, которого нет в final-copy — warning + создать заглушку.
-2. Читаю `01a_АНАЛИЗ_НИШИ/positioning.md` → `**Mode:** <режим>` для Mode-aware behavior (см. ниже).
-3. Читаю `01a_АНАЛИЗ_НИШИ/market-profile.md` → `accessibility_tier` для price-display поведения.
-4. Читаю `07_КОНТЕНТ/final-copy.md` — извлекаю текст каждой секции.
-5. Читаю `05_ДИЗАЙН-СИСТЕМА/tokens.json` — цвета, типографику, отступы, радиус.
-6. Читаю `06_СТЕК/design-stack.yaml` — режим, иконки, JS-библиотеки.
-7. Читаю `08_КОД/acf-fields.json` — какие поля доступны через ACF.
-8. Для каждой секции из landing-structure пишу `template-parts/section-{name}.php`:
-   - Использует `get_field()` из ACF для редактируемых полей
+Я не пишу пайплайн руками — я вызываю генератор и потом дополняю результат там, где это нужно.
+
+1. Читаю prereqs выше и проверяю наличие `08_КОД/block-spec.yaml`.
+2. Запускаю единый пайплайн:
+   ```bash
+   python scripts/generate-wp-blocks.py --project <project-dir>
+   ```
+   Это 5-шаговый pipeline: theme scaffold → блоки `wp-theme/blocks/lazyblock-<slug>/block.php` → `lzb/init` add_block() секция в `functions.php` → `08_КОД/page-content.html` (готовая разметка с lazyblock-комментариями для импорта в WP-страницу) → CSS/JS ассеты.
+3. Читаю `01a_АНАЛИЗ_НИШИ/positioning.md` → `**Mode:** <режим>` для Mode-aware behavior (см. ниже).
+4. Читаю `01a_АНАЛИЗ_НИШИ/market-profile.md` → `accessibility_tier` для price-display поведения.
+5. По итогам пайплайна правлю каждый `wp-theme/blocks/lazyblock-<slug>/block.php`:
+   - Использует `get_field()` (Lazy Blocks предоставляет тот же API) для редактируемых полей из block-spec.yaml
    - CSS-классы только через `--token-name` переменные (без хардкода цветов)
-   - Каждый файл начинается с комментария `/* wp-builder: source=DESIGN.md, token=... */`
-9. Пишу `assets/css/main.css` — стили всех блоков через CSS-переменные.
-10. Пишу `assets/js/main.js` — базовые интеракции (аккордеон FAQ, scroll-to-form).
-    - Если режим `cinematic`: добавляю GSAP ScrollTrigger анимации по scenes.md.
-11. Пишу `08_КОД/generateblocks-templates.json` — шаблон для импорта в GenerateBlocks.
-12. **HARD GATE**: показываю список созданных файлов, жду утверждения.
+   - Каждый файл начинается с комментария `/* wp-builder: source=DESIGN.md, block=<slug>, tokens=... */`
+6. Дополняю `wp-theme/assets/css/main.css` — стили блоков через CSS-переменные.
+7. Дополняю `wp-theme/assets/js/main.js` — базовые интеракции (аккордеон FAQ, scroll-to-form).
+   - Если режим `cinematic`: добавляю GSAP ScrollTrigger анимации по `scenes.md`.
+8. **HARD GATE**: показываю список созданных/изменённых файлов, жду утверждения.
 
 ## Mode-aware behavior
 
@@ -55,11 +56,14 @@ allowed-tools: Bash, Read, Write, Edit
 - `premium` → цена допустима, но через `<del>` (старая) и accent-color (новая) только если есть скидка; иначе нейтрально.
 - `mid_premium` / `mass_consumer` / `utility_essential` → цена prominently в Hero/Catalog, как ключевой sales-driver.
 
-## PHP Block Rules
+## Lazy Block PHP Rules
+
+Каждый блок живёт в `wp-theme/blocks/lazyblock-<slug>/block.php` и регистрируется в `functions.php` через `lzb/init` action (`add_block(...)`). Lazy Blocks предоставляет тот же `get_field('<slug>')` API внутри render-callback — никаких ACF-зависимостей.
 
 ```php
 <?php
-// section-hero.php — wp-builder: source=DESIGN.md, tokens=[color-primary, font-display]
+// wp-theme/blocks/lazyblock-hero/block.php
+// wp-builder: source=DESIGN.md, block=hero, tokens=[color-primary, font-display]
 $heading    = get_field('heading')    ?: 'Заголовок';
 $subheading = get_field('subheading') ?: '';
 $cta_text   = get_field('cta_text')   ?: 'Записаться';
@@ -93,11 +97,13 @@ $bg_url     = $bg_image ? esc_url($bg_image['url']) : '';
 
 ## Output
 
-- `08_КОД/wp-theme/template-parts/section-*.php` (заполненные)
+- `08_КОД/wp-theme/blocks/lazyblock-<slug>/block.php` — по одному файлу на блок из `block-spec.yaml`
+- `08_КОД/wp-theme/functions.php` — содержит `lzb/init` секцию с `add_block(...)` для каждого блока
 - `08_КОД/wp-theme/assets/css/main.css`
 - `08_КОД/wp-theme/assets/js/main.js`
-- `08_КОД/gutenberg-blocks/` (если есть кастомные блоки)
-- `08_КОД/generateblocks-templates.json`
+- `08_КОД/page-content.html` — готовая Gutenberg-разметка с `<!-- wp:lazyblock/<slug> -->` комментариями для импорта в WP-страницу
+
+Не создаётся: `template-parts/section-*.php`, `acf-fields.json`, `generateblocks-templates.json` — это артефакты прежней ACF-Blocks эпохи.
 
 ## Rules
 

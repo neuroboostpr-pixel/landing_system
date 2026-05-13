@@ -22,9 +22,10 @@ python3 skills/wp-theme-assembler/scripts/bundle-assets.py <project-dir>
 
 ### render-build-preview.py
 
-Читает `tokens.json` + `design-stack.yaml` + `acf-fields.json` + список template-parts.
+Читает `tokens.json` + `design-stack.yaml` + `block-spec.yaml` + список Lazy Blocks
+(сканирует `08_КОД/wp-theme/blocks/lazyblock-*/`).
 Рендерит `08_КОД/build-preview.html` через Jinja2 (`build-preview.html.j2`).
-Preview показывает: цветовые токены, типографику, стек, template parts, ACF-группы.
+Preview показывает: цветовые токены, типографику, стек, список Lazy Blocks, контролы из block-spec.
 
 ```bash
 python3 skills/wp-theme-assembler/scripts/render-build-preview.py <project-dir>
@@ -34,7 +35,7 @@ python3 skills/wp-theme-assembler/scripts/render-build-preview.py <project-dir>
 ## Usage sequence
 
 ```
-1. wp-builder agent завершил template-parts + CSS/JS
+1. wp-builder agent завершил Lazy Blocks (blocks/lazyblock-*/block.php) + CSS/JS
 2. integrations-engineer добавил forms в functions.php
 3. analytics-engineer добавил Metrika код
 4. seo-optimizer добавил meta tags

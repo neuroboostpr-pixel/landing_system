@@ -29,17 +29,19 @@ def _setup_project(tmp_path, sample_tokens, sample_stack):
         yaml.dump(sample_stack, allow_unicode=True), encoding="utf-8"
     )
     theme_dir = tmp_path / "08_КОД" / "wp-theme"
-    tp = theme_dir / "template-parts"
-    tp.mkdir(parents=True)
+    blocks = theme_dir / "blocks"
+    blocks.mkdir(parents=True)
     (theme_dir / "style.css").write_text("/* Theme Name: LP Test */\n")
     for section in ["hero", "about", "form"]:
-        (tp / f"section-{section}.php").write_text("<?php //placeholder\n")
-    acf = tmp_path / "08_КОД" / "acf-fields.json"
-    acf.write_text(json.dumps({"groups": [
-        {"key": "group_hero", "title": "LP — Hero", "fields": [
-            {"key": "f1", "label": "Заголовок", "name": "heading", "type": "text"}
+        bdir = blocks / f"lazyblock-{section}"
+        bdir.mkdir()
+        (bdir / "block.php").write_text("<?php //placeholder\n")
+    spec = tmp_path / "08_КОД" / "block-spec.yaml"
+    spec.write_text(yaml.dump({"blocks": [
+        {"slug": "hero", "title": "LP — Hero", "controls": [
+            {"name": "heading", "label": "Заголовок", "type": "text"}
         ]}
-    ]}))
+    ]}, allow_unicode=True), encoding="utf-8")
     return tmp_path
 
 
@@ -78,7 +80,7 @@ def test_preview_contains_color_tokens(tmp_path, sample_tokens, sample_stack):
     assert "#ff5733" in html
 
 
-def test_preview_contains_acf_group(tmp_path, sample_tokens, sample_stack):
+def test_preview_contains_block_spec_title(tmp_path, sample_tokens, sample_stack):
     project = _setup_project(tmp_path, sample_tokens, sample_stack)
     mod = _load()
     mod.main(["prog", str(project)])
@@ -86,12 +88,12 @@ def test_preview_contains_acf_group(tmp_path, sample_tokens, sample_stack):
     assert "LP — Hero" in html
 
 
-def test_preview_contains_template_parts(tmp_path, sample_tokens, sample_stack):
+def test_preview_contains_lazy_blocks(tmp_path, sample_tokens, sample_stack):
     project = _setup_project(tmp_path, sample_tokens, sample_stack)
     mod = _load()
     mod.main(["prog", str(project)])
     html = (project / "08_КОД" / "build-preview.html").read_text(encoding="utf-8")
-    assert "section-hero" in html
+    assert "lazyblock-hero" in html
 
 
 def test_main_missing_style_css_returns_one(tmp_path):
