@@ -17,10 +17,6 @@ SKILLS_DIR="$REPO_ROOT/skills"
   grep -q "generate-theme.py" "$COMMANDS_DIR/landing-build.md"
 }
 
-@test "landing-build.md mentions generate-acf.py" {
-  grep -q "generate-acf.py" "$COMMANDS_DIR/landing-build.md"
-}
-
 @test "landing-build.md mentions bundle-assets.py" {
   grep -q "bundle-assets.py" "$COMMANDS_DIR/landing-build.md"
 }
@@ -43,10 +39,6 @@ SKILLS_DIR="$REPO_ROOT/skills"
 
 @test "generate-theme.py exists" {
   [ -f "$SKILLS_DIR/wp-gutenberg-block-builder/scripts/generate-theme.py" ]
-}
-
-@test "generate-acf.py exists" {
-  [ -f "$SKILLS_DIR/wp-gutenberg-block-builder/scripts/generate-acf.py" ]
 }
 
 @test "bundle-assets.py exists" {

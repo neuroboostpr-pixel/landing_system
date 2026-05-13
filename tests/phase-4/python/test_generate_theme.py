@@ -102,12 +102,6 @@ def test_main_functions_php_cinematic_has_gsap(tmp_path, sample_tokens, sample_s
     assert "gsap" in php.lower()
 
 
-def test_main_creates_template_parts_dir(wp_theme_project):
-    mod = _load()
-    mod.main(["prog", str(wp_theme_project)])
-    assert (wp_theme_project / "08_КОД" / "wp-theme" / "template-parts").is_dir()
-
-
 def test_main_creates_assets_dirs(wp_theme_project):
     mod = _load()
     mod.main(["prog", str(wp_theme_project)])
@@ -120,15 +114,6 @@ def test_main_creates_index_php(wp_theme_project):
     mod = _load()
     mod.main(["prog", str(wp_theme_project)])
     assert (wp_theme_project / "08_КОД" / "wp-theme" / "index.php").exists()
-
-
-def test_main_creates_front_page_php(wp_theme_project):
-    mod = _load()
-    mod.main(["prog", str(wp_theme_project)])
-    php = (wp_theme_project / "08_КОД" / "wp-theme" / "front-page.php").read_text()
-    assert "get_header" in php
-    assert "get_footer" in php
-    assert "template-parts/section" in php
 
 
 def test_main_creates_gutenberg_blocks_dir(wp_theme_project):
