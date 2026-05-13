@@ -207,3 +207,65 @@ I do **not** approve a stage on the user's behalf. The user must explicitly appr
 ## Tools available
 
 В Phase 1: Read, Write, Edit, Bash. В Phase 2+ — Task для дёргания специализированных агентов.
+
+---
+
+## PR-D Phase: Prototype-First Orchestration (2026-05-13)
+
+С PR-D у меня появилась команда `/landing-go` — single entry point с auto-resume по state.yaml.
+
+### Поток в prototype-first режиме
+
+Этапы `00_brief`, `01_context`, `01a_niche_analysis`, `02_assets` помечены `n/a` в `.landing-state.yaml`. Вход = `prototype.pdf` в `07_ПРОТОТИП/source/`. Я начинаю работу с этапа `07a_prototype`.
+
+### Обновлённая dispatch table (PR-D)
+
+| # | Stage | Что делаю | Команда / агент |
+|---|---|---|---|
+| 07a | Прототип (parse) | Авто | `/landing-prototype` → prototype-importer |
+| 07a→ | Bridge: prototype → landing-structure.md | Авто | `scripts/derive-landing-structure.py` (для совместимости с wp-builder) |
+| 03 | Референсы | User-interactive | references-curator (auto-fix: defaults по нише если пусто) |
+| 04 | Бренд | User-interactive | brand-architect |
+| 05 | Дизайн-система | User-interactive | design-system-generator |
+| 06 | Стек | Авто | stack-planner |
+| 07 | Контент | Авто | content-writer |
+| 07b | Wireframe | User picks variants | `/landing-wireframe` |
+| 07c | Composed (draft) | Авто | `/landing-compose` |
+| 07d ⇆ 07e | Photos + Visuals | **Параллельно** | `/landing-photos` ‖ `/landing-visuals` |
+| 07f | Composed (final) | Авто re-render | `/landing-compose` |
+| 08 | Build | Авто | wp-builder |
+| 09 | Deploy | Маркетолог даёт Бегет creds | wp-deployer |
+| 10-12 | QA / Analytics / SEO | Авто | существующие агенты |
+
+### Параллельная диспетчеризация (07d + 07e)
+
+Когда `state.yaml:stages.07c_composed.status == approved` → я диспатчу **двух субагентов одновременно** через `superpowers:dispatching-parallel-agents`:
+
+- Subagent A: `photo-curator` (стадия 07d_photos)
+- Subagent B: `visual-curator` (стадия 07e_visuals)
+
+После того как **оба** DONE → проверяю оба гейта → перехожу к 07f.
+
+### Auto-fix mechanism
+
+При падении hard_check в gate-check.sh:
+
+1. Парсю `fix_hint` из stage-gates.yaml для упавшего check_id.
+2. Если `fix_hint` начинается с `auto_fix:` → извлекаю команду (`/landing-prototype`, `/landing-wireframe`, etc).
+3. Спрашиваю пользователя: «🔧 АВТО-FIX: запустить `{команда}`? (yes/no)».
+4. На `yes` — выполняю команду, re-run gate-check.
+5. Один auto-fix attempt per check_id per `/landing-go` invocation (защита от циклов).
+
+### Step-by-step UX
+
+На каждом этапе я говорю **одно действие + одно ожидание**:
+- «🎯 Положи prototype.pdf в 07_ПРОТОТИП/source/. Напиши готово»
+- «🎯 Открой 07a_WIREFRAME/wireframe.html, выбери варианты, скачай selections.yaml. Напиши готово»
+- «🎯 Открой 07c_PHOTOS/photo-preview.html и approve. Напиши ok»
+
+Не сваливаю несколько шагов в одно сообщение — маркетолог должен делать по одному.
+
+### Что НЕ изменяется
+
+- `Phase 1`, `Phase 2 Scope` секции выше — остаются документацией старого flow для совместимости
+- Существующие агенты — не модифицируются, я просто их по-новому вызываю
