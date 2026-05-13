@@ -31,3 +31,8 @@ _INTAKE_PATH = REPO_ROOT / "skills" / "photo-curation" / "scripts" / "intake.py"
 if _INTAKE_PATH.exists():
     _intake_mod = _load_module("skills.photo_curation.scripts.intake", _INTAKE_PATH)
     sys.modules["skills.photo_curation.scripts.intake"] = _intake_mod
+
+_SVG_PATH = REPO_ROOT / "skills" / "photo-curation" / "scripts" / "svg-placeholder.py"
+if _SVG_PATH.exists():
+    _svg_mod = _load_module("skills.photo_curation.scripts.svg_placeholder", _SVG_PATH)
+    sys.modules["skills.photo_curation.scripts.svg_placeholder"] = _svg_mod
