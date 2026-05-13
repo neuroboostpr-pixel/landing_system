@@ -19,7 +19,18 @@ description: Use during stage 07a (UX Wireframe) to compose an interactive wiref
 4. `block-library/catalog.yaml` — список доступных блоков
 5. `~/.claude/skills/ui-ux-pro-max/data/landing.csv` — **ОБЯЗАТЕЛЬНО** — 30 UX-паттернов для лендингов
 6. `~/.claude/skills/ui-ux-pro-max/data/ux-guidelines.csv` — **ОБЯЗАТЕЛЬНО** — критические UX-правила (Critical + High severity)
-7. `vendor/opendesign-extracts/design-systems-refs/` — прочитать 2–3 релевантных DESIGN.md как reference (например `stripe--DESIGN.md`, `minimal--DESIGN.md`, `elegant--DESIGN.md`)
+7. `~/.claude/skills/ui-ux-pro-max/data/web-interface.csv` — дополнительные web-специфичные UX-правила (мержатся с ux-guidelines, дедупликация по полю Issue)
+8. `~/.claude/skills/ui-ux-pro-max/data/styles.csv` — 67 дизайн-стилей (Minimalism, Brutalism, Glassmorphism, etc.) — используется для рекомендации `recommended_styles_ru` на блок
+9. `~/.claude/skills/ui-ux-pro-max/data/colors.csv` — 96 цветовых палитр по типу продукта — топ-3 для ниши отображаются в wireframe как palette swatches
+10. `~/.claude/skills/ui-ux-pro-max/data/typography.csv` — 57 пар шрифтов — топ-3 для ниши отображаются в wireframe как font samples
+11. `vendor/opendesign-extracts/design-systems-refs/` — прочитать 2–3 релевантных DESIGN.md как reference (например `stripe--DESIGN.md`, `minimal--DESIGN.md`, `elegant--DESIGN.md`)
+
+**Все 6 CSV-файлов из ui-ux-pro-max читает render-wireframe.py автоматически:**
+```bash
+# Данные injected в wireframe.html через placeholders:
+# {{ux_patterns_html}}, {{ux_rules_html}}, {{palettes_html}}, {{typography_html}}
+# Стили per-block берутся из meta.yaml[recommended_styles_ru]
+```
 
 **Проверка ui-ux-pro-max перед запуском:**
 ```bash

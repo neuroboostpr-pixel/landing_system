@@ -16,6 +16,20 @@ description: Use during stage 07b (Block Compose) to render composed.html — fi
 - `<project>/05_ДИЗАЙН-СИСТЕМА/tokens.json`
 - `block-library/` (общая)
 
+## Pre-flight: стиль hint из ui-ux-pro-max
+
+Перед compose прочитай `meta.yaml` для каждого выбранного блока из `selections.yaml`.
+Если в meta.yaml есть поле `recommended_styles_ru`, применить соответствующий стиль
+через `design-tokens` (CSS-переменные):
+
+```bash
+# Пример: если meta.yaml содержит recommended_styles_ru: ["Brutalism"]
+# → ищи в ~/.claude/skills/ui-ux-pro-max/data/styles.csv строку Brutalism
+# → используй CSS/Technical Keywords для дополнения design-tokens
+```
+
+Это необязательно блокирующий шаг — если styles.csv не доступен, пропустить.
+
 ## Workflow
 
 1. Валидируй `selections.yaml`:
