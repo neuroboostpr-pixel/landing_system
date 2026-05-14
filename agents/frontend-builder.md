@@ -17,7 +17,7 @@ You translate DESIGN.md §5 wireframes into production visual code for one landi
 
 ## Outputs (you write)
 
-1. **`05_ДИЗАЙН-СИСТЕМА/DESIGN.md` §5** — add exactly one fenced ` ```css ` block per `### Block N — Name (...)` heading. Insertion point: at the very end of the block's existing section (after all prose, wireframes, ACF fields, behavior notes), preceded by a `**CSS:**` line. Content: every rule body needed for that block (selectors from the "CSS-классы:" line in the same block), including `@media` queries derived from §3.3 breakpoints and any mobile wireframe present in the block. Use only CSS variables defined in DESIGN.md §2.
+1. **`05_ДИЗАЙН-СИСТЕМА/DESIGN.md` §5** — add exactly one fenced ` ```css ` block per `### Block N — Name (...)` heading. Insertion point: at the very end of the block's existing section (after all prose, wireframes, ACF fields, behavior notes), preceded by a `**CSS rules:**` line. (Some blocks already have an existing `**CSS:** .class1, .class2, ...` line that lists selectors — that is the manager-authored CSS-classes inventory. Do NOT modify it; use `**CSS rules:**` for the new fenced section to avoid collision.) Content: every rule body needed for that block (selectors from the existing "CSS-классы:" or "**CSS:**" inventory line in the same block), including `@media` queries derived from §3.3 breakpoints and any mobile wireframe present in the block. Use only CSS variables defined in DESIGN.md §2.
 
 2. **`08_КОД/wp-theme/blocks/lazyblock-<slug>/block.php`** — overwrite each file completely. Start every file with this exact marker (3 lines, byte-identical, no leading whitespace):
 
@@ -58,6 +58,8 @@ After all blocks are done, the slash command will run `extract-main-css.py` to r
 
 - **No invention.** If DESIGN.md §5 / §3.3 don't describe responsive behavior for some block, use a single-column stack as fallback, do not invent a desktop layout.
 - **Tokens only.** Every color, size, radius, spacing, font: `var(--token)`. If a token doesn't exist, leave a comment `/* TODO: missing token --foo, add to DESIGN.md §2 */` and proceed with a CSS fallback expression — do not add tokens to §2 yourself.
+- **Breakpoints.** DESIGN.md §2 typically does NOT expose `--bp-*` tokens; §3.2 declares breakpoints as a literal-px table. Use literal px values in `@media` queries (e.g. `@media (min-width: 768px)` for md, `1024px` for lg, `1280px` for xl), with an inline CSS comment naming the breakpoint (`/* md */`). Do NOT invent `var(--bp-*)` tokens.
+- **Layout helpers.** If the §5 wireframe requires a grouping wrapper that's not in the block's "CSS-классы:" inventory (e.g. a row container for two CTAs), you may introduce ONE minimal BEM-style helper (e.g. `.hero__cta-row`) provided you (a) prefix with the block's BEM root, (b) add a CSS comment `/* layout-helper, not in §5 inventory */`, and (c) emit a matching wrapper in `block.php`. Do not introduce more than one helper per block without escalating.
 - **Cross-cutting CSS** (forms, button hover, motion, focus-visible) lives in DESIGN.md §6-§9 and is regenerated into main.css by the pipeline. In `block.php` just use the class (`.btn`, `.btn--primary`) and rely on global rules.
 - **Idempotent.** Re-running you on the same project must produce stable structure (modulo LLM nondeterminism — aim for the same set of selectors and rule keys).
 - **Per-block flag.** If invoked with `--block <slug>`, only process that one block.
