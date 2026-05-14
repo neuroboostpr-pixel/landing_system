@@ -33,12 +33,14 @@
 
 **Note on saas-landing:** The spec referenced `skills/saas-landing/` but this directory does not exist in the OpenDesign repository. We substituted `skills/ui-ux-pro-max/` SKILL.md as the closest SaaS landing reference. The actual pattern data is installed at `~/.claude/skills/ui-ux-pro-max/data/`.
 
-## Design templates (6 HTML landings) — added PR-A.X 2026-05-14
+## Design templates (12 HTML landings) — added PR-A.X 2026-05-14, extended PR-A visual-upgrade 2026-05-14
 
-**Pinned commit:** 75498838a911d5d7ab4299ac817774ab5e560824
+**Pinned commit (batch 1):** 75498838a911d5d7ab4299ac817774ab5e560824
+**Pinned commit (batch 2):** 7c8305f4862796cebe0e05b6fc6406823a8debf2
 **Source:** design-templates/*/example.html
-**Use:** reference for layout patterns, scroll-reveal, CSS effects
-**Files:** web-prototype-taste-soft, open-design-landing, saas-landing, pricing-page, waitlist-page, web-prototype-taste-editorial
+**Use:** reference for layout patterns, scroll-reveal, CSS effects, style moods
+
+### Batch 1 (original 6)
 
 | File | Lines | Notable patterns |
 |---|---|---|
@@ -48,6 +50,17 @@
 | `pricing-page.html` | 128 | toggle annual/monthly, comparison table |
 | `waitlist-page.html` | 401 | email capture, social proof, countdown |
 | `web-prototype-taste-editorial.html` | 393 | editorial typography, paper texture, dot grid |
+
+### Batch 2 (visual-upgrade +6)
+
+| File | Lines | Style Mood | Notable patterns |
+|---|---|---|---|
+| `kami-landing.html` | 674 | editorial-warm | Warm parchment, ink-blue single accent, eyebrow strip, asymmetric 2-col hero |
+| `taste-brutalist.html` | 450 | brutalist | 3-colour system, massive display text as graphic, 1px ink grid, ASCII decorators |
+| `orbit-linear.html` | 572 | swiss-modernist | data-theme dark/light, 3-tier shadow elevation, micro-lift hover, Linear typography |
+| `taste-soft-editorial.html` | 1184 | coral-soft | Cormorant Garamond, drop cap, pastel oval cards, 5-colour pastel system |
+| `taste-monochrome.html` | 2597 | monochrome-precision | Pure cream+black, extreme whitespace, data-anim stagger, vw-based type scale |
+| `taste-coral.html` | 1487 | coral-soft | Coral+cream+black, Bebas Neue display, nav dots, Chart.js integration |
 
 ## Craft knowledge (12 markdown rule-files) — added PR-A.X 2026-05-14
 
