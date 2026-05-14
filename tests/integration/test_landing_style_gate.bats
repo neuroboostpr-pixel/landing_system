@@ -6,15 +6,17 @@ setup() {
   PROJECT="$(mktemp -d)"
   mkdir -p "$PROJECT/05_ДИЗАЙН-СИСТЕМА" "$PROJECT/08_КОД/wp-theme/blocks/lazyblock-hero" "$PROJECT/08_КОД/wp-theme/blocks/lazyblock-faq" "$PROJECT/08_КОД/wp-theme/assets/css"
   cat > "$PROJECT/.landing-state.yaml" <<EOF
-00_brief: approved
-01a_niche_analysis: approved
-03_moodboard: approved
-04_brand: approved
-05_design: approved
-06_stack: approved
-07_content: approved
-08_build: approved
-08b_style: pending
+schema_version: 1
+stages:
+  "00_brief":          {status: approved, timestamp: ""}
+  "01a_niche_analysis": {status: approved, timestamp: ""}
+  "03_references":     {status: approved, timestamp: ""}
+  "04_brand":          {status: approved, timestamp: ""}
+  "05_design":         {status: approved, timestamp: ""}
+  "06_stack":          {status: approved, timestamp: ""}
+  "07_content":        {status: approved, timestamp: ""}
+  "08_build":          {status: approved, timestamp: ""}
+  "08b_style":         {status: in_progress, timestamp: ""}
 EOF
   cat > "$PROJECT/05_ДИЗАЙН-СИСТЕМА/DESIGN.md" <<EOF
 # D
