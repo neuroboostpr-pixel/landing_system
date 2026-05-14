@@ -51,7 +51,8 @@ bash scripts/wizard.sh
 | `/landing-design` | Этап 05: дизайн-система |
 | `/landing-stack` | Этап 06: стек |
 | `/landing-content` | Этап 07: контент |
-| `/landing-build` | Этап 08: WP-сборка |
+| `/landing-build` | Этап 08: WP-сборка (механика — блоки, контент, скелеты) |
+| `/landing-style` | Этап 08b: per-block CSS + layout-aware block.php (frontend-builder) |
 | `/landing-deploy` | Этап 09: деплой |
 | `/landing-qa` | Этап 10: QA |
 | `/landing-status` | Статус проекта |
