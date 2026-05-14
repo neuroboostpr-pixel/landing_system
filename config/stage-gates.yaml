@@ -226,6 +226,7 @@ stages:
         type: file_exists
         path: "{project}/08_КОД/wp-theme/assets/css/main.css"
         required: true
+        fix_hint: "Run /landing-style to regenerate assets/css/main.css from DESIGN.md"
     soft_checks:
       - id: visual_passable
         prompt: "Открой preview URL в браузере: визуал соответствует DESIGN.md §5 (Hero 2-col на desktop, FAQ accordion, Pricing badge)? (yes / no / partial)"
