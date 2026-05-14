@@ -17,7 +17,7 @@ MARKER_LINES = (
 )
 
 
-def main(argv: list) -> int:
+def main(argv: list[str]) -> int:
     if len(argv) < 2:
         print("usage: check-block-php-markers.py <project-dir>", file=sys.stderr)
         return 2
@@ -28,8 +28,8 @@ def main(argv: list) -> int:
     missing: list[str] = []
     for block_php in sorted(blocks_dir.glob("lazyblock-*/block.php")):
         text = block_php.read_text(encoding="utf-8")
-        head = "\n".join(text.splitlines()[:3])
-        if not all(line in head for line in MARKER_LINES):
+        head = text.splitlines()[:3]
+        if head != list(MARKER_LINES):
             missing.append(block_php.parent.name)
     if missing:
         print(f"missing frontend-builder marker in: {', '.join(missing)}", file=sys.stderr)
