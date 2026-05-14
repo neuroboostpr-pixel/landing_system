@@ -1,0 +1,29 @@
+/* Monochrome Precision Style Mood — palette
+ * Inspired by: zhangzara-monochrome (Ivory Ledger) (OpenDesign)
+ * Pure cream + black ink. ZERO other colours. Whitespace is the design.
+ */
+
+:root {
+  /* ── Surfaces (cream only) ── */
+  --color-bg:          #fafadf;   /* Ivory Ledger cream — not pure white */
+  --color-bg-alt:      #f2f2d2;   /* slightly deeper cream */
+  --color-bg-warm:     #f5f0e4;   /* warm cream variant */
+  --color-surface:     #fafadf;
+  --color-surface-inset: #f0f0d4;
+
+  /* ── Text (black ink system) ── */
+  --color-fg:          #1a1a16;   /* warm near-black ink */
+  --color-fg-strong:   #1a1a16;
+  --color-fg-muted:    #5e5e54;   /* secondary graphite */
+  --color-fg-subtle:   #8a8a80;   /* tertiary graphite */
+
+  /* ── Accent = black ink (accent is eliminated) ── */
+  --color-accent:      #1a1a16;   /* accent IS black — no chromatic accent */
+  --color-accent-soft: #5e5e54;   /* secondary accent = muted graphite */
+
+  /* ── Borders (black dividers) ── */
+  --color-border:      #1a1a16;   /* bold black borders */
+  --color-border-soft: rgba(26, 26, 22, 0.15);  /* very soft dividers */
+
+  /* ── NO accent colour. Space and typography are the design. ── */
+}

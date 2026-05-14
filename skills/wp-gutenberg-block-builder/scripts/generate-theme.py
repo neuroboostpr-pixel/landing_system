@@ -32,6 +32,7 @@ from design_extractor import DesignExtractError, extract  # noqa: E402
 #   scripts/ → wp-gutenberg-block-builder/ → skills/ → landing-system/
 _SYSTEM_ROOT = Path(__file__).resolve().parents[3]
 PATTERNS_DIR = _SYSTEM_ROOT / "block-library" / "_patterns"
+STYLES_DIR = _SYSTEM_ROOT / "block-library" / "_styles"
 
 PATTERNS_BY_MODE: dict[str, list[str]] = {
     "none": [],
@@ -40,10 +41,57 @@ PATTERNS_BY_MODE: dict[str, list[str]] = {
     "editorial": ["scroll-reveal", "paper-texture", "dot-grid-bg"],
 }
 
+# Style mood → recommended patterns mapping
+# style_mood in tokens.json OVERRIDES animation_mode pattern selection
+STYLE_MOOD_PATTERNS: dict[str, list[str]] = {
+    "brutalist": ["scroll-reveal", "bento-grid-hairline", "headroom-nav"],
+    "editorial-warm": ["scroll-reveal", "paper-texture", "dot-grid-bg", "text-reveal-mask"],
+    "swiss-modernist": ["scroll-reveal", "bento-grid-hairline", "headroom-nav", "text-reveal-mask"],
+    "retro-windows": ["scroll-reveal"],
+    "coral-soft": ["scroll-reveal", "ambient-mesh-bg", "marquee-fade", "gradient-mesh-animated"],
+    "monochrome-precision": ["scroll-reveal", "dot-grid-bg", "conic-ring", "text-reveal-mask"],
+}
+
 
 def _get_animation_mode(tokens_data: dict) -> str:
     """Read animation_mode from tokens.json or default 'smooth'."""
     return str(tokens_data.get("animation_mode", "smooth"))
+
+
+def _get_style_mood(tokens_data: dict) -> str | None:
+    """Read style_mood from tokens.json. Returns None if not set."""
+    mood = tokens_data.get("style_mood", None)
+    return str(mood) if mood else None
+
+
+def _apply_style_mood(style_css_path: Path, styles_dir: Path, mood: str) -> None:
+    """Append style mood CSS (palette + typography + motion) to style.css.
+
+    Called after patterns are appended so mood variables override pattern defaults.
+    """
+    if not mood:
+        return
+    mood_dir = styles_dir / mood
+    if not mood_dir.exists():
+        info(f"warn: style mood '{mood}' directory not found at {mood_dir}")
+        return
+
+    css_chunks = [
+        f"\n\n/* ========================================================== */\n"
+        f"/* Style Mood: {mood} (from block-library/_styles/{mood}/) */\n"
+        f"/* ========================================================== */\n"
+    ]
+    for fname in ["palette.css", "typography.css", "motion.css"]:
+        fpath = mood_dir / fname
+        if fpath.exists():
+            css_chunks.append(f"\n/* --- {mood}/{fname} --- */\n")
+            css_chunks.append(fpath.read_text(encoding="utf-8"))
+        else:
+            info(f"warn: mood file not found: {fpath}")
+
+    with open(style_css_path, "a", encoding="utf-8") as f:
+        f.write("".join(css_chunks))
+    info(f"Style mood '{mood}' applied to style.css (palette + typography + motion)")
 
 
 def _load_tokens_json(project: Path) -> dict:
@@ -241,14 +289,27 @@ def main(argv: list) -> int:
     # ── OpenDesign Patterns ────────────────────────────────────────────────
     tokens_data = _load_tokens_json(project)
     animation_mode = _get_animation_mode(tokens_data)
-    patterns_list = PATTERNS_BY_MODE.get(animation_mode, PATTERNS_BY_MODE["smooth"])
-    if animation_mode not in PATTERNS_BY_MODE:
-        info(f"Unknown animation_mode '{animation_mode}' — falling back to 'smooth'")
-        patterns_list = PATTERNS_BY_MODE["smooth"]
+    style_mood = _get_style_mood(tokens_data)
 
-    info(f"animation_mode: {animation_mode!r} → patterns: {patterns_list}")
+    # style_mood overrides animation_mode for pattern selection
+    if style_mood and style_mood in STYLE_MOOD_PATTERNS:
+        patterns_list = STYLE_MOOD_PATTERNS[style_mood]
+        info(f"style_mood: {style_mood!r} → overriding animation_mode patterns → {patterns_list}")
+    else:
+        patterns_list = PATTERNS_BY_MODE.get(animation_mode, PATTERNS_BY_MODE["smooth"])
+        if animation_mode not in PATTERNS_BY_MODE:
+            info(f"Unknown animation_mode '{animation_mode}' — falling back to 'smooth'")
+            patterns_list = PATTERNS_BY_MODE["smooth"]
+        info(f"animation_mode: {animation_mode!r} → patterns: {patterns_list}")
+
     _append_patterns_css(theme_dir / "style.css", patterns_list)
     _write_animations_js(theme_dir / "assets" / "js", patterns_list)
+
+    # ── Style Mood CSS (palette + typography + motion) ────────────────────
+    if style_mood:
+        _apply_style_mood(theme_dir / "style.css", STYLES_DIR, style_mood)
+    else:
+        info("No style_mood set in tokens.json — skipping mood CSS")
 
     # Minimal WP template: emits enqueued head/footer + post content. Front page
     # is a Gutenberg page set via page_on_front; the_content() renders its blocks.

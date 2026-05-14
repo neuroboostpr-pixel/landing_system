@@ -1,0 +1,38 @@
+/* Retro Windows Style Mood — palette
+ * Inspired by: zhangzara-retro-windows (OpenDesign) — Windows 95 / CRT aesthetic
+ * Classic system palette: grays, navy titlebar, retro accent colours.
+ */
+
+:root {
+  /* ── System surfaces (Win95 palette) ── */
+  --color-bg:          #c0c0c0;   /* classic Windows gray */
+  --color-bg-light:    #d4d0c8;   /* slightly lighter */
+  --color-bg-dark:     #808080;   /* darker gray */
+  --color-surface:     #d4d0c8;   /* window body */
+  --color-surface-inset: #ffffff;  /* inset areas, text boxes */
+
+  /* ── Titlebar (the iconic gradient) ── */
+  --color-titlebar-from: #000080;  /* navy blue */
+  --color-titlebar-to:   #0000a0;  /* slightly brighter navy */
+  --color-titlebar-text: #ffffff;
+
+  /* ── Text ── */
+  --color-fg:          #222222;   /* near-black */
+  --color-fg-muted:    #444444;
+  --color-fg-inverted: #ffffff;   /* on titlebar */
+
+  /* ── Accent colours (retro system palette) ── */
+  --color-accent:      #000080;   /* navy — primary accent */
+  --color-positive:    #008000;   /* retro green */
+  --color-negative:    #800000;   /* retro red/maroon */
+  --color-highlight:   #0078d4;   /* selection blue */
+
+  /* ── 3D border system (the Win95 bevel) ── */
+  --color-btn-highlight: #ffffff;
+  --color-btn-shadow:    #404040;
+  --color-btn-dark:      #000000;
+  --color-btn-face:      #d4d0c8;
+
+  /* ── CRT overlay tint ── */
+  --color-crt-scanline: rgba(0, 0, 0, 0.03);
+}

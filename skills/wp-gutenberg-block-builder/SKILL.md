@@ -97,6 +97,56 @@ scroll_reveal_js = (patterns_dir / "scroll-reveal" / "snippet.js").read_text()
 animations_js_content += scroll_reveal_js
 ```
 
+## Style Moods (block-library/_styles/)
+
+6 готовых визуальных настроений на основе zhangzara collection из OpenDesign + kami-landing.
+Каждый mood = `palette.css` + `typography.css` + `motion.css` + `style-guide.md`.
+
+В `tokens.json` укажи `style_mood` — generate-theme.py подключит все 3 CSS-файла к `style.css`:
+
+| Mood | Inspiration | Когда применять |
+|---|---|---|
+| `brutalist` | web-prototype-taste-brutalist | Стартапы с характером, нон-конформизм, инди |
+| `editorial-warm` | kami-landing + soft-editorial | Психология, эксперты, коучинг, премиум-услуги |
+| `swiss-modernist` | cobalt-grid + digits-fintech-swiss | Tech, finance, SaaS, B2B |
+| `retro-windows` | zhangzara-retro-windows | Геймификация, nostalgia, инди-приложения |
+| `coral-soft` | zhangzara-coral + sakura-chroma | Beauty, wellness, lifestyle |
+| `monochrome-precision` | zhangzara-monochrome (Ivory Ledger) | Архитектура, фото, luxury-премиум |
+
+**Использование:**
+
+```json
+// 05_ДИЗАЙН-СИСТЕМА/tokens.json
+{
+  "style_mood": "editorial-warm",
+  "animation_mode": "cinematic"
+}
+```
+
+`style_mood` ПЕРЕОПРЕДЕЛЯЕТ паттерны animation_mode — задействует рекомендованные для mood паттерны:
+
+| Mood | Patterns |
+|---|---|
+| `brutalist` | scroll-reveal, bento-grid-hairline, headroom-nav |
+| `editorial-warm` | scroll-reveal, paper-texture, dot-grid-bg, text-reveal-mask |
+| `swiss-modernist` | scroll-reveal, bento-grid-hairline, headroom-nav, text-reveal-mask |
+| `retro-windows` | scroll-reveal |
+| `coral-soft` | scroll-reveal, ambient-mesh-bg, marquee-fade, gradient-mesh-animated |
+| `monochrome-precision` | scroll-reveal, dot-grid-bg, conic-ring, text-reveal-mask |
+
+## New Patterns (PR-A visual-upgrade)
+
+6 новых patterns добавлены в `block-library/_patterns/`:
+
+| Pattern | Что даёт | Когда применять |
+|---|---|---|
+| `gradient-mesh-animated` | Cinematic drift: 3-4 цветных пятна медленно дрейфуют | Dark hero, premium moods |
+| `cursor-aura` | Световое пятно за курсором | Dark sections, interactive feel |
+| `text-reveal-mask` | Apple keynote-style mask reveal | Hero headlines, features |
+| `sticky-section-reveal` | Apple AirPods style: секция залипает, контент меняется | Storytelling продуктовые страницы |
+| `magnetic-button` | Кнопка притягивается к курсору | CTA кнопки, premium UX |
+| `marquee-3d-perspective` | Бегущая строка с CSS перспективой | Brand logos, social proof |
+
 ## Anti-AI-Slop правила (craft/anti-ai-slop.md)
 
 См. `vendor/opendesign-extracts/craft/anti-ai-slop.md` — 7 паттернов

@@ -1,0 +1,42 @@
+/* Editorial Warm Style Mood — motion preferences
+ * Philosophy: whisper-soft. Movements feel organic, like turning a page.
+ * Spring-y ease-out is allowed. Slow drift for backgrounds.
+ */
+
+:root {
+  /* ── Durations — slow, deliberate ── */
+  --motion-duration-instant:  80ms;
+  --motion-duration-base:     300ms;   /* comfortable */
+  --motion-duration-medium:   500ms;
+  --motion-duration-slow:     800ms;   /* for reveals */
+  --motion-duration-drift:    18s;     /* for background animations */
+
+  /* ── Easing — organic, editorial ── */
+  --motion-easing-default:    cubic-bezier(0.16, 1, 0.3, 1);   /* spring ease-out */
+  --motion-easing-in:         cubic-bezier(0.4, 0, 1, 1);
+  --motion-easing-out:        cubic-bezier(0, 0, 0.2, 1);
+  --motion-easing-spring:     cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ── Hover transforms ── */
+  --motion-hover-translate-y: -2px;   /* soft upward float */
+  --motion-hover-scale:       1.01;   /* very subtle scale */
+
+  /* ── Scroll animations ── */
+  --motion-scroll-threshold:  0.15;   /* trigger at 15% visibility */
+  --motion-stagger-delay:     100ms;  /* comfortable stagger */
+
+  /* ── Shadow animation ── */
+  --shadow-base:    0 4px 24px rgba(0, 0, 0, 0.05);
+  --shadow-raised:  0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-duration-base:   0ms;
+    --motion-duration-medium: 0ms;
+    --motion-duration-slow:   0ms;
+    --motion-duration-drift:  0s;
+    --motion-hover-translate-y: 0;
+    --motion-hover-scale:     1;
+  }
+}

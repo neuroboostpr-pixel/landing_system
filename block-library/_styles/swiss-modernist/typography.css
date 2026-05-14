@@ -1,0 +1,44 @@
+/* Swiss Modernist Style Mood — typography
+ * Inspired by: cobalt-grid (Newsreader + Hanken Grotesk) + digits-fintech-swiss
+ * Italic serif for display (editorial authority), grotesque for body (clarity).
+ */
+
+:root {
+  /* ── Font stacks ── */
+  --font-display:  'Newsreader', Georgia, serif;        /* italic serif for display */
+  --font-body:     'Hanken Grotesk', 'Inter', system-ui, sans-serif;
+  --font-mono:     'DM Mono', 'JetBrains Mono', ui-monospace, monospace;
+
+  /* ── Weights ── */
+  --font-display-weight:  400;    /* light weight serif — counterintuitively refined */
+  --font-body-weight:     400;
+  --font-label-weight:    600;    /* labels are confident */
+
+  /* ── Display: italic is the default style ── */
+  --font-display-style:   italic;
+  --font-display-tracking: -0.005em;
+
+  /* ── Body tracking ── */
+  --font-body-tracking:   0em;
+  --font-mono-tracking:   0.06em;
+  --font-label-tracking:  0.16em;
+
+  /* ── Type Scale (clamp) ── */
+  --text-display:  clamp(4rem, 9vw, 8rem);    /* large, italic, commanding */
+  --text-h1:       clamp(2.5rem, 5vw, 4.5rem);
+  --text-h2:       clamp(1.75rem, 3.2vw, 2.75rem);
+  --text-h3:       clamp(1.25rem, 2vw, 1.75rem);
+  --text-body:     1rem;           /* 16px */
+  --text-small:    0.875rem;
+  --text-label:    0.6875rem;      /* 11px — tight chromium */
+
+  /* ── Line heights ── */
+  --lh-display: 0.92;    /* very tight — graphic */
+  --lh-heading: 1.15;
+  --lh-body:    1.5;
+  --lh-label:   1.4;
+
+  /* ── Case ── */
+  --text-case-label:   uppercase;
+  --text-case-display: none;     /* lowercase italic is the Swiss move */
+}

@@ -1,0 +1,44 @@
+/* Monochrome Precision Style Mood — motion preferences
+ * Philosophy: restrained. Motion only where it adds meaning.
+ * Spring ease-out for reveals. No background animations.
+ */
+
+:root {
+  /* ── Durations ── */
+  --motion-duration-instant:  100ms;
+  --motion-duration-base:     400ms;   /* deliberate pace */
+  --motion-duration-medium:   700ms;   /* reveal animations */
+  --motion-duration-slow:     0.9s;    /* slide pan */
+
+  /* ── Easing — refined spring ── */
+  --motion-easing-default:    cubic-bezier(0.16, 1, 0.3, 1);   /* spring ease-out */
+  --motion-easing-slide:      cubic-bezier(0.77, 0, 0.175, 1); /* cinematic pan */
+  --motion-easing-enter:      cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ── Stagger delays (5 levels — from monochrome data-delay system) ── */
+  --motion-delay-1: 0.08s;
+  --motion-delay-2: 0.18s;
+  --motion-delay-3: 0.30s;
+  --motion-delay-4: 0.44s;
+  --motion-delay-5: 0.60s;
+
+  /* ── Hover — minimal ── */
+  --motion-hover-translate-y: -1px;
+  --motion-hover-scale:       1;       /* no scale */
+
+  /* ── NO background animations — purity of the mood ── */
+  --motion-duration-drift:    0s;      /* no ambient mesh drift */
+
+  /* ── Scroll ── */
+  --motion-scroll-threshold:  0.15;
+  --motion-stagger-delay:     80ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-duration-base:   0ms;
+    --motion-duration-medium: 0ms;
+    --motion-duration-slow:   0s;
+    --motion-hover-translate-y: 0;
+  }
+}

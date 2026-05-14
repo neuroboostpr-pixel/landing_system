@@ -1,0 +1,48 @@
+/* Editorial Warm Style Mood — typography
+ * Inspired by: kami-landing (Source Serif 4) + soft-editorial (Cormorant Garamond)
+ * Serif-first: display and headings in serif, body in clean sans.
+ */
+
+:root {
+  /* ── Font stacks ── */
+  --font-display:  'Cormorant Garamond', 'Garamond', Georgia, serif;
+  --font-serif:    'Source Serif 4', Charter, Georgia, Palatino, serif;
+  --font-body:     'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono:     'JetBrains Mono', 'SF Mono', 'Fira Code', Consolas, monospace;
+
+  /* ── Weights ── */
+  --font-display-weight:  500;    /* medium — elegant, not heavy */
+  --font-serif-weight:    400;
+  --font-body-weight:     400;
+  --font-label-weight:    500;
+
+  /* ── Tracking ── */
+  --font-display-tracking: -0.02em;  /* slightly tight */
+  --font-body-tracking:     0.05em;  /* slightly open for readability */
+  --font-mono-tracking:     1.2px;   /* labels: 1.2px */
+
+  /* ── Type Scale ── */
+  --text-display:  clamp(3.5rem, 7.4vw, 6.5rem);   /* kami: clamp(60px, 7.4vw, 106px) */
+  --text-h1:       clamp(2.25rem, 5vw, 4rem);
+  --text-h2:       clamp(1.5rem, 3vw, 2.25rem);
+  --text-h3:       clamp(1.2rem, 2vw, 1.5rem);
+  --text-lead:     1.3125rem;     /* 21px — generous lead */
+  --text-body:     0.875rem;      /* 14px — kami canonical */
+  --text-small:    0.8125rem;
+  --text-label:    0.75rem;       /* 12px mono labels */
+
+  /* ── Line heights ── */
+  --lh-display: 1.05;   /* tight but readable */
+  --lh-heading: 1.25;
+  --lh-body:    1.55;   /* editorial reading */
+  --lh-lead:    1.45;
+
+  /* ── Styles ── */
+  --text-case-label:  uppercase;
+  --text-case-display: none;      /* NOT uppercase — editorial */
+  --font-feature:     'liga', 'calt';  /* ligatures */
+
+  /* ── Italic usage ── */
+  /* Display text can mix roman and italic mid-sentence for accent */
+  --font-display-italic: 'Cormorant Garamond', Georgia, serif;
+}

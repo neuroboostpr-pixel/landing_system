@@ -1,0 +1,42 @@
+/* Coral Soft Style Mood — motion preferences
+ * Philosophy: smooth, feminine, playful but not chaotic.
+ * Gentle transitions, soft spring, slow drift backgrounds.
+ */
+
+:root {
+  /* ── Durations ── */
+  --motion-duration-instant:  100ms;
+  --motion-duration-base:     350ms;   /* slightly slow — soft feel */
+  --motion-duration-medium:   500ms;
+  --motion-duration-slow:     700ms;
+  --motion-duration-drift:    22s;     /* background blob drift */
+  --motion-duration-slide:    0.6s;    /* slide transitions */
+
+  /* ── Easing — smooth, spring-y ── */
+  --motion-easing-default:    cubic-bezier(0.4, 0, 0.2, 1);   /* Material smooth */
+  --motion-easing-spring:     cubic-bezier(0.34, 1.56, 0.64, 1);  /* spring overshoot */
+  --motion-easing-slide:      ease;
+  --motion-easing-gentle:     cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ── Hover ── */
+  --motion-hover-translate-y: -3px;   /* gentle float up */
+  --motion-hover-scale:       1.02;   /* slight grow */
+
+  /* ── Nav dots (coral specific) ── */
+  --motion-dot-duration: 0.3s;
+
+  /* ── Scroll ── */
+  --motion-scroll-threshold:  0.2;    /* trigger a bit later — soft */
+  --motion-stagger-delay:     120ms;  /* comfortable stagger */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-duration-base:   0ms;
+    --motion-duration-medium: 0ms;
+    --motion-duration-slow:   0ms;
+    --motion-duration-drift:  0s;
+    --motion-hover-translate-y: 0;
+    --motion-hover-scale:     1;
+  }
+}

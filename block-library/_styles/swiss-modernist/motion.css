@@ -1,0 +1,40 @@
+/* Swiss Modernist Style Mood — motion preferences
+ * Philosophy: precise, confident. Not slow or organic.
+ * Sharp easing, medium speed, graph-paper clarity.
+ */
+
+:root {
+  /* ── Durations ── */
+  --motion-duration-instant:  80ms;
+  --motion-duration-base:     200ms;   /* efficient */
+  --motion-duration-medium:   350ms;
+  --motion-duration-slow:     500ms;
+  --motion-duration-slide:    0.85s;   /* slide pan: cinematic */
+
+  /* ── Easing ── */
+  --motion-easing-default:    cubic-bezier(0.2, 0, 0, 1);    /* production: sharp out */
+  --motion-easing-slide:      cubic-bezier(0.77, 0, 0.175, 1); /* cobalt slide pan */
+  --motion-easing-enter:      cubic-bezier(0.16, 1, 0.3, 1);  /* element reveal */
+  --motion-easing-spring:     cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ── Hover ── */
+  --motion-hover-translate-y: -1px;   /* subtle lift */
+  --motion-hover-scale:       1;
+
+  /* ── Scroll ── */
+  --motion-scroll-threshold:  0.12;
+  --motion-stagger-delay:     80ms;
+
+  /* ── Hairlines ── */
+  --hairline-width: 1.5px;           /* the cobalt hairlines */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-duration-base:   0ms;
+    --motion-duration-medium: 0ms;
+    --motion-duration-slow:   0ms;
+    --motion-duration-slide:  0s;
+    --motion-hover-translate-y: 0;
+  }
+}
