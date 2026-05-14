@@ -6,6 +6,9 @@ fenced ```css blocks — and writes ONLY main.css. style.css is left alone.
 
 Used by /landing-style after frontend-builder edits DESIGN.md §5.
 
+WARNING: any manual edits to main.css are overwritten on every run.
+Edit DESIGN.md §3-§9 (single source of truth) instead.
+
 Exit 0: main.css written.
 Exit 1: theme css dir missing (run /landing-build first), or DESIGN.md missing.
 Exit 2: missing argv.
