@@ -1,0 +1,75 @@
+/* cursor-aura — Light spot follows the cursor (radial-gradient + CSS vars)
+ * ~10 lines of JS, zero dependencies.
+ * Disabled on touch devices automatically.
+ *
+ * Usage: add class "cursor-aura" to the section/container.
+ * JS (snippet.js) handles updating the CSS vars.
+ */
+
+.cursor-aura {
+  /* Aura appearance tokens */
+  --aura-color: rgba(120, 80, 220, 0.18);
+  --aura-size: 500px;
+  --aura-x: 50%;
+  --aura-y: 50%;
+
+  position: relative;
+  overflow: hidden;
+}
+
+.cursor-aura::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    var(--aura-size) var(--aura-size) at var(--aura-x) var(--aura-y),
+    var(--aura-color) 0%,
+    transparent 70%
+  );
+  /* GPU layer — smooth without layout thrash */
+  will-change: background;
+  transition: background 0.05s linear;
+}
+
+/* Children sit above the aura */
+.cursor-aura > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Variant: warm aura (editorial-warm mood) ── */
+.cursor-aura--warm {
+  --aura-color: rgba(200, 140, 60, 0.14);
+  --aura-size: 600px;
+}
+
+/* ── Variant: cool aura (swiss-modernist mood) ── */
+.cursor-aura--cobalt {
+  --aura-color: rgba(31, 43, 224, 0.12);
+  --aura-size: 450px;
+}
+
+/* ── Variant: subtle (light backgrounds) ── */
+.cursor-aura--subtle {
+  --aura-color: rgba(0, 0, 0, 0.04);
+  --aura-size: 700px;
+}
+
+/* Touch devices: aura stays centred (JS also disables itself) */
+@media (hover: none) and (pointer: coarse) {
+  .cursor-aura::before {
+    --aura-x: 50%;
+    --aura-y: 50%;
+    opacity: 0;
+  }
+}
+
+/* prefers-reduced-motion: keep aura but remove transition */
+@media (prefers-reduced-motion: reduce) {
+  .cursor-aura::before {
+    transition: none;
+    opacity: 0;
+  }
+}

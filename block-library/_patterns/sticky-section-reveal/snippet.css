@@ -1,0 +1,92 @@
+/* sticky-section-reveal — Apple AirPods Pro style section pinning.
+ * Section sticks to screen while inner "states" change on scroll.
+ * Requires GSAP + ScrollTrigger (via CDN or wp_enqueue_script).
+ *
+ * Usage:
+ *   <section class="ssr-section">
+ *     <div class="ssr-state" data-state="1">State 1 content</div>
+ *     <div class="ssr-state" data-state="2">State 2 content</div>
+ *     <div class="ssr-state" data-state="3">State 3 content</div>
+ *   </section>
+ */
+
+.ssr-section {
+  /* Height = number of states × viewport height — creates scroll room */
+  height: calc(var(--ssr-states, 3) * 100vh);
+  position: relative;
+}
+
+.ssr-sticky {
+  /* The sticky container that pins to viewport */
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+
+/* Individual states — stacked, all at same position */
+.ssr-state {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 4rem 2rem;
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+/* Active state */
+.ssr-state.is-active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Exiting state (going up) */
+.ssr-state.is-exiting {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+/* Progress indicator */
+.ssr-progress {
+  position: fixed;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.ssr-progress-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.2);
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.ssr-progress-dot.is-active {
+  background: rgba(0, 0, 0, 0.7);
+  transform: scale(1.4);
+}
+
+/* prefers-reduced-motion: no transitions, states switch instantly */
+@media (prefers-reduced-motion: reduce) {
+  .ssr-state {
+    transition: none;
+    transform: none;
+  }
+  .ssr-state.is-exiting {
+    transform: none;
+  }
+}

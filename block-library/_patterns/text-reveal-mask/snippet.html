@@ -1,0 +1,28 @@
+<!-- text-reveal-mask: Text proявляется через mask.
+     Requires snippet.css and snippet.js.
+     Scroll down to trigger the animation. -->
+
+<section style="min-height:60vh; display:grid; place-items:center; padding:4rem 2rem; background:#fff;">
+  <div style="max-width:700px; text-align:center;">
+
+    <!-- Default: reveal up (default direction) -->
+    <h1 data-animate="reveal" style="font-size:clamp(2.5rem,6vw,5rem); font-weight:800; line-height:1.1; margin-bottom:1.5rem; color:#111;">
+      Text Appears Through a Mask
+    </h1>
+
+    <!-- Delay stagger -->
+    <p data-animate="reveal" data-reveal-dir="up" data-delay="2"
+       style="font-size:1.25rem; color:#555; margin-bottom:1rem;">
+      Like an Apple keynote slide reveal.
+    </p>
+
+    <!-- Horizontal reveal -->
+    <p data-animate="reveal" data-reveal-dir="ltr" data-delay="3"
+       style="font-size:1rem; color:#888;">
+      Left-to-right reveal direction.
+    </p>
+
+  </div>
+</section>
+
+<script src="snippet.js" defer></script>

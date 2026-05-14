@@ -1,0 +1,71 @@
+/* gradient-mesh-animated — Cinematic animated gradient mesh
+ * 3-4 colour blobs drift slowly. Pure CSS, zero JS.
+ * Inspired by Apple/Linear hero backgrounds.
+ *
+ * Usage: add class "gma-bg" to any section/div.
+ * Customise via CSS variables on that element.
+ */
+
+.gma-bg {
+  /* Palette tokens — override per project */
+  --gma-color-1: rgba(120, 80, 220, 0.55);   /* purple */
+  --gma-color-2: rgba(60, 160, 240, 0.45);    /* blue */
+  --gma-color-3: rgba(180, 80, 160, 0.40);    /* rose */
+  --gma-color-4: rgba(80, 200, 180, 0.35);    /* teal */
+  --gma-blur: 80px;
+  --gma-speed: 18s;
+
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* The mesh lives in a pseudo-element so it doesn't affect layout */
+.gma-bg::before {
+  content: '';
+  position: absolute;
+  inset: -50%;          /* oversized so blobs can drift without gaps */
+  z-index: -1;
+  pointer-events: none;
+  filter: blur(var(--gma-blur));
+  background:
+    radial-gradient(ellipse 55% 45% at 20% 25%, var(--gma-color-1), transparent 70%),
+    radial-gradient(ellipse 50% 55% at 80% 15%, var(--gma-color-2), transparent 70%),
+    radial-gradient(ellipse 45% 60% at 65% 80%, var(--gma-color-3), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 10% 75%, var(--gma-color-4), transparent 70%);
+  animation: gma-drift var(--gma-speed) ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes gma-drift {
+  0%   { transform: translate(0, 0) scale(1); }
+  25%  { transform: translate(4%, 3%) scale(1.04); }
+  50%  { transform: translate(-3%, 5%) scale(0.97); }
+  75%  { transform: translate(5%, -2%) scale(1.02); }
+  100% { transform: translate(-4%, 4%) scale(1.05); }
+}
+
+/* Static fallback for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .gma-bg::before {
+    animation: none;
+    transform: none;
+  }
+}
+
+/* ── Variant: editorial-warm colours ── */
+.gma-bg--warm {
+  --gma-color-1: rgba(200, 150, 80, 0.45);
+  --gma-color-2: rgba(180, 100, 60, 0.35);
+  --gma-color-3: rgba(220, 180, 100, 0.30);
+  --gma-color-4: rgba(160, 80, 90, 0.25);
+}
+
+/* ── Variant: monochrome (dark) ── */
+.gma-bg--mono {
+  --gma-color-1: rgba(80, 80, 80, 0.6);
+  --gma-color-2: rgba(40, 40, 40, 0.5);
+  --gma-color-3: rgba(120, 120, 120, 0.4);
+  --gma-color-4: rgba(60, 60, 60, 0.45);
+  --gma-blur: 60px;
+}

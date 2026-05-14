@@ -1,0 +1,61 @@
+<!-- sticky-section-reveal: Apple AirPods Pro style section pinning.
+     Requires snippet.css and snippet.js (+ optionally GSAP + ScrollTrigger).
+     Scroll down to trigger state transitions. -->
+
+<!-- Optional: load GSAP for best experience -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js" defer></script>
+
+<section class="ssr-section" style="background:#0a0a12;">
+  <div class="ssr-sticky">
+
+    <!-- State 1 -->
+    <div class="ssr-state" data-state="1" style="text-align:center; color:#fff;">
+      <div>
+        <p style="font-size:0.9rem; text-transform:uppercase; letter-spacing:0.1em; opacity:0.5; margin-bottom:1rem;">Step 01</p>
+        <h2 style="font-size:clamp(2.5rem,6vw,4.5rem); font-weight:700; line-height:1.1; margin-bottom:1rem;">
+          Start with an insight
+        </h2>
+        <p style="font-size:1.1rem; opacity:0.6; max-width:40ch; margin:0 auto;">
+          The section stays pinned while you scroll. Only the content changes.
+        </p>
+      </div>
+    </div>
+
+    <!-- State 2 -->
+    <div class="ssr-state" data-state="2" style="text-align:center; color:#fff;">
+      <div>
+        <p style="font-size:0.9rem; text-transform:uppercase; letter-spacing:0.1em; opacity:0.5; margin-bottom:1rem;">Step 02</p>
+        <h2 style="font-size:clamp(2.5rem,6vw,4.5rem); font-weight:700; line-height:1.1; margin-bottom:1rem;">
+          Build on momentum
+        </h2>
+        <p style="font-size:1.1rem; opacity:0.6; max-width:40ch; margin:0 auto;">
+          Each scroll step reveals the next idea. Like Apple's product pages.
+        </p>
+      </div>
+    </div>
+
+    <!-- State 3 -->
+    <div class="ssr-state" data-state="3" style="text-align:center; color:#fff;">
+      <div>
+        <p style="font-size:0.9rem; text-transform:uppercase; letter-spacing:0.1em; opacity:0.5; margin-bottom:1rem;">Step 03</p>
+        <h2 style="font-size:clamp(2.5rem,6vw,4.5rem); font-weight:700; line-height:1.1; margin-bottom:1rem;">
+          Land with conviction
+        </h2>
+        <p style="font-size:1.1rem; opacity:0.6; max-width:40ch; margin:0 auto;">
+          The final state completes the story.
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Progress dots -->
+  <div class="ssr-progress">
+    <div class="ssr-progress-dot" style="background:rgba(255,255,255,0.3);"></div>
+    <div class="ssr-progress-dot" style="background:rgba(255,255,255,0.3);"></div>
+    <div class="ssr-progress-dot" style="background:rgba(255,255,255,0.3);"></div>
+  </div>
+</section>
+
+<script src="snippet.js" defer></script>
