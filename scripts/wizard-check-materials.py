@@ -35,8 +35,14 @@ def check_prototype(project: Path) -> dict:
     found: list[str] = []
     if src.exists():
         for p in src.iterdir():
-            if p.is_file() and p.suffix.lower() in PROTOTYPE_EXTS and p.name.lower().startswith("prototype"):
-                found.append(f"{p.name} ({_human_size(p.stat().st_size)})")
+            # Accept any file with a supported extension. Skip README/.gitkeep/system files.
+            if not p.is_file():
+                continue
+            if p.suffix.lower() not in PROTOTYPE_EXTS:
+                continue
+            if p.name.lower() == "readme.md":
+                continue  # template README, not user content
+            found.append(f"{p.name} ({_human_size(p.stat().st_size)})")
     if not found:
         return {
             "step": "prototype",
