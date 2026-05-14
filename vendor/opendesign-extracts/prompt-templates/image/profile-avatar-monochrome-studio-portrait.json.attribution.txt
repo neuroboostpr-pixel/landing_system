@@ -1,0 +1,3 @@
+Source: github.com/nexu-io/open-design @ ef699df4cdaca8ddd5a39935145837332835ce42
+Path: prompt-templates/image/profile-avatar-monochrome-studio-portrait.json
+License: Apache-2.0

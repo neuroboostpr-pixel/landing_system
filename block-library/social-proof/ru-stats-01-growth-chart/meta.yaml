@@ -1,0 +1,33 @@
+id: ru-stats-01-growth-chart
+category: social-proof
+ru_market: true
+use_cases:
+  - services
+  - b2c
+description: 'Блок социального доказательства: график роста (клиентов / выручки / проектов) за N лет'
+display_name_ru: 📈 График роста (клиенты / выручка / проекты за N лет)
+layout_summary_ru: Заголовок + один большой line-chart инфографик слева, краткое описание метрики справа. На mobile — chart сверху, текст снизу.
+slots:
+  - type: infographic
+    name: growth-chart-main
+    chart_type: line
+    data:
+      x_label: 'Год'
+      y_label: 'Клиентов'
+      points: [[2019, 50], [2020, 180], [2021, 420], [2022, 700], [2023, 1000]]
+    required: true
+  - type: text
+    name: headline
+    max_chars: 60
+    required: true
+  - type: text
+    name: subhead
+    max_chars: 200
+    required: false
+conversion_notes: Графики роста — мощный proof. Используй реальные данные.
+source: manual
+source_attribution: ''
+created: 2026-05-13
+recommended_styles_ru:
+  - Minimalism & Swiss Style
+  - Editorial

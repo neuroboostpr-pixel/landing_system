@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>ru-quiz-09-multi-select — mobile</title>
+<style>
+  :root {
+    --color-bg: #fff; --color-fg: #111; --color-accent: #333; --color-border: #ccc;
+    --font-display: system-ui, sans-serif; --font-body: system-ui, sans-serif;
+    --spacing-md: 16px; --spacing-lg: 32px;
+  }
+  body { margin: 0; font-family: var(--font-body); background: #f5f5f5; color: var(--color-fg); width: 375px; }
+  .step-card { background: var(--color-bg); min-height: 100vh; padding: 24px 16px 36px; box-sizing: border-box; }
+  .progress-bar-wrap { margin-bottom: 20px; }
+  .progress-label { font-size: 11px; color: #999; margin-bottom: 5px; }
+  .progress-track { background: #eee; border-radius: 4px; height: 5px; }
+  .progress-fill { background: var(--color-accent); height: 5px; border-radius: 4px; width: 80%; }
+  .question-text { font-family: var(--font-display); font-size: 20px; font-weight: 700; line-height: 1.25; margin: 0 0 6px; text-align: center; }
+  .question-hint { font-size: 13px; color: #999; text-align: center; margin-bottom: 18px; }
+  .options-list { display: flex; flex-direction: column; gap: 8px; }
+  .check-option input[type=checkbox] { position: absolute; opacity: 0; width: 0; height: 0; }
+  .check-option label { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 2px solid var(--color-border); border-radius: 8px; cursor: pointer; font-size: 14px; }
+  .check-option input[type=checkbox]:checked + label { border-color: var(--color-accent); background: #f8f8f8; }
+  .check-box { width: 20px; height: 20px; border: 2px solid var(--color-border); border-radius: 4px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .check-option input[type=checkbox]:checked + label .check-box { background: var(--color-accent); border-color: var(--color-accent); }
+  .check-option input[type=checkbox]:checked + label .check-box::after { content: '✓'; color: #fff; font-size: 12px; font-weight: 700; }
+  .next-btn { display: block; margin: 20px 0 0; background: var(--color-accent); color: #fff; border: none; border-radius: 8px; padding: 14px; width: 100%; font-size: 16px; font-weight: 700; text-decoration: none; text-align: center; box-sizing: border-box; }
+</style>
+</head>
+<body>
+  <div class="step-card" data-block-id="ru-quiz-09-multi-select">
+    <div class="progress-bar-wrap">
+      <div class="progress-label" data-slot="progress-label">Вопрос 4 из 5</div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+    </div>
+    <p class="question-text" data-slot="question-text">Что важно при выборе покрытия?</p>
+    <p class="question-hint">Выберите все подходящие варианты</p>
+    <div class="options-list">
+      <div class="check-option"><input type="checkbox" id="m-ch1" name="importance" value="1"><label for="m-ch1"><span class="check-box"></span><span data-slot="option-1">Долговечность</span></label></div>
+      <div class="check-option"><input type="checkbox" id="m-ch2" name="importance" value="2"><label for="m-ch2"><span class="check-box"></span><span data-slot="option-2">Лёгкий уход</span></label></div>
+      <div class="check-option"><input type="checkbox" id="m-ch3" name="importance" value="3"><label for="m-ch3"><span class="check-box"></span><span data-slot="option-3">Водостойкость</span></label></div>
+      <div class="check-option"><input type="checkbox" id="m-ch4" name="importance" value="4"><label for="m-ch4"><span class="check-box"></span><span data-slot="option-4">Тёплое на ощупь</span></label></div>
+      <div class="check-option"><input type="checkbox" id="m-ch5" name="importance" value="5"><label for="m-ch5"><span class="check-box"></span><span data-slot="option-5">Экологически чистое</span></label></div>
+      <div class="check-option"><input type="checkbox" id="m-ch6" name="importance" value="6"><label for="m-ch6"><span class="check-box"></span><span data-slot="option-6">Цена/качество</span></label></div>
+    </div>
+    <a class="next-btn" href="#" data-slot="next-button">Далее →</a>
+  </div>
+</body>
+</html>

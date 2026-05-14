@@ -1,0 +1,43 @@
+id: ru-hero-02-b2c-expert
+category: hero
+ru_market: true
+use_cases:
+- b2c
+description: 'RU hero B2C: фото эксперта в круге, имя, регалии, оффер, CTA ''Подобрать
+  программу'''
+display_name_ru: 🧑‍💼 Эксперт слева + оффер справа
+layout_summary_ru: Фото эксперта в круге слева, имя и регалии под фото, оффер с подзаголовком
+  и CTA 'Подобрать программу' справа. На mobile — эксперт над оффером.
+slots:
+- type: photo
+  name: expert-photo
+  ratio: '1:1'
+  required: true
+- type: text
+  name: expert-name
+  max_chars: 30
+  required: true
+- type: text
+  name: expert-credentials
+  max_chars: 80
+  required: false
+- type: text
+  name: headline
+  max_chars: 60
+  required: true
+- type: text
+  name: subhead
+  max_chars: 120
+  required: false
+- type: cta
+  name: primary-cta
+  default_text: Подобрать программу
+  required: true
+conversion_notes: Фото эксперта в круге создаёт доверие. Регалии — социальное доказательство.
+  CTA ведёт на квиз.
+source: manual
+source_attribution: ''
+created: 2026-05-12
+recommended_styles_ru:
+- Neumorphism
+- Glassmorphism

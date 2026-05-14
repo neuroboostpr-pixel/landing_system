@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<!-- Source: github.com/nexu-io/open-design @ main | design-templates/open-design-landing/example.html | License: Apache-2.0 -->
+<html lang="ru"><head><meta charset="UTF-8"><title>ru-process-03-4steps-numbered — desktop</title>
+<style>
+  :root { --color-bg:#efe7d2; --color-fg:#15140f; --color-accent:#ed6f5c; --color-border:rgba(21,20,15,0.16); --font-display:'Playfair Display',Georgia,serif; --font-body:'Inter Tight',system-ui,sans-serif; }
+  @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;1,400&display=swap');
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:var(--font-body); background:var(--color-bg); color:var(--color-fg); }
+  .process-section { padding:100px 0; }
+  .wrap { max-width:1200px; margin:0 auto; padding:0 64px; }
+  .process-head { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:end; margin-bottom:60px; }
+  .kicker { font-size:11px; font-weight:600; letter-spacing:0.22em; text-transform:uppercase; color:var(--color-accent); display:flex; align-items:center; gap:12px; margin-bottom:22px; }
+  .kicker::before { content:''; width:18px; height:1px; background:var(--color-accent); }
+  .section-title { font-family:var(--font-body); font-weight:800; font-size:clamp(36px,4vw,56px); line-height:1.0; letter-spacing:-0.028em; }
+  .section-title em { font-family:var(--font-display); font-style:italic; font-weight:500; }
+  .head-right p { font-size:15px; line-height:1.55; color:rgba(21,20,15,0.65); }
+  .process-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:0; border:1px solid var(--color-border); }
+  .step { padding:32px 26px 36px; border-right:1px solid var(--color-border); position:relative; }
+  .step:last-child { border-right:none; }
+  .step-num { font-size:11px; letter-spacing:0.22em; text-transform:uppercase; color:rgba(21,20,15,0.35); margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; }
+  .step-num .accent { color:var(--color-accent); font-size:24px; font-weight:700; letter-spacing:-0.02em; }
+  .step h4 { font-family:var(--font-body); font-size:18px; font-weight:700; margin-bottom:12px; line-height:1.1; }
+  .step p { font-size:13.5px; color:rgba(21,20,15,0.65); line-height:1.55; }
+  .step-img { margin-bottom:16px; height:100px; background:rgba(21,20,15,0.06); display:flex; align-items:center; justify-content:center; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(21,20,15,0.3); }
+</style></head>
+<body>
+  <section class="process-section" data-block-id="ru-process-03-4steps-numbered">
+    <div class="wrap">
+      <div class="process-head">
+        <div>
+          <div class="kicker" data-slot="kicker">[Процесс / Как мы работаем]</div>
+          <h2 class="section-title" data-slot="headline">[Процесс от <em>запроса</em> до <em>результата</em>]</h2>
+        </div>
+        <div class="head-right">
+          <p data-slot="subhead">[Описание методологии: почему именно такой порядок, какие гарантии даёт процесс]</p>
+        </div>
+      </div>
+      <div class="process-grid">
+        <div class="step">
+          <div class="step-num"><span>Шаг</span><span class="accent">01</span></div>
+          <div class="step-img" data-slot="step-1-img">Иллюстрация</div>
+          <h4 data-slot="step-1-title">[Диагностика]</h4>
+          <p data-slot="step-1-desc">[Описание первого шага]</p>
+        </div>
+        <div class="step">
+          <div class="step-num"><span>Шаг</span><span class="accent">02</span></div>
+          <div class="step-img" data-slot="step-2-img">Иллюстрация</div>
+          <h4 data-slot="step-2-title">[Анализ]</h4>
+          <p data-slot="step-2-desc">[Описание второго шага]</p>
+        </div>
+        <div class="step">
+          <div class="step-num"><span>Шаг</span><span class="accent">03</span></div>
+          <div class="step-img" data-slot="step-3-img">Иллюстрация</div>
+          <h4 data-slot="step-3-title">[Разработка]</h4>
+          <p data-slot="step-3-desc">[Описание третьего шага]</p>
+        </div>
+        <div class="step">
+          <div class="step-num"><span>Шаг</span><span class="accent">04</span></div>
+          <div class="step-img" data-slot="step-4-img">Иллюстрация</div>
+          <h4 data-slot="step-4-title">[Результат]</h4>
+          <p data-slot="step-4-desc">[Что получит клиент на выходе]</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</body></html>

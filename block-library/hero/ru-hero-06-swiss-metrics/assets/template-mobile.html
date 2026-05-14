@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!-- Source: /tmp/open-design/skills/digits-fintech-swiss-template/example.html (Apache-2.0, adapted for RU block-library schema) -->
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ru-hero-06-swiss-metrics — mobile</title>
+<style>
+  :root {
+    --color-bg: #f2f2ed;
+    --color-fg: #0a0a0a;
+    --color-accent: #e2ff41;
+    --color-border: rgba(10,10,10,.15);
+    --font-display: system-ui, sans-serif;
+    --font-body: system-ui, sans-serif;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-body); background: var(--color-bg); color: var(--color-fg); width: 375px; }
+  .hero-top { background: var(--color-accent); padding: 14px 16px; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; font-weight: 700; }
+  .hero-main { padding: 28px 16px 24px; }
+  .headline { font-family: var(--font-display); font-size: 2.2rem; line-height: .95; letter-spacing: -.03em; text-transform: uppercase; margin-bottom: 14px; }
+  .subhead { font-size: .9rem; line-height: 1.5; opacity: .85; margin-bottom: 22px; }
+  .cta-btn { display: block; padding: 14px 24px; background: var(--color-fg); color: var(--color-bg); font-weight: 700; font-size: .875rem; text-align: center; text-decoration: none; text-transform: uppercase; }
+  .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 16px; border-top: 1px solid var(--color-border); }
+  .metric-card { border: 1px solid var(--color-border); background: #fff; padding: 14px; }
+  .metric-card.accent { background: var(--color-accent); }
+  .metric-value { font-size: 2rem; font-weight: 900; letter-spacing: -.03em; line-height: 1; }
+  .metric-label { font-size: 9px; letter-spacing: .12em; text-transform: uppercase; opacity: .75; margin-top: 4px; }
+</style>
+</head>
+<body>
+  <section data-block-id="ru-hero-06-swiss-metrics">
+    <div class="hero-top">Профессиональные решения</div>
+    <div class="hero-main">
+      <h1 class="headline" data-slot="headline">[HEADLINE]</h1>
+      <p class="subhead" data-slot="subhead">[SUBHEAD]</p>
+      <a class="cta-btn" data-slot="primary-cta" href="#contact">[CTA]</a>
+    </div>
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-value" data-slot="metric-1-value">[123]</div>
+        <div class="metric-label" data-slot="metric-1-label">[Метрика 1]</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" data-slot="metric-2-value">[456]</div>
+        <div class="metric-label" data-slot="metric-2-label">[Метрика 2]</div>
+      </div>
+      <div class="metric-card accent" style="grid-column: 1/-1;">
+        <div class="metric-value" data-slot="metric-3-value">[789]</div>
+        <div class="metric-label" data-slot="metric-3-label">[Главная метрика]</div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

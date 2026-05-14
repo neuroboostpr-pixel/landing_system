@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>ru-hero-02-b2c-expert — mobile</title>
+<style>
+  :root {
+    --color-bg: #fff; --color-fg: #111; --color-accent: #333; --color-border: #ccc;
+    --font-display: system-ui, sans-serif; --font-body: system-ui, sans-serif;
+    --spacing-md: 16px; --spacing-lg: 32px;
+  }
+  body { margin: 0; font-family: var(--font-body); background: var(--color-bg); color: var(--color-fg); width: 375px; }
+  .hero { display: flex; flex-direction: column; align-items: center; padding: 24px 20px; }
+  .expert-photo { width: 140px; height: 140px; border-radius: 50%; background: #ddd; border: 3px solid var(--color-border); display: flex; align-items: center; justify-content: center; font-size: 10px; color: #666; text-align: center; margin-bottom: 12px; }
+  .expert-name { font-family: var(--font-display); font-size: 18px; font-weight: 700; margin: 0 0 4px; text-align: center; }
+  .expert-credentials { font-size: 13px; color: #555; margin: 0 0 20px; text-align: center; }
+  .headline { font-family: var(--font-display); font-size: 26px; line-height: 1.15; margin: 0 0 12px; text-align: center; }
+  .subhead { font-size: 15px; color: #444; margin: 0 0 20px; text-align: center; line-height: 1.5; }
+  .cta { display: block; width: 100%; padding: 14px; background: var(--color-accent); color: #fff; text-align: center; text-decoration: none; border-radius: 6px; font-weight: 600; box-sizing: border-box; }
+</style>
+</head>
+<body>
+  <section class="hero" data-block-id="ru-hero-02-b2c-expert">
+    <div class="expert-photo" data-slot="expert-photo">photo · 1:1 · expert-photo</div>
+    <p class="expert-name" data-slot="expert-name">[Имя Эксперта]</p>
+    <p class="expert-credentials" data-slot="expert-credentials">[Регалии]</p>
+    <h1 class="headline" data-slot="headline">[HEADLINE]</h1>
+    <p class="subhead" data-slot="subhead">[SUBHEAD]</p>
+    <a class="cta" data-slot="primary-cta" href="#quiz">[Подобрать программу]</a>
+  </section>
+</body>
+</html>

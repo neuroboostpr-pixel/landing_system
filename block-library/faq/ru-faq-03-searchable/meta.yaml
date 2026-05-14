@@ -1,0 +1,25 @@
+id: ru-faq-03-searchable
+category: faq
+ru_market: true
+use_cases: [services, b2c, local]
+description: "FAQ с категорией-фильтрами и поиском по тексту. До 12 вопросов с сортировкой по разделам. Без JS-фреймворков."
+display_name_ru: "❓ FAQ с поиском и категориями"
+layout_summary_ru: "Поле поиска + кнопки-категории сверху, аккордеон-список снизу. Пользователь ищет сразу или фильтрует по разделу. Footer-CTA под списком."
+recommended_styles_ru: ["Minimalism & Swiss Style", "Flat Design 2.0"]
+slots:
+  - {type: text, name: headline, max_chars: 60, required: true}
+  - {type: text, name: subhead, max_chars: 120, required: false}
+  - {type: text, name: faq-cat-1, max_chars: 30, required: true}
+  - {type: text, name: faq-cat-2, max_chars: 30, required: false}
+  - {type: text, name: faq-cat-3, max_chars: 30, required: false}
+  - {type: text, name: faq-1-q, max_chars: 120, required: true}
+  - {type: text, name: faq-1-a, max_chars: 500, required: true}
+  - {type: text, name: faq-2-q, max_chars: 120, required: true}
+  - {type: text, name: faq-2-a, max_chars: 500, required: true}
+  - {type: text, name: faq-3-q, max_chars: 120, required: true}
+  - {type: text, name: faq-3-a, max_chars: 500, required: true}
+  - {type: cta, name: footer-cta, default_text: "Задать вопрос", required: false}
+conversion_notes: "Поиск снижает отказы у сомневающихся. Категории ускоряют навигацию. Footer-CTA ловит тех, кто не нашёл ответ."
+source: opendesign
+source_attribution: "/tmp/open-design/skills/faq-page/example.html"
+created: 2026-05-13

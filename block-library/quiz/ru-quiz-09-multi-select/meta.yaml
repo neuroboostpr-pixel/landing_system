@@ -1,0 +1,21 @@
+id: ru-quiz-09-multi-select
+category: quiz
+ru_market: true
+use_cases: [services, b2c, local]
+description: "Вопрос квиза с множественным выбором: чекбоксы вместо radio, можно отметить несколько вариантов."
+display_name_ru: "☑️ Квиз — вопрос с мульти-выбором (чекбоксы)"
+layout_summary_ru: "Список вариантов с чекбоксами — CSS :checked без JS. Кнопка «Далее» внизу. Прогресс-бар сверху. Для выбора нескольких характеристик сразу."
+slots:
+  - {type: text, name: question-text, max_chars: 120, required: true}
+  - {type: text, name: option-1, max_chars: 60, required: true}
+  - {type: text, name: option-2, max_chars: 60, required: true}
+  - {type: text, name: option-3, max_chars: 60, required: false}
+  - {type: text, name: option-4, max_chars: 60, required: false}
+  - {type: text, name: option-5, max_chars: 60, required: false}
+  - {type: text, name: option-6, max_chars: 60, required: false}
+  - {type: text, name: next-button, max_chars: 30, required: true}
+  - {type: text, name: progress-label, max_chars: 60, required: false}
+conversion_notes: "Множественный выбор собирает больше данных о потребностях. Пользователь чувствует, что его лучше поняли. Источники: Tilda Education, Marquiz."
+source: manual
+source_attribution: "tilda.education/how-to-create-marketing-quiz; marquiz.ru/blog"
+created: '2026-05-13'

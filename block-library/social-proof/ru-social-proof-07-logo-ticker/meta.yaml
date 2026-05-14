@@ -1,0 +1,33 @@
+id: ru-social-proof-07-logo-ticker
+category: social-proof
+ru_market: true
+use_cases:
+- services
+- b2c
+- local
+description: 'Горизонтальная бегущая строка с именами клиентов/партнёров: пульсирующая
+  точка, лейбл слева, анимированный тикер справа. Адаптирован из wire-section open-design-landing.'
+display_name_ru: Тикер клиентов — бегущая строка с названиями
+layout_summary_ru: 'Тонкая полоса с пульсирующей точкой и бегущей строкой клиентов.
+  Двухколоночный — лейбл слева (с бордером), тикер справа. Mobile — стек.'
+slots:
+- {type: text, name: ticker-label, max_chars: 40, required: true}
+- {type: text, name: ticker-sub, max_chars: 40, required: false}
+- {type: text, name: client-1, max_chars: 40, required: true}
+- {type: text, name: client-2, max_chars: 40, required: false}
+- {type: text, name: client-3, max_chars: 40, required: false}
+- {type: text, name: client-4, max_chars: 40, required: false}
+- {type: text, name: client-5, max_chars: 40, required: false}
+- {type: text, name: client-6, max_chars: 40, required: false}
+- {type: text, name: client-7, max_chars: 40, required: false}
+- {type: text, name: client-8, max_chars: 40, required: false}
+conversion_notes: Пульсирующая точка добавляет ощущение активности. Для бесшовного
+  зацикливания клиенты дублируются в HTML. Анимация CSS-only без JS.
+  Хорошо ставить между hero и features для быстрого сигнала доверия.
+source: opendesign
+source_attribution: 'github.com/nexu-io/open-design: design-templates/open-design-landing (Apache-2.0)'
+created: '2026-05-13'
+recommended_styles_ru:
+- Editorial & Magazine Style
+- Minimalism & Swiss Style
+- Flat Design 2.0

@@ -1,0 +1,19 @@
+id: ru-quiz-04-lead-form
+category: quiz
+ru_market: true
+use_cases: [services, b2c, local]
+description: "Финальный экран квиза. Telegram + Max + звонок. Только разрешённые в РФ мессенджеры. Согласие на ПД."
+display_name_ru: "📋 Квиз — финальная форма захвата"
+layout_summary_ru: "Последний экран квиза: заголовок, поле телефона, выбор мессенджера (Telegram / Max / Звонок), кнопка 'Получить расчёт'. Согласие на ПД (152-ФЗ)."
+slots:
+  - {type: text, name: headline, max_chars: 80, required: true}
+  - {type: text, name: subhead, max_chars: 140, required: false}
+  - {type: text, name: name-input, max_chars: 50, required: false}
+  - {type: text, name: phone-input, max_chars: 20, required: true}
+  - {type: text, name: channel-choice, required: true}
+  - {type: cta, name: submit-cta, default_text: "Получить расчёт", required: true}
+  - {type: text, name: agreement-text, max_chars: 200, required: true}
+conversion_notes: "Только разрешённые мессенджеры в РФ. Max Messenger обязателен. 152-ФЗ checkbox НЕ pre-checked."
+source: manual
+source_attribution: ""
+created: 2026-05-12

@@ -1,0 +1,7 @@
+project_slug: example
+selections:
+  - block_position: 1
+    chosen_variant: ru-hero-01-services-calc
+  - block_position: 2
+    chosen_variant: ru-features-02-bento-grid
+confirmed_at: "2026-05-12T14:23:00Z"

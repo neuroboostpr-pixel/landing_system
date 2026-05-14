@@ -171,9 +171,80 @@ stages:
         path: "{project}/07_КОНТЕНТ/final-copy.md"
         required: true
 
+  "07a_prototype":
+    name: "Прототип (parse)"
+    require_approved: []
+    hard_checks:
+      - id: prototype_source_exists
+        type: file_or_dir_exists
+        path: "{project}/07_ПРОТОТИП/source"
+        required: true
+        fix_hint: "Положи prototype.pdf или prototype.md в 07_ПРОТОТИП/source/"
+      - id: prototype_yaml_exists
+        type: file_exists
+        path: "{project}/07_ПРОТОТИП/prototype.yaml"
+        required: true
+        fix_hint: "auto_fix: /landing-prototype"
+
+  "07b_wireframe":
+    name: "Wireframe"
+    require_approved: ["07a_prototype"]
+    hard_checks:
+      - id: wireframe_html_exists
+        type: file_exists
+        path: "{project}/07a_WIREFRAME/wireframe.html"
+        required: true
+        fix_hint: "auto_fix: /landing-wireframe"
+      - id: wireframe_selections
+        type: file_exists
+        path: "{project}/07a_WIREFRAME/selections.yaml"
+        required: true
+        fix_hint: "Открой wireframe.html в браузере, выбери варианты блоков, нажми Confirm. Скачается selections.yaml — положи его в 07a_WIREFRAME/"
+
+  "07c_composed":
+    name: "Composed (draft)"
+    require_approved: ["07b_wireframe", "05_design"]
+    hard_checks:
+      - id: composed_html
+        type: file_exists
+        path: "{project}/07b_COMPOSED/composed.html"
+        required: true
+        fix_hint: "auto_fix: /landing-compose"
+
+  "07d_photos":
+    name: "Photos pipeline"
+    require_approved: ["07c_composed"]
+    hard_checks:
+      - id: photo_selections_yaml
+        type: file_exists
+        path: "{project}/07c_PHOTOS/selections.yaml"
+        required: true
+        fix_hint: "Открой 07c_PHOTOS/photo-board.html, расставь фото, нажми Подтвердить, скачай selections.yaml и положи в 07c_PHOTOS/"
+
+  "07e_visuals":
+    name: "Visuals pipeline (icons + infographics)"
+    require_approved: ["07c_composed"]
+    hard_checks:
+      - id: visuals_generated
+        type: dir_has_files
+        path: "{project}/07d_VISUALS/icons"
+        required: false
+        fix_hint: "auto_fix: /landing-visuals"
+
+  "07f_composed_final":
+    name: "Composed (final)"
+    require_approved: ["07d_photos", "07e_visuals"]
+    hard_checks:
+      - id: composed_has_real_visuals
+        type: script
+        script: "scripts/verify-composed-has-visuals.sh"
+        args: ["{project}/07b_COMPOSED/composed.html"]
+        required: true
+        fix_hint: "auto_fix: /landing-compose"
+
   "08_build":
     name: "WP Build"
-    require_approved: ["07_content"]
+    require_approved: ["07f_composed_final"]
     hard_checks:
       - id: design_md
         type: file_exists
@@ -183,6 +254,18 @@ stages:
         type: file_exists
         path: "{project}/07_КОНТЕНТ/final-copy.md"
         required: true
+      - id: theme_php_syntax_valid
+        type: script
+        script: "scripts/verify-php-syntax.sh"
+        args: ["{project}/08_КОД/wp-theme"]
+        required: true
+        fix_hint: "wp-builder сгенерил невалидный PHP — посмотри логи wp-builder, re-run"
+      - id: gutenberg_blocks_valid
+        type: script
+        script: "scripts/verify-gutenberg-json.sh"
+        args: ["{project}/08_КОД/gutenberg-blocks"]
+        required: false
+        fix_hint: "Gutenberg block.json невалидный — посмотри errors output"
       - id: wp_theme_dir
         type: file_exists
         path: "{project}/08_КОД/wp-theme"
@@ -251,6 +334,12 @@ stages:
         type: file_exists
         path: "{project}/08_КОД/wp-theme/functions.php"
         required: true
+      - id: site_url_accessible
+        type: script
+        script: "scripts/verify-site-url.sh"
+        args: ["{project}/.landing-state.yaml"]
+        required: true
+        fix_hint: "Сайт не открывается по URL. Проверь Бегет credentials в ~/.beget-config или логи wp-deployer"
 
   "10_qa":
     name: "QA"

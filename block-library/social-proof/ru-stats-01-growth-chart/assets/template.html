@@ -1,0 +1,17 @@
+<section class="lp-growth-chart" data-block-id="ru-stats-01-growth-chart">
+  <div class="growth-grid">
+    <div data-slot="growth-chart-main" data-slot-type="infographic" data-chart-type="line" class="growth-visual"></div>
+    <div class="growth-text">
+      <h2 data-slot="headline">Рост за 5 лет</h2>
+      <p data-slot="subhead">От 50 до 1000+ клиентов — стабильный органический рост.</p>
+    </div>
+  </div>
+</section>
+<style>
+.lp-growth-chart { padding: 80px 24px; }
+.growth-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px; max-width: 1200px; margin: 0 auto; align-items: center; }
+.growth-visual { width: 100%; aspect-ratio: 16/10; }
+.growth-visual img { width: 100%; height: 100%; object-fit: contain; }
+.growth-text h2 { font-size: 32px; margin: 0 0 16px; color: var(--color-accent, #1e3a8a); }
+.growth-text p { font-size: 16px; color: var(--text-secondary, #57534e); }
+</style>

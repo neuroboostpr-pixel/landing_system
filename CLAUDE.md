@@ -9,10 +9,125 @@
 
 ## Главные команды
 
-- `/landing-new <slug>` — создать новый проект-лендинг с нуля
+- `/landing-start` — **главная команда для новичков**. Interactive wizard: объясняет систему, создаёт папку, проводит через 4 шага материалов (PR-E)
+- `/landing-new <slug>` — advanced: создать пустой проект без wizard (для опытных)
 - `/landing-from-context <slug>` — создать проект из родительской папки агентства
 - `/landing-status` — статус системы и текущих проектов
 - `/landing-help` — справка по всем командам
+
+## Новые команды PR-A (Прототип + Wireframe + Compose)
+
+- `/landing-prototype` — импорт пользовательского прототипа (PDF/MD) → prototype.{md,yaml}
+- `/landing-wireframe` — интерактивный wireframe.html с 2-3 вариантами на блок
+- `/landing-compose` — composed.html с tokens + текстами, placeholders для визуала
+
+**Workflow PR-A:**
+1. Положи `prototype.pdf` или `.md` в `<project>/07_ПРОТОТИП/source/`
+2. Запусти `/landing-prototype` → проверь `prototype.md`, поправь если нужно
+3. Запусти `/landing-wireframe` → открой `07a_WIREFRAME/wireframe.html`, выбери варианты, нажми «Confirm» — скачается `selections.yaml`, положи его в `07a_WIREFRAME/`
+4. Запусти `/landing-compose` → `07b_COMPOSED/composed.html` готов
+
+**NOTE:** PR-A команды вызываются ВРУЧНУЮ, не через `landing-orchestrator`. Интеграция в оркестратор — задача PR-D.
+
+## Новые команды PR-B (Photo Pipeline)
+
+- `/landing-photos` — обработка клиентских фоток: AI-classify через codex, matching к слотам, generative fallback для пустых слотов. **Stage 07c.**
+
+**Workflow PR-B:**
+1. Утверди этапы 05 (design-system) и 07a (wireframe).
+2. Положи фотки клиента в `<project>/07c_PHOTOS/inbox/`. Подсказка: открой `07c_PHOTOS/README.md` — там описаны 7 подпапок по типу фото (`портреты_и_команда/`, `процесс_работы/` и т.д.).
+3. Запусти `/landing-photos`.
+4. Открой `07c_PHOTOS/photo-board.html` — расставь фотки drag-drop, нажми «Подтвердить и скачать selections.yaml».
+5. Положи скачанный `selections.yaml` обратно в `07c_PHOTOS/`.
+6. Открой `07c_PHOTOS/photo-preview.html` — проверь как фото лягут в макет.
+7. После approve — `composed.html` перерендерится с реальными фото (placeholders заменятся на `<img>` или `<picture>` с mobile-вариантом).
+
+**Идентичность-safe:** клиентские фото никогда не репеинтятся AI; AI-генерация лиц для testimonial/expert/team слотов требует явной галочки `ai_approved_by_user`.
+
+**NOTE:** PR-B команда вызывается ВРУЧНУЮ, не через `landing-orchestrator`. Интеграция в orchestrator + stage-gates — задача PR-D.
+
+См. [spec](docs/superpowers/specs/2026-05-13-photo-pipeline-design.md) и [plan](docs/superpowers/plans/2026-05-13-photo-pipeline-plan.md).
+
+## Новые команды PR-C (Visual Generation)
+
+- `/landing-visuals` — AI-генерация иконок и инфографики через codex image_gen. **Stage 07d.**
+
+**Workflow PR-C:**
+1. Утверди этап 05 (design-system) и убедись что есть `07b_COMPOSED/composed.html` (PR-A).
+2. Запусти `/landing-visuals`. Без флагов = и иконки, и инфографика.
+3. Codex генерит PNG под брендинг (цвета из `tokens.json`, ниша из `market-profile.md`).
+4. Кэш по hash(hint + style + brand_color + niche) — повторный прогон НЕ зовёт codex для тех же слотов.
+5. `composed.html` перерендерится — placeholders `[SLOT: feature-1-icon]` заменятся на `<img class="lp-icon">`.
+
+**Опциональные флаги:**
+- `--type icons` или `--type infographics` — частичный прогон
+- `--force` — игнорировать кэш
+- `--slot <name>` — один конкретный слот
+
+**Identity-safe** НЕ применяется (в иконках/чартах нет людей).
+
+**NOTE:** PR-C команда вызывается ВРУЧНУЮ, не через `landing-orchestrator`. Интеграция — задача PR-D.
+
+См. [spec](docs/superpowers/specs/2026-05-13-visual-generation-design.md) и [plan](docs/superpowers/plans/2026-05-13-visual-generation-plan.md).
+
+## Новая команда PR-D (Orchestrator Integration)
+
+- `/landing-go` — **главная** команда: single entry point. Читает `.landing-state.yaml`, диспатчит следующий этап через `landing-orchestrator`.
+
+**Workflow PR-D (prototype-first):**
+1. Положи `prototype.pdf` в `<project>/07_ПРОТОТИП/source/`.
+2. Запусти `/landing-go`.
+3. Следуй подсказкам — оркестратор сам ведёт через все этапы:
+   - 07a prototype parse (авто)
+   - 03 references → 04 brand → 05 design (user-interactive)
+   - 06 stack → 07 content (авто)
+   - 07b wireframe (user picks variants) → 07c composed (авто)
+   - **07d photos ⇆ 07e visuals параллельно**
+   - 07f composed final → 08 build → 09 deploy → 10-12
+
+**Auto-fix:** при падении гейта оркестратор предлагает фикс и применяет на `yes`.
+
+**Этапы 00/01/01a/02 помечены `n/a`** — они происходят до landing-system (prototype-first).
+
+**Установка codex CLI:** `bash scripts/install-codex.sh` (в onboarding).
+
+**Lucide icons:** простые иконки берутся бесплатно из Lucide вместо codex API.
+
+**Migration:** для существующих проектов — `bash scripts/migrate-state-for-prd.sh <project>/.landing-state.yaml`.
+
+См. [spec](docs/superpowers/specs/2026-05-13-pr-d-orchestrator-integration-design.md), [plan](docs/superpowers/plans/2026-05-13-pr-d-orchestrator-integration-plan.md).
+
+## Новая команда PR-E (Onboarding Wizard)
+
+- `/landing-start` — **главная точка входа** для нового проекта. Interactive wizard.
+
+**Что делает:**
+1. Welcome (3 параграфа объяснения системы)
+2. Спрашивает имя проекта (kebab-case)
+3. Создаёт `~/Lendings/<slug>/` с 18 подпапками и READMEs внутри
+4. Проводит через 4 шага материалов:
+   - 🔴 **Прототип** (обязательно) → `07_ПРОТОТИП/source/`
+   - 🟡 **Фото клиента** (рекомендую) → `07c_PHOTOS/inbox/`
+   - 🟡 **Логотип** (рекомендую) → `04_БРЕНД/logos/`
+   - ⚪ **Референсы** (опционально) → `03_РЕФЕРЕНСЫ/`
+5. Проверяет наличие материалов после каждого шага
+6. Финиш — подсказка `/landing-go`
+
+**Migration для старых проектов:**
+```bash
+bash scripts/migrate-template-readmes.sh ~/Lendings/<existing-project>
+```
+Добавит недостающие READMEs во все папки + создаст `04_БРЕНД/logos/` если её нет.
+
+См. [spec](docs/superpowers/specs/2026-05-14-pr-e-onboarding-wizard-design.md), [plan](docs/superpowers/plans/2026-05-14-pr-e-onboarding-wizard-plan.md).
+
+## Block Library
+
+Общая библиотека wireframe-блоков: `block-library/`. См. `block-library/README.md`.
+
+## Атрибуция
+
+См. `THIRD_PARTY_NOTICES.md` — мы используем фрагменты OpenDesign (Apache-2.0).
 
 ## Зависимости
 

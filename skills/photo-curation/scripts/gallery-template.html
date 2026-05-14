@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Photo Board — раскладывание фоток по слотам</title>
+<style>
+  body { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI; margin: 0; background: #f5f5f4; }
+  header { padding: 16px 24px; background: white; border-bottom: 1px solid #e5e5e4; position: sticky; top: 0; z-index: 10; }
+  h1 { margin: 0; font-size: 18px; }
+  .container { display: grid; grid-template-columns: 1fr 1fr; gap: 0; height: calc(100vh - 64px); }
+  .pane { padding: 16px 24px; overflow-y: auto; }
+  .pane.left { border-right: 1px solid #e5e5e4; background: white; }
+  h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; color: #57534e; margin: 0 0 12px; }
+  .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; }
+  .photo { cursor: grab; background: white; border: 2px solid transparent; border-radius: 6px; overflow: hidden; transition: 0.15s; user-select: none; }
+  .photo:hover { border-color: #1e3a8a; }
+  .photo img { width: 100%; height: 140px; object-fit: cover; display: block; }
+  .photo .caption { padding: 6px 8px; font-size: 11px; color: #57534e; }
+  .photo .tags { padding: 0 8px 6px; font-size: 10px; color: #888; }
+  .slot { background: white; border: 1px solid #e5e5e4; border-radius: 8px; padding: 12px; margin-bottom: 10px; }
+  .slot.has-photo { border-color: #1e3a8a; }
+  .slot.fallback { border-color: #c47a3a; background: #fff7ed; }
+  .slot-header { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; }
+  .slot-meta { font-size: 11px; color: #888; margin-top: 4px; }
+  .slot-photo { margin-top: 8px; padding: 12px; background: #f5f5f4; border-radius: 4px; min-height: 60px; display: flex; align-items: center; gap: 12px; }
+  .slot-photo.empty { color: #888; font-style: italic; }
+  .slot-photo img { width: 80px; height: 60px; object-fit: cover; border-radius: 4px; }
+  .ai-banner { background: #c47a3a; color: white; padding: 8px; border-radius: 4px; margin-top: 8px; font-size: 12px; }
+  .ai-banner label { display: block; margin-top: 4px; cursor: pointer; }
+  .ai-banner input[type=checkbox] { margin-right: 6px; }
+  .controls { padding: 16px 0; }
+  button { padding: 10px 20px; background: #1e3a8a; color: white; border: none; border-radius: 6px; font-size: 14px; cursor: pointer; }
+  button:hover { background: #1e2a6a; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Раскладывание фоток по слотам</h1>
+  <p style="margin: 4px 0 0; font-size: 12px; color: #57534e;">Перетащи фотку из левой панели в нужный слот справа. Для AI-генерации лиц — поставь галочку Согласен.</p>
+</header>
+<div class="container">
+  <div class="pane left">
+    <h2>Фотки клиента ({{PHOTO_COUNT}})</h2>
+    <div class="photo-grid">
+      {{PHOTOS_HTML}}
+    </div>
+  </div>
+  <div class="pane right">
+    <h2>Слоты прототипа ({{SLOT_COUNT}})</h2>
+    {{SLOTS_HTML}}
+    <div class="controls">
+      <button id="confirm-btn">Подтвердить и скачать selections.yaml</button>
+    </div>
+  </div>
+</div>
+<script>
+const SELECTIONS_STATE = {{INITIAL_STATE_JSON}};
+
+document.querySelectorAll('.photo').forEach(p => {
+  p.draggable = true;
+  p.addEventListener('dragstart', e => {
+    e.dataTransfer.setData('text/plain', p.dataset.photoId);
+  });
+});
+document.querySelectorAll('.slot').forEach(s => {
+  s.addEventListener('dragover', e => e.preventDefault());
+  s.addEventListener('drop', e => {
+    e.preventDefault();
+    const photoId = e.dataTransfer.getData('text/plain');
+    const slotId = s.dataset.slotId;
+    assignPhoto(slotId, photoId);
+  });
+});
+
+function assignPhoto(slotId, photoId) {
+  const slot = SELECTIONS_STATE.slots.find(s => s.slot_id === slotId);
+  if (!slot) return;
+  slot.chosen_photo_id = photoId;
+  slot.strategy = 'bring-your-own';
+  slot.ai_fallback_needed = false;
+  location.reload();
+}
+
+function toggleAiApproval(slotId, checked) {
+  const slot = SELECTIONS_STATE.slots.find(s => s.slot_id === slotId);
+  if (!slot) return;
+  slot.ai_approved_by_user = checked;
+  slot.strategy = checked ? 'generate' : 'placeholder';
+}
+
+document.getElementById('confirm-btn').addEventListener('click', () => {
+  const canonical = {
+    strategy_default: 'bring-your-own',
+    slots: SELECTIONS_STATE.slots.map(s => ({
+      slot_id: s.slot_id,
+      block_id: s.block_id,
+      ratio: s.ratio,
+      mobile_ratio: s.mobile_ratio,
+      strategy: s.strategy || (s.chosen_photo_id ? 'bring-your-own' : (s.ai_approved_by_user ? 'generate' : 'placeholder')),
+      chosen_photo_id: s.chosen_photo_id || null,
+      ai_approved_by_user: s.ai_approved_by_user || false,
+      ai_prompt: s.ai_prompt || null
+    }))
+  };
+  const yaml = canonicalToYaml(canonical);
+  const blob = new Blob([yaml], {type: 'text/yaml'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'selections.yaml';
+  a.click();
+});
+
+function canonicalToYaml(obj) {
+  let out = `strategy_default: ${obj.strategy_default}\nslots:\n`;
+  for (const s of obj.slots) {
+    out += `  - slot_id: ${s.slot_id}\n`;
+    out += `    block_id: ${s.block_id}\n`;
+    out += `    ratio: "${s.ratio}"\n`;
+    if (s.mobile_ratio) out += `    mobile_ratio: "${s.mobile_ratio}"\n`;
+    out += `    strategy: ${s.strategy}\n`;
+    out += `    chosen_photo_id: ${s.chosen_photo_id ? s.chosen_photo_id : 'null'}\n`;
+    out += `    ai_approved_by_user: ${s.ai_approved_by_user}\n`;
+    if (s.ai_prompt) out += `    ai_prompt: "${s.ai_prompt.replace(/"/g, '\\"')}"\n`;
+  }
+  return out;
+}
+</script>
+</body>
+</html>

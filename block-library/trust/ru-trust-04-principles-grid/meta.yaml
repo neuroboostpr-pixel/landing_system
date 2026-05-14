@@ -1,0 +1,26 @@
+id: ru-trust-04-principles-grid
+category: trust
+ru_market: true
+use_cases: [services, b2c, local]
+description: "Сетка 4×2 карточек с принципами работы. Editorial стиль: тёмные и акцентные карточки, нумерация, краткие тезисы."
+display_name_ru: "🏛️ Принципы работы — редакционная сетка"
+layout_summary_ru: "Заголовок + сетка 4×2 карточек с порядковым номером, заголовком принципа и коротким текстом. Чёрные и акцентные цвета чередуются."
+recommended_styles_ru: ["Editorial", "Minimalism & Swiss Style"]
+slots:
+  - {type: text, name: headline, max_chars: 60, required: true}
+  - {type: text, name: p1-title, max_chars: 40, required: true}
+  - {type: text, name: p1-text, max_chars: 160, required: true}
+  - {type: text, name: p2-title, max_chars: 40, required: true}
+  - {type: text, name: p2-text, max_chars: 160, required: true}
+  - {type: text, name: p3-title, max_chars: 40, required: true}
+  - {type: text, name: p3-text, max_chars: 160, required: true}
+  - {type: text, name: p4-title, max_chars: 40, required: true}
+  - {type: text, name: p4-text, max_chars: 160, required: true}
+  - {type: text, name: p5-title, max_chars: 40, required: false}
+  - {type: text, name: p5-text, max_chars: 160, required: false}
+  - {type: text, name: p6-title, max_chars: 40, required: false}
+  - {type: text, name: p6-text, max_chars: 160, required: false}
+conversion_notes: "Принципы = ценности компании. Покупатель сравнивает себя с ними. Editorial стиль = серьёзная, взрослая аудитория."
+source: opendesign
+source_attribution: "/tmp/open-design/skills/editorial-burgundy-principles-template/example.html"
+created: 2026-05-13

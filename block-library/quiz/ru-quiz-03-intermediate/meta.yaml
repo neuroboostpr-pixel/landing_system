@@ -1,0 +1,15 @@
+id: ru-quiz-03-intermediate
+category: quiz
+ru_market: true
+use_cases: [services, b2c, local]
+description: "Промежуточный мотивационный экран квиза: большое эмодзи + поощрительный текст + CTA 'Продолжить'."
+display_name_ru: "🎉 Квиз — промежуточный мотивационный экран"
+layout_summary_ru: "Большое эмодзи + поощрительный текст + кнопка 'Продолжить'. Появляется между шагами квиза — снижает abandon rate на 15–25%."
+slots:
+  - {type: text, name: emoji-icon, required: true}
+  - {type: text, name: motivation-text, max_chars: 100, required: true}
+  - {type: cta, name: continue-cta, default_text: "Продолжить", required: true}
+conversion_notes: "Промежуточный экран снижает abandon rate на 15-25%. Эмодзи создаёт эмоциональный момент."
+source: manual
+source_attribution: ""
+created: 2026-05-12

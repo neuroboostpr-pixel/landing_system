@@ -1,0 +1,33 @@
+id: ru-features-05-method-steps
+category: features
+ru_market: true
+use_cases:
+- services
+- b2c
+- local
+description: 'Четыре шага с горизонтальной линией-соединителем и нумерацией: кики,
+  заголовок, подзаголовок слева; шаги справа. Стиль method-section от open-design-landing.'
+display_name_ru: Метод — 4 шага с линией-соединителем
+layout_summary_ru: Двухчастный layout (заголовок+лид слева, 4 шага справа). Горизонтальная
+  линия над шагами. Акцентные числа 01–04. Mobile — вертикальный стек с разделителями.
+slots:
+- {type: text, name: kicker, max_chars: 50, required: false}
+- {type: text, name: headline, max_chars: 70, required: true}
+- {type: text, name: subhead, max_chars: 200, required: false}
+- {type: text, name: step-1-title, max_chars: 40, required: true}
+- {type: text, name: step-1-desc, max_chars: 160, required: true}
+- {type: text, name: step-2-title, max_chars: 40, required: true}
+- {type: text, name: step-2-desc, max_chars: 160, required: true}
+- {type: text, name: step-3-title, max_chars: 40, required: true}
+- {type: text, name: step-3-desc, max_chars: 160, required: true}
+- {type: text, name: step-4-title, max_chars: 40, required: true}
+- {type: text, name: step-4-desc, max_chars: 160, required: true}
+conversion_notes: Горизонтальная линия визуально связывает шаги, создавая ощущение
+  последовательности и надёжности. Четыре шага — оптимально для описания сложных
+  услуг (диагностика → анализ → решение → результат).
+source: opendesign
+source_attribution: 'github.com/nexu-io/open-design: design-templates/open-design-landing (Apache-2.0)'
+created: '2026-05-13'
+recommended_styles_ru:
+- Editorial & Magazine Style
+- Minimalism & Swiss Style

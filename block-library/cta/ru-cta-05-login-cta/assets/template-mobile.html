@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!-- Source: /tmp/open-design/skills/login-flow/example.html (Apache-2.0, adapted for RU block-library schema) -->
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ru-cta-05-login-cta — mobile</title>
+<style>
+  :root {
+    --color-bg: #f7f8fa;
+    --color-fg: #1a1a2e;
+    --color-accent: #4f46e5;
+    --color-border: #e5e7eb;
+    --font-display: system-ui, sans-serif;
+    --font-body: system-ui, sans-serif;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-body); background: var(--color-bg); color: var(--color-fg); width: 375px; padding: 32px 20px; }
+  .cta-card { background: #fff; border-radius: 20px; padding: 36px 24px; box-shadow: 0 16px 40px rgba(0,0,0,.1); text-align: center; }
+  .brand-icon-wrap { width: 56px; height: 56px; background: var(--color-accent); border-radius: 14px; margin: 0 auto 14px; display: flex; align-items: center; justify-content: center; }
+  .brand-icon-wrap svg { width: 28px; height: 28px; fill: #fff; }
+  .cta-headline { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; margin-bottom: 8px; }
+  .cta-subhead { font-size: .875rem; color: #6b7280; line-height: 1.5; margin-bottom: 24px; }
+  .input-field { width: 100%; height: 48px; padding: 0 16px; border: 1.5px solid var(--color-border); border-radius: 12px; font-size: 1rem; color: var(--color-fg); outline: none; margin-bottom: 12px; }
+  .cta-btn { width: 100%; height: 50px; background: var(--color-accent); color: #fff; border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; margin-bottom: 14px; }
+  .trust-note { font-size: .75rem; color: #9ca3af; }
+</style>
+</head>
+<body>
+  <section class="cta-card" data-block-id="ru-cta-05-login-cta">
+    <div class="brand-icon-wrap" data-slot="brand-icon" data-slot-type="icon">
+      <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+    </div>
+    <h2 class="cta-headline" data-slot="headline">[HEADLINE]</h2>
+    <p class="cta-subhead" data-slot="subhead">[SUBHEAD]</p>
+    <input class="input-field" type="tel" data-slot="input-placeholder" placeholder="[+7 (___) ___-__-__]">
+    <button class="cta-btn" data-slot="primary-cta">[CTA]</button>
+    <p class="trust-note" data-slot="trust-note">[Trust note]</p>
+  </section>
+</body>
+</html>

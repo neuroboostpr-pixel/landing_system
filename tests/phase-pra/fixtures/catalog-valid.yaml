@@ -1,0 +1,11 @@
+version: 1
+updated: 2026-05-12
+blocks:
+  - id: ru-hero-01-services-calc
+    path: hero/ru-hero-01-services-calc/
+    category: hero
+    use_cases: [services]
+  - id: ru-features-01-3col-icons
+    path: features/ru-features-01-3col-icons/
+    category: features
+    use_cases: [services, b2c, local]

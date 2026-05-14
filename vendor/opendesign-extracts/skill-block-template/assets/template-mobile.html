@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>{{block_id}} — mobile wireframe</title>
+<style>
+  /* Wireframe: ч/б, CSS-only, no external deps.
+     CSS vars in :root are MANDATORY — block-composition/inject-tokens.py relies on these names. */
+  :root {
+    --color-bg: #fff;
+    --color-fg: #111;
+    --color-accent: #333;
+    --color-border: #ccc;
+    --font-display: system-ui, sans-serif;
+    --font-body: system-ui, sans-serif;
+    --spacing-md: 16px;
+    --spacing-lg: 32px;
+  }
+  body { margin: 0; font-family: var(--font-body); background: var(--color-bg); color: var(--color-fg); width: 375px; }
+  .slot { border: 2px dashed #999; padding: var(--spacing-md); margin: 8px; background: #f4f4f4; }
+  .slot-label { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
+  /* Replace this scaffold with real block-specific layout */
+</style>
+</head>
+<body>
+  <section class="block-wireframe" data-block-id="{{block_id}}">
+    <!-- Replace with block-specific markup -->
+    <div class="slot"><div class="slot-label">REPLACE ME</div></div>
+  </section>
+</body>
+</html>

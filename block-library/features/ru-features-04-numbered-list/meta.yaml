@@ -1,0 +1,65 @@
+id: ru-features-04-numbered-list
+category: features
+ru_market: true
+use_cases:
+- services
+- b2c
+- local
+description: 'Три колонки с нумерованными преимуществами: номер-монопространство,
+  заголовок, описание. Минималистичный чистый стиль от saas-landing (Apache-2.0).'
+display_name_ru: Нумерованные преимущества — 3 колонки, монопространство
+layout_summary_ru: Три равные колонки на белом фоне с верхней/нижней границей. Номера
+  01–03 в моноширинном шрифте с акцентным цветом. Mobile — вертикальный стек с
+  разделителями.
+slots:
+- type: text
+  name: section-label
+  max_chars: 50
+  required: false
+- type: text
+  name: feat-1-num
+  max_chars: 4
+  required: false
+- type: text
+  name: feat-1-title
+  max_chars: 45
+  required: true
+- type: text
+  name: feat-1-desc
+  max_chars: 180
+  required: true
+- type: text
+  name: feat-2-num
+  max_chars: 4
+  required: false
+- type: text
+  name: feat-2-title
+  max_chars: 45
+  required: true
+- type: text
+  name: feat-2-desc
+  max_chars: 180
+  required: true
+- type: text
+  name: feat-3-num
+  max_chars: 4
+  required: false
+- type: text
+  name: feat-3-title
+  max_chars: 45
+  required: true
+- type: text
+  name: feat-3-desc
+  max_chars: 180
+  required: true
+conversion_notes: Нумерация создаёт ощущение последовательности и порядка. Чистый
+  белый фон с серыми границами хорошо отделяет от hero. Хорошо для SaaS и tech-услуг.
+  Лучше использовать измеримые описания (не "мы быстрые", а "доставка за 2 дня").
+source: opendesign
+source_attribution: 'github.com/nexu-io/open-design: design-templates/saas-landing
+  (Apache-2.0)'
+created: '2026-05-13'
+recommended_styles_ru:
+- Minimalism & Swiss Style
+- Flat Design 2.0
+- Corporate Clean

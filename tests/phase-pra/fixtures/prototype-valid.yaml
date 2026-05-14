@@ -1,0 +1,21 @@
+project:
+  slug: example
+  niche: services
+  source_file: prototype.pdf
+blocks:
+  - position: 1
+    type: hero
+    headline: "Ремонт квартир под ключ в Москве"
+    subhead: "Срок 30 дней, договор, гарантия 3 года"
+    cta:
+      text: "Рассчитать стоимость"
+      action: scroll-to-quiz
+    slots:
+      - {type: photo, name: hero-bg, hint: "интерьер до/после"}
+    mobile_notes: ""
+  - position: 2
+    type: features
+    headline: "Почему мы"
+    items:
+      - {title: "Договор", text: "Фиксированная смета", icon_slot: "document"}
+    mobile_notes: ""

@@ -1,0 +1,62 @@
+id: ru-features-02-bento-grid
+category: features
+ru_market: true
+use_cases:
+- services
+- b2c
+- local
+description: 'Bento grid 2x2: большая фото-ячейка + 3 мелких карточки с иконками и
+  текстом.'
+display_name_ru: '🔲 Bento-сетка: фото + 3 карточки'
+layout_summary_ru: 'Сетка 2×2: большое фото (50% ширины) слева, три карточки с иконками
+  справа. Фото якорит внимание, карточки перечисляют выгоды лаконично.'
+slots:
+- type: text
+  name: headline
+  max_chars: 60
+  required: true
+- type: photo
+  name: feature-photo
+  ratio: '1:1'
+  required: true
+- type: icon
+  name: bento-1-icon
+  required: false
+- type: text
+  name: bento-1-title
+  max_chars: 30
+  required: true
+- type: text
+  name: bento-1-text
+  max_chars: 80
+  required: true
+- type: icon
+  name: bento-2-icon
+  required: false
+- type: text
+  name: bento-2-title
+  max_chars: 30
+  required: true
+- type: text
+  name: bento-2-text
+  max_chars: 80
+  required: true
+- type: icon
+  name: bento-3-icon
+  required: false
+- type: text
+  name: bento-3-title
+  max_chars: 30
+  required: true
+- type: text
+  name: bento-3-text
+  max_chars: 80
+  required: true
+conversion_notes: 'Bento-сетка: большое фото якорит внимание, карточки перечисляют
+  выгоды лаконично.'
+source: manual
+source_attribution: ''
+created: 2026-05-12
+recommended_styles_ru:
+- Glassmorphism
+- Bento Grid

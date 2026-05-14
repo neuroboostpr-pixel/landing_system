@@ -1,0 +1,36 @@
+id: ru-social-proof-08-stats-deck
+category: social-proof
+ru_market: true
+use_cases:
+- services
+- b2c
+- local
+description: 'Четыре метрики в сетке с чередующимися фонами (bone/тёплый) и крупными
+  акцентными числами. Стиль stats-slide от open-design-landing-deck.'
+display_name_ru: Метрики — сетка 4 статистики с чередующимся фоном
+layout_summary_ru: Заголовок вверху, сетка 4×1 метрик снизу с чередующимися фонами.
+  Акцентный символ (+, %, ×, k) в coral. Mobile — сетка 2×2.
+slots:
+- {type: text, name: kicker, max_chars: 50, required: false}
+- {type: text, name: headline, max_chars: 80, required: true}
+- {type: text, name: stat-1-value, max_chars: 12, required: true}
+- {type: text, name: stat-1-label, max_chars: 60, required: true}
+- {type: text, name: stat-1-desc, max_chars: 60, required: false}
+- {type: text, name: stat-2-value, max_chars: 12, required: true}
+- {type: text, name: stat-2-label, max_chars: 60, required: true}
+- {type: text, name: stat-2-desc, max_chars: 60, required: false}
+- {type: text, name: stat-3-value, max_chars: 12, required: true}
+- {type: text, name: stat-3-label, max_chars: 60, required: true}
+- {type: text, name: stat-3-desc, max_chars: 60, required: false}
+- {type: text, name: stat-4-value, max_chars: 12, required: true}
+- {type: text, name: stat-4-label, max_chars: 60, required: true}
+- {type: text, name: stat-4-desc, max_chars: 60, required: false}
+conversion_notes: Используйте реальные измеримые цифры. Акцентный символ (+ % × k)
+  в coral усиливает читаемость. Чередующиеся фоны создают ритм без бордеров.
+source: opendesign
+source_attribution: 'github.com/nexu-io/open-design: design-templates/open-design-landing-deck (Apache-2.0)'
+created: '2026-05-13'
+recommended_styles_ru:
+- Editorial & Magazine Style
+- Bold & Expressive
+- Minimalism & Swiss Style

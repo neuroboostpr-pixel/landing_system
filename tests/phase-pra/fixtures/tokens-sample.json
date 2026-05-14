@@ -1,0 +1,16 @@
+{
+  "color": {
+    "bg": "#fafafa",
+    "fg": "#1a1a1a",
+    "accent": "#ff4d4d",
+    "border": "#e0e0e0"
+  },
+  "font": {
+    "display": "Manrope, sans-serif",
+    "body": "Inter, sans-serif"
+  },
+  "spacing": {
+    "md": "16px",
+    "lg": "48px"
+  }
+}

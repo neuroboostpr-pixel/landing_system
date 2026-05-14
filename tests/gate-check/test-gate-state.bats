@@ -10,7 +10,7 @@ setup() {
 @test "get returns status of stage" {
     run bash "$SCRIPT" get "$PROJECT_DIR" "00_brief"
     [ "$status" -eq 0 ]
-    [ "$output" = "in_progress" ]
+    [ "$output" = "n/a" ]
 }
 
 @test "get returns 'locked' for unstarted stage" {
@@ -39,7 +39,8 @@ setup() {
 
 @test "all_approved returns 1 when any stage not approved" {
     bash "$SCRIPT" approve "$PROJECT_DIR" "00_brief"
-    run bash "$SCRIPT" all_approved "$PROJECT_DIR" "00_brief,01_context"
+    # 03_references is "locked" in template (not n/a), so all_approved must return 1
+    run bash "$SCRIPT" all_approved "$PROJECT_DIR" "00_brief,03_references"
     [ "$status" -eq 1 ]
-    [[ "$output" == *"01_context"* ]]
+    [[ "$output" == *"03_references"* ]]
 }

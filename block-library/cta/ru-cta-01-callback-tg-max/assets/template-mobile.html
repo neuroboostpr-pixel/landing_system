@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>ru-cta-01-callback-tg-max — mobile</title>
+<style>
+  :root {
+    --color-bg: #fff; --color-fg: #111; --color-accent: #333; --color-border: #ccc;
+    --font-display: system-ui, sans-serif; --font-body: system-ui, sans-serif;
+    --spacing-md: 16px; --spacing-lg: 32px;
+  }
+  body { margin: 0; font-family: var(--font-body); background: var(--color-bg); color: var(--color-fg); width: 375px; }
+  .cta-section { padding: 48px 20px; text-align: center; background: #f8f8f8; }
+  .headline { font-family: var(--font-display); font-size: 28px; line-height: 1.15; margin: 0 0 12px; }
+  .subhead { font-size: 15px; color: #555; margin: 0 0 32px; }
+  .buttons { display: flex; flex-direction: column; gap: 12px; }
+  .btn { display: block; padding: 14px; border-radius: 8px; font-weight: 600; font-size: 15px; text-decoration: none; border: 2px solid transparent; text-align: center; }
+  .btn--tg { background: var(--color-accent); color: #fff; }
+  .btn--max { background: var(--color-accent); color: #fff; }
+  .btn--callback { background: transparent; color: var(--color-fg); border-color: var(--color-border); }
+</style>
+</head>
+<body>
+  <section class="cta-section" data-block-id="ru-cta-01-callback-tg-max">
+    <h2 class="headline" data-slot="headline">[HEADLINE]</h2>
+    <p class="subhead" data-slot="subhead">[SUBHEAD]</p>
+    <div class="buttons">
+      <a class="btn btn--tg" data-slot="tg-cta" href="#tg">[Написать в Telegram]</a>
+      <a class="btn btn--max" data-slot="max-cta" href="#max">[Написать в Max]</a>
+      <a class="btn btn--callback" data-slot="callback-cta" href="#callback">[Перезвоните мне]</a>
+    </div>
+  </section>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<!-- Source: github.com/nexu-io/open-design @ main | design-templates/open-design-landing/example.html | License: Apache-2.0 -->
+<html lang="ru"><head><meta charset="UTF-8"><title>ru-social-proof-06-editorial-quote — mobile</title>
+<style>
+  :root { --color-bg:#efe7d2; --color-fg:#15140f; --color-accent:#ed6f5c; --color-border:rgba(21,20,15,0.16); --font-display:'Playfair Display',Georgia,serif; --font-body:'Inter Tight',system-ui,sans-serif; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:var(--font-body); background:var(--color-bg); color:var(--color-fg); width:375px; padding:40px 20px; }
+  .kicker { font-size:11px; font-weight:600; letter-spacing:0.22em; text-transform:uppercase; color:var(--color-accent); margin-bottom:20px; }
+  .quote { font-family:var(--font-display); font-size:24px; line-height:1.4; font-weight:500; margin-bottom:24px; }
+  .quote em { font-style:italic; color:var(--color-accent); }
+  .author { display:flex; align-items:center; gap:12px; margin-bottom:20px; }
+  .avatar { width:38px; height:38px; border-radius:50%; background:rgba(21,20,15,0.12); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; flex-shrink:0; }
+  .author-info { font-size:13px; line-height:1.4; }
+  .author-info strong { display:block; font-weight:700; }
+  .author-info span { color:rgba(21,20,15,0.55); font-size:12px; }
+  .divider { height:1px; background:var(--color-border); margin:20px 0; }
+  .partners { display:flex; flex-direction:column; gap:14px; }
+  .partner-name { font-size:13px; font-weight:600; }
+  .partner-role { font-size:11px; color:rgba(21,20,15,0.45); letter-spacing:0.12em; text-transform:uppercase; }
+</style></head>
+<body>
+  <section data-block-id="ru-social-proof-06-editorial-quote">
+    <div class="kicker" data-slot="kicker">[Клиенты]</div>
+    <p class="quote" data-slot="quote">«[Цитата клиента с <em>акцентом</em>]»</p>
+    <div class="author">
+      <div class="avatar" data-slot="author-initial">[И]</div>
+      <div class="author-info">
+        <strong data-slot="author-name">[Имя Фамилия]</strong>
+        <span data-slot="author-role">[Должность · Компания]</span>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="partners">
+      <div><span class="partner-name" data-slot="partner-1">[Партнёр 1]</span> <span class="partner-role" data-slot="partner-1-role">[Роль]</span></div>
+      <div><span class="partner-name" data-slot="partner-2">[Партнёр 2]</span> <span class="partner-role" data-slot="partner-2-role">[Роль]</span></div>
+      <div><span class="partner-name" data-slot="partner-3">[Партнёр 3]</span> <span class="partner-role" data-slot="partner-3-role">[Роль]</span></div>
+    </div>
+  </section>
+</body></html>

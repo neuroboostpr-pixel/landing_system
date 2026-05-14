@@ -1,0 +1,27 @@
+id: ru-features-07-2col-split
+category: features
+ru_market: true
+use_cases:
+- services
+- b2c
+- local
+description: 'Двухколоночный split-блок: текст с манифестом или историей компании слева,
+  изображение справа. Стиль about-section от open-design-landing.'
+display_name_ru: О нас — двухколоночный split с манифестом
+layout_summary_ru: Сетка 1.05fr / 1fr. Слева kicker, заголовок с засечным курсивом,
+  подзаголовок, ghost-кнопка, footnote. Справа изображение с border. Mobile — фото сверху, текст снизу.
+slots:
+- {type: text, name: kicker, max_chars: 50, required: false}
+- {type: text, name: headline, max_chars: 80, required: true}
+- {type: text, name: subhead, max_chars: 300, required: true}
+- {type: photo, name: art-image, ratio: '1:1', mobile_ratio: '4:3', required: false}
+- {type: cta, name: cta, default_text: Узнать больше о нас, required: false}
+- {type: text, name: footnote, max_chars: 80, required: false}
+conversion_notes: Используйте для "О нас" или манифеста компании. Доверительный тон
+  важнее продажного. Кнопка ghost не должна быть главным CTA — она вспомогательная.
+source: opendesign
+source_attribution: 'github.com/nexu-io/open-design: design-templates/open-design-landing (Apache-2.0)'
+created: '2026-05-13'
+recommended_styles_ru:
+- Editorial & Magazine Style
+- Minimalism & Swiss Style

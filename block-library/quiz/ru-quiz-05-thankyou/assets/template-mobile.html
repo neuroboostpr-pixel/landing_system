@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>ru-quiz-05-thankyou — mobile</title>
+<style>
+  :root {
+    --color-bg: #fff; --color-fg: #111; --color-accent: #333; --color-border: #ccc;
+    --font-display: system-ui, sans-serif; --font-body: system-ui, sans-serif;
+    --spacing-md: 16px; --spacing-lg: 32px;
+  }
+  body { margin: 0; font-family: var(--font-body); background: var(--color-bg); color: var(--color-fg); width: 375px; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+  .thankyou { text-align: center; padding: 40px 20px; }
+  .success-icon { font-size: 64px; line-height: 1; margin: 0 0 20px; display: block; color: var(--color-accent); }
+  .success-headline { font-family: var(--font-display); font-size: 28px; line-height: 1.15; margin: 0 0 12px; }
+  .success-subhead { font-size: 15px; color: #555; margin: 0 0 32px; line-height: 1.5; }
+  .cta { display: block; padding: 13px 32px; background: transparent; color: var(--color-fg); border: 2px solid var(--color-border); text-decoration: none; border-radius: 8px; font-weight: 600; }
+</style>
+</head>
+<body>
+  <div class="thankyou" data-block-id="ru-quiz-05-thankyou">
+    <span class="success-icon" data-slot="success-icon">✓</span>
+    <h1 class="success-headline" data-slot="success-headline">[Спасибо!]</h1>
+    <p class="success-subhead" data-slot="success-subhead">[Свяжемся в TG/Max через 5 минут]</p>
+    <a class="cta" data-slot="back-cta" href="/">[На главную]</a>
+  </div>
+</body>
+</html>

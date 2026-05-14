@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>ru-hero-04-split-form — mobile</title>
+<style>
+  :root {
+    --color-bg: #fff;
+    --color-fg: #111;
+    --color-accent: #2563eb;
+    --color-border: #d1d5db;
+    --font-display: system-ui, sans-serif;
+    --font-body: system-ui, sans-serif;
+    --spacing-md: 16px;
+    --spacing-lg: 32px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font-body); background: var(--color-bg); color: var(--color-fg); width: 375px; }
+
+  .hero { display: flex; flex-direction: column; padding: 24px 20px; gap: 24px; }
+
+  .headline {
+    font-family: var(--font-display);
+    font-size: 28px;
+    line-height: 1.15;
+    font-weight: 800;
+    margin: 0;
+  }
+  .bullets {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .bullets li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 15px;
+    line-height: 1.4;
+  }
+  .bullets li::before {
+    content: "✓";
+    color: var(--color-accent);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .hero-cta {
+    display: block;
+    padding: 14px;
+    background: var(--color-accent);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 16px;
+    text-align: center;
+  }
+
+  /* Form stacked below */
+  .lead-form {
+    background: #f9fafb;
+    border: 1.5px solid var(--color-border);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .form-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+  }
+  .field-label {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 4px;
+    display: block;
+  }
+  .phone-input {
+    width: 100%;
+    padding: 12px;
+    border: 1.5px solid var(--color-border);
+    border-radius: 6px;
+    font-size: 16px;
+    background: #fff;
+    font-family: var(--font-body);
+  }
+  .contact-label {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .radio-group { display: flex; flex-direction: column; gap: 8px; }
+  .radio-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+  }
+  .radio-row input[type="radio"] {
+    accent-color: var(--color-accent);
+    width: 16px;
+    height: 16px;
+  }
+  .submit-btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: var(--color-accent);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 16px;
+    font-family: var(--font-body);
+  }
+  .form-disclaimer {
+    font-size: 11px;
+    color: #999;
+    text-align: center;
+    margin: 0;
+  }
+</style>
+</head>
+<body>
+  <section class="hero" data-block-id="ru-hero-04-split-form">
+
+    <!-- Value prop -->
+    <div>
+      <h1 class="headline" data-slot="headline">[HEADLINE: ваш главный оффер]</h1>
+    </div>
+    <ul class="bullets">
+      <li data-slot="bullet-1-text">[BULLET 1: преимущество]</li>
+      <li data-slot="bullet-2-text">[BULLET 2: преимущество]</li>
+      <li data-slot="bullet-3-text">[BULLET 3: преимущество]</li>
+    </ul>
+    <a class="hero-cta" data-slot="primary-cta" href="#form">[Узнать стоимость]</a>
+
+    <!-- Form below on mobile -->
+    <form class="lead-form" novalidate>
+      <p class="form-title">Получить консультацию</p>
+      <div>
+        <label class="field-label" for="m-phone">Ваш телефон</label>
+        <input class="phone-input" id="m-phone" type="tel" placeholder="+7 (___) ___-__-__" data-slot="lead-phone-input">
+      </div>
+      <div>
+        <span class="contact-label">Как связаться?</span>
+        <div class="radio-group">
+          <label class="radio-row"><input type="radio" name="m-contact" value="telegram" checked> Telegram</label>
+          <label class="radio-row"><input type="radio" name="m-contact" value="max"> Max</label>
+          <label class="radio-row"><input type="radio" name="m-contact" value="call"> Позвоните мне</label>
+        </div>
+      </div>
+      <button type="submit" class="submit-btn" data-slot="lead-submit-cta">[Отправить заявку]</button>
+      <p class="form-disclaimer">Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности</p>
+    </form>
+
+  </section>
+</body>
+</html>

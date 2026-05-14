@@ -1,0 +1,14 @@
+id: ru-quiz-02-progress-top
+category: quiz
+ru_market: true
+use_cases: [services, b2c, local]
+description: "Sticky progress bar для квиза: текст 'Вопрос N из M' + CSS progress bar. Без JavaScript."
+display_name_ru: "📊 Квиз — вопрос с прогрессом сверху"
+layout_summary_ru: "Шаг квиза с прогресс-баром вверху, вопрос по центру, варианты ответа в 2 колонки. Подсчёт шагов 'Шаг 2 из 5' снижает отток."
+slots:
+  - {type: text, name: progress-text, max_chars: 20, required: true}
+  - {type: text, name: progress-bar, required: false}
+conversion_notes: "Progress bar снижает отказы на 20-35%. Sticky — всегда виден. CSS-only ширина через inline style."
+source: manual
+source_attribution: ""
+created: 2026-05-12

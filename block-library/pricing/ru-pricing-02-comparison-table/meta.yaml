@@ -1,0 +1,31 @@
+id: ru-pricing-02-comparison-table
+category: pricing
+ru_market: true
+use_cases:
+- services
+- b2c
+- local
+description: "Таблица сравнения тарифов 3×6: три тарифа в колонках, 6 строк функций, премиум-колонка с акцентным фоном. CTA-строка снизу."
+display_name_ru: "📊 Сравнительная таблица тарифов"
+layout_summary_ru: "3 тарифа в колонках × 6 строк функций, премиум-колонка подсвечена акцентом. ✓/✗ матрица для быстрого сравнения. Mobile: горизонтальный скролл."
+slots:
+  - {type: text, name: headline, max_chars: 60, required: true}
+  - {type: text, name: tier-1-name, max_chars: 20, required: true}
+  - {type: text, name: tier-1-price, max_chars: 20, required: true}
+  - {type: cta, name: tier-1-cta, default_text: "Выбрать", required: true}
+  - {type: text, name: tier-2-name, max_chars: 20, required: true}
+  - {type: text, name: tier-2-price, max_chars: 20, required: true}
+  - {type: cta, name: tier-2-cta, default_text: "Выбрать", required: true}
+  - {type: text, name: tier-3-name, max_chars: 20, required: true}
+  - {type: text, name: tier-3-price, max_chars: 20, required: true}
+  - {type: cta, name: tier-3-cta, default_text: "Выбрать", required: true}
+  - {type: text, name: feature-row-1, max_chars: 60, required: true}
+  - {type: text, name: feature-row-2, max_chars: 60, required: true}
+  - {type: text, name: feature-row-3, max_chars: 60, required: true}
+  - {type: text, name: feature-row-4, max_chars: 60, required: true}
+  - {type: text, name: feature-row-5, max_chars: 60, required: true}
+  - {type: text, name: feature-row-6, max_chars: 60, required: true}
+conversion_notes: "Средний тариф (tier-2) выделен акцентным фоном — якорный эффект. ✓/✗ матрица hardcoded в шаблоне, кастомизируется под проект. Mobile: горизонтальный скролл таблицы (overflow-x: auto), JS не нужен."
+source: manual
+source_attribution: ''
+created: '2026-05-13'
