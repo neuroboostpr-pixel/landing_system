@@ -2,8 +2,10 @@
 """Verify every `### Block N — Name` heading in DESIGN.md §5 has at least one
 fenced ```css block in its body.
 
-Exit 0: all blocks have CSS fence.
-Exit 1: §5 missing, or at least one Block heading lacks CSS.
+Exit 0: every `### Block N` in §5 has ≥1 fenced ```css.
+Exit 1: DESIGN.md missing, §5 missing, §5 has no `### Block N` headings,
+        or at least one `### Block N` heading lacks a fenced ```css block.
+Exit 2: missing argv.
 
 Usage: check-section5-css.py <project-dir>
 """
@@ -12,7 +14,11 @@ import sys
 from pathlib import Path
 
 
+# Keep _H2_RE in sync with scripts/lib/design_extractor.py — both must agree
+# on what counts as a top-level §N. heading, otherwise the gate-check and the
+# main.css extractor would disagree about what is inside §5.
 _H2_RE = re.compile(r"^##\s+(\d+)(?:\.\d+)*\.?\s+.*$", re.MULTILINE)
+# Case-sensitive on "Block" — matches DESIGN.md convention (`### Block N — Name`).
 _H3_BLOCK_RE = re.compile(r"^###\s+(Block\s+\d+[^\n]*)", re.MULTILINE)
 _CSS_FENCE_RE = re.compile(r"```css\n.*?\n```", re.DOTALL)
 
