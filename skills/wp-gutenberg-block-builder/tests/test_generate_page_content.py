@@ -64,6 +64,44 @@ def test_repeater_values_are_urlencoded_json(tmp_path):
     assert urllib.parse.unquote(card_data["features"]) == "[]"
 
 
+def test_repeater_filled_from_template_list(tmp_path):
+    """When a card's template entry supplies a list for a repeater attribute
+    (e.g. features: ["..", ".."]), the generator must wrap each item as the
+    repeater's first child control's name → urlencoded JSON
+    [{"text": ".."}, {"text": ".."}].
+    """
+    project = _make_project(tmp_path)
+    # Patch the fixture in-place to add features lists to template entries
+    spec_path = project / "08_КОД" / "block-spec.yaml"
+    spec = spec_path.read_text(encoding="utf-8")
+    spec = spec.replace(
+        "      template:\n        - { name: \"Basic\" }\n        - { name: \"Pro\" }",
+        "      template:\n"
+        "        - name: \"Basic\"\n"
+        "          features:\n"
+        "            - \"Feat A\"\n"
+        "            - \"Feat B\"\n"
+        "        - name: \"Pro\"\n"
+        "          features:\n"
+        "            - \"Pro Feat 1\"\n",
+    )
+    spec_path.write_text(spec, encoding="utf-8")
+    r = _run(project)
+    assert r.returncode == 0, r.stderr
+    out = (project / "08_КОД" / "page-content.html").read_text(encoding="utf-8")
+    import json as _json
+    import re
+    import urllib.parse
+    cards = re.findall(r'<!-- wp:lazyblock/tarify-card (\{.*?\}) /-->', out)
+    assert len(cards) == 2, f"expected 2 cards, got {len(cards)}"
+    basic = _json.loads(cards[0])
+    pro = _json.loads(cards[1])
+    basic_feats = _json.loads(urllib.parse.unquote(basic["features"]))
+    pro_feats = _json.loads(urllib.parse.unquote(pro["features"]))
+    assert basic_feats == [{"text": "Feat A"}, {"text": "Feat B"}]
+    assert pro_feats == [{"text": "Pro Feat 1"}]
+
+
 def test_image_placeholder_is_unquoted_in_json(tmp_path):
     project = _make_project(tmp_path)
     spec = (project / "08_КОД" / "block-spec.yaml").read_text(encoding="utf-8")
