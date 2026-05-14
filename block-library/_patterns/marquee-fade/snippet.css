@@ -1,0 +1,84 @@
+/* marquee-fade — CSS-only бегущая строка с mask-image fade
+ * Source: github.com/nexu-io/open-design @ 75498838 | design-templates/open-design-landing/example.html:698-718
+ * License: Apache-2.0
+ *
+ * Горизонтальная бегущая строка. Края плавно исчезают через mask-image.
+ * Поддерживает обратное направление (.lp-marquee-row--reverse).
+ * Пауза при hover.
+ */
+
+.lp-marquee {
+  overflow: hidden;
+  /* fade-эффект на краях через mask */
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+}
+
+.lp-marquee__track {
+  display: inline-flex;
+  align-items: center;
+  gap: 36px;
+  width: max-content;
+  white-space: nowrap;
+  animation: lp-marquee-x 40s linear infinite;
+  will-change: transform;
+}
+
+/* Обратное направление (для второй строки) */
+.lp-marquee--reverse .lp-marquee__track {
+  animation-direction: reverse;
+  animation-duration: 52s;
+}
+
+/* Пауза при наведении */
+.lp-marquee:hover .lp-marquee__track {
+  animation-play-state: paused;
+}
+
+@keyframes lp-marquee-x {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.lp-marquee__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  font-size: 13px;
+  color: var(--text-muted, #888);
+  letter-spacing: 0.04em;
+}
+
+/* Разделитель между элементами */
+.lp-marquee__sep {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.4;
+  flex-shrink: 0;
+}
+
+/* prefers-reduced-motion — остановить анимацию */
+@media (prefers-reduced-motion: reduce) {
+  .lp-marquee__track {
+    animation: none;
+    /* Показываем статичную строку */
+    overflow-x: auto;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}

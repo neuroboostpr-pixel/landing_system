@@ -1,0 +1,39 @@
+<!-- conic-ring: прогресс-кольцо для KPI-секций -->
+
+<!-- Простое кольцо (только дуга, без числа внутри) -->
+<div class="lp-ring" style="--progress: 85" aria-label="85% завершено" role="img"></div>
+
+<!-- Кольцо с числом внутри -->
+<div class="lp-ring-wrap" style="--progress: 92; --ring-size: 100px;">
+  <div class="lp-ring"></div>
+  <span class="lp-ring-label">92%</span>
+</div>
+
+<!-- KPI секция с 3 кольцами -->
+<div class="kpi-grid" style="display: flex; gap: 40px; align-items: center;">
+
+  <div style="text-align: center;">
+    <div class="lp-ring-wrap" style="--progress: 98; --ring-fill-color: #16a34a;">
+      <div class="lp-ring"></div>
+      <span class="lp-ring-label">98%</span>
+    </div>
+    <p style="margin-top: 12px; font-size: 13px;">Клиентов довольны</p>
+  </div>
+
+  <div style="text-align: center;">
+    <div class="lp-ring-wrap" style="--progress: 75; --ring-size: 80px;">
+      <div class="lp-ring"></div>
+      <span class="lp-ring-label">75%</span>
+    </div>
+    <p style="margin-top: 12px; font-size: 13px;">Экономия бюджета</p>
+  </div>
+
+  <div style="text-align: center;">
+    <div class="lp-ring-wrap lp-ring--lg" style="--progress: 60;">
+      <div class="lp-ring"></div>
+      <span class="lp-ring-label">×2</span>
+    </div>
+    <p style="margin-top: 12px; font-size: 13px;">Рост конверсии</p>
+  </div>
+
+</div>

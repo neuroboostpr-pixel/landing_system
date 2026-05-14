@@ -1,0 +1,49 @@
+/* dot-grid-bg — editorial dot-pattern фон через radial-gradient
+ * Source: github.com/nexu-io/open-design @ 75498838 | craft/typography-hierarchy-editorial.md (Apache-2.0)
+ *
+ * Один radial-gradient создаёт точечную сетку — magazine/portfolio стиль.
+ * Нет изображений, нет SVG — чистый CSS.
+ *
+ * Применение: добавь класс .has-dot-grid на <body>, <section> или <div>.
+ */
+
+:root {
+  --dot-color: rgba(0, 0, 0, 0.12);   /* цвет точек — переопределить под тему */
+  --dot-size: 1.5px;                   /* размер точки */
+  --dot-spacing: 24px;                 /* шаг сетки */
+}
+
+.has-dot-grid {
+  background-image: radial-gradient(
+    circle,
+    var(--dot-color) var(--dot-size),
+    transparent var(--dot-size)
+  );
+  background-size: var(--dot-spacing) var(--dot-spacing);
+  background-position: 0 0;
+}
+
+/* Вариации размеров */
+.has-dot-grid--sm {
+  --dot-spacing: 16px;
+  --dot-size: 1px;
+}
+
+.has-dot-grid--lg {
+  --dot-spacing: 32px;
+  --dot-size: 2px;
+}
+
+/* Тёмная тема */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --dot-color: rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* Если точки на цветном фоне — переопределить переменную */
+.has-dot-grid--on-accent {
+  --dot-color: rgba(255, 255, 255, 0.15);
+}
+
+/* prefers-reduced-motion: не применимо — нет анимации */
