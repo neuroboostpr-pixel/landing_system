@@ -25,6 +25,8 @@ setup() {
 
 @test "every block has desktop and mobile template" {
   for d in "$LIB"/*/*/; do
+    # Skip directories inside _patterns/ (these are patterns, not blocks)
+    case "$d" in */_patterns/*) continue ;; esac
     [ -f "$d/assets/template.html" ]
     [ -f "$d/assets/template-mobile.html" ]
   done
@@ -32,6 +34,8 @@ setup() {
 
 @test "every block template references at least one CSS var --color-accent" {
   for d in "$LIB"/*/*/; do
+    # Skip directories inside _patterns/ (these are patterns, not blocks)
+    case "$d" in */_patterns/*) continue ;; esac
     grep -q -- "--color-accent" "$d/assets/template.html"
   done
 }
