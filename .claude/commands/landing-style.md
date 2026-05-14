@@ -24,7 +24,7 @@ Invoke the agent defined in `agents/frontend-builder.md`. Pass the project path.
 - Reads inputs (read-only): DESIGN.md §1-§9, brand-kit, landing-structure, block-spec.yaml, each `block.php` skeleton.
 - For each block in `block-spec.yaml` (sequentially):
   - Composes per-block CSS from the wireframe + tokens, including media queries from §3.3.
-  - Appends a fenced ```css block to DESIGN.md §5 under the matching `### Block N — Name` heading, preceded by a `**CSS:**` line.
+  - Appends a fenced ```css block to DESIGN.md §5 under the matching `### Block N — Name` heading, preceded by a `**CSS rules:**` line (separate from any existing `**CSS:** .class1, .class2, ...` selector-inventory line).
   - Overwrites `wp-theme/blocks/lazyblock-<slug>/block.php` with a marker header + layout-aware markup.
 
 The marker that goes in the top of every `block.php`:

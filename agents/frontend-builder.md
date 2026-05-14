@@ -48,7 +48,7 @@ Process blocks one at a time, sequentially, in the order they appear in `block-s
 4. Compose:
    - Fenced ```css block for §5 covering every BEM class. Media queries derived from §3.3 breakpoints + any explicit mobile wireframe. Use only `var(--*)` tokens from §2. No hard-coded colors or sizes.
    - New `block.php` with marker header + layout-aware markup matching desktop wireframe; mobile via CSS only (no PHP branching on viewport).
-5. Append the fenced ```css to DESIGN.md §5 under the right heading (preceded by `**CSS:**`).
+5. Append the fenced ```css to DESIGN.md §5 under the right heading (preceded by `**CSS rules:**`). Do NOT modify any existing `**CSS:** .class1, .class2, ...` selector-inventory line.
 6. Overwrite `block.php`.
 7. Move to the next block.
 
@@ -64,3 +64,7 @@ After all blocks are done, the slash command will run `extract-main-css.py` to r
 - **Idempotent.** Re-running you on the same project must produce stable structure (modulo LLM nondeterminism — aim for the same set of selectors and rule keys).
 - **Per-block flag.** If invoked with `--block <slug>`, only process that one block.
 - **DESIGN.md authoring order.** Sections must be in numeric order (§1 → §2 → … → §9). The CSS extractor walks them in document order; out-of-order sections will produce a broken cascade in main.css.
+
+## Known limitations
+
+- **Sub-block `block.php` files are NOT covered by the marker contract.** Lazy Blocks repeater patterns generate child block.php files (e.g. `lazyblock-audience-card`, `lazyblock-cases-tile`, `lazyblock-faq-item`, `lazyblock-pricing-tier`, `lazyblock-program-module`, `lazyblock-reviews-item`). These are pipeline-owned via `generate-lzb-templates.py` and do NOT receive the frontend-builder marker on /landing-style runs. `check-block-php-markers.py` currently globs all `lazyblock-*/block.php` and will report these as missing — that exit-1 is a known false positive for sub-blocks. Followup: either change the check-script to skip sub-blocks (convention: slug contains hyphen after parent), or have `generate-lzb-templates.py` emit a generator-marker too.
