@@ -1,0 +1,12 @@
+project: "valid-project"
+stages:
+  "00_brief": {status: approved}
+  "01_context": {status: approved}
+  "01a_niche_analysis": {status: approved}
+  "02_assets": {status: approved}
+  "03_references": {status: approved}
+  "04_brand": {status: approved}
+  "05_design": {status: approved}
+  "06_stack": {status: approved}
+  "07_content": {status: approved}
+  "08_build": {status: in_progress}

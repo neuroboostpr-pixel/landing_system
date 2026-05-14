@@ -1,0 +1,30 @@
+# Heading text (lowercased, before transliteration) → canonical block slug.
+# Lookup is case-insensitive, whitespace-stripped, emoji-stripped.
+# Extend as new content patterns appear.
+aliases:
+  "тарифы": pricing
+  "цены": pricing
+  "стоимость": pricing
+  "hero": hero
+  "главный экран": hero
+  "главная": hero
+  "программа": program
+  "модули": program
+  "что входит": program
+  "аудитория": audience
+  "для кого": audience
+  "кому подойдёт": audience
+  "автор": author
+  "об авторе": author
+  "кейсы": cases
+  "результаты": cases
+  "отзывы": testimonials
+  "вопросы": faq
+  "faq": faq
+  "частые вопросы": faq
+  "контакты": contacts
+  "футер": footer
+  "подвал": footer
+  "cta": cta
+  "призыв": cta
+  "записаться": cta

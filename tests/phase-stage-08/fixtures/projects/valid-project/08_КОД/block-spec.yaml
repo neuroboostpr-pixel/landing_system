@@ -1,0 +1,12 @@
+version: 1
+page:
+  title: "Home"
+  slug: "home"
+blocks:
+  - slug: hero
+    type: single
+    title: "Hero"
+    icon: "star-filled"
+    category: "lp-blocks"
+    controls:
+      - { id: c_title, name: title, type: text, label: "Title", default: "Hi" }

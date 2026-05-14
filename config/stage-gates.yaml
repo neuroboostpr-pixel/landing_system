@@ -266,13 +266,57 @@ stages:
         args: ["{project}/08_КОД/gutenberg-blocks"]
         required: false
         fix_hint: "Gutenberg block.json невалидный — посмотри errors output"
+      - id: wp_theme_dir
+        type: file_exists
+        path: "{project}/08_КОД/wp-theme"
+        required: true
+        fix_hint: "Run /landing-build to generate the wp-theme scaffold."
+      - id: block_registration
+        type: script
+        script: "scripts/lib/check-block-registration.sh"
+        args: ["{project}"]
+        fix_hint: "block registration missing: functions.php needs lzb/init + lazyblocks()->add_block(. Run: python scripts/generate-wp-blocks.py --project {project}"
+      - id: acf_and_blocks_structure
+        type: script
+        script: "scripts/lib/stage_08_helper.py"
+        args: ["{project}"]
+        fix_hint: "Run: python scripts/generate-wp-blocks.py --project {project}"
     soft_checks:
       - id: legal_blocks
         prompt: "152-ФЗ блок и cookie-баннер присутствуют в HTML? (yes / no / partial)"
 
+  "08b_style":
+    name: "Frontend style"
+    require_approved: ["08_build"]
+    hard_checks:
+      - id: design_md
+        type: file_exists
+        path: "{project}/05_ДИЗАЙН-СИСТЕМА/DESIGN.md"
+        required: true
+      - id: block_php_markers
+        type: script
+        script: "skills/wp-gutenberg-block-builder/scripts/check-block-php-markers.py"
+        args: ["{project}"]
+        required: true
+        fix_hint: "Run /landing-style — every wp-theme/blocks/lazyblock-*/block.php must start with the frontend-builder marker comment"
+      - id: section5_has_css
+        type: script
+        script: "skills/wp-gutenberg-block-builder/scripts/check-section5-css.py"
+        args: ["{project}"]
+        required: true
+        fix_hint: "Run /landing-style — DESIGN.md §5 must contain a fenced ```css block under each `### Block N` heading"
+      - id: main_css_regenerated
+        type: file_exists
+        path: "{project}/08_КОД/wp-theme/assets/css/main.css"
+        required: true
+        fix_hint: "Run /landing-style to regenerate assets/css/main.css from DESIGN.md"
+    soft_checks:
+      - id: visual_passable
+        prompt: "Открой preview URL в браузере: визуал соответствует DESIGN.md §5 (Hero 2-col на desktop, FAQ accordion, Pricing badge)? (yes / no / partial)"
+
   "09_deploy":
     name: "Deploy"
-    require_approved: ["08_build"]
+    require_approved: ["08b_style"]
     hard_checks:
       - id: ssh_to_beget
         type: api_validator

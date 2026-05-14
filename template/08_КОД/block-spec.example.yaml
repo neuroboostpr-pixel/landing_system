@@ -1,0 +1,40 @@
+version: 1
+page:
+  title: "Главная"
+  slug: "home"
+blocks:
+  - slug: hero
+    type: single
+    title: "Hero"
+    icon: "star-filled"
+    category: "lp-blocks"
+    controls:
+      - { id: c_heading,  name: heading,  type: text,     label: "Заголовок", default: "Заголовок Hero" }
+      - { id: c_subtitle, name: subtitle, type: textarea, label: "Подзаголовок", default: "" }
+      - { id: c_cta_text, name: cta_text, type: text,     label: "CTA текст", default: "Записаться" }
+      - { id: c_cta_url,  name: cta_url,  type: url,      label: "CTA ссылка", default: "#cta" }
+      - { id: c_image,    name: hero_image, type: image,  label: "Картинка", default: "hero-kirill.png" }
+      - { id: c_bullets,  name: bullets,  type: repeater, label: "Буллеты" }
+      - { id: c_bullets_text, name: text, type: text, label: "Текст", default: "", child_of: c_bullets }
+
+  - slug: tarify
+    type: section-card
+    title: "Тарифы — секция"
+    icon: "money-alt"
+    category: "lp-blocks"
+    section_grid_class: "nu-tier-grid"
+    controls:
+      - { id: c_section_heading, name: heading, type: text, label: "Заголовок секции", default: "Выберите тариф" }
+    card:
+      slug: tarify-card
+      title: "Тариф"
+      controls:
+        - { id: c_name,    name: name,    type: text,    label: "Название", default: "Базовый" }
+        - { id: c_price,   name: price,   type: text,    label: "Цена",     default: "29 000" }
+        - { id: c_popular, name: popular, type: toggle,  label: "Популярный?", default: false }
+        - { id: c_feats,   name: features, type: repeater, label: "Фичи" }
+        - { id: c_feats_text, name: text, type: text, label: "Текст", default: "", child_of: c_feats }
+      template:
+        - { name: "Базовый",     price: "29 000" }
+        - { name: "Продвинутый", price: "59 000", popular: true }
+        - { name: "ВИП",         price: "129 000" }

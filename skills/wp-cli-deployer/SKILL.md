@@ -7,7 +7,9 @@ description: Deploy WordPress theme to Beget via SSH+rsync+wp-cli. Used by /land
 
 ## Mission
 
-Деплою лендинг на Бегет: синхронизирую тему, активирую, импортирую ACF.
+Деплою лендинг на Бегет: синхронизирую тему, ставлю плагины, импортирую
+изображения в Media Library, подставляю их ID в page-content и сидирую главную
+страницу как Gutenberg-страницу.
 
 ## Script
 
@@ -16,10 +18,22 @@ description: Deploy WordPress theme to Beget via SSH+rsync+wp-cli. Used by /land
 Reads from `.env`: `BEGET_USER`, `BEGET_HOST`, `BEGET_PATH`
 
 ## What it does
-1. `rsync` — синхронизирует `08_КОД/wp-theme/` на сервер
-2. `wp theme activate` — активирует тему
-3. `wp acf import` — импортирует ACF-поля из `08_КОД/acf-fields.json`
-4. `wp cache flush` — сбрасывает кэш
+
+1. **rsync** — синхронизирует `08_КОД/wp-theme/` на сервер.
+2. **`wp theme activate`** — активирует тему.
+3. **Plugins** — устанавливает и активирует `lazy-blocks` (рендеринг блоков).
+   ACF Free остаётся установленным как no-op (для возможных page-level meta-полей);
+   `wp acf import` больше не вызывается.
+4. **Media import** — для каждого файла в `theme/assets/img/*` вызывает
+   `wp media import` идемпотентно: пропускает, если attachment с таким slug
+   уже существует. Возвращает attachment ID для каждого имени файла.
+5. **Page-content substitution** — заменяет placeholders
+   `__IMAGE_ATTACHMENT_ID__<file>__` в `08_КОД/page-content.html` на bare
+   integer literals (см. контракт `generate-page-content.py`).
+6. **Front page seed** — `wp post create --post_type=page` с обработанным
+   page-content (идемпотентно: при существующем slug делает `wp post update`),
+   затем `wp option update show_on_front page` + `page_on_front=<id>`.
+7. **`wp cache flush`** — сбрасывает кэш.
 
 ## lp-preview-panel activation
 

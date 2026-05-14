@@ -1,0 +1,14 @@
+# Block slug → WordPress Dashicon name. Used by block.json generator.
+# Fallback for unmapped slugs: "block-default".
+icons:
+  hero: cover-image
+  pricing: tag
+  program: portfolio
+  audience: groups
+  author: businessperson
+  cases: awards
+  testimonials: format-quote
+  faq: format-aside
+  footer: editor-alignleft
+  cta: megaphone
+  contacts: phone

@@ -4,7 +4,6 @@
 
 REPO_ROOT="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../.." && pwd)"
 GENERATE_THEME="$REPO_ROOT/skills/wp-gutenberg-block-builder/scripts/generate-theme.py"
-GENERATE_ACF="$REPO_ROOT/skills/wp-gutenberg-block-builder/scripts/generate-acf.py"
 BUNDLE_ASSETS="$REPO_ROOT/skills/wp-theme-assembler/scripts/bundle-assets.py"
 RENDER_PREVIEW="$REPO_ROOT/skills/wp-theme-assembler/scripts/render-build-preview.py"
 
@@ -83,28 +82,6 @@ teardown() {
   grep -q "bunny.net" "$PROJECT/08_КОД/wp-theme/functions.php"
 }
 
-@test "generate-theme.py creates template-parts stubs" {
-  python3 "$GENERATE_THEME" "$PROJECT"
-  [ -f "$PROJECT/08_КОД/wp-theme/template-parts/section-hero.php" ]
-  [ -f "$PROJECT/08_КОД/wp-theme/template-parts/section-form.php" ]
-}
-
-@test "generate-acf.py exits 0 on valid project" {
-  run python3 "$GENERATE_ACF" "$PROJECT"
-  [ "$status" -eq 0 ]
-}
-
-@test "generate-acf.py creates acf-fields.json with groups" {
-  python3 "$GENERATE_ACF" "$PROJECT"
-  python3 -c "
-import json, sys
-data = json.load(open('$PROJECT/08_КОД/acf-fields.json'))
-assert 'groups' in data
-assert len(data['groups']) >= 2
-sys.exit(0)
-"
-}
-
 @test "bundle-assets.py exits 0 after generate-theme creates dirs" {
   python3 "$GENERATE_THEME" "$PROJECT"
   run python3 "$BUNDLE_ASSETS" "$PROJECT"
@@ -119,28 +96,24 @@ sys.exit(0)
 
 @test "render-build-preview.py exits 0 after full pipeline" {
   python3 "$GENERATE_THEME" "$PROJECT"
-  python3 "$GENERATE_ACF" "$PROJECT"
   run python3 "$RENDER_PREVIEW" "$PROJECT"
   [ "$status" -eq 0 ]
 }
 
 @test "render-build-preview.py creates build-preview.html" {
   python3 "$GENERATE_THEME" "$PROJECT"
-  python3 "$GENERATE_ACF" "$PROJECT"
   python3 "$RENDER_PREVIEW" "$PROJECT"
   [ -f "$PROJECT/08_КОД/build-preview.html" ]
 }
 
 @test "build-preview.html contains color token" {
   python3 "$GENERATE_THEME" "$PROJECT"
-  python3 "$GENERATE_ACF" "$PROJECT"
   python3 "$RENDER_PREVIEW" "$PROJECT"
   grep -q "#ff5733" "$PROJECT/08_КОД/build-preview.html"
 }
 
-@test "build-preview.html contains ACF group title" {
+@test "build-preview.html contains section heading" {
   python3 "$GENERATE_THEME" "$PROJECT"
-  python3 "$GENERATE_ACF" "$PROJECT"
   python3 "$RENDER_PREVIEW" "$PROJECT"
   grep -qi "hero\|форма" "$PROJECT/08_КОД/build-preview.html"
 }

@@ -45,7 +45,7 @@ def test_popup_css_created(wp_built_project):
 def test_popup_php_created(wp_built_project):
     mod = _load()
     mod.main(["generate-popup.py", str(wp_built_project)])
-    php = wp_built_project / "08_КОД" / "wp-theme" / "template-parts" / "popup-overlay.php"
+    php = wp_built_project / "08_КОД" / "wp-theme" / "popup.php"
     assert php.exists()
     assert "lp-popup" in php.read_text(encoding="utf-8")
 
@@ -56,6 +56,9 @@ def test_functions_php_has_popup_enqueue(wp_built_project):
     fp = (wp_built_project / "08_КОД" / "wp-theme" / "functions.php").read_text(encoding="utf-8")
     assert "popup.js" in fp
     assert "popup.css" in fp
+    # Popup auto-renders via wp_footer hook (no front-page.php dependency)
+    assert "lp_render_popup" in fp
+    assert "wp_footer" in fp
 
 
 def test_popup_enqueue_is_idempotent(wp_built_project):

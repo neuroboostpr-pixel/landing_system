@@ -1,0 +1,34 @@
+version: 1
+page:
+  title: "Test"
+  slug: "home"
+blocks:
+  - slug: hero
+    type: single
+    title: "Hero"
+    icon: "star-filled"
+    category: "lp-blocks"
+    css_class: "hero"
+    element: "section"
+    controls:
+      - { id: c_h, name: heading, type: text, label: "H", default: "Hi", css_class: "hero__title", element: h1 }
+  - slug: tarify
+    type: section-card
+    title: "Tarify"
+    icon: "money-alt"
+    category: "lp-blocks"
+    section_grid_class: "nu-tier-grid"
+    css_class: "tarify section"
+    controls:
+      - { id: c_sh, name: heading, type: text, label: "SH", default: "Tariffs", css_class: "tarify__title", element: h2 }
+    card:
+      slug: tarify-card
+      title: "Tarif"
+      css_class: "tarify-card"
+      controls:
+        - { id: c_n, name: name, type: text, label: "N", default: "Basic", css_class: "tarify-card__name", element: h3 }
+        - { id: c_f, name: features, type: repeater, label: "F" }
+        - { id: c_ft, name: text, type: text, label: "FT", default: "", child_of: c_f }
+      template:
+        - { name: "Basic" }
+        - { name: "Pro" }

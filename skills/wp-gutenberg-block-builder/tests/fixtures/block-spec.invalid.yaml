@@ -1,0 +1,11 @@
+version: 1
+page: { title: "T", slug: "home" }
+blocks:
+  - slug: bad
+    type: single
+    title: "Bad"
+    icon: "x"
+    category: "lp-blocks"
+    controls:
+      - { id: c1, name: features, type: repeater, label: "F" }
+      - { id: c2, name: nested, type: repeater, label: "N", child_of: c1 }

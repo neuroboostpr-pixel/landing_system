@@ -11,6 +11,8 @@
     "test:phase-niche": "bats tests/phase-niche/ && python -m pytest tests/phase-niche/test-validate-competitors.py tests/phase-niche/test-validate-visual-requirements.py tests/phase-niche/test-validate-market-profile.py tests/phase-niche/test-validate-positioning.py tests/phase-niche/test-validate-landing-structure.py -v",
     "test:phase-preview-panel": "bats tests/phase-preview-panel/",
     "test:phase-pra": "bats tests/phase-pra/*.bats",
+    "test:phase-stage-08": "bats tests/phase-stage-08/*.bats && python -m pytest tests/phase-stage-08/test-content-parser.py -v",
+    "generate-wp-blocks": "python scripts/generate-wp-blocks.py",
     "check-deps": "bash scripts/check-deps.sh"
   },
   "engines": {

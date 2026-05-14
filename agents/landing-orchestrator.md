@@ -107,9 +107,10 @@ content-writer            # → 07_КОНТЕНТ/final-copy.md + seo-copy.md
 ## Phase 4 Scope (Stage 08 — Код)
 
 When user runs `/landing-build`:
-1. Run `generate-theme.py` → `08_КОД/wp-theme/` scaffold
-2. Run `generate-acf.py` → `08_КОД/acf-fields.json`
-3. Dispatch `wp-builder` agent → fills template-parts, CSS, JS
+1. Verify `08_КОД/block-spec.yaml` exists (filled from `template/08_КОД/block-spec.example.yaml`)
+2. Run `scripts/generate-wp-blocks.py` → 5-step Lazy Blocks pipeline
+   (theme scaffold → lzb-templates → lzb-registration → css-patches → page-content)
+3. Dispatch `wp-builder` agent → fills block.php templates, CSS, JS
 4. Dispatch `integrations-engineer` agent → Fluent Forms + webhooks
 5. Dispatch `analytics-engineer` agent → Yandex Metrika + 11_АНАЛИТИКА/
 6. Dispatch `seo-optimizer` agent → meta tags + 12_SEO/
@@ -120,8 +121,7 @@ When user runs `/landing-build`:
 
 ### Stage 08 flow
 ```bash
-python3 skills/wp-gutenberg-block-builder/scripts/generate-theme.py .
-python3 skills/wp-gutenberg-block-builder/scripts/generate-acf.py .
+python3 scripts/generate-wp-blocks.py --project .
 # dispatch wp-builder, integrations-engineer, analytics-engineer, seo-optimizer
 python3 skills/wp-theme-assembler/scripts/bundle-assets.py .
 python3 skills/wp-theme-assembler/scripts/render-build-preview.py .
