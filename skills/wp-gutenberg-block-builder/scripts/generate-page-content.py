@@ -46,13 +46,27 @@ def _build_attrs(controls: list[Control], override: dict | None = None) -> dict:
     """Return dict {attr_name: value} suitable for Gutenberg block attrs JSON.
 
     Repeater values are serialised as urlencoded JSON arrays per Lazy Blocks
-    convention (see research-doc).
+    convention. If the template override supplies a list for the repeater,
+    each item is wrapped as the repeater's first child control's name
+    (e.g. lessons: ["..."] → [{"text": "..."}, ...]).
     """
     attrs: dict[str, object] = {}
     top_level = [c for c in controls if c.child_of is None]
+    child_name_by_repeater = {}
+    for c in controls:
+        if c.child_of is not None:
+            child_name_by_repeater.setdefault(c.child_of, c.name)
     for c in top_level:
         if c.type == "repeater":
-            attrs[c.name] = quote(json.dumps([]))
+            rows: list[dict] = []
+            if override is not None and c.name in override and isinstance(override[c.name], list):
+                child_name = child_name_by_repeater.get(c.id, "text")
+                for item in override[c.name]:
+                    if isinstance(item, dict):
+                        rows.append(item)
+                    else:
+                        rows.append({child_name: item})
+            attrs[c.name] = quote(json.dumps(rows, ensure_ascii=False))
         else:
             attrs[c.name] = _attr_value(c, override)
     return attrs
