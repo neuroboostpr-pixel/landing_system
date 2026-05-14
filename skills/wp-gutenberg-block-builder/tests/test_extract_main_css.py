@@ -100,3 +100,39 @@ def test_missing_design_md_fails(tmp_path):
     (project / "08_КОД" / "wp-theme" / "assets" / "css").mkdir(parents=True)
     r = subprocess.run([sys.executable, str(SCRIPT), str(project)], capture_output=True, text=True)
     assert r.returncode == 1
+
+
+def test_runs_css_patches_when_block_spec_present(tmp_path):
+    """When block-spec.yaml has section-card blocks, extract-main-css.py
+    must re-run generate-css-patches.py so InnerBlocks wrappers get
+    display:contents and Lazy Blocks grids don't collapse to one column.
+    """
+    project = _make_project(tmp_path, DESIGN)
+    (project / "08_КОД" / "block-spec.yaml").write_text(
+        """\
+version: 1
+page: { title: T, slug: home }
+blocks:
+  - slug: pricing
+    type: section-card
+    title: Pricing
+    icon: money-alt
+    category: lp-blocks
+    section_grid_class: pricing__grid
+    controls:
+      - { id: c_h, name: heading, type: text, label: H, default: P }
+    card:
+      slug: pricing-tier
+      title: Tier
+      controls:
+        - { id: c_n, name: name, type: text, label: N, default: B }
+      template:
+        - { name: B }
+""",
+        encoding="utf-8",
+    )
+    r = subprocess.run([sys.executable, str(SCRIPT), str(project)], capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr
+    main_css = (project / "08_КОД" / "wp-theme" / "assets" / "css" / "main.css").read_text(encoding="utf-8")
+    assert "display: contents" in main_css
+    assert "wp-block-lazyblock-pricing-tier" in main_css
