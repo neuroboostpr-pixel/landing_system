@@ -9,7 +9,8 @@
 
 ## Главные команды
 
-- `/landing-new <slug>` — создать новый проект-лендинг с нуля
+- `/landing-start` — **главная команда для новичков**. Interactive wizard: объясняет систему, создаёт папку, проводит через 4 шага материалов (PR-E)
+- `/landing-new <slug>` — advanced: создать пустой проект без wizard (для опытных)
 - `/landing-from-context <slug>` — создать проект из родительской папки агентства
 - `/landing-status` — статус системы и текущих проектов
 - `/landing-help` — справка по всем командам
@@ -95,6 +96,30 @@
 **Migration:** для существующих проектов — `bash scripts/migrate-state-for-prd.sh <project>/.landing-state.yaml`.
 
 См. [spec](docs/superpowers/specs/2026-05-13-pr-d-orchestrator-integration-design.md), [plan](docs/superpowers/plans/2026-05-13-pr-d-orchestrator-integration-plan.md).
+
+## Новая команда PR-E (Onboarding Wizard)
+
+- `/landing-start` — **главная точка входа** для нового проекта. Interactive wizard.
+
+**Что делает:**
+1. Welcome (3 параграфа объяснения системы)
+2. Спрашивает имя проекта (kebab-case)
+3. Создаёт `~/Lendings/<slug>/` с 18 подпапками и READMEs внутри
+4. Проводит через 4 шага материалов:
+   - 🔴 **Прототип** (обязательно) → `07_ПРОТОТИП/source/`
+   - 🟡 **Фото клиента** (рекомендую) → `07c_PHOTOS/inbox/`
+   - 🟡 **Логотип** (рекомендую) → `04_БРЕНД/logos/`
+   - ⚪ **Референсы** (опционально) → `03_РЕФЕРЕНСЫ/`
+5. Проверяет наличие материалов после каждого шага
+6. Финиш — подсказка `/landing-go`
+
+**Migration для старых проектов:**
+```bash
+bash scripts/migrate-template-readmes.sh ~/Lendings/<existing-project>
+```
+Добавит недостающие READMEs во все папки + создаст `04_БРЕНД/logos/` если её нет.
+
+См. [spec](docs/superpowers/specs/2026-05-14-pr-e-onboarding-wizard-design.md), [plan](docs/superpowers/plans/2026-05-14-pr-e-onboarding-wizard-plan.md).
 
 ## Block Library
 
