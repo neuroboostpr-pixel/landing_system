@@ -1,0 +1,79 @@
+/* ambient-mesh-bg — 2 размытых сферы + drift animation
+ * Source: github.com/nexu-io/open-design @ 75498838 | design-templates/web-prototype-taste-soft/example.html:44-66
+ * License: Apache-2.0
+ *
+ * Живой mesh-фон без Three.js / Canvas.
+ * Добавь <div class="lp-mesh-bg" aria-hidden="true"></div> как первый дочерний элемент <body>.
+ * Цвета берутся из CSS-переменных — менять только их, не трогая animation.
+ */
+
+:root {
+  /* Переопределить в tokens/style.css темы под конкретный проект */
+  --mesh-color-a: var(--accent, #5a8c7a);   /* основной цвет бренда */
+  --mesh-color-b: #c9b79a;                   /* тёплый контраст */
+  --mesh-opacity: 0.18;
+}
+
+.lp-mesh-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.lp-mesh-bg::before,
+.lp-mesh-bg::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: var(--mesh-opacity);
+  will-change: transform;
+}
+
+/* Сфера A — верхний левый угол, цвет акцента */
+.lp-mesh-bg::before {
+  width: 720px;
+  height: 720px;
+  background: radial-gradient(circle at 30% 30%, var(--mesh-color-a), transparent 60%);
+  top: -180px;
+  left: -160px;
+  animation: lp-drift1 28s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+}
+
+/* Сфера B — правый центр, тёплый цвет */
+.lp-mesh-bg::after {
+  width: 560px;
+  height: 560px;
+  background: radial-gradient(circle at 60% 60%, var(--mesh-color-b), transparent 60%);
+  top: 120px;
+  right: -140px;
+  animation: lp-drift2 36s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+}
+
+@keyframes lp-drift1 {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(80px, 60px, 0); }
+}
+
+@keyframes lp-drift2 {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-60px, 40px, 0); }
+}
+
+/* prefers-reduced-motion — остановить анимацию, но оставить цвет */
+@media (prefers-reduced-motion: reduce) {
+  .lp-mesh-bg::before,
+  .lp-mesh-bg::after {
+    animation: none;
+    will-change: auto;
+  }
+}
+
+/* Все дочерние элементы body должны иметь position: relative; z-index: 1 */
+/* чтобы контент рендерился поверх mesh */
+body > *:not(.lp-mesh-bg) {
+  position: relative;
+  z-index: 1;
+}

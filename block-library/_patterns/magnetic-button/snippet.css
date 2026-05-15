@@ -1,0 +1,79 @@
+/* magnetic-button — Button "притягивается" к курсору в радиусе hover.
+ * ~15 lines of vanilla JS. Zero dependencies.
+ *
+ * Usage:
+ *   <button class="mag-btn" data-mag-strength="0.4">Click me</button>
+ *
+ * data-mag-strength: 0.1 (subtle) to 0.8 (strong), default 0.4
+ * data-mag-radius: pixel radius for magnetic effect, default 80
+ */
+
+.mag-btn {
+  /* Base button appearance — override as needed */
+  --mag-bg: #111;
+  --mag-fg: #fff;
+  --mag-radius-border: 999px;   /* pill shape default */
+  --mag-pad: 1rem 2.5rem;
+  --mag-font-size: 1rem;
+  --mag-duration: 0.3s;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  background: var(--mag-bg);
+  color: var(--mag-fg);
+  border: 2px solid transparent;
+  border-radius: var(--mag-radius-border);
+  padding: var(--mag-pad);
+  font-size: var(--mag-font-size);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  user-select: none;
+
+  /* Transform is driven by JS via --tx, --ty CSS variables */
+  transform: translate(var(--mag-tx, 0), var(--mag-ty, 0));
+  transition:
+    transform var(--mag-duration) cubic-bezier(0.23, 1, 0.32, 1),
+    background var(--mag-duration) ease,
+    box-shadow var(--mag-duration) ease;
+
+  will-change: transform;
+}
+
+.mag-btn:hover {
+  background: #333;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* ── Light variant ── */
+.mag-btn--light {
+  --mag-bg: #fff;
+  --mag-fg: #111;
+  border-color: rgba(0, 0, 0, 0.12);
+}
+.mag-btn--light:hover {
+  background: #f5f5f5;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* ── Outlined variant ── */
+.mag-btn--outline {
+  --mag-bg: transparent;
+  --mag-fg: #111;
+  border-color: currentColor;
+}
+.mag-btn--outline:hover {
+  background: rgba(0, 0, 0, 0.04);
+  box-shadow: none;
+}
+
+/* prefers-reduced-motion: standard hover only, no magnetic pull */
+@media (prefers-reduced-motion: reduce) {
+  .mag-btn {
+    transition: background var(--mag-duration) ease;
+    transform: none !important;
+  }
+}

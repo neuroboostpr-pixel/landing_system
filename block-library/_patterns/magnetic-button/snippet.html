@@ -1,0 +1,29 @@
+<!-- magnetic-button: Button притягивается к курсору.
+     Requires snippet.css and snippet.js. -->
+
+<div style="display:flex; gap:1.5rem; flex-wrap:wrap; justify-content:center; padding:4rem 2rem; background:#fafafa;">
+
+  <!-- Default dark -->
+  <button class="mag-btn" data-mag-strength="0.4" data-mag-radius="80">
+    Get started
+  </button>
+
+  <!-- Light variant -->
+  <button class="mag-btn mag-btn--light" data-mag-strength="0.3" data-mag-radius="70">
+    Learn more
+  </button>
+
+  <!-- Outlined variant -->
+  <button class="mag-btn mag-btn--outline" data-mag-strength="0.35" data-mag-radius="75">
+    See pricing
+  </button>
+
+  <!-- Stronger pull -->
+  <button class="mag-btn" data-mag-strength="0.6" data-mag-radius="120"
+          style="--mag-bg:#1B365D; --mag-pad:1.25rem 3rem; font-size:1.1rem;">
+    Book a call ↗
+  </button>
+
+</div>
+
+<script src="snippet.js" defer></script>

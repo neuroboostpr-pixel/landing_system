@@ -1,0 +1,43 @@
+/* Coral Soft Style Mood — typography
+ * Inspired by: zhangzara-coral (Bebas Neue) + soft-editorial (Cormorant Garamond)
+ * Mix: condensed display + elegant serif + clean sans body.
+ */
+
+:root {
+  /* ── Font stacks ── */
+  --font-display:  'Bebas Neue', 'Impact', 'Arial Narrow', sans-serif;
+  --font-serif:    'Cormorant Garamond', 'Garamond', Georgia, serif;
+  --font-body:     'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono:     'JetBrains Mono', ui-monospace, monospace;
+
+  /* ── Weights ── */
+  --font-display-weight:  400;    /* Bebas Neue is naturally bold at 400 */
+  --font-serif-weight:    500;    /* Cormorant: medium for body serif */
+  --font-body-weight:     300;    /* Inter light for elegant feel */
+  --font-label-weight:    600;
+
+  /* ── Tracking ── */
+  --font-display-tracking: 2px;      /* Bebas Neue: slight spacing */
+  --font-body-tracking:    0em;
+  --font-label-tracking:   0.05em;
+
+  /* ── Type Scale ── */
+  --text-display:  clamp(4rem, 10vw, 9rem);   /* Bebas Neue: tall + condensed */
+  --text-h1:       clamp(2.5rem, 6vw, 5rem);
+  --text-h2:       clamp(1.75rem, 3.5vw, 3rem);
+  --text-h3:       clamp(1.25rem, 2vw, 1.875rem);
+  --text-lead:     1.125rem;        /* generous lead */
+  --text-body:     1rem;
+  --text-small:    0.875rem;
+  --text-label:    0.75rem;         /* 12px */
+
+  /* ── Line heights ── */
+  --lh-display: 0.95;    /* Bebas Neue: very tight */
+  --lh-heading: 1.1;
+  --lh-body:    1.6;     /* slightly more open for lifestyle feel */
+  --lh-serif:   1.45;
+
+  /* ── Styles ── */
+  --text-case-display: uppercase;   /* Bebas Neue is always uppercase */
+  --text-case-label:   uppercase;
+}

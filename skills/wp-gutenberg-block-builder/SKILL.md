@@ -58,6 +58,124 @@ Step 1 takes the project path as a positional argument; steps 2–5 use `--proje
   `page_on_front`. Deploy seeds it from `page-content.html`.
 - **No `template-parts/` directory** — block PHP lives under `blocks/lazyblock-<slug>/block.php`.
 
+## Visual Patterns Library (block-library/_patterns/)
+
+После PR-A.X — при генерации WP-темы (`generate-theme.py`), автоматически
+подключаются переиспользуемые patterns из OpenDesign (Apache-2.0):
+
+| Pattern | Что даёт | Когда применять |
+|---|---|---|
+| `scroll-reveal` | Плавное появление блоков на скролле | Везде — главный visual upgrade |
+| `paper-texture` | Бумажная текстура body::before | Editorial / премиум-проекты |
+| `ambient-mesh-bg` | Живой mesh-фон без Three.js | Hero для tech/SaaS проектов |
+| `marquee-fade` | Бегущая строка с fade-краями | Логотипы клиентов, бегущие новости |
+| `floating-pill-nav` | Sticky nav с backdrop-blur | Apple-style premium nav |
+| `headroom-nav` | Nav прячется при скролле вниз | Мобильный UX |
+| `dot-grid-bg` | Editorial dot-pattern фон | Magazine / portfolio проекты |
+| `conic-ring` | Прогресс-кольцо без canvas | Stats / KPI секции |
+| `bento-grid-hairline` | Notion/Linear-style 6-col grid | Features секция |
+
+**Какие patterns включать автоматически** (зависит от `animation_mode` в tokens.json):
+
+| animation_mode | Auto-included patterns |
+|---|---|
+| `none` | Никаких |
+| `smooth` (default) | scroll-reveal, headroom-nav |
+| `cinematic` | scroll-reveal, headroom-nav, ambient-mesh-bg, paper-texture |
+| `editorial` | scroll-reveal, paper-texture, dot-grid-bg |
+
+**Как использовать в generate-theme.py:**
+
+```python
+# Подключить snippet в style.css темы:
+patterns_dir = SYSTEM_ROOT / "block-library" / "_patterns"
+scroll_reveal_css = (patterns_dir / "scroll-reveal" / "snippet.css").read_text()
+style_css_content += scroll_reveal_css
+
+# Подключить snippet JS в assets/js/animations.js:
+scroll_reveal_js = (patterns_dir / "scroll-reveal" / "snippet.js").read_text()
+animations_js_content += scroll_reveal_js
+```
+
+## Style Moods (block-library/_styles/)
+
+6 готовых визуальных настроений на основе zhangzara collection из OpenDesign + kami-landing.
+Каждый mood = `palette.css` + `typography.css` + `motion.css` + `style-guide.md`.
+
+В `tokens.json` укажи `style_mood` — generate-theme.py подключит все 3 CSS-файла к `style.css`:
+
+| Mood | Inspiration | Когда применять |
+|---|---|---|
+| `brutalist` | web-prototype-taste-brutalist | Стартапы с характером, нон-конформизм, инди |
+| `editorial-warm` | kami-landing + soft-editorial | Психология, эксперты, коучинг, премиум-услуги |
+| `swiss-modernist` | cobalt-grid + digits-fintech-swiss | Tech, finance, SaaS, B2B |
+| `retro-windows` | zhangzara-retro-windows | Геймификация, nostalgia, инди-приложения |
+| `coral-soft` | zhangzara-coral + sakura-chroma | Beauty, wellness, lifestyle |
+| `monochrome-precision` | zhangzara-monochrome (Ivory Ledger) | Архитектура, фото, luxury-премиум |
+
+**Использование:**
+
+```json
+// 05_ДИЗАЙН-СИСТЕМА/tokens.json
+{
+  "style_mood": "editorial-warm",
+  "animation_mode": "cinematic"
+}
+```
+
+`style_mood` ПЕРЕОПРЕДЕЛЯЕТ паттерны animation_mode — задействует рекомендованные для mood паттерны:
+
+| Mood | Patterns |
+|---|---|
+| `brutalist` | scroll-reveal, bento-grid-hairline, headroom-nav |
+| `editorial-warm` | scroll-reveal, paper-texture, dot-grid-bg, text-reveal-mask |
+| `swiss-modernist` | scroll-reveal, bento-grid-hairline, headroom-nav, text-reveal-mask |
+| `retro-windows` | scroll-reveal |
+| `coral-soft` | scroll-reveal, ambient-mesh-bg, marquee-fade, gradient-mesh-animated |
+| `monochrome-precision` | scroll-reveal, dot-grid-bg, conic-ring, text-reveal-mask |
+
+## New Patterns (PR-A visual-upgrade)
+
+6 новых patterns добавлены в `block-library/_patterns/`:
+
+| Pattern | Что даёт | Когда применять |
+|---|---|---|
+| `gradient-mesh-animated` | Cinematic drift: 3-4 цветных пятна медленно дрейфуют | Dark hero, premium moods |
+| `cursor-aura` | Световое пятно за курсором | Dark sections, interactive feel |
+| `text-reveal-mask` | Apple keynote-style mask reveal | Hero headlines, features |
+| `sticky-section-reveal` | Apple AirPods style: секция залипает, контент меняется | Storytelling продуктовые страницы |
+| `magnetic-button` | Кнопка притягивается к курсору | CTA кнопки, premium UX |
+| `marquee-3d-perspective` | Бегущая строка с CSS перспективой | Brand logos, social proof |
+
+## Anti-AI-Slop правила (craft/anti-ai-slop.md)
+
+См. `vendor/opendesign-extracts/craft/anti-ai-slop.md` — 7 паттернов
+которые ВЫДАЮТ AI-сгенерированный сайт. При генерации темы НЕЛЬЗЯ:
+
+- Использовать indigo (#6366f1, #4f46e5, #4338ca, #8b5cf6, #7c3aed) или purple→blue gradient в hero
+- Blob backgrounds (svg organic shapes)
+- Emoji в feature icons (✨ 🚀 🎯) — только SVG с `currentColor`
+- Generic stock illustrations
+- Dark mode toggle без явного запроса в DESIGN.md
+- Chat bubble UI в hero
+- Лозунги типа "AI-powered", "Revolutionize", "Game-changing"
+- Выдуманные метрики ("10× faster", "99.9% uptime") без реального источника
+
+Если в `tokens.json` указан accent_color близкий к #6366f1 — wp-builder агент
+должен предложить альтернативу.
+
+## Animation Discipline (craft/animation-discipline.md)
+
+При написании CSS-анимаций и JS-эффектов соблюдать:
+
+- Default duration: 150ms (UI feedback) / 300ms (page transitions) / 500ms (hero reveal)
+- Easing: `cubic-bezier(0.2, 0, 0, 1)` для material-style smooth
+- Stagger gap: 80-120ms между элементами
+- ScrollTrigger start: top 85% (НЕ top top для блоков ниже hero)
+- ВСЕГДА: respect `prefers-reduced-motion` (CSS fallback + JS skip)
+- Spring для position/scale/rotation; curve для opacity/color
+- Мобильные анимации: 20-30% короче desktop
+
 ## Honest scope
 
 - **Flat repeaters only.** Lazy Blocks Free does not support nested repeaters.

@@ -1,0 +1,136 @@
+/* marquee-3d-perspective — Бегущая строка с 3D-перспективой.
+ * CSS-only animation with perspective transform for depth.
+ * prefers-reduced-motion → static horizontal list.
+ *
+ * Usage:
+ *   <div class="mq3d-track">
+ *     <ul class="mq3d-list" data-speed="30">
+ *       <li>Item 1</li>
+ *       <li>Item 2</li>
+ *       ...
+ *     </ul>
+ *   </div>
+ *
+ * The JS (snippet.js) duplicates the list for seamless looping.
+ * Pure CSS fallback: items scroll without JS (may not be seamless).
+ */
+
+.mq3d-track {
+  /* Perspective wrapper — creates the 3D depth */
+  --mq3d-perspective: 800px;
+  --mq3d-tilt: -8deg;           /* X-axis tilt for depth effect */
+  --mq3d-speed: 30s;            /* Override via data-speed in JS */
+  --mq3d-gap: 2.5rem;           /* Gap between items */
+  --mq3d-font-size: clamp(1rem, 2.5vw, 1.5rem);
+  --mq3d-color: #111;
+  --mq3d-separator-color: rgba(0, 0, 0, 0.2);
+
+  overflow: hidden;
+  /* Fade edges */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+}
+
+/* Perspective container for tilt */
+.mq3d-perspective {
+  perspective: var(--mq3d-perspective);
+  perspective-origin: 50% 50%;
+}
+
+/* The tilted stage */
+.mq3d-stage {
+  transform: rotateX(var(--mq3d-tilt));
+  transform-style: preserve-3d;
+}
+
+/* Scrolling list container */
+.mq3d-list {
+  display: flex;
+  align-items: center;
+  gap: var(--mq3d-gap);
+  list-style: none;
+  margin: 0;
+  padding: 1rem 0;
+  width: max-content;   /* Allows infinite scroll */
+  animation: mq3d-scroll var(--mq3d-speed) linear infinite;
+  will-change: transform;
+}
+
+/* Pause on hover */
+.mq3d-track:hover .mq3d-list {
+  animation-play-state: paused;
+}
+
+.mq3d-list li {
+  white-space: nowrap;
+  font-size: var(--mq3d-font-size);
+  font-weight: 500;
+  color: var(--mq3d-color);
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  gap: var(--mq3d-gap);
+}
+
+/* Bullet separator between items */
+.mq3d-list li::after {
+  content: '·';
+  color: var(--mq3d-separator-color);
+  font-size: 1.5em;
+  font-weight: 400;
+}
+
+/* The last item in each clone shouldn't have the trailing separator */
+.mq3d-list li:last-child::after {
+  display: none;
+}
+
+/* Scroll keyframes */
+@keyframes mq3d-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }  /* JS duplicates list so 50% = original width */
+}
+
+/* ── Reverse direction variant ── */
+.mq3d-list--reverse {
+  animation-direction: reverse;
+}
+
+/* ── No-tilt flat variant ── */
+.mq3d-track--flat .mq3d-stage {
+  transform: none;
+}
+
+/* prefers-reduced-motion: static list, no animation */
+@media (prefers-reduced-motion: reduce) {
+  .mq3d-list {
+    animation: none;
+    width: auto;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+    justify-content: center;
+  }
+  .mq3d-stage {
+    transform: none;
+  }
+  .mq3d-track {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .mq3d-list li:last-child::after {
+    display: inline;
+  }
+}

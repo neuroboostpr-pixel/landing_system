@@ -1,0 +1,50 @@
+/* Monochrome Precision Style Mood — typography
+ * Inspired by: zhangzara-monochrome (Ivory Ledger) (OpenDesign)
+ * Jost geometric sans (light weights) + Lora serif for accents.
+ * vw-based scale: space IS the design.
+ */
+
+:root {
+  /* ── Font stacks ── */
+  --font-display:  'Jost', system-ui, sans-serif;      /* geometric, light */
+  --font-serif:    'Lora', 'Noto Serif SC', Georgia, serif;  /* for quotes, card titles */
+  --font-body:     'Jost', system-ui, sans-serif;
+  --font-mono:     'JetBrains Mono', monospace;
+
+  /* ── Weights — use LIGHT weights for the Ivory Ledger sophistication ── */
+  --font-display-weight:  200;    /* ultra-light for large display */
+  --font-body-weight:     300;    /* light for body */
+  --font-label-weight:    500;    /* medium for labels only */
+
+  /* ── Tracking ── */
+  --font-display-tracking: 0em;      /* geometric sans: no extra tracking */
+  --font-body-tracking:    0em;
+  --font-label-tracking:   0em;
+
+  /* ── Type Scale (vw-based — viewport-proportional) ── */
+  --text-display:  8.5vw;    /* hero/cover — very large, very light */
+  --text-h1:       5vw;      /* chapter / statement headline */
+  --text-h2:       3.2vw;    /* slide headline */
+  --text-h3:       2vw;      /* sub-headline */
+  --text-lead:     1.5vw;    /* generous lead text */
+  --text-body:     1.1vw;    /* body text */
+  --text-caption:  0.85vw;   /* captions, footnotes */
+  --text-label:    0.72vw;   /* chrome labels */
+
+  /* Clamp fallbacks for very small/large screens */
+  --text-display-safe:  clamp(2.5rem, 8.5vw, 9rem);
+  --text-body-safe:     clamp(0.875rem, 1.1vw, 1.1rem);
+
+  /* ── Line heights ── */
+  --lh-display: 1.05;
+  --lh-heading: 1.2;
+  --lh-body:    1.65;    /* generous — space is the design */
+  --lh-serif:   1.5;
+
+  /* ── Spacing — extreme whitespace ── */
+  --pad-x:    8vw;    /* generous horizontal — largest in collection */
+  --pad-y:    6vh;
+  --gap-lg:   5vh;
+  --gap-md:   3vh;
+  --gap-sm:   1.5vh;
+}

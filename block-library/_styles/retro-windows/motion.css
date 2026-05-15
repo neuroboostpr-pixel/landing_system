@@ -1,0 +1,42 @@
+/* Retro Windows Style Mood — motion preferences
+ * Philosophy: mechanical, instant. Win95 had NO animation (mostly).
+ * Exception: window open/close — fast opacity only.
+ */
+
+:root {
+  /* ── Durations — Win95 speed ── */
+  --motion-duration-instant:  0ms;     /* truly instant for button states */
+  --motion-duration-base:     150ms;   /* subtle transition where needed */
+  --motion-duration-medium:   200ms;
+  --motion-duration-slow:     300ms;   /* "slow" for this mood */
+
+  /* ── Easing — linear or step-based ── */
+  --motion-easing-default:    linear;
+  --motion-easing-window:     ease-out;   /* window open */
+  --motion-easing-spring:     linear;
+
+  /* ── Win95 button press animation ── */
+  /* Achieved via CSS box-shadow change on :active */
+  --shadow-btn-normal: inset 1px 1px 0 var(--color-btn-highlight), inset -1px -1px 0 var(--color-btn-dark);
+  --shadow-btn-pressed: inset -1px -1px 0 var(--color-btn-highlight), inset 1px 1px 0 var(--color-btn-dark);
+
+  /* ── CRT scanline overlay ── */
+  --crt-opacity: 1;   /* always on */
+  --crt-line-height: 3px;
+
+  /* ── No hover lifts or scales ── */
+  --motion-hover-translate-y: 0;
+  --motion-hover-scale:       1;
+
+  /* ── Stagger ── */
+  --motion-scroll-threshold:  0.05;
+  --motion-stagger-delay:     30ms;   /* fast */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-duration-base:   0ms;
+    --motion-duration-medium: 0ms;
+    --motion-duration-slow:   0ms;
+  }
+}

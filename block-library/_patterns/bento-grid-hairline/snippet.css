@@ -1,0 +1,106 @@
+/* bento-grid-hairline — Notion/Linear-style 6-col grid с hairline разделителями
+ * Source: github.com/nexu-io/open-design @ 75498838 | design-templates/open-design-landing/example.html:1477-1520
+ * License: Apache-2.0
+ *
+ * CSS Grid 6 колонок + hairline (1px) разделители вместо borders/cards.
+ * Ячейки могут span разное количество колонок.
+ * Чистый editorial вид без box-shadow и border-radius.
+ */
+
+:root {
+  --hairline: rgba(0, 0, 0, 0.1);      /* цвет разделителей */
+  --bento-gap: 1px;                     /* ширина разделителей = gap */
+  --bento-cols: 6;                      /* количество колонок */
+  --bento-cell-pad: 32px;              /* внутренние отступы ячеек */
+}
+
+/* Основной grid-контейнер */
+.lp-bento {
+  display: grid;
+  grid-template-columns: repeat(var(--bento-cols), 1fr);
+  gap: var(--bento-gap);
+  background: var(--hairline); /* gap заполнен hairline-цветом */
+  border: var(--bento-gap) solid var(--hairline);
+  /* Опционально: скруглить только внешние углы */
+  border-radius: 16px;
+  overflow: hidden;             /* чтобы border-radius работал */
+}
+
+/* Ячейки */
+.lp-bento__cell {
+  background: var(--bg, #fff);
+  padding: var(--bento-cell-pad);
+  /* Нет box-shadow, нет border-radius — только hairline от gap */
+}
+
+/* Span-варианты для 6-col сетки */
+.lp-bento__cell--span-1 { grid-column: span 1; }
+.lp-bento__cell--span-2 { grid-column: span 2; }
+.lp-bento__cell--span-3 { grid-column: span 3; } /* половина */
+.lp-bento__cell--span-4 { grid-column: span 4; }
+.lp-bento__cell--span-5 { grid-column: span 5; }
+.lp-bento__cell--span-6 { grid-column: span 6; } /* полная ширина */
+
+/* Span по строкам */
+.lp-bento__cell--row-2 { grid-row: span 2; }
+.lp-bento__cell--row-3 { grid-row: span 3; }
+
+/* Типичный Features layout из OpenDesign (4+2, 2+4) */
+.lp-bento--features-4-2 .lp-bento__cell:nth-child(1) { grid-column: span 4; }
+.lp-bento--features-4-2 .lp-bento__cell:nth-child(2) { grid-column: span 2; }
+.lp-bento--features-4-2 .lp-bento__cell:nth-child(3) { grid-column: span 2; }
+.lp-bento--features-4-2 .lp-bento__cell:nth-child(4) { grid-column: span 4; }
+
+/* Типографика ячеек */
+.lp-bento__label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.5;
+  margin-bottom: 12px;
+}
+
+.lp-bento__title {
+  font-size: clamp(18px, 2.2vw, 26px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  margin-bottom: 10px;
+}
+
+.lp-bento__desc {
+  font-size: 14px;
+  opacity: 0.6;
+  line-height: 1.65;
+}
+
+/* Адаптив: на мобильном — 2 колонки */
+@media (max-width: 768px) {
+  .lp-bento {
+    --bento-cols: 2;
+    grid-template-columns: repeat(2, 1fr);
+    --bento-cell-pad: 20px;
+  }
+
+  .lp-bento__cell--span-3,
+  .lp-bento__cell--span-4,
+  .lp-bento__cell--span-5,
+  .lp-bento__cell--span-6,
+  .lp-bento--features-4-2 .lp-bento__cell:nth-child(1),
+  .lp-bento--features-4-2 .lp-bento__cell:nth-child(4) {
+    grid-column: span 2; /* full width на мобильном */
+  }
+}
+
+/* Тёмная тема */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --hairline: rgba(255, 255, 255, 0.08);
+  }
+  .lp-bento__cell {
+    background: var(--bg, #161616);
+  }
+}
+
+/* prefers-reduced-motion: нет анимаций — не применимо */

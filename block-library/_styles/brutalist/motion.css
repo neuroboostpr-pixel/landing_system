@@ -1,0 +1,35 @@
+/* Brutalist Style Mood — motion preferences
+ * Philosophy: fast, sharp, mechanical. No spring-y easing.
+ * Transitions happen but they're QUICK and LINEAR.
+ */
+
+:root {
+  /* ── Durations — short, decisive ── */
+  --motion-duration-instant:  60ms;
+  --motion-duration-base:     80ms;    /* fast */
+  --motion-duration-medium:   150ms;
+  --motion-duration-slow:     250ms;   /* max for brutalist */
+
+  /* ── Easing — mechanical, no spring ── */
+  --motion-easing-default:    linear;          /* harsh, industrial */
+  --motion-easing-in:         ease-in;
+  --motion-easing-out:        ease-out;
+  --motion-easing-spring:     linear;          /* no spring in brutalist */
+
+  /* ── Hover transforms — direct, no float ── */
+  --motion-hover-translate-y: 0;               /* no floating lift */
+  --motion-hover-scale:       1;               /* no scale on hover */
+
+  /* ── Scroll animations ── */
+  --motion-scroll-threshold:  0.1;             /* trigger early */
+  --motion-stagger-delay:     50ms;            /* fast stagger */
+}
+
+/* Brutalist: prefers-reduced-motion is already "reduced" so no extra override needed */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-duration-base:   0ms;
+    --motion-duration-medium: 0ms;
+    --motion-duration-slow:   0ms;
+  }
+}

@@ -1,0 +1,92 @@
+/* text-reveal-mask — Text appears through a mask (Apple keynote style).
+ * Text "proявляется" vertically or horizontally via CSS mask-image + animation.
+ * Triggered by data-animate="reveal" attribute on the element.
+ *
+ * Usage:
+ *   <h2 data-animate="reveal">Your headline</h2>
+ *   Optionally: data-reveal-dir="ltr" | "rtl" | "up" (default) | "down"
+ *   Optionally: data-delay="1" (0–5, see delays below)
+ */
+
+/* Base: elements with data-animate start masked (invisible) */
+[data-animate="reveal"] {
+  --reveal-duration: 0.8s;
+  --reveal-easing: cubic-bezier(0.16, 1, 0.3, 1);  /* Spring ease-out */
+  --reveal-delay: 0s;
+
+  -webkit-mask-image: linear-gradient(to top, transparent 0%, black 0%);
+  mask-image: linear-gradient(to top, transparent 0%, black 0%);
+  opacity: 0;
+
+  /* The mask AND opacity animate together */
+  transition:
+    -webkit-mask-image var(--reveal-duration) var(--reveal-easing) var(--reveal-delay),
+    mask-image var(--reveal-duration) var(--reveal-easing) var(--reveal-delay),
+    opacity 0.3s ease var(--reveal-delay);
+}
+
+/* Revealed state — add class "is-revealed" via JS or IntersectionObserver */
+[data-animate="reveal"].is-revealed {
+  -webkit-mask-image: linear-gradient(to top, transparent 0%, black 100%);
+  mask-image: linear-gradient(to top, transparent 0%, black 100%);
+  opacity: 1;
+}
+
+/* ── Direction variants ── */
+[data-animate="reveal"][data-reveal-dir="up"] {
+  -webkit-mask-image: linear-gradient(to top, transparent 0%, black 0%);
+  mask-image: linear-gradient(to top, transparent 0%, black 0%);
+}
+[data-animate="reveal"][data-reveal-dir="up"].is-revealed {
+  -webkit-mask-image: linear-gradient(to top, transparent 0%, black 100%);
+  mask-image: linear-gradient(to top, transparent 0%, black 100%);
+}
+
+[data-animate="reveal"][data-reveal-dir="down"] {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 0%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 0%);
+}
+[data-animate="reveal"][data-reveal-dir="down"].is-revealed {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
+}
+
+[data-animate="reveal"][data-reveal-dir="ltr"] {
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 0%);
+  mask-image: linear-gradient(to right, transparent 0%, black 0%);
+}
+[data-animate="reveal"][data-reveal-dir="ltr"].is-revealed {
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 100%);
+}
+
+[data-animate="reveal"][data-reveal-dir="rtl"] {
+  -webkit-mask-image: linear-gradient(to left, transparent 0%, black 0%);
+  mask-image: linear-gradient(to left, transparent 0%, black 0%);
+}
+[data-animate="reveal"][data-reveal-dir="rtl"].is-revealed {
+  -webkit-mask-image: linear-gradient(to left, transparent 0%, black 100%);
+  mask-image: linear-gradient(to left, transparent 0%, black 100%);
+}
+
+/* ── Stagger delays ── */
+[data-animate="reveal"][data-delay="1"] { --reveal-delay: 0.1s; }
+[data-animate="reveal"][data-delay="2"] { --reveal-delay: 0.22s; }
+[data-animate="reveal"][data-delay="3"] { --reveal-delay: 0.38s; }
+[data-animate="reveal"][data-delay="4"] { --reveal-delay: 0.56s; }
+[data-animate="reveal"][data-delay="5"] { --reveal-delay: 0.76s; }
+
+/* ── prefers-reduced-motion: instant reveal ── */
+@media (prefers-reduced-motion: reduce) {
+  [data-animate="reveal"] {
+    -webkit-mask-image: none;
+    mask-image: none;
+    opacity: 1;
+    transition: none;
+  }
+  [data-animate="reveal"].is-revealed {
+    -webkit-mask-image: none;
+    mask-image: none;
+    opacity: 1;
+  }
+}

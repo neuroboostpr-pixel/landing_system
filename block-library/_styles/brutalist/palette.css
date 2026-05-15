@@ -1,0 +1,27 @@
+/* Brutalist Style Mood — palette
+ * Inspired by: web-prototype-taste-brutalist (OpenDesign)
+ * 3-colour system: paper + ink + hazard. No half-tones, no gradients.
+ */
+
+:root {
+  /* ── Surfaces ── */
+  --color-bg:          #F4F4F0;   /* warm off-white paper */
+  --color-bg-alt:      #EAE8E3;   /* slightly darker paper */
+  --color-surface:     #F4F4F0;
+  --color-surface-raised: #ffffff;
+
+  /* ── Text ── */
+  --color-fg:          #060606;   /* near-black ink */
+  --color-fg-muted:    #1A1A18;   /* soft ink */
+  --color-fg-subtle:   #3A3A38;   /* tertiary */
+
+  /* ── Accent (hazard) ── */
+  --color-accent:      #E61919;   /* hazard red — used SPARINGLY */
+  --color-accent-soft: #FF4444;
+
+  /* ── Borders — always ink, never translucent ── */
+  --color-border:      #060606;
+  --color-border-thick: #060606;
+
+  /* ── NO gradient, NO transparency ── */
+}

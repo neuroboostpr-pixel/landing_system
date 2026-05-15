@@ -1,0 +1,19 @@
+<!-- dot-grid-bg: добавить класс на body или секцию -->
+
+<!-- Глобальный dot grid фон -->
+<body class="has-dot-grid">
+  <!-- контент -->
+</body>
+
+<!-- Только на конкретной секции (мелкая сетка) -->
+<section class="hero has-dot-grid has-dot-grid--sm">
+  <h1>Заголовок на точечном фоне</h1>
+</section>
+
+<!-- Переопределение цвета точек под тему -->
+<style>
+  body.has-dot-grid {
+    --dot-color: rgba(31, 77, 63, 0.1); /* точки цвета акцента */
+    --dot-spacing: 28px;
+  }
+</style>

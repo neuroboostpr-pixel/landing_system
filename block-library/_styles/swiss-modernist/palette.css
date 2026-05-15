@@ -1,0 +1,34 @@
+/* Swiss Modernist Style Mood — palette
+ * Inspired by: cobalt-grid + digits-fintech-swiss (OpenDesign)
+ * Electric cobalt on warm cream — precision and authority.
+ */
+
+:root {
+  /* ── Surfaces ── */
+  --color-bg:          #F0EBDE;   /* warm ivory/cream paper */
+  --color-bg-alt:      #E6E0CE;   /* slightly deeper cream */
+  --color-bg-dark:     #1a1a22;   /* for dark sections */
+  --color-surface:     #ffffff;
+  --color-surface-dark: #18181f;
+
+  /* ── Text ── */
+  --color-fg:          #1a1a20;   /* near-black */
+  --color-fg-muted:    #4a4a54;   /* secondary */
+  --color-fg-subtle:   #8a8a95;   /* tertiary */
+  --color-fg-inverted: #ededf0;   /* on dark surfaces */
+
+  /* ── Cobalt accent — THE colour of this mood ── */
+  --color-accent:      #1F2BE0;   /* electric cobalt / royal blue */
+  --color-accent-soft: #5560E5;   /* lighter cobalt */
+  --color-accent-grid: rgba(31, 43, 224, 0.10);  /* graph paper grid lines */
+
+  /* ── Borders ── */
+  --color-border:      #1F2BE0;   /* cobalt borders */
+  --color-border-light: rgba(31, 43, 224, 0.15);
+  --color-border-neutral: #d0cfc8;
+
+  /* ── Status/data colours ── */
+  --color-positive:    #1a8d3a;
+  --color-negative:    #c73a3a;
+  --color-neutral:     #8a8a95;
+}

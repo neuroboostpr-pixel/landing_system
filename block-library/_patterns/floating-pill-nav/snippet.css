@@ -1,0 +1,135 @@
+/* floating-pill-nav — sticky nav с backdrop-filter
+ * Source: github.com/nexu-io/open-design @ 75498838 | design-templates/web-prototype-taste-soft/example.html:72-125
+ * License: Apache-2.0
+ *
+ * Apple-style "floating pill" навигация.
+ * Центрирована, sticky, backdrop-blur, тонкие тени.
+ * Работает поверх любого фона.
+ */
+
+.lp-nav-shell {
+  position: sticky;
+  top: 16px;
+  z-index: 100;
+  /* Центрирование по ширине страницы */
+  margin: 16px auto 0;
+  padding: 6px;
+  width: max-content;
+  max-width: calc(100% - 48px);
+  border-radius: 999px;
+  /* Glassmorphism */
+  background: rgba(255, 255, 255, 0.42);
+  backdrop-filter: saturate(160%) blur(22px);
+  -webkit-backdrop-filter: saturate(160%) blur(22px);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.45) inset,
+    0 0 0 1px rgba(10, 10, 10, 0.05),
+    0 12px 36px -18px rgba(10, 10, 10, 0.18);
+  /* Transition для headroom-nav совместимости */
+  transition: transform 300ms cubic-bezier(0.2, 0, 0, 1),
+              opacity 300ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* headroom-nav совместимость: прятать при скролле вниз */
+.lp-nav-shell.lp-nav--hidden {
+  transform: translateY(-120%);
+  opacity: 0;
+}
+
+.lp-nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 6px 8px 6px 20px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* Логотип/бренд */
+.lp-nav__brand {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  text-decoration: none;
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* Навигационные ссылки */
+.lp-nav__links {
+  list-style: none;
+  display: flex;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+}
+
+.lp-nav__links a {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: inherit;
+  transition: background 250ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.lp-nav__links a:hover {
+  background: rgba(10, 10, 10, 0.06);
+}
+
+/* CTA-кнопка */
+.lp-nav__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--text-primary, #111);
+  color: var(--bg, #fff);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  transition: transform 250ms cubic-bezier(0.2, 0, 0, 1),
+              opacity 250ms;
+}
+
+.lp-nav__cta:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.lp-nav__cta:active {
+  transform: scale(0.97);
+}
+
+/* Тёмная тема — инвертировать shell */
+@media (prefers-color-scheme: dark) {
+  .lp-nav-shell {
+    background: rgba(20, 20, 20, 0.55);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.06) inset,
+      0 0 0 1px rgba(255, 255, 255, 0.06),
+      0 12px 36px -18px rgba(0, 0, 0, 0.4);
+  }
+  .lp-nav {
+    background: rgba(30, 30, 30, 0.6);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+}
+
+/* prefers-reduced-motion — убрать transition */
+@media (prefers-reduced-motion: reduce) {
+  .lp-nav-shell,
+  .lp-nav__links a,
+  .lp-nav__cta {
+    transition: none;
+  }
+}

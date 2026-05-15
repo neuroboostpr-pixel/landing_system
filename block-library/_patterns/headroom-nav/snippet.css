@@ -1,0 +1,38 @@
+/* headroom-nav — transition для скрытия/показа nav
+ * Source: github.com/nexu-io/open-design @ 75498838 | design-templates/saas-landing/example.html (Apache-2.0)
+ *
+ * Работает в паре с headroom-nav/snippet.js.
+ * Добавить к любому <nav> или .lp-nav-shell.
+ *
+ * Если используется с floating-pill-nav — transition уже есть в floating-pill-nav/snippet.css.
+ * Этот файл нужен для обычного (не pill) nav.
+ */
+
+/* Обычный nav (не pill) — headroom transition */
+nav.lp-headroom,
+.lp-headroom {
+  transition: transform 300ms cubic-bezier(0.2, 0, 0, 1),
+              opacity 300ms cubic-bezier(0.2, 0, 0, 1);
+  will-change: transform;
+}
+
+nav.lp-headroom.lp-nav--hidden,
+.lp-headroom.lp-nav--hidden {
+  transform: translateY(-110%);
+  opacity: 0;
+}
+
+/* prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  nav.lp-headroom,
+  .lp-headroom {
+    transition: none;
+    will-change: auto;
+  }
+
+  nav.lp-headroom.lp-nav--hidden,
+  .lp-headroom.lp-nav--hidden {
+    /* При reduced-motion прячем мгновенно — не анимируем */
+    transform: translateY(-110%);
+  }
+}

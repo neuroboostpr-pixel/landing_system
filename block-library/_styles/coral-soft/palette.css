@@ -1,0 +1,39 @@
+/* Coral Soft Style Mood — palette
+ * Inspired by: zhangzara-coral + sakura-chroma + soft-editorial (OpenDesign)
+ * Warm cream base, coral accent, multi-pastel supporting palette.
+ */
+
+:root {
+  /* ── Surfaces (warm cream) ── */
+  --color-bg:          #F5F0E8;   /* warm cream base */
+  --color-bg-alt:      #EDE6D8;   /* slightly deeper cream */
+  --color-bg-paper:    #F2EEDF;   /* parchment variant */
+  --color-surface:     #ffffff;
+  --color-surface-frosted: rgba(255, 255, 255, 0.55);  /* frosted card overlay */
+
+  /* ── Text ── */
+  --color-fg:          #1A1A1A;   /* near-black */
+  --color-fg-muted:    #6B6B6B;   /* secondary */
+  --color-fg-subtle:   #B0B0B0;   /* tertiary */
+
+  /* ── Coral — primary accent ── */
+  --color-accent:      #E85D5D;   /* coral red */
+  --color-accent-dark: #D44A4A;   /* coral dark */
+  --color-accent-soft: #F5A0A0;   /* light coral */
+
+  /* ── Pastel supporting palette (sakura-chroma influence) ── */
+  --color-pastel-pink:    #E1A4C2;  /* dusty pink */
+  --color-pastel-peach:   #E8C9B6;  /* soft peach / blush */
+  --color-pastel-lemon:   #D6DD63;  /* chartreuse */
+  --color-pastel-sage:    #B7C7A8;  /* sage green */
+  --color-pastel-lavender:#C9BEDC;  /* lilac */
+  --color-pastel-orange:  #F09131;  /* warm orange */
+
+  /* ── Borders (soft, warm) ── */
+  --color-border:      rgba(26, 26, 26, 0.12);
+  --color-border-soft: rgba(26, 26, 26, 0.06);
+
+  /* ── Nav dots / indicators ── */
+  --color-dot:         rgba(255, 255, 255, 0.3);
+  --color-dot-active:  var(--color-accent);
+}

@@ -1,0 +1,81 @@
+/* conic-ring — прогресс-кольцо через conic-gradient без canvas
+ * Source: github.com/nexu-io/open-design @ 75498838 | design-templates/open-design-landing/example.html:484-497
+ * License: Apache-2.0
+ *
+ * Круговой прогресс-индикатор — для KPI, статистики, процентов.
+ * Значение задаётся через CSS custom property --progress (0–100).
+ * Нет SVG, нет Canvas, нет JavaScript для рендера.
+ */
+
+:root {
+  --ring-size: 80px;
+  --ring-track: 8px;          /* толщина дорожки */
+  --ring-bg-color: rgba(0, 0, 0, 0.08);
+  --ring-fill-color: var(--accent, #111);
+  --progress: 75;             /* значение 0–100 */
+}
+
+.lp-ring {
+  width: var(--ring-size);
+  height: var(--ring-size);
+  border-radius: 50%;
+  /* conic-gradient создаёт дугу прогресса */
+  background: conic-gradient(
+    var(--ring-fill-color) calc(var(--progress) * 1%),
+    var(--ring-bg-color) calc(var(--progress) * 1%)
+  );
+  /* Внутренний вырез через mask создаёт кольцо */
+  -webkit-mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - var(--ring-track)),
+    black calc(100% - var(--ring-track))
+  );
+  mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - var(--ring-track)),
+    black calc(100% - var(--ring-track))
+  );
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* Контейнер для числа внутри кольца */
+.lp-ring-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--ring-size);
+  height: var(--ring-size);
+}
+
+.lp-ring-wrap .lp-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.lp-ring-wrap .lp-ring-label {
+  position: relative;
+  z-index: 1;
+  font-size: calc(var(--ring-size) * 0.25);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  text-align: center;
+}
+
+/* Размерные варианты */
+.lp-ring--sm { --ring-size: 56px; --ring-track: 6px; }
+.lp-ring--md { --ring-size: 80px; --ring-track: 8px; }  /* default */
+.lp-ring--lg { --ring-size: 120px; --ring-track: 10px; }
+
+/* Цветовые варианты */
+.lp-ring--success { --ring-fill-color: #16a34a; }
+.lp-ring--warning { --ring-fill-color: #d97706; }
+.lp-ring--danger  { --ring-fill-color: #dc2626; }
+
+/* prefers-reduced-motion: не применимо — нет анимации */
+/* Если добавляется анимация счётчика — wrap в: */
+/* @media (prefers-reduced-motion: reduce) { counter-animation: none } */

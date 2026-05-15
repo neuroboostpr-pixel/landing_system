@@ -1,0 +1,38 @@
+/* Editorial Warm Style Mood — palette
+ * Inspired by: kami-landing + soft-editorial (OpenDesign)
+ * Warm parchment surface, ink-blue single accent, no cool grays.
+ */
+
+:root {
+  /* ── Surfaces (warm paper system) ── */
+  --color-bg:          #f5f4ed;   /* parchment — main surface */
+  --color-bg-alt:      #faf9f5;   /* ivory — slightly lighter */
+  --color-bg-warm:     #e8e6dc;   /* warm sand — borders, insets */
+  --color-surface:     #faf9f5;
+  --color-surface-raised: #ffffff;
+
+  /* ── Text (4 levels, all warm-toned) ── */
+  --color-fg:          #141413;   /* near-black (warm) */
+  --color-fg-strong:   #3d3d3a;   /* dark warm */
+  --color-fg-muted:    #504e49;   /* olive */
+  --color-fg-subtle:   #6b6a64;   /* stone */
+
+  /* ── Single chromatic accent (ink-blue) ── */
+  --color-accent:      #1B365D;   /* deep ink-blue */
+  --color-accent-soft: #2D5A8A;   /* lighter ink-blue */
+
+  /* ── Tag tints (solid hex, NOT rgba) ── */
+  --color-tag-light:   #EEF2F7;
+  --color-tag-mid:     #E4ECF5;
+  --color-tag-strong:  #D0DCE9;
+
+  /* ── Borders (warm, never cool) ── */
+  --color-border:      #e8e6dc;
+  --color-border-soft: #e5e3d8;
+
+  /* ── Pastel accents (soft-editorial influence) ── */
+  --color-pastel-pink: #E1A4C2;   /* dusty pink */
+  --color-pastel-lemon:#D6DD63;   /* chartreuse */
+  --color-pastel-blush:#E8C9B6;   /* soft peach */
+  --color-pastel-sage: #B7C7A8;   /* sage */
+}
