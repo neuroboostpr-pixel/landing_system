@@ -1,0 +1,3899 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>landing-system wiki</title>
+<style>body { font-family: -apple-system, sans-serif; margin: 0; background: #fafafa; }
+.container { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
+.sidebar { background: #fff; padding: 16px; border-right: 1px solid #e5e5e5; overflow-y: auto; }
+.sidebar h2 { font-size: 13px; text-transform: uppercase; color: #888; margin: 16px 0 8px; }
+.sidebar a { display: block; padding: 4px 8px; color: #1a1a1a; text-decoration: none; border-radius: 4px; font-size: 14px; }
+.sidebar a:hover { background: #f0f0f0; }
+.main { padding: 24px 32px; max-width: 760px; }
+.main h1 { font-size: 28px; }
+.main pre { background: #f4f4f4; padding: 12px; border-radius: 6px; overflow-x: auto; }
+.search { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 12px; }
+.badge { display: inline-block; font-size: 11px; padding: 2px 6px; border-radius: 3px; background: #eee; margin-left: 6px; }
+.badge-agent { background: #e0f2fe; color: #075985; }
+.badge-skill { background: #fce7f3; color: #9d174d; }
+.badge-command { background: #fef3c7; color: #92400e; }
+.badge-stage { background: #d1fae5; color: #065f46; }
+.badge-rule { background: #fee2e2; color: #991b1b; }
+.badge-block { background: #ede9fe; color: #5b21b6; }
+</style>
+</head>
+<body>
+<div class="container">
+  <aside class="sidebar">
+    <input class="search" placeholder="Поиск..." oninput="filter(this.value)">
+    
+      <h2>agent</h2>
+      
+        <a href="#analytics-engineer" data-name="analytics-engineer">
+          analytics-engineer<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#block-composer" data-name="block-composer">
+          block-composer<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#brand-architect" data-name="brand-architect">
+          brand-architect<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#client-assets-collector" data-name="client-assets-collector">
+          client-assets-collector<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#content-writer" data-name="content-writer">
+          content-writer<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#design-system-generator" data-name="design-system-generator">
+          design-system-generator<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#frontend-builder" data-name="frontend-builder">
+          frontend-builder<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#icon-generator" data-name="icon-generator">
+          icon-generator<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#infographic-builder" data-name="infographic-builder">
+          infographic-builder<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#integrations-engineer" data-name="integrations-engineer">
+          integrations-engineer<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#landing-onboarding-wizard" data-name="landing-onboarding-wizard">
+          landing-onboarding-wizard<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#landing-orchestrator" data-name="landing-orchestrator">
+          landing-orchestrator<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#lifecycle-keeper" data-name="lifecycle-keeper">
+          lifecycle-keeper<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#moodboard-composer" data-name="moodboard-composer">
+          moodboard-composer<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#niche-analyst" data-name="niche-analyst">
+          niche-analyst<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#onboarding-guide" data-name="onboarding-guide">
+          onboarding-guide<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#photo-classifier" data-name="photo-classifier">
+          photo-classifier<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#photo-curator" data-name="photo-curator">
+          photo-curator<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#photo-matcher" data-name="photo-matcher">
+          photo-matcher<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#photo-preview-board" data-name="photo-preview-board">
+          photo-preview-board<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#photo-stylist" data-name="photo-stylist">
+          photo-stylist<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#prototype-importer" data-name="prototype-importer">
+          prototype-importer<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#qa-auditor" data-name="qa-auditor">
+          qa-auditor<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#references-curator" data-name="references-curator">
+          references-curator<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#scene-director" data-name="scene-director">
+          scene-director<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#seo-optimizer" data-name="seo-optimizer">
+          seo-optimizer<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#stack-planner" data-name="stack-planner">
+          stack-planner<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#style-extractor" data-name="style-extractor">
+          style-extractor<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#system-setup" data-name="system-setup">
+          system-setup<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#ux-composer" data-name="ux-composer">
+          ux-composer<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#visual-curator" data-name="visual-curator">
+          visual-curator<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#wp-builder" data-name="wp-builder">
+          wp-builder<span class="badge badge-agent">agent</span>
+        </a>
+      
+        <a href="#wp-deployer" data-name="wp-deployer">
+          wp-deployer<span class="badge badge-agent">agent</span>
+        </a>
+      
+    
+      <h2>command</h2>
+      
+        <a href="#landing-brand" data-name="landing-brand">
+          landing-brand<span class="badge badge-command">command</span>
+        </a>
+      
+        <a href="#landing-build" data-name="landing-build">
+          landing-build<span class="badge badge-command">command</span>
+        </a>
+      
+        <a href="#landing-clone" data-name="landing-clone">
+          landing-clone<span class="badge badge-command">command</span>
+        </a>
+      
+        <a href="#landing-compose" data-name="landing-compose">
+          landing-compose<span class="badge badge-command">command</span>
+        </a>
+      
+        <a href="#landing-content" data-name="landing-content">
+          landing-content<span class="badge badge-command">command</span>
+        </a>
+      
+        <a href="#landing-deploy" data-name="landing-deploy">
+          landing-deploy<span class="badge badge-command">command</span>
+        </a>
+      
+        <a href="#landing-design" data-name="landing-design">
+          landing-design<span class="badge badge-command">command</span>
+        </a>
+      
+        <a href="#landing-from-context" data-name="landing-from-context">
+          landing-from-context<span class="badge badge-command">command</span>
+        </a>
+      
+        <a href="#landing-go" data-name="landing-go">
+          landing-go<span class="badge badge-command">command</span>
+        </a>
+      
+        <a href="#landing-help" data-name="landing-help">
+          landing-help<span class="badge badge-command">command</span>
+        </a>
+      
+        <a href="#landing-moodboard" data-name="landing-moodboard">
+          landing-moodboard<span class="badge badge-command">command</span>
+        </a>
+      
+        <a href="#landing-new" data-name="landing-new">
+          landing-new<span class="badge badge-command">command</span>
+        </a>
+      
+        <a href="#landing-niche" data-name="landing-niche">
+          landing-niche<span class="badge badge-command">command</span>
+        </a>
+      
+        <a href="#landing-onboarding" data-name="landing-onboarding">
+          landing-onboarding<span class="badge badge-command">command</span>
+        </a>
+      
+        <a href="#landing-photos" data-name="landing-photos">
+          landing-photos<span class="badge badge-command">command</span>
+        </a>
+      
+        <a href="#landing-prototype" data-name="landing-prototype">
+          landing-prototype<span class="badge badge-command">command</span>
+        </a>
+      
+        <a href="#landing-qa" data-name="landing-qa">
+          landing-qa<span class="badge badge-command">command</span>
+        </a>
+      
+        <a href="#landing-references" data-name="landing-references">
+          landing-references<span class="badge badge-command">command</span>
+        </a>
+      
+        <a href="#landing-rollback" data-name="landing-rollback">
+          landing-rollback<span class="badge badge-command">command</span>
+        </a>
+      
+        <a href="#landing-setup" data-name="landing-setup">
+          landing-setup<span class="badge badge-command">command</span>
+        </a>
+      
+        <a href="#landing-stack" data-name="landing-stack">
+          landing-stack<span class="badge badge-command">command</span>
+        </a>
+      
+        <a href="#landing-start" data-name="landing-start">
+          landing-start<span class="badge badge-command">command</span>
+        </a>
+      
+        <a href="#landing-status" data-name="landing-status">
+          landing-status<span class="badge badge-command">command</span>
+        </a>
+      
+        <a href="#landing-visuals" data-name="landing-visuals">
+          landing-visuals<span class="badge badge-command">command</span>
+        </a>
+      
+        <a href="#landing-wireframe" data-name="landing-wireframe">
+          landing-wireframe<span class="badge badge-command">command</span>
+        </a>
+      
+    
+      <h2>skill</h2>
+      
+        <a href="#block-composition" data-name="block-composition">
+          block-composition<span class="badge badge-skill">skill</span>
+        </a>
+      
+        <a href="#block-library-management" data-name="block-library-management">
+          block-library-management<span class="badge badge-skill">skill</span>
+        </a>
+      
+        <a href="#brand-kit-build" data-name="brand-kit-build">
+          brand-kit-build<span class="badge badge-skill">skill</span>
+        </a>
+      
+        <a href="#client-assets-collection" data-name="client-assets-collection">
+          client-assets-collection<span class="badge badge-skill">skill</span>
+        </a>
+      
+        <a href="#design-tokens-generation" data-name="design-tokens-generation">
+          design-tokens-generation<span class="badge badge-skill">skill</span>
+        </a>
+      
+        <a href="#landing-from-context" data-name="landing-from-context">
+          landing-from-context<span class="badge badge-skill">skill</span>
+        </a>
+      
+        <a href="#landing-onboarding" data-name="landing-onboarding">
+          landing-onboarding<span class="badge badge-skill">skill</span>
+        </a>
+      
+        <a href="#landing-project-init" data-name="landing-project-init">
+          landing-project-init<span class="badge badge-skill">skill</span>
+        </a>
+      
+        <a href="#landing-versioning-and-cloning" data-name="landing-versioning-and-cloning">
+          landing-versioning-and-cloning<span class="badge badge-skill">skill</span>
+        </a>
+      
+        <a href="#moodboard-creation" data-name="moodboard-creation">
+          moodboard-creation<span class="badge badge-skill">skill</span>
+        </a>
+      
+        <a href="#niche-analysis" data-name="niche-analysis">
+          niche-analysis<span class="badge badge-skill">skill</span>
+        </a>
+      
+        <a href="#paralaximus-codex" data-name="paralaximus-codex">
+          paralaximus-codex<span class="badge badge-skill">skill</span>
+        </a>
+      
+        <a href="#photo-curation" data-name="photo-curation">
+          photo-curation<span class="badge badge-skill">skill</span>
+        </a>
+      
+        <a href="#photo-styling" data-name="photo-styling">
+          photo-styling<span class="badge badge-skill">skill</span>
+        </a>
+      
+        <a href="#prototype-import" data-name="prototype-import">
+          prototype-import<span class="badge badge-skill">skill</span>
+        </a>
+      
+        <a href="#references-collection" data-name="references-collection">
+          references-collection<span class="badge badge-skill">skill</span>
+        </a>
+      
+        <a href="#style-decomposition" data-name="style-decomposition">
+          style-decomposition<span class="badge badge-skill">skill</span>
+        </a>
+      
+        <a href="#visual-generation" data-name="visual-generation">
+          visual-generation<span class="badge badge-skill">skill</span>
+        </a>
+      
+        <a href="#wireframe-rendering" data-name="wireframe-rendering">
+          wireframe-rendering<span class="badge badge-skill">skill</span>
+        </a>
+      
+    
+  </aside>
+  <main class="main">
+    <h1>landing-system wiki</h1>
+    <p>Обновлено: 2026-05-15. Концептов: 77.</p>
+
+    
+      <section id="analytics-engineer">
+        <h2>analytics-engineer <span class="badge badge-agent">agent</span></h2>
+        <pre># Analytics Engineer (Инженер аналитики)
+
+## Что делает
+
+Подключает счётчик Яндекс.Метрики к WordPress-лендингу: вставляет код счётчика в тему, определяет цели (клики по CTA, отправки форм) и готовит документацию по аналитике и UTM-шаблонам для рекламных кампаний.
+
+## Когда вызывать / в каком этапе
+
+Вызывается на **этапе 08** — после того, как `integrations-engineer` завершил настройку форм и webhook'ов. Агент не запускается самостоятельно; его запускает `landing-orchestrator` в рамках команды `/landing-build` или `/landing-go`.
+
+Предусловия:
+- `08_КОД/wp-theme/functions.php` уже создан агентом `wp-builder`
+- В `.env` (или `.env.example`) прописана переменная `YM_COUNTER_ID` (8-значный идентификатор счётчика)
+
+## Что на вход / на выход
+
+**Вход:**
+- `08_КОД/wp-theme/functions.php` — файл темы, содержащий плейсхолдер `// [YM_COUNTER]`
+- `.env` — файл окружения с переменной `YM_COUNTER_ID`
+
+**Выход:**
+- `08_КОД/wp-theme/functions.php` — дополнен PHP-функцией `lp_yandex_metrika()`, подключённой через хук `wp_head`
+- `11_АНАЛИТИКА/metrika-config.md` — ID счётчика и список настроенных целей (показывается пользователю перед финальным утверждением — **HARD GATE**)
+- `11_АНАЛИТИКА/goals-and-events.json` — цели в формате JSON для настройки в интерфейсе Яндекс.Метрики
+- `11_АНАЛИТИКА/utm-templates.md` — шаблоны UTM-меток для кампаний в Яндекс.Директ
+
+**HARD GATE:** перед закрытием этапа агент показывает `metrika-config.md` и ждёт явного утверждения от пользователя.
+
+## Связанные концепты
+
+- [[integrations-engineer]] — предшественник: настраивает формы и webhook'и до запуска аналитики
+- [[wp-builder]] — создаёт `functions.php`, куда инжектируется код Метрики
+- [[seo-optimizer]] — следующий по цепочке: добавляет SEO-мета-теги после аналитики
+- [[landing-orchestrator]] — мастер-оркестратор, диспатчит агента в нужный момент
+
+## Источник
+
+- `agents/analytics-engineer.md`</pre>
+      </section>
+    
+      <section id="block-composer">
+        <h2>block-composer <span class="badge badge-agent">agent</span></h2>
+        <pre># block-composer — сборка финального макета (этап 07b)
+
+## Что делает
+
+Собирает `composed.html` — итоговый цветной макет лендинга с реальными текстами, CTA и дизайн-токенами. Фото, иконки и инфографика на этом этапе остаются в виде подписанных заглушек: их заполнят агенты PR-B и PR-C позже.
+
+## Когда вызывать / в каком этапе
+
+Запускается на **этапе 07b** командой `/landing-compose` или оркестратором `landing-orchestrator`.  
+Вызывать только после того, как утверждены:
+- этап 07a (wireframe + `selections.yaml` от пользователя),
+- этап 05 (дизайн-система, `tokens.json`),
+- этап 07 (прототип, `prototype.yaml`).
+
+## Что на вход / на выход
+
+**Вход:**
+- `<project>/07_ПРОТОТИП/prototype.yaml` — структура прототипа с текстами
+- `<project>/07a_WIREFRAME/selections.yaml` — выбранные пользователем варианты блоков
+- `<project>/05_ДИЗАЙН-СИСТЕМА/tokens.json` — цвета, шрифты, тени
+- `block-library/` — общая библиотека блоков
+- `docs/standards/premium-07b-checklist.md` — обязательный чеклист из 13 премиум-фич
+
+**Выход:**
+- `07b_COMPOSED/composed.html` — десктопный макет
+- `07b_COMPOSED/composed-mobile.html` — мобильный макет
+- `07b_COMPOSED/composed-mobile-preview.html` — iframe-превью iPhone/iPad
+- `07b_COMPOSED/composed-explained.md` — описание что собрано и какие фичи включены
+
+**Hard gate:** перед завершением этапа агент обязан прогнать `scripts/verify-composed-premium.sh`. Если скрипт вернул exit code ≠ 0 — этап не закрыт, агент дорабатывает `composed.html`.
+
+## Ключевые правила
+
+Агент реализует 13 обязательных премиум-фич: CSS-переменные в `:root`, `clamp()` для типографики, glassmorphism-навигация, parallax-герой, `IntersectionObserver`, `.reveal`-анимации, gradient-text, hover lift на карточках, JS-слайдер, lightbox с клавиатурой, count-up анимация, smooth scroll, pulse-dot на live-бейджах.
+
+Если `selections.yaml` ссылается на блок, отсутствующий в `catalog.yaml` — агент останавливается и сообщает пользователю.
+
+## Связанные концепты
+
+- [[block-composition]] — скилл с Python-скриптами `compose-blocks.py` и `validate-selections.py`
+- [[ui-ux-pro-max]] — источник стилевых hint'ов из `meta.yaml` блоков
+- [[ux-composer]] — создаёт `selections.yaml` на этапе 07a (wireframe)
+- [[prototype-importer]] — создаёт `prototype.yaml` на этапе 07
+- [[photo-curator]] — PR-B: заполняет photo-placeholders после 07b
+- [[visual-curator]] — PR-C: заполняет icon/infographic-placeholders после 07b
+
+## Источник
+
+- `agents/block-composer.md`</pre>
+      </section>
+    
+      <section id="brand-architect">
+        <h2>brand-architect <span class="badge badge-agent">agent</span></h2>
+        <pre># brand-architect — Архитектор бренд-кита
+
+## Что делает
+
+Берёт все извлечённые стилевые данные (цвета, шрифты, иконки, сетку, анимации) и собирает из них единый бренд-кит с полной «родословной» каждого элемента — откуда взят каждый цвет, шрифт и иконка. Дополнительно отрисовывает HTML-превью для утверждения заказчиком.
+
+## Когда вызывать / в каком этапе
+
+**Этап 04.** Запускается строго после того, как агент `style-extractor` завершил работу и в папке `04_БРЕНД/extracted/` появились все пять файлов: `palette.yaml`, `fonts.yaml`, `icons.yaml`, `grid.md`, `motion.md`. До следующего этапа (05 — design-system) не идти, пока пользователь не одобрит `brand-kit.html`.
+
+## Что на вход / на выход
+
+**Вход:**
+- `04_БРЕНД/extracted/palette.yaml` — извлечённые цвета
+- `04_БРЕНД/extracted/fonts.yaml` — идентифицированные шрифты
+- `04_БРЕНД/extracted/icons.yaml` — подобранные иконки
+- `04_БРЕНД/extracted/grid.md` — сетка и отступы
+- `04_БРЕНД/extracted/motion.md` — токены анимации
+- `03_РЕФЕРЕНСЫ/index.yaml` — список одобренных референсов
+- `01a_АНАЛИЗ_НИШИ/positioning.md` — позиционирование (mode: rational / emotional_aspiration / trust_authority)
+- `01a_АНАЛИЗ_НИШИ/market-profile.md` — профиль рынка (accessibility_tier, cultural_context)
+- `01a_АНАЛИЗ_НИШИ/landing-structure.md` — контракт с wp-builder, список блоков
+
+**Выход:**
+- `04_БРЕНД/brand-kit.md` — канонический бренд-кит с полной провенансом
+- `04_БРЕНД/brand-kit.html` — визуальный превью (свотчи палитры, образцы шрифтов, миниатюры иконок)
+
+**Процесс:**
+1. `python3 skills/brand-kit-build/scripts/build.py <project-dir>` → `brand-kit.md`
+2. `python3 skills/brand-kit-build/scripts/render-html.py <project-dir>` → `brand-kit.html`
+3. Открыть HTML на ревью пользователю → HARD GATE
+
+**HARD GATE:** все 5 extracted-файлов обязательны; продолжение без одобрения `brand-kit.html` заблокировано.
+
+## Связанные концепты
+
+- [[style-extractor]] — обязательный предшественник: создаёт все 5 extracted/*.yaml файлов
+- [[niche-analyst]] — поставляет positioning.md и market-profile.md, определяющие стиль палитры и типографики
+- [[references-curator]] — поставляет одобренные референсы (index.yaml)
+- [[brand-kit-build]] — скилл, которому принадлежит этот агент; содержит Python-скрипты build.py и render-html.py
+- [[design-system-generator]] — следующий этап (05): читает brand-kit.md и генерирует DESIGN.md + tokens.json
+
+## Источник
+
+- `agents/brand-architect.md`</pre>
+      </section>
+    
+      <section id="client-assets-collector">
+        <h2>client-assets-collector <span class="badge badge-agent">agent</span></h2>
+        <pre># client-assets-collector — Сбор материалов клиента
+
+## Что делает
+Собирает все исходные материалы клиента: фотографии, видео и отзывы с публичных площадок (Яндекс Карты, 2GIS, Otzovik, Flamp). Работает без API-ключей — использует бесплатный локальный парсинг через trafilatura и Playwright. Результат — структурированная папка `02_МАТЕРИАЛЫ_КЛИЕНТА/` с манифестом и HTML-галереей для просмотра.
+
+## Когда вызывать / в каком этапе
+**Этап 02** — сразу после анализа ниши (`01a_АНАЛИЗ_НИШИ/`). Агент запускается оркестратором `landing-orchestrator` или вручную. Перед запуском обязательно должен существовать файл `01a_АНАЛИЗ_НИШИ/visual-requirements.md` — он определяет, какие именно фото запрашивать у клиента и от каких материалов стоит отказаться (секции red flags).
+
+## Что на вход / на выход
+
+**Вход:**
+- Пользовательские файлы (фото, видео) — клиент кладёт их в `02_МАТЕРИАЛЫ_КЛИЕНТА/photos/original/` и `videos/`
+- Ссылки на профили в Яндекс Картах, 2GIS, Otzovik, Flamp
+- `00_БРИФ/brief.md` — сигналы о нише
+- `01a_АНАЛИЗ_НИШИ/visual-requirements.md` — требования к визуалу (обязательно)
+
+**Выход:**
+- `02_МАТЕРИАЛЫ_КЛИЕНТА/photos/original/*.{jpg,png,webp}` — оригинальные фото (без обработки)
+- `02_МАТЕРИАЛЫ_КЛИЕНТА/videos/*.{mp4,mov}` — видео с указанием хронометража
+- `02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/<source>/*.json` — распарсенные отзывы по источникам
+- `02_МАТЕРИАЛЫ_КЛИЕНТА/assets-manifest.yaml` — реестр всех файлов с плановым назначением (hero / about / proof)
+- `02_МАТЕРИАЛЫ_КЛИЕНТА/assets-gallery.html` — HTML-галерея для пользовательского просмотра
+
+## Связанные концепты
+- [[photo-stylist]] — обрабатывает фото из этого этапа (identity-safe cutout, edge cleanup), агент не трогает оригиналы
+- [[niche-analyst]] — поставляет `visual-requirements.md`, который задаёт критерии отбора фото
+- [[landing-orchestrator]] — диспатчит агента в нужный момент и держит HARD GATE до user approve
+- [[client-assets-collection]] — скилл с Python-скриптами парсинга отзывов
+
+## Источник
+- `agents/client-assets-collector.md`</pre>
+      </section>
+    
+      <section id="content-writer">
+        <h2>content-writer <span class="badge badge-agent">agent</span></h2>
+        <pre># Content Writer — Контент-райтер
+
+## Что делает
+
+Берёт черновой прототип текста лендинга и превращает его в готовый копирайт, разложенный по конкретным блокам страницы. Параллельно пишет SEO-копию с мета-заголовками и вариантами h1.
+
+## Когда вызывать / в каком этапе
+
+Запускается на **этапе 07** после того, как завершены: анализ ниши (01a), дизайн-система (05), подбор стека (06) и импорт прототипа (07). Агент не переходит дальше без явного одобрения пользователем итогового `final-copy.md`.
+
+## Что на вход / на выход
+
+**Входные артефакты:**
+
+| Файл | Зачем |
+|------|-------|
+| `01a_АНАЛИЗ_НИШИ/positioning.md` | Режим позиционирования (`rational` / `emotional_aspiration` / `trust_authority` / `hybrid`) |
+| `01a_АНАЛИЗ_НИШИ/landing-structure.md` | Эталонный список и порядок блоков лендинга |
+| `01a_АНАЛИЗ_НИШИ/market-profile.md` | Тон: `accessibility_tier` и `cultural_context` |
+| `01a_АНАЛИЗ_НИШИ/competitors.yaml` | Поле `key_messages` — что НЕ повторять |
+| `07_КОНТЕНТ/prototype.md` | Исходный прототип текста |
+| `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` | Детали секций, типографика |
+| `06_СТЕК/design-stack.yaml` | Компонентная библиотека |
+| `02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/` | Реальные отзывы клиентов |
+| `02_МАТЕРИАЛЫ_КЛИЕНТА/assets-manifest.yaml` | Список доступных фото/иконок |
+
+**Выходные артефакты:**
+
+- `07_КОНТЕНТ/final-copy.md` — копирайт, разложенный по блокам из `landing-structure.md`
+- `07_КОНТЕНТ/seo-copy.md` — SEO-заголовки, description, варианты h1
+
+**Жёсткие правила:**
+
+- Запрещён Lorem ipsum — только реальные данные из `prototype.md` и `testimonials/`
+- Каждый блок содержит явную ссылку на иконку/фото из `assets-manifest`
+- HARD GATE: показывает `final-copy.md` пользователю и ждёт подтверждения
+
+## Режимы тона (mode-aware)
+
+Агент адаптирует регистр копирайта под режим позиционирования:
+
+- **rational** — факты, цифры, без аспирации
+- **emotional_aspiration** — эмоциональный крюк, структура StoryBrand
+- **trust_authority** — каждый claim с доказательством (имя, число, дата)
+- **hybrid:X+Y** — основной тон + поддержка 1–2 блоками вторичного
+- **legacy_v1** — без mode-аугментации (старые проекты до 2026-05-06)
+
+## Связанные концепты
+
+- [[niche-analyst]] — поставляет `positioning.md`, `landing-structure.md`, `competitors.yaml`
+- [[prototype-importer]] — поставляет `prototype.md` как сырой входной текст
+- [[design-system-generator]] — поставляет `DESIGN.md` с деталями секций
+- [[stack-planner]] — поставляет `design-stack.yaml` с компонентной библиотекой
+- [[client-assets-collector]] — поставляет `testimonials/` и `assets-manifest.yaml`
+
+## Источник
+
+- `agents/content-writer.md`</pre>
+      </section>
+    
+      <section id="design-system-generator">
+        <h2>design-system-generator <span class="badge badge-agent">agent</span></h2>
+        <pre># design-system-generator (Генератор дизайн-системы)
+
+## Что делает
+
+Берёт готовый бренд-кит и превращает его в полноценную дизайн-систему: файл с токенами, машиночитаемый JSON и живой HTML-превью с компонентами. Это «единый источник истины» для всех следующих этапов: цвета, шрифты, отступы, тени, сетка и анимации — всё в одном месте с указанием откуда взялось каждое значение (провенанс).
+
+## Когда вызывать / в каком этапе
+
+Этап **05 — Дизайн-система**. Запускается строго после того, как агент [[brand-architect]] завершил работу и файл `04_БРЕНД/brand-kit.md` существует. До этого запускать нельзя — нечего будет читать. Переход к этапу 06 ([[stack-planner]]) возможен только после явного подтверждения пользователя (`утверждаю`, `ok`, `дальше`) — это **HARD GATE**.
+
+## Что на вход / на выход
+
+**Вход:**
+- `04_БРЕНД/brand-kit.md` — бренд-кит с цветами, шрифтами, иконками, motion-параметрами и сеткой
+
+**Выход:**
+- `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` — единый источник истины, токены с YAML frontmatter и провенансом (каждый цвет/шрифт ссылается на источник)
+- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — машиночитаемые токены для сборки темы
+- `05_ДИЗАЙН-СИСТЕМА/design-preview.html` — интерактивный превью живых компонентов по токенам
+
+**Структура токенов:**
+цвета (primary / secondary / accent / text / bg), типографика (display / body / sizes), отступы (xs→3xl), сетка (columns / gap / max_width), скругления, тени, брейкпоинты (mobile / tablet / desktop), анимации (duration_fast/base/slow, easing).
+
+**Скрипты:**
+- `skills/design-tokens-generation/scripts/build-tokens.py <project-dir>` — строит DESIGN.md и tokens.json
+- `skills/design-tokens-generation/scripts/render-preview.py <project-dir>` — рендерит design-preview.html
+
+## Связанные концепты
+
+- [[brand-architect]] — предшествующий агент, создаёт brand-kit.md, который этот агент читает
+- [[brand-kit-build]] — скилл-владелец: design-system-generator входит в его область ответственности
+- [[design-tokens-generation]] — скилл, которому принадлежит агент; содержит скрипты build-tokens и render-preview
+- [[stack-planner]] — следующий этап (06): получает токены и определяет плагины/библиотеки
+- [[scene-director]] — альтернативный следующий шаг (только cinematic mode): использует tokens.json для motion-плана
+
+## Источник
+
+- `agents/design-system-generator.md`</pre>
+      </section>
+    
+      <section id="frontend-builder">
+        <h2>frontend-builder <span class="badge badge-agent">agent</span></h2>
+        <pre># frontend-builder — Перевод вайрфреймов в CSS и PHP-шаблоны
+
+## Что делает
+
+Берёт вайрфреймы из DESIGN.md §5 и превращает их в настоящий CSS-код (per-block правила) и рабочие PHP-шаблоны блоков Lazy Blocks. После него лендинг визуально совпадает с дизайном.
+
+## Когда вызывать / в каком этапе
+
+Этап **08b**, после команды `/landing-build` (wp-builder уже создал скелет тем). Вызывается автоматически `landing-orchestrator` как часть stage 08, либо вручную с флагом `--block <slug>` для перегенерации одного блока.
+
+## Что на вход / на выход
+
+**Входные артефакты (только чтение):**
+- `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` — §5 вайрфреймы, §2 токены, §3 брейкпоинты, §7 motion, §8 a11y (единственный источник истины)
+- `04_БРЕНД/brand-kit.md` — контекст бренда
+- `01a_АНАЛИЗ_НИШИ/landing-structure.md` — контракт блоков
+- `08_КОД/block-spec.yaml` — список блоков, контролы, BEM-классы
+- `08_КОД/wp-theme/blocks/lazyblock-<slug>/block.php` — текущий скелет
+
+**Выходные артефакты (агент пишет):**
+- `05_ДИЗАЙН-СИСТЕМА/DESIGN.md §5` — в каждую секцию `### Block N` добавляет фenced-блок ` ```css ` с правилами, предварённый строкой `**CSS rules:**`
+- `08_КОД/wp-theme/blocks/lazyblock-<slug>/block.php` — полная перезапись с маркером `// AUTO-GENERATED by frontend-builder.`
+
+**Ключевые ограничения:**
+- Только CSS-переменные `var(--*)` из §2 — никаких хардкоженных цветов или размеров
+- Брейкпоинты в px из §3.2 (не токены `--bp-*`)
+- Нулевой JavaScript — аккордеоны через `<details>`, бургер через checkbox-hack
+- Не трогает §1–§4, §6–§9, `style.css`, `functions.php`, `assets/js/*`
+
+**Алгоритм:** обрабатывает блоки последовательно по порядку из `block-spec.yaml`. Для каждого: читает спецификацию → читает вайрфрейм →  генерирует CSS → генерирует `block.php` → переходит к следующему. После всех блоков pipeline запускает `extract-main-css.py` для регенерации `main.css`.
+
+**Известное ограничение:** дочерние `block.php` (repeater-паттерны Lazy Blocks, например `lazyblock-faq-item`) принадлежат pipeline и не получают маркер — скрипт `check-block-php-markers.py` даёт по ним false positive exit-1. Планируется фикс в follow-up задаче.
+
+## Связанные концепты
+
+- [[design-system-generator]] — создаёт DESIGN.md и tokens.json, которые frontend-builder использует как источник истины
+- [[wp-builder]] — генерирует скелеты block.php и functions.php перед вызовом frontend-builder
+- [[landing-build]] — команда-оркестратор stage 08, вызывающая frontend-builder
+- [[brand-kit-build]] — brand-kit.md читается агентом для контекста бренда
+
+## Источник
+
+- `agents/frontend-builder.md`</pre>
+      </section>
+    
+      <section id="icon-generator">
+        <h2>icon-generator <span class="badge badge-agent">agent</span></h2>
+        <pre># icon-generator — генератор одного PNG-иконки
+
+## Что делает
+
+Генерирует **один** файл иконки в формате PNG для конкретного слота лендинга. Работает через codex image_gen с умным кэшированием: если иконка с такими же параметрами уже была создана ранее — берёт из кэша без повторного запроса к API.
+
+## Когда вызывать / в каком этапе
+
+Вызывается агентом [[visual-curator]] на этапе **07d** (Visual Generation). Не вызывается напрямую пользователем — только как субагент в рамках команды `/landing-visuals`.
+
+## Что на вход / на выход
+
+**Входные данные:**
+- `project_dir` — абсолютный путь к папке проекта
+- `slot_name` — имя слота, например `feature-1-icon`
+- `hint` (опционально) — текстовая подсказка для генерации, например `shield`
+
+**Процесс:**
+1. Вычисляет хэш-ключ кэша по параметрам: `hint`, `icon_style`, `brand-color`, `niche` через скрипт `visual-cache.py`.
+2. Если файл с таким хэшем уже есть в `.cache/` (размер ≥ 1 КБ) — копирует его в целевую папку и завершает работу.
+3. Если кэш-промах — запускает `codex-generate-icon.sh` для генерации.
+4. После успешной генерации сохраняет результат в `.cache/<hash>.png` для будущих прогонов.
+
+**Выходной артефакт:**
+- `<project>/07d_VISUALS/icons/<slot_name>.png`
+
+**При ошибках:**
+- Если codex падает после повтора — создаёт SVG-заглушку через `svg-placeholder.py` (из PR-B).
+- При проблемах с цветовой рамкой (chroma-key fringe) — повторяет с флагом `--edge-contract 1`.
+
+## Связанные концепты
+
+- [[visual-curator]] — оркестратор этапа 07d, который диспатчит icon-generator для каждого слота
+- [[visual-generation]] — скилл и набор скриптов (visual-cache.py, codex-generate-icon.sh), на которые опирается агент
+- [[photo-curation]] — предоставляет svg-placeholder.py как fallback при ошибках генерации
+- [[infographic-builder]] — аналогичный агент, но для инфографики (а не иконок)
+
+## Источник
+
+- `agents/icon-generator.md`</pre>
+      </section>
+    
+      <section id="infographic-builder">
+        <h2>infographic-builder <span class="badge badge-agent">agent</span></h2>
+        <pre># infographic-builder — генератор одного инфографика
+
+## Что делает
+
+Генерирует **один PNG-файл инфографики** для конкретного слота в лендинге через codex image_gen. Работает с числовыми, столбчатыми, линейными и кольцевыми диаграммами. Чтобы не тратить API-запросы повторно — кэширует результат по хэшу параметров.
+
+## Когда вызывать / в каком этапе
+
+Вызывается **только агентом [[visual-curator]]** на этапе **07d (Visual Generation)**. Пользователь напрямую не запускает этот агент — он запускает `/landing-visuals`, а `visual-curator` диспатчит `infographic-builder` для каждого инфографического слота по очереди.
+
+## Что на вход / на выход
+
+**Вход:**
+- `<project_dir>` — путь к папке проекта
+- `<slot_name>` — имя слота, например `kpi-clients`
+- `<chart_type>` — тип диаграммы: `number`, `bar`, `line`, `donut`
+- `<data_json>` — JSON-строка с данными для инфографики
+
+**Выход:**
+- PNG-файл `<project>/07d_VISUALS/infographics/<slot_name>.png`
+- Запись атрибуции в `07d_VISUALS/prompts.yaml` (если источник — OpenDesign)
+- Обновление `STATE.yaml` при ошибках
+
+**Логика исполнения:**
+1. Вычислить хэш-ключ из `(hint, chart_type, brand_accent, niche)`.
+2. Если кэш-хит — скопировать из `.cache/<hash>.png`, выйти.
+3. Если кэш-мисс — запустить `codex-generate-infographic.sh`.
+4. После генерации — сохранить в `.cache/<hash>.png`.
+
+**Fallback-логика:**
+- Если codex падает после повтора → SVG-плейсхолдер вместо PNG.
+- Если `data_json` невалиден → использовать заглушку-данные, предупреждение в `STATE.yaml`.
+
+## Связанные концепты
+
+- [[visual-curator]] — оркестратор этапа 07d, вызывает этого агента для каждого слота
+- [[icon-generator]] — аналогичный агент, но для иконок (не инфографики)
+- [[visual-generation]] — скилл, содержащий скрипты генерации, в том числе `codex-generate-infographic.sh`
+
+## Источник
+
+- `agents/infographic-builder.md`</pre>
+      </section>
+    
+      <section id="integrations-engineer">
+        <h2>integrations-engineer <span class="badge badge-agent">agent</span></h2>
+        <pre># Integrations Engineer (Инженер интеграций)
+
+## Что делает
+Настраивает формы захвата лидов и вебхуки: подключает Fluent Forms к Telegram-боту и/или CRM, чтобы каждая заявка с лендинга мгновенно уходила в нужный канал.
+
+## Когда вызывать / в каком этапе
+Этап **08**, строго после [[wp-builder]]. Активируется автоматически через [[landing-orchestrator]] или вручную в рамках команды `/landing-build`. Требует, чтобы `wp-builder` уже создал `functions.php`.
+
+## Что на вход / на выход
+
+**Вход:**
+- `08_КОД/wp-theme/functions.php` — файл темы, созданный `wp-builder`; должен содержать placeholder `// [FLUENT_WEBHOOK]`
+- `08_КОД/acf-fields.json` — поле `form_id` для секции формы
+- `.env` проекта — переменные `TELEGRAM_BOT_TOKEN`, `TELEGRAM_LEADS_CHAT_ID` и/или `CRM_WEBHOOK_URL`
+
+**Выход:**
+- `08_КОД/wp-theme/functions.php` — дополнен PHP-хуком `lp_send_lead_to_telegram()` для Fluent Forms, плюс опциональным хуком отправки в CRM
+
+**Логика добавления:**
+1. Читает `.env` (или `.env.example`) — определяет, какие токены есть.
+2. Если `TELEGRAM_BOT_TOKEN` + `TELEGRAM_LEADS_CHAT_ID` — добавляет хук `fluentform/submission_inserted` → `wp_remote_post` к Telegram API.
+3. Если `CRM_WEBHOOK_URL` — добавляет аналогичный хук с отправкой данных формы на CRM-эндпоинт.
+4. **HARD GATE**: показывает добавленный код и ждёт явного утверждения пользователя.
+
+**Правила безопасности:**
+- Токены никогда не хардкодятся — только через `getenv()`
+- Все пользовательские данные экранируются через `esc_html()` перед отправкой
+
+## Связанные концепты
+- [[wp-builder]] — создаёт `functions.php` с placeholder `// [FLUENT_WEBHOOK]`, который этот агент заменяет
+- [[analytics-engineer]] — следующий этап 08; добавляет счётчик Яндекс Метрики в тот же `functions.php`
+- [[landing-orchestrator]] — управляет очерёдностью запуска агентов на этапе 08
+
+## Источник
+- `agents/integrations-engineer.md`</pre>
+      </section>
+    
+      <section id="landing-onboarding-wizard">
+        <h2>landing-onboarding-wizard <span class="badge badge-agent">agent</span></h2>
+        <pre># landing-onboarding-wizard — Мастер создания нового проекта
+
+## Что делает
+Ведёт маркетолога за руку от нуля до готовой папки проекта со всеми материалами. Объясняет систему, создаёт структуру директорий, помогает разложить прототип, фото, логотип и референсы по нужным папкам — и всё это шаг за шагом с проверкой каждого шага.
+
+## Когда вызывать / в каком этапе
+Запускается командой `/landing-start` в самом начале работы — до всех остальных этапов workflow. Только для **новых** проектов. Существующие проекты не трогает.
+
+## Что на вход / на выход
+
+**Вход:**
+- Имя проекта (kebab-case), которое вводит пользователь
+- Файлы материалов, которые пользователь кладёт вручную:
+  - `prototype.pdf` или `prototype.md` (обязательно)
+  - фотографии клиента в `07c_PHOTOS/inbox/` (рекомендуется)
+  - логотип в `04_БРЕНД/logos/` (рекомендуется)
+  - референсы в `03_РЕФЕРЕНСЫ/` (опционально)
+
+**Выход:**
+- Папка `~/Lendings/<slug>/` с 18 подпапками (скопированными из `template/`)
+- Разложенные материалы по соответствующим подпапкам
+- Верифицированный результат каждого шага через `scripts/wizard-check-materials.py`
+- Подсказка запустить `/landing-go` для продолжения
+
+## Процесс (5 фаз)
+
+1. **Pre-flight** — проверяет наличие `codex CLI` и что работаем внутри landing-system repo.
+2. **Welcome** — печатает 3 абзаца объяснения системы, запрашивает slug.
+3. **Создание проекта** — вызывает `skills/landing-project-init/scripts/init.sh <slug>`, копирует template.
+4. **4 шага материалов** — интерактивно для каждого шага: показывает путь, объясняет что класть, ждёт «готово» / «пропустить», проверяет через `wizard-check-materials.py`. Шаг 1 (прототип) пропустить **нельзя**.
+5. **Финальный итог** — показывает результаты всех шагов, советует `/landing-go`.
+
+## Что НЕ делает
+- Не запускает `/landing-go` самостоятельно — это явный шаг пользователя.
+- Не парсит прототип — это задача [[prototype-importer]] на этапе 07a.
+- Не модифицирует существующие проекты.
+
+## Связанные концепты
+- [[landing-project-init]] — скилл создания папки проекта, вызывается на фазе 3
+- [[prototype-importer]] — следующий шаг после wizard, парсит `prototype.pdf`
+- [[brand-architect]] — генерирует текстовый логотип, если логотип не предоставлен
+- [[references-curator]] — подбирает референсы, если папка осталась пустой
+- [[landing-go]] — команда, которую wizard рекомендует в финале
+
+## Источник
+- `agents/landing-onboarding-wizard.md`</pre>
+      </section>
+    
+      <section id="landing-orchestrator">
+        <h2>landing-orchestrator <span class="badge badge-agent">agent</span></h2>
+        <pre># landing-orchestrator (Главный дирижёр)
+
+## Что делает
+
+Ведёт лендинг-проект через все 12 этапов производства: от брифа до деплоя и SEO. На каждом этапе вызывает нужного специализированного агента, показывает результат, ждёт явного одобрения от пользователя и только потом двигается дальше.
+
+## Когда вызывать / в каком этапе
+
+Активируется после создания проекта командами `/landing-new` или `/landing-from-context`. Основная точка входа в текущей реализации — `/landing-go` (PR-D), которая читает `.landing-state.yaml` и автоматически определяет, на каком этапе продолжить. Также активируется при командах `/landing-build`, `/landing-deploy`, `/landing-qa`.
+
+## Что на вход / на выход
+
+**На вход:**
+- Инициализированная папка проекта (`~/Lendings/<slug>/`) со структурой template
+- `.landing-state.yaml` — состояние 13 этапов (статус каждого: pending / approved / n/a)
+- `prototype.pdf` в `07_ПРОТОТИП/source/` (в prototype-first режиме PR-D)
+- Ответы пользователя в HARD GATE точках
+
+**На выход:**
+- `00_БРИФ/brief.md` — заполненный бриф проекта
+- Последовательно: артефакты каждого этапа (мудборд, бренд-кит, DESIGN.md, WP-тема, задеплоенный сайт)
+- Обновлённый `.landing-state.yaml` после каждого одобренного этапа
+
+## Ключевые правила
+
+**HARD GATE:** никогда не переходить на этап N+1 без явного «утверждаю», «ok» или «дальше» от пользователя. Gate проверяется скриптом `scripts/gate-check.sh`.
+
+**Auto-fix:** при падении hard_check парсит `fix_hint` из `config/stage-gates.yaml`, предлагает конкретную команду-фикс, ждёт `yes/no`.
+
+**Premium 07b:** этап `07c_composed` не закрывается, пока `scripts/verify-composed-premium.sh` не вернёт exit 0 (13 обязательных фич). Если фичи отсутствуют — делегирует обратно `block-composer`, не просит пользователя «принять как есть».
+
+**Параллельная диспетчеризация:** когда этап 07c одобрен — одновременно запускает `photo-curator` (07d) и `visual-curator` (07e) через `superpowers:dispatching-parallel-agents`.
+
+## Связанные концепты
+
+- [[prototype-importer]] — первый агент в prototype-first потоке (этап 07a)
+- [[niche-analyst]] — анализ ниши (этап 01a)
+- [[brand-architect]] — сборка бренд-кита (этап 04)
+- [[design-system-generator]] — токены и DESIGN.md (этап 05)
+- [[wp-builder]] — генерация WP-темы (этап 08)
+- [[photo-curator]] — обработка фото клиента (этап 07d)
+- [[visual-curator]] — генерация иконок и инфографики (этап 07e)
+- [[block-composer]] — финальная сборка composed.html (этап 07b/07f)
+- [[qa-auditor]] — проверка живого сайта (этап 10)
+- [[lifecycle-keeper]] — rollback и клонирование версий
+- [[landing-go]] — slash-команда единой точки входа PR-D
+
+## Источник
+
+- `agents/landing-orchestrator.md`</pre>
+      </section>
+    
+      <section id="lifecycle-keeper">
+        <h2>lifecycle-keeper <span class="badge badge-agent">agent</span></h2>
+        <pre># lifecycle-keeper (Хранитель версий)
+
+## Что делает
+Сохраняет снапшоты лендинга в конкретный момент времени, позволяет откатиться к любой предыдущей версии и создаёт полные A/B-клоны проекта на отдельный поддомен. Это страховочная сетка: если что-то сломалось после правок — можно вернуть рабочую версию за несколько команд.
+
+## Когда вызывать / в каком этапе
+Вызывается командами `/landing-rollback` и `/landing-clone`. Этап фиксированный нет — агент работает в любой момент после появления кода (`08_КОД/`). Типичные сценарии:
+- **До деплоя** — создать снапшот текущего состояния перед рискованными правками.
+- **После сбоя** — откатить тему к последней рабочей версии.
+- **A/B-тест** — запустить альтернативную версию лендинга на отдельном поддомене.
+
+## Что на вход / на выход
+
+**Вход:**
+- Путь к папке проекта `<project-dir>`
+- Метка версии (например `v1.0`)
+- Для клона — новый `slug` нового проекта
+
+**Выход:**
+- Снапшот папки `09_ВЕРСИИ/<версия>/` — полная копия `wp-theme` на момент сохранения
+- Восстановленная папка `08_КОД/wp-theme` (при откате)
+- Новый проект-клон (полная копия каталога) с отдельным поддоменом — при A/B-клоне
+
+**Ключевые скрипты:**
+- `skills/landing-versioning-and-cloning/scripts/create-version.sh` — создание снапшота
+- `skills/landing-versioning-and-cloning/scripts/clone-landing.sh` — полное копирование проекта
+
+**Инструменты агента:** Bash, Read.
+
+## Связанные концепты
+- [[landing-rollback]] — команда, которая инициирует откат через этого агента
+- [[landing-clone]] — команда, которая запускает A/B-клонирование
+- [[landing-deploy]] — после отката нужно заново задеплоить тему на сервер
+- [[landing-versioning-and-cloning]] — скилл со скриптами и логикой версионирования
+
+## Источник
+- `agents/lifecycle-keeper.md`</pre>
+      </section>
+    
+      <section id="moodboard-composer">
+        <h2>moodboard-composer <span class="badge badge-agent">agent</span></h2>
+        <pre># Moodboard Composer — сборка мудборда
+
+## Что делает
+
+Берёт одобренные референсы из `03_РЕФЕРЕНСЫ/index.yaml` и собирает два артефакта: текстовое описание визуального направления (`moodboard.md`) и наглядную HTML-доску с карточками референсов (`moodboard.html`). Результат — общий знаменатель по палитре, типографике и ощущению будущего лендинга.
+
+## Когда вызывать / в каком этапе
+
+Запускается на **этапе 03** после того, как `references-curator` пометил нужные референсы статусом `approved`. Агент не запускается раньше — необходим утверждённый набор референсов. После завершения мудборд передаётся на **HARD GATE**: пользователь открывает `moodboard.html` и подтверждает направление. Только после этого стартует `style-extractor`.
+
+## Что на вход / на выход
+
+**Вход:**
+- `03_РЕФЕРЕНСЫ/index.yaml` — список референсов со статусом `approved`
+- `01a_АНАЛИЗ_НИШИ/niche-analysis.md` — секция 6 «Что брать с собой» задаёт уместный визуальный язык
+- `01a_АНАЛИЗ_НИШИ/visual-requirements.md` — секции 1, 2, 3, 5, 6 определяют требования к визуалу; референсы из red flag (секция 6) не включаются
+
+**Выход:**
+- `03_РЕФЕРЕНСЫ/moodboard.md` — нарратив: палитра, типографика, motion, что берём / что отвергаем
+- `03_РЕФЕРЕНСЫ/moodboard.html` — визуальная доска с карточками референсов (генерируется скриптом `skills/moodboard-creation/scripts/render.py`)
+
+**Инструменты:** Bash, Read, Write, Glob, вызов `render.py`.
+
+## Процесс работы
+
+1. Читает `index.yaml`, фильтрует только `approved`-референсы.
+2. Для каждого референса запрашивает у пользователя теги (например: `split-screen`, `warm-palette`, `premium-typography`).
+3. Пишет `moodboard.md` с описанием визуального направления.
+4. Запускает `render.py` для генерации HTML-доски.
+5. Ждёт явного одобрения пользователя перед передачей эстафеты.
+
+## Связанные концепты
+
+- [[references-curator]] — поставляет утверждённые референсы (index.yaml), без которых агент не запускается
+- [[style-extractor]] — следующий этап: извлекает конкретные цвета, шрифты, иконки из одобренного мудборда
+- [[niche-analyst]] — поставляет niche-analysis.md и visual-requirements.md, которые ограничивают выбор референсов
+
+## Источник
+
+- `agents/moodboard-composer.md`</pre>
+      </section>
+    
+      <section id="niche-analyst">
+        <h2>niche-analyst <span class="badge badge-agent">agent</span></h2>
+        <pre># niche-analyst — Автоматический анализ ниши
+
+## Что делает
+
+Исследует нишу, конкурентов и рынок полностью в автоматическом режиме — без единого вопроса к пользователю. По итогам выдаёт 6 структурированных артефактов, которые используют все последующие этапы: от бренд-кита до генерации блоков WordPress.
+
+## Когда вызывать / в каком этапе
+
+Активируется на этапе **01a** — после того как готов `00_БРИФ/brief.md` и (опционально) `01_КОНТЕКСТ/context.md`. Запускается через `landing-orchestrator` автоматически или вручную. После завершения оркестратор вызывает `scripts/gate-check.sh 01a_niche_analysis` и ждёт подтверждения пользователя для перехода к этапу 02.
+
+## Что на вход / на выход
+
+**Вход:**
+- `00_БРИФ/brief.md` — обязательно
+- `01_КОНТЕКСТ/context.md` — если есть
+
+**Выход** (6 артефактов в `01a_АНАЛИЗ_НИШИ/`):
+1. `niche-analysis.md` — обзор 400–800 слов: тип бренда, ниша, допущения
+2. `competitors.yaml` — 15–25 конкурентов в 7 ролях
+3. `market-profile.md` — 8 секций: accessibility tier, consideration cycle, emotional load, cultural context и др.
+4. `positioning.md` — шаблон одного из трёх режимов: `rational`, `emotional_aspiration`, `trust_authority` (или `hybrid`)
+5. `landing-structure.md` — карта блоков лендинга по типу бренда × режиму
+6. `visual-requirements.md` — визуальные правила: focal, photography, people, red flags
+
+Все артефакты проходят валидацию через Python-скрипты в `skills/niche-analysis/scripts/`.
+
+## Алгоритм (кратко)
+
+12 шагов: парсинг брифа → определение региона и языка → классификация бренда (Тип 1/2/3) → сбор конкурентов через WebSearch + Firecrawl → скрейп каждого конкурента → построение market-profile (с расчётом `ratio = цена / медианный доход` для определения accessibility tier) → синтез positioning mode через матрицу + override-индикаторы из брифа → генерация landing-structure по таблице Тип × Mode → визуальные требования → итоговый `niche-analysis.md`. При нехватке данных ставит `[ДОПУЩЕНИЕ]` вместо вопроса.
+
+## Связанные концепты
+
+- [[landing-orchestrator]] — запускает агента и проверяет gate после завершения
+- [[brand-architect]] — потребляет `positioning.md` и `niche-analysis.md` как вход
+- [[content-writer]] — использует `landing-structure.md` для адаптации текстов
+- [[wp-builder]] — использует `landing-structure.md` для генерации block.php
+- [[niche-analysis]] — скилл, содержащий валидаторы и конфиги (`positioning-modes.yaml`, `niche-visual-rules.yaml`)
+
+## Источник
+
+- `agents/niche-analyst.md`</pre>
+      </section>
+    
+      <section id="onboarding-guide">
+        <h2>onboarding-guide <span class="badge badge-agent">agent</span></h2>
+        <pre># Onboarding Guide — Проводник по первичной настройке
+
+## Что делает
+
+Проводит пользователя через первичную настройку landing-system: объясняет систему, проверяет зависимости, помогает заполнить API-ключи в `.env` и валидирует каждый из них сразу после ввода. В финале выставляет флаг `setup_complete`.
+
+## Когда вызывать / в каком этапе
+
+Активируется при двух сценариях:
+1. Пользователь явно запускает команду `/landing-onboarding`.
+2. Любая `/landing-*` команда обнаруживает отсутствие файла `~/.landing-system/setup_complete` и автоматически перенаправляет сюда.
+
+Это всегда **нулевой этап** — ничего нельзя строить, пока онбординг не завершён.
+
+## Что на вход / на выход
+
+**Вход:**
+- Отсутствие `~/.landing-system/setup_complete` (триггер)
+- Файл `.env.example` в корне репозитория
+- `docs/SETUP.md` — документация по настройке
+- `scripts/wizard.sh` — интерактивный мастер
+- `scripts/validate-all.sh` — валидатор API
+
+**Выход:**
+- `~/.landing-system/setup_complete` — файл-флаг с timestamp (создаётся только при успехе всех обязательных проверок)
+- `.env` в корне репо — заполнен ключами
+- Консольная сводка: «X из Y подключено, fallback: ...»
+
+## Как работает (по шагам)
+
+1. Читает `docs/SETUP.md`, объясняет пользователю ключевые разделы.
+2. Запускает `bash scripts/wizard.sh` интерактивно.
+3. При недостающих зависимостях — даёт точные команды установки, ждёт подтверждения.
+4. Если `.env` отсутствует — копирует из `.env.example`, затем по очереди открывает каждую секцию: объясняет сервис, даёт ссылку на регистрацию, просит вставить ключ.
+5. **После каждого ключа** немедленно запускает `bash scripts/validate-all.sh --service <name>`.
+6. При ошибке валидации — читает сообщение, объясняет причину, просит исправить.
+7. После успеха всех **обязательных** проверок — запускает `bash scripts/setup-flag.sh mark_complete`.
+
+## Обязательные vs опциональные ключи
+
+**Блокируют завершение:** `FIRECRAWL_API_KEY`, один из стоковых фото API (`PEXELS` / `UNSPLASH` / `PIXABAY`), `YM_COUNTER_ID`, `TG_BOT_TOKEN` + `TG_CHAT_ID`, один из CRM (`AMOCRM` / `BITRIX24`), `BEGET_USER` + `BEGET_HOST` + SSH-доступ.
+
+**Опциональные (warning, не блокируют):** HuggingFace, WhatTheFont, Yandex OAuth, GTM, Cloudflare, Reg.ru — отмечаются как «fallback» в итоговой сводке.
+
+## Связанные концепты
+
+- [[landing-orchestrator]] — следующая точка входа после успешного онбординга
+- [[landing-new]] — первая команда, которую пользователь запускает после завершения онбординга
+- [[landing-setup]] — смежный скилл первичной инициализации системы
+
+## Источник
+
+- `agents/onboarding-guide.md`</pre>
+      </section>
+    
+      <section id="photo-classifier">
+        <h2>photo-classifier <span class="badge badge-agent">agent</span></h2>
+        <pre># Photo Classifier — ИИ-тегирование фотографий
+
+## Что делает
+
+Анализирует одну фотографию через codex CLI и создаёт структурированные метаданные: теги, подпись, кадрирование, совместимость с брендом. Сами фотографии не изменяются — агент работает только на чтение.
+
+## Когда вызывать / в каком этапе
+
+Вызывается автоматически агентом [[photo-curator]] на этапе **07c** (Photo Pipeline). Обрабатывает все фото в `07c_PHOTOS/intake/`, у которых в `catalog.yaml` стоит статус `tag_source: pending_ai_classify`. Не вызывается напрямую пользователем — только как субагент в рамках `/landing-photos`.
+
+## Что на вход / на выход
+
+**Вход:**
+- `<project_dir>` — абсолютный путь к папке проекта
+- `<photo_path>` — путь к одному фото для классификации
+- Контекст проекта: `tokens.json`, `market-profile.md` (для составления промпта)
+
+**Выход:**
+- Запись в `07c_PHOTOS/catalog.yaml` с полями: `tags`, `caption`, `composition`, `usable_ratios`, `brand_compatible`, `notes`, статус `tag_source: ai_classify`
+- Полный лог промпта и ответа codex → `07c_PHOTOS/.logs/`
+
+**Процесс:**
+1. Рендерит `templates/classify-prompt.md` с контекстом проекта.
+2. Вызывает `codex exec --image <photo_path> "<prompt>"` через обёртку `call-codex.sh`.
+3. Парсит YAML-ответ; при невалидном YAML — повторяет до 2 раз с более строгим промптом.
+4. При полном провале — помечает фото как `unclassified`, записывает предупреждение в `STATE.yaml`.
+5. Добавляет или обновляет запись в `catalog.yaml` по полю `id`.
+
+**Ограничение безопасности:** согласно `IDENTITY_SAFE.md`, агент никогда не перезаписывает пиксели фотографий. Только метаданные.
+
+## Связанные концепты
+
+- [[photo-curator]] — оркестратор этапа 07c, вызывает photo-classifier для каждого фото из intake и агрегирует результаты в catalog.yaml
+- [[photo-curation]] — навык-обёртка, содержит скрипты (`codex-classify.sh`, `call-codex.sh`) и шаблоны промптов
+- [[landing-photos]] — slash-команда, запускающая весь пайплайн 07c включая этот агент
+
+## Источник
+
+- `agents/photo-classifier.md`</pre>
+      </section>
+    
+      <section id="photo-curator">
+        <h2>photo-curator <span class="badge badge-agent">agent</span></h2>
+        <pre># photo-curator — оркестратор фото-пайплайна (этап 07c)
+
+## Что делает
+Управляет полным процессом работы с клиентскими фотографиями: принимает фотки из папки `inbox/`, классифицирует их через AI, подбирает лучшие фото к каждому блоку лендинга, показывает галерею на подтверждение и в конце обновляет `composed.html` — заменяя заглушки на реальные изображения.
+
+## Когда вызывать / в каком этапе
+Вызывается командой `/landing-photos` на **этапе 07c**. Запуск возможен только после того, как утверждены:
+- этап `05_design` (дизайн-система) — статус `approved` в `.landing-state.yaml`
+- этап `07a_wireframe` (выбраны варианты блоков, существует `selections.yaml`)
+
+Если хотя бы одно условие не выполнено — агент выходит с ошибкой на русском языке.
+
+## Что на вход / на выход
+
+**На вход:**
+- Фотографии клиента в `<project>/07c_PHOTOS/inbox/` (7 подпапок по типу: портреты, процесс, объекты, интерьер, до/после, документы, свалка)
+- Обратная совместимость: также сканирует `02_МАТЕРИАЛЫ_КЛИЕНТА/photos/original/`
+- `07_ПРОТОТИП/prototype.yaml` — список слотов для фото
+- `07a_WIREFRAME/selections.yaml` — выбранные варианты блоков
+
+**На выход:**
+- `07c_PHOTOS/catalog.yaml` — каталог классифицированных фото
+- `07c_PHOTOS/selections.draft.yaml` — черновик подбора фото к слотам
+- `07c_PHOTOS/photo-board.html` — интерактивная галерея для ручной расстановки
+- `07c_PHOTOS/selections.yaml` — утверждённый подбор (загружает пользователь)
+- `07c_PHOTOS/photo-preview.html` — предпросмотр фото в макете
+- `07c_PHOTOS/STATE.yaml` — трекинг прогресса (intake → classify → match → approval → process)
+- Обновлённый `07b_COMPOSED/composed.html` с реальными фото вместо заглушек
+
+## Алгоритм работы
+Агент проходит 12 шагов: подготовка папок → импорт → классификация (батчами по 5 через `photo-classifier`) → матчинг (`photo-matcher`) → рендер галереи → **HARD GATE** (пользователь расставляет фото) → валидация → обработка (`photo-preview-board`) → **HARD GATE** (пользователь проверяет превью) → перерендер `composed.html`. При перезапуске читает `STATE.yaml` и продолжает с первого незавершённого шага.
+
+**Identity-safe:** клиентские фото никогда не перерисовываются AI. AI-генерация лиц для слотов testimonial/team требует явной галочки `ai_approved_by_user`.
+
+## Связанные концепты
+- [[photo-classifier]] — классифицирует каждое фото через codex CLI (теги, тип, контент)
+- [[photo-matcher]] — подбирает лучшие фото к каждому слоту wireframe
+- [[photo-preview-board]] — обрабатывает фото (кроп/ресайз) и рендерит `photo-preview.html`
+- [[block-composition]] — скрипт `compose-blocks.py`, который перерендерит `composed.html` с реальными фото
+- [[landing-orchestrator]] — вызывает photo-curator как часть stage 07c в общем workflow
+
+## Источник
+- `agents/photo-curator.md`</pre>
+      </section>
+    
+      <section id="photo-matcher">
+        <h2>photo-matcher <span class="badge badge-agent">agent</span></h2>
+        <pre># Photo Matcher — ранжирование фотографий по слотам
+
+## Что делает
+Один раз анализирует каталог клиентских фотографий и автоматически подбирает топ-3 кандидата для каждого фото-слота в wireframe. Если подходящих фото нет — выставляет флаг «нужна AI-генерация». Для слотов с людьми (отзывы, команда, эксперты) требует явного согласия пользователя.
+
+## Когда вызывать / в каком этапе
+Вызывается на этапе **07c** в рамках пайплайна `/landing-photos`. Запускается агентом `photo-curator` автоматически — после того как `photo-classifier` разметил все фото в `catalog.yaml`. Не вызывается напрямую пользователем.
+
+## Что на вход / на выход
+
+**Вход:**
+- `<project_dir>` — путь к папке проекта
+- `07c_PHOTOS/catalog.yaml` — каталог фото, размеченный `photo-classifier`
+- `07_ПРОТОТИП/prototype.yaml` — список всех слотов
+- `07a_WIREFRAME/selections.yaml` — выбранные пользователем варианты блоков (фильтрует только активные `type: photo` слоты)
+
+**Выход:**
+- `07c_PHOTOS/selections.draft.yaml` — файл с топ-3 кандидатами на каждый слот, флагами `ai_fallback_needed` и `required_user_approval`
+
+## Процесс работы
+
+1. Строит временный `_slots-input.yaml` — только активные фото-слоты из выбранных вариантов wireframe.
+2. Запускает `skills/photo-curation/scripts/codex-match.sh` через bash — codex читает `catalog.yaml` + список слотов и возвращает ранжированных кандидатов.
+3. Проверяет, что результат — корректный YAML со структурой `slots: [...]`. При ошибке парсинга — два автоматических ретрая; если после них YAML невалиден — останавливается и просит пользователя проверить лог codex.
+
+**Обработка пустых слотов:** если для слота нет ни одного кандидата — это штатная ситуация, выставляется `ai_fallback_needed: true`.
+
+**Identity-safe правило:** слоты типа testimonial/expert/team получают `required_user_approval: true` — это требование прописано в промпте для codex и дополнительно валидируется скриптом `selections-validator.py` и UI `photo-board.html`.
+
+## Связанные концепты
+- [[photo-curator]] — оркестратор этапа 07c, который вызывает photo-matcher
+- [[photo-classifier]] — создаёт `catalog.yaml` до запуска photo-matcher
+- [[photo-preview-board]] — использует `selections.draft.yaml` для рендера превью
+- [[landing-photos]] — команда, запускающая весь пайплайн 07c
+
+## Источник
+- `agents/photo-matcher.md`</pre>
+      </section>
+    
+      <section id="photo-preview-board">
+        <h2>photo-preview-board <span class="badge badge-agent">agent</span></h2>
+        <pre># Photo Preview Board — рендер превью обработанных фото
+
+## Что делает
+
+Берёт утверждённый пользователем файл `selections.yaml` и превращает каждый слот в реальное изображение: обрезает и масштабирует клиентские фото, генерирует изображения через codex или создаёт SVG-заглушку. После обработки всех слотов рендерит HTML-страницу `photo-preview.html` для финального просмотра перед сборкой.
+
+## Когда вызывать / в каком этапе
+
+Вызывается на этапе **07c** агентом-оркестратором `photo-curator` — автоматически после того, как пользователь одобрил `selections.yaml` в интерактивной фото-доске (`photo-board.html`). Вручную не вызывается напрямую — только через `/landing-photos`.
+
+## Что на вход / на выход
+
+**Вход:**
+- Директория проекта с готовым `07c_PHOTOS/selections.yaml` (каноничный, утверждённый пользователем)
+- Обработанные фото в `07c_PHOTOS/intake/`
+
+**Выход:**
+- `07c_PHOTOS/processed/<slot_id>/desktop.jpg` — обрезанное фото под десктоп
+- `07c_PHOTOS/processed/<slot_id>/mobile.jpg` — мобильный вариант (если блок задаёт `mobile_ratio`)
+- `07c_PHOTOS/photo-preview.html` — финальная страница для просмотра и утверждения
+
+**Три стратегии обработки слота:**
+1. `bring-your-own` — обрезка/масштаб клиентского фото через `style.py`
+2. `generate` — генерация через `codex-generate-fallback.sh` (с identity-safe проверкой)
+3. `placeholder` — SVG-заглушка через `svg-placeholder.py`
+
+## Identity-safe enforcement
+
+Критическое правило: если слот относится к типу `testimonial`, `expert`, `team-member` или `avatar` (т.е. может изображать реального человека) и при этом `ai_approved_by_user: false` — стратегия `generate` **молча понижается** до `placeholder`. Агент никогда не генерирует лица без явного разрешения пользователя. Эта проверка закреплена в шаге 2 процесса и является точкой принудительного соблюдения политики идентичности.
+
+## Связанные концепты
+
+- [[photo-curator]] — оркестратор этапа 07c, вызывает этот агент после approve `selections.yaml`
+- [[photo-matcher]] — предшественник: формирует `selections.draft.yaml`, из которого пользователь делает `selections.yaml`
+- [[photo-stylist]] — предоставляет скрипт `style.py` для обрезки клиентских фото
+- [[selections-validator]] — валидирует `selections.yaml` перед обработкой; при ошибке агент прерывается
+- [[identity-safe]] — политика, запрещающая AI-репейнт людей без разрешения
+
+## Источник
+
+- `agents/photo-preview-board.md`</pre>
+      </section>
+    
+      <section id="photo-stylist">
+        <h2>photo-stylist <span class="badge badge-agent">agent</span></h2>
+        <pre># photo-stylist — Безопасная обработка клиентских фотографий
+
+## Что делает
+
+Обрабатывает «сырые» фотографии клиента для использования в лендинге: вырезает фон, подчищает края, накладывает тени и текстуры. Главное ограничение — лица, возраст и пропорции тела **никогда не изменяются**.
+
+## Когда вызывать / в каком этапе
+
+Этап **02** (материалы клиента). Запускается после того, как клиент передал фотографии. Завершается до перехода к этапу 03 (референсы): перед закрытием этапа пользователь должен утвердить галерею `assets-gallery.html`.
+
+## Что на вход / на выход
+
+**Вход:**
+- Оригинальные фото в папке `02_МАТЕРИАЛЫ_КЛИЕНТА/photos/original/`
+- Назначение каждой фотографии (hero / about / proof) — уточняется у пользователя
+
+**Выход:**
+- Обработанные фото в `02_МАТЕРИАЛЫ_КЛИЕНТА/photos/processed/`
+- `02_МАТЕРИАЛЫ_КЛИЕНТА/photos/stylesheet.md` — журнал применённых трансформаций
+- `assets-gallery.html` — превью оригиналов и обработанных версий для финального утверждения
+
+## Разрешённые трансформации
+
+| Разрешено | Запрещено |
+|---|---|
+| Удаление фона (cutout) | Изменение лица, возраста, пропорций |
+| Чистка краёв | AI-репейнт человека |
+| Тени, бумажные текстуры | Бьюти-ретушь |
+| Кадрирование под макет | Face swap / face age change |
+| Изменение размера и формата | |
+
+## Ключевое ограничение
+
+Для обработки изображений разрешён **только** скрипт `python3 skills/photo-styling/scripts/style.py`. Нельзя использовать PIL напрямую, внешние редакторы, AI-сервисы или любые другие инструменты. Если нужная операция выходит за рамки `style.py` — агент останавливается и запрашивает решение у пользователя.
+
+## HARD GATE
+
+Этап 03 не начинается, пока пользователь не проверил `assets-gallery.html` и не одобрил обработанные фотографии.
+
+## Связанные концепты
+
+- [[client-assets-collection]] — этап 02, в рамках которого работает photo-stylist; собирает исходные материалы клиента
+- [[photo-curator]] — этап 07c, следующий фото-пайплайн: матчинг фото к wireframe-слотам
+- [[photo-classifier]] — классифицирует фото через codex для последующего матчинга
+
+## Источник
+
+- `agents/photo-stylist.md`</pre>
+      </section>
+    
+      <section id="prototype-importer">
+        <h2>prototype-importer <span class="badge badge-agent">agent</span></h2>
+        <pre># prototype-importer — Импорт и нормализация прототипа
+
+## Что делает
+
+Принимает пользовательский прототип (PDF или Markdown) из папки `source/`, извлекает структуру, задаёт уточняющие вопросы при неясностях и сохраняет нормализованные артефакты для дальнейшей работы системы. Дополнительно автоматически обогащает квиз-блоки до полноценного Marquiz-фаннела, что повышает CR на 25–40%.
+
+## Когда вызывать / в каком этапе
+
+Этап **07 — Прототип**. Активируется командой `/landing-prototype`. Запускается после того, как пользователь положил `prototype.pdf` или `prototype.md` в папку `<project>/07_ПРОТОТИП/source/`. Перед запуском wireframe (этап 07a) прототип должен быть успешно импортирован и проверен.
+
+## Что на вход / на выход
+
+**Вход:**
+- `<project>/07_ПРОТОТИП/source/prototype.pdf` — PDF прототип (текстовый или сканированный)
+- `<project>/07_ПРОТОТИП/source/prototype.md` — Markdown прототип (альтернатива)
+
+**Выход:**
+- `prototype.md` — нормализованный human-readable прототип с блоками, хедлайнами, CTA и слотами
+- `prototype.yaml` — machine-readable версия, валидируется скриптом `validate-prototype.py`
+- `import-log.md` — журнал: что агент понял, какие вопросы задавал, какие CTA/поля были пустыми
+- `enrichment-log.md` — отчёт об автоматическом расширении квиз-фаннела
+
+## Ключевые правила
+
+- **Не выдумывать:** если CTA или тип блока не найден в прототипе — записывается пустое значение (`cta: ""`), а в `import-log.md` фиксируется пропуск.
+- **Задавать вопросы:** при неопределённой нише, неясном типе блока или спорных элементах (калькулятор = quiz или pricing?) агент спрашивает у пользователя, а не угадывает.
+- **OCR fallback:** если PDF сканированный (нет текстового слоя), подключается скилл `anthropic-skills:pdf` для распознавания.
+- **HARD GATE:** после записи артефактов агент явно сообщает пользователю о необходимости проверить `prototype.md` перед переходом к `/landing-wireframe`.
+
+## Связанные концепты
+
+- [[landing-prototype]] — slash-команда, которая вызывает этот агент
+- [[ux-composer]] — следующий агент в цепочке, потребляет `prototype.yaml` для wireframe
+- [[prototype-import]] — скилл с вспомогательными скриптами (extract-pdf-text, md-to-yaml, validate-prototype)
+- [[landing-wireframe]] — команда следующего этапа, доступна только после успешного импорта
+
+## Источник
+
+- `agents/prototype-importer.md`</pre>
+      </section>
+    
+      <section id="qa-auditor">
+        <h2>qa-auditor <span class="badge badge-agent">agent</span></h2>
+        <pre># qa-auditor — QA-аудитор задеплоенного лендинга
+
+## Что делает
+
+Автоматически проверяет живой сайт по 7 критериям качества сразу после деплоя: от доступности и HTTPS до форм и аналитики. Формирует отчёт в виде таблицы и ждёт утверждения перед переходом к следующему этапу.
+
+## Когда вызывать / в каком этапе
+
+Вызывается на **этапе 10** — после того как агент [[wp-deployer]] завершил деплой (`/landing-deploy`). Запуск через `/landing-qa` или автоматически через [[landing-orchestrator]].
+
+## Что на вход / на выход
+
+**Вход:**
+- `00_БРИФ/brief.md` — содержит URL задеплоенного сайта
+- Живой HTML сайта (скачивается через `curl`)
+
+**Выход:**
+- `10_QA/qa-report.md` — таблица с результатами по 7 критериям (✅ / ❌)
+
+**Семь проверяемых критериев:**
+1. Доступность — HTTP 200
+2. HTTPS + редирект с HTTP → HTTPS (301)
+3. Meta-теги — `<title>`, `<meta description>`, `og:title`
+4. Яндекс Метрика — счётчик `mc.yandex.ru` в HTML
+5. Google Tag Manager — контейнер `googletagmanager` в HTML
+6. Fluent Forms — shortcode `fluentform` отрендерен в HTML
+7. Viewport — `<meta name="viewport">` для мобайла
+
+**HARD GATE:** после формирования отчёта агент показывает его пользователю и ждёт явного подтверждения. Следующий этап не открывается до approve.
+
+## Связанные концепты
+
+- [[wp-deployer]] — выполняет деплой, после которого запускается qa-auditor
+- [[integrations-engineer]] — настраивает Fluent Forms и Telegram webhook (проверяется в п. 6)
+- [[analytics-engineer]] — добавляет счётчик Яндекс Метрики (проверяется в п. 4)
+- [[landing-orchestrator]] — управляет порядком этапов и HARD GATE между ними
+
+## Источник
+
+- `agents/qa-auditor.md`</pre>
+      </section>
+    
+      <section id="references-curator">
+        <h2>references-curator <span class="badge badge-agent">agent</span></h2>
+        <pre># references-curator — сборщик визуальных референсов
+
+## Что делает
+Собирает визуальные референсы (URL-сайтов, Behance/Dribbble, скриншоты), присваивает каждому статус и ведёт реестр в `03_РЕФЕРЕНСЫ/index.yaml`. Работает в первой половине этапа 03 — до передачи управления в `moodboard-composer`.
+
+## Когда вызывать / в каком этапе
+Этап **03** (сбор референсов). Запускается после того, как завершён анализ ниши (этап 01a) и у проекта есть `competitors.yaml` с визуальными заметками конкурентов. Агент активен до тех пор, пока не наберётся минимум 3 референса со статусом `approved`.
+
+## Что на вход / на выход
+
+**Вход:**
+- URL-ссылки, файлы с Behance/Dribbble, скриншоты, перетащенные в `03_РЕФЕРЕНСЫ/refs/`
+- `01a_АНАЛИЗ_НИШИ/competitors.yaml` — поле `visual_notes` каждого конкурента обязательно к прочтению перед поиском
+- `01a_АНАЛИЗ_НИШИ/visual-requirements.md` — раздел 6 (red flags) проверяется при оценке каждого референса
+
+**Выход:**
+- `03_РЕФЕРЕНСЫ/index.yaml` — реестр всех референсов со статусами `candidate` / `approved` / `rejected`
+- Передача управления агенту `moodboard-composer` после прохождения HARD GATE
+
+## HARD GATE
+Агент **не передаёт управление** `moodboard-composer`, пока количество референсов со статусом `approved` не достигнет **минимум 3**. Референсы, попадающие в запреты из `visual-requirements.md`, отвергаются автоматически со ссылкой на конкретный пункт.
+
+## Процесс работы
+1. Запрашивает у пользователя референсы (URL / файлы / скриншоты).
+2. Для каждого URL по возможности захватывает скриншот (Phase 2 — хранит только URL).
+3. Предлагает пользователю присвоить статус: `candidate`, `approved` или `rejected`.
+4. Управляет `index.yaml` через скрипт `python3 skills/references-collection/scripts/index.py add|update|list`.
+5. Перед оценкой нового референса сверяется с `visual_notes` конкурентов — не клонировать визуал лидеров категории, искать визуальные gaps.
+
+## Связанные концепты
+- [[moodboard-composer]] — принимает управление после HARD GATE; строит мудборд из approved-референсов
+- [[niche-analyst]] — поставляет `competitors.yaml` и `visual-requirements.md`, которые агент обязан прочитать перед работой
+- [[references-collection]] — скилл, содержащий скрипт `index.py` для управления реестром
+
+## Источник
+- `agents/references-curator.md`</pre>
+      </section>
+    
+      <section id="scene-director">
+        <h2>scene-director <span class="badge badge-agent">agent</span></h2>
+        <pre># scene-director (Режиссёр сцен — Cinematic Premium)
+
+## Что делает
+Проектирует кинематографическую архитектуру лендинга: делит страницу на 6–8 сцен с описанием визуала, анимаций и параллакса. Результат — готовый motion-план, по которому фронтенд-разработчик подключает GSAP и ScrollTrigger.
+
+## Когда вызывать / в каком этапе
+Этап **05 (Дизайн-система)**, только при флаге `--cinematic` при создании проекта или при явном запросе пользователя. Запускается строго **после** того, как `design-system-generator` создал `DESIGN.md` с motion-токенами.
+
+## Что на вход / на выход
+
+**Вход:**
+- `00_БРИФ/brief.md` — ниша, целевая аудитория, тон
+- `04_БРЕНД/brand-kit.md` — цвета, motion-параметры
+- `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` — motion-токены
+
+**Выход:**
+- `05_ДИЗАЙН-СИСТЕМА/scenes.md` — scene grammar (название, тип, визуал, глубина), GSAP / ScrollTrigger / Lenis-инструкции, parallax-логика, mobile fallback для каждой из 6–8 сцен
+
+**Жёсткие запреты (Motion Rules):**
+- ❌ scroll hijack
+- ❌ particle systems
+- ❌ fade-up на каждом блоке
+
+**8 типовых сцен-шаблонов:**
+1. Hero Film Frame — full-height split, слоевый параллакс
+2. Chaos to Clarity — текстовые слои, фоновые орбиты
+3. What You Get — карточки с controlled stagger
+4. The Diagnostic Process — псевдо-таймлайн с параллаксом
+5. About the Expert — портретная сцена, световая глубина
+6. Proof / Trust — цифры, кейсы, сдержанный motion
+7. FAQ — лёгкие взаимодействия
+8. Final Call — кульминация, контрастный сдвиг
+
+## Связанные концепты
+- [[design-system-generator]] — должен отработать первым и поставить motion-токены в `DESIGN.md`
+- [[brand-kit-build]] — поставляет цвета и motion-параметры через `brand-kit.md`
+- [[niche-analysis]] — через `brief.md` определяет тон и ЦА, которые влияют на выбор сцен
+
+## Источник
+- `agents/scene-director.md`</pre>
+      </section>
+    
+      <section id="seo-optimizer">
+        <h2>seo-optimizer <span class="badge badge-agent">agent</span></h2>
+        <pre># seo-optimizer — SEO-оптимизатор лендинга
+
+## Что делает
+
+Подключает лендинг к поисковым системам: прописывает мета-теги, Open Graph, Schema.org и robots.txt на основе готового SEO-текста и данных брифа. Делает страницу видимой и правильно отображаемой в Google и Яндексе.
+
+## Когда вызывать / в каком этапе
+
+Запускается на **этапе 08** — строго после `analytics-engineer`. Вызывается агентом `landing-orchestrator` в рамках команды `/landing-build` или `/landing-go`. Вручную не вызывается. Перед запуском обязательны: утверждённый SEO-текст (`07_КОНТЕНТ/seo-copy.md`), бриф (`00_БРИФ/approved-design-brief.md`) и существующий `functions.php` от `wp-builder`.
+
+## Что на вход / на выход
+
+**Вход:**
+- `07_КОНТЕНТ/seo-copy.md` — title, description, h1 варианты от `content-writer`
+- `00_БРИФ/approved-design-brief.md` — ниша, гео, CTA, ключевые слова
+- `01a_АНАЛИЗ_НИШИ/competitors.yaml` — ключевые сообщения конкурентов для расширения семантики
+- `08_КОД/wp-theme/functions.php` — WordPress-файл с маркером `// [SEO_META]`
+
+**Выход:**
+- `08_КОД/wp-theme/functions.php` — дополнен функциями `lp_seo_meta()` и `lp_schema_org()`
+- `12_SEO/meta-tags.yaml` — title / description / og-поля
+- `12_SEO/structured-data.json` — Schema.org объект (LocalBusiness / Course / Organization)
+- `12_SEO/robots.txt` — запрет служебных страниц WP, Allow: /
+- `12_SEO/keywords.md` — список ключевых слов из брифа
+
+**HARD GATE:** после генерации агент показывает `meta-tags.yaml` и `structured-data.json` и ждёт явного утверждения пользователем перед завершением этапа.
+
+## SEO-правила агента
+
+- Title: 50–60 символов, ключевое слово стоит первым
+- Description: 140–160 символов, содержит призыв к действию
+- h1 — один на странице, совпадает с тематикой title
+- Schema.org тип выбирается по нише: `LocalBusiness` (услуги), `Course` (обучение), `Organization` (бренд)
+
+## Связанные концепты
+
+- [[analytics-engineer]] — должен завершиться перед запуском seo-optimizer (добавляет Яндекс.Метрику)
+- [[content-writer]] — поставляет `seo-copy.md` с вариантами SEO-текста
+- [[niche-analyst]] — поставляет `competitors.yaml` с ключевыми сообщениями ниши
+- [[wp-builder]] — создаёт `functions.php`, в который агент вписывает SEO-функции
+- [[landing-orchestrator]] — вызывает агента в нужный момент этапа 08
+
+## Источник
+
+- `agents/seo-optimizer.md`</pre>
+      </section>
+    
+      <section id="stack-planner">
+        <h2>stack-planner <span class="badge badge-agent">agent</span></h2>
+        <pre># stack-planner — Планировщик технического стека
+
+## Что делает
+Выбирает и фиксирует набор WordPress-плагинов, JS-библиотек, иконок и шрифтов на основе готовой дизайн-системы. Результат — `design-stack.yaml`, единственный разрешённый источник зависимостей для всего проекта.
+
+## Когда вызывать / в каком этапе
+Этап **06 — Стек**. Запускается вручную или оркестратором **после** того, как `design-system-generator` сгенерировал `DESIGN.md` и `tokens.json`. Завершается **HARD GATE**: агент показывает `design-stack.yaml` пользователю и ждёт явного подтверждения перед переходом к этапу 07.
+
+## Что на вход / на выход
+
+**Входные артефакты:**
+- `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` — описание дизайн-системы
+- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — дизайн-токены
+- `04_БРЕНД/brand-kit.md` — семейства шрифтов и иконки из бренд-кита
+- `00_БРИФ/brief.md` — флаг `cinematic` (если есть, подключает GSAP/Lenis)
+
+**Выходные артефакты:**
+- `06_СТЕК/design-stack.yaml` — главный файл: режим, плагины, шрифты, иконки, JS-библиотеки
+- `06_СТЕК/component-library-plan.md` — откуда берётся каждый UI-компонент
+- `06_СТЕК/effects-plan.md` — анимации и motion (пуст в standard-режиме; в cinematic — GSAP, ScrollTrigger, Lenis, Split-Type)
+- `06_СТЕК/font-and-color-plan.md` — маппинг шрифтов и цветов к токенам
+
+**Жёсткие правила выбора:**
+- ✅ GeneratePress + GenerateBlocks, ACF, FluentForm
+- ✅ Bunny Fonts CDN (GDPR и РФ-совместимый)
+- ✅ Iconify API (без ключа, Lucide-набор)
+- ❌ Tailwind, Elementor, shadcn, Radix — запрещены
+- ❌ Любые пакеты вне `design-stack.yaml` — запрещены
+
+## Связанные концепты
+- [[design-system-generator]] — предшествующий агент, генерирует DESIGN.md и tokens.json, без него stack-planner не запускается
+- [[brand-kit-build]] — поставляет шрифты и иконки из бренд-кита
+- [[design-tokens-generation]] — скилл, создающий tokens.json, который читает этот агент
+- [[wp-builder]] — следующий агент в цепочке, потребляет design-stack.yaml как единственный источник зависимостей
+
+## Источник
+- `agents/stack-planner.md`</pre>
+      </section>
+    
+      <section id="style-extractor">
+        <h2>style-extractor <span class="badge badge-agent">agent</span></h2>
+        <pre># Style Extractor — извлечение стилей из референсов
+
+## Что делает
+
+Анализирует одобренные референсы (картинки и URL) и вытаскивает из них конкретные стилевые параметры: цветовую палитру, шрифты, иконографику, сетку и анимацию. Результат — 5 готовых к использованию файлов-конфигураций для бренда.
+
+## Когда вызывать / в каком этапе
+
+Запускается на **этапе 04** после того, как мудборд утверждён (этап 03 завершён). Должен отработать до запуска `brand-architect`. Вызывается агентом-оркестратором или вручную при переходе к оформлению бренда.
+
+## Что на вход / на выход
+
+**Вход:**
+- `03_РЕФЕРЕНСЫ/index.yaml` — список референсов со статусом `approved`
+- Изображения и URL из одобренных референсов
+
+**Выход (5 файлов в `04_БРЕНД/extracted/`):**
+- `palette.yaml` — цветовая палитра в hex/rgb
+- `fonts.yaml` — шрифтовая система (семейства, начертания, размеры)
+- `icons.yaml` — используемые иконки
+- `grid.md` — структура сетки лендинга
+- `motion.md` — принципы анимации и переходов
+
+**HARD GATE:** все 5 файлов обязательны. Пока хотя бы один отсутствует — `brand-architect` не запускается.
+
+## Как работает
+
+1. Читает `03_РЕФЕРЕНСЫ/index.yaml`, фильтрует записи со статусом `approved`.
+2. Для изображений: запускает `scripts/extract-palette.py` — извлекает доминирующие цвета.
+3. Для URL: запускает `scripts/identify-fonts.py` — определяет шрифты со страниц.
+4. Запускает `scripts/match-icons.py` — сопоставляет нужные иконки со стандартным списком.
+5. Запускает `scripts/orchestrate.py` — агрегирует все результаты в единые файлы.
+6. Если `grid.md` и `motion.md` ещё не созданы — записывает шаблоны-заглушки.
+
+Использует инструменты: Bash, Read, Write, Glob.
+
+## Связанные концепты
+
+- [[moodboard-composer]] — предшествующий этап: создаёт мудборд, который становится входом для style-extractor
+- [[brand-architect]] — следующий этап: получает 5 yaml/md файлов и синтезирует brand-kit.md
+- [[style-decomposition]] — скилл/скрипты, реализующие логику извлечения палитры, шрифтов и иконок
+- [[references-curator]] — управляет файлом `03_РЕФЕРЕНСЫ/index.yaml`, из которого берутся approved-референсы
+
+## Источник
+
+- `agents/style-extractor.md`</pre>
+      </section>
+    
+      <section id="system-setup">
+        <h2>system-setup <span class="badge badge-agent">agent</span></h2>
+        <pre># system-setup (Настройщик системы)
+
+## Что делает
+Одноразовый агент, который подготавливает landing-system к работе: проверяет окружение, настраивает переменные среды и конфиг системы. После его выполнения можно приступать к созданию лендингов.
+
+## Когда вызывать / в каком этапе
+Запускается **один раз** перед первым проектом через команду `/landing-setup`. Повторный запуск допустим при изменении интеграций (CRM, Telegram, GTM). Не является частью 12-этапного workflow — это предварительная системная настройка.
+
+## Что на вход / на выход
+
+**На вход:**
+- Пустое или частично заполненное окружение (отсутствуют `.env`, `config/system.yaml`)
+- Ответы пользователя на вопросы мастера настройки
+
+**На выход:**
+- `.env` — заполненный файл с API-ключами и токенами (Firecrawl, Beget, Telegram, CRM)
+- `config/system.yaml` — публичные флаги конфигурации (CRM-провайдер, JS-библиотеки, попапы, GTM)
+- Текстовый отчёт о подключённых сервисах в чате
+
+**Этапы работы:**
+1. **Preflight** — запускает `scripts/preflight.sh`, при ошибках выводит инструкции и ждёт исправления
+2. **Настройка .env** — копирует `.env.example → .env`, интерактивно заполняет пустые поля (обязательные: `FIRECRAWL_API_KEY`, `BEGET_USER/HOST/PATH`; опциональные: Telegram, AmoCRM, Bitrix24)
+3. **Заполнение config/system.yaml** — спрашивает про CRM, Telegram-бота, Яндекс.Метрику, GTM, JS-библиотеки, встроенные попапы
+4. **Отчёт** — выводит список подключённых сервисов
+
+**Важные правила:**
+- Токены и ключи хранятся **только** в `.env`, никогда в `system.yaml`
+- `system.yaml` хранит только флаги (`enabled: true`) и публичные значения (субдомен)
+- Агент объясняет каждый шаг — рассчитан на пользователя без технического опыта
+
+## Связанные концепты
+- [[landing-new]] — следующий шаг после настройки: создание первого проекта
+- [[landing-orchestrator]] — основной оркестратор, который запускается уже после system-setup
+- [[onboarding-guide]] — wizard для первичного onboarding пользователя (`/landing-start`)
+
+## Источник
+- `agents/system-setup.md`</pre>
+      </section>
+    
+      <section id="ux-composer">
+        <h2>ux-composer <span class="badge badge-agent">agent</span></h2>
+        <pre># UX Composer — интерактивный вайрфрейм по прототипу
+
+## Что делает
+
+Превращает утверждённый прототип (`prototype.yaml`) в интерактивный `wireframe.html`: для каждого блока страницы предлагает 2–3 варианта компоновки с radio-переключателями. Маркетолог выбирает нужные варианты и скачивает `selections.yaml` для передачи в следующий этап.
+
+## Когда вызывать / в каком этапе
+
+Этап **07a (UX Wireframe)**. Вызывается командой `/landing-wireframe` или агентом `landing-orchestrator`. Требует, чтобы были готовы:
+- `07_ПРОТОТИП/prototype.yaml` (этап 07 завершён)
+- `05_ДИЗАЙН-СИСТЕМА/tokens.json` (этап 05 завершён)
+- `04_БРЕНД/brand-kit.md` (этап 04 завершён)
+- Плагин `ui-ux-pro-max` с CSV-файлами UX-паттернов, цветов, шрифтов и стилей
+
+Если плагин `ui-ux-pro-max` не установлен — агент немедленно останавливается и выводит инструкцию по установке.
+
+## Что на вход / на выход
+
+**Вход:**
+- `07_ПРОТОТИП/prototype.yaml` — структурированный прототип
+- `block-library/catalog.yaml` — каталог доступных блоков
+- `04_БРЕНД/brand-kit.md`, `05_ДИЗАЙН-СИСТЕМА/tokens.json` — бренд и токены
+- 6 CSV-файлов из `ui-ux-pro-max` (UX-паттерны, правила, цвета, шрифты, стили)
+- 2–3 DESIGN.md reference из `vendor/opendesign-extracts/`
+
+**Выход:**
+- `07a_WIREFRAME/wireframe.html` — интерактивный вайрфрейм с вариантами блоков
+- `07a_WIREFRAME/candidates.yaml` — кандидаты блоков с UX-мета
+- `07a_WIREFRAME/selections.yaml` — выбор пользователя (создаётся вручную через UI)
+
+## Ключевые правила
+
+1. **Никогда не придумывает блоки**: если в `block-library` нет подходящего блока для секции прототипа — возвращает `needs_new_block: true` и предлагает создать блок через `scaffold-block.py`.
+2. **HARD GATE**: следующий этап (07b Compose) недоступен, пока `selections.yaml` не появится в папке `07a_WIREFRAME/`.
+3. UX-правила из CSV инжектируются в wireframe.html как вкладки (`{{ux_patterns_html}}`, `{{ux_rules_html}}` и т.д.) — маркетолог видит рекомендации прямо в браузере.
+
+## Связанные концепты
+
+- [[prototype-importer]] — создаёт `prototype.yaml`, который является входом для ux-composer
+- [[block-library-management]] — хранит каталог блоков; ux-composer выбирает только из него
+- [[block-composer]] — следующий этап: берёт `selections.yaml` и рендерит `composed.html`
+- [[wireframe-rendering]] — скилл, содержащий скрипт `render-wireframe.py` и шаблон `wireframe-shell.html`
+- [[ui-ux-pro-max]] — обязательная зависимость с CSV-данными UX-паттернов и палитр
+- [[landing-orchestrator]] — вызывает ux-composer в рамках общего workflow
+
+## Источник
+
+- `agents/ux-composer.md`</pre>
+      </section>
+    
+      <section id="visual-curator">
+        <h2>visual-curator <span class="badge badge-agent">agent</span></h2>
+        <pre># Visual Curator — оркестратор визуальной генерации (этап 07d)
+
+## Что делает
+
+Сканирует `composed.html` на наличие слотов для иконок и инфографики, запускает AI-генерацию через codex, кэширует результаты и вставляет готовые PNG обратно в сборку. После работы агента все плейсхолдеры вида `[SLOT: feature-1-icon]` заменяются реальными изображениями.
+
+## Когда вызывать / в каком этапе
+
+Этап **07d**, запускается командой `/landing-visuals` после того, как выполнены:
+- Этап 05 (дизайн-система) утверждён — `stages.05_design.status == approved`
+- Файл `07b_COMPOSED/composed.html` существует (этап PR-A выполнен)
+
+Если одно из условий не выполнено, агент завершает работу с русским сообщением об ошибке и не идёт дальше.
+
+Поддерживаются флаги:
+- `--type icons` / `--type infographics` — частичный прогон
+- `--force` — игнорировать кэш
+- `--slot <name>` — обработать один конкретный слот
+
+## Что на вход / на выход
+
+**Вход:**
+- `07b_COMPOSED/composed.html` — сборка с плейсхолдерами иконок и инфографики
+- `tokens.json` — цвета бренда (используются при генерации)
+- `01a_АНАЛИЗ_НИШИ/market-profile.md` — ниша проекта (контекст для промптов)
+- `.cache/` — кэш по hash(hint + style + brand_color + niche)
+
+**Выход:**
+- `07d_VISUALS/icons/*.png` — сгенерированные иконки
+- `07d_VISUALS/infographics/*.png` — сгенерированная инфографика
+- `07d_VISUALS/_slots.yaml` — список обнаруженных слотов
+- `07d_VISUALS/STATE.yaml` — статус каждой стадии (scan / generate / inject)
+- Обновлённый `07b_COMPOSED/composed.html` с вставленными `<img class="lp-icon">`
+
+## Связанные концепты
+
+- [[icon-generator]] — субагент для генерации одной иконки PNG через codex image_gen
+- [[infographic-builder]] — субагент для генерации одной инфографики PNG через codex image_gen
+- [[block-composition]] — скилл, чей `compose-blocks.py` выполняет финальную инъекцию PNG в composed.html
+- [[landing-visuals]] — slash-команда, триггерящая этот агент
+- [[ux-composer]] — создаёт wireframe с исходными слотами (этап 07a)
+- [[block-composer]] — создаёт composed.html с плейсхолдерами (этап 07b)
+
+## Источник
+
+- `agents/visual-curator.md`</pre>
+      </section>
+    
+      <section id="wp-builder">
+        <h2>wp-builder <span class="badge badge-agent">agent</span></h2>
+        <pre># wp-builder — WP-сборщик (Этап 08)
+
+## Что делает
+Генерирует готовый PHP-код WordPress-темы: Lazy Blocks для каждого блока лендинга, CSS с дизайн-токенами и JS-интеракции. На выходе — рабочий WP-шаблон, который можно задеплоить на Бегет.
+
+## Когда вызывать / в каком этапе
+Этап **08**. Запускается после того, как утверждены:
+- `design-system-generator` (этап 05 — токены готовы)
+- `content-writer` (этап 07 — финальный текст готов)
+
+Команда-триггер: `/landing-build`. Агент диспатчится `landing-orchestrator` автоматически.
+
+## Что на вход / на выход
+
+**Вход:**
+- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — дизайн-токены (цвета, шрифты, отступы)
+- `06_СТЕК/design-stack.yaml` — режим сборки (standard / cinematic)
+- `07_КОНТЕНТ/final-copy.md` — финальные тексты по блокам
+- `08_КОД/block-spec.yaml` — источник истины: список блоков и поля каждого
+- `01a_АНАЛИЗ_НИШИ/landing-structure.md` — перечень блоков лендинга
+- `01a_АНАЛИЗ_НИШИ/market-profile.md` — ценовой тир (luxury → mass)
+- `01a_АНАЛИЗ_НИШИ/positioning.md` — режим позиционирования (rational / emotional_aspiration / trust_authority)
+
+**Выход:**
+- `08_КОД/wp-theme/blocks/lazyblock-<slug>/block.php` — по одному PHP-файлу на блок
+- `08_КОД/wp-theme/functions.php` — регистрация блоков через `lzb/init`
+- `08_КОД/wp-theme/assets/css/main.css` — стили через CSS-переменные
+- `08_КОД/wp-theme/assets/js/main.js` — интеракции (FAQ-аккордеон, GSAP в cinematic-режиме)
+- `08_КОД/page-content.html` — Gutenberg-разметка с `<!-- wp:lazyblock/<slug> -->` для импорта в WP
+
+**Не создаётся:** `acf-fields.json`, `template-parts/section-*.php` — устаревшие артефакты ACF-Blocks.
+
+## Ключевые правила генерации
+- Все цвета — только через `var(--token-name)`, хардкод запрещён
+- Каждый PHP-файл начинается с provenance-комментария (`/* wp-builder: source=DESIGN.md, block=... */`)
+- Все строки экранируются через `esc_html()` или `wp_kses_post()`
+- Mobile-first CSS: базовые стили → `@media (min-width: 768px)` → `1440px`
+- В cinematic-режиме (gsap в стеке) — GSAP ScrollTrigger по `scenes.md`
+- Luxury/ultra-luxury тир: цена в Hero скрыта, CTA — «Связаться», не «Купить»
+- **HARD GATE**: после генерации показывает список файлов и ждёт утверждения
+
+## Связанные концепты
+- [[design-system-generator]] — производит `tokens.json`, обязателен перед запуском
+- [[content-writer]] — производит `final-copy.md` с текстами для блоков
+- [[integrations-engineer]] — следующий этап 08, настраивает формы и вебхуки
+- [[frontend-builder]] — переписывает `block.php` по CSS из `DESIGN.md §5`
+- [[landing-build]] — slash-команда, триггерящая этот агент
+- [[landing-orchestrator]] — диспатчит wp-builder в нужный момент
+
+## Источник
+- `agents/wp-builder.md`</pre>
+      </section>
+    
+      <section id="wp-deployer">
+        <h2>wp-deployer <span class="badge badge-agent">agent</span></h2>
+        <pre># wp-deployer — Деплой на Бегет
+
+## Что делает
+
+Загружает готовую WordPress-тему на хостинг Бегет через SSH+rsync, активирует тему и импортирует ACF-поля. После деплоя проверяет доступность сайта и настраивает SSL/редиректы.
+
+## Когда вызывать / в каком этапе
+
+Запускается на **этапе 09**, после того как команда `/landing-build` успешно завершена и пользователь утвердил сборку. Агент не стартует без прохождения preflight-проверки конфигурации.
+
+## Что на вход / на выход
+
+**Вход:**
+- Собранная тема (артефакт этапа 08)
+- Файл `.env` с тремя переменными: `BEGET_USER`, `BEGET_HOST`, `BEGET_PATH`
+- Проект, прошедший HARD GATE этапа 08
+
+**Процесс:**
+1. Проверяет наличие всех трёх переменных `.env`
+2. Запускает `scripts/deploy.sh <project-dir>` (rsync → Бегет)
+3. Проверяет живость сайта: `curl -sI https://<domain> | head -5`
+4. Если SSL не настроен — выдаёт инструкцию для certbot через SSH
+5. Проверяет цепочку редиректов: HTTP→HTTPS, www→без www
+6. **HARD GATE**: показывает финальный URL и ждёт явного утверждения
+
+**Выход:**
+- Живой сайт по HTTPS
+- Подтверждённый URL для передачи в [[landing-qa]]
+
+## Связанные концепты
+
+- [[landing-build]] — должен быть завершён и утверждён перед запуском деплоя
+- [[landing-orchestrator]] — диспатчит этот агент как часть общего 12-этапного флоу
+- [[landing-qa]] — следующий этап после деплоя, проверяет живой сайт по 7 критериям
+
+## Источник
+
+- `agents/wp-deployer.md`</pre>
+      </section>
+    
+      <section id="landing-brand">
+        <h2>landing-brand <span class="badge badge-command">command</span></h2>
+        <pre># /landing-brand — Сборка бренд-кита
+
+## Что делает
+
+Собирает финальный бренд-кит проекта: берёт все извлечённые стили (палитра, шрифты, иконки) и синтезирует их в единый документ `brand-kit.md` с полной трассировкой источников. Рендерит HTML-превью со свотчами, образцами шрифтов и миниатюрами иконок.
+
+## Когда вызывать / в каком этапе
+
+**Этап 04 (Бренд).** Вызывается вручную командой `/landing-brand` после того, как:
+- пройден onboarding (`~/.landing-system/setup_complete`);
+- утверждён мудборд (этап 03);
+- `style-extractor` сформировал файлы `04_БРЕНД/extracted/*.yaml` (через `/landing-style`).
+
+Перед запуском система проверяет наличие предыдущих этапов через `gate-check.sh --stage 04_brand`. Если что-то не завершено — команда останавливается с сообщением об ошибке.
+
+## Что на вход / на выход
+
+**Вход:**
+- `04_БРЕНД/extracted/*.yaml` — структурированные данные о стилях (палитра, типографика, иконки), подготовленные агентом `style-extractor`
+
+**Выход:**
+- `04_БРЕНД/brand-kit.md` — канонический бренд-кит с провенансом (каждый цвет, шрифт и иконка ссылаются на свой источник)
+- `04_БРЕНД/brand-kit.html` — визуальный превью: свотчи палитры, образцы шрифтов, миниатюры иконок
+
+**HARD GATE:** после генерации команда показывает путь к превью и ждёт явного подтверждения пользователя. Без approve переход к этапу 05 заблокирован. После подтверждения выполняется `gate-check.sh --stage 04_brand --project <project> --approve`.
+
+## Связанные концепты
+
+- [[brand-architect]] — агент, который непосредственно синтезирует brand-kit.md из extracted/*.yaml
+- [[style-extractor]] — агент предыдущего шага, поставляет входные YAML-файлы
+- [[landing-moodboard]] — этап 03, который должен быть утверждён перед запуском
+- [[landing-design]] — этап 05, который становится доступен после approve бренд-кита
+- [[landing-style]] — команда, запускающая style-extractor (предшествует /landing-brand)
+
+## Источник
+
+- `commands/landing-brand.md`</pre>
+      </section>
+    
+      <section id="landing-build">
+        <h2>landing-build <span class="badge badge-command">command</span></h2>
+        <pre># /landing-build — Сборка WordPress-темы и кода лендинга
+
+## Что делает
+
+Генерирует полноценную WordPress-тему с Lazy Blocks, подключает формы и CRM-интеграции, настраивает аналитику и SEO. На выходе — готовый к деплою код и статический `build-preview.html` для финального утверждения.
+
+## Когда вызывать / в каком этапе
+
+Этап **08_build**. Вызывается после того, как `content-writer` создал `07_КОНТЕНТ/final-copy.md` и пользователь его одобрил. Перед запуском система проверяет: пройден onboarding, закрыты гейты предыдущих этапов, присутствует `08_КОД/block-spec.yaml`.
+
+## Что на вход / на выход
+
+**Обязательные входные артефакты:**
+- `07_КОНТЕНТ/final-copy.md` — финальные тексты (от `/landing-content`)
+- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — дизайн-токены (от `/landing-design`)
+- `06_СТЕК/design-stack.yaml` — выбранный стек (от `/landing-stack`)
+- `08_КОД/block-spec.yaml` — спецификация блоков (заполняется из шаблона)
+
+**Выходные артефакты:**
+- `08_КОД/wp-theme/` — полная WP-тема (PHP, CSS, JS, ресурсы)
+- `08_КОД/wp-theme/blocks/lazyblock-<slug>/block.php` — PHP-шаблон на каждый блок
+- `08_КОД/wp-theme/functions.php` — с регистрацией блоков и аналитикой
+- `08_КОД/wp-theme/assets/css/main.css` — CSS с патчами InnerBlocks
+- `08_КОД/wp-theme/assets/js/main.js`, `sliders.js`, `animations.js`, `counters.js` — JS-инициализация
+- `08_КОД/wp-theme/assets/js/popup.js` — встроенный попап
+- `08_КОД/page-content.html` — Gutenberg-разметка для seed страницы
+- `08_КОД/build-preview.html` — статический превью для утверждения
+- `11_АНАЛИТИКА/` — конфиги Яндекс.Метрики, цели, UTM-шаблоны
+- `12_SEO/` — meta-tags, Schema.org JSON-LD, robots.txt, ключевые слова
+
+**Pipeline (11 шагов):**
+1. `generate-wp-blocks.py` — scaffold темы и Lazy Blocks
+2. Агент `integrations-engineer` — Fluent Forms + Telegram/CRM webhook
+3. Агент `analytics-engineer` — Яндекс.Метрика в functions.php
+4. Агент `seo-optimizer` — SEO-мета и Schema.org
+5. `bundle-assets.py` — шрифты, иконки, фото
+6. `render-build-preview.py` — статический превью
+7. `generate-popup.py` — попап-система
+8. `generate-js-init.py` — JS-файлы
+9. `generate-analytics.py` — YM + GTM
+10. `generate-integrations.py` — CRM-интеграции
+11. **HARD GATE** — показ превью и ожидание одобрения перед этапом 09
+
+## Связанные концепты
+
+- [[landing-content]] — предшествующий этап, поставляет `final-copy.md`
+- [[landing-design]] — поставляет `tokens.json`
+- [[landing-stack]] — поставляет `design-stack.yaml`
+- [[wp-builder]] — агент, генерирующий PHP-шаблоны блоков
+- [[integrations-engineer]] — агент форм и CRM-вебхуков
+- [[analytics-engineer]] — агент аналитики Яндекс.Метрика
+- [[seo-optimizer]] — агент SEO-разметки и Schema.org
+- [[landing-deploy]] — следующий этап после одобрения превью
+
+## Источник
+
+- `commands/landing-build.md`</pre>
+      </section>
+    
+      <section id="landing-clone">
+        <h2>landing-clone <span class="badge badge-command">command</span></h2>
+        <pre># Landing Clone — создание A/B-копии лендинга
+
+## Что делает
+
+Создаёт независимую копию существующего лендинга на новом поддомене — для A/B-тестирования или запуска параллельного варианта. Копия полностью автономна: имеет собственный путь на сервере и собственный URL.
+
+## Когда вызывать / в каком этапе
+
+Вызывается вручную после того, как основной лендинг уже задеплоен. Типичный сценарий — маркетолог хочет протестировать альтернативный заголовок, оффер или дизайн без риска для основного сайта. Запускается из папки исходного проекта-лендинга.
+
+```
+/landing-clone <new-slug>
+```
+
+Где `<new-slug>` — короткое kebab-case имя для нового поддомена (например, `my-project-v2`).
+
+## Что на вход / на выход
+
+**Вход:**
+- Существующая папка проекта-лендинга (текущая директория)
+- Аргумент `<new-slug>` — имя клона
+
+**Выход:**
+- Клонированная папка проекта с независимой структурой
+- Обновлённый `.env` клона с новым значением `BEGET_PATH` (поддомен)
+- Задеплоенный сайт на новом поддомене
+- Отчёт с URL нового сайта
+
+## Шаги выполнения
+
+1. Запускает `clone-landing.sh <project-dir> <new-slug>` — копирует всю структуру проекта.
+2. Обновляет `BEGET_PATH` в `.env` клона — прописывает новый поддомен.
+3. Запускает `/landing-deploy` внутри клонированного проекта — деплоит на сервер.
+4. Возвращает новый URL клона.
+
+## Связанные концепты
+
+- [[landing-deploy]] — используется на шаге 3 для деплоя клона на Бегет
+- [[lifecycle-keeper]] — агент, управляющий версиями, снапшотами и клонами лендингов
+- [[landing-rollback]] — команда для отката к предыдущей версии (смежный lifecycle-сценарий)
+
+## Источник
+
+- `commands/landing-clone.md`</pre>
+      </section>
+    
+      <section id="landing-compose">
+        <h2>landing-compose <span class="badge badge-command">command</span></h2>
+        <pre># /landing-compose — сборка composed.html
+
+## Что делает
+
+Собирает финальный HTML-файл лендинга с подставленными дизайн-токенами и текстами из прототипа. Визуальный контент (фото, иконки, инфографика) пока остаётся в виде именованных placeholder-ов — они заполняются на этапах PR-B и PR-C.
+
+## Когда вызывать / в каком этапе
+
+Вызывается вручную на **этапе 07b** после того, как:
+- пользователь выбрал варианты блоков в `wireframe.html` и сохранил `selections.yaml` в папку `07a_WIREFRAME/`;
+- в папке `05_ДИЗАЙН-СИСТЕМА/` лежит готовый `tokens.json`.
+
+Команда **не интегрирована в `landing-orchestrator`** — это задача PR-D. До выхода PR-D запускается вручную через `/landing-compose`.
+
+## Что на вход / на выход
+
+**Вход:**
+- `07_ПРОТОТИП/prototype.yaml` — машинное представление прототипа с текстами блоков
+- `07a_WIREFRAME/selections.yaml` — выбор вариантов блоков, сделанный пользователем в wireframe.html
+- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — дизайн-токены (цвета, шрифты, отступы)
+
+**Выход:**
+- `07b_COMPOSED/composed.html` — основной файл: блоки со стилями и реальными текстами, визуальные слоты — placeholder-ы
+- `07b_COMPOSED/composed-mobile.html` — мобильная версия
+- `07b_COMPOSED/block-injection-log.md` — лог подстановки блоков
+
+## Связанные концепты
+
+- [[block-composer]] — агент, выполняющий фактическую сборку; команда делегирует работу ему
+- [[prototype-import]] — поставляет `prototype.yaml`, без которого команда не запустится
+- [[wireframe-rendering]] — поставляет `selections.yaml` с выбором вариантов блоков
+- [[design-tokens-generation]] — поставляет `tokens.json` с брендовыми переменными
+- [[landing-photos]] — этап PR-B, заменяет фото-placeholder-ы реальными снимками
+- [[landing-visuals]] — этап PR-C, заменяет icon/infographic-placeholder-ы сгенерированными PNG
+
+## Источник
+
+- `commands/landing-compose.md`</pre>
+      </section>
+    
+      <section id="landing-content">
+        <h2>landing-content <span class="badge badge-command">command</span></h2>
+        <pre># /landing-content — Адаптация текстов под Gutenberg-блоки
+
+## Что делает
+
+Берёт черновой прототип текста и структуру блоков из DESIGN.md, добавляет реальные отзывы клиента и выдаёт два готовых файла: финальный копирайт по блокам и SEO-тексты. После этого ждёт одобрения пользователя, прежде чем двигаться к этапу 08 (сборка WordPress-темы).
+
+## Когда вызывать / в каком этапе
+
+Вызывается на этапе **07 (Контент)** после того, как одобрен стек (`06_СТЕК/design-stack.yaml`). Перед запуском система автоматически проверяет:
+
+1. Пройден ли onboarding (`~/.landing-system/setup_complete`). Если нет — предлагает запустить `/landing-onboarding`.
+2. Закрыт ли предыдущий этап через `gate-check.sh --stage 07_content`. Если нет — сообщает, какой шаг пропущен, и останавливается.
+
+После одобрения пользователем вызывает `gate-check.sh --stage 07_content --approve`, фиксируя этап как завершённый.
+
+## Что на вход / на выход
+
+**Вход:**
+- `07_КОНТЕНТ/prototype.md` — исходный прототип текстов (результат `/landing-prototype`)
+- `06_СТЕК/design-stack.yaml` — структура блоков и стек (результат `/landing-stack`)
+- `02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/` — реальные отзывы клиента
+
+**Выход:**
+- `07_КОНТЕНТ/final-copy.md` — финальный текст, разбитый по каждому Gutenberg-блоку
+- `07_КОНТЕНТ/seo-copy.md` — SEO-заголовки, мета-описания, варианты H1
+
+**HARD GATE:** команда показывает `final-copy.md` и ждёт явного подтверждения пользователя. Только после этого открывается этап 08.
+
+## Связанные концепты
+
+- [[content-writer]] — специализированный агент, который выполняет основную работу по написанию текстов
+- [[prototype-import]] — поставляет `prototype.md` как источник черновых текстов
+- [[landing-stack]] — поставляет `design-stack.yaml` с определением блоков
+- [[landing-build]] — следующий этап после утверждения контента (этап 08)
+- [[gate-check]] — скрипт проверки и закрытия этапов
+
+## Источник
+
+- `commands/landing-content.md`</pre>
+      </section>
+    
+      <section id="landing-deploy">
+        <h2>landing-deploy <span class="badge badge-command">command</span></h2>
+        <pre># /landing-deploy — Деплой лендинга на Бегет
+
+## Что делает
+
+Загружает готовую WordPress-тему на хостинг Бегет по SSH+rsync, активирует тему через WP-CLI и проверяет, что сайт живой. После деплоя пользователь видит рабочую ссылку и подтверждает результат.
+
+## Когда вызывать / в каком этапе
+
+Этап 09. Вызывается вручную командой `/landing-deploy` после того, как пользователь одобрил результат `/landing-build` (этап 08). Перед запуском система автоматически проверяет: онбординг пройден, предыдущие этапы закрыты.
+
+## Что на вход / на выход
+
+**Вход:**
+- `08_КОД/wp-theme/` — собранная тема от `/landing-build`
+- `.env` с переменными `BEGET_USER`, `BEGET_HOST`, `BEGET_PATH`
+- Пройденный онбординг (`~/.landing-system/setup_complete`)
+
+**Выход:**
+- Живой WordPress-сайт на Бегет
+- Тема активирована, ACF-поля импортированы, кэш сброшен
+- HTTPS подтверждён, редирект HTTP→HTTPS работает
+
+## Шаги выполнения
+
+1. **Pre-flight проверка** — `scripts/setup-flag.sh is_complete`. Если онбординг не пройден — стоп.
+2. **Gate-check** — `scripts/gate-check.sh --stage 09_deploy --project <project>`. Если предыдущий этап не закрыт — сообщает, чего не хватает, и стоп.
+3. **Preflight среды** — `scripts/preflight.sh` проверяет окружение (ключи SSH, доступность сервера).
+4. **Деплой** — `scripts/deploy.sh .` синхронизирует тему по rsync, активирует через WP-CLI.
+5. **Проверка живости** — `curl -sI https://<domain>`, SSL и редирект.
+6. **HARD GATE** — показывает живую ссылку, ждёт явного одобрения пользователя.
+7. **Post-completion** — `scripts/gate-check.sh --approve` фиксирует этап 09 как завершённый.
+
+## Связанные концепты
+
+- [[landing-build]] — обязательный предыдущий этап, поставляет `08_КОД/wp-theme/`
+- [[landing-orchestrator]] — мастер-оркестратор, управляет порядком этапов
+- [[wp-deployer]] — специализированный агент, выполняющий SSH+rsync+WP-CLI операции
+- [[landing-qa]] — следующий этап после деплоя (этап 10, проверка живого сайта)
+
+## Источник
+
+- `commands/landing-deploy.md`</pre>
+      </section>
+    
+      <section id="landing-design">
+        <h2>landing-design <span class="badge badge-command">command</span></h2>
+        <pre># /landing-design — Генерация дизайн-системы (этап 05)
+
+## Что делает
+Команда запускает генерацию дизайн-системы проекта: читает утверждённый бренд-кит и превращает его в машиночитаемые токены (`tokens.json`), исчерпывающий документ дизайна (`DESIGN.md`) и живой HTML-превью компонентов. Результат — единый источник правды для всех последующих этапов верстки.
+
+## Когда вызывать / в каком этапе
+Этап 05. Вызывается вручную после того, как `brand-architect` создал `04_БРЕНД/brand-kit.md` и пользователь подтвердил результат команды `/landing-brand`. Перед запуском система автоматически проверяет: пройден ли онбординг и закрыт ли gate предыдущего этапа. Если нет — выдаёт понятную ошибку и останавливается.
+
+Опциональный флаг `--cinematic` подключает дополнительный агент `scene-director`, который создаёт кинематографическую грамматику из 8 сцен и план GSAP-анимаций (`scenes.md`).
+
+## Что на вход / на выход
+
+**Вход:**
+- `04_БРЕНД/brand-kit.md` — утверждённый бренд-кит от `brand-architect`
+- Флаг `--cinematic` (опционально) — для кинематографического режима
+
+**Выход:**
+- `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` — главный документ токенов (YAML frontmatter + структура блоков)
+- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — машиночитаемые токены для сборки
+- `05_ДИЗАЙН-СИСТЕМА/design-preview.html` — живой превью компонентов в браузере
+- `05_ДИЗАЙН-СИСТЕМА/scenes.md` — кинематографическая грамматика сцен (только при `--cinematic`)
+
+**HARD GATE:** после генерации система показывает путь к превью и ждёт явного подтверждения пользователя, прежде чем разрешить переход к этапу 06 (stack-planner).
+
+## Как работает внутри
+1. Запускает агента `design-system-generator`
+2. Выполняет `skills/design-tokens-generation/scripts/build-tokens.py` → `DESIGN.md` + `tokens.json`
+3. Выполняет `skills/design-tokens-generation/scripts/render-preview.py` → `design-preview.html`
+4. При флаге `--cinematic` — запускает агента `scene-director` → `scenes.md`
+5. После approve пользователя — закрывает gate командой `scripts/gate-check.sh --approve`
+
+## Связанные концепты
+- [[brand-architect]] — создаёт `brand-kit.md`, который является входом для этой команды
+- [[landing-brand]] — предшествующая команда, без её approve gate не откроется
+- [[design-system-generator]] — агент, исполняющий основную логику генерации
+- [[design-tokens-generation]] — скилл со скриптами build-tokens и render-preview
+- [[scene-director]] — агент кинематографических сцен (опционально)
+- [[landing-stack]] — следующий этап после approve дизайн-системы
+- [[stack-planner]] — агент этапа 06, читает `DESIGN.md` как входной документ
+
+## Источник
+- `commands/landing-design.md`</pre>
+      </section>
+    
+      <section id="landing-from-context">
+        <h2>landing-from-context <span class="badge badge-command">command</span></h2>
+        <pre># /landing-from-context — Создать проект с наследованием контекста
+
+## Что делает
+
+Создаёт новый проект лендинга и автоматически переносит в него данные из текущей папки агентства — аудиторию, исследования, прототип. Избавляет от ручного копирования материалов, которые уже были собраны на уровне продукта.
+
+## Когда вызывать / в каком этапе
+
+Вызывается вручную, когда маркетолог уже находится в папке агентства с готовым контекстом (например, `~/Desktop/Агентство лидогенерации/04_документы/курс-копирайтинг/`), где есть `01_контекст/`, `05_исследования/` и другие наработки. Команда актуальна до запуска основного pipeline — она заменяет ручной этап 00–01 (бриф и контекст).
+
+## Что на вход / на выход
+
+**Вход:**
+- Аргумент `<project-slug>` — уникальное имя нового проекта (kebab-case).
+- Опциональный флаг `--cinematic` — активирует кинематографический режим визуала.
+- Текущая папка агентства с материалами (`01_контекст/`, `05_исследования/` и т.д.).
+
+**Выход:**
+- Новая папка `~/Lendings/<slug>/` со структурой из шаблона.
+- Снапшот контекста из родительской папки (аудитория, исследования, прототип).
+- Этапы 00–01 в `.landing-state.yaml` помечаются как частично заполненные.
+- Автоматически запускается `landing-orchestrator` — с этапа 02 (Материалы).
+
+**Внутренняя механика:**
+Команда вызывает bash-скрипт `skills/landing-from-context/scripts/from-context.sh`, передавая ему путь к новому проекту и все дополнительные флаги.
+
+## Связанные концепты
+
+- [[landing-orchestrator]] — диспатчится автоматически после создания проекта, начиная с этапа 02
+- [[landing-from-context]] — скилл, содержащий `from-context.sh` и логику снапшота контекста
+- [[landing-new]] — альтернативная команда для создания пустого проекта без наследования контекста
+- [[landing-start]] — интерактивный wizard для новичков, не использует снапшот
+
+## Источник
+
+- `commands/landing-from-context.md`</pre>
+      </section>
+    
+      <section id="landing-go">
+        <h2>landing-go <span class="badge badge-command">command</span></h2>
+        <pre># /landing-go — Главная команда конвейера
+
+## Что делает
+
+Единая точка входа для всего производства лендинга. Запускаешь один раз — команда сама читает статус проекта, находит следующий этап и ведёт тебя от прототипа до живого сайта на Бегете, не давая пропустить ни один шаг.
+
+## Когда вызывать / в каком этапе
+
+Вызывать после того, как прототип (`prototype.pdf` или `prototype.md`) положен в `<project>/07_ПРОТОТИП/source/`. Подходит и для старта с нуля, и для возобновления застрявшего проекта — команда читает `.landing-state.yaml` и подхватывает с нужного места. Этапы 00–02 (бриф, контекст, ниша, материалы клиента) считаются сделанными до системы и помечаются `n/a` автоматически.
+
+**Синтаксис:**
+```
+/landing-go [--project <slug>] [--auto-fix yes|no] [--skip-gate <id>]
+```
+
+## Что на вход / на выход
+
+**Вход:**
+- `<project>/.landing-state.yaml` — текущий статус этапов проекта
+- `<project>/07_ПРОТОТИП/source/prototype.pdf` (или `.md`) — исходный прототип
+- Опциональные флаги: `--project`, `--auto-fix yes`, `--skip-gate <id>`
+
+**Выход:**
+- Последовательный проход через все 13+ этапов конвейера с HTML-превью на каждом gate
+- Финальный результат: задеплоенный WordPress-сайт на Бегете + QA + аналитика + SEO
+- При падении гейта — `fix_hint` из `config/stage-gates.yaml` и авто-фикс на `yes`
+
+**Особый режим:** на этапах 07d (фото) и 07e (визуалы) оркестратор диспатчит оба субагента **параллельно**, сокращая время сборки.
+
+## Ключевые этапы
+
+| Этап | Режим | Агент |
+|---|---|---|
+| 07a prototype | авто | `prototype-importer` |
+| 03–05 бренд | руками + AI | `brand-architect`, `design-system-generator` |
+| 06–07 стек + контент | авто | `stack-planner`, `content-writer` |
+| 07b–07c wireframe + compose | маркетолог утверждает | `ux-composer`, `block-composer` |
+| **07d ⇆ 07e** фото + визуалы | **параллельно** | `photo-curator` ‖ `visual-curator` |
+| 08–12 build → QA → SEO | авто | `wp-builder`, `wp-deployer`, QA, SEO |
+
+Ручные команды `/landing-photos`, `/landing-visuals`, `/landing-prototype`, `/landing-wireframe`, `/landing-compose` продолжают работать независимо.
+
+## Связанные концепты
+
+- [[landing-orchestrator]] — агент, которого вызывает команда для диспетчеризации этапов
+- [[prototype-importer]] — первый автоматический шаг: парсит `prototype.pdf` → `prototype.yaml`
+- [[photo-curator]] — параллельный этап 07d: классификация и matching клиентских фото
+- [[visual-curator]] — параллельный этап 07e: AI-генерация иконок и инфографики
+- [[wp-builder]] — этап 08: генерация WordPress-темы из собранных артефактов
+- [[landing-start]] — точка входа для новых проектов (wizard перед `/landing-go`)
+
+## Источник
+
+- `commands/landing-go.md`</pre>
+      </section>
+    
+      <section id="landing-help">
+        <h2>landing-help <span class="badge badge-command">command</span></h2>
+        <pre># /landing-help — Справка по командам системы
+
+## Что делает
+
+Выводит полный список всех slash-команд landing-system с кратким описанием каждой. Ничего не создаёт и не изменяет — только справка.
+
+## Когда вызывать / в каком этапе
+
+Вызывать в любой момент — нет привязки к этапу. Полезно на старте, когда непонятно с чего начать, или при возврате к проекту после паузы.
+
+## Что на вход / на выход
+
+**Вход:** ничего не требуется.
+
+**Выход:** фиксированный текстовый блок со всеми командами, разбитый на 4 раздела:
+
+- **ENTRY POINTS** — точки входа: создать проект, создать из контекста агентства, клонировать A/B-копию.
+- **PER-STAGE** — команды по этапам 03–08: референсы, мудборд, бренд, дизайн, стек, контент, сборка.
+- **OPERATIONS** — деплой, передеплой, откат версии, QA-аудит.
+- **SERVICE** — статус, справка, обновление мастер-системы.
+
+## Связанные концепты
+
+- [[landing-new]] — создаёт новый проект с нуля (упомянут в ENTRY POINTS)
+- [[landing-from-context]] — создаёт проект из папки агентства (упомянут в ENTRY POINTS)
+- [[landing-clone]] — A/B-клонирование существующего лендинга
+- [[landing-status]] — текущее состояние системы и проектов
+- [[landing-deploy]] — деплой на Бегет
+- [[landing-rollback]] — откат к предыдущей версии
+- [[landing-qa]] — QA-аудит живого сайта
+- [[landing-build]] — сборка WordPress-темы (этап 08)
+
+## Источник
+
+- `commands/landing-help.md`</pre>
+      </section>
+    
+      <section id="landing-moodboard">
+        <h2>landing-moodboard <span class="badge badge-command">command</span></h2>
+        <pre># /landing-moodboard — Генерация визуального мудборда
+
+## Что делает
+
+Создаёт визуальный мудборд лендинга из одобренных референсов: запускает агента `moodboard-composer`, который рендерит HTML-превью с настроением и визуальным направлением проекта. Результат — файл `moodboard.html`, который маркетолог смотрит и утверждает перед извлечением стилей.
+
+## Когда вызывать / в каком этапе
+
+Этап **03 (мудборд)**. Вызывается вручную командой `/landing-moodboard` после того, как в файле `03_РЕФЕРЕНСЫ/index.yaml` хотя бы один референс имеет статус `approved` (через команду `/landing-references`).
+
+Перед запуском система автоматически проверяет:
+1. Пройден ли онбординг (`~/.landing-system/setup_complete`) — если нет, просит запустить `/landing-onboarding`.
+2. Закрыт ли gate этапа `03_references` — если нет, сообщает, какой предыдущий этап не завершён.
+
+## Что на вход / на выход
+
+**Вход:**
+- `03_РЕФЕРЕНСЫ/index.yaml` — файл с одобренными референсами (status: `approved`)
+
+**Выход:**
+- `03_РЕФЕРЕНСЫ/moodboard.html` — интерактивный HTML-превью мудборда
+
+**HARD GATE:** после генерации команда показывает путь к файлу и ждёт явного подтверждения пользователя. Только после approve запускается gate-check (`--approve`) и система переходит к извлечению стилей (`/landing-style`).
+
+## Связанные концепты
+
+- [[moodboard-composer]] — агент, который читает `index.yaml` и рендерит `moodboard.html`
+- [[landing-references]] — предыдущий этап: сбор и одобрение референсов, без него мудборд не запустится
+- [[landing-style]] — следующий этап: извлечение палитры, шрифтов и иконографики из мудборда
+- [[references-collection]] — скилл, на котором базируется работа с референсами
+
+## Источник
+
+- `commands/landing-moodboard.md`</pre>
+      </section>
+    
+      <section id="landing-new">
+        <h2>landing-new <span class="badge badge-command">command</span></h2>
+        <pre># /landing-new — Создание нового проекта лендинга
+
+## Что делает
+
+Создаёт новый проект лендинга «с нуля»: разворачивает папку из шаблона, инициализирует файл состояния `.landing-state.yaml` и передаёт управление оркестратору для прохождения Этапа 00 (бриф). Предназначена для опытных пользователей — новичкам рекомендуется `/landing-start`.
+
+## Когда вызывать / в каком этапе
+
+Вызывается вручную в самом начале работы, до любых этапов. Синтаксис:
+
+```
+/landing-new <project-slug> [--cinematic]
+```
+
+- `project-slug` — идентификатор проекта в kebab-case (например, `lp-kurs-marafon`)
+- `--cinematic` — опциональный флаг для включения cinematic-режима (premium)
+
+Перед запуском команда проверяет, пройден ли онбординг (`~/.landing-system/setup_complete`). Если нет — останавливается с подсказкой запустить `/landing-onboarding`.
+
+## Что на вход / на выход
+
+**Вход:**
+- Аргумент `<project-slug>` — имя проекта (kebab-case)
+- Опционально: флаг `--cinematic`
+- Готовый онбординг (файл `setup_complete`)
+
+**Выход:**
+- Папка проекта `~/Lendings/<slug>/` со структурой из 18 подпапок (по шаблону `template/`)
+- Файл `.landing-state.yaml` с полями `project` и `created`
+- Пройденная проверка `gate-check` для Этапа 00 (наличие `brief.md`)
+- Запущенный агент `landing-orchestrator` для ведения через Этап 00
+
+**Логика пути:** если `slug` — абсолютный или относительный путь, используется как есть. Иначе папка создаётся в `~/Lendings/<slug>/`.
+
+## Связанные концепты
+
+- [[landing-project-init]] — скилл, который содержит основной скрипт `init.sh`, выполняющий развёртывание шаблона
+- [[landing-orchestrator]] — агент, которому команда передаёт управление после создания папки проекта
+- [[gate-check]] — скрипт проверки готовности этапа; вызывается для валидации Этапа 00 после инициализации
+- [[landing-start]] — альтернативная команда-wizard для новичков, более интерактивная и подробная
+- [[landing-state]] — файл `.landing-state.yaml`, фиксирующий статус всех 13 этапов проекта
+
+## Источник
+
+- `commands/landing-new.md`</pre>
+      </section>
+    
+      <section id="landing-niche">
+        <h2>landing-niche <span class="badge badge-command">command</span></h2>
+        <pre># /landing-niche — Анализ ниши (этап 01a)
+
+## Что делает
+
+Запускает автоматический анализ рыночной ниши для текущего проекта-лендинга: изучает конкурентов, формирует профиль рынка и выбирает стратегию позиционирования. Агент работает без уточняющих вопросов — недостающие данные помечаются `[ДОПУЩЕНИЕ]`.
+
+## Когда вызывать / в каком этапе
+
+Вызывается на этапе **01a** — после того, как этап `00_brief` переведён в статус `approved`. Запускается вручную командой `/landing-niche` из папки проекта. Если анализ уже был выполнен и одобрен, команда запросит подтверждение перезапуска перед перезаписью артефактов.
+
+**Предусловия:**
+- Пройден onboarding (`~/.landing-system/setup_complete`)
+- В текущей папке есть `.landing-state.yaml`
+- Этап `00_brief` имеет статус `approved`
+
+## Что на вход / на выход
+
+**Вход:**
+- `00_БРИФ/brief.md` — бриф проекта
+- `01_КОНТЕКСТ/context.md` — контекст (если присутствует)
+
+**Выход:**
+- `01a_АНАЛИЗ_НИШИ/niche-analysis.md` — полный анализ ниши
+- `01a_АНАЛИЗ_НИШИ/competitors.yaml` — список конкурентов с характеристиками
+- `01a_АНАЛИЗ_НИШИ/positioning.md` — выбранный режим позиционирования
+
+**Внутренние шаги:**
+1. Gate-check этапа `00_brief`
+2. Пометка `01a_niche_analysis` → `in_progress`
+3. Диспатч агента `niche-analyst`
+4. Валидация: `python skills/niche-analysis/scripts/validate-competitors.py`
+5. Gate-check `01a_niche_analysis` (`bash scripts/gate-check.sh`)
+6. Summary + запрос approval для перехода на этап 02
+
+## Связанные концепты
+
+- [[niche-analyst]] — специализированный агент, выполняющий фактическую работу анализа ниши zero-touch
+- [[niche-analysis]] — скилл с логикой анализа и скриптом валидации конкурентов
+- [[landing-go]] — мастер-команда, которая вызывает `/landing-niche` автоматически через оркестратор
+- [[landing-orchestrator]] — управляет последовательностью этапов и HARD GATE между ними
+
+## Источник
+
+- `commands/landing-niche.md`</pre>
+      </section>
+    
+      <section id="landing-onboarding">
+        <h2>landing-onboarding <span class="badge badge-command">command</span></h2>
+        <pre># Landing Onboarding — мастер первичной настройки
+
+## Что делает
+
+Запускает интерактивный мастер настройки системы для нового пользователя: проверяет все зависимости, помогает ввести API-ключи и фиксирует завершение онбординга. После прохождения система готова к созданию лендингов.
+
+## Когда вызывать / в каком этапе
+
+Вызывается **один раз** перед первым проектом — командой `/landing-onboarding`. Если файл `~/.landing-system/setup_complete` уже существует, команда спрашивает, нужно ли пройти онбординг повторно (например, чтобы добавить новые ключи). Без пройденного онбординга все `/landing-*` команды заблокированы.
+
+## Что на вход / на выход
+
+**Вход:**
+- Файл `docs/SETUP.md` — описание системы и требований
+- Скрипт `scripts/wizard.sh` — интерактивные проверки
+- Скрипт `scripts/setup-flag.sh` — маркировка завершения
+
+**Выход:**
+- Файл-флаг `~/.landing-system/setup_complete` — подтверждение, что все зависимости прошли валидацию
+- Итоговый отчёт: «Onboarding complete» или список того, что ещё не настроено
+
+## Шаги выполнения
+
+1. Читает `docs/SETUP.md` и рассказывает пользователю, что умеет система.
+2. Диспатчит агента `onboarding-guide`.
+3. Агент запускает `bash scripts/wizard.sh` и интерактивно проводит через каждую секцию (зависимости, ключи, конфигурация).
+4. После успешного прохождения всех валидаторов — запускает `bash scripts/setup-flag.sh mark_complete`.
+5. Возвращает финальный статус: всё готово или список незакрытых пунктов.
+
+## Связанные концепты
+
+- [[onboarding-guide]] — специализированный агент, который исполняет мастер-шаги и валидирует ключи
+- [[landing-setup]] — скилл, запускаемый командой `/landing-setup`; ближайший аналог для повторной проверки окружения
+- [[landing-start]] — следующий шаг после онбординга: создание нового проекта через wizard
+
+## Источник
+
+- `commands/landing-onboarding.md`</pre>
+      </section>
+    
+      <section id="landing-photos">
+        <h2>landing-photos <span class="badge badge-command">command</span></h2>
+        <pre># /landing-photos — Конвейер клиентских фотографий
+
+## Что делает
+
+Запускает полный pipeline обработки клиентских фотографий: AI-классификация снимков, подбор лучших кандидатов под каждый слот лендинга, ручная галерея для расстановки и генеративный fallback если фоток нет. После выполнения перерендерит `composed.html` с реальными фото вместо плейсхолдеров.
+
+## Когда вызывать / в каком этапе
+
+**Stage 07c** — после того как утверждены:
+- этап `05_ДИЗАЙН-СИСТЕМА` (статус `approved` в `.landing-state.yaml`) — нужен `tokens.json` для стиля промптов
+- `07a_WIREFRAME/selections.yaml` с выбранными вариантами блоков — нужно знать какие photo-слоты будут в лендинге
+
+Запускается **вручную** командой `/landing-photos`. В автоматический оркестратор (`landing-orchestrator`) не встроен — это задача PR-D.
+
+**Флаги:**
+- `--project <slug>` — указать папку проекта явно
+- `--force-stage <intake|classify|match|preview>` — сбросить конкретный шаг при повторном прогоне
+- `--all-ai` — пропустить inbox, генерировать все фото через codex (требует подтверждения)
+
+## Что на вход / на выход
+
+**Вход:**
+- Фотки клиента в `07c_PHOTOS/inbox/` (7 подпапок по типу: портреты, процесс работы и т.д.)
+- Или архивные фото из `02_МАТЕРИАЛЫ_КЛИЕНТА/photos/original/` (для старых проектов)
+- `07a_WIREFRAME/selections.yaml` — список photo-слотов
+- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — цвета и стиль бренда
+
+**Выход (в `07c_PHOTOS/`):**
+- `intake/` — обработанные JPEG + миниатюры (HEIC→JPEG, EXIF strip, dedupe)
+- `catalog.yaml` — каталог с AI-тегами
+- `selections.draft.yaml` — AI-черновик расстановки
+- `selections.yaml` — финальная расстановка (утверждается пользователем)
+- `processed/` — финальные кадрированные фото под слоты
+- `photo-board.html` — UI для drag-drop расстановки
+- `photo-preview.html` — превью «фото в макете»
+- `STATE.yaml` — статусы этапов
+- Обновлённый `07b_COMPOSED/composed.html` с реальными `<img>`/`<picture>`
+
+## Связанные концепты
+
+- [[photo-curator]] — оркестратор всего pipeline, диспатчит под-агентов
+- [[photo-classifier]] — тегирует фотки через codex (один снимок за вызов)
+- [[photo-matcher]] — ранжирует кандидатов по каждому слоту, формирует `selections.draft.yaml`
+- [[photo-preview-board]] — кадрирует фото под слоты и генерирует fallback через codex image_gen
+- [[block-composition]] — предыдущий этап 07b, создаёт `composed.html` с плейсхолдерами
+- [[landing-visuals]] — параллельный этап 07d для иконок и инфографики
+
+## Источник
+
+- `commands/landing-photos.md`</pre>
+      </section>
+    
+      <section id="landing-prototype">
+        <h2>landing-prototype <span class="badge badge-command">command</span></h2>
+        <pre># /landing-prototype — Импорт прототипа
+
+## Что делает
+
+Берёт файл прототипа (`prototype.pdf` или `prototype.md`), который маркетолог положил в папку проекта, и преобразует его в два стандартных формата: человекочитаемый `prototype.md` и машиночитаемый `prototype.yaml`. После этого система готова к построению wireframe.
+
+## Когда вызывать / в каком этапе
+
+Этап **07 — Прототип**. Вызывается вручную командой `/landing-prototype`, когда:
+- вы находитесь внутри папки проекта-лендинга (есть `00_БРИФ/brief.md` или `.landing-state.yaml`),
+- в папке `07_ПРОТОТИП/source/` лежит файл `prototype.pdf` или `prototype.md`.
+
+После завершения этапа — запускай `/landing-wireframe`.
+
+> **Внимание (PR-A scope):** команда пока не интегрирована с `gate-check.sh` и `.landing-state.yaml`. Порядок этапов контролирует сам пользователь вручную. Интеграция в оркестратор — задача PR-D.
+
+## Что на вход / на выход
+
+**Вход:**
+- `07_ПРОТОТИП/source/prototype.pdf` **или** `07_ПРОТОТИП/source/prototype.md`
+
+**Выход:**
+- `07_ПРОТОТИП/prototype.md` — нормализованный прототип для человека
+- `07_ПРОТОТИП/prototype.yaml` — машиночитаемая структура блоков
+- `07_ПРОТОТИП/import-log.md` — лог импорта с пометками об уточнениях
+
+**Встроенная проверка:**
+После работы агента запускается валидатор:
+```bash
+python3 skills/prototype-import/scripts/validate-prototype.py 07_ПРОТОТИП/prototype.yaml
+```
+Команда сообщает итоговый summary и предлагает запустить следующий шаг.
+
+## Связанные концепты
+
+- [[prototype-importer]] — агент, который выполняет парсинг и нормализацию прототипа, задаёт уточняющие вопросы при неоднозначностях
+- [[landing-wireframe]] — следующая команда: строит интерактивный wireframe.html на основе `prototype.yaml`
+- [[landing-go]] — единая точка входа PR-D, которая в будущем интегрирует эту команду в автоматический оркестратор
+
+## Источник
+
+- `commands/landing-prototype.md`</pre>
+      </section>
+    
+      <section id="landing-qa">
+        <h2>landing-qa <span class="badge badge-command">command</span></h2>
+        <pre># /landing-qa — QA-аудит живого лендинга
+
+## Что делает
+
+Проверяет опубликованный лендинг по 7 критериям качества: доступность сайта, HTTPS, мета-теги, аналитика, формы, мобильная версия и производительность. Результат — отчёт в `10_QA/qa-report.md` с пометкой pass/fail по каждому критерию.
+
+## Когда вызывать / в каком этапе
+
+Этап **10 (QA)**. Вызывается вручную командой `/landing-qa` **после** того, как сайт задеплоен через `/landing-deploy` (этап 09). Перед запуском система проверяет:
+
+1. Пройден ли onboarding (`~/.landing-system/setup_complete`). Если нет — просит запустить `/landing-onboarding`.
+2. Наличие завершённого этапа 09 через `gate-check.sh --stage 10_qa`. Если предыдущий этап не закрыт — сообщает об ошибке и останавливается.
+
+После успешного завершения аудита и подтверждения пользователем запускается `gate-check.sh --stage 10_qa --approve`, фиксирующий этап в `.landing-state.yaml`.
+
+## Что на вход / на выход
+
+**Вход:**
+- Живой сайт, задеплоенный через `/landing-deploy`
+- URL лендинга — берётся из `00_БРИФ/brief.md`
+
+**Выход:**
+- `10_QA/qa-report.md` — отчёт QA-аудита с результатами по 7 критериям (pass/fail по каждому)
+
+## Связанные концепты
+
+- [[qa-auditor]] — специализированный агент, выполняющий проверки и пишущий отчёт
+- [[landing-deploy]] — предшествующая команда (этап 09), без неё QA не запустится
+- [[gate-check]] — скрипт проверки gate-условий между этапами
+
+## Источник
+
+- `commands/landing-qa.md`</pre>
+      </section>
+    
+      <section id="landing-references">
+        <h2>landing-references <span class="badge badge-command">command</span></h2>
+        <pre># /landing-references — Сбор визуальных референсов (этап 03)
+
+## Что делает
+
+Собирает и систематизирует визуальные ссылки-референсы (сайты, Behance, скриншоты), помечает каждый как `candidate / approved / rejected`, а затем рендерит из одобренных HTML-мудборд для передачи дизайнеру на следующий этап.
+
+## Когда вызывать / в каком этапе
+
+Этап **03** — запускается после завершения этапа 01 (контекст/анализ ниши). Перед запуском система проверяет:
+1. Пройден ли онбординг (`~/.landing-system/setup_complete`). Если нет — команда останавливается с подсказкой запустить `/landing-onboarding`.
+2. Готов ли предыдущий этап — `gate-check.sh --stage 03_references --project <project>`.
+
+После того как пользователь явно одобряет мудборд, скрипт закрывает гейт (`--approve`) и система разблокирует переход к этапу 04 (бренд).
+
+## Что на вход / на выход
+
+**Вход:**
+- URL-ы сайтов, Behance-проектов или локальные скриншоты, предоставленные пользователем в интерактивном режиме.
+- Данные о проекте из `landing.project` конфига или аргумента `<project>`.
+
+**Выход:**
+- `03_РЕФЕРЕНСЫ/index.yaml` — реестр всех референсов с полями `url`, `status` (candidate / approved / rejected) и тегами.
+- `03_РЕФЕРЕНСЫ/moodboard.html` — визуальный превью одобренных референсов (рендерит `moodboard-composer`).
+
+**HARD GATE:** команда явно ждёт подтверждения пользователя после показа `moodboard.html`. Без одобрения переход к этапу 04 заблокирован.
+
+## Связанные концепты
+
+- [[references-curator]] — агент, выполняющий сбор, теггирование и ведение `index.yaml`
+- [[moodboard-composer]] — агент, рендерящий `moodboard.html` из одобренного набора референсов
+- [[gate-check]] — скрипт проверки и закрытия stage-гейтов
+- [[landing-brand]] — следующий этап (04), разблокируется после approve мудборда
+- [[landing-orchestrator]] — мастер-оркестратор, в который интегрирована команда
+
+## Источник
+
+- `commands/landing-references.md`</pre>
+      </section>
+    
+      <section id="landing-rollback">
+        <h2>landing-rollback <span class="badge badge-command">command</span></h2>
+        <pre># /landing-rollback — Откат лендинга к предыдущей версии
+
+## Что делает
+
+Восстанавливает WordPress-тему из ранее сохранённого снапшота и сразу же деплоит её на сервер. Позволяет быстро вернуться к рабочему состоянию сайта, если после обновления что-то пошло не так.
+
+## Когда вызывать / в каком этапе
+
+Используется на этапе **09 (деплой / ops)** — после того как лендинг уже находится в продакшне. Вызывать вручную в папке проекта, если нужно срочно откатить изменения:
+
+```
+/landing-rollback v1.0
+```
+
+Аргумент — метка версии (например, `v1.0`, `v2.3`). Если аргумент не указан, команда сначала покажет список доступных версий из папки `09_ВЕРСИИ/`.
+
+## Что на вход / на выход
+
+**Вход:**
+- Метка версии для восстановления (например, `v1.0`)
+- Сохранённые снапшоты в `09_ВЕРСИИ/<version>/wp-theme/`
+- Скрипт деплоя `scripts/deploy.sh`
+
+**Выход:**
+- Восстановленный `08_КОД/wp-theme/` из выбранной версии
+- Переразвёрнутый сайт на сервере (Бегет)
+- Подтверждение доступности сайта после отката
+
+**Шаги выполнения:**
+1. Список доступных версий: `ls 09_ВЕРСИИ/`
+2. Копирование темы: `cp -r 09_ВЕРСИИ/<version>/wp-theme 08_КОД/wp-theme`
+3. Деплой: `scripts/deploy.sh .`
+4. Проверка доступности сайта
+
+## Связанные концепты
+
+- [[lifecycle-keeper]] — агент, управляющий версиями, снапшотами и клонами лендинга; создаёт артефакты в `09_ВЕРСИИ/`, которые использует эта команда
+- [[wp-deployer]] — агент деплоя на Бегет через SSH+rsync+wp-cli; вызывается внутри `scripts/deploy.sh`
+- [[landing-clone]] — смежная ops-команда для клонирования проекта под A/B-тест
+
+## Источник
+
+- `commands/landing-rollback.md`</pre>
+      </section>
+    
+      <section id="landing-setup">
+        <h2>landing-setup <span class="badge badge-command">command</span></h2>
+        <pre># /landing-setup — Одноразовая инициализация системы
+
+## Что делает
+
+Настраивает всю инфраструктуру landing-system перед первым использованием: проверяет зависимости, собирает API-ключи, записывает конфигурацию интеграций и выводит итоговый отчёт о готовности системы.
+
+## Когда вызывать / в каком этапе
+
+Запускается **один раз** при первой установке системы — до создания любых проектов. Если preflight-проверки падают, команда показывает инструкции по исправлению, ждёт и перезапускает проверку. После успешного завершения доступна команда `/landing-new <slug>`.
+
+## Что на вход / на выход
+
+**На вход:**
+- Нет обязательных аргументов — команда запускается без параметров
+- Интерактивный ввод API-ключей: Firecrawl, CRM, deploy-credentials
+
+**На выход:**
+- `.env` — файл с заполненными API-ключами (добавлен в `.gitignore`, не коммитится)
+- `config/system.yaml` — настройки выбранных интеграций (CRM, аналитика, JS-библиотеки; коммитится)
+- Отчёт о готовности: какие интеграции подключены, какие нет
+
+**Внутренние шаги:**
+1. `scripts/preflight.sh` — проверка наличия Python, bats, wp-cli, `.env`
+2. При ошибках — вывод инструкций по устранению, повторная проверка
+3. Сбор API-ключей и запись в `.env`
+4. Выбор интеграций и запись в `config/system.yaml`
+5. Финальный отчёт готовности
+
+## Связанные концепты
+
+- [[system-setup]] — агент, реализующий логику этой команды
+- [[landing-new]] — следующий шаг после успешного setup (создание проекта)
+- [[landing-start]] — альтернативная точка входа с wizard-режимом для новичков
+- [[preflight]] — скрипт проверки зависимостей, вызываемый внутри команды
+
+## Источник
+
+- `commands/landing-setup.md`</pre>
+      </section>
+    
+      <section id="landing-stack">
+        <h2>landing-stack <span class="badge badge-command">command</span></h2>
+        <pre># /landing-stack — Планирование стека плагинов и библиотек
+
+## Что делает
+
+Определяет, какие WordPress-плагины, JS-библиотеки, иконочный набор и CDN-шрифты будут использованы в лендинге. Результат — YAML-реестр `design-stack.yaml` и три вспомогательных документа по компонентам, эффектам и шрифтам.
+
+## Когда вызывать / в каком этапе
+
+**Этап 06.** Запускается вручную командой `/landing-stack` после того, как пользователь утвердил дизайн-систему (этап 05, файл `05_ДИЗАЙН-СИСТЕМА/DESIGN.md`).
+
+Перед стартом система автоматически проверяет:
+1. Пройден ли onboarding (`scripts/setup-flag.sh is_complete`); если нет — останавливается.
+2. Выполнен ли гейт этапа 06 (`scripts/gate-check.sh --stage 06_stack`); если предыдущий этап не закрыт — выводит ошибку и останавливается.
+
+**HARD GATE:** после генерации агент показывает `design-stack.yaml` и ждёт явного подтверждения пользователя перед переходом к этапу 07. Без approve к контенту не переходят.
+
+## Что на вход / на выход
+
+**Вход:**
+- `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` — утверждённая дизайн-система (производится `design-system-generator`)
+
+**Выход:**
+- `06_СТЕК/design-stack.yaml` — реестр WordPress-плагинов, JS-библиотек, иконочного набора и font CDN
+- `06_СТЕК/component-library-plan.md` — план компонентной библиотеки
+- `06_СТЕК/effects-plan.md` — план визуальных эффектов
+- `06_СТЕК/font-and-color-plan.md` — план шрифтов и цветовой системы
+
+## Связанные концепты
+
+- [[stack-planner]] — специализированный агент, непосредственно генерирующий все выходные файлы
+- [[design-system-generator]] — агент этапа 05, создаёт `DESIGN.md`, который является обязательным входом
+- [[landing-design]] — команда этапа 05; должна быть завершена и утверждена до запуска `/landing-stack`
+
+## Источник
+
+- `commands/landing-stack.md`</pre>
+      </section>
+    
+      <section id="landing-start">
+        <h2>landing-start <span class="badge badge-command">command</span></h2>
+        <pre># /landing-start — Главная точка входа в систему
+
+## Что делает
+
+Запускает интерактивный wizard, который за один раз объясняет систему, создаёт папку проекта со всеми нужными подпапками и подсказками, проводит маркетолога через четыре шага материалов (прототип, фото, логотип, референсы) с проверкой каждого шага, и в финале подсказывает запустить `/landing-go`.
+
+## Когда вызывать / в каком этапе
+
+Вызывается **один раз**, в самом начале работы с новым проектом. Это нулевой этап — до любого контента, брендинга и кода. Предназначен для маркетологов, которые впервые знакомятся с системой. Опытные пользователи могут пропустить и сразу взять `/landing-new <slug>`.
+
+## Что на вход / на выход
+
+**Вход:**
+- Никаких аргументов. Wizard сам спрашивает имя проекта (kebab-case slug).
+
+**Выход:**
+- Папка `~/Lendings/<slug>/` с 18 подпапками и README-подсказками в каждой
+- Проверенные материалы в нужных местах:
+  - 🔴 `07_ПРОТОТИП/source/` — `prototype.pdf` или `prototype.md` (обязательно, без него wizard выходит с ошибкой)
+  - 🟡 `07c_PHOTOS/inbox/` — клиентские фото (рекомендуется, можно пропустить — AI сгенерирует)
+  - 🟡 `04_БРЕНД/logos/` — логотип (рекомендуется, можно пропустить)
+  - ⚪ `03_РЕФЕРЕНСЫ/` — референсы (опционально)
+- Финальная подсказка: «запусти `/landing-go`»
+
+**Важно:** wizard **не запускает** `/landing-go` автоматически — только подсказывает.
+
+## Связанные концепты
+
+- [[landing-onboarding-wizard]] — агент, который реализует всю логику wizard под капотом
+- [[landing-new]] — быстрая альтернатива без онбординга, для опытных пользователей
+- [[landing-go]] — следующий шаг после wizard; запускает полный pipeline через оркестратор
+- [[landing-prototype]] — импорт прототипа (вызывается позже, после `/landing-go`)
+
+## Источник
+
+- `commands/landing-start.md`</pre>
+      </section>
+    
+      <section id="landing-status">
+        <h2>landing-status <span class="badge badge-command">command</span></h2>
+        <pre># /landing-status — Статус системы и проекта
+
+## Что делает
+Показывает текущее состояние: либо мастер-системы landing-system (какие скиллы и агенты установлены), либо активного проекта-лендинга (название, номер текущего этапа из 12 и подсказку что делать дальше).
+
+## Когда вызывать / в каком этапе
+Вызывается вручную в любой момент — нет привязки к конкретному этапу. Особенно полезен при возобновлении работы после перерыва или для быстрой диагностики того, где находится проект.
+
+## Что на вход / на выход
+
+**На вход:**
+- Текущая рабочая директория (`cwd`), определяет режим работы команды.
+
+**На выход (3 режима):**
+
+1. **Мастер-система** — если `cwd` содержит `skills/landing-project-init/`:
+   - Версия из `package.json`
+   - Статус фазы («Phase 1 — Skeleton & Infrastructure»)
+   - Список установленных скиллов и агентов
+
+2. **Проект-лендинг** — если `cwd` содержит `00_БРИФ/` и `08_КОД/`:
+   - Название проекта (из имени папки)
+   - Номер текущего этапа (0–12) — определяется по наличию реальных файлов в пронумерованных папках
+   - Подсказка о следующем шаге
+
+3. **Ни то ни другое** — сообщение об ошибке с подсказкой куда перейти.
+
+**Алгоритм определения этапа:**
+Скрипт последовательно проверяет наличие ключевых файлов: `brief.md` → контент `01_КОНТЕКСТ` → `moodboard.md` → `brand-kit.md` → `DESIGN.md` → `design-stack.yaml` → `final-copy.md` → папка `wp-theme` → `deploy.sh` → `checklist.md`. Стадия — номер последнего выполненного шага.
+
+## Связанные концепты
+- [[landing-project-init]] — по наличию его папки команда определяет, что находится в мастер-системе
+- [[landing-orchestrator]] — упоминается в подсказках как следующий шаг после заполнения брифа
+- [[landing-new]] — создаёт проекты, структуру которых читает эта команда
+
+## Источник
+- `commands/landing-status.md`</pre>
+      </section>
+    
+      <section id="landing-visuals">
+        <h2>landing-visuals <span class="badge badge-command">command</span></h2>
+        <pre># /landing-visuals — генерация иконок и инфографики
+
+## Что делает
+
+Автоматически генерирует PNG-иконки и инфографику для лендинга через codex image_gen, встраивает их в `composed.html` вместо текстовых плейсхолдеров. Стиль генерации согласован с брендом: цвета берутся из `tokens.json`, тематика — из профиля ниши.
+
+## Когда вызывать / в каком этапе
+
+**Stage 07d (PR-C).** Вызывается вручную после того, как:
+
+1. Дизайн-система утверждена (`05_ДИЗАЙН-СИСТЕМА/DESIGN.md`, статус `approved` в `.landing-state.yaml`).
+2. Файл `07b_COMPOSED/composed.html` существует (создаётся командой `/landing-compose`).
+
+До PR-D команда **не встроена** в `landing-orchestrator` — запускается отдельно.
+
+Поддерживает флаги:
+- `--type icons` / `--type infographics` — частичный прогон;
+- `--force` — сброс кэша;
+- `--slot <name>` — один слот.
+
+## Что на вход / на выход
+
+**Вход:**
+- `07b_COMPOSED/composed.html` с data-слотами `type="icon"` и `type="infographic"`.
+- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — цвета бренда для промптов.
+- `01a_АНАЛИЗ_НИШИ/market-profile.md` — тематика ниши.
+- Опционально: `07d_VISUALS/.cache/` — хэш-кэш предыдущих генераций.
+
+**Выход (в `07d_VISUALS/`):**
+- `_slots.yaml` — список найденных слотов.
+- `icons/<slot>.png` — сгенерированные иконки.
+- `infographics/<slot>.png` — сгенерированная инфографика.
+- `.cache/<hash>.png` — кэш по hash(hint + style + brand_color + niche).
+- `prompts.yaml` — лог промптов с attribution.
+- `STATE.yaml` — статусы этапов.
+- Обновлённый `07b_COMPOSED/composed.html` — плейсхолдеры `[SLOT: ...]` и `[INFOGRAPHIC: ...]` заменены на `<img class="lp-icon">` / `<img class="lp-infographic">`.
+
+## Связанные концепты
+
+- [[visual-curator]] — агент-оркестратор, сканирует слоты, управляет кэшем, диспатчит субагентов.
+- [[icon-generator]] — генерирует один PNG-иконки через codex.
+- [[infographic-builder]] — генерирует одну инфографику через codex.
+- [[block-composition]] — re-render composed.html после замены плейсхолдеров.
+- [[design-tokens-generation]] — поставляет `tokens.json` с цветами бренда.
+
+## Источник
+
+- `commands/landing-visuals.md`</pre>
+      </section>
+    
+      <section id="landing-wireframe">
+        <h2>landing-wireframe <span class="badge badge-command">command</span></h2>
+        <pre># /landing-wireframe — Интерактивный wireframe с вариантами блоков
+
+## Что делает
+
+Генерирует интерактивный HTML-файл, в котором каждый блок лендинга представлен в 2–3 вариантах оформления из библиотеки блоков. Маркетолог открывает файл в браузере, выбирает понравившийся вариант для каждого раздела и нажимает «Confirm» — система сохраняет выбор.
+
+## Когда вызывать / в каком этапе
+
+Вызывается **после** завершения этапа 07 (импорт прототипа). Обязательное условие: файл `07_ПРОТОТИП/prototype.yaml` должен существовать и быть валидным. Типичный триггер — после того как `/landing-prototype` завершил работу и пользователь проверил `prototype.md`.
+
+Команда вызывается **вручную**; в `landing-orchestrator` и `.landing-state.yaml` пока не интегрирована (задача PR-D).
+
+## Что на вход / на выход
+
+**Вход:**
+- `07_ПРОТОТИП/prototype.yaml` — машиночитаемый прототип, подготовленный командой `/landing-prototype`
+
+**Выход:**
+- `07a_WIREFRAME/wireframe.html` — интерактивный preview с radio-переключателями между вариантами блоков (desktop + mobile)
+- `07a_WIREFRAME/candidates.yaml` — список кандидатов из block-library для каждого блока прототипа
+- `07a_WIREFRAME/selections.yaml` — создаётся самим пользователем через кнопку «Confirm» в браузере; содержит финальный выбор вариантов
+
+## Как использовать
+
+1. Открой `07a_WIREFRAME/wireframe.html` в браузере.
+2. Для каждого раздела выбери подходящий вариант блока через radio-кнопки.
+3. Нажми «Confirm» — скачается `selections.yaml`.
+4. Положи скачанный файл обратно в `07a_WIREFRAME/`.
+5. Запусти `/landing-compose` для следующего этапа.
+
+## Связанные концепты
+
+- [[ux-composer]] — агент, который непосредственно рендерит `wireframe.html` и `candidates.yaml`
+- [[prototype-import]] — предшествующий этап; формирует входной `prototype.yaml`
+- [[landing-compose]] — следующий этап (07b): вставляет токены дизайна и тексты в выбранные блоки
+- [[wireframe-rendering]] — скилл, описывающий логику рендера wireframe
+- [[block-composition]] — скилл этапа 07b, следует после одобрения wireframe
+
+## Источник
+
+- `commands/landing-wireframe.md`</pre>
+      </section>
+    
+      <section id="block-composition">
+        <h2>block-composition <span class="badge badge-skill">skill</span></h2>
+        <pre># Block Composition — сборка итогового HTML лендинга
+
+## Что делает
+
+Берёт утверждённые блоки из wireframe, дизайн-токены и тексты из прототипа — и собирает из них единый HTML-файл лендинга (`composed.html`). Это финальная сборка перед тем, как добавить реальные фото и иконки.
+
+## Когда вызывать / в каком этапе
+
+Этап **07b**. Запускается командой `/landing-compose` после того, как:
+1. Пользователь выбрал варианты блоков в `wireframe.html` и сохранил `selections.yaml` в `07a_WIREFRAME/`.
+2. Готовы дизайн-токены (`tokens.json`) из этапа 05.
+3. Импортирован прототип (`prototype.yaml`) из этапа 07.
+
+Выполняется агентом **block-composer**. HARD GATE 07b не закрывается, пока скрипт `scripts/verify-composed-premium.sh` не вернёт exit 0 (13 premium-фич обязательны).
+
+## Что на вход / на выход
+
+**Вход:**
+- `<project>/07_ПРОТОТИП/prototype.yaml` — структура и тексты лендинга
+- `<project>/07a_WIREFRAME/selections.yaml` — выбранные варианты блоков
+- `<project>/05_ДИЗАЙН-СИСТЕМА/tokens.json` — цвета, шрифты, отступы
+- `block-library/` — общая библиотека HTML-шаблонов блоков
+
+**Выход:**
+- `<project>/07b_COMPOSED/composed.html` — desktop-версия лендинга
+- `<project>/07b_COMPOSED/composed-mobile.html` — мобильная версия
+- `<project>/07b_COMPOSED/block-injection-log.md` — лог подстановок
+
+Визуальный контент (фото, иконки, инфографика) на этом этапе остаётся в виде подписанных плейсхолдеров — они заполняются на этапах 07c (PR-B) и 07d (PR-C).
+
+## Скрипты
+
+Скилл использует четыре вспомогательных скрипта:
+- `scripts/validate-selections.py` — проверить корректность `selections.yaml`
+- `scripts/inject-tokens.py` — подставить CSS-переменные из `tokens.json`
+- `scripts/inject-content.py` — вставить заголовки, тексты и CTA из `prototype.yaml`
+- `scripts/compose-blocks.py` — собрать финальный `composed.html`
+
+## Связанные концепты
+
+- [[block-composer]] — агент, выполняющий сборку на этапе 07b
+- [[prototype-import]] — поставляет `prototype.yaml` со структурой и текстами
+- [[wireframe-rendering]] — этап 07a, производит `selections.yaml` с выбранными блоками
+- [[design-tokens-generation]] — этап 05, производит `tokens.json` с дизайн-токенами
+- [[landing-compose]] — slash-команда, запускающая этот скилл
+- [[photo-curation]] — этап 07c, заполняет фото-плейсхолдеры в `composed.html`
+- [[visual-generation]] — этап 07d, заполняет иконки и инфографику
+
+## Источник
+
+- `skills/block-composition/SKILL.md`</pre>
+      </section>
+    
+      <section id="block-library-management">
+        <h2>block-library-management <span class="badge badge-skill">skill</span></h2>
+        <pre># Block Library Management — Управление библиотекой блоков
+
+## Что делает
+Предоставляет утилиты для обслуживания общей библиотеки wireframe-блоков: создаёт новые блоки по шаблону, проверяет корректность каталога и метаданных каждого блока.
+
+## Когда вызывать / в каком этапе
+Используется на этапе **07a (Wireframe)** агентом `ux-composer` при инъекции блоков в wireframe. Также вызывается вручную разработчиком, когда нужно добавить новый блок в библиотеку или убедиться, что существующие блоки соответствуют схемам.
+
+## Что на вход / на выход
+
+**Вход:**
+- Путь к `block-library/catalog.yaml` — для валидации каталога
+- Путь к `block-library/<block>/meta.yaml` — для валидации метаданных блока
+- Параметры `--id` и `--category` — для создания нового блока
+
+**Выход:**
+- Отчёт валидации (exit 0 / ошибки) от `validate-catalog.py` и `validate-meta.py`
+- Новый блок-папка со всеми обязательными файлами — от `scaffold-block.py`
+
+**Скрипты:**
+| Команда | Назначение |
+|---|---|
+| `scripts/validate-catalog.py <path>` | Проверить `catalog.yaml` по схеме |
+| `scripts/validate-meta.py <path>` | Проверить `meta.yaml` отдельного блока |
+| `scripts/scaffold-block.py --id <id> --category <cat>` | Создать новый блок из шаблона |
+
+## Связанные концепты
+- [[ux-composer]] — использует библиотеку при инъекции блоков в wireframe.html на этапе 07a
+- [[block-library]] — сам каталог блоков, который этот скилл обслуживает
+- [[wireframe-rendering]] — потребитель блоков на этапе 07a
+
+## Источник
+- `skills/block-library-management/SKILL.md`</pre>
+      </section>
+    
+      <section id="brand-kit-build">
+        <h2>brand-kit-build <span class="badge badge-skill">skill</span></h2>
+        <pre># brand-kit-build — Сборка бренд-кита
+
+## Что делает
+
+Собирает единый бренд-кит проекта из извлечённых стилевых данных: формирует файл `brand-kit.md` с полной прослеживаемостью каждого токена (цвет, шрифт, иконка — со ссылкой на источник), затем рендерит HTML-превью `brand-kit.html` с цветовыми плашками, образцами шрифтов и миниатюрами иконок.
+
+## Когда вызывать / в каком этапе
+
+Этап **04 — Бренд**. Вызывается агентом `brand-architect` после того, как `style-extractor` уже отработал и записал YAML-файлы в `04_БРЕНД/extracted/`. Пользователь видит результат через `brand-kit.html` и подтверждает бренд-кит перед переходом к этапу 05.
+
+## Что на вход / на выход
+
+**Вход:**
+- `04_БРЕНД/extracted/*.yaml` — структурированные данные о палитре, шрифтах и иконках, подготовленные `style-extractor`
+- `01a_АНАЛИЗ_НИШИ/` — артефакты нишевого анализа (используются для предложения подходящих палитр из библиотеки)
+- `landing_system/presets/palettes.yaml` — глобальная библиотека готовых палитр
+
+**Выход:**
+- `04_БРЕНД/brand-kit.md` — каноничный бренд-кит с провенансом каждого токена
+- `04_БРЕНД/brand-kit.html` — визуальный превью для согласования с клиентом
+- `04_БРЕНД/palettes.yaml` — выбранный пользователем подмножество палитр (если библиотека не пуста)
+
+**Скрипты:**
+- `scripts/build.py` — синтез `brand-kit.md`
+- `scripts/render-html.py` — рендер `brand-kit.html`
+- `scripts/snapshot-palettes-to-project.py` — копирование выбранных палитр из глобальной библиотеки в проект
+
+## Режимы выбора палитры
+
+Перед синтезом агент спрашивает клиента, сколько палитр показать на согласовании:
+
+| Режим | Описание |
+|---|---|
+| **1** Точечно (1–3) | клиент чётко знает стиль |
+| **2** Несколько (4–6) | есть направление (рекомендуется) |
+| **3** Весь каталог | клиент в поиске |
+
+Если `palettes.yaml` пуст (новая установка) — шаг выбора пропускается, палитры создаются на этапе 05 с нуля.
+
+## Связанные концепты
+
+- [[style-extractor]] — готовит входные YAML перед запуском этого скилла
+- [[brand-architect]] — агент-владелец, запускает brand-kit-build
+- [[design-tokens-generation]] — следующий этап, принимает brand-kit.md как вход
+- [[niche-analysis]] — даёт контекст ниши для выбора палитры из библиотеки
+
+## Источник
+
+- `skills/brand-kit-build/SKILL.md`</pre>
+      </section>
+    
+      <section id="client-assets-collection">
+        <h2>client-assets-collection <span class="badge badge-skill">skill</span></h2>
+        <pre># Client Assets Collection — Сбор материалов клиента
+
+## Что делает
+
+Собирает все клиентские материалы на этапе 02: создаёт структуру папок в `02_МАТЕРИАЛЫ_КЛИЕНТА/`, парсит отзывы с внешних площадок (Яндекс.Карты, 2GIS, Отзовик) и формирует HTML-галерею с манифестом всех собранных ресурсов.
+
+## Когда вызывать / в каком этапе
+
+Вызывается на **этапе 02** (Материалы клиента) агентом `client-assets-collector`. Выполняется до этапа 03 (Референсы) и этапа 04 (Бренд). Активировать, когда нужно заполнить папку `02_МАТЕРИАЛЫ_КЛИЕНТА/` реальными данными клиента — отзывами, фото, видео с внешних источников.
+
+## Что на вход / на выход
+
+**Вход:**
+- URL-адреса страниц клиента на Яндекс.Картах, 2GIS, Отзовике (передаются в скрипты)
+- Существующий проект с папкой `02_МАТЕРИАЛЫ_КЛИЕНТА/` (или создаётся автоматически)
+
+**Выход:**
+- Подпапки внутри `02_МАТЕРИАЛЫ_КЛИЕНТА/` (scaffold)
+- Файл `assets-manifest.yaml` — манифест всех найденных ресурсов
+- HTML-галерея-превью собранных материалов
+- Спарсенные отзывы из внешних источников
+
+**Инструменты:**
+- `scripts/collect.py` — сборка манифеста и HTML-галереи
+- `scripts/parse-reviews.py` — парсинг отзывов через Playwright + trafilatura (без API-ключей, бесплатно)
+
+## Связанные концепты
+
+- [[client-assets-collector]] — агент-владелец этого скилла, запускает его в рамках stage 02
+
+## Источник
+
+- `skills/client-assets-collection/SKILL.md`</pre>
+      </section>
+    
+      <section id="design-tokens-generation">
+        <h2>design-tokens-generation <span class="badge badge-skill">skill</span></h2>
+        <pre># Design Tokens Generation — Генерация дизайн-системы
+
+## Что делает
+
+Читает готовый бренд-кит проекта и автоматически собирает полную дизайн-систему: файл `DESIGN.md` с описанием всех визуальных правил и машиночитаемый `tokens.json` с цветами, шрифтами и отступами. Дополнительно рендерит HTML-превью дизайн-системы для визуальной проверки.
+
+## Когда вызывать / в каком этапе
+
+Этап **05 (Дизайн-система)**. Запускается агентом `design-system-generator` после того, как `brand-architect` завершил этап 04 и файл `04_БРЕНД/brand-kit.md` утверждён. Скилл не вызывается вручную — его запускает агент.
+
+После утверждения этапа 05 автоматически срабатывает post-approve хук: скрипт `export-palettes-to-library.py` добавляет новую палитру в глобальную библиотеку `presets/palettes.yaml`. **Важно:** запускать этот хук до утверждения нельзя — черновые палитры не должны попадать в библиотеку.
+
+## Что на вход / на выход
+
+**Вход:**
+- `04_БРЕНД/brand-kit.md` — YAML-frontmatter с цветами, шрифтами, иконками из бренд-кита
+
+**Выход:**
+- `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` — 9 секций: Color, Typography, Spacing, Layout, Components, Motion, Voice, Brand, Anti-patterns
+- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — машиночитаемые токены для сборки темы
+- `05_ДИЗАЙН-СИСТЕМА/design-preview.html` — визуальный превью дизайн-системы в браузере
+
+**Скрипты:**
+- `scripts/build-tokens.py <project-dir>` — генерирует DESIGN.md + tokens.json
+- `scripts/render-preview.py <project-dir>` — генерирует design-preview.html
+- `scripts/export-palettes-to-library.py` — post-approve хук экспорта палитры
+
+**Структура DESIGN.md** включает 9 обязательных секций: палитра с контрастными парами, типографика (display/body/mono, h1–h6), модульная сетка отступов, 12-колоночный лэйаут с breakpoints, стили компонентов (кнопки, инпуты, карточки), motion-токены (duration + easing), тон голоса бренда, атмосфера бренда, явный список анти-паттернов.
+
+## Связанные концепты
+
+- [[brand-kit-build]] — предыдущий этап, создаёт `brand-kit.md`, который является входом для этого скилла
+- [[design-system-generator]] — агент-исполнитель, который вызывает этот скилл на этапе 05
+- [[brand-architect]] — агент этапа 04, чей артефакт (`brand-kit.md`) служит источником данных
+
+## Источник
+
+- `skills/design-tokens-generation/SKILL.md`</pre>
+      </section>
+    
+      <section id="landing-from-context">
+        <h2>landing-from-context <span class="badge badge-skill">skill</span></h2>
+        <pre># landing-from-context
+
+## Что делает
+
+Создаёт новый лендинг-проект внутри системы, унаследовав данные из уже существующей папки агентства — аудиторию, исследования, прототип текста. Один раз скопировал нужное — дальше лендинг живёт самостоятельно.
+
+## Когда вызывать / в каком этапе
+
+Запускается в самом начале работы над новым лендингом, когда текущая рабочая папка — родительский проект агентства. Условия активации:
+
+- Пользователь произносит фразу «новый лендинг по этому курсу/проекту» или явно вводит `/landing-from-context <slug>`.
+- В текущей директории присутствуют подпапки `01_контекст`, `04_документы`, `05_исследования` — признаки структуры агентства.
+
+## Что на вход / на выход
+
+**Вход:**
+- `slug` — имя нового лендинга (kebab-case).
+- Родительская папка агентства со стандартной структурой подпапок.
+- Опциональный флаг `--cinematic`.
+
+**Выход:**
+- Новая папка лендинга `~/Lendings/<slug>/` (создаётся через `landing-project-init`).
+- Снепшоты данных родителя:
+  - `01_контекст/` → `<лендинг>/01_КОНТЕКСТ/`
+  - `05_исследования/` → `<лендинг>/01_КОНТЕКСТ/исследования/`
+  - `04_документы/прототип-*.md` → `<лендинг>/07_КОНТЕНТ/prototype.md`
+- Файл `01_КОНТЕКСТ/source-references.yaml` — фиксирует источник каждой копии.
+- Управление передаётся `landing-orchestrator`, начиная с этапа 02 (этапы 00–01 уже частично заполнены).
+
+**Что НЕ делается:** симлинки не создаются, родительский проект не изменяется, данные не угадываются — при отсутствии файлов-прототипов задаётся вопрос пользователю.
+
+## Связанные концепты
+
+- [[landing-project-init]] — базовый скилл инициализации: создаёт структуру папок лендинга через `init.sh`
+- [[landing-orchestrator]] — принимает управление после создания проекта и ведёт через все оставшиеся этапы
+- [[landing-new]] — альтернативная команда: создаёт пустой лендинг без наследования контекста
+
+## Источник
+
+- `skills/landing-from-context/SKILL.md`</pre>
+      </section>
+    
+      <section id="landing-onboarding">
+        <h2>landing-onboarding <span class="badge badge-skill">skill</span></h2>
+        <pre># landing-onboarding — первоначальная настройка системы
+
+## Что делает
+
+Настраивает landing-system на новой машине: проверяет локальные зависимости, MCP-серверы, плагин superpowers и все API-ключи. По завершении создаёт флаг `~/.landing-system/setup_complete`, без которого ни одна `/landing-*` команда не запустится.
+
+## Когда вызывать / в каком этапе
+
+Вызывается **один раз** при первом запуске системы на машине — вручную через `/landing-onboarding`. Если флаг `setup_complete` отсутствует, любая другая `/landing-*` команда автоматически перенаправляет сюда. После успешного прохождения onboarding повторный запуск не требуется.
+
+## Что на вход / на выход
+
+**На вход:**
+- Нет пользовательских файлов — скрипты сами проверяют окружение
+- Интерактивный ввод при работе `scripts/wizard.sh`
+
+**На выход:**
+- `~/.landing-system/setup_complete` — флаг с ISO-таймстампом (основной результат)
+- Установленный `codex` CLI (если отсутствовал)
+- Подтверждение работоспособности всех 15 API-валидаторов
+
+**Скрипты:**
+| Скрипт | Назначение |
+|---|---|
+| `scripts/wizard.sh` | Интерактивный мастер-поток настройки |
+| `scripts/validate-all.sh` | Запускает все 15 API-валидаторов |
+| `scripts/setup-flag.sh` | Управляет файлом `setup_complete` |
+| `scripts/install-codex.sh` | Устанавливает `@openai/codex` и запускает `codex login` |
+
+## Prototype-first дополнения (PR-D)
+
+С версии PR-D onboarding расширен тремя обязательными шагами:
+
+1. **Установка codex CLI** — `bash scripts/install-codex.sh`. Без codex не работают `/landing-photos` и `/landing-visuals`.
+2. **Новый прототип-first флоу** — маркетолог кладёт `prototype.pdf` в `07_ПРОТОТИП/source/` и запускает `/landing-go`. Этапы 00/01/01a/02 помечены `n/a` (выполняются до системы).
+3. **Smoke-тест пайплайна:**
+   ```bash
+   SKIP_OPEN=1 USE_CODEX_MOCK=1 bash scripts/test-pipeline.sh smoke-onboarding tests/phase-pra/fixtures/prototype-sample.md
+   ```
+
+## Связанные концепты
+
+- [[landing-go]] — главная команда после onboarding; ведёт через все 12 этапов автоматически
+- [[landing-photos]] — требует установленного codex; не работает без `setup_complete`
+- [[landing-visuals]] — требует установленного codex; не работает без `setup_complete`
+
+## Источник
+
+- `skills/landing-onboarding/SKILL.md`</pre>
+      </section>
+    
+      <section id="landing-project-init">
+        <h2>landing-project-init <span class="badge badge-skill">skill</span></h2>
+        <pre># landing-project-init — Инициализация нового проекта лендинга
+
+## Что делает
+Создаёт чистую папку нового проекта лендинга по шаблону и запускает workflow с нулевого этапа. Это стартовая точка для проектов «с нуля» — не из существующего контекста агентства.
+
+## Когда вызывать / в каком этапе
+Вызывается при команде `/landing-new <slug>` или когда пользователь говорит «создай новый лендинг». Подходит только для чистого старта — если проект уже существует в контексте агентства, используй [[landing-from-context]].
+
+## Что на вход / на выход
+
+**Вход:**
+- `<slug>` — имя проекта в kebab-case (например, `lp-курс-марафон`)
+- Опционально: ниша, клиент, домен
+- Флаг `--cinematic` для premium-режима
+
+**Выход:**
+- Папка `~/Lendings/<slug>/` со структурой из `template/` (13 подпапок)
+- Инициализированный git-репозиторий проекта
+- Заполненные placeholder в `README.md` и `CLAUDE.md` проекта
+- Открытый `00_БРИФ/brief.md` для первого этапа
+
+**Побочные эффекты:**
+- Папка проекта создаётся вне `landing-system/` — она не вкладывается в мастер-систему
+- После создания скилл передаёт управление агенту [[landing-orchestrator]] с этапа 00
+
+## Как работает (шаги)
+1. Принимает slug проекта
+2. Запрашивает базовые поля: ниша, клиент, домен (опционально)
+3. Запускает `scripts/init.sh <slug>` — копирует `template/`, инит git, подставляет плейсхолдеры
+4. Открывает `00_БРИФ/brief.md` для заполнения
+5. Передаёт управление `landing-orchestrator` на этап 00
+
+## Что НЕ делает
+- Не создаёт WordPress (это этап 09, [[wp-deployer]])
+- Не требует домен жёстко — его можно указать на этапе 09
+- Не вызывает других агентов, кроме передачи `landing-orchestrator`
+
+## Связанные концепты
+- [[landing-from-context]] — альтернатива: создать проект из родительской папки агентства
+- [[landing-orchestrator]] — принимает управление после инициализации и ведёт workflow через 12 этапов
+- [[wp-deployer]] — финальный этап: деплой WordPress на Бегет
+
+## Источник
+- `skills/landing-project-init/SKILL.md`</pre>
+      </section>
+    
+      <section id="landing-versioning-and-cloning">
+        <h2>landing-versioning-and-cloning <span class="badge badge-skill">skill</span></h2>
+        <pre># Landing Versioning and Cloning — версионирование и клонирование лендингов
+
+## Что делает
+
+Сохраняет снапшоты (версии) готового лендинга и позволяет откатиться к любой из них. Также создаёт полную копию проекта для A/B-тестирования — чтобы попробовать другой вариант без риска потерять рабочий.
+
+## Когда вызывать / в каком этапе
+
+Вызывается вручную в любой момент работы над проектом:
+
+- **Перед рискованными правками** — сохранить текущее состояние через снапшот.
+- **После деплоя** — зафиксировать рабочую версию как контрольную точку.
+- **При запуске A/B-теста** — клонировать проект под новый вариант.
+- **При откате** — вернуть проект к одной из сохранённых версий.
+
+Активируется через команды `/landing-rollback` и `/landing-clone`, которыми управляет агент [[lifecycle-keeper]].
+
+## Что на вход / на выход
+
+**Вход:**
+- Путь к папке проекта (например `~/Lendings/my-project/`)
+- Для версии: опциональная метка (`version-label`), например `v1-before-redesign`
+- Для клона: новый слаг (`new-slug`), например `my-project-ab`
+
+**Выход:**
+- **Снапшот:** папка `09_ВЕРСИИ/<version>/` внутри проекта — полная копия состояния на момент сохранения
+- **Клон:** новая папка проекта `~/Lendings/<new-slug>/` — независимая копия всего лендинга для параллельной работы
+
+## Скрипты
+
+```bash
+# Сохранить снапшот
+bash skills/landing-versioning-and-cloning/scripts/create-version.sh <project-dir> [version-label]
+
+# Клонировать проект
+bash skills/landing-versioning-and-cloning/scripts/clone-landing.sh <project-dir> <new-slug>
+```
+
+## Связанные концепты
+
+- [[lifecycle-keeper]] — агент-оркестратор, который управляет этим скиллом через `/landing-rollback` и `/landing-clone`
+- [[landing-rollback]] — команда для отката к сохранённой версии
+- [[landing-clone]] — команда для создания A/B-копии проекта
+
+## Источник
+
+- `skills/landing-versioning-and-cloning/SKILL.md`</pre>
+      </section>
+    
+      <section id="moodboard-creation">
+        <h2>moodboard-creation <span class="badge badge-skill">skill</span></h2>
+        <pre># Moodboard Creation — Генерация мудборда из референсов
+
+## Что делает
+
+Читает файл `03_РЕФЕРЕНСЫ/index.yaml`, разделяет референсы на одобренные и отклонённые, затем рендерит визуальный HTML-превью мудборда (`moodboard.html`) через Jinja2-шаблон. При наличии нарратива в `moodboard.md` — встраивает его текст в HTML-превью.
+
+## Когда вызывать / в каком этапе
+
+Вызывается на **этапе 03** (мудборд) сразу после того, как маркетолог или пользователь одобрил набор визуальных референсов в `03_РЕФЕРЕНСЫ/index.yaml`. Агентом-владельцем является [[moodboard-composer]], который и запускает этот скилл автоматически. Вручную можно инициировать командой `/landing-moodboard`.
+
+## Что на вход / на выход
+
+**Вход:**
+- `03_РЕФЕРЕНСЫ/index.yaml` — список референсов с пометками `status: approved / rejected`
+- `moodboard.md` (опционально) — текстовый нарратив с описанием настроения и стиля
+- `moodboard.html.j2` — Jinja2-шаблон для рендеринга HTML
+
+**Выход:**
+- `03_РЕФЕРЕНСЫ/moodboard.html` — визуальный превью-мудборд с одобренными референсами; отклонённые не попадают в финальный HTML
+
+## Связанные концепты
+
+- [[moodboard-composer]] — агент-владелец, который оркестрирует этот скилл на этапе 03
+- [[references-collection]] — предшествующий скилл, который наполняет `index.yaml` и выставляет статусы `approved/rejected`
+
+## Источник
+
+- `skills/moodboard-creation/SKILL.md`</pre>
+      </section>
+    
+      <section id="niche-analysis">
+        <h2>niche-analysis <span class="badge badge-skill">skill</span></h2>
+        <pre># niche-analysis — автоматический анализ ниши и конкурентов
+
+## Что делает
+
+Запускает полностью автоматический ресёрч ниши: ищет конкурентов, классифицирует тип бренда, определяет режим позиционирования и создаёт 6 готовых артефактов для downstream-этапов (бренд-кит, контент, билдер). Никаких вопросов пользователю не задаёт — при нехватке данных ставит пометку `[ДОПУЩЕНИЕ]`.
+
+## Когда вызывать / в каком этапе
+
+Этап **01a** — между `01_КОНТЕКСТ` и `02_МАТЕРИАЛЫ_КЛИЕНТА`.
+
+Вызывается командой `/landing-niche` вручную или через `landing-orchestrator`. Перед запуском skill проверяет два условия:
+- в папке есть `.landing-state.yaml` (это проект-лендинг);
+- этап `00_brief` имеет статус `approved`.
+
+Если условия не выполнены — выдаёт ошибку и не идёт дальше.
+
+## Что на вход / на выход
+
+**Вход:**
+- `00_БРИФ/brief.md` — обязательно
+- `01_КОНТЕКСТ/context.md` — если есть
+
+**Выход (папка `01a_АНАЛИЗ_НИШИ/`):**
+1. `niche-analysis.md` — обзор ниши 400–800 слов, тип бренда, список допущений
+2. `competitors.yaml` — 15–25 конкурентов в 7 ролях (direct, local_competitor, manufacturer и др.)
+3. `market-profile.md` — 8 секций: tier доступности, цикл принятия решения, регулируемость, эмоциональная нагрузка, культурный контекст, рекомендованный режим
+4. `positioning.md` — один из 3 режимов: `rational`, `emotional_aspiration`, `trust_authority` (или гибрид)
+5. `landing-structure.md` — карта блоков лендинга под выбранный Mode × тип бренда
+6. `visual-requirements.md` — визуальные требования с red flags и preferences
+
+После записи всех артефактов skill запускает 5 валидаторов (`validate-competitors.py`, `validate-market-profile.py`, `validate-positioning.py`, `validate-landing-structure.py`, `validate-visual-requirements.py`) и `gate-check.sh`. При успехе `landing-orchestrator` запрашивает у пользователя approve для перехода на этап `02`.
+
+## Связанные концепты
+
+- [[niche-analyst]] — агент, выполняющий фактическую работу (12 шагов, WebSearch + firecrawl scrape)
+- [[landing-orchestrator]] — диспатчер этапов; принимает hand-off после gate-check
+- [[gate-check]] — скрипт валидации завершения этапа перед переходом к следующему
+- [[brand-kit-build]] — downstream-потребитель артефактов этапа 01a
+- [[landing-content]] — downstream-потребитель `positioning.md` и `landing-structure.md`
+
+## Источник
+
+- `skills/niche-analysis/SKILL.md`
+- `agents/niche-analyst.md`</pre>
+      </section>
+    
+      <section id="paralaximus-codex">
+        <h2>paralaximus-codex <span class="badge badge-skill">skill</span></h2>
+        <pre># paralaximus-codex — параллакс-герой с 4 слоями
+
+## Что делает
+
+Создаёт hero-блок с эффектом глубины: одна 2K-картинка нарезается на 4 слоя (фон, дальний план, ближний план, главный объект), фоны снимаются через chroma-key, и всё оборачивается CSS+JS-движком — слои плавно расходятся при скролле и движении мыши.
+
+## Когда вызывать / в каком этапе
+
+Используется на этапе **07b (compose)** или позже, когда нужен «вау»-герой с ощущением пространства. Активировать только если:
+- визуальная тема и главный объект ясны (продукт, персонаж, объект);
+- клиент не запрещал иллюстрацию в hero (не «type-only»).
+
+Если тема не определена — сначала уточнить у пользователя.
+
+## Что на вход / на выход
+
+**Вход:**
+- путь к проекту (`/path/to/project`)
+- описание визуальной темы: стиль, освещение, главный объект, цветокор под бренд-кит
+- chroma-key цвет (`#00ff00` по умолчанию; `#ff00ff` если subject содержит зелёный)
+
+**Выход:**
+- `assets/atlas.png` — оригинальный 2K атлас (2048×1152, 4 квадранта)
+- `assets/background.png` — opaque фон (верхний левый квадрант)
+- `assets/far.png`, `near.png`, `subject.png` — RGBA-слои с прозрачным фоном
+- `assets/layers-report.json` — отчёт по альфе
+- `assets/css/parallax.css`, `assets/js/parallax.js` — CSS+JS движок
+- `boilerplate/hero.html` — markup-референс (для WP переписывается в `block-hero.php`)
+
+**Рабочий пайплайн (8 шагов):**
+1. Уточнить тему и subject
+2. Зафиксировать composition contract (стиль/свет/позиция/foreground/far/chroma-key)
+3. Собрать промпт через шаблон `templates/atlas-prompt.md`
+4. Запустить `generate-atlas.sh` → атлас появляется в `~/.codex/generated_images/` и копируется в проект
+5. Нарезать `prepare-layers.py`
+6. Снять chroma-key `remove-bg.sh` (внутри — `remove_chroma_key.py` из системного скилла `imagegen`)
+7. Подключить boilerplate CSS/JS
+8. Проверить локально: скролл, мышь, чистые края, subject не закрыт foreground
+
+**Жёсткие ограничения:**
+- Один запрос к `image_gen` (атлас), никогда не 4 отдельных
+- Background removal только через `remove_chroma_key.py` из `imagegen`
+- Foreground — рамка/обрамление, не главный объект
+
+## Связанные концепты
+
+- [[block-composition]] — скил compose (07b), в котором hero-блок встраивается в composed.html
+- [[visual-generation]] — параллельный скил для иконок и инфографики (07d)
+- [[landing-content]] — этап текстового наполнения, после которого верстается hero
+
+## Источник
+
+- `skills/paralaximus-codex/SKILL.md`</pre>
+      </section>
+    
+      <section id="photo-curation">
+        <h2>photo-curation <span class="badge badge-skill">skill</span></h2>
+        <pre># photo-curation — Конвейер клиентских фотографий
+
+## Что делает
+
+Автоматически обрабатывает фотографии клиента: классифицирует их через AI, подбирает лучшие фото к каждому слоту макета, кадрирует и готовит финальный вариант для вставки в лендинг. Если фото не хватает — генерирует замену через codex.
+
+## Когда вызывать / в каком этапе
+
+Этап **07c**. Запускается командой `/landing-photos` вручную после того, как утверждены этап `05_design` (дизайн-система) и `07a_wireframe` (вайрфрейм). Фотографии клиента должны быть заранее загружены в `07c_PHOTOS/inbox/` по подпапкам.
+
+## Что на вход / на выход
+
+**Вход:**
+- Фотографии клиента в `07c_PHOTOS/inbox/` (подпапки по типу: портреты, процесс работы и т.д.)
+- `prototype.yaml` с описанием photo-слотов
+- `07a_WIREFRAME/selections.yaml` с выбранными блоками
+- `tokens.json` (цвета и стиль для AI-fallback)
+
+**Выход:**
+- `07c_PHOTOS/catalog.yaml` — каталог всех фотографий с тегами
+- `07c_PHOTOS/photo-board.html` — интерактивная доска для ручного одобрения выбора
+- `07c_PHOTOS/selections.yaml` — утверждённое соответствие фото ↔ слот
+- `07c_PHOTOS/photo-preview.html` — финальный превью перед вставкой
+- `07c_PHOTOS/STATE.yaml` — состояние конвейера (для возобновления)
+- Обновлённый `07b_COMPOSED/composed.html` — с реальными фото вместо плейсхолдеров
+
+**Семь шагов конвейера:**
+1. **intake** — копирует фото из inbox, конвертирует HEIC→JPEG, убирает EXIF, дедублирует
+2. **classify** — codex тегирует фото из `_свалки/` (фото в подпапках получают folder-tag)
+3. **match** — codex ранжирует кандидатов под каждый слот макета
+4. **approve** — пользователь правит выбор через `photo-board.html`, скачивает `selections.yaml`
+5. **process** — кадрирование под `slots[].ratio` и `mobile_ratio`; для пустых слотов — codex-fallback
+6. **preview** — сборка `photo-preview.html` для финального одобрения
+7. **compose re-render** — `inject-content.py` заменяет плейсхолдеры на `<img>`/`<picture>` в `composed.html`
+
+Перезапуск `/landing-photos` продолжает с прерванного шага. Принудительный сброс: `/landing-photos --force-stage <name>`.
+
+**Identity-safe правило:** клиентские фото никогда не перерисовываются AI. AI-генерация лиц (для testimonial/team слотов) требует явного `ai_approved_by_user: true` в `selections.yaml`.
+
+## Связанные концепты
+
+- [[photo-curator]] — агент-оркестратор, который запускает этот конвейер
+- [[wireframe-rendering]] — предшествующий этап 07a, даёт список слотов
+- [[block-composition]] — предшествующий этап 07b, создаёт composed.html
+- [[design-tokens-generation]] — токены (цвета, стиль) используются для codex-fallback
+- [[visual-generation]] — параллельный этап 07d для иконок и инфографики
+- [[prototype-import]] — prototype.yaml используется как источник описания photo-слотов
+
+## Источник
+
+- `skills/photo-curation/SKILL.md`</pre>
+      </section>
+    
+      <section id="photo-styling">
+        <h2>photo-styling <span class="badge badge-skill">skill</span></h2>
+        <pre># Photo Styling — обработка клиентских фотографий
+
+## Что делает
+
+Применяет технические трансформации к клиентским фотографиям: вырезает фон, сглаживает края, обрезает и масштабирует изображения. Все операции безопасны для идентичности — лица, пропорции и возраст людей на фото **никогда не изменяются**.
+
+## Когда вызывать / в каком этапе
+
+Используется на **этапе 02** (сбор и обработка материалов клиента). Запускается агентом `photo-stylist` как часть подготовки визуальных материалов до начала дизайна. Вызывается автоматически внутри пайплайна — напрямую пользователем не вызывается.
+
+## Что на вход / на выход
+
+**Вход:**
+- Исходные фотографии клиента (JPG, PNG и аналогичные форматы)
+- Параметр режима: `cutout`, `cleanup`, `crop` или `resize`
+- Для `crop` — целевое соотношение сторон
+- Для `resize` — максимальный размер в пикселях
+
+**Выход:**
+- Обработанные изображения с применёнными трансформациями
+- При `cutout` — PNG с прозрачным фоном (alpha-канал)
+- При `cleanup` — изображение с выровненными краями alpha-маски
+- При `crop`/`resize` — ресайзнутое или кадрированное изображение
+
+**Режимы обработки:**
+
+| Режим | Описание |
+|---|---|
+| `cutout` | Удаление фона: rembg если доступен, иначе Pillow alpha-mask эвристика |
+| `cleanup` | Сглаживание краёв уже существующей alpha-маски |
+| `crop` | Кадрирование до заданного соотношения сторон |
+| `resize` | Масштабирование до заданного максимального размера |
+
+Вся логика реализована в `scripts/style.py`.
+
+## Связанные концепты
+
+- [[photo-stylist]] — агент, который владеет этим скиллом и оркестрирует обработку фотографий
+- [[client-assets-collection]] — предшествующий этап, на котором фото клиента собираются из внешних источников
+- [[photo-curation]] — последующий этап (07c), где обработанные фото сопоставляются со слотами wireframe
+
+## Источник
+
+- `skills/photo-styling/SKILL.md`</pre>
+      </section>
+    
+      <section id="prototype-import">
+        <h2>prototype-import <span class="badge badge-skill">skill</span></h2>
+        <pre># prototype-import — Импорт прототипа лендинга
+
+## Что делает
+Принимает пользовательский прототип в формате PDF или Markdown, парсит его и преобразует в два нормализованных файла: читаемый `prototype.md` и машиночитаемый `prototype.yaml`. Это точка входа в производственный цикл лендинга — без утверждённого прототипа дальнейшие этапы не запускаются.
+
+## Когда вызывать / в каком этапе
+Этап **07 (Прототип)**. Активируется командой `/landing-prototype` или агентом [[prototype-importer]]. Запускать после того, как пользователь положил файл (`prototype.pdf` или `prototype.md`) в папку `<project>/07_ПРОТОТИП/source/`. Должен выполняться до [[landing-wireframe]] (этап 07a).
+
+## Что на вход / на выход
+
+**Вход:**
+- `<project>/07_ПРОТОТИП/source/prototype.pdf` — скан или экспорт из Figma/Notion/Word
+- или `<project>/07_ПРОТОТИП/source/prototype.md` — уже структурированный текстовый прототип
+
+**Процесс (скрипты):**
+- `scripts/extract-pdf-text.py` — извлекает текст из PDF, при необходимости использует OCR через `anthropic-skills:pdf`
+- `scripts/md-to-yaml.py` — конвертирует структурированный MD в YAML
+- `scripts/validate-prototype.py` — проверяет YAML по схеме
+
+**Выход:**
+- `07_ПРОТОТИП/prototype.md` — нормализованный человекочитаемый прототип
+- `07_ПРОТОТИП/prototype.yaml` — машиночитаемая структура для последующих агентов
+- `07_ПРОТОТИП/import-log.md` — лог импорта с замечаниями и допущениями
+
+**Схема YAML (кратко):**
+- `project`: slug, niche (`services|b2c|local`), source_file
+- `blocks[]`: position (уникальный int), type (`hero|features|...`), headline, subhead, cta, slots, items, mobile_notes
+
+## Связанные концепты
+- [[prototype-importer]] — агент, который выполняет этот скилл
+- [[landing-prototype]] — slash-команда, запускающая импорт
+- [[landing-wireframe]] — следующий этап (07a), потребляет `prototype.yaml`
+- [[landing-orchestrator]] — мастер-оркестратор, вызывает этот скилл в рамках `/landing-go`
+- [[block-composition]] — этап 07b, также зависит от `prototype.yaml`
+
+## Источник
+- `skills/prototype-import/SKILL.md`</pre>
+      </section>
+    
+      <section id="references-collection">
+        <h2>references-collection <span class="badge badge-skill">skill</span></h2>
+        <pre># References Collection — управление индексом референсов
+
+## Что делает
+Ведёт YAML-файл `03_РЕФЕРЕНСЫ/index.yaml`, в котором хранятся все визуальные референсы проекта (ссылки и файлы) с присвоенными статусами: кандидат, одобрен или отклонён. Позволяет добавлять, обновлять, просматривать и удалять записи через стандартные подкоманды.
+
+## Когда вызывать / в каком этапе
+Активируется на **этапе 03 — Референсы**. Агент `references-curator` использует этот скилл для работы с индексом: когда нужно добавить новый референс (URL или файл), изменить его статус, или сформировать финальный одобренный список для передачи в `moodboard-creation`.
+
+## Что на вход / на выход
+
+**Вход:**
+- Путь к директории `03_РЕФЕРЕНСЫ/` (`refs-dir`)
+- Команда и её аргументы: референс (URL или путь к файлу), опциональные флаги `--type` и `--status`
+
+**Выход:**
+- Обновлённый `03_РЕФЕРЕНСЫ/index.yaml` с актуальными записями и статусами
+- При `list` / `show` — вывод записей для просмотра
+
+**Доступные подкоманды:**
+| Команда | Назначение |
+|---|---|
+| `add` | Добавить новый референс (url или file) |
+| `update` | Изменить статус существующего референса |
+| `list` | Показать список (с фильтром по статусу) |
+| `show` | Показать одну запись по ID |
+| `remove` | Удалить запись из индекса |
+
+**Статусы референсов:** `candidate` → `approved` / `rejected`
+
+## Связанные концепты
+- [[references-curator]] — агент-владелец скилла: вызывает подкоманды, управляет сессией курирования
+- [[moodboard-creation]] — принимает одобренные референсы (`status: approved`) на вход для синтеза мудборда
+- [[landing-references]] — slash-команда, запускающая этап 03 через `references-curator`
+
+## Источник
+- `skills/references-collection/SKILL.md`</pre>
+      </section>
+    
+      <section id="style-decomposition">
+        <h2>style-decomposition <span class="badge badge-skill">skill</span></h2>
+        <pre># Style Decomposition — Извлечение стиля из референсов
+
+## Что делает
+Автоматически извлекает цвета, шрифты и иконки из картинок и веб-ссылок референсов. На выходе — пять структурированных файлов, которые потом использует `brand-architect` для сборки бренд-кита.
+
+## Когда вызывать / в каком этапе
+Запускается на **этапе 04** (Бренд), после того как мудборд утверждён и референсы собраны. Вызывается агентом `style-extractor`. Вручную пользователь этот скилл не трогает — он часть внутреннего пайплайна.
+
+## Что на вход / на выход
+
+**Вход:**
+- Изображения референсов (скриншоты, фото) из `03_РЕФЕРЕНСЫ/`
+- URL-ссылки сайтов-референсов
+
+**Выход** (папка `04_БРЕНД/extracted/`):
+- `palette.yaml` — доминантные цвета (HEX + роли: primary, accent, neutral)
+- `fonts.yaml` — найденные шрифты с вариантами начертания
+- `icons.yaml` — подобранные иконки из Iconify по семантическим именам
+- `grid.md` — сетка и отступы, выведенные из референсов
+- `motion.md` — паттерны анимации и переходов
+
+**Внутренние скрипты:**
+| Скрипт | Задача |
+|---|---|
+| `extract-palette.py` | Colorthief + Pillow → цвета из изображений |
+| `identify-fonts.py` | Playwright DOM → CSS-шрифты с URL |
+| `match-icons.py` | Semantic names → Iconify matching |
+| `download-fonts.py` | Скачать WOFF2-файлы для офлайн-использования |
+| `orchestrate.py` | Точка входа: запускает все 4 скрипта по очереди |
+
+## Связанные концепты
+- [[style-extractor]] — агент-владелец этого скилла, вызывает `orchestrate.py`
+- [[brand-architect]] — следующий шаг: берёт 5 extracted-файлов и синтезирует `brand-kit.md`
+- [[brand-kit-build]] — скилл, которому принадлежит `brand-architect`
+- [[moodboard-creation]] — предшествующий этап, после которого запускается style-decomposition
+- [[references-collection]] — поставляет исходные URL и изображения на вход
+
+## Источник
+- `skills/style-decomposition/SKILL.md`</pre>
+      </section>
+    
+      <section id="visual-generation">
+        <h2>visual-generation <span class="badge badge-skill">skill</span></h2>
+        <pre># Visual Generation — конвейер генерации иконок и инфографики
+
+## Что делает
+
+Автоматически генерирует иконки и инфографику через codex image_gen и подставляет их в `composed.html` вместо текстовых плейсхолдеров. Брендинг берётся из `tokens.json`, тематика — из профиля ниши.
+
+## Когда вызывать / в каком этапе
+
+**Этап 07d (PR-C).** Вызывается командой `/landing-visuals` после того, как:
+- этап 05 (design-system) утверждён,
+- файл `07b_COMPOSED/composed.html` существует (результат PR-A).
+
+Поддерживает флаги: `--type icons`, `--type infographics`, `--force` (обход кэша), `--slot <name>` (один слот).
+
+## Что на вход / на выход
+
+**Вход:**
+- `07b_COMPOSED/composed.html` — плейсхолдеры вида `[SLOT: feature-1-icon]`
+- `tokens.json` — цвета и стиль бренда
+- `market-profile.md` — ниша проекта
+- `07d_VISUALS/_slots.yaml` — список слотов (генерируется автоматически на шаге scan)
+
+**Выход:**
+- `07d_VISUALS/.cache/<hash>.png` — сгенерированные PNG (кэшированные по hash)
+- `07d_VISUALS/STATE.yaml` — состояние прогона (scan / generate / inject)
+- `07b_COMPOSED/composed.html` — обновлённый файл с реальными `<img class="lp-icon">` вместо плейсхолдеров
+
+## Детали работы
+
+Конвейер состоит из трёх шагов:
+
+1. **scan** — `scripts/slot-scanner.py` парсит `composed.html` и выдаёт список icon/infographic слотов в `_slots.yaml`.
+2. **generate** — для каждого слота запускается `scripts/codex-generate-icon.sh` или `-infographic.sh`. Перед вызовом codex проверяется кэш по hash(hint + style + brand_color + niche). Prompt-picker waterfall: иконки → icons.csv keyword match → generic template; инфографика → OpenDesign 90 JSON tag match → generic template.
+3. **inject** — `inject-content.py` подставляет PNG в `composed.html`.
+
+Перезапуск продолжает с прерванного — `STATE.yaml` фиксирует прогресс. Identity-safe правила **не применяются** — в иконках и чартах нет людей.
+
+## Связанные концепты
+
+- [[visual-curator]] — агент-оркестратор этого конвейера, управляет STATE.yaml и диспатчит генераторы
+- [[block-composition]] — этап 07b, создаёт `composed.html` с плейсхолдерами, которые заполняет этот скилл
+- [[design-tokens-generation]] — поставляет `tokens.json` с цветами бренда для промптов генерации
+- [[landing-visuals]] — команда-точка входа (`/landing-visuals`)
+- [[icon-generator]] — субагент для генерации одной иконки
+- [[infographic-builder]] — субагент для генерации одной инфографики
+
+## Источник
+
+- `skills/visual-generation/SKILL.md`</pre>
+      </section>
+    
+      <section id="wireframe-rendering">
+        <h2>wireframe-rendering <span class="badge badge-skill">skill</span></h2>
+        <pre># Wireframe Rendering — интерактивный прототип блоков
+
+## Что делает
+
+Строит `wireframe.html` — интерактивную страницу-предпросмотр, где для каждого блока прототипа показаны 2–3 варианта композиции из библиотеки блоков. Переключение между вариантами работает на чистом CSS (без JS-фреймворков), а каждый блок отображается сразу в двух видах: desktop и mobile.
+
+## Когда вызывать / в каком этапе
+
+Этап **07a**. Вызывается командой `/landing-wireframe` или агентом `ux-composer` после того, как импортирован прототип (этап 07 — `prototype-import`). Предшествует команде `/landing-compose` (этап 07b).
+
+## Что на вход / на выход
+
+**Входные артефакты:**
+- `<project>/07_ПРОТОТИП/prototype.yaml` — машиночитаемый прототип, подготовленный скиллом `prototype-import`
+- `block-library/catalog.yaml` — каталог всех доступных блоков системы
+- `block-library/<category>/<block-id>/assets/template.html` и `template-mobile.html` — HTML-шаблоны блоков для desktop и mobile
+
+**Выходные артефакты:**
+- `<project>/07a_WIREFRAME/wireframe.html` — интерактивный wireframe с CSS-переключением вариантов
+- `<project>/07a_WIREFRAME/candidates.yaml` — список подобранных кандидатов (до 3-х) для каждого слота прототипа
+
+**Вспомогательные скрипты:**
+- `scripts/match-candidates.py` — подбирает кандидатов из каталога для каждого блока прототипа
+- `scripts/render-wireframe.py` — собирает `wireframe.html` из оболочки + кандидатов
+- `scripts/serve-preview.sh` — локальный `http.server` на случай, если `file://` ломает iframe sandbox
+
+**Шаблоны:**
+- `templates/wireframe-shell.html` — HTML-оболочка с radio-кнопками и CSS-логикой переключения
+
+## Связанные концепты
+
+- [[prototype-import]] — поставляет `prototype.yaml`, который служит основным входом
+- [[block-library-management]] — каталог `block-library/catalog.yaml`, из которого подбираются кандидаты
+- [[ux-composer]] — агент, который вызывает этот скилл для рендеринга wireframe
+- [[block-composition]] — следующий этап (07b): принимает выбранные в wireframe варианты и формирует `composed.html`
+
+## Источник
+
+- `skills/wireframe-rendering/SKILL.md`</pre>
+      </section>
+    
+  </main>
+</div>
+<script>
+function filter(q) {
+  q = q.toLowerCase();
+  document.querySelectorAll('.sidebar a').forEach(a => {
+    a.style.display = a.dataset.name.includes(q) ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>
