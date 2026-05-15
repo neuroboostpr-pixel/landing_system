@@ -68,7 +68,20 @@ def main(argv=None) -> int:
         return 0
 
     if args.source_mode == "project-graph":
-        print(f"[PR-F.1] project-graph mode для {args.project} (логика в PR-F.3, not implemented).")
+        from pathlib import Path
+        from scripts.wiki import project_graph_compiler
+        project_root = Path.home() / "Lendings" / args.project
+        if not project_root.exists():
+            print(f"ERROR: проект не найден: {project_root}", file=sys.stderr)
+            return 2
+        try:
+            result = project_graph_compiler.compile_project(project_root=project_root)
+        except FileNotFoundError as e:
+            print(f"ERROR: {e}", file=sys.stderr)
+            return 2
+        print(f"Project: {args.project}")
+        print(f"Current stage: {result['current_stage']}")
+        print(f"Wiki updated: {project_root / 'wiki'}")
         return 0
 
     if args.source_mode == "conversations":
