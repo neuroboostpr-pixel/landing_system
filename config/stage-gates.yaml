@@ -210,6 +210,12 @@ stages:
         path: "{project}/07b_COMPOSED/composed.html"
         required: true
         fix_hint: "auto_fix: /landing-compose"
+      - id: composed_premium_standard
+        type: script
+        script: "scripts/verify-composed-premium.sh"
+        args: ["{project}/07b_COMPOSED/composed.html"]
+        required: true
+        fix_hint: "composed.html не соответствует premium-стандарту (docs/standards/premium-07b-checklist.md). block-composer должен доработать недостающие фичи (parallax / glassmorphism / slider / lightbox / count-up / reveal / gradient text) и прогнать verify заново."
 
   "07d_photos":
     name: "Photos pipeline"
@@ -241,6 +247,12 @@ stages:
         args: ["{project}/07b_COMPOSED/composed.html"]
         required: true
         fix_hint: "auto_fix: /landing-compose"
+      - id: composed_premium_standard
+        type: script
+        script: "scripts/verify-composed-premium.sh"
+        args: ["{project}/07b_COMPOSED/composed.html"]
+        required: true
+        fix_hint: "Финальный composed.html не соответствует premium-стандарту (docs/standards/premium-07b-checklist.md). Прогнать /landing-compose заново и доработать недостающие фичи."
 
   "08_build":
     name: "WP Build"

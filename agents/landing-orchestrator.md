@@ -256,6 +256,25 @@ I do **not** approve a stage on the user's behalf. The user must explicitly appr
 4. На `yes` — выполняю команду, re-run gate-check.
 5. Один auto-fix attempt per check_id per `/landing-go` invocation (защита от циклов).
 
+### Premium 07b quality enforcement (обязательно)
+
+Этапы `07c_composed` и `07f_composed_final` имеют hard_check
+`composed_premium_standard` (тип `script`), который вызывает
+`scripts/verify-composed-premium.sh`. Скрипт проверяет 13 обязательных
+премиум-фич (parallax, glassmorphism, slider, lightbox, count-up, reveal,
+gradient text, hover lift, smooth scroll, pulse-dot, IntersectionObserver,
+clamp typography, CSS-переменные в `:root`).
+
+**Если check падает:**
+
+1. НЕ прошу у пользователя approve — гейт не закрыт мной.
+2. Показываю пользователю список отсутствующих фич (вывод verify-скрипта).
+3. Делегирую обратно `block-composer` с явным указанием: «доработай эти N фич по `docs/standards/premium-07b-checklist.md`».
+4. После доработки re-run `gate-check.sh --stage 07c_composed`.
+5. Цикл повторяется до exit 0. **«И так сойдёт» — недопустимо.**
+
+Эталон-референс: `~/Lendings/dubai-avto-liza/07b_COMPOSED/composed.html` (13/13).
+
 ### Step-by-step UX
 
 На каждом этапе я говорю **одно действие + одно ожидание**:
