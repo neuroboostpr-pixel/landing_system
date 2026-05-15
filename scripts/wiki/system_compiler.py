@@ -46,17 +46,54 @@ def _compile_concept(
     return sdk_client.generate(system=system_prompt, user=user_msg)
 
 
+GROUP_TITLES_INDEX = [
+    ("stage", "## 📋 Этапы pipeline"),
+    ("agent", "## 🤖 Агенты"),
+    ("skill", "## 🛠 Скиллы"),
+    ("command", "## ⚡ Команды"),
+    ("rule", "## 📐 Правила (стандарты качества)"),
+    ("block", "## 🧱 Блоки"),
+    ("unknown", "## ❓ Прочее"),
+]
+
+
 def _build_index(concepts: list[dict[str, Any]]) -> str:
-    """Зовёт SDK для генерации index.md из списка концептов."""
-    system_prompt = _load_prompt("system_index.md")
-    summary_lines = []
+    """Детерминированно строит index.md БЕЗ SDK.
+
+    SDK для index выдавал мусор (мета-комментарии вместо markdown).
+    Stub надёжнее, бесплатно и предсказуемо.
+    """
+    groups: dict[str, list[dict[str, Any]]] = {}
     for c in concepts:
-        summary_lines.append(
-            f"- file_stem={c['file_stem']}, type={c.get('type', 'unknown')}, "
-            f"name={c.get('name', '')}, source={c.get('source', '')}"
-        )
-    user_msg = "Список существующих концептов:\n\n" + "\n".join(summary_lines)
-    return sdk_client.generate(system=system_prompt, user=user_msg)
+        type_ = c.get("type", "unknown")
+        groups.setdefault(type_, []).append(c)
+
+    lines = [
+        "# Landing-System Wiki — главный индекс",
+        "",
+        "> Авто-сгенерированный индекс. Обновляется при `python -m scripts.wiki.compile --source-mode=system`.",
+        "",
+        f"**Концептов всего:** {sum(len(v) for v in groups.values())}",
+        f"**Категории:** {', '.join(sorted(groups.keys()))}",
+        "",
+        "**Известные ограничения:**",
+        "- Блоки из `block-library/` ещё не в wiki — отдельная задача.",
+        "- Часть `[[wikilinks]]` ссылается на скрипты/конфиги вне wiki — это норма.",
+        "",
+    ]
+
+    for type_, title in GROUP_TITLES_INDEX:
+        if type_ not in groups:
+            continue
+        lines.append(title)
+        lines.append("")
+        for c in sorted(groups[type_], key=lambda x: x.get("file_stem", "")):
+            stem = c.get("file_stem", "?")
+            name = c.get("name") or stem
+            lines.append(f"- [[{stem}]] — {name}")
+        lines.append("")
+
+    return "\n".join(lines)
 
 
 def _append_log(log_path: Path, entries: list[str]) -> None:
