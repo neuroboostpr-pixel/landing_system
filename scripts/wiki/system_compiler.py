@@ -22,8 +22,17 @@ def _load_prompt(name: str) -> str:
     return (PROMPTS_DIR / name).read_text(encoding="utf-8")
 
 
+GENERIC_STEMS = {"SKILL", "README", "readme", "meta", "META", "index"}
+
+
 def _slug_for_source(path: Path) -> str:
-    """Slug файла без расширения."""
+    """Slug файла без расширения.
+
+    Если stem общий (SKILL/README/meta/index) — используем имя родительской папки.
+    Это нужно для `skills/foo/SKILL.md` → slug `foo`, не `skill`.
+    """
+    if path.stem in GENERIC_STEMS:
+        return utils.slugify(path.parent.name)
     return utils.slugify(path.stem)
 
 
