@@ -1,0 +1,4 @@
+{"role": "user", "content": "Помоги починить compile.py — падает"}
+{"role": "assistant", "content": "Посмотрел код, проблема в импорте scripts.wiki. Нужно добавить pythonpath=. в pytest.ini"}
+{"role": "user", "content": "Так и сделаем"}
+{"role": "assistant", "content": "Готово, тесты прошли"}
