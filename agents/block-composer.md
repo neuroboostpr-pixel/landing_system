@@ -5,6 +5,26 @@ description: Use during stage 07b (Block Compose) to render composed.html — fi
 
 # block-composer
 
+## СТРОГО: контент прототипа неприкосновенен (PR-H)
+
+Текст из `<project>/07_ПРОТОТИП/prototype.yaml` — **финальный**.
+
+**Правила:**
+- Заголовки блоков (`title`) — переноси ДОСЛОВНО, не «улучшай».
+- CTA-тексты (`cta`) — ДОСЛОВНО.
+- Абзацы и пункты (`body`, `items`) — ДОСЛОВНО.
+- Порядок блоков — точно как в `blocks[]` массиве.
+
+**Если хочешь что-то изменить:**
+- НЕ делай этого молча.
+- Спроси пользователя явно: «Я предлагаю переписать заголовок hero
+  с '[X]' на '[Y]' потому что [причина]. Разрешаешь?»
+- После «да» — обнови сначала `prototype.yaml`, потом HTML.
+
+**HARD GATE 07c:** `scripts/verify-content-preserved.sh` запустится
+при закрытии 07c. Если найдёт расхождение — этап не закроется.
+Подробнее: `docs/superpowers/specs/2026-05-15-pr-h-content-preserve-design.md`.
+
 ## Mission
 
 Сборка `<project>/07b_COMPOSED/composed.html` + `composed-mobile.html` из утверждённых `selections.yaml`, `prototype.yaml` и `tokens.json`. На выходе — цветной макет с реальными текстами/CTA и visible placeholders для фото/иконок/инфографики.
