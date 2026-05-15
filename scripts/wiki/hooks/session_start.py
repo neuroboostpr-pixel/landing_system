@@ -19,7 +19,7 @@ import sys
 from pathlib import Path
 
 
-LANDING_SYSTEM = Path(__file__).resolve().parents[2]
+LANDING_SYSTEM = Path(__file__).resolve().parents[3]
 
 
 def _read_or_empty(p: Path, max_chars: int = 8000) -> str:
