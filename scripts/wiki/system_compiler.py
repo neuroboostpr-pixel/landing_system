@@ -75,6 +75,20 @@ def compile_system(
     """
     cache_path = wiki_dir / ".cache.json"
     cache = hash_cache.load_cache(cache_path)
+
+    # Pre-populate cache from existing concepts: если концепт уже есть на диске
+    # а source в кэше нет — добавляем текущий sha source в кэш. Это позволяет
+    # возобновить bootstrap после падения без перекомпиляции.
+    if not dry_run:
+        for source_def in sources:
+            for source_path in sorted(repo_root.glob(source_def["path"])):
+                rel_key = source_path.relative_to(repo_root).as_posix()
+                slug = _slug_for_source(source_path)
+                concept_path = wiki_dir / "concepts" / source_def["concept_dir"] / f"{slug}.md"
+                if concept_path.exists() and rel_key not in cache:
+                    cache[rel_key] = hash_cache.compute_hash(source_path)
+        hash_cache.save_cache(cache_path, cache)
+
     concepts_summary: list[dict[str, Any]] = []
     compiled: list[str] = []
     skipped: list[str] = []
@@ -123,6 +137,7 @@ def compile_system(
             if not dry_run:
                 utils.atomic_write(concept_path, content)
                 cache[rel_key] = hash_cache.compute_hash(source_path)
+                hash_cache.save_cache(cache_path, cache)
             compiled.append(rel_key)
 
     # Индекс

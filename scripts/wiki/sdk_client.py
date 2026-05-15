@@ -50,7 +50,7 @@ def _sdk_query(system: str, user: str) -> SDKResponse:
             system_prompt=system,
             model=DEFAULT_MODEL,
             permission_mode="bypassPermissions",
-            max_turns=1,
+            max_turns=10,
         )
         chunks: list[str] = []
         async for message in query(prompt=user, options=options):
