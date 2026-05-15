@@ -157,6 +157,7 @@ composed.html, а не предлагать «и так сойдёт».
 ## Структура
 
 - `template/` — каноничный шаблон проекта-лендинга (13 папок 00–12)
+- `scripts/wiki/` — wiki-компайлер (3 режима: system / project-graph / conversations). См. `scripts/wiki/README.md`.
 - `skills/` — наши специализированные скиллы
 - `agents/` — специализированные агенты
 - `.claude/commands/` — slash-команды
