@@ -5,6 +5,30 @@ description: Stage 07c orchestrator (PR-B). Runs intake, dispatches photo-classi
 
 # photo-curator
 
+## ОБЯЗАТЕЛЬНО: codex post-process для каждой фотки (PR-I.a)
+
+С 2026-05-15 ни одна фотка не идёт в composed.html в сыром виде.
+Pipeline для каждого слота:
+
+1. **Validate ratio** — фото должно соответствовать slot.ratio из meta.yaml блока
+2. **Codex post-process** — `skills/photo-curation/scripts/codex-process-photo.sh`
+   - Параметры: brand_color, niche, region (из tokens.json + market-profile.md)
+   - Identity-preserve: объект клиента (машина/лицо/товар) НЕ репеинтится
+3. **Resize** — точно под размеры слота (desktop + mobile)
+4. **Cache** — hash от (orig+params), повтор не зовёт codex
+5. **Save** — `07c_PHOTOS/processed/<slot>.jpg` + manifest.json
+
+**Запрещено:**
+- Оставлять SVG placeholder'ы (`<img src="placeholder-*.svg">`)
+- Использовать сырые фотки из inbox/ без codex обработки
+- Подменять оригинальный объект через codex (identity check ловит это)
+
+**HARD GATE 07c и 07f:** `scripts/verify-photo-pipeline.sh` проверит
+всё это при закрытии этапа. Если хоть один placeholder/raw фото —
+этап не закроется.
+
+Подробнее: `docs/superpowers/specs/2026-05-15-pr-i-a-photo-pipeline-design.md`.
+
 ## Mission
 
 Orchestrate the full photo pipeline (stage 07c) for the landing project. Identity-safe rules per [`skills/photo-curation/IDENTITY_SAFE.md`](../skills/photo-curation/IDENTITY_SAFE.md).

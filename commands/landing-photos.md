@@ -66,3 +66,19 @@ description: Stage 07c (PR-B) — обработка клиентских фот
 PR-B команда вызывается **вручную**, не через `landing-orchestrator`. Полная интеграция в orchestrator + `config/stage-gates.yaml` — задача PR-D.
 
 См. [spec](../docs/superpowers/specs/2026-05-13-photo-pipeline-design.md) и [plan](../docs/superpowers/plans/2026-05-13-photo-pipeline-plan.md).
+
+## Интерактивный режим (PR-I.a)
+
+```
+/landing-photos --interactive
+```
+
+Агент по очереди спрашивает у пользователя что положить в каждый
+photo-слот, показывает подсказку (что должно быть на фото в этом
+контексте, какой ratio), потом пропускает фото через pipeline:
+codex обработка + resize + identity check.
+
+Альтернатива — drag-drop UI в `07c_PHOTOS/photo-board.html`
+(остаётся из PR-B). Если предпочитаешь визуально расставить —
+открой HTML, drag фото в слоты, скачай selections.yaml, положи
+обратно в проект.
