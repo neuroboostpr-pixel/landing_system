@@ -1,0 +1,36 @@
+#!/bin/bash
+# PR-G: Авто-пересборка системной wiki при изменениях источников.
+# Триггер: коммит затронул agents/skills/commands/template/standards.
+
+set -uo pipefail
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "$REPO_ROOT"
+
+# Защита от рекурсии — если последний коммит уже chore(wiki) — выходим
+LAST_MSG="$(git log -1 --pretty=%B 2>/dev/null | head -1)"
+case "$LAST_MSG" in
+    chore\(wiki\)*) exit 0 ;;
+esac
+
+SOURCE_PATTERN='^(agents/|skills/.*/SKILL\.md|commands/|template/.*/README\.md|docs/standards/)'
+
+CHANGED="$(git diff-tree --no-commit-id --name-only -r HEAD 2>/dev/null || true)"
+if ! echo "$CHANGED" | grep -qE "$SOURCE_PATTERN"; then
+    exit 0  # источники wiki не менялись — ничего не делаем
+fi
+
+echo "📚 PR-G post-commit: источники wiki изменились, пересобираю..."
+if ! python3 -m scripts.wiki.compile --source-mode=system 2>&1 | tail -3; then
+    echo "⚠️  compile.py упал — wiki не обновлена. Запусти вручную:"
+    echo "    python3 -m scripts.wiki.compile --source-mode=system"
+    exit 0  # не блокируем commit
+fi
+
+if [ -n "$(git status wiki/ --short 2>/dev/null)" ]; then
+    git add wiki/
+    git commit -m "chore(wiki): авто-обновление после изменений системы" --no-verify
+    echo "✅ wiki/ авто-закоммичено"
+fi
+
+exit 0
