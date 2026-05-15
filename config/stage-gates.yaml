@@ -234,6 +234,12 @@ stages:
         args: ["{project}"]
         required: true
         fix_hint: "Текст прототипа изменён в composed.html. Откати правки или обнови prototype.yaml если клиент дал новый текст."
+      - id: photo_pipeline_valid
+        type: script
+        script: "scripts/verify-photo-pipeline.sh"
+        args: ["{project}"]
+        required: true
+        fix_hint: "Photo pipeline не пройден. Запусти /landing-photos для обработки фото через codex. Проверь что в composed.html нет SVG placeholder'ов."
 
   "07d_photos":
     name: "Photos pipeline"
@@ -280,6 +286,12 @@ stages:
         args: ["{project}"]
         required: true
         fix_hint: "Текст прототипа изменён в composed.html. Откати правки или обнови prototype.yaml если клиент дал новый текст."
+      - id: photo_pipeline_valid
+        type: script
+        script: "scripts/verify-photo-pipeline.sh"
+        args: ["{project}"]
+        required: true
+        fix_hint: "Photo pipeline не пройден. Запусти /landing-photos для обработки фото через codex. Проверь что в composed.html нет SVG placeholder'ов."
 
   "08_build":
     name: "WP Build"
