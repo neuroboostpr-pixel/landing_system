@@ -41,13 +41,14 @@ def test_invalid_source_mode():
     assert result.returncode != 0
 
 
-def test_system_mode_not_yet_implemented():
-    """system mode принимается, но в PR-F.1 говорит что не реализован."""
-    result = run_compile("--source-mode=system", "--dry-run")
-    # В PR-F.1 — печатает stub, exit 0
-    assert result.returncode == 0
-    assert "not implemented" in (result.stdout + result.stderr).lower() or \
-           "PR-F.2" in (result.stdout + result.stderr)
+def test_system_mode_recognized():
+    """system mode + dry-run принимается CLI (без проверки SDK — это в smoke Task 7)."""
+    # Не запускаем subprocess — он реально позовёт SDK без моков.
+    # Проверяем только что аргументы парсятся.
+    from scripts.wiki.compile import parse_args
+    args = parse_args(["--source-mode=system", "--dry-run"])
+    assert args.source_mode == "system"
+    assert args.dry_run is True
 
 
 def test_project_graph_requires_project():

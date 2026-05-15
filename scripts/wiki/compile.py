@@ -51,9 +51,20 @@ def main(argv=None) -> int:
         return 2
 
     if args.source_mode == "system":
-        print("[PR-F.1] system mode принят (логика будет в PR-F.2, not implemented).")
-        if args.dry_run:
-            print(f"DRY RUN: целевая папка {config.WIKI_DIR}")
+        from scripts.wiki import system_compiler
+        result = system_compiler.compile_system(
+            repo_root=config.REPO_ROOT,
+            wiki_dir=config.WIKI_DIR,
+            sources=config.SYSTEM_SOURCES,
+            dry_run=args.dry_run,
+        )
+        print(f"Compiled: {len(result['compiled'])}")
+        print(f"Skipped: {len(result['skipped'])}")
+        if result["errors"]:
+            print(f"Errors: {len(result['errors'])}")
+            for e in result["errors"]:
+                print(f"  ! {e}", file=sys.stderr)
+            return 1
         return 0
 
     if args.source_mode == "project-graph":
