@@ -23,6 +23,28 @@ python -m scripts.wiki.compile --source-mode=project-graph --project=dubai-avto-
 python -m scripts.wiki.compile --source-mode=conversations --project=dubai-avto-liza
 ```
 
+## Lint
+
+```bash
+python -m scripts.wiki.lint --wiki wiki --structural-only   # бесплатно
+python -m scripts.wiki.lint --wiki wiki --llm-check          # с проверкой противоречий (~$0.15)
+```
+
+## Query
+
+```bash
+python -m scripts.wiki.query "что делает landing-orchestrator"
+python -m scripts.wiki.query "когда было решение про цены" --project=dubai-avto-liza
+python -m scripts.wiki.query "..." --project=... --file-back   # сохранит ответ в memory/qa/
+```
+
+## Preview HTML
+
+```bash
+python -m scripts.wiki.preview --wiki wiki
+open wiki/preview.html  # macOS
+```
+
 ## Статус по PR
 
 - **PR-F.1** (текущий): инфраструктура + CLI-скелет. Логика не реализована.
