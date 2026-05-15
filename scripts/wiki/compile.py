@@ -85,7 +85,14 @@ def main(argv=None) -> int:
         return 0
 
     if args.source_mode == "conversations":
-        print(f"[PR-F.1] conversations mode для {args.project} (логика в PR-F.4, not implemented).")
+        from pathlib import Path
+        from scripts.wiki import conversations_compiler
+        memory_root = Path.home() / "Lendings" / args.project / "memory"
+        if not memory_root.exists():
+            print(f"ERROR: memory dir not found: {memory_root}", file=sys.stderr)
+            return 2
+        result = conversations_compiler.compile_conversations(memory_root=memory_root)
+        print(f"Conversations compiled: {len(result.get('written', []))}")
         return 0
 
     return 1
