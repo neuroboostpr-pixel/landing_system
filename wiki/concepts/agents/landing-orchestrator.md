@@ -3,87 +3,62 @@ type: agent
 name: landing-orchestrator
 sources: ["agents/landing-orchestrator.md"]
 updated: 2026-05-15
-triggers:
-  - "запустить проект лендинга"
-  - "/landing-go"
-  - "/landing-build"
-  - "/landing-deploy"
-  - "/landing-qa"
-  - "продолжить работу над лендингом"
-  - "следующий этап проекта"
-stage: "00–12"
-uses:
-  - niche-analyst
-  - client-assets-collector
-  - photo-stylist
-  - references-curator
-  - moodboard-composer
-  - style-extractor
-  - brand-architect
-  - design-system-generator
-  - scene-director
-  - stack-planner
-  - content-writer
-  - wp-builder
-  - integrations-engineer
-  - analytics-engineer
-  - seo-optimizer
-  - wp-deployer
-  - qa-auditor
-  - lifecycle-keeper
-  - prototype-importer
-  - photo-curator
-  - visual-curator
-  - block-composer
-tags: [orchestrator, workflow, core]
+triggers: []
+stage: ""
+uses: ["niche-analyst", "client-assets-collector", "photo-stylist", "references-curator", "moodboard-composer", "style-extractor", "brand-architect", "design-system-generator", "scene-director", "stack-planner", "content-writer", "wp-builder", "integrations-engineer", "analytics-engineer", "seo-optimizer", "wp-deployer", "qa-auditor", "lifecycle-keeper", "prototype-importer", "photo-curator", "visual-curator", "block-composer"]
+tags: ["orchestration", "workflow", "pipeline", "hard-gate"]
 ---
 
 # landing-orchestrator (Главный дирижёр)
 
 ## Что делает
 
-Ведёт лендинг-проект через все 12 этапов производства: от брифа до деплоя и SEO. На каждом этапе вызывает нужного специализированного агента, показывает результат, ждёт явного одобрения от пользователя и только потом двигается дальше.
+Ведёт лендинг-проект через все 12 этапов производства — от брифа до деплоя и SEO. На каждом этапе вызывает нужного специализированного агента, показывает HTML-превью результата и **не двигается дальше без явного утверждения** от пользователя (HARD GATE).
 
 ## Когда вызывать / в каком этапе
 
-Активируется после создания проекта командами `/landing-new` или `/landing-from-context`. Основная точка входа в текущей реализации — `/landing-go` (PR-D), которая читает `.landing-state.yaml` и автоматически определяет, на каком этапе продолжить. Также активируется при командах `/landing-build`, `/landing-deploy`, `/landing-qa`.
+Запускается через команду `/landing-go` — единственную точку входа для нового проекта в prototype-first режиме. Предполагает, что `landing-project-init` или `landing-from-context` уже выполнен и в папке проекта есть `.landing-state.yaml`.
+
+В legacy-режиме запускается после `/landing-start` или `/landing-new`.
 
 ## Что на вход / на выход
 
-**На вход:**
-- Инициализированная папка проекта (`~/Lendings/<slug>/`) со структурой template
-- `.landing-state.yaml` — состояние 13 этапов (статус каждого: pending / approved / n/a)
-- `prototype.pdf` в `07_ПРОТОТИП/source/` (в prototype-first режиме PR-D)
-- Ответы пользователя в HARD GATE точках
+**Вход:**
+- `<project>/.landing-state.yaml` — текущий статус этапов
+- `config/stage-gates.yaml` — правила гейтов
+- `07_ПРОТОТИП/source/prototype.pdf` (в prototype-first режиме)
+- Ответы пользователя на вопросы брифа (в legacy-режиме)
 
-**На выход:**
-- `00_БРИФ/brief.md` — заполненный бриф проекта
-- Последовательно: артефакты каждого этапа (мудборд, бренд-кит, DESIGN.md, WP-тема, задеплоенный сайт)
-- Обновлённый `.landing-state.yaml` после каждого одобренного этапа
+**Выход:**
+- Заполненный `00_БРИФ/brief.md`
+- HTML-превью каждого ключевого этапа (moodboard, brand-kit, design-preview, build-preview)
+- Обновлённый `.landing-state.yaml` с закрытыми этапами
+- Финальный задеплоенный лендинг (этапы 08–12)
 
-## Ключевые правила
+## Ключевые механики
 
-**HARD GATE:** никогда не переходить на этап N+1 без явного «утверждаю», «ok» или «дальше» от пользователя. Gate проверяется скриптом `scripts/gate-check.sh`.
+**HARD GATE:** агент никогда не переходит к этапу N+1 без явного «утверждаю / ok / дальше» от пользователя. Нельзя пропустить этап даже по просьбе.
 
-**Auto-fix:** при падении hard_check парсит `fix_hint` из `config/stage-gates.yaml`, предлагает конкретную команду-фикс, ждёт `yes/no`.
+**Gate-check:** перед каждым действием выполняет `scripts/gate-check.sh --stage <target> --project <project>`. При падении hard-lock — останавливается и сообщает список незакрытых зависимостей.
 
-**Premium 07b:** этап `07c_composed` не закрывается, пока `scripts/verify-composed-premium.sh` не вернёт exit 0 (13 обязательных фич). Если фичи отсутствуют — делегирует обратно `block-composer`, не просит пользователя «принять как есть».
+**Auto-fix:** при падении hard_check парсит `fix_hint` из stage-gates.yaml и предлагает выполнить исправляющую команду (например `/landing-prototype`).
 
-**Параллельная диспетчеризация:** когда этап 07c одобрен — одновременно запускает `photo-curator` (07d) и `visual-curator` (07e) через `superpowers:dispatching-parallel-agents`.
+**Параллельная диспетчеризация:** когда этап 07c утверждён, запускает `photo-curator` и `visual-curator` одновременно через `superpowers:dispatching-parallel-agents`. Переходит к 07f только после того, как оба агента завершились.
+
+**Premium 07b enforcement:** этапы 07c и 07f проверяются скриптом `scripts/verify-composed-premium.sh` на 13 обязательных Premium-фич. Если проверка не пройдена — возвращает задачу агенту `block-composer` и повторяет цикл до exit 0.
 
 ## Связанные концепты
 
-- [[prototype-importer]] — первый агент в prototype-first потоке (этап 07a)
-- [[niche-analyst]] — анализ ниши (этап 01a)
-- [[brand-architect]] — сборка бренд-кита (этап 04)
-- [[design-system-generator]] — токены и DESIGN.md (этап 05)
-- [[wp-builder]] — генерация WP-темы (этап 08)
-- [[photo-curator]] — обработка фото клиента (этап 07d)
-- [[visual-curator]] — генерация иконок и инфографики (этап 07e)
-- [[block-composer]] — финальная сборка composed.html (этап 07b/07f)
-- [[qa-auditor]] — проверка живого сайта (этап 10)
-- [[lifecycle-keeper]] — rollback и клонирование версий
-- [[landing-go]] — slash-команда единой точки входа PR-D
+- [[niche-analyst]] — диспатчится на этапе 01a для анализа рынка
+- [[brand-architect]] — диспатчится на этапе 04 для сборки бренд-кита
+- [[design-system-generator]] — диспатчится на этапе 05 для генерации токенов
+- [[wp-builder]] — диспатчится на этапе 08 для генерации WordPress-темы
+- [[photo-curator]] — диспатчится параллельно на этапе 07d
+- [[visual-curator]] — диспатчится параллельно на этапе 07e
+- [[block-composer]] — возвращает задачу при не пройденном premium-check
+- [[lifecycle-keeper]] — используется при rollback и clone
+- [[qa-auditor]] — диспатчится на этапе 10 для проверки живого сайта
+- [[landing-go]] — единственная точка входа для запуска оркестратора
 
 ## Источник
 
