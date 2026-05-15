@@ -204,3 +204,11 @@ else
     bash "$GATE_STATE" set "$project" "$stage" "in_progress"
     echo "✅ Gate passed for $stage (status: in_progress)"
 fi
+
+# === PR-G: Auto-update project-graph wiki after successful gate-check ===
+if [ "${fail:-1}" = "0" ] && [ -d "$project/wiki" ]; then
+    project_slug="$(basename "$project")"
+    cd "$REPO_ROOT" && python3 -m scripts.wiki.compile \
+        --source-mode=project-graph --project="$project_slug" \
+        >/dev/null 2>&1 || true
+fi
