@@ -25,6 +25,7 @@ build/
 
 # Claude Code
 .claude/settings.local.json
+.claude/launch.json
 
 # Project versions (snapshot folders inside projects)
 **/09_ДЕПЛОЙ/versions/
