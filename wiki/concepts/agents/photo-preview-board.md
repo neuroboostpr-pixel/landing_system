@@ -44,8 +44,8 @@ tags: ["photos", "preview", "identity-safe", "processing", "stage-07c"]
 - [[photo-curator]] — оркестратор этапа 07c, вызывает этот агент после approve `selections.yaml`
 - [[photo-matcher]] — предшественник: формирует `selections.draft.yaml`, из которого пользователь делает `selections.yaml`
 - [[photo-stylist]] — предоставляет скрипт `style.py` для обрезки клиентских фото
-- [[selections-validator]] — валидирует `selections.yaml` перед обработкой; при ошибке агент прерывается
-- [[identity-safe]] — политика, запрещающая AI-репейнт людей без разрешения
+- selections-validator — валидирует `selections.yaml` перед обработкой; при ошибке агент прерывается
+- identity-safe — политика, запрещающая AI-репейнт людей без разрешения
 
 ## Источник
 

@@ -51,7 +51,7 @@ tags: [content, copywriting, seo, gutenberg, stage-07]
 - [[prototype-import]] — поставляет `prototype.md` как источник черновых текстов
 - [[landing-stack]] — поставляет `design-stack.yaml` с определением блоков
 - [[landing-build]] — следующий этап после утверждения контента (этап 08)
-- [[gate-check]] — скрипт проверки и закрытия этапов
+- gate-check — скрипт проверки и закрытия этапов
 
 ## Источник
 

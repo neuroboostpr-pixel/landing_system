@@ -51,7 +51,7 @@ tags: ["wireframe", "ux", "stage-07a", "block-library"]
 - [[block-library-management]] — хранит каталог блоков; ux-composer выбирает только из него
 - [[block-composer]] — следующий этап: берёт `selections.yaml` и рендерит `composed.html`
 - [[wireframe-rendering]] — скилл, содержащий скрипт `render-wireframe.py` и шаблон `wireframe-shell.html`
-- [[ui-ux-pro-max]] — обязательная зависимость с CSV-данными UX-паттернов и палитр
+- ui-ux-pro-max — обязательная зависимость с CSV-данными UX-паттернов и палитр
 - [[landing-orchestrator]] — вызывает ux-composer в рамках общего workflow
 
 ## Источник

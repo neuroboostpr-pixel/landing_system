@@ -37,7 +37,7 @@ tags: ["block-library", "scaffold", "validation", "catalog"]
 
 ## Связанные концепты
 - [[ux-composer]] — использует библиотеку при инъекции блоков в wireframe.html на этапе 07a
-- [[block-library]] — сам каталог блоков, который этот скилл обслуживает
+- block-library — сам каталог блоков, который этот скилл обслуживает
 - [[wireframe-rendering]] — потребитель блоков на этапе 07a
 
 ## Источник

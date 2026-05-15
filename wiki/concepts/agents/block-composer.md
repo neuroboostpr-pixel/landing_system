@@ -49,7 +49,7 @@ tags: ["compose", "html", "design-tokens", "landing", "stage-07b"]
 ## Связанные концепты
 
 - [[block-composition]] — скилл с Python-скриптами `compose-blocks.py` и `validate-selections.py`
-- [[ui-ux-pro-max]] — источник стилевых hint'ов из `meta.yaml` блоков
+- ui-ux-pro-max — источник стилевых hint'ов из `meta.yaml` блоков
 - [[ux-composer]] — создаёт `selections.yaml` на этапе 07a (wireframe)
 - [[prototype-importer]] — создаёт `prototype.yaml` на этапе 07
 - [[photo-curator]] — PR-B: заполняет photo-placeholders после 07b

@@ -52,7 +52,7 @@ tags:
 - [[style-extractor]] — агент предыдущего шага, поставляет входные YAML-файлы
 - [[landing-moodboard]] — этап 03, который должен быть утверждён перед запуском
 - [[landing-design]] — этап 05, который становится доступен после approve бренд-кита
-- [[landing-style]] — команда, запускающая style-extractor (предшествует /landing-brand)
+- landing-style — команда, запускающая style-extractor (предшествует /landing-brand)
 
 ## Источник
 

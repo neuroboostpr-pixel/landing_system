@@ -45,7 +45,7 @@ tags: ["research", "competitors", "positioning", "zero-touch"]
 
 - [[niche-analyst]] — агент, выполняющий фактическую работу (12 шагов, WebSearch + firecrawl scrape)
 - [[landing-orchestrator]] — диспатчер этапов; принимает hand-off после gate-check
-- [[gate-check]] — скрипт валидации завершения этапа перед переходом к следующему
+- gate-check — скрипт валидации завершения этапа перед переходом к следующему
 - [[brand-kit-build]] — downstream-потребитель артефактов этапа 01a
 - [[landing-content]] — downstream-потребитель `positioning.md` и `landing-structure.md`
 
