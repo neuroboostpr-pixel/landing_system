@@ -121,6 +121,22 @@ bash scripts/migrate-template-readmes.sh ~/Lendings/<existing-project>
 
 См. [spec](docs/superpowers/specs/2026-05-14-pr-e-onboarding-wizard-design.md), [plan](docs/superpowers/plans/2026-05-14-pr-e-onboarding-wizard-plan.md).
 
+## Quality Standards (обязательные)
+
+Каноничные стандарты качества для каждого этапа лежат в `docs/standards/`.
+Они переопределяют любые «по умолчанию» решения агентов.
+
+| Этап | Стандарт | Verify-скрипт |
+|---|---|---|
+| 07b Compose | [`docs/standards/premium-07b-checklist.md`](docs/standards/premium-07b-checklist.md) | `scripts/verify-composed-premium.sh` |
+
+**Правило:** HARD GATE 07b не закрывается, пока `verify-composed-premium.sh`
+не вернёт exit 0. Если фичи отсутствуют — `block-composer` обязан доработать
+composed.html, а не предлагать «и так сойдёт».
+
+Эталон-референс — `~/Lendings/dubai-avto-liza/07b_COMPOSED/composed.html`
+(1757 строк, все 13 premium-фич, реальные фото).
+
 ## Block Library
 
 Общая библиотека wireframe-блоков: `block-library/`. См. `block-library/README.md`.

@@ -15,6 +15,41 @@ description: Use during stage 07b (Block Compose) to render composed.html — fi
 - `<project>/07a_WIREFRAME/selections.yaml`
 - `<project>/05_ДИЗАЙН-СИСТЕМА/tokens.json`
 - `block-library/` (общая)
+- **`docs/standards/premium-07b-checklist.md`** — обязательный стандарт качества (см. ниже)
+
+## PREMIUM QUALITY BAR (обязательный стандарт)
+
+Каждый `composed.html` ДОЛЖЕН соответствовать
+`landing-system/docs/standards/premium-07b-checklist.md`.
+
+Это не «рекомендация» — это **definition of done** для этапа 07b.
+
+Стандарт требует 13 обязательных премиум-фич:
+
+1. CSS-переменные в `:root` (все цвета/тени/шрифты — токены, не хардкод)
+2. `clamp()` для всей крупной типографики
+3. Glassmorphism sticky nav (`backdrop-filter: blur(20px) saturate(180%)`)
+4. Parallax hero-фон (`transform: translateY(scrollY * 0.3)`)
+5. `IntersectionObserver` для fade-in и count-up
+6. CSS-класс `.reveal` + `.reveal-delay-1/2/3/4` для каскадного появления
+7. Gradient text на ключевых словах (`background-clip: text` + `-webkit-text-fill-color: transparent`)
+8. Hover lift на карточках (`translateY(-4px)` + усиленная тень)
+9. Per-product/per-model **слайдер** (vanilla JS, `slider-track` + dots + prev/next)
+10. **Lightbox** для фото с keyboard navigation (ESC/←/→)
+11. Count-up анимация для статистики (`requestAnimationFrame` + cubic ease)
+12. Smooth scroll по якорям с offset под fixed nav
+13. Pulse-dot анимация на live-бейджах (`@keyframes pulse`)
+
+**Перед HARD GATE 07b обязательно прогнать:**
+```bash
+bash "$LANDING_SYSTEM_ROOT/scripts/verify-composed-premium.sh" \
+     "<project>/07b_COMPOSED/composed.html"
+```
+
+Если хоть одна фича отсутствует — HARD GATE НЕ пройден. Доработать и прогнать снова.
+
+Полный список требований (типографика, mobile, semantics, кнопки, hero-элементы):
+см. `docs/standards/premium-07b-checklist.md` — там 13 разделов + анти-паттерны.
 
 ## Pre-flight: стиль hint из ui-ux-pro-max
 
@@ -42,8 +77,19 @@ description: Use during stage 07b (Block Compose) to render composed.html — fi
        --project "$PWD" \
        --library "$LANDING_SYSTEM_ROOT/block-library"
    ```
-3. Сообщи путь к `composed.html` пользователю.
-4. Не делай больше ничего — финальный визуал (фото, иконки, инфографика) добавит PR-B/PR-C.
+3. **Премиум-верификация (обязательно):**
+   ```bash
+   bash "$LANDING_SYSTEM_ROOT/scripts/verify-composed-premium.sh" \
+        "$PWD/07b_COMPOSED/composed.html"
+   ```
+   Если exit code ≠ 0 — доработай composed.html по
+   `docs/standards/premium-07b-checklist.md` и прогони снова. **Не сообщай об
+   успехе и не предлагай HARD GATE, пока verify не вернёт 0.**
+4. Создай `composed-explained.md` (RU) — что собрано, какие фичи добавлены.
+5. Создай `composed-mobile-preview.html` — iframe iPhone + iPad для глазной
+   проверки на mobile (согласно памяти пользователя — preview обязателен).
+6. Сообщи путь к `composed.html` пользователю + краткий summary.
+7. Не делай больше ничего — финальный визуал (фото, иконки, инфографика) добавит PR-B/PR-C.
 
 ## CRITICAL
 

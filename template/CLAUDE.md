@@ -37,6 +37,51 @@
 3. **TDD при разработке кода темы:** тесты (PHPUnit/Pest) идут в `08_КОД/wp-theme/tests/`.
 4. **Один проект = один WordPress = один поддомен.** Изоляция строгая.
 5. **Я.Директ-копии** делаются через мастер-команду `/landing-clone`, не вручную.
+6. **Premium 07b — обязательный стандарт.** Каждый `composed.html` должен соответствовать `landing-system/docs/standards/premium-07b-checklist.md`. HARD GATE 07b не закрывается без exit 0 от `verify-composed-premium.sh`.
+
+## Premium 07b — стандарт качества composed.html
+
+Этот пункт критичен — без него лендинги получаются «средние», а не уровня эталона.
+
+**Эталон-референс:** `~/Lendings/dubai-avto-liza/07b_COMPOSED/composed.html`
+(1757 строк, ~130 KB, все 13 premium-фич, реальные фото).
+
+**Стандарт (обязательно к прочтению перед сборкой):**
+`landing-system/docs/standards/premium-07b-checklist.md`
+
+**13 обязательных интерактивных фич:**
+
+1. CSS-переменные `:root` (никакого хардкода цветов)
+2. `clamp()` для крупной типографики
+3. Glassmorphism sticky nav (`backdrop-filter: blur`)
+4. Parallax hero-фон
+5. `IntersectionObserver` для fade-in и count-up
+6. Класс `.reveal` + delay-каскад
+7. Gradient text на ключевых словах
+8. Hover lift на карточках
+9. Per-product vanilla-JS слайдер
+10. Lightbox с keyboard navigation (ESC/←/→)
+11. Count-up анимация для статистики
+12. Smooth scroll с offset под fixed nav
+13. Pulse-dot на live-бейджах
+
+**Перед HARD GATE 07b прогнать:**
+```bash
+bash "$LANDING_SYSTEM_ROOT/scripts/verify-composed-premium.sh" \
+     "$PWD/07b_COMPOSED/composed.html"
+```
+
+Если exit ≠ 0 — доработать и прогнать снова. Не сообщать пользователю об
+успехе, пока verify не вернёт 0.
+
+**Анти-паттерны (запрещено):**
+- ❌ Эмодзи как «иконки» в production-блоках
+- ❌ Хардкод цветов в коде блоков (только `var(--...)`)
+- ❌ `font-size: 48px` без `clamp()`
+- ❌ Слайдер «4 картинки в ряд» вместо настоящего слайдера
+- ❌ `<a target="_blank">` вместо lightbox
+- ❌ jQuery/Swiper/AOS — только vanilla
+- ❌ Скрывать блоки на mobile через `display: none` — стекируй
 
 ## Полезные команды
 
