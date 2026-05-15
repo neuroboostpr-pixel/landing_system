@@ -18,3 +18,12 @@ wp-content/cache/
 
 # Logs
 *.log
+
+# Личная память сессий — не коммитим
+memory/daily/
+memory/compiled/
+# (только README.md остаётся в репо)
+!memory/README.md
+
+# Wiki кэш
+wiki/.cache.json
