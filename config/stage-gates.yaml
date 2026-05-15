@@ -228,6 +228,12 @@ stages:
         args: ["{project}/07b_COMPOSED/composed.html"]
         required: true
         fix_hint: "composed.html не соответствует premium-стандарту (docs/standards/premium-07b-checklist.md). block-composer должен доработать недостающие фичи (parallax / glassmorphism / slider / lightbox / count-up / reveal / gradient text) и прогнать verify заново."
+      - id: content_preserved
+        type: script
+        script: "scripts/verify-content-preserved.sh"
+        args: ["{project}"]
+        required: true
+        fix_hint: "Текст прототипа изменён в composed.html. Откати правки или обнови prototype.yaml если клиент дал новый текст."
 
   "07d_photos":
     name: "Photos pipeline"
@@ -268,6 +274,12 @@ stages:
         args: ["{project}/07b_COMPOSED/composed.html"]
         required: true
         fix_hint: "Финальный composed.html не соответствует premium-стандарту (docs/standards/premium-07b-checklist.md). Прогнать /landing-compose заново и доработать недостающие фичи."
+      - id: content_preserved
+        type: script
+        script: "scripts/verify-content-preserved.sh"
+        args: ["{project}"]
+        required: true
+        fix_hint: "Текст прототипа изменён в composed.html. Откати правки или обнови prototype.yaml если клиент дал новый текст."
 
   "08_build":
     name: "WP Build"
