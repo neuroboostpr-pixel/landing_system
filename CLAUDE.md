@@ -193,3 +193,37 @@ Master plan: [`docs/superpowers/plans/2026-05-03-landing-system-master-plan.md`]
 - `landing-orchestrator` НЕ пропускает этапы, даже если пользователь просит
 
 Подробнее: [`docs/SETUP.md`](docs/SETUP.md), [`docs/superpowers/specs/2026-05-04-stage-gates-onboarding-mcp-design.md`](docs/superpowers/specs/2026-05-04-stage-gates-onboarding-mcp-design.md)
+
+## Wiki Auto-Sync (правило)
+
+С 2026-05-15 системная wiki (`landing-system/wiki/`) **обязана быть синхронной с исходниками** в каждом коммите.
+
+**Источники wiki:**
+- `agents/*.md`
+- `skills/*/SKILL.md`
+- `commands/*.md`
+- `template/*/README.md`
+- `docs/standards/*.md`
+
+**Авто-механика (PR-G):**
+- `.githooks/post-commit` запускается после каждого `git commit`.
+- Если коммит трогает любой из источников выше → `compile.py --source-mode=system`.
+- Хэш-кэш скипает неизменённое (~0 сек если ничего не менялось).
+- Если wiki/ обновилась → авто-`chore(wiki)` коммит без `--verify`.
+
+**Установка хука на новой машине:**
+```bash
+bash scripts/install-git-hooks.sh
+```
+
+**Проверить что wiki в синхроне:**
+```bash
+bash scripts/check-wiki-sync.sh
+# exit 0 — синхрон, exit 1 — нужно пересобрать
+```
+
+**Если правило нарушено:**
+- Хук не установлен → `bash scripts/install-git-hooks.sh`
+- Wiki разошлась с источниками → `python3 -m scripts.wiki.compile --source-mode=system && git add wiki/ && git commit -m "chore(wiki): manual resync"`
+
+**Никогда не коммить изменения в `agents/`, `skills/`, `commands/`, `template/`, `docs/standards/` без свежей wiki.** Хук это делает автоматом, но если хук отключён или упал — пересобирай руками.
