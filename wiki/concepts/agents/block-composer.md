@@ -5,55 +5,47 @@ sources: ["agents/block-composer.md"]
 updated: 2026-05-15
 triggers: []
 stage: "07b"
-uses: ["block-composition", "ui-ux-pro-max", "prototype-importer", "ux-composer", "photo-curator", "visual-curator"]
-tags: ["compose", "html", "design-tokens", "landing", "stage-07b"]
+uses: ["prototype-importer", "ux-composer", "design-system-generator", "photo-curator", "visual-curator", "block-composition"]
+tags: ["compose", "html", "design-tokens", "premium", "07b"]
 ---
 
-# block-composer — сборка финального макета (этап 07b)
+# block-composer — Сборка цветного макета лендинга
 
 ## Что делает
 
-Собирает `composed.html` — итоговый цветной макет лендинга с реальными текстами, CTA и дизайн-токенами. Фото, иконки и инфографика на этом этапе остаются в виде подписанных заглушек: их заполнят агенты PR-B и PR-C позже.
+Берёт утверждённые блоки из wireframe, подставляет в них реальные тексты из прототипа и цвета/шрифты из дизайн-системы — и собирает финальный цветной HTML-макет (`composed.html`). Фото, иконки и инфографика пока остаются текстовыми плейсхолдерами — их заполнят агенты PR-B и PR-C на следующих этапах.
 
 ## Когда вызывать / в каком этапе
 
-Запускается на **этапе 07b** командой `/landing-compose` или оркестратором `landing-orchestrator`.  
-Вызывать только после того, как утверждены:
-- этап 07a (wireframe + `selections.yaml` от пользователя),
-- этап 05 (дизайн-система, `tokens.json`),
-- этап 07 (прототип, `prototype.yaml`).
+Этап **07b (Block Compose)**. Вызывается после того, как пользователь утвердил wireframe и в папке `07a_WIREFRAME/` появился `selections.yaml`. Запускается командой `/landing-compose` или через `landing-orchestrator`.
 
 ## Что на вход / на выход
 
-**Вход:**
-- `<project>/07_ПРОТОТИП/prototype.yaml` — структура прототипа с текстами
-- `<project>/07a_WIREFRAME/selections.yaml` — выбранные пользователем варианты блоков
-- `<project>/05_ДИЗАЙН-СИСТЕМА/tokens.json` — цвета, шрифты, тени
-- `block-library/` — общая библиотека блоков
-- `docs/standards/premium-07b-checklist.md` — обязательный чеклист из 13 премиум-фич
+**Входные артефакты:**
+- `07_ПРОТОТИП/prototype.yaml` — финальные тексты и CTA (неприкосновенны)
+- `07a_WIREFRAME/selections.yaml` — выбранные пользователем варианты блоков
+- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — цвета, шрифты, отступы
+- `block-library/` — общая библиотека шаблонов блоков
 
-**Выход:**
-- `07b_COMPOSED/composed.html` — десктопный макет
-- `07b_COMPOSED/composed-mobile.html` — мобильный макет
-- `07b_COMPOSED/composed-mobile-preview.html` — iframe-превью iPhone/iPad
-- `07b_COMPOSED/composed-explained.md` — описание что собрано и какие фичи включены
-
-**Hard gate:** перед завершением этапа агент обязан прогнать `scripts/verify-composed-premium.sh`. Если скрипт вернул exit code ≠ 0 — этап не закрыт, агент дорабатывает `composed.html`.
+**Выходные артефакты:**
+- `07b_COMPOSED/composed.html` — цветной макет с реальными текстами и плейсхолдерами для визуала
+- `07b_COMPOSED/composed-mobile-preview.html` — превью для iPhone/iPad
+- `07b_COMPOSED/composed-explained.md` — текстовый отчёт о собранных фичах (RU)
 
 ## Ключевые правила
 
-Агент реализует 13 обязательных премиум-фич: CSS-переменные в `:root`, `clamp()` для типографики, glassmorphism-навигация, parallax-герой, `IntersectionObserver`, `.reveal`-анимации, gradient-text, hover lift на карточках, JS-слайдер, lightbox с клавиатурой, count-up анимация, smooth scroll, pulse-dot на live-бейджах.
+**Контент прототипа — неприкосновенен (PR-H).** Заголовки, CTA и абзацы переносятся дословно. Любое изменение текста — только с явного разрешения пользователя после открытого вопроса. HARD GATE 07c проверяет это скриптом `verify-content-preserve.sh`.
 
-Если `selections.yaml` ссылается на блок, отсутствующий в `catalog.yaml` — агент останавливается и сообщает пользователю.
+**Премиум-стандарт обязателен.** Каждый `composed.html` должен содержать 13 обязательных фич: CSS-переменные в `:root`, `clamp()` для типографики, glassmorphism nav, parallax hero, IntersectionObserver, `.reveal`-классы, gradient text, hover lift на карточках, слайдер, lightbox с keyboard navigation, count-up анимация, smooth scroll, pulse-dot на бейджах. Проверяется скриптом `verify-composed-premium.sh` — HARD GATE 07b не закрывается при exit code ≠ 0.
 
 ## Связанные концепты
 
+- [[prototype-importer]] — поставляет `prototype.yaml` с неизменяемыми текстами
+- [[ux-composer]] — поставляет `selections.yaml` из wireframe-этапа
+- [[design-system-generator]] — поставляет `tokens.json` с цветами и шрифтами
 - [[block-composition]] — скилл с Python-скриптами `compose-blocks.py` и `validate-selections.py`
-- ui-ux-pro-max — источник стилевых hint'ов из `meta.yaml` блоков
-- [[ux-composer]] — создаёт `selections.yaml` на этапе 07a (wireframe)
-- [[prototype-importer]] — создаёт `prototype.yaml` на этапе 07
-- [[photo-curator]] — PR-B: заполняет photo-placeholders после 07b
-- [[visual-curator]] — PR-C: заполняет icon/infographic-placeholders после 07b
+- [[photo-curator]] — PR-B: заменяет фото-плейсхолдеры реальными изображениями
+- [[visual-curator]] — PR-C: заменяет icon/infographic-плейсхолдеры PNG-файлами
 
 ## Источник
 
