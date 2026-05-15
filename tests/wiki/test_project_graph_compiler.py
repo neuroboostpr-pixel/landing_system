@@ -29,11 +29,7 @@ def fake_project(tmp_path):
     return project
 
 
-def test_compile_creates_wiki_dir(fake_project, mocker):
-    mocker.patch(
-        "scripts.wiki.project_graph_compiler.sdk_client.generate",
-        return_value="# Project Index\n- состояние проекта",
-    )
+def test_compile_creates_wiki_dir(fake_project):
     project_graph_compiler.compile_project(project_root=fake_project)
 
     wiki = fake_project / "wiki"
@@ -42,22 +38,14 @@ def test_compile_creates_wiki_dir(fake_project, mocker):
     assert (wiki / "concepts" / "stage-current.md").exists()
 
 
-def test_compile_stage_current_contains_current_stage(fake_project, mocker):
-    mocker.patch(
-        "scripts.wiki.project_graph_compiler.sdk_client.generate",
-        return_value="idx",
-    )
+def test_compile_stage_current_contains_current_stage(fake_project):
     project_graph_compiler.compile_project(project_root=fake_project)
 
     content = (fake_project / "wiki" / "concepts" / "stage-current.md").read_text()
     assert "07c_composed" in content
 
 
-def test_compile_blocks_concept_lists_selected_blocks(fake_project, mocker):
-    mocker.patch(
-        "scripts.wiki.project_graph_compiler.sdk_client.generate",
-        return_value="idx",
-    )
+def test_compile_blocks_concept_lists_selected_blocks(fake_project):
     project_graph_compiler.compile_project(project_root=fake_project)
 
     blocks_path = fake_project / "wiki" / "concepts" / "blocks.md"
@@ -67,23 +55,24 @@ def test_compile_blocks_concept_lists_selected_blocks(fake_project, mocker):
         assert "features-3" in content
 
 
-def test_compile_brand_concept_has_tokens(fake_project, mocker):
-    mocker.patch(
-        "scripts.wiki.project_graph_compiler.sdk_client.generate",
-        return_value="idx",
-    )
+def test_compile_brand_concept_has_tokens(fake_project):
     project_graph_compiler.compile_project(project_root=fake_project)
 
     brand = (fake_project / "wiki" / "concepts" / "brand.md").read_text()
     assert "#1a1a1a" in brand or "primary" in brand.lower()
 
 
-def test_compile_appends_log(fake_project, mocker):
-    mocker.patch(
-        "scripts.wiki.project_graph_compiler.sdk_client.generate",
-        return_value="idx",
-    )
+def test_compile_appends_log(fake_project):
     project_graph_compiler.compile_project(project_root=fake_project)
 
     log = (fake_project / "wiki" / "log.md").read_text()
     assert "project-graph" in log
+
+
+def test_index_contains_project_name(fake_project):
+    """Регресс-тест: index.md должен начинаться с правильного имени проекта,
+    а не путать его (как раньше иногда делал SDK с lixiang-dubai)."""
+    project_graph_compiler.compile_project(project_root=fake_project)
+
+    index = (fake_project / "wiki" / "index.md").read_text()
+    assert index.startswith("# test-project — wiki проекта")

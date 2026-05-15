@@ -1,8 +1,9 @@
 # scripts/wiki/project_graph_compiler.py
 """Компилит артефакты проекта-лендинга в <project>/wiki/.
 
-В отличие от system_compiler — большинство концептов генерится БЕЗ SDK
-(парсинг yaml/json/html → markdown). SDK зовётся только для index.md.
+Все артефакты, включая index.md, генерятся БЕЗ SDK (парсинг yaml/json/html →
+markdown). SDK раньше звался для index.md, но выдавал мусор и путал имя
+проекта — заменён на детерминированный stub.
 """
 from __future__ import annotations
 
@@ -12,7 +13,7 @@ from typing import Any
 
 import yaml
 
-from scripts.wiki import sdk_client, utils
+from scripts.wiki import utils
 from scripts.wiki.parsers import (
     state_yaml,
     selections_yaml,
@@ -112,17 +113,63 @@ def _append_log(log_path: Path, stage: str) -> None:
         f.write(entry)
 
 
+STATUS_EMOJI = {
+    "approved": "✅",
+    "in_progress": "🔄",
+    "locked": "🔒",
+    "failed": "❌",
+    "n/a": "⏭",
+}
+
+
 def _build_index(state: dict, has_blocks: bool, has_brand: bool) -> str:
-    """Зовёт SDK для index.md."""
-    prompt = (PROMPTS_DIR / "project_index.md").read_text(encoding="utf-8")
-    user = f"""Проект: {state.get('project')}
-Текущий этап: {state.get('current_stage')}
-Closed: {', '.join(state.get('approved', []))}
-In progress: {', '.join(state.get('in_progress', []))}
-Locked: {', '.join(state.get('locked', []))}
-Концепты доступны: stage-current{', blocks' if has_blocks else ''}{', brand' if has_brand else ''}, photos
-"""
-    return sdk_client.generate(system=prompt, user=user)
+    """Stub-генератор index.md проекта БЕЗ SDK.
+
+    Раньше зовёл sdk_client.generate, но SDK для project-индекса выдавал
+    мусор (мета-комментарии) и иногда путал имя проекта. Stub надёжнее
+    и бесплатно.
+    """
+    project = state.get("project", "?")
+    current = state.get("current_stage", "?")
+    approved = state.get("approved", [])
+    in_progress = state.get("in_progress", [])
+    locked = state.get("locked", [])
+    failed = state.get("failed", [])
+
+    total = len(approved) + len(in_progress) + len(locked) + len(failed)
+
+    lines = [
+        f"# {project} — wiki проекта",
+        "",
+        "> Авто-граф проекта. Обновляется после каждого этапа pipeline. Не редактируй вручную.",
+        "",
+        "## Текущее состояние",
+        f"- **Текущий этап:** `{current}`",
+        f"- **Закрыто этапов:** {len(approved)} из {total}",
+        f"- **Обновлено:** {date.today().isoformat()}",
+        "",
+        "## Этапы",
+    ]
+
+    # Все этапы в порядке: approved → in_progress → locked → failed
+    for stage in approved:
+        lines.append(f"- {STATUS_EMOJI['approved']} `{stage}` — approved")
+    for stage in in_progress:
+        lines.append(f"- {STATUS_EMOJI['in_progress']} `{stage}` — in_progress")
+    for stage in locked:
+        lines.append(f"- {STATUS_EMOJI['locked']} `{stage}` — locked")
+    for stage in failed:
+        lines.append(f"- {STATUS_EMOJI['failed']} `{stage}` — failed")
+
+    lines.extend(["", "## Связанные документы"])
+    lines.append("- [[stage-current]] — детали текущего этапа")
+    if has_blocks:
+        lines.append("- [[blocks]] — выбранные блоки сайта")
+    if has_brand:
+        lines.append("- [[brand]] — цвета и шрифты")
+    lines.append("- [[photos]] — соответствие фото слотам")
+
+    return "\n".join(lines) + "\n"
 
 
 def compile_project(project_root: Path) -> dict[str, Any]:
@@ -136,6 +183,10 @@ def compile_project(project_root: Path) -> dict[str, Any]:
     if not state_path.exists():
         raise FileNotFoundError(f"{state_path} not found")
     state = state_yaml.parse(state_path)
+    # Fallback: если поле project в .landing-state.yaml не заполнено,
+    # берём имя папки проекта (надёжный источник).
+    if not state.get("project"):
+        state["project"] = project_root.name
     utils.atomic_write(concepts_dir / "stage-current.md", _stage_current_md(state))
 
     # 2. wireframe selections → blocks.md (опционально)
@@ -164,16 +215,9 @@ def compile_project(project_root: Path) -> dict[str, Any]:
         if md:
             utils.atomic_write(concepts_dir / "photos.md", md)
 
-    # 5. Index через SDK
-    try:
-        index_content = _build_index(state, has_blocks, has_brand)
-        utils.atomic_write(wiki_dir / "index.md", index_content)
-    except sdk_client.SDKError:
-        # fallback — простой индекс без SDK
-        utils.atomic_write(
-            wiki_dir / "index.md",
-            f"# {state.get('project', 'project')} wiki\n\nТекущий этап: {state.get('current_stage')}\n",
-        )
+    # 5. Index (stub, без SDK)
+    index_content = _build_index(state, has_blocks, has_brand)
+    utils.atomic_write(wiki_dir / "index.md", index_content)
 
     # 6. Log
     _append_log(wiki_dir / "log.md", state.get("current_stage", "?"))
