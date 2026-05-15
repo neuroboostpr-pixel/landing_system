@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>{{ title }}</title>
+<style>{{ styles }}</style>
+</head>
+<body>
+<div class="container">
+  <aside class="sidebar">
+    <input class="search" placeholder="Поиск..." oninput="filter(this.value)">
+    {% for group, items in groups.items() %}
+      <h2>{{ group }}</h2>
+      {% for item in items %}
+        <a href="#{{ item.slug }}" data-name="{{ item.name | lower }}">
+          {{ item.name }}<span class="badge badge-{{ item.type }}">{{ item.type }}</span>
+        </a>
+      {% endfor %}
+    {% endfor %}
+  </aside>
+  <main class="main">
+    <h1>{{ title }}</h1>
+    <p>Обновлено: {{ updated }}. Концептов: {{ total }}.</p>
+
+    {% for concept in concepts %}
+      <section id="{{ concept.slug }}">
+        <h2>{{ concept.name }} <span class="badge badge-{{ concept.type }}">{{ concept.type }}</span></h2>
+        <pre>{{ concept.body }}</pre>
+      </section>
+    {% endfor %}
+  </main>
+</div>
+<script>
+function filter(q) {
+  q = q.toLowerCase();
+  document.querySelectorAll('.sidebar a').forEach(a => {
+    a.style.display = a.dataset.name.includes(q) ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>
