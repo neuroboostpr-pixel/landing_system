@@ -4,6 +4,8 @@
 stages:
   "00_brief":
     name: "Brief"
+    lock: soft
+    require_approved: []
     hard_checks:
       - id: brief_file_exists
         type: file_exists
@@ -13,6 +15,7 @@ stages:
 
   "01a_niche_analysis":
     name: "Niche analysis"
+    lock: soft
     require_approved: ["00_brief"]
     hard_checks:
       - id: niche_analysis_md
@@ -83,7 +86,8 @@ stages:
 
   "02_assets":
     name: "Materials collection"
-    require_approved: ["00_brief", "01_context", "01a_niche_analysis"]
+    lock: soft
+    require_approved: []
     hard_checks:
       - id: stock_photo_api
         type: api_validator_any_of
@@ -103,7 +107,8 @@ stages:
 
   "03_references":
     name: "References"
-    require_approved: ["02_assets"]
+    lock: soft
+    require_approved: []
     hard_checks:
       - id: refs_index_exists
         type: file_exists
@@ -116,7 +121,8 @@ stages:
 
   "04_brand":
     name: "Brand kit"
-    require_approved: ["03_references"]
+    lock: soft
+    require_approved: []
     hard_checks:
       - id: brand_kit_exists
         type: file_exists
@@ -126,7 +132,8 @@ stages:
 
   "05_design":
     name: "Design system"
-    require_approved: ["04_brand"]
+    lock: soft
+    require_approved: []
     hard_checks:
       - id: design_md
         type: file_exists
@@ -143,7 +150,8 @@ stages:
 
   "06_stack":
     name: "Stack selection"
-    require_approved: ["05_design"]
+    lock: soft
+    require_approved: []
     hard_checks:
       - id: design_stack_yaml
         type: file_exists
@@ -164,7 +172,8 @@ stages:
 
   "07_content":
     name: "Content"
-    require_approved: ["06_stack"]
+    lock: soft
+    require_approved: []
     hard_checks:
       - id: final_copy
         type: file_exists
@@ -173,6 +182,7 @@ stages:
 
   "07a_prototype":
     name: "Прототип (parse)"
+    lock: soft
     require_approved: []
     hard_checks:
       - id: prototype_source_exists
@@ -188,7 +198,8 @@ stages:
 
   "07b_wireframe":
     name: "Wireframe"
-    require_approved: ["07a_prototype"]
+    lock: hard
+    require_approved: ["04_brand", "05_design", "07a_prototype"]
     hard_checks:
       - id: wireframe_html_exists
         type: file_exists
@@ -203,7 +214,8 @@ stages:
 
   "07c_composed":
     name: "Composed (draft)"
-    require_approved: ["07b_wireframe", "05_design"]
+    lock: hard
+    require_approved: ["05_design", "07a_prototype", "07b_wireframe"]
     hard_checks:
       - id: composed_html
         type: file_exists
@@ -219,7 +231,8 @@ stages:
 
   "07d_photos":
     name: "Photos pipeline"
-    require_approved: ["07c_composed"]
+    lock: soft
+    require_approved: []
     hard_checks:
       - id: photo_selections_yaml
         type: file_exists
@@ -229,7 +242,8 @@ stages:
 
   "07e_visuals":
     name: "Visuals pipeline (icons + infographics)"
-    require_approved: ["07c_composed"]
+    lock: soft
+    require_approved: []
     hard_checks:
       - id: visuals_generated
         type: dir_has_files
@@ -239,7 +253,8 @@ stages:
 
   "07f_composed_final":
     name: "Composed (final)"
-    require_approved: ["07d_photos", "07e_visuals"]
+    lock: soft
+    require_approved: []
     hard_checks:
       - id: composed_has_real_visuals
         type: script
@@ -256,7 +271,8 @@ stages:
 
   "08_build":
     name: "WP Build"
-    require_approved: ["07f_composed_final"]
+    lock: hard
+    require_approved: ["07c_composed"]
     hard_checks:
       - id: design_md
         type: file_exists
@@ -328,7 +344,8 @@ stages:
 
   "09_deploy":
     name: "Deploy"
-    require_approved: ["08b_style"]
+    lock: hard
+    require_approved: ["08_build", "10_qa"]
     hard_checks:
       - id: ssh_to_beget
         type: api_validator
@@ -355,21 +372,24 @@ stages:
 
   "10_qa":
     name: "QA"
-    require_approved: ["09_deploy"]
+    lock: hard
+    require_approved: ["08_build"]
     soft_checks:
       - id: site_live
         prompt: "Сайт открывается по HTTPS? (yes / no)"
 
   "11_analytics":
     name: "Analytics"
-    require_approved: ["10_qa"]
+    lock: soft
+    require_approved: ["09_deploy"]
     soft_checks:
       - id: metrika_works
         prompt: "Метрика принимает события (проверено в Вебвизоре)? (yes / no)"
 
   "12_seo":
     name: "SEO"
-    require_approved: ["11_analytics"]
+    lock: soft
+    require_approved: ["09_deploy"]
     hard_checks:
       - id: meta_tags_yaml
         type: file_exists
