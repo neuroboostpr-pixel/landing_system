@@ -211,16 +211,25 @@ def main():
         brand["primary"] = t.get("colors", {}).get("primary", "#000000")
 
     brand["niche"] = "generic"
-    brand["region"] = "global"
     profile = project / "01a_АНАЛИЗ_НИШИ" / "market-profile.md"
     if profile.exists():
         text = profile.read_text(encoding="utf-8")
-        # Простой парсинг
+        # Простой парсинг niche
         for line in text.splitlines():
             if line.lower().startswith("**niche") or line.lower().startswith("niche:"):
                 brand["niche"] = line.split(":", 1)[-1].strip(" *")
-            if line.lower().startswith("**geo") or line.lower().startswith("region:"):
-                brand["region"] = line.split(":", 1)[-1].strip(" *")
+
+    # Регион извлекаем через отдельный скрипт detect-region.py (PR-N)
+    try:
+        region_result = subprocess.run(
+            ["python3", str(SCRIPT_DIR / "detect-region.py"), str(project)],
+            capture_output=True, text=True, timeout=5
+        )
+        brand["region"] = region_result.stdout.strip() if region_result.returncode == 0 else "global"
+    except (subprocess.TimeoutExpired, FileNotFoundError):
+        brand["region"] = "global"
+    if not brand["region"]:
+        brand["region"] = "global"
 
     photo_assignments = selections_data.get("slots", {}) or selections_data.get("blocks", {})
 

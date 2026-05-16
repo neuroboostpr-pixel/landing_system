@@ -32,9 +32,19 @@ IDENTITY GUARD (hard constraints — priority order, top rule wins)
 6. If the requested adjustment cannot be applied without violating rules 1–5 → output the ORIGINAL input photo unchanged.
 
 REGION CUES (apply subtly, not as a costume change)
+
+Apply {REGION} influence ONLY to:
+- Background scenery
+- Color grading mood
+- Lighting direction and quality
+
+NEVER repaint the main subject — region atmosphere is BACKGROUND-ONLY.
+
 - Dubai / UAE: warm golden hour, soft haze, modern Arabic / luxury skyline cues, desert or marina ambience.
-- Moscow: contemporary urban, European business-district light, cool-neutral grade.
-- London: refined, slightly muted, overcast or soft directional daylight.
+- Moscow / Russia: contemporary urban, European business-district light, cool-neutral grade.
+- London / UK: refined, slightly muted, overcast or soft directional daylight.
+- Bali / SE Asia: lush tropical greenery, warm sunset tones, organic textures.
+- Paris / France: elegant haussmann architecture, soft warm light, refined palette.
 - Other regions: match local cultural and architectural cues without stereotyping.
 
 BRAND COLOR APPLICATION
