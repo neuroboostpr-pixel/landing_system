@@ -322,8 +322,8 @@ def main() -> None:
     p.add_argument("--project", required=True)
     p.add_argument("--library", required=True)
     p.add_argument("--template", required=True)
-    p.add_argument("--top", type=int, default=5,
-                   help="Max candidates shown per block (default: 5, was 3)")
+    p.add_argument("--top", type=int, default=8,
+                   help="Max candidates shown per block (default: 8, was 5)")
     p.add_argument(
         "--ux-rules",
         default=str(Path.home() / ".claude" / "skills" / "ui-ux-pro-max" / "data"),
@@ -397,6 +397,17 @@ def main() -> None:
         enrichment_log_content = enrichment_log_path.read_text()
 
     total_blocks = len(proto.get("blocks", []))
+
+    # Count how many blocks live under each category folder in the library —
+    # so the footer of each section can show "shown N of M available <cat> blocks".
+    library_dir = Path(args.library)
+    category_counts: dict[str, int] = {}
+    if library_dir.exists():
+        for cat_dir in library_dir.iterdir():
+            if not cat_dir.is_dir() or cat_dir.name.startswith((".", "_")):
+                continue
+            n = sum(1 for d in cat_dir.iterdir() if d.is_dir() and not d.name.startswith("."))
+            category_counts[cat_dir.name] = n
     for block in proto["blocks"]:
         position = block["position"]
         btype = block["type"]
@@ -600,6 +611,25 @@ def main() -> None:
             if what_here_text else ""
         )
 
+        # Footer: "shown N of M available <category> blocks" + links
+        first_cat = _category_for(args.library, candidate_ids[0]) if candidate_ids else btype
+        cat_total = category_counts.get(first_cat, len(candidate_ids))
+        shown_n = len(candidate_ids)
+        # Link from <project>/07a_WIREFRAME/wireframe.html to landing-system block-library:
+        # use file:// absolute path so the link works regardless of cwd.
+        cat_dir_abs = (Path(args.library) / first_cat).resolve()
+        cat_dir_url = f"file://{cat_dir_abs}"
+        footer_html = (
+            f'<footer class="lp-block-footer">'
+            f'<p>Показано {shown_n} из <strong>{cat_total}</strong> доступных '
+            f'<code>{html.escape(first_cat)}</code> блоков. Все блоки →&nbsp;'
+            f'<a href="{html.escape(cat_dir_url, quote=True)}" target="_blank">'
+            f'открыть папку библиотеки</a> или&nbsp;'
+            f'<a href="file:///tmp/block-library-gallery.html" target="_blank">'
+            f'посмотреть полную галерею</a>.</p>'
+            f'</footer>'
+        )
+
         section = (
             f'<section class="lp-block-wrapper" data-block-position="{position}">'
             f'<header class="lp-block-header">'
@@ -615,6 +645,7 @@ def main() -> None:
             f'{"".join(radios)}'
             f'<div class="lp-preview-stage">{"".join(variant_cards)}</div>'
             f'<nav class="lp-variant-tabs">{"".join(tab_labels)}</nav>'
+            f'{footer_html}'
             f'</section>'
         )
         blocks_html_parts.append(section)
