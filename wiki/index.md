@@ -2,7 +2,7 @@
 
 > Авто-сгенерированный индекс. Обновляется при `python -m scripts.wiki.compile --source-mode=system`.
 
-**Концептов всего:** 103
+**Концептов всего:** 104
 **Категории:** agent, command, rule, skill, stage
 
 **Известные ограничения:**
@@ -88,6 +88,7 @@
 - [[references-collection]] — references-collection
 - [[style-decomposition]] — style-decomposition
 - [[visual-generation]] — visual-generation
+- [[visual-qa]] — visual-qa
 - [[wireframe-rendering]] — wireframe-rendering
 - [[wp-cli-deployer]] — wp-cli-deployer
 - [[wp-gutenberg-block-builder]] — wp-gutenberg-block-builder
