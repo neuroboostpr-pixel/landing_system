@@ -22,6 +22,54 @@ CHECKED_TAB_TPL = (
 )
 HIDDEN_RADIO_CSS = "input[name^=\"b\"][type=\"radio\"].lp-variant-radio { position: absolute; left: -9999px; opacity: 0; pointer-events: none; }"
 
+# Маппинг технического типа блока -> понятное русское название и цель
+BLOCK_TYPE_RU: dict[str, str] = {
+    "nav": "Навигация (шапка сайта)",
+    "header": "Шапка сайта",
+    "hero": "Первый экран сайта",
+    "features": "Преимущества / возможности",
+    "features-2": "Преимущества (вторая секция)",
+    "trust": "Доверие (логотипы / факты)",
+    "social-proof": "Социальное доказательство (отзывы / клиенты)",
+    "gallery": "Галерея (фотографии / модели)",
+    "models-gallery": "Каталог моделей (карусель)",
+    "process": "Процесс работы / этапы",
+    "pricing": "Цены / тарифы",
+    "cta": "Призыв к действию (форма заявки)",
+    "cta-form": "Форма заявки",
+    "form": "Форма",
+    "test-drive-form": "Форма записи на тест-драйв",
+    "faq": "Часто задаваемые вопросы (FAQ)",
+    "team": "Команда",
+    "contacts": "Контакты",
+    "footer": "Подвал сайта",
+    "quiz": "Квиз / опрос",
+}
+
+BLOCK_PURPOSE_RU: dict[str, str] = {
+    "hero": "Первое впечатление + главный CTA",
+    "features": "Объяснить ценность продукта/услуги",
+    "features-2": "Дополнительные преимущества / технические детали",
+    "social-proof": "Снять возражения через примеры/отзывы",
+    "trust": "Показать что вам можно доверять",
+    "gallery": "Дать визуальное представление о продукте",
+    "models-gallery": "Показать ассортимент / каталог",
+    "process": "Объяснить как происходит сделка",
+    "pricing": "Показать цены / варианты тарифов",
+    "cta": "Преобразовать интерес в заявку",
+    "cta-form": "Собрать контакт через короткую форму",
+    "form": "Собрать контакт",
+    "test-drive-form": "Записать на тест-драйв",
+    "faq": "Снять оставшиеся возражения",
+    "team": "Показать кто за компанией стоит",
+    "contacts": "Способы связи и адрес",
+    "footer": "Технические ссылки и соцсети",
+    "nav": "Навигация по разделам сайта",
+    "header": "Логотип + меню + быстрый CTA",
+    "quiz": "Квалификация и сбор контакта через игру",
+}
+
+
 UX_NOT_AVAILABLE_BANNER = (
     '<div style="margin:24px; padding:16px 24px; background:#fffbe6; border:1px solid #ffe58f; '
     'border-radius:8px; color:#7d4e00; font-size:14px;">'
@@ -288,7 +336,7 @@ def main() -> None:
     if not proto_path.exists():
         fail(f"no prototype.yaml at {proto_path}")
     proto = yaml.safe_load(proto_path.read_text())
-    niche = proto["project"]["niche"]
+    niche = (proto.get("project") or {}).get("niche") or "generic"
     slug = proto["project"]["slug"]
 
     matcher_script = Path(__file__).parent / "match-candidates.py"
@@ -348,6 +396,7 @@ def main() -> None:
     if enrichment_log_path.exists():
         enrichment_log_content = enrichment_log_path.read_text()
 
+    total_blocks = len(proto.get("blocks", []))
     for block in proto["blocks"]:
         position = block["position"]
         btype = block["type"]
@@ -373,11 +422,15 @@ def main() -> None:
                 "candidates": [],
                 "warning": f"no candidates for {btype} / {niche}",
             })
+            type_ru = BLOCK_TYPE_RU.get(btype, btype)
+            purpose_ru = BLOCK_PURPOSE_RU.get(btype, "")
             blocks_html_parts.append(
                 f'<section class="lp-block-wrapper" data-block-position="{position}">'
                 f'<header class="lp-block-header">'
-                f'<h2>📦 Блок {position} — {html.escape(btype)}</h2>'
-                f'<p class="lp-block-sub">Нет подходящих кандидатов в block-library для ниши <code>{html.escape(niche)}</code>.</p>'
+                f'<div class="lp-block-counter">БЛОК {position} / {total_blocks}</div>'
+                f'<h2>{html.escape(type_ru)} <span class="lp-block-type-slug">({html.escape(btype)})</span></h2>'
+                f'<p class="lp-block-sub"><strong>Цель блока:</strong> {html.escape(purpose_ru) or "—"}</p>'
+                f'<p class="lp-block-sub" style="color:#c4424c;"><strong>⚠️ Нет подходящих кандидатов</strong> в block-library для ниши <code>{html.escape(niche)}</code>.</p>'
                 f'</header>'
                 f'<div class="lp-block-empty">Нужен новый блок? '
                 f'<code>python3 skills/block-library-management/scripts/scaffold-block.py --id &lt;new-id&gt; --category {html.escape(btype)}</code>'
@@ -436,8 +489,23 @@ def main() -> None:
             # Load Russian display name and layout summary from meta.yaml
             meta_path = block_dir / "meta.yaml"
             meta = yaml.safe_load(meta_path.read_text()) if meta_path.exists() else {}
-            display_name = html.escape(meta.get("display_name_ru", cid))
-            layout_summary = html.escape(meta.get("layout_summary_ru", ""))
+            # display_name_ru — короткое человеко-понятное имя; layout_summary_ru — что в макете
+            display_name_full = meta.get("display_name_ru") or cid
+            # Trim until first dot/newline for a short headline; keep full as tooltip
+            short_name = display_name_full.split(".")[0].split("\n")[0].strip()
+            if len(short_name) > 90:
+                short_name = short_name[:87].rstrip() + "…"
+            short_name_html = html.escape(short_name)
+            layout_summary = html.escape(meta.get("layout_summary_ru", "") or display_name_full)
+            niches_meta = meta.get("use_cases") or meta.get("niches_suitable") or []
+            niches_str = ", ".join(niches_meta[:4]) if isinstance(niches_meta, list) else ""
+            mood_str = meta.get("style_mood") or ""
+            meta_tags_parts: list[str] = []
+            if niches_str:
+                meta_tags_parts.append(html.escape(niches_str))
+            if mood_str:
+                meta_tags_parts.append(html.escape(mood_str))
+            meta_tags = " · ".join(meta_tags_parts)
             radios.append(
                 f'<input type="radio" class="lp-variant-radio" name="b{position}" id="{rid}" '
                 f'value="{html.escape(cid, quote=True)}" data-position="{position}" {checked}>'
@@ -452,8 +520,10 @@ def main() -> None:
             )
             tab_labels.append(
                 f'<label for="{rid}" title="{layout_summary}">'
-                f'<span class="lp-tab-title">Вариант {i+1} · {display_name}</span>'
-                f'<span class="lp-tab-id">{html.escape(cid)}</span>'
+                f'<span class="lp-tab-title">Вариант {i+1} — {short_name_html}</span>'
+                f'<span class="lp-tab-id" style="display:block;font-size:11px;color:#888;margin-top:2px;">'
+                f'{html.escape(cid)}{(" · " + meta_tags) if meta_tags else ""}'
+                f'</span>'
                 f'</label>'
             )
             checked_rules.append(CHECKED_TPL.format(rid=rid))
@@ -479,22 +549,67 @@ def main() -> None:
 
         # Pull a short description of THIS block from prototype for the header
         proto_block = block
-        proto_desc_parts = []
-        for k in ("headline", "title", "subhead", "subtitle", "cta_primary", "cta", "primary_cta"):
+        # "Что здесь" — конкретный текст первой смысловой строки прототипа
+        what_here_text = ""
+        for k in ("headline", "title", "subhead", "subtitle", "primary_cta", "cta_primary", "cta"):
             v = proto_block.get(k)
-            if v and isinstance(v, str):
-                proto_desc_parts.append(f"<strong>{k}:</strong> {html.escape(v[:160])}")
-                if len(proto_desc_parts) >= 2:
-                    break
-        proto_desc_html = " · ".join(proto_desc_parts) if proto_desc_parts else (
-            f"тип <code>{html.escape(btype)}</code> — {len(candidate_ids)} вариант(ов) из block-library"
+            if v and isinstance(v, str) and v.strip():
+                what_here_text = v.strip()[:200]
+                break
+
+        # "Контент" — список slot-полей которые есть в прото-блоке
+        SLOT_KEYS_RU = {
+            "headline": "заголовок",
+            "title": "заголовок",
+            "subhead": "подзаголовок",
+            "subtitle": "подзаголовок",
+            "cta_primary": "главная кнопка",
+            "primary_cta": "главная кнопка",
+            "cta_secondary": "вторая кнопка",
+            "cta": "кнопка",
+            "photo_slot": "фото",
+            "image": "изображение",
+            "items": "список пунктов",
+            "features": "список преимуществ",
+            "logos": "логотипы",
+            "form": "форма",
+            "questions": "вопросы",
+            "badges": "бейджи",
+            "stats": "цифры",
+            "testimonials": "отзывы",
+            "models": "модели",
+            "faq": "вопросы-ответы",
+            "cards": "карточки",
+            "metrics": "метрики",
+        }
+        content_slots: list[str] = []
+        for k in proto_block.keys():
+            if k in ("id", "type", "position", "quiz_role", "notes"):
+                continue
+            ru = SLOT_KEYS_RU.get(k)
+            if ru and ru not in content_slots:
+                content_slots.append(ru)
+        content_slots_str = ", ".join(content_slots) if content_slots else "—"
+
+        type_ru = BLOCK_TYPE_RU.get(btype, btype)
+        purpose_ru = BLOCK_PURPOSE_RU.get(btype, "—")
+
+        # Composite header — 4 строки: счётчик, тип, что здесь, цель, контент
+        what_here_html = (
+            f'<p class="lp-block-sub"><strong>Что здесь:</strong> {html.escape(what_here_text)}</p>'
+            if what_here_text else ""
         )
 
         section = (
             f'<section class="lp-block-wrapper" data-block-position="{position}">'
             f'<header class="lp-block-header">'
-            f'<h2>📦 Блок {position} — {html.escape(btype)}</h2>'
-            f'<p class="lp-block-sub">{proto_desc_html}</p>'
+            f'<div class="lp-block-counter" style="font-size:11px;letter-spacing:1px;color:#888;text-transform:uppercase;font-weight:600;">'
+            f'БЛОК {position} / {total_blocks}</div>'
+            f'<h2 style="margin:4px 0 8px;">{html.escape(type_ru)} '
+            f'<span class="lp-block-type-slug" style="font-size:13px;color:#aaa;font-weight:400;">({html.escape(btype)})</span></h2>'
+            f'{what_here_html}'
+            f'<p class="lp-block-sub"><strong>Цель блока:</strong> {html.escape(purpose_ru)}</p>'
+            f'<p class="lp-block-sub" style="color:#666;font-size:13px;"><strong>Контент:</strong> {html.escape(content_slots_str)}</p>'
             f'</header>'
             f'{hint_html}'
             f'{"".join(radios)}'
