@@ -2,7 +2,7 @@
 
 > Авто-сгенерированный индекс. Обновляется при `python -m scripts.wiki.compile --source-mode=system`.
 
-**Концептов всего:** 105
+**Концептов всего:** 106
 **Категории:** agent, command, rule, skill, stage
 
 **Известные ограничения:**
@@ -112,6 +112,7 @@
 - [[landing-niche]] — landing-niche
 - [[landing-onboarding]] — landing-onboarding
 - [[landing-photos]] — landing-photos
+- [[landing-previews]] — landing-previews
 - [[landing-prototype]] — landing-prototype
 - [[landing-qa]] — landing-qa
 - [[landing-references]] — landing-references
