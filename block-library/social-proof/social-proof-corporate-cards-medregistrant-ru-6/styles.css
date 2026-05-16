@@ -1,0 +1,170 @@
+.lp-social-proof-corporate-cards {
+  background: var(--lp-bg);
+  color: var(--lp-text);
+  font-family: var(--lp-font-body);
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md);
+}
+
+.lp-social-proof-corporate-cards__inner {
+  margin: 0 auto;
+  max-width: 1280px;
+}
+
+.lp-social-proof-corporate-cards__header {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  margin-bottom: var(--lp-spacing-lg);
+  max-width: 52rem;
+}
+
+.lp-social-proof-corporate-cards__eyebrow {
+  color: var(--lp-accent);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  margin: 0;
+}
+
+.lp-social-proof-corporate-cards__title {
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: clamp(2rem, 6vw, 4rem);
+  line-height: 1;
+  letter-spacing: 0;
+  margin: 0;
+}
+
+.lp-social-proof-corporate-cards__lead {
+  color: var(--lp-text-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.lp-social-proof-corporate-cards__track {
+  display: grid;
+  gap: var(--lp-spacing-md);
+  grid-auto-columns: minmax(16rem, 82%);
+  grid-auto-flow: column;
+  overflow-x: auto;
+  padding-bottom: var(--lp-spacing-sm);
+  scroll-snap-type: x mandatory;
+}
+
+.lp-social-proof-corporate-cards__card {
+  align-content: start;
+  background: var(--lp-bg-alt);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+  display: grid;
+  gap: var(--lp-spacing-md);
+  min-height: 100%;
+  padding: var(--lp-spacing-md);
+  scroll-snap-align: start;
+}
+
+.lp-social-proof-corporate-cards__logo {
+  align-items: center;
+  background: var(--lp-bg);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+  display: flex;
+  min-height: 4.5rem;
+  padding: var(--lp-spacing-sm);
+}
+
+.lp-social-proof-corporate-cards__logo img {
+  display: block;
+  height: auto;
+  max-height: 3rem;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.lp-social-proof-corporate-cards__content {
+  display: grid;
+  gap: var(--lp-spacing-xs);
+}
+
+.lp-social-proof-corporate-cards__card-title {
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 1.25rem;
+  line-height: 1.2;
+  letter-spacing: 0;
+  margin: 0;
+}
+
+.lp-social-proof-corporate-cards__text {
+  color: var(--lp-text-muted);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.lp-social-proof-corporate-cards__link {
+  align-items: center;
+  background: var(--lp-primary);
+  border: 1px solid var(--lp-primary);
+  border-radius: var(--lp-radius);
+  color: var(--lp-bg);
+  display: inline-flex;
+  font-weight: 700;
+  justify-content: center;
+  line-height: 1.2;
+  min-height: 2.75rem;
+  padding: var(--lp-spacing-sm) var(--lp-spacing-md);
+  text-decoration: none;
+}
+
+.lp-social-proof-corporate-cards__link:focus-visible {
+  outline: 2px solid var(--lp-accent);
+  outline-offset: 3px;
+}
+
+@media (min-width: 768px) {
+  .lp-social-proof-corporate-cards {
+    padding: var(--lp-spacing-xl) var(--lp-spacing-lg);
+  }
+
+  .lp-social-proof-corporate-cards__header {
+    grid-template-columns: 1fr;
+    margin-bottom: var(--lp-spacing-xl);
+  }
+
+  .lp-social-proof-corporate-cards__track {
+    grid-auto-columns: minmax(18rem, 24%);
+  }
+
+  .lp-social-proof-corporate-cards__card {
+    padding: var(--lp-spacing-lg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .lp-social-proof-corporate-cards__card,
+  .lp-social-proof-corporate-cards__link {
+    transition: border-color 180ms ease, color 180ms ease, background-color 180ms ease, transform 180ms ease;
+  }
+
+  .lp-social-proof-corporate-cards__card:hover,
+  .lp-social-proof-corporate-cards__card:focus-within {
+    animation: lp-social-proof-corporate-cards-lift 260ms ease both;
+    border-color: var(--lp-accent);
+  }
+
+  .lp-social-proof-corporate-cards__link:hover {
+    background: var(--lp-accent);
+    border-color: var(--lp-accent);
+  }
+
+  @keyframes lp-social-proof-corporate-cards-lift {
+    from {
+      transform: translateY(0);
+    }
+
+    to {
+      transform: translateY(-0.25rem);
+    }
+  }
+}

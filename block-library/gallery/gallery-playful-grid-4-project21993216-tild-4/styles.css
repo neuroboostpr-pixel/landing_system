@@ -1,0 +1,128 @@
+.lp-gallery-playful-grid-4 {
+  background: var(--lp-bg);
+  color: var(--lp-text);
+  font-family: var(--lp-font-body);
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md);
+}
+
+.lp-gallery-playful-grid-4__inner {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.lp-gallery-playful-grid-4__header {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  margin-bottom: var(--lp-spacing-lg);
+  max-width: 720px;
+}
+
+.lp-gallery-playful-grid-4__eyebrow {
+  color: var(--lp-accent);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  margin: 0;
+}
+
+.lp-gallery-playful-grid-4__title {
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.05;
+  margin: 0;
+}
+
+.lp-gallery-playful-grid-4__lead {
+  color: var(--lp-text-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.lp-gallery-playful-grid-4__list {
+  display: grid;
+  gap: var(--lp-spacing-md);
+  grid-template-columns: 1fr;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.lp-gallery-playful-grid-4__item {
+  min-width: 0;
+}
+
+.lp-gallery-playful-grid-4__figure {
+  align-items: center;
+  background: var(--lp-bg-alt);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+  display: grid;
+  gap: var(--lp-spacing-md);
+  height: 100%;
+  justify-items: center;
+  margin: 0;
+  padding: var(--lp-spacing-lg);
+  text-align: center;
+}
+
+.lp-gallery-playful-grid-4__media {
+  align-items: center;
+  aspect-ratio: 1;
+  background: var(--lp-bg);
+  border: 1px solid var(--lp-border);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  max-width: 220px;
+  overflow: hidden;
+  padding: var(--lp-spacing-sm);
+  width: 100%;
+}
+
+.lp-gallery-playful-grid-4__media img {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.lp-gallery-playful-grid-4__caption {
+  display: grid;
+  gap: var(--lp-spacing-xs);
+}
+
+.lp-gallery-playful-grid-4__name {
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.lp-gallery-playful-grid-4__text {
+  color: var(--lp-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+@media (min-width: 768px) {
+  .lp-gallery-playful-grid-4 {
+    padding: var(--lp-spacing-xl) var(--lp-spacing-lg);
+  }
+
+  .lp-gallery-playful-grid-4__header {
+    margin-bottom: var(--lp-spacing-xl);
+  }
+
+  .lp-gallery-playful-grid-4__list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .lp-gallery-playful-grid-4__figure {
+    padding: var(--lp-spacing-md);
+  }
+}

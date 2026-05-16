@@ -1,0 +1,20 @@
+id: header-technical-split-sskrusgun-ru-0
+category: header
+display_name_ru: "Компактная верхняя панель с логотипом, навигацией, иконками и яркой кнопкой дейс"
+description: "Компактная верхняя панель с логотипом, навигацией, иконками и яркой кнопкой действия."
+style_mood: technical
+layout_pattern: split
+ru_market: true
+has_animation: false
+niches_suitable:
+  - services
+  - education
+  - ecommerce
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://sskrusgun.ru/"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

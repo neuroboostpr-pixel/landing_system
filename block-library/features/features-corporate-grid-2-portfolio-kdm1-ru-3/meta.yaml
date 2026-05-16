@@ -1,0 +1,19 @@
+id: features-corporate-grid-2-portfolio-kdm1-ru-3
+category: features
+display_name_ru: "Сетка товарных категорий с разными размерами карточек, короткими подписями и тем"
+description: "Сетка товарных категорий с разными размерами карточек, короткими подписями и темными CTA."
+style_mood: corporate
+layout_pattern: grid-2
+ru_market: true
+has_animation: false
+niches_suitable:
+  - ecommerce
+  - services
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://portfolio.kdm1.ru/upload/iblock/f94/slk0g7ub4mnpodwty9jl8iyrq4zk33uv/LCase.pdf"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

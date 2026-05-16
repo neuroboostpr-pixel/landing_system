@@ -1,0 +1,6 @@
+@keyframes move-down {
+  /* extracted from real site */
+}
+.anim-09 {
+  animation: move-down 1.2s ease forwards;
+}

@@ -1,0 +1,6 @@
+@keyframes button-icon-fade-in {
+  /* extracted from real site */
+}
+.anim-00 {
+  animation: button-icon-fade-in 1.2s ease forwards;
+}

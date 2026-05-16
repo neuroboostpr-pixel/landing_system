@@ -1,0 +1,20 @@
+id: header-cinematic-split-portfolio-kdm1-ru-0
+category: header
+display_name_ru: "Узкая верхняя навигация на светлом фоне с компактными ссылками и контрастной кно"
+description: "Узкая верхняя навигация на светлом фоне с компактными ссылками и контрастной кнопкой."
+style_mood: cinematic
+layout_pattern: split
+ru_market: true
+has_animation: false
+niches_suitable:
+  - services
+  - education
+  - b2b-saas
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://portfolio.kdm1.ru/upload/iblock/b31/i0qylig13hzo7ow4qcpia0qhtn3i87pk/Onlai_n_shkola-Dmitriya-Vykhodtseva.pdf"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

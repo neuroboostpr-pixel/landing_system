@@ -1,0 +1,156 @@
+.lp-features-brutalist-grid-3 {
+  color: var(--lp-text);
+  background: var(--lp-bg);
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md);
+  font-family: var(--lp-font-body);
+}
+
+.lp-features-brutalist-grid-3__inner {
+  width: min(100%, 1280px);
+  margin: 0 auto;
+  display: grid;
+  gap: var(--lp-spacing-lg);
+}
+
+.lp-features-brutalist-grid-3__intro {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  border-top: 2px solid var(--lp-border);
+  padding-top: var(--lp-spacing-md);
+}
+
+.lp-features-brutalist-grid-3__eyebrow {
+  margin: 0;
+  color: var(--lp-accent);
+  font-size: 0.78rem;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.lp-features-brutalist-grid-3__title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: clamp(2.5rem, 14vw, 7rem);
+  line-height: 0.9;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  max-width: 11ch;
+}
+
+.lp-features-brutalist-grid-3__lead {
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  line-height: 1.5;
+  max-width: 42rem;
+}
+
+.lp-features-brutalist-grid-3__portrait {
+  margin: 0;
+  display: grid;
+  gap: var(--lp-spacing-xs);
+  border: 2px solid var(--lp-border);
+  background: var(--lp-bg-alt);
+  padding: var(--lp-spacing-xs);
+}
+
+.lp-features-brutalist-grid-3__portrait img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  background: var(--lp-border);
+}
+
+.lp-features-brutalist-grid-3__portrait figcaption {
+  color: var(--lp-text-muted);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.lp-features-brutalist-grid-3__list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--lp-spacing-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lp-features-brutalist-grid-3__card {
+  min-height: 14rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--lp-spacing-sm);
+  justify-content: space-between;
+  border: 2px solid var(--lp-border);
+  background: var(--lp-bg-alt);
+  padding: var(--lp-spacing-md);
+}
+
+.lp-features-brutalist-grid-3__marker {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  border: 2px solid var(--lp-accent);
+  color: var(--lp-accent);
+  padding: var(--lp-spacing-xs) var(--lp-spacing-sm);
+  font-size: 0.78rem;
+  line-height: 1;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.lp-features-brutalist-grid-3__card h3 {
+  margin: auto 0 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: clamp(1.35rem, 5vw, 2rem);
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.lp-features-brutalist-grid-3__card p {
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
+@media (min-width: 768px) {
+  .lp-features-brutalist-grid-3 {
+    padding: var(--lp-spacing-xl) var(--lp-spacing-lg);
+  }
+
+  .lp-features-brutalist-grid-3__inner {
+    grid-template-columns: minmax(0, 1.1fr) minmax(16rem, 0.6fr);
+    align-items: start;
+  }
+
+  .lp-features-brutalist-grid-3__intro {
+    grid-column: 1 / 2;
+  }
+
+  .lp-features-brutalist-grid-3__portrait {
+    grid-column: 2 / 3;
+    grid-row: 1 / 3;
+    position: sticky;
+    top: var(--lp-spacing-md);
+  }
+
+  .lp-features-brutalist-grid-3__list {
+    grid-column: 1 / 2;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .lp-features-brutalist-grid-3__card {
+    min-height: 17rem;
+  }
+}

@@ -1,0 +1,21 @@
+id: team-cinematic-split-portfolio-kdm1-ru-11
+category: team
+display_name_ru: "Блок с групповой иллюстрацией людей, крупным обещанием результата и эмоциональны"
+description: "Блок с групповой иллюстрацией людей, крупным обещанием результата и эмоциональным акцентом."
+style_mood: cinematic
+layout_pattern: split
+ru_market: true
+has_animation: false
+niches_suitable:
+  - services
+  - education
+  - medical
+  - b2b-saas
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://portfolio.kdm1.ru/upload/iblock/b31/i0qylig13hzo7ow4qcpia0qhtn3i87pk/Onlai_n_shkola-Dmitriya-Vykhodtseva.pdf"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

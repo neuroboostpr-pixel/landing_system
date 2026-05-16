@@ -1,0 +1,6 @@
+@keyframes checkIconDraw {
+  /* extracted from real site */
+}
+.anim-01 {
+  animation: checkIconDraw 1.2s ease forwards;
+}

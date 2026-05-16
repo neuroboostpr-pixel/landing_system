@@ -1,0 +1,20 @@
+id: footer-corporate-split-opt-ecowash-ru-12
+category: footer
+display_name_ru: "Темный нижний футер с логотипной зоной, центральной кнопкой связи и служебными с"
+description: "Темный нижний футер с логотипной зоной, центральной кнопкой связи и служебными ссылками."
+style_mood: corporate
+layout_pattern: split
+ru_market: true
+has_animation: false
+niches_suitable:
+  - services
+  - ecommerce
+  - b2b-saas
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://opt.ecowash.ru/"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

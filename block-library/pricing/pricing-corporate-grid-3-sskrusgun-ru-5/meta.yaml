@@ -1,0 +1,19 @@
+id: pricing-corporate-grid-3-sskrusgun-ru-5
+category: pricing
+display_name_ru: "Раздел с карточками специализированных программ, фотофоном, ценовым маркером и к"
+description: "Раздел с карточками специализированных программ, фотофоном, ценовым маркером и кнопками."
+style_mood: corporate
+layout_pattern: grid-3
+ru_market: true
+has_animation: false
+niches_suitable:
+  - services
+  - education
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://sskrusgun.ru/"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

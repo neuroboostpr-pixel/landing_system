@@ -1,0 +1,20 @@
+id: hero-cinematic-split-antidiler-karpov-ru-1
+category: hero
+display_name_ru: "Темный первый экран с крупным наклонным заголовком, автомобильным фоном и контра"
+description: "Темный первый экран с крупным наклонным заголовком, автомобильным фоном и контрастной кнопкой."
+style_mood: cinematic
+layout_pattern: split
+ru_market: true
+has_animation: false
+niches_suitable:
+  - premium-auto
+  - services
+  - luxury
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://antidiler-karpov.ru/"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

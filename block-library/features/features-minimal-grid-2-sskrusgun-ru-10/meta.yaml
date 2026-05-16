@@ -1,0 +1,19 @@
+id: features-minimal-grid-2-sskrusgun-ru-10
+category: features
+display_name_ru: "Две подарочные карточки с продуктовым изображением, кратким описанием и кнопкой."
+description: "Две подарочные карточки с продуктовым изображением, кратким описанием и кнопкой."
+style_mood: minimal
+layout_pattern: grid-2
+ru_market: true
+has_animation: false
+niches_suitable:
+  - ecommerce
+  - services
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://sskrusgun.ru/"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

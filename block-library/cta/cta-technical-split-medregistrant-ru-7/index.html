@@ -1,0 +1,22 @@
+<section class="lp-cta-technical-split" aria-labelledby="lp-cta-technical-split-title">
+  <div class="lp-cta-technical-split__inner">
+    <div class="lp-cta-technical-split__content">
+      <p class="lp-cta-technical-split__eyebrow">{{slot:cta-eyebrow}}</p>
+      <h2 class="lp-cta-technical-split__title" id="lp-cta-technical-split-title">{{slot:cta-title}}</h2>
+      <p class="lp-cta-technical-split__text">{{slot:cta-text}}</p>
+      <div class="lp-cta-technical-split__actions">
+        <a class="lp-cta-technical-split__button lp-cta-technical-split__button--primary" href="{{slot:cta-primary-link}}">
+          {{slot:cta-primary-label}}
+        </a>
+        <a class="lp-cta-technical-split__button lp-cta-technical-split__button--secondary" href="{{slot:cta-secondary-link}}">
+          {{slot:cta-secondary-label}}
+        </a>
+      </div>
+    </div>
+
+    <figure class="lp-cta-technical-split__media">
+      <img src="{{slot:cta-image}}" alt="{{slot:cta-image-alt}}" loading="lazy">
+      <figcaption class="lp-cta-technical-split__caption">{{slot:cta-image-caption}}</figcaption>
+    </figure>
+  </div>
+</section>

@@ -1,0 +1,20 @@
+id: trust-minimal-centered-antidiler-karpov-ru-6
+category: trust
+display_name_ru: "Короткая секция партнеров на темном фоне с крупным заголовком и большим пустым п"
+description: "Короткая секция партнеров на темном фоне с крупным заголовком и большим пустым полем под логотипы."
+style_mood: minimal
+layout_pattern: centered
+ru_market: true
+has_animation: false
+niches_suitable:
+  - premium-auto
+  - services
+  - b2b-saas
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://antidiler-karpov.ru/"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

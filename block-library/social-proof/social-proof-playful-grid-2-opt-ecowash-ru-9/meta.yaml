@@ -1,0 +1,20 @@
+id: social-proof-playful-grid-2-opt-ecowash-ru-9
+category: social-proof
+display_name_ru: "Раздел отзывов с крупным заголовком и сеткой пустых белых карточек для отзывов к"
+description: "Раздел отзывов с крупным заголовком и сеткой пустых белых карточек для отзывов клиентов."
+style_mood: playful
+layout_pattern: grid-2
+ru_market: true
+has_animation: false
+niches_suitable:
+  - ecommerce
+  - services
+  - education
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://opt.ecowash.ru/"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

@@ -1,0 +1,50 @@
+<section class="lp-trust-editorial-grid-2" aria-labelledby="lp-trust-editorial-grid-2-title">
+  <div class="lp-trust-editorial-grid-2__inner">
+    <div class="lp-trust-editorial-grid-2__header">
+      <span class="lp-trust-editorial-grid-2__eyebrow">{{slot:eyebrow}}</span>
+      <h2 class="lp-trust-editorial-grid-2__title" id="lp-trust-editorial-grid-2-title">{{slot:heading}}</h2>
+      <p class="lp-trust-editorial-grid-2__lead">{{slot:subhead}}</p>
+    </div>
+
+    <div class="lp-trust-editorial-grid-2__grid">
+      <article class="lp-trust-editorial-grid-2__card">
+        <picture class="lp-trust-editorial-grid-2__media">
+          <source media="(max-width: 767px)" srcset="{{slot:case-image-1-mobile}}">
+          <img src="{{slot:case-image-1}}" alt="{{slot:case-image-1-alt}}" loading="lazy">
+        </picture>
+        <div class="lp-trust-editorial-grid-2__card-body">
+          <span class="lp-trust-editorial-grid-2__label">{{slot:case-label-1}}</span>
+          <h3 class="lp-trust-editorial-grid-2__card-title">{{slot:case-title-1}}</h3>
+          <p class="lp-trust-editorial-grid-2__text">{{slot:case-text-1}}</p>
+        </div>
+      </article>
+
+      <article class="lp-trust-editorial-grid-2__card">
+        <picture class="lp-trust-editorial-grid-2__media">
+          <source media="(max-width: 767px)" srcset="{{slot:case-image-2-mobile}}">
+          <img src="{{slot:case-image-2}}" alt="{{slot:case-image-2-alt}}" loading="lazy">
+        </picture>
+        <div class="lp-trust-editorial-grid-2__card-body">
+          <span class="lp-trust-editorial-grid-2__label">{{slot:case-label-2}}</span>
+          <h3 class="lp-trust-editorial-grid-2__card-title">{{slot:case-title-2}}</h3>
+          <p class="lp-trust-editorial-grid-2__text">{{slot:case-text-2}}</p>
+        </div>
+      </article>
+    </div>
+
+    <ul class="lp-trust-editorial-grid-2__takeaways" aria-label="{{slot:takeaways-label}}">
+      <li class="lp-trust-editorial-grid-2__takeaway">
+        <span class="lp-trust-editorial-grid-2__takeaway-value">{{slot:takeaway-value-1}}</span>
+        <span class="lp-trust-editorial-grid-2__takeaway-text">{{slot:takeaway-text-1}}</span>
+      </li>
+      <li class="lp-trust-editorial-grid-2__takeaway">
+        <span class="lp-trust-editorial-grid-2__takeaway-value">{{slot:takeaway-value-2}}</span>
+        <span class="lp-trust-editorial-grid-2__takeaway-text">{{slot:takeaway-text-2}}</span>
+      </li>
+      <li class="lp-trust-editorial-grid-2__takeaway">
+        <span class="lp-trust-editorial-grid-2__takeaway-value">{{slot:takeaway-value-3}}</span>
+        <span class="lp-trust-editorial-grid-2__takeaway-text">{{slot:takeaway-text-3}}</span>
+      </li>
+    </ul>
+  </div>
+</section>

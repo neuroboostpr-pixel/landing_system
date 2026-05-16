@@ -1,0 +1,20 @@
+id: header-luxury-split-romanmelnikov-tilda-0
+category: header
+display_name_ru: "Узкая навигационная шапка на темном фоне с мелкими ссылками и теплым акцентом."
+description: "Узкая навигационная шапка на темном фоне с мелкими ссылками и теплым акцентом."
+style_mood: luxury
+layout_pattern: split
+ru_market: true
+has_animation: false
+niches_suitable:
+  - services
+  - luxury
+  - education
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://romanmelnikov.tilda.ws/"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

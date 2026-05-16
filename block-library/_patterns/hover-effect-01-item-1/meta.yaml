@@ -1,0 +1,6 @@
+id: hover-effect-01-item-1
+type: pattern
+name: Hover 1
+description: "Hover effect extracted from real site"
+imported_at: "2026-05-16"
+import_method: css-pattern-extraction

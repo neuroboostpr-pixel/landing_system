@@ -1,0 +1,57 @@
+<section class="lp-hero-playful-split" aria-labelledby="lp-hero-playful-split-title">
+  <div class="lp-hero-playful-split__inner">
+    <div class="lp-hero-playful-split__content">
+      <p class="lp-hero-playful-split__badge">{{slot:hero-badge}}</p>
+      <h1 class="lp-hero-playful-split__title" id="lp-hero-playful-split-title">{{slot:hero-title}}</h1>
+      <p class="lp-hero-playful-split__subhead">{{slot:hero-subhead}}</p>
+
+      <ul class="lp-hero-playful-split__bullets" aria-label="{{slot:hero-bullets-label}}">
+        <li>{{slot:hero-bullet-1}}</li>
+        <li>{{slot:hero-bullet-2}}</li>
+        <li>{{slot:hero-bullet-3}}</li>
+      </ul>
+
+      <div class="lp-hero-playful-split__actions">
+        <a class="lp-hero-playful-split__cta lp-hero-playful-split__cta--primary" href="{{slot:primary-cta-url}}">
+          {{slot:primary-cta-label}}
+        </a>
+        <a class="lp-hero-playful-split__cta lp-hero-playful-split__cta--secondary" href="{{slot:secondary-cta-url}}">
+          {{slot:secondary-cta-label}}
+        </a>
+      </div>
+
+      <div class="lp-hero-playful-split__trust" aria-label="{{slot:trust-label}}">
+        <span>{{slot:trust-item-1}}</span>
+        <span>{{slot:trust-item-2}}</span>
+      </div>
+    </div>
+
+    <div class="lp-hero-playful-split__side">
+      <figure class="lp-hero-playful-split__media">
+        <picture>
+          <source media="(max-width: 767px)" srcset="{{slot:hero-image-mobile}}">
+          <img src="{{slot:hero-image}}" alt="{{slot:hero-image-alt}}" loading="lazy">
+        </picture>
+        <figcaption>{{slot:hero-image-caption}}</figcaption>
+      </figure>
+
+      <form class="lp-hero-playful-split__form" action="{{slot:form-action}}" method="post" aria-label="{{slot:form-label}}">
+        <h2 class="lp-hero-playful-split__form-title">{{slot:form-title}}</h2>
+        <label class="lp-hero-playful-split__field">
+          <span>{{slot:name-label}}</span>
+          <input type="text" name="{{slot:name-field-name}}" placeholder="{{slot:name-placeholder}}">
+        </label>
+        <label class="lp-hero-playful-split__field">
+          <span>{{slot:phone-label}}</span>
+          <input type="tel" name="{{slot:phone-field-name}}" placeholder="{{slot:phone-placeholder}}">
+        </label>
+        <label class="lp-hero-playful-split__field">
+          <span>{{slot:message-label}}</span>
+          <textarea name="{{slot:message-field-name}}" placeholder="{{slot:message-placeholder}}" rows="3"></textarea>
+        </label>
+        <button class="lp-hero-playful-split__submit" type="submit">{{slot:form-submit-label}}</button>
+        <p class="lp-hero-playful-split__notice">{{slot:form-notice}}</p>
+      </form>
+    </div>
+  </div>
+</section>

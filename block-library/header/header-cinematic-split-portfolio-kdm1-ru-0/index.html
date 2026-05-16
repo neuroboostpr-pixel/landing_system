@@ -1,0 +1,24 @@
+<header class="lp-header-cinematic-split" aria-label="{{slot:header-aria-label}}">
+  <div class="lp-header-cinematic-split__inner">
+    <a class="lp-header-cinematic-split__brand" href="{{slot:brand-link}}" aria-label="{{slot:brand-aria-label}}">
+      <span class="lp-header-cinematic-split__brand-mark" aria-hidden="true">{{slot:brand-mark}}</span>
+      <span class="lp-header-cinematic-split__brand-name">{{slot:brand-name}}</span>
+    </a>
+
+    <nav class="lp-header-cinematic-split__nav" aria-label="{{slot:nav-aria-label}}">
+      <a href="{{slot:nav-link-1-url}}">{{slot:nav-link-1-label}}</a>
+      <a href="{{slot:nav-link-2-url}}">{{slot:nav-link-2-label}}</a>
+      <a href="{{slot:nav-link-3-url}}">{{slot:nav-link-3-label}}</a>
+      <a href="{{slot:nav-link-4-url}}">{{slot:nav-link-4-label}}</a>
+    </nav>
+
+    <div class="lp-header-cinematic-split__actions">
+      <a class="lp-header-cinematic-split__secondary" href="{{slot:secondary-cta-url}}">
+        {{slot:secondary-cta-label}}
+      </a>
+      <a class="lp-header-cinematic-split__primary" href="{{slot:primary-cta-url}}">
+        {{slot:primary-cta-label}}
+      </a>
+    </div>
+  </div>
+</header>

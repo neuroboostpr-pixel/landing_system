@@ -1,0 +1,21 @@
+id: trust-editorial-grid-2-zilant-group-7
+category: trust
+display_name_ru: "Секция кейса с большим заголовком, двумя документальными карточками и бирюзовыми"
+description: "Секция кейса с большим заголовком, двумя документальными карточками и бирюзовыми выводами."
+style_mood: editorial
+layout_pattern: grid-2
+ru_market: true
+has_animation: true
+niches_suitable:
+  - services
+  - b2b-saas
+  - education
+  - medical
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://zilant.group/"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

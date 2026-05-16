@@ -1,0 +1,6 @@
+id: animation-09-move-down
+type: pattern
+name: Animation move-down
+description: "Keyframe animation: move-down"
+imported_at: "2026-05-16"
+import_method: css-pattern-extraction

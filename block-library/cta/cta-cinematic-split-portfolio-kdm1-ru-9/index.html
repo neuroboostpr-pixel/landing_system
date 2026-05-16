@@ -1,0 +1,25 @@
+<section class="lp-cta-cinematic-split" aria-labelledby="cta-cinematic-split-title">
+  <div class="lp-cta-cinematic-split__inner">
+    <div class="lp-cta-cinematic-split__content">
+      <p class="lp-cta-cinematic-split__eyebrow">{{slot:eyebrow}}</p>
+      <h2 class="lp-cta-cinematic-split__title" id="cta-cinematic-split-title">{{slot:heading}}</h2>
+      <p class="lp-cta-cinematic-split__text">{{slot:subhead}}</p>
+      <div class="lp-cta-cinematic-split__actions">
+        <a class="lp-cta-cinematic-split__button lp-cta-cinematic-split__button--primary" href="{{slot:primary-cta-link}}">
+          {{slot:primary-cta-label}}
+        </a>
+        <a class="lp-cta-cinematic-split__button lp-cta-cinematic-split__button--secondary" href="{{slot:secondary-cta-link}}">
+          {{slot:secondary-cta-label}}
+        </a>
+      </div>
+    </div>
+
+    <figure class="lp-cta-cinematic-split__media">
+      <picture>
+        <source media="(max-width: 767px)" srcset="{{slot:cta-image-mobile}}">
+        <img src="{{slot:cta-image}}" alt="{{slot:cta-image-alt}}" loading="lazy">
+      </picture>
+      <figcaption class="lp-cta-cinematic-split__caption">{{slot:image-caption}}</figcaption>
+    </figure>
+  </div>
+</section>

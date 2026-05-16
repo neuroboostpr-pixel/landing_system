@@ -1,0 +1,6 @@
+id: animation-01-checkicondraw
+type: pattern
+name: Animation checkIconDraw
+description: "Keyframe animation: checkIconDraw"
+imported_at: "2026-05-16"
+import_method: css-pattern-extraction

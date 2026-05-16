@@ -1,0 +1,6 @@
+id: animation-02-checkiconopacity
+type: pattern
+name: Animation checkIconOpacity
+description: "Keyframe animation: checkIconOpacity"
+imported_at: "2026-05-16"
+import_method: css-pattern-extraction

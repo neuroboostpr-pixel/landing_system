@@ -1,0 +1,6 @@
+id: animation-07-iconbackgroundopacity
+type: pattern
+name: Animation iconBackgroundOpacity
+description: "Keyframe animation: iconBackgroundOpacity"
+imported_at: "2026-05-16"
+import_method: css-pattern-extraction

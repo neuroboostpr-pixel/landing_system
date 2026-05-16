@@ -1,0 +1,19 @@
+id: cta-brutalist-split-sskrusgun-ru-3
+category: cta
+display_name_ru: "Широкий промоблок с вертикальным предметным фоном и большим рубленым призывом сл"
+description: "Широкий промоблок с вертикальным предметным фоном и большим рубленым призывом слева."
+style_mood: brutalist
+layout_pattern: split
+ru_market: true
+has_animation: false
+niches_suitable:
+  - services
+  - education
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://sskrusgun.ru/"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

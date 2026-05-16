@@ -1,0 +1,54 @@
+<section class="lp-process-corporate-timeline" aria-labelledby="process-corporate-timeline-title">
+  <div class="lp-process-corporate-timeline__inner">
+    <div class="lp-process-corporate-timeline__header">
+      <span class="lp-process-corporate-timeline__eyebrow">{{slot:process-eyebrow}}</span>
+      <h2 class="lp-process-corporate-timeline__title" id="process-corporate-timeline-title">{{slot:process-title}}</h2>
+      <p class="lp-process-corporate-timeline__lead">{{slot:process-lead}}</p>
+    </div>
+
+    <ol class="lp-process-corporate-timeline__list">
+      <li class="lp-process-corporate-timeline__item">
+        <article class="lp-process-corporate-timeline__card">
+          <span class="lp-process-corporate-timeline__number">{{slot:step-1-number}}</span>
+          <div class="lp-process-corporate-timeline__content">
+            <h3 class="lp-process-corporate-timeline__step-title">{{slot:step-1-title}}</h3>
+            <p class="lp-process-corporate-timeline__text">{{slot:step-1-text}}</p>
+          </div>
+        </article>
+      </li>
+
+      <li class="lp-process-corporate-timeline__item">
+        <article class="lp-process-corporate-timeline__card">
+          <span class="lp-process-corporate-timeline__number">{{slot:step-2-number}}</span>
+          <div class="lp-process-corporate-timeline__content">
+            <h3 class="lp-process-corporate-timeline__step-title">{{slot:step-2-title}}</h3>
+            <p class="lp-process-corporate-timeline__text">{{slot:step-2-text}}</p>
+          </div>
+        </article>
+      </li>
+
+      <li class="lp-process-corporate-timeline__item">
+        <article class="lp-process-corporate-timeline__card">
+          <span class="lp-process-corporate-timeline__number">{{slot:step-3-number}}</span>
+          <div class="lp-process-corporate-timeline__content">
+            <h3 class="lp-process-corporate-timeline__step-title">{{slot:step-3-title}}</h3>
+            <p class="lp-process-corporate-timeline__text">{{slot:step-3-text}}</p>
+          </div>
+        </article>
+      </li>
+
+      <li class="lp-process-corporate-timeline__item lp-process-corporate-timeline__item--final">
+        <article class="lp-process-corporate-timeline__card lp-process-corporate-timeline__card--final">
+          <span class="lp-process-corporate-timeline__number">{{slot:final-step-number}}</span>
+          <div class="lp-process-corporate-timeline__content">
+            <h3 class="lp-process-corporate-timeline__step-title">{{slot:final-step-title}}</h3>
+            <p class="lp-process-corporate-timeline__text">{{slot:final-step-text}}</p>
+            <a class="lp-process-corporate-timeline__button" href="{{slot:final-cta-link}}">
+              {{slot:final-cta-label}}
+            </a>
+          </div>
+        </article>
+      </li>
+    </ol>
+  </div>
+</section>

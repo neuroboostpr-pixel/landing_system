@@ -1,0 +1,21 @@
+id: features-technical-grid-3-zilant-group-4
+category: features
+display_name_ru: "Воздушный блок с контрастным заголовком, тремя белыми карточками и декоративной "
+description: "Воздушный блок с контрастным заголовком, тремя белыми карточками и декоративной бумажной графикой."
+style_mood: technical
+layout_pattern: grid-3
+ru_market: true
+has_animation: false
+niches_suitable:
+  - b2b-saas
+  - services
+  - tech
+  - education
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://zilant.group/"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

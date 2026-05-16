@@ -1,0 +1,6 @@
+id: animation-03-checkiconscale
+type: pattern
+name: Animation checkIconScale
+description: "Keyframe animation: checkIconScale"
+imported_at: "2026-05-16"
+import_method: css-pattern-extraction

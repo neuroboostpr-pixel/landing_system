@@ -1,0 +1,20 @@
+id: header-cinematic-split-antidiler-karpov-ru-0
+category: header
+display_name_ru: "Узкая темная панель навигации с логотипом, меню, контактами и иконками связи."
+description: "Узкая темная панель навигации с логотипом, меню, контактами и иконками связи."
+style_mood: cinematic
+layout_pattern: split
+ru_market: true
+has_animation: false
+niches_suitable:
+  - premium-auto
+  - services
+  - luxury
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://antidiler-karpov.ru/"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

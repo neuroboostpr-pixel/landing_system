@@ -1,0 +1,202 @@
+.lp-pricing-technical-grid-3 {
+  background: var(--lp-bg);
+  color: var(--lp-text);
+  font-family: var(--lp-font-body);
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md);
+}
+
+.lp-pricing-technical-grid-3__inner {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.lp-pricing-technical-grid-3__header {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  max-width: 760px;
+  margin-bottom: var(--lp-spacing-lg);
+}
+
+.lp-pricing-technical-grid-3__eyebrow {
+  color: var(--lp-accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.lp-pricing-technical-grid-3__title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 0.95;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.lp-pricing-technical-grid-3__subtitle {
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.lp-pricing-technical-grid-3__grid {
+  display: grid;
+  gap: var(--lp-spacing-md);
+}
+
+.lp-pricing-technical-grid-3__card {
+  display: grid;
+  overflow: hidden;
+  background: var(--lp-bg-alt);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+}
+
+.lp-pricing-technical-grid-3__card--featured {
+  border-color: var(--lp-accent);
+}
+
+.lp-pricing-technical-grid-3__media {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 16 / 10;
+  background: var(--lp-border);
+}
+
+.lp-pricing-technical-grid-3__media img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.lp-pricing-technical-grid-3__body {
+  display: grid;
+  gap: var(--lp-spacing-md);
+  padding: var(--lp-spacing-md);
+}
+
+.lp-pricing-technical-grid-3__card-head {
+  display: grid;
+  gap: var(--lp-spacing-xs);
+}
+
+.lp-pricing-technical-grid-3__badge {
+  justify-self: start;
+  padding: 0.35rem 0.55rem;
+  color: var(--lp-bg);
+  background: var(--lp-accent);
+  border-radius: var(--lp-radius);
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.lp-pricing-technical-grid-3__plan {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 1.35rem;
+  line-height: 1.1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.lp-pricing-technical-grid-3__text {
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.lp-pricing-technical-grid-3__params {
+  display: grid;
+  gap: var(--lp-spacing-xs);
+  margin: 0;
+  padding: var(--lp-spacing-sm) 0;
+  border-top: 1px solid var(--lp-border);
+  border-bottom: 1px solid var(--lp-border);
+}
+
+.lp-pricing-technical-grid-3__params div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--lp-spacing-sm);
+}
+
+.lp-pricing-technical-grid-3__params dt {
+  color: var(--lp-text-muted);
+  font-size: 0.82rem;
+}
+
+.lp-pricing-technical-grid-3__params dd {
+  margin: 0;
+  color: var(--lp-text);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-align: right;
+}
+
+.lp-pricing-technical-grid-3__footer {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  margin-top: auto;
+}
+
+.lp-pricing-technical-grid-3__price {
+  margin: 0;
+  color: var(--lp-primary);
+  font-family: var(--lp-font-display);
+  font-size: 1.7rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.lp-pricing-technical-grid-3__button {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--lp-spacing-md);
+  color: var(--lp-bg);
+  background: var(--lp-primary);
+  border: 1px solid var(--lp-primary);
+  border-radius: var(--lp-radius);
+  font-weight: 800;
+  line-height: 1.1;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.lp-pricing-technical-grid-3__button:focus-visible {
+  outline: 2px solid var(--lp-accent);
+  outline-offset: 3px;
+}
+
+@media (min-width: 768px) {
+  .lp-pricing-technical-grid-3 {
+    padding: var(--lp-spacing-xl) var(--lp-spacing-lg);
+  }
+
+  .lp-pricing-technical-grid-3__header {
+    margin-bottom: var(--lp-spacing-xl);
+  }
+
+  .lp-pricing-technical-grid-3__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .lp-pricing-technical-grid-3__card {
+    grid-template-rows: auto 1fr;
+  }
+
+  .lp-pricing-technical-grid-3__body {
+    padding: var(--lp-spacing-lg);
+  }
+}
