@@ -29,9 +29,9 @@ def apply_css_tweak(html_path: Path, selector: str, fix_hint: str) -> bool:
 
     # Извлечь CSS правило из fix_hint
     # Формат ожидается: "css_tweak: <property>: <value>" или просто "<property>: <value>"
-    css_part = fix_hint.split(":", 1)[-1].strip() if ":" in fix_hint else fix_hint
-    if "css_tweak" in css_part:
-        css_part = css_part.split(":", 1)[-1].strip()
+    css_part = fix_hint.strip()
+    if css_part.lower().startswith("css_tweak:"):
+        css_part = css_part.split(":", 1)[1].strip()
 
     # Select element
     try:
