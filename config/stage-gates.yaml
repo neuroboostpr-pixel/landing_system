@@ -243,6 +243,8 @@ stages:
     soft_checks:
       - id: visual_qa_passed
         prompt: "Запустить Visual QA через /landing-qa? (опционально, не блокирует этап)"
+      - id: identity_preserved
+        prompt: "Identity check для фоток прошёл (manifest.json без violations)? Опционально на этом этапе."
 
   "07d_photos":
     name: "Photos pipeline"
@@ -295,6 +297,12 @@ stages:
         args: ["{project}"]
         required: true
         fix_hint: "Photo pipeline не пройден. Запусти /landing-photos для обработки фото через codex. Проверь что в composed.html нет SVG placeholder'ов."
+      - id: identity_preserved
+        type: script
+        script: "scripts/verify-identity-preserved.sh"
+        args: ["{project}"]
+        required: true
+        fix_hint: "Identity violation для одной или нескольких фоток. Проверь 07c_PHOTOS/processed/manifest.json. Решение: вернуть оригинал или переобработать с уточнённым промптом."
     soft_checks:
       - id: visual_qa_passed
         prompt: "Запустить Visual QA через /landing-qa? (опционально, не блокирует этап)"
