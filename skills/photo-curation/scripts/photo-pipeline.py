@@ -136,15 +136,31 @@ def process_one_slot(
         codex_ok = False
 
     # 3. Identity check
+    identity_violation = False
+    distance_measured = None
+    threshold_used = None
     if codex_ok:
+        slot_type_for_check = slot_meta.get("type") or slot_meta.get("slot_type") or "default"
         try:
             check = subprocess.run(
-                ["python3", str(IDENTITY_CHECK), str(photo_path), str(intermediate)],
+                [
+                    "python3", str(IDENTITY_CHECK),
+                    str(photo_path), str(intermediate),
+                    "--slot-type", slot_type_for_check,
+                ],
                 capture_output=True, text=True, timeout=30,
             )
+            # Извлечь distance из stdout (формат: "phash distance: N (threshold: M, slot_type: ...)")
+            if check.stdout:
+                import re as _re
+                m = _re.search(r"phash distance:\s*(\d+)\s*\(threshold:\s*(\d+)", check.stdout)
+                if m:
+                    distance_measured = int(m.group(1))
+                    threshold_used = int(m.group(2))
             if check.returncode != 0:
                 # Identity changed too much — revert to original
                 codex_ok = False
+                identity_violation = True
         except (subprocess.TimeoutExpired, FileNotFoundError):
             pass
 
@@ -164,7 +180,10 @@ def process_one_slot(
 
     return {
         "slot": slot_name,
-        "status": "processed" if codex_ok else "raw-resized",
+        "status": "processed" if codex_ok else ("raw-resized" if not identity_violation else "reverted"),
+        "identity_violation": identity_violation,
+        "distance": distance_measured,
+        "threshold": threshold_used,
         "path": str(processed_path),
         "size": f"{target_w}x{target_h}",
     }
