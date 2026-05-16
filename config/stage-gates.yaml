@@ -407,6 +407,12 @@ stages:
         args: ["{project}/.landing-state.yaml"]
         required: true
         fix_hint: "Сайт не открывается по URL. Проверь Бегет credentials в ~/.beget-config или логи wp-deployer"
+      - id: final_check
+        type: script
+        script: "scripts/landing-final-check.sh"
+        args: ["{project}"]
+        required: true
+        fix_hint: "Final check fail. Смотри 10_QA/final-check-report.md."
 
   "10_qa":
     name: "QA"
