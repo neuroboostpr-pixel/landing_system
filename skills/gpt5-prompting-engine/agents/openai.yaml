@@ -1,0 +1,3 @@
+interface:
+  display_name: "GPT-5 Prompting Engine"
+  short_description: "Create, migrate, debug, and validate GPT-5 prompts"
