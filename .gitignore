@@ -33,3 +33,6 @@ build/
 # Logs
 *.log
 wiki/.obsidian/
+
+# PR-O block-import work cache
+.import-blocks-work/
