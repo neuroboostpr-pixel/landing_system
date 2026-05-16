@@ -2,7 +2,7 @@
 
 > Авто-сгенерированный индекс. Обновляется при `python -m scripts.wiki.compile --source-mode=system`.
 
-**Концептов всего:** 102
+**Концептов всего:** 103
 **Категории:** agent, command, rule, skill, stage
 
 **Известные ограничения:**
@@ -74,6 +74,7 @@
 - [[brand-kit-build]] — brand-kit-build
 - [[client-assets-collection]] — client-assets-collection
 - [[design-tokens-generation]] — design-tokens-generation
+- [[gpt5-prompting-engine]] — gpt5-prompting-engine
 - [[landing-from-context]] — landing-from-context
 - [[landing-onboarding]] — landing-onboarding
 - [[landing-project-init]] — landing-project-init
