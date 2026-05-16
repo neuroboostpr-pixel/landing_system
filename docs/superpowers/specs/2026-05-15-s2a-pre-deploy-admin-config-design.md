@@ -4,7 +4,14 @@
 **Owner:** Спец 2
 **Roadmap:** [2026-05-15-specialist-2-roadmap.md](2026-05-15-specialist-2-roadmap.md)
 **Источник:** [docs/planning/2026-05-15-plan-dorabotok.md](../../planning/2026-05-15-plan-dorabotok.md), пункты 1-4 части «Специалист 2».
-**Статус:** brainstorm complete → awaiting user approval → writing-plans
+**Статус:** brainstorm complete, **PENDING REVISION** под multisite-aware (см. [roadmap](2026-05-15-specialist-2-roadmap.md) — S2-CD делается первым). Ревизия после approval S2-CD spec.
+
+**Что требует ревизии после S2-CD:**
+- mu-plugin → network-activated; `wp_options` → `wp_sitemeta` для общих ключей, per-site override для специфичных.
+- `wp_landing_leads` — per-site таблица (одна на blog_id), чтобы заявки сегментов не пересекались.
+- Admin UI «Заявки» — фильтр «все сайты сетки / только этот».
+- CTA пресеты, head/SEO — network defaults + per-site override.
+- Test-connection и async-retry — учитывать что разные сайты сетки могут иметь разные API-ключи.
 
 ---
 

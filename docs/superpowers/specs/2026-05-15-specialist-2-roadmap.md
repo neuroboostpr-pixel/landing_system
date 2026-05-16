@@ -10,15 +10,26 @@
 
 ## Сводка под-проектов
 
+> **Изменение порядка от 2026-05-15:** по решению юзера S2-CD (multisite + клонирование) делается **первым**, потому что архитектурно перестраивать single-site код под multisite потом дороже, чем сразу проектировать с учётом multisite. Спеки S2-A и S2-E помечены `pending-revision` — после approval S2-CD их надо пересмотреть (network-activated mu-plugin, audit-batch по поддоменам).
+
 | ID | Название | Покрывает пункты ПЛАН-ДОРАБОТОК | Приоритет | Зависимости |
 |---|---|---|---|---|
-| **S2-A** | Pre-deploy & Admin Config (mu-plugin `landing-config`) | п.1 Интеграции, п.2 Head/SEO, п.3 Маршрутизация заявок, п.4 CTA-routing | **P0 — сейчас** | Stage-08 Lazy Blocks миграция должна работать |
-| **S2-E** | SEO / Tech / Vitals Audit Skill (`/landing-audit`) | п.6 спеца 1 «финальная авто-проверка» + новое (вне исходного плана) | **P0 — сейчас, параллельно с S2-A** | Только задеплоенный URL |
-| **S2-B** | Block Editability Levels (editable / semi-editable / hardcoded) | п.5 | P1 | После S2-A (использует `landing-config.yaml` схему) |
-| **S2-C** | Segment Cloning v2 | п.6 | P1 | После S2-A (нужны конфиги для копирования) |
-| **S2-D** | WordPress Multisite + Subdomains | п.7 | P1 | После S2-C |
+| **S2-CD** | Multisite + Segment Cloning (объединённый) | п.6 Клонирование, п.7 Поддомены/мультисайт | **P0 — СЕЙЧАС, фундамент** | Stage-08 Lazy Blocks миграция должна работать |
+| **S2-A** | Pre-deploy & Admin Config (mu-plugin `landing-config`) | п.1 Интеграции, п.2 Head/SEO, п.3 Маршрутизация заявок, п.4 CTA-routing | P0 — после S2-CD | `pending-revision`: переписать под network mode |
+| **S2-E** | SEO / Tech / Vitals Audit Skill (`/landing-audit`) | п.6 спеца 1 «финальная авто-проверка» + новое | P0 — параллельно с S2-A | `pending-revision`: batch-mode по всем поддоменам сайта |
+| **S2-B** | Block Editability Levels (editable / semi-editable / hardcoded) | п.5 | P1 | После S2-A |
 
 **Out of scope текущей итерации (P2):** п.8 SEO для многостраничных, п.9 маркетинговые сценарии.
+
+## Почему S2-CD сначала
+
+1. **mu-plugin `landing-config`** (S2-A) кардинально по-разному устроен в single vs network mode:
+   - single: `wp_options` per-site
+   - network: `wp_sitemeta` (общие) + `wp_options` (per-site override)
+   - Переписать после = почти полная рерайт.
+2. **CTA-пресеты, head/SEO**: в multisite клиент хочет общие пресеты на network уровне + override на конкретный поддомен. Это решение влияет на схему `landing-config.yaml` и UI.
+3. **`/landing-audit`** должен уметь `--batch` по всем поддоменам мультисайта одной командой (требование из п.6 ПЛАН-ДОРАБОТОК: «после деплоя — авто-проверка всего сайта»). Single-site audit реализовать тривиально, но потом расширять до batch — пересмотр output формата.
+4. **Клонирование** (`/landing-clone`) — в single mode это копия всего инстанса (rsync + db dump), в network — добавление сайта в существующую сетку (`wp site create`). Подход разный, и S2-CD выбирает который мы используем.
 
 ---
 
@@ -92,45 +103,61 @@ Stage-08 находится в активной миграции с ACF Blocks �
 
 ---
 
-## S2-C — Segment Cloning v2
+## S2-CD — Multisite + Segment Cloning (объединённый, **СЕЙЧАС**)
 
-**Что закрывает:** п.6 ПЛАН-ДОРАБОТОК.
+**Что закрывает:** п.6 (клонирование) + п.7 (поддомены/мультисайт).
 
-**Идея:** доработать существующий `/landing-clone` (`skills/landing-versioning-and-cloning`):
+**Спек:** в работе, требует отдельный брейншторм-раунд. См. `2026-05-15-s2cd-multisite-cloning-design.md` (создаётся после брейншторма).
 
-- При клонировании копируется не только wp-theme и контент, но и `landing-config.yaml` (из S2-A).
-- Появляется wizard «Какой сегмент?» — меняет текст / фото / цены / WhatsApp-номер.
-- Дизайн, структура, технические блоки (`hardcoded` из S2-B) — НЕ меняются.
+**Идея (предварительная):** один главный домен (`liauto.dubai`) + поддомены (`russian.liauto.dubai`, `family.liauto.dubai`, ...) на WP Multisite в subdomain mode. Один wp-admin управляет всеми. Клонирование = `wp site create` + копирование контента с существующего сайта сетки с заменой текста/фото/цен по правилам сегмента. Дизайн, структура, hardcoded-блоки не меняются.
 
-**Требует:** готовые S2-A (для копирования настроек) и S2-B (для понимания что трогать нельзя).
-
----
-
-## S2-D — WordPress Multisite + Subdomains
-
-**Что закрывает:** п.7 ПЛАН-ДОРАБОТОК.
-
-**Идея:** один главный домен (`liauto.dubai`) + поддомены (`russian.liauto.dubai`, ...) на WP Multisite. Деплой переключается с single-site режима на multisite-aware. Один wp-admin для всех. mu-plugin `landing-config` из S2-A работает как **network-activated** — настройки шарятся между сайтами с возможностью override на уровне поддомена.
-
-**Требует:** S2-C (без клонирования multisite не нужен).
+**Открытые вопросы для брейншторма:**
+- Subdomain mode vs subdirectory mode?
+- WP Multisite в одном инстансе vs N независимых инстансов за reverse-proxy?
+- Что шарится между сайтами сетки (бренд, дизайн, lazy-blocks definitions) vs per-site (тексты, фото, integrations, leads)?
+- Бегет: поддерживает wildcard SSL + multisite или нужен апгрейд?
+- Деплой: переписываем `deploy-wordpress.sh` под multisite целиком или добавляем `--mode=single|network`?
+- Lazy Blocks определения — network-shared (одна копия в сетке) или per-site (можно править отдельно)?
 
 ---
 
-## Порядок реализации
+## Порядок реализации (обновлён 2026-05-15)
 
 ```
-Сейчас (параллельно):
-  ├─ S2-A (полный спек готов)
-  └─ S2-E (полный спек готов)
-
-После approval S2-A:
-  └─ S2-B (требует landing-config.yaml схему из S2-A)
-
-После approval S2-B:
-  └─ S2-C
-
-После approval S2-C:
-  └─ S2-D
+1. S2-CD (брейншторм → спек → план → имплементация по фазам)
+       │
+       ▼
+2. Ревизия S2-A spec под multisite-aware (network-activated mu-plugin)
+       │
+       ├─► 3a. S2-A имплементация (по фазам, см. §«Фазы S2-A» ниже)
+       │
+       └─► 3b. S2-E имплементация (параллельно, с batch-mode по поддоменам)
+                       │
+                       ▼
+                  4. S2-B имплементация
 ```
+
+**Каждая фаза = отдельный план + отдельный PR в feature branch (worktree) + smoke-gate прогон на `dubai-avto-liza`.**
+
+### Фазы S2-A (после revision)
+
+| Фаза | Содержимое | Зачем сначала |
+|---|---|---|
+| A1 | Scaffolding + activation hook + `wp_landing_leads` + REST `/lead` + email-fallback | Заявки перестают теряться |
+| A2 | Admin UI «Заявки» (список + экспорт CSV, multisite-aware фильтр) | Маркетолог видит лиды без SSH |
+| A3 | CTA-пресеты + `cta_slot` в `block-spec.yaml` + helper | Закрывает п.4 ПЛАН-ДОРАБОТОК |
+| A4 | Head & SEO админка + wp_kses фильтр | Закрывает п.2 ПЛАН-ДОРАБОТОК |
+| A5 | 6 адаптеров + Test-connection + async-retry + шифрование ключей | Закрывает п.1 ПЛАН-ДОРАБОТОК |
+
+### Фазы S2-E (после revision)
+
+| Фаза | Содержимое |
+|---|---|
+| E1 | `run-audit.py` скелет + `html_checks.py` + `network_checks.py` + Markdown report |
+| E2 | `vitals.py` (lighthouse) + `schema_checks.py` |
+| E3 | `content_metrics.py` (тошнота/вода/Flesch RU) + `crawler.py` |
+| E4 | `ai_readiness.py` + `external_apis.py` (opt-in) + multisite batch mode + интеграция в orchestrator stage-11 |
+
+---
 
 Каждый под-проект завершается merge в `main` + регрессионный прогон `test_lazy_blocks_smoke.sh` + `test_mu_plugin_smoke.sh` на `dubai-avto-liza` (требование CLAUDE.md).

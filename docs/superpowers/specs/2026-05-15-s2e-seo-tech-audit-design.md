@@ -4,7 +4,12 @@
 **Owner:** Спец 2
 **Roadmap:** [2026-05-15-specialist-2-roadmap.md](2026-05-15-specialist-2-roadmap.md)
 **Источник:** п.6 «финальная авто-проверка сайта» из ПЛАН-ДОРАБОТОК + benchmark 10 инструментов pr-cy.ru
-**Статус:** brainstorm complete → awaiting user approval → writing-plans
+**Статус:** brainstorm complete, **PENDING REVISION** под multisite (см. [roadmap](2026-05-15-specialist-2-roadmap.md) — S2-CD делается первым).
+
+**Что требует ревизии после S2-CD:**
+- `--batch` режим: автодетекция всех поддоменов сетки через `wp site list --field=url` и прогон audit по каждому.
+- Output `11_QA/audit-report.md` — сводный отчёт с разбивкой по поддоменам (главный + N сегментов).
+- Гейты stage-11 — все поддомены должны быть зелёные перед approval, не только главный.
 
 ---
 
