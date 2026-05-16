@@ -1,0 +1,256 @@
+<style>.lp-pricing-corporate-cards {
+  background: var(--lp-bg);
+  color: var(--lp-text);
+  font-family: var(--lp-font-body);
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md);
+}
+
+.lp-pricing-corporate-cards__inner {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.lp-pricing-corporate-cards__header {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  max-width: 760px;
+  margin-bottom: var(--lp-spacing-lg);
+}
+
+.lp-pricing-corporate-cards__eyebrow {
+  color: var(--lp-accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.lp-pricing-corporate-cards__title {
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: clamp(2rem, 4vw, 4rem);
+  line-height: 1.05;
+  margin: 0;
+}
+
+.lp-pricing-corporate-cards__subhead {
+  color: var(--lp-text-muted);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.lp-pricing-corporate-cards__grid {
+  display: grid;
+  gap: var(--lp-spacing-md);
+}
+
+.lp-pricing-corporate-cards__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--lp-spacing-md);
+  background: var(--lp-bg-alt);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+  padding: var(--lp-spacing-lg);
+}
+
+.lp-pricing-corporate-cards__card--featured {
+  border-color: var(--lp-primary);
+  box-shadow: 0 0 0 2px var(--lp-primary);
+}
+
+.lp-pricing-corporate-cards__badge {
+  align-self: flex-start;
+  background: var(--lp-accent);
+  color: var(--lp-bg);
+  border-radius: var(--lp-radius);
+  padding: var(--lp-spacing-xs) var(--lp-spacing-sm);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.lp-pricing-corporate-cards__card-head {
+  display: grid;
+  gap: var(--lp-spacing-xs);
+}
+
+.lp-pricing-corporate-cards__plan {
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 1.35rem;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.lp-pricing-corporate-cards__description {
+  color: var(--lp-text-muted);
+  font-size: 0.98rem;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.lp-pricing-corporate-cards__price {
+  display: flex;
+  align-items: baseline;
+  gap: var(--lp-spacing-xs);
+  border-top: 1px solid var(--lp-border);
+  padding-top: var(--lp-spacing-md);
+}
+
+.lp-pricing-corporate-cards__amount {
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.lp-pricing-corporate-cards__period {
+  color: var(--lp-text-muted);
+  font-size: 0.95rem;
+}
+
+.lp-pricing-corporate-cards__features {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  color: var(--lp-text);
+  line-height: 1.45;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lp-pricing-corporate-cards__features li {
+  display: grid;
+  grid-template-columns: 1.1em 1fr;
+  gap: var(--lp-spacing-sm);
+}
+
+.lp-pricing-corporate-cards__features li::before {
+  content: "";
+  width: 0.55em;
+  height: 0.55em;
+  margin-top: 0.45em;
+  border-radius: 50%;
+  background: var(--lp-accent);
+}
+
+.lp-pricing-corporate-cards__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  margin-top: auto;
+  border: 1px solid var(--lp-primary);
+  border-radius: var(--lp-radius);
+  color: var(--lp-primary);
+  background: transparent;
+  font-weight: 700;
+  text-decoration: none;
+  padding: var(--lp-spacing-sm) var(--lp-spacing-md);
+}
+
+.lp-pricing-corporate-cards__button--primary {
+  background: var(--lp-primary);
+  color: var(--lp-bg);
+}
+
+.lp-pricing-corporate-cards__button:focus-visible {
+  outline: 3px solid var(--lp-accent);
+  outline-offset: 3px;
+}
+
+.lp-pricing-corporate-cards__note {
+  color: var(--lp-text-muted);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  margin: var(--lp-spacing-md) 0 0;
+}
+
+@media (min-width: 768px) {
+  .lp-pricing-corporate-cards {
+    padding: var(--lp-spacing-xl) var(--lp-spacing-lg);
+  }
+
+  .lp-pricing-corporate-cards__header {
+    margin-bottom: var(--lp-spacing-xl);
+  }
+
+  .lp-pricing-corporate-cards__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: stretch;
+  }
+
+  .lp-pricing-corporate-cards__card--featured {
+    transform: translateY(calc(var(--lp-spacing-sm) * -1));
+  }
+}
+</style>
+<section class="lp-pricing-corporate-cards" aria-labelledby="lp-pricing-corporate-cards-title">
+  <div class="lp-pricing-corporate-cards__inner">
+    <div class="lp-pricing-corporate-cards__header">
+      <span class="lp-pricing-corporate-cards__eyebrow">{{slot:pricing-eyebrow}}</span>
+      <h2 class="lp-pricing-corporate-cards__title" id="lp-pricing-corporate-cards-title">{{slot:pricing-title}}</h2>
+      <p class="lp-pricing-corporate-cards__subhead">{{slot:pricing-subhead}}</p>
+    </div>
+
+    <div class="lp-pricing-corporate-cards__grid">
+      <article class="lp-pricing-corporate-cards__card">
+        <div class="lp-pricing-corporate-cards__card-head">
+          <h3 class="lp-pricing-corporate-cards__plan">{{slot:plan-1-title}}</h3>
+          <p class="lp-pricing-corporate-cards__description">{{slot:plan-1-description}}</p>
+        </div>
+        <div class="lp-pricing-corporate-cards__price">
+          <span class="lp-pricing-corporate-cards__amount">{{slot:plan-1-price}}</span>
+          <span class="lp-pricing-corporate-cards__period">{{slot:plan-1-period}}</span>
+        </div>
+        <ul class="lp-pricing-corporate-cards__features" aria-label="{{slot:plan-1-features-label}}">
+          <li>{{slot:plan-1-feature-1}}</li>
+          <li>{{slot:plan-1-feature-2}}</li>
+          <li>{{slot:plan-1-feature-3}}</li>
+        </ul>
+        <a class="lp-pricing-corporate-cards__button" href="{{slot:plan-1-cta-url}}">{{slot:plan-1-cta-label}}</a>
+      </article>
+
+      <article class="lp-pricing-corporate-cards__card lp-pricing-corporate-cards__card--featured">
+        <div class="lp-pricing-corporate-cards__badge">{{slot:plan-2-badge}}</div>
+        <div class="lp-pricing-corporate-cards__card-head">
+          <h3 class="lp-pricing-corporate-cards__plan">{{slot:plan-2-title}}</h3>
+          <p class="lp-pricing-corporate-cards__description">{{slot:plan-2-description}}</p>
+        </div>
+        <div class="lp-pricing-corporate-cards__price">
+          <span class="lp-pricing-corporate-cards__amount">{{slot:plan-2-price}}</span>
+          <span class="lp-pricing-corporate-cards__period">{{slot:plan-2-period}}</span>
+        </div>
+        <ul class="lp-pricing-corporate-cards__features" aria-label="{{slot:plan-2-features-label}}">
+          <li>{{slot:plan-2-feature-1}}</li>
+          <li>{{slot:plan-2-feature-2}}</li>
+          <li>{{slot:plan-2-feature-3}}</li>
+          <li>{{slot:plan-2-feature-4}}</li>
+        </ul>
+        <a class="lp-pricing-corporate-cards__button lp-pricing-corporate-cards__button--primary" href="{{slot:plan-2-cta-url}}">{{slot:plan-2-cta-label}}</a>
+      </article>
+
+      <article class="lp-pricing-corporate-cards__card">
+        <div class="lp-pricing-corporate-cards__card-head">
+          <h3 class="lp-pricing-corporate-cards__plan">{{slot:plan-3-title}}</h3>
+          <p class="lp-pricing-corporate-cards__description">{{slot:plan-3-description}}</p>
+        </div>
+        <div class="lp-pricing-corporate-cards__price">
+          <span class="lp-pricing-corporate-cards__amount">{{slot:plan-3-price}}</span>
+          <span class="lp-pricing-corporate-cards__period">{{slot:plan-3-period}}</span>
+        </div>
+        <ul class="lp-pricing-corporate-cards__features" aria-label="{{slot:plan-3-features-label}}">
+          <li>{{slot:plan-3-feature-1}}</li>
+          <li>{{slot:plan-3-feature-2}}</li>
+          <li>{{slot:plan-3-feature-3}}</li>
+        </ul>
+        <a class="lp-pricing-corporate-cards__button" href="{{slot:plan-3-cta-url}}">{{slot:plan-3-cta-label}}</a>
+      </article>
+    </div>
+
+    <p class="lp-pricing-corporate-cards__note">{{slot:pricing-note}}</p>
+  </div>
+</section>

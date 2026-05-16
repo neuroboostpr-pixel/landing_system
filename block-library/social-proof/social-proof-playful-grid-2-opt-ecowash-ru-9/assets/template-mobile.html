@@ -1,0 +1,203 @@
+<style>.lp-social-proof-playful-grid-2 {
+  background: var(--lp-bg-alt);
+  color: var(--lp-text);
+  font-family: var(--lp-font-body);
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md);
+}
+
+.lp-social-proof-playful-grid-2__inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  gap: var(--lp-spacing-lg);
+}
+
+.lp-social-proof-playful-grid-2__header {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  max-width: 760px;
+}
+
+.lp-social-proof-playful-grid-2__eyebrow {
+  margin: 0;
+  color: var(--lp-accent);
+  font-family: var(--lp-font-body);
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.lp-social-proof-playful-grid-2__title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: clamp(2rem, 9vw, 4.5rem);
+  line-height: 0.95;
+  letter-spacing: 0;
+}
+
+.lp-social-proof-playful-grid-2__subhead {
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.lp-social-proof-playful-grid-2__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--lp-spacing-md);
+}
+
+.lp-social-proof-playful-grid-2__card {
+  min-height: 100%;
+  background: white;
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+  padding: var(--lp-spacing-md);
+  display: grid;
+  gap: var(--lp-spacing-md);
+  align-content: space-between;
+  box-shadow: 0 1rem 2rem transparent;
+}
+
+.lp-social-proof-playful-grid-2__rating {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--lp-radius);
+  background: var(--lp-accent);
+  color: var(--lp-text);
+  padding: var(--lp-spacing-xs) var(--lp-spacing-sm);
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.lp-social-proof-playful-grid-2__quote {
+  margin: 0;
+  color: var(--lp-text);
+}
+
+.lp-social-proof-playful-grid-2__quote p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.lp-social-proof-playful-grid-2__author {
+  display: grid;
+  gap: var(--lp-spacing-xs);
+  padding-top: var(--lp-spacing-sm);
+  border-top: 1px solid var(--lp-border);
+}
+
+.lp-social-proof-playful-grid-2__name {
+  color: var(--lp-text);
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.lp-social-proof-playful-grid-2__meta {
+  color: var(--lp-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+@media (min-width: 768px) {
+  .lp-social-proof-playful-grid-2 {
+    padding: var(--lp-spacing-xl) var(--lp-spacing-lg);
+  }
+
+  .lp-social-proof-playful-grid-2__inner {
+    gap: var(--lp-spacing-xl);
+  }
+
+  .lp-social-proof-playful-grid-2__header {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .lp-social-proof-playful-grid-2__subhead {
+    max-width: 620px;
+    font-size: 1.125rem;
+  }
+
+  .lp-social-proof-playful-grid-2__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lp-social-proof-playful-grid-2__card {
+    padding: var(--lp-spacing-lg);
+  }
+}
+
+/* Forced mobile viewport for preview */
+@media (min-width: 0) {
+  body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
+}
+</style>
+<section class="lp-social-proof-playful-grid-2" aria-labelledby="lp-social-proof-playful-grid-2-title">
+  <div class="lp-social-proof-playful-grid-2__inner">
+    <div class="lp-social-proof-playful-grid-2__header">
+      <p class="lp-social-proof-playful-grid-2__eyebrow">{{slot:eyebrow}}</p>
+      <h2 class="lp-social-proof-playful-grid-2__title" id="lp-social-proof-playful-grid-2-title">{{slot:heading}}</h2>
+      <p class="lp-social-proof-playful-grid-2__subhead">{{slot:subhead}}</p>
+    </div>
+
+    <div class="lp-social-proof-playful-grid-2__grid">
+      <article class="lp-social-proof-playful-grid-2__card">
+        <div class="lp-social-proof-playful-grid-2__rating" aria-label="{{slot:review-1-rating-label}}">
+          <span>{{slot:review-1-rating}}</span>
+        </div>
+        <blockquote class="lp-social-proof-playful-grid-2__quote">
+          <p>{{slot:review-1-text}}</p>
+        </blockquote>
+        <footer class="lp-social-proof-playful-grid-2__author">
+          <span class="lp-social-proof-playful-grid-2__name">{{slot:review-1-author-name}}</span>
+          <span class="lp-social-proof-playful-grid-2__meta">{{slot:review-1-author-meta}}</span>
+        </footer>
+      </article>
+
+      <article class="lp-social-proof-playful-grid-2__card">
+        <div class="lp-social-proof-playful-grid-2__rating" aria-label="{{slot:review-2-rating-label}}">
+          <span>{{slot:review-2-rating}}</span>
+        </div>
+        <blockquote class="lp-social-proof-playful-grid-2__quote">
+          <p>{{slot:review-2-text}}</p>
+        </blockquote>
+        <footer class="lp-social-proof-playful-grid-2__author">
+          <span class="lp-social-proof-playful-grid-2__name">{{slot:review-2-author-name}}</span>
+          <span class="lp-social-proof-playful-grid-2__meta">{{slot:review-2-author-meta}}</span>
+        </footer>
+      </article>
+
+      <article class="lp-social-proof-playful-grid-2__card">
+        <div class="lp-social-proof-playful-grid-2__rating" aria-label="{{slot:review-3-rating-label}}">
+          <span>{{slot:review-3-rating}}</span>
+        </div>
+        <blockquote class="lp-social-proof-playful-grid-2__quote">
+          <p>{{slot:review-3-text}}</p>
+        </blockquote>
+        <footer class="lp-social-proof-playful-grid-2__author">
+          <span class="lp-social-proof-playful-grid-2__name">{{slot:review-3-author-name}}</span>
+          <span class="lp-social-proof-playful-grid-2__meta">{{slot:review-3-author-meta}}</span>
+        </footer>
+      </article>
+
+      <article class="lp-social-proof-playful-grid-2__card">
+        <div class="lp-social-proof-playful-grid-2__rating" aria-label="{{slot:review-4-rating-label}}">
+          <span>{{slot:review-4-rating}}</span>
+        </div>
+        <blockquote class="lp-social-proof-playful-grid-2__quote">
+          <p>{{slot:review-4-text}}</p>
+        </blockquote>
+        <footer class="lp-social-proof-playful-grid-2__author">
+          <span class="lp-social-proof-playful-grid-2__name">{{slot:review-4-author-name}}</span>
+          <span class="lp-social-proof-playful-grid-2__meta">{{slot:review-4-author-meta}}</span>
+        </footer>
+      </article>
+    </div>
+  </div>
+</section>

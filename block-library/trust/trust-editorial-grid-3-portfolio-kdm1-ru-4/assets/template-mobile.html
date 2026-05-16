@@ -1,0 +1,203 @@
+<style>.lp-trust-editorial-grid-3 {
+  position: relative;
+  overflow: hidden;
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md);
+  color: var(--lp-text);
+  background: var(--lp-bg);
+  font-family: var(--lp-font-body);
+}
+
+.lp-trust-editorial-grid-3::before {
+  content: "";
+  position: absolute;
+  inset: var(--lp-spacing-lg) 0;
+  background: var(--lp-bg-alt);
+  transform: skewY(-4deg);
+  transform-origin: center;
+}
+
+.lp-trust-editorial-grid-3__inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: var(--lp-spacing-lg);
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.lp-trust-editorial-grid-3__intro {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  max-width: 760px;
+}
+
+.lp-trust-editorial-grid-3__eyebrow {
+  color: var(--lp-accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.lp-trust-editorial-grid-3__title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: clamp(2rem, 8vw, 4.5rem);
+  line-height: 0.95;
+  letter-spacing: 0;
+}
+
+.lp-trust-editorial-grid-3__lead {
+  margin: 0;
+  max-width: 620px;
+  color: var(--lp-text-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.lp-trust-editorial-grid-3__list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--lp-spacing-md);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.lp-trust-editorial-grid-3__item {
+  display: grid;
+  gap: var(--lp-spacing-md);
+  padding: var(--lp-spacing-md);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+  background: var(--lp-bg);
+}
+
+.lp-trust-editorial-grid-3__figure {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--lp-radius);
+  background: var(--lp-bg-alt);
+}
+
+.lp-trust-editorial-grid-3__figure img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lp-trust-editorial-grid-3__content {
+  display: grid;
+  gap: var(--lp-spacing-xs);
+}
+
+.lp-trust-editorial-grid-3__number {
+  color: var(--lp-primary);
+  font-family: var(--lp-font-display);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.lp-trust-editorial-grid-3__item-title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 1.35rem;
+  line-height: 1.1;
+  letter-spacing: 0;
+}
+
+.lp-trust-editorial-grid-3__text {
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+@media (min-width: 768px) {
+  .lp-trust-editorial-grid-3 {
+    padding: var(--lp-spacing-xl) var(--lp-spacing-lg);
+  }
+
+  .lp-trust-editorial-grid-3__inner {
+    gap: var(--lp-spacing-xl);
+  }
+
+  .lp-trust-editorial-grid-3__intro {
+    grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.6fr);
+    align-items: end;
+    max-width: none;
+  }
+
+  .lp-trust-editorial-grid-3__eyebrow {
+    grid-column: 1 / -1;
+  }
+
+  .lp-trust-editorial-grid-3__lead {
+    justify-self: end;
+  }
+
+  .lp-trust-editorial-grid-3__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .lp-trust-editorial-grid-3__item {
+    align-content: start;
+    padding: var(--lp-spacing-lg);
+  }
+}
+
+/* Forced mobile viewport for preview */
+@media (min-width: 0) {
+  body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
+}
+</style>
+<section class="lp-trust-editorial-grid-3" aria-labelledby="trust-editorial-grid-3-title">
+  <div class="lp-trust-editorial-grid-3__inner">
+    <div class="lp-trust-editorial-grid-3__intro">
+      <span class="lp-trust-editorial-grid-3__eyebrow">{{slot:eyebrow}}</span>
+      <h2 class="lp-trust-editorial-grid-3__title" id="trust-editorial-grid-3-title">{{slot:title}}</h2>
+      <p class="lp-trust-editorial-grid-3__lead">{{slot:lead}}</p>
+    </div>
+
+    <ul class="lp-trust-editorial-grid-3__list" aria-label="{{slot:list-label}}">
+      <li class="lp-trust-editorial-grid-3__item">
+        <figure class="lp-trust-editorial-grid-3__figure">
+          <img src="{{slot:principle-1-image}}" alt="{{slot:principle-1-image-alt}}" loading="lazy">
+        </figure>
+        <div class="lp-trust-editorial-grid-3__content">
+          <span class="lp-trust-editorial-grid-3__number">{{slot:principle-1-number}}</span>
+          <h3 class="lp-trust-editorial-grid-3__item-title">{{slot:principle-1-title}}</h3>
+          <p class="lp-trust-editorial-grid-3__text">{{slot:principle-1-text}}</p>
+        </div>
+      </li>
+
+      <li class="lp-trust-editorial-grid-3__item">
+        <figure class="lp-trust-editorial-grid-3__figure">
+          <img src="{{slot:principle-2-image}}" alt="{{slot:principle-2-image-alt}}" loading="lazy">
+        </figure>
+        <div class="lp-trust-editorial-grid-3__content">
+          <span class="lp-trust-editorial-grid-3__number">{{slot:principle-2-number}}</span>
+          <h3 class="lp-trust-editorial-grid-3__item-title">{{slot:principle-2-title}}</h3>
+          <p class="lp-trust-editorial-grid-3__text">{{slot:principle-2-text}}</p>
+        </div>
+      </li>
+
+      <li class="lp-trust-editorial-grid-3__item">
+        <figure class="lp-trust-editorial-grid-3__figure">
+          <img src="{{slot:principle-3-image}}" alt="{{slot:principle-3-image-alt}}" loading="lazy">
+        </figure>
+        <div class="lp-trust-editorial-grid-3__content">
+          <span class="lp-trust-editorial-grid-3__number">{{slot:principle-3-number}}</span>
+          <h3 class="lp-trust-editorial-grid-3__item-title">{{slot:principle-3-title}}</h3>
+          <p class="lp-trust-editorial-grid-3__text">{{slot:principle-3-text}}</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>

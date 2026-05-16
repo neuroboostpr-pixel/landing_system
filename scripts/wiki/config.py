@@ -26,7 +26,8 @@ SYSTEM_SOURCES = [
     {"path": "commands/*.md", "concept_dir": "commands"},
     {"path": "template/*/README.md", "concept_dir": "stages"},
     {"path": "docs/standards/*.md", "concept_dir": "rules"},
-    {"path": "block-library/*/meta.yaml", "concept_dir": "blocks"},
+    # PR-Q: блоки лежат на 2 уровнях вложенности — <category>/<block-id>/meta.yaml
+    {"path": "block-library/*/*/meta.yaml", "concept_dir": "blocks"},
 ]
 
 # Источники для графа конкретного проекта (~/Lendings/<slug>/).

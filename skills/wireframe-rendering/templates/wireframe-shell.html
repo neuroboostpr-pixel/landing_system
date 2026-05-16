@@ -31,6 +31,34 @@
   .device.mobile iframe { height: 720px; }
   body { padding-bottom: 90px; }
 
+  /* PR-Q: B/W wireframe mode */
+  .wireframe-bw .device iframe,
+  .wireframe-bw .preview-iframe {
+    filter: grayscale(100%) contrast(0.95);
+  }
+
+  /* PR-Q: Larger previews */
+  .preview-iframe { height: 600px; }
+  .preview-iframe.mobile { height: 750px; width: 390px; }
+  .device.desktop iframe.preview-iframe { height: 600px; }
+  .device.mobile iframe.preview-iframe { height: 750px; }
+
+  /* PR-Q: Zoom levels */
+  .wireframe-zoom-50 .device iframe { transform: scale(0.5); transform-origin: top left; }
+  .wireframe-zoom-75 .device iframe { transform: scale(0.75); transform-origin: top left; }
+  .wireframe-zoom-100 .device iframe { /* default */ }
+  .wireframe-zoom-125 .device iframe { transform: scale(1.25); transform-origin: top left; }
+
+  /* PR-Q: Controls bar */
+  .wireframe-controls {
+    position: sticky; top: 0; z-index: 100;
+    background: #fff; border-bottom: 1px solid #e0e0e0;
+    padding: 12px 24px; display: flex; gap: 20px; align-items: center;
+    font-size: 13px;
+  }
+  .wireframe-controls label { cursor: pointer; }
+  .wireframe-controls select { padding: 4px 8px; border-radius: 4px; border: 1px solid #ccc; }
+
   .ux-panel, .ux-rules-panel { margin: 24px; background: #fff; padding: 16px 24px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
   .ux-panel summary, .ux-rules-panel summary { font-weight: 600; font-size: 14px; cursor: pointer; color: #333; }
   .ux-patterns-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-top: 12px; }
@@ -61,6 +89,17 @@
 </style>
 </head>
 <body>
+<div class="wireframe-controls">
+  <label><input type="checkbox" id="bw-toggle"> 🎨 Чёрно-белый wireframe</label>
+  <label>🔍 Zoom:
+    <select id="zoom-level">
+      <option value="50">50%</option>
+      <option value="75">75%</option>
+      <option value="100" selected>100%</option>
+      <option value="125">125%</option>
+    </select>
+  </label>
+</div>
 <h1 style="padding: 24px 24px 8px;">Wireframe — {{project_slug}} <span style="font-size: 14px; color: #888; font-weight: 400;">niche: {{niche}}</span></h1>
 <p style="padding: 0 24px; color: #666;">Слева — что хотел клиент (прототип). Снизу — варианты, как это может выглядеть. Выбери вариант композиции для каждого блока radio-кнопками. Когда закончишь — нажми «Confirm selections» внизу.</p>
 
@@ -108,6 +147,15 @@
 </div>
 
 <script>
+// PR-Q: B/W mode and zoom controls
+document.getElementById('bw-toggle').addEventListener('change', function(e) {
+  document.body.classList.toggle('wireframe-bw', e.target.checked);
+});
+document.getElementById('zoom-level').addEventListener('change', function(e) {
+  document.body.className = document.body.className.replace(/wireframe-zoom-\d+/g, '').trim();
+  document.body.classList.add('wireframe-zoom-' + e.target.value);
+});
+
 function confirmSelections() {
   const radios = document.querySelectorAll('input[type=radio]:checked');
   const sel = [];

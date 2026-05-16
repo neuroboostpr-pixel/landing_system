@@ -1,0 +1,220 @@
+<style>.lp-social-proof-corporate-grid-3 {
+  background: var(--lp-bg);
+  color: var(--lp-text);
+  font-family: var(--lp-font-body);
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md);
+}
+
+.lp-social-proof-corporate-grid-3__inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  gap: var(--lp-spacing-lg);
+}
+
+.lp-social-proof-corporate-grid-3__header {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  max-width: 760px;
+}
+
+.lp-social-proof-corporate-grid-3__eyebrow {
+  margin: 0;
+  color: var(--lp-primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.lp-social-proof-corporate-grid-3__title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: clamp(2rem, 7vw, 4rem);
+  line-height: 0.95;
+  letter-spacing: 0;
+}
+
+.lp-social-proof-corporate-grid-3__lead {
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.lp-social-proof-corporate-grid-3__stats {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--lp-spacing-md);
+}
+
+.lp-social-proof-corporate-grid-3__stat {
+  min-height: 168px;
+  padding: var(--lp-spacing-lg);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+  background: var(--lp-bg-alt);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--lp-spacing-md);
+}
+
+.lp-social-proof-corporate-grid-3__number {
+  color: var(--lp-accent);
+  font-family: var(--lp-font-display);
+  font-size: clamp(3rem, 14vw, 6.25rem);
+  line-height: 0.9;
+  letter-spacing: 0;
+}
+
+.lp-social-proof-corporate-grid-3__caption {
+  color: var(--lp-text);
+  font-size: 1rem;
+  line-height: 1.45;
+  max-width: 18rem;
+}
+
+.lp-social-proof-corporate-grid-3__video {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--lp-radius-lg);
+  background: var(--lp-bg-alt);
+  border: 1px solid var(--lp-border);
+}
+
+.lp-social-proof-corporate-grid-3__video picture,
+.lp-social-proof-corporate-grid-3__video img {
+  display: block;
+  width: 100%;
+}
+
+.lp-social-proof-corporate-grid-3__video img {
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+
+.lp-social-proof-corporate-grid-3__play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4.5rem;
+  height: 4.5rem;
+  transform: translate(-50%, -50%);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+  background: var(--lp-bg);
+  color: var(--lp-accent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.lp-social-proof-corporate-grid-3__play:focus-visible {
+  outline: 3px solid var(--lp-accent);
+  outline-offset: 4px;
+}
+
+.lp-social-proof-corporate-grid-3__play-icon {
+  width: 0;
+  height: 0;
+  margin-left: 0.25rem;
+  border-top: 0.75rem solid transparent;
+  border-bottom: 0.75rem solid transparent;
+  border-left: 1.1rem solid currentColor;
+}
+
+.lp-social-proof-corporate-grid-3__video-caption {
+  position: absolute;
+  left: var(--lp-spacing-md);
+  right: var(--lp-spacing-md);
+  bottom: var(--lp-spacing-md);
+  padding: var(--lp-spacing-sm) var(--lp-spacing-md);
+  border-radius: var(--lp-radius);
+  background: var(--lp-bg);
+  color: var(--lp-text);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+@media (min-width: 768px) {
+  .lp-social-proof-corporate-grid-3 {
+    padding: var(--lp-spacing-xl) var(--lp-spacing-lg);
+  }
+
+  .lp-social-proof-corporate-grid-3__inner {
+    gap: var(--lp-spacing-xl);
+  }
+
+  .lp-social-proof-corporate-grid-3__header {
+    grid-template-columns: 1fr 0.72fr;
+    align-items: end;
+    max-width: none;
+  }
+
+  .lp-social-proof-corporate-grid-3__eyebrow,
+  .lp-social-proof-corporate-grid-3__title {
+    grid-column: 1;
+  }
+
+  .lp-social-proof-corporate-grid-3__lead {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+
+  .lp-social-proof-corporate-grid-3__stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .lp-social-proof-corporate-grid-3__video img {
+    aspect-ratio: 16 / 7;
+  }
+
+  .lp-social-proof-corporate-grid-3__video-caption {
+    left: var(--lp-spacing-lg);
+    right: auto;
+    bottom: var(--lp-spacing-lg);
+    max-width: 34rem;
+  }
+}
+</style>
+<section class="lp-social-proof-corporate-grid-3" aria-labelledby="social-proof-corporate-grid-3-title">
+  <div class="lp-social-proof-corporate-grid-3__inner">
+    <div class="lp-social-proof-corporate-grid-3__header">
+      <p class="lp-social-proof-corporate-grid-3__eyebrow">{{slot:eyebrow}}</p>
+      <h2 class="lp-social-proof-corporate-grid-3__title" id="social-proof-corporate-grid-3-title">{{slot:heading}}</h2>
+      <p class="lp-social-proof-corporate-grid-3__lead">{{slot:subhead}}</p>
+    </div>
+
+    <ul class="lp-social-proof-corporate-grid-3__stats" aria-label="{{slot:stats-list-label}}">
+      <li class="lp-social-proof-corporate-grid-3__stat">
+        <strong class="lp-social-proof-corporate-grid-3__number">{{slot:stat-1-number}}</strong>
+        <span class="lp-social-proof-corporate-grid-3__caption">{{slot:stat-1-caption}}</span>
+      </li>
+      <li class="lp-social-proof-corporate-grid-3__stat">
+        <strong class="lp-social-proof-corporate-grid-3__number">{{slot:stat-2-number}}</strong>
+        <span class="lp-social-proof-corporate-grid-3__caption">{{slot:stat-2-caption}}</span>
+      </li>
+      <li class="lp-social-proof-corporate-grid-3__stat">
+        <strong class="lp-social-proof-corporate-grid-3__number">{{slot:stat-3-number}}</strong>
+        <span class="lp-social-proof-corporate-grid-3__caption">{{slot:stat-3-caption}}</span>
+      </li>
+    </ul>
+
+    <figure class="lp-social-proof-corporate-grid-3__video">
+      <picture>
+        <source media="(max-width: 767px)" srcset="{{slot:video-preview-mobile}}">
+        <img src="{{slot:video-preview}}" alt="{{slot:video-preview-alt}}" loading="lazy">
+      </picture>
+      <button class="lp-social-proof-corporate-grid-3__play" type="button" aria-label="{{slot:video-play-label}}">
+        <span class="lp-social-proof-corporate-grid-3__play-icon" aria-hidden="true"></span>
+      </button>
+      <figcaption class="lp-social-proof-corporate-grid-3__video-caption">{{slot:video-caption}}</figcaption>
+    </figure>
+  </div>
+</section>
