@@ -2,68 +2,57 @@
 type: rule
 name: premium-07b-checklist
 sources: ["docs/standards/premium-07b-checklist.md"]
-updated: 2026-05-15
+updated: 2026-05-16
 triggers: []
 stage: "07b"
-uses:
-  - block-composer
-  - design-tokens-generation
-  - content-writer
-  - ux-composer
-  - photo-curator
-tags: ["quality", "checklist", "07b", "composed", "premium", "hard-gate"]
+uses: ["block-composer", "design-system-generator", "content-writer", "ux-composer", "photo-curator"]
+tags: ["quality", "checklist", "composed", "frontend", "premium"]
 ---
 
-# Premium 07b — Чек-лист сборки composed.html
+# Premium 07b Checklist — стандарт сборки composed.html
 
 ## Что делает
-
-Устанавливает обязательные стандарты качества для этапа 07b: агент `block-composer` собирает `composed.html` только при выполнении всех пунктов. Гарантирует уровень «dubai-avto-liza», а не «средний AI-лендинг».
+Обязательный чек-лист из 20 разделов, который задаёт планку качества для этапа **07b_COMPOSED**: если хоть один пункт не выполнен, HARD GATE не закрывается и агент не переходит к следующему этапу.
 
 ## Когда вызывать / в каком этапе
-
-Передаётся агенту `block-composer` **перед** запуском сборки 07b. HARD GATE 07b не закрывается, пока скрипт `scripts/verify-composed-premium.sh` не вернёт `exit 0`. Если хотя бы один пункт не выполнен — сборка не начинается, оркестратор возвращает управление на предыдущий этап.
+Применяется на этапе **07b** — перед тем как [[block-composer]] начинает сборку `composed.html`. Передаётся агенту на вход явно. Финальная проверка — через скрипт `scripts/verify-composed-premium.sh` (exit 0 = ОК).
 
 ## Что на вход / на выход
 
-**Вход (обязательные артефакты):**
+**Входные артефакты (все обязательны — иначе сборка не стартует):**
 - `00_БРИФ/brief.md` — ниша, ЦА, тон голоса
-- `04_БРЕНД/brand-kit.md` — палитра + типографика
-- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — все CSS-переменные
-- `07_КОНТЕНТ/final-copy.md` — реальные тексты по блокам
-- `07a_WIREFRAME/selections.yaml` — список блоков с ID из библиотеки
-- `07c_PHOTOS/photo-mapping.yaml` — привязка фото к слотам
+- `04_БРЕНД/brand-kit.md` — палитра и типографика
+- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — CSS-переменные
+- `07_КОНТЕНТ/final-copy.md` — реальные тексты
+- `07a_WIREFRAME/selections.yaml` — выбранные блоки
+- `02_МАТЕРИАЛЫ_КЛИЕНТА/inbox/` — минимум 15 реальных фото
+- `07c_PHOTOS/photo-mapping.yaml` — маппинг фото к слотам
 
-**Выход (что должен создать `block-composer`):**
-- `07b_COMPOSED/composed.html` — 60–150 KB, HTML+CSS+JS inline, ноль фреймворков
-- `composed-mobile-preview.html` — iframe iPhone+iPad
-- `composed-explained.md` — описание принятых решений
+**Что проверяет чек-лист (13 секций + 7 PR-P):**
+1. Архитектура — один HTML-файл 60–150 KB, без фреймворков
+2. CSS-переменные (`:root`) — полный набор токенов цвета, теней, радиусов, анимаций
+3. Типографика — `clamp()` на всех заголовках, Inter 300–900
+4. Минимальный набор блоков — 11 секций (nav, hero, social proof, products, features, why us, process, testimonials, FAQ, CTA-form, footer)
+5. Сетка — Grid + Flexbox с указанными пропорциями для каждого блока
+6. Интерактивность — 10 обязательных эффектов: glassmorphism nav, parallax, reveal-on-scroll, count-up, per-product slider, lightbox, hover lift, scroll-to-top, smooth scroll, pulse-dot
+7. Премиум-типографика — gradient text, eyebrow, font-weight 900
+8. Hero — 9 обязательных элементов включая savings-строку и 2 CTA
+9. Кнопки — gold gradient + translateY на hover
+10. Mobile — breakpoints 768px и 1024px, все grid → 1 column
+11. Семантика и accessibility — `<nav>`, aria-label, alt, контраст 4.5:1
+12. Запреты — никаких эмодзи-иконок, inline-стилей, хардкод-цветов, jQuery/Swiper/AOS
+13. Финальная проверка — Lighthouse Performance > 85, Accessibility > 90
+14–20. PR-P (2026-05-16) — scroll-driven анимации, hover на всех интерактивах, backdrop-filter, mesh-gradient, mix-blend-mode, prefers-reduced-motion, clip-path
 
-## Ключевые требования (сжато)
-
-| Раздел | Что проверяется |
-|---|---|
-| **Архитектура** | Один файл, без React/Vue/jQuery/Bootstrap, только Google Fonts |
-| **CSS-переменные** | Полный `:root` из `tokens.json`; хардкод цветов — запрещён |
-| **Типографика** | `clamp()` на всех заголовках; Inter 300–900; gradient-text на акцентах |
-| **Структура** | 11 обязательных блоков: nav→hero→social proof→models→features→why us→process→testimonials→FAQ→CTA form→footer |
-| **Интерактив** | 10 эффектов: parallax, reveal-on-scroll, count-up, per-product slider, lightbox+keyboard, glassmorphism nav, hover-lift, scroll-top, smooth scroll, pulse-dot |
-| **Mobile** | Breakpoints 768/1024px; все grid → 1 колонка; `clamp()` без ступенек |
-| **Accessibility** | Семантические теги, `aria-label`, `alt`, контраст ≥ 4.5:1 |
-| **Запрещено** | Эмодзи-иконки, inline-стили, хардкод цветов, сторонние JS-библиотеки |
-
-Эталон-референс: `~/Lendings/dubai-avto-liza/07b_COMPOSED/composed.html` (1757 строк, 13 premium-фич).
+**Эталон-референс:** `~/Lendings/dubai-avto-liza/07b_COMPOSED/composed.html` — 1757 строк, 15 premium-фич.
 
 ## Связанные концепты
-
 - [[block-composer]] — агент, который собирает `composed.html` по этому чек-листу
-- [[design-tokens-generation]] — поставляет `tokens.json` с CSS-переменными
-- [[content-writer]] — поставляет `final-copy.md` с текстами
-- [[ux-composer]] — поставляет `selections.yaml` с выбранными блоками
-- [[photo-curator]] — поставляет `photo-mapping.yaml` с привязкой фото
-- [[block-composition]] — скилл, реализующий сборку composed.html
-- [[landing-compose]] — команда, запускающая этап 07b
+- [[design-system-generator]] — поставляет `tokens.json` (вход п.2)
+- [[content-writer]] — поставляет `final-copy.md` (вход п.4)
+- [[ux-composer]] — поставляет `selections.yaml` (вход п.5)
+- [[photo-curator]] — поставляет `photo-mapping.yaml` (вход п.7)
+- [[07b-composed]] — этап, к которому относится этот стандарт
 
 ## Источник
-
 - `docs/standards/premium-07b-checklist.md`
