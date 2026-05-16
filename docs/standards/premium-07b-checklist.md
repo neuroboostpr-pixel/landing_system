@@ -371,3 +371,32 @@ function scrollTo(id) {
 1757 строк, ~130 KB, все 15 premium-фич, реальные фото.
 
 Когда сомневаешься «достаточно ли премиум» — открой эталон и сравни.
+
+---
+
+## Дополнительные премиум-фичи (PR-P, 2026-05-16)
+
+После анализа топовых русских лендингов 2026 — добавлены требования:
+
+### 14. Scroll-driven анимации (intersection observer или scroll-timeline)
+Элементы появляются при попадании в viewport (fade-in / slide-in / scale-in).
+**Минимум 3 блока** должны иметь scroll-reveal.
+
+### 15. Hover-эффекты на интерактивах
+Все `<button>`, `<a class="...cta...">`, `.card` имеют `transition` и hover-state (cursor: pointer + visual feedback за 200-300ms).
+
+### 16. Backdrop-filter где есть overlay (glassmorphism)
+Если есть `<header sticky>`, modal или overlay panel — backdrop-filter: blur() для премиум-эффекта.
+
+### 17. Complex gradient mesh background
+Один из больших блоков (hero, cta) имеет animated multi-stop gradient или mesh-gradient для премиум-визуала.
+
+### 18. Mix-blend-mode для текста-поверх-фото
+Если текст лежит поверх фото — `mix-blend-mode: difference|overlay` для гарантированного контраста.
+
+### 19. @media prefers-reduced-motion
+Все анимации обёрнуты в `@media (prefers-reduced-motion: no-preference)` для accessibility.
+
+### 20. clip-path или mask-image для нестандартных форм
+Хотя бы один блок имеет нестандартную форму через clip-path (geometric mask, angled bottom) — премиум-маркер 2026.
+

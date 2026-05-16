@@ -35,6 +35,11 @@ lightbox	Lightbox для фото
 requestAnimationFrame|count-up	Count-up анимация
 scroll-behavior:[[:space:]]*smooth|behavior:[[:space:]]*['\"]smooth	Smooth scroll
 @keyframes[[:space:]]+pulse	Pulse-dot animation
+scroll-timeline|IntersectionObserver|data-scroll-reveal	Scroll-driven анимации (PR-P §14)
+:hover[[:space:]]*\{	Hover-эффекты (PR-P §15)
+backdrop-filter:	Glassmorphism backdrop-filter (PR-P §16)
+@media[[:space:]]*\([[:space:]]*prefers-reduced-motion	prefers-reduced-motion media query (PR-P §19)
+clip-path:|mask-image:	Нестандартные формы clip-path/mask (PR-P §20)
 EOF
 )
 
