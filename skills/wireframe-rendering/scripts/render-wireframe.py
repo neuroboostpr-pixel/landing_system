@@ -12,8 +12,15 @@ from pathlib import Path
 import yaml
 
 CHECKED_TPL = (
-    "#{rid}:checked ~ .variants-stage [data-variant=\"{rid}\"] {{ display: flex; }}"
+    "#{rid}:checked ~ .lp-preview-stage [data-variant=\"{rid}\"] {{ display: block; }}"
 )
+CHECKED_TAB_TPL = (
+    "#{rid}:checked ~ .lp-variant-tabs label[for=\"{rid}\"] {{ "
+    "background: #111; color: #fff; border-color: #111; }}"
+    "#{rid}:checked ~ .lp-variant-tabs label[for=\"{rid}\"] .lp-tab-title {{ color: #fff; }}"
+    "#{rid}:checked ~ .lp-variant-tabs label[for=\"{rid}\"] .lp-tab-id {{ color: #bbb; }}"
+)
+HIDDEN_RADIO_CSS = "input[name^=\"b\"][type=\"radio\"].lp-variant-radio { position: absolute; left: -9999px; opacity: 0; pointer-events: none; }"
 
 UX_NOT_AVAILABLE_BANNER = (
     '<div style="margin:24px; padding:16px 24px; background:#fffbe6; border:1px solid #ffe58f; '
@@ -332,6 +339,7 @@ def main() -> None:
 
     blocks_html_parts: list[str] = []
     checked_rules: list[str] = []
+    checked_tab_rules: list[str] = []
     candidates_log: dict = {"project_slug": slug, "blocks": []}
 
     # Check if enrichment-log.md exists alongside prototype.yaml
@@ -366,8 +374,14 @@ def main() -> None:
                 "warning": f"no candidates for {btype} / {niche}",
             })
             blocks_html_parts.append(
-                f'<section class="block-slot"><strong>Block {position} ({btype})</strong>: '
-                f'no candidates found for niche {niche}.</section>'
+                f'<section class="lp-block-wrapper" data-block-position="{position}">'
+                f'<header class="lp-block-header">'
+                f'<h2>📦 Блок {position} — {html.escape(btype)}</h2>'
+                f'<p class="lp-block-sub">Нет подходящих кандидатов в block-library для ниши <code>{html.escape(niche)}</code>.</p>'
+                f'</header>'
+                f'<div class="lp-block-empty">Нужен новый блок? '
+                f'<code>python3 skills/block-library-management/scripts/scaffold-block.py --id &lt;new-id&gt; --category {html.escape(btype)}</code>'
+                f'</div></section>'
             )
             continue
 
@@ -378,7 +392,8 @@ def main() -> None:
         })
 
         radios = []
-        variants = []
+        variant_cards = []
+        tab_labels = []
         for i, cid in enumerate(candidate_ids):
             cat = _category_for(args.library, cid)
             block_dir = Path(args.library) / cat / cid
@@ -424,25 +439,28 @@ def main() -> None:
             display_name = html.escape(meta.get("display_name_ru", cid))
             layout_summary = html.escape(meta.get("layout_summary_ru", ""))
             radios.append(
-                f'<input type="radio" name="b{position}" id="{rid}" '
-                f'value="{cid}" data-position="{position}" {checked}>'
-                f'<label for="{rid}" title="{layout_summary}">'
-                f'{display_name}'
-                f'<span style="color:#999;font-size:11px;margin-left:6px;">({html.escape(cid)})</span>'
-                f'</label>'
+                f'<input type="radio" class="lp-variant-radio" name="b{position}" id="{rid}" '
+                f'value="{html.escape(cid, quote=True)}" data-position="{position}" {checked}>'
             )
-            variants.append(
-                f'<div class="variant" data-variant="{rid}">'
-                f'<div class="device desktop"><div class="device-label">Desktop · {cid}</div>'
+            variant_cards.append(
+                f'<div class="lp-preview-card" data-variant="{rid}">'
+                f'<div class="device desktop"><div class="device-label">Desktop · {html.escape(cid)}</div>'
                 f'<iframe sandbox srcdoc="{html.escape(tmpl_d, quote=True)}"></iframe></div>'
-                f'<div class="device mobile"><div class="device-label">Mobile · {cid}</div>'
+                f'<div class="device mobile"><div class="device-label">Mobile · {html.escape(cid)}</div>'
                 f'<iframe sandbox srcdoc="{html.escape(tmpl_m, quote=True)}"></iframe></div>'
                 f'</div>'
             )
+            tab_labels.append(
+                f'<label for="{rid}" title="{layout_summary}">'
+                f'<span class="lp-tab-title">Вариант {i+1} · {display_name}</span>'
+                f'<span class="lp-tab-id">{html.escape(cid)}</span>'
+                f'</label>'
+            )
             checked_rules.append(CHECKED_TPL.format(rid=rid))
+            checked_tab_rules.append(CHECKED_TAB_TPL.format(rid=rid))
 
+        # Block-level hint
         hint = hint_for_block(btype, patterns)
-        # Use last candidate's meta for style hint (first variant, position 0)
         last_meta: dict = {}
         if candidate_ids:
             last_block_dir = Path(args.library) / _category_for(args.library, candidate_ids[0]) / candidate_ids[0]
@@ -456,16 +474,32 @@ def main() -> None:
         if style_hint:
             hint_parts.append(f"🎨 Стиль: {style_hint}")
         hint_html = (
-            f'<div class="block-ux-hint">{"<br>".join(hint_parts)}</div>' if hint_parts else ''
+            f'<div class="lp-block-hint">{"<br>".join(hint_parts)}</div>' if hint_parts else ''
         )
+
+        # Pull a short description of THIS block from prototype for the header
+        proto_block = block
+        proto_desc_parts = []
+        for k in ("headline", "title", "subhead", "subtitle", "cta_primary", "cta", "primary_cta"):
+            v = proto_block.get(k)
+            if v and isinstance(v, str):
+                proto_desc_parts.append(f"<strong>{k}:</strong> {html.escape(v[:160])}")
+                if len(proto_desc_parts) >= 2:
+                    break
+        proto_desc_html = " · ".join(proto_desc_parts) if proto_desc_parts else (
+            f"тип <code>{html.escape(btype)}</code> — {len(candidate_ids)} вариант(ов) из block-library"
+        )
+
         section = (
-            f'<section class="block-slot" data-block-position="{position}">'
-            f'<fieldset class="variant-picker">'
-            f'<legend>Блок {position} — {btype} — выбери вариант:</legend>'
-            f'{"".join(radios)}'
-            f'</fieldset>'
+            f'<section class="lp-block-wrapper" data-block-position="{position}">'
+            f'<header class="lp-block-header">'
+            f'<h2>📦 Блок {position} — {html.escape(btype)}</h2>'
+            f'<p class="lp-block-sub">{proto_desc_html}</p>'
+            f'</header>'
             f'{hint_html}'
-            f'<div class="variants-stage">{"".join(variants)}</div>'
+            f'{"".join(radios)}'
+            f'<div class="lp-preview-stage">{"".join(variant_cards)}</div>'
+            f'<nav class="lp-variant-tabs">{"".join(tab_labels)}</nav>'
             f'</section>'
         )
         blocks_html_parts.append(section)
@@ -487,7 +521,8 @@ def main() -> None:
         .replace("{{niche}}", niche)
         .replace("{{prototype_source}}", html.escape(prototype_source_text))
         .replace("{{blocks_html}}", "\n".join(blocks_html_parts))
-        .replace("{{checked_rules}}", "\n".join(checked_rules))
+        .replace("{{checked_rules}}", HIDDEN_RADIO_CSS + "\n" + "\n".join(checked_rules))
+        .replace("{{checked_tab_rules}}", "\n".join(checked_tab_rules))
         .replace("{{ux_patterns_html}}", ux_patterns_html)
         .replace("{{ux_rules_html}}", ux_rules_html)
         .replace("{{palettes_html}}", palettes_html)

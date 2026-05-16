@@ -4,94 +4,246 @@
 <meta charset="UTF-8">
 <title>Wireframe — {{project_slug}}</title>
 <style>
-  body { margin: 0; font-family: system-ui, sans-serif; background: #f0f0f0; }
-  .block-slot { margin: 24px; background: #fff; padding: 16px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-  .variant-picker { border: none; padding: 0; margin: 0 0 16px; }
-  .variant-picker legend { font-weight: 600; font-size: 14px; margin-bottom: 8px; color: #333; }
-  .variant-picker label { display: inline-block; padding: 6px 12px; margin-right: 8px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; font-size: 13px; }
-  .block-ux-hint { font-size: 12px; color: #666; background: #f4f4f4; padding: 8px 12px; border-radius: 4px; margin: 0 0 12px; border-left: 3px solid #ccc; }
-  .variants-stage { display: block; }
-  .variant { display: none; gap: 24px; flex-wrap: wrap; }
-  .device { border: 1px solid #ddd; background: #fff; }
-  .device.desktop { width: 1280px; max-width: 100%; }
-  .device.mobile { width: 375px; }
-  .device-label { font-size: 11px; color: #888; padding: 4px 8px; background: #fafafa; }
-  .device iframe { width: 100%; border: none; display: block; }
-
-  {{checked_rules}}
-
-  .confirm-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #111; color: #fff; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
-  .confirm-bar button { padding: 12px 24px; background: #fff; color: #111; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
-
-  .proto-panel { margin: 24px; background: #fff; padding: 20px 24px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-  .proto-panel summary { font-weight: 600; font-size: 14px; cursor: pointer; padding: 4px 0; color: #333; }
-  .proto-panel pre { background: #fafafa; border: 1px solid #eee; border-radius: 6px; padding: 16px; font-size: 13px; line-height: 1.5; white-space: pre-wrap; max-height: 480px; overflow: auto; margin: 12px 0 0; }
-  .proto-meta { color: #777; font-size: 12px; margin-top: 8px; }
-  .device.desktop iframe { height: 720px; }
-  .device.mobile iframe { height: 720px; }
-  body { padding-bottom: 90px; }
-
-  /* PR-Q: B/W wireframe mode */
-  .wireframe-bw .device iframe,
-  .wireframe-bw .preview-iframe {
-    filter: grayscale(100%) contrast(0.95);
+  /* ===== PR-R: new wireframe UX — one big centered preview per block + tabs ===== */
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    background: #f4f5f7;
+    color: #222;
+    padding-bottom: 96px;
+  }
+  h1 { padding: 24px 32px 8px; margin: 0; font-size: 28px; }
+  h1 .niche { font-size: 14px; color: #888; font-weight: 400; margin-left: 8px; }
+  .intro {
+    padding: 0 32px 16px;
+    color: #555;
+    max-width: 1200px;
   }
 
-  /* PR-Q: Larger previews */
-  .preview-iframe { height: 600px; }
-  .preview-iframe.mobile { height: 750px; width: 390px; }
-  .device.desktop iframe.preview-iframe { height: 600px; }
-  .device.mobile iframe.preview-iframe { height: 750px; }
-
-  /* PR-Q: Zoom levels */
-  .wireframe-zoom-50 .device iframe { transform: scale(0.5); transform-origin: top left; }
-  .wireframe-zoom-75 .device iframe { transform: scale(0.75); transform-origin: top left; }
-  .wireframe-zoom-100 .device iframe { /* default */ }
-  .wireframe-zoom-125 .device iframe { transform: scale(1.25); transform-origin: top left; }
-
-  /* PR-Q: Controls bar */
+  /* === Sticky control bar === */
   .wireframe-controls {
     position: sticky; top: 0; z-index: 100;
-    background: #fff; border-bottom: 1px solid #e0e0e0;
-    padding: 12px 24px; display: flex; gap: 20px; align-items: center;
+    background: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 12px 32px;
+    display: flex; gap: 24px; align-items: center;
     font-size: 13px;
   }
   .wireframe-controls label { cursor: pointer; }
   .wireframe-controls select { padding: 4px 8px; border-radius: 4px; border: 1px solid #ccc; }
 
-  .ux-panel, .ux-rules-panel { margin: 24px; background: #fff; padding: 16px 24px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-  .ux-panel summary, .ux-rules-panel summary { font-weight: 600; font-size: 14px; cursor: pointer; color: #333; }
-  .ux-patterns-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-top: 12px; }
-  .ux-pattern { border: 1px solid #e0e0e0; padding: 12px; border-radius: 6px; background: #fafafa; }
+  /* === Side info panels (collapsed by default to give space to previews) === */
+  .proto-panel, .ux-panel, .ux-rules-panel, .palettes-panel, .typography-panel, .enrichment-panel {
+    margin: 16px auto;
+    max-width: 1280px;
+    background: #fff;
+    padding: 16px 24px;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .proto-panel summary, .ux-panel summary, .ux-rules-panel summary,
+  .palettes-panel summary, .typography-panel summary, .enrichment-panel summary {
+    font-weight: 600; font-size: 14px; cursor: pointer; padding: 4px 0; color: #333;
+  }
+  .proto-panel pre {
+    background: #fafafa; border: 1px solid #eee; border-radius: 6px;
+    padding: 16px; font-size: 13px; line-height: 1.5;
+    white-space: pre-wrap; max-height: 480px; overflow: auto; margin: 12px 0 0;
+  }
+  .proto-meta { color: #777; font-size: 12px; margin-top: 8px; }
+  .ux-patterns-grid, .palettes-grid, .typography-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px; margin-top: 12px;
+  }
+  .ux-pattern, .palette-card, .typo-card {
+    border: 1px solid #e0e0e0; padding: 12px; border-radius: 6px; background: #fafafa;
+  }
   .ux-pattern-title { font-weight: 600; margin-bottom: 6px; }
   .ux-pattern-detail { font-size: 12px; color: #555; margin-top: 4px; }
   .ux-rules-list { font-size: 13px; line-height: 1.6; padding-left: 20px; margin-top: 8px; }
   .ux-rule-critical { color: #c00; }
   .ux-rule-high { color: #d80; }
-  .palettes-panel, .typography-panel { margin: 24px; background: #fff; padding: 16px 24px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-  .palettes-panel summary, .typography-panel summary { font-weight: 600; font-size: 14px; cursor: pointer; color: #333; }
-  .palettes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin-top: 12px; }
-  .palette-card { border: 1px solid #e0e0e0; padding: 12px; border-radius: 6px; background: #fafafa; }
   .palette-name { font-weight: 600; font-size: 13px; margin-bottom: 8px; }
   .palette-swatches { display: flex; gap: 6px; margin-bottom: 6px; }
   .palette-hex { font-size: 11px; color: #888; }
-  .typography-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin-top: 12px; }
-  .typo-card { border: 1px solid #e0e0e0; padding: 12px; border-radius: 6px; background: #fafafa; }
   .typo-name { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px; }
-  .typo-heading { font-size: 18px; font-weight: 700; margin-bottom: 2px; }
-  .typo-body { font-size: 13px; color: #666; margin-bottom: 4px; }
-  .typo-mood { font-size: 11px; color: #999; }
+  .enrichment-panel { background: #f0faf0; border-left: 4px solid #3a9e3a; }
+  .enrichment-panel pre {
+    background: #e8f5e8; border: 1px solid #b2d8b2; border-radius: 6px;
+    padding: 16px; font-size: 12px; line-height: 1.6;
+    white-space: pre-wrap; max-height: 400px; overflow: auto; margin: 12px 0 0;
+    color: #1a3a1a;
+  }
 
-  /* Enrichment panel */
-  .enrichment-panel { margin: 24px; background: #f0faf0; padding: 16px 24px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #3a9e3a; }
-  .enrichment-panel summary { font-weight: 600; font-size: 14px; cursor: pointer; color: #1a5c1a; }
-  .enrichment-panel pre { background: #e8f5e8; border: 1px solid #b2d8b2; border-radius: 6px; padding: 16px; font-size: 12px; line-height: 1.6; white-space: pre-wrap; max-height: 400px; overflow: auto; margin: 12px 0 0; color: #1a3a1a; }
+  /* === BIG BLOCK SECTION (PR-R core) === */
+  .lp-block-wrapper {
+    max-width: 1320px;
+    margin: 28px auto 56px;
+    padding: 28px 28px 24px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+  }
+  .lp-block-header {
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid #111;
+  }
+  .lp-block-header h2 {
+    font-family: "SF Mono", "Courier New", monospace;
+    font-size: 18px;
+    margin: 0 0 6px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+  .lp-block-header .lp-block-sub {
+    font-size: 13px;
+    color: #666;
+    margin: 0;
+  }
+  .lp-block-hint {
+    font-size: 12px; color: #555;
+    background: #fffbe6; border-left: 3px solid #f0c14b;
+    padding: 8px 12px; border-radius: 4px;
+    margin: 0 0 14px;
+    line-height: 1.5;
+  }
+
+  /* Stage = preview area. We keep ALL variants rendered;
+     visibility controlled by :checked on hidden radio inputs. */
+  .lp-preview-stage {
+    position: relative;
+    width: 100%;
+    background: #f5f5f5;
+    border: 1px dashed #b8b8b8;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .lp-preview-card {
+    display: none;
+    width: 100%;
+  }
+  /* The CHECKED-rule for showing the active variant is generated
+     by render-wireframe.py and inserted below: */
+  {{checked_rules}}
+
+  /* Big iframe — one centered preview ~1100-1200 wide, 720 tall */
+  .lp-preview-stage .device {
+    background: #fff;
+    margin: 0 auto;
+  }
+  .lp-preview-stage .device.desktop {
+    width: 100%;
+    max-width: 1240px;
+  }
+  .lp-preview-stage .device.desktop iframe {
+    width: 100%;
+    height: 760px;
+    border: 0;
+    display: block;
+    background: #fff;
+  }
+  .lp-preview-stage .device-label {
+    font-size: 11px;
+    color: #888;
+    padding: 6px 12px;
+    background: #fafafa;
+    border-bottom: 1px solid #eee;
+  }
+
+  /* Optional small mobile preview alongside (hidden by default; toggle via control) */
+  .lp-preview-card .device.mobile { display: none; }
+  body.show-mobile .lp-preview-card { display: none; }
+  body.show-mobile .lp-preview-card.lp-active { display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap; justify-content: center; }
+  body.show-mobile .lp-preview-card .device.mobile { display: block; width: 390px; }
+  body.show-mobile .lp-preview-card .device.mobile iframe {
+    width: 100%; height: 760px; border: 0; display: block; background: #fff;
+  }
+  /* The :checked selector adds .lp-active class via CSS — we use direct display rule instead.
+     Mobile toggle is enabled via JS adding body.show-mobile + per-variant class. */
+
+  /* === Variant tabs UNDER the preview === */
+  .lp-variant-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 18px;
+    padding: 12px;
+    background: #f0f0f3;
+    border-radius: 10px;
+  }
+  .lp-variant-tabs label {
+    flex: 1 1 220px;
+    text-align: center;
+    padding: 12px 14px;
+    background: #fff;
+    border: 1px solid #d4d4d8;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: "SF Mono", "Courier New", monospace;
+    transition: all 0.15s;
+    line-height: 1.4;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .lp-variant-tabs label:hover {
+    border-color: #111;
+    background: #fafafa;
+  }
+  .lp-variant-tabs label .lp-tab-title {
+    font-weight: 600;
+    font-size: 13px;
+    color: #111;
+  }
+  .lp-variant-tabs label .lp-tab-id {
+    font-size: 11px;
+    color: #888;
+    font-weight: 400;
+  }
+  /* Active (checked) tab — uses sibling combinator via render-wireframe.py generated rules */
+  {{checked_tab_rules}}
+
+  /* === Confirm bar (unchanged behaviour) === */
+  .confirm-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #111; color: #fff;
+    padding: 16px 24px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 200;
+  }
+  .confirm-bar button {
+    padding: 12px 24px; background: #fff; color: #111;
+    border: none; border-radius: 6px; font-weight: 600; cursor: pointer;
+  }
+
+  /* === PR-Q: B/W mode and zoom (kept) === */
+  .wireframe-bw .lp-preview-stage iframe { filter: grayscale(100%) contrast(0.95); }
+  .wireframe-zoom-50 .lp-preview-stage iframe { transform: scale(0.5); transform-origin: top left; }
+  .wireframe-zoom-75 .lp-preview-stage iframe { transform: scale(0.75); transform-origin: top left; }
+  .wireframe-zoom-100 .lp-preview-stage iframe { /* default */ }
+  .wireframe-zoom-125 .lp-preview-stage iframe { transform: scale(1.25); transform-origin: top left; }
+
+  /* Empty/no-candidates message */
+  .lp-block-empty {
+    padding: 40px;
+    text-align: center;
+    color: #999;
+    font-style: italic;
+    border: 1px dashed #ccc;
+    border-radius: 8px;
+  }
 </style>
 </head>
 <body>
+
 <div class="wireframe-controls">
-  <label><input type="checkbox" id="bw-toggle"> 🎨 Чёрно-белый wireframe</label>
-  <label>🔍 Zoom:
+  <strong style="font-size:14px;">Wireframe</strong>
+  <label><input type="checkbox" id="bw-toggle"> Чёрно-белый</label>
+  <label><input type="checkbox" id="mobile-toggle"> Показать mobile</label>
+  <label>Zoom:
     <select id="zoom-level">
       <option value="50">50%</option>
       <option value="75">75%</option>
@@ -99,44 +251,38 @@
       <option value="125">125%</option>
     </select>
   </label>
+  <span style="margin-left:auto;color:#888;font-size:12px;">Каждый блок = одна большая секция, варианты переключаются табами под превью</span>
 </div>
-<h1 style="padding: 24px 24px 8px;">Wireframe — {{project_slug}} <span style="font-size: 14px; color: #888; font-weight: 400;">niche: {{niche}}</span></h1>
-<p style="padding: 0 24px; color: #666;">Слева — что хотел клиент (прототип). Снизу — варианты, как это может выглядеть. Выбери вариант композиции для каждого блока radio-кнопками. Когда закончишь — нажми «Confirm selections» внизу.</p>
+
+<h1>Wireframe — {{project_slug}} <span class="niche">niche: {{niche}}</span></h1>
+<p class="intro">Слева — что хотел клиент (прототип). Ниже — каждый блок прототипа отдельной секцией с одним большим превью и переключателем вариантов под ним. Тексты в превью — РЕАЛЬНЫЕ из <code>prototype.yaml</code>. Когда выбраны все варианты — нажми «Confirm selections» внизу.</p>
 
 {{enrichment_panel_html}}
 
-<details class="proto-panel" open>
+<details class="proto-panel">
   <summary>📄 Прототип-источник (что хотел клиент)</summary>
   <pre>{{prototype_source}}</pre>
   <div class="proto-meta">Если нужно подправить — отредактируй <code>07_ПРОТОТИП/source/prototype.md</code> и перезапусти <code>/landing-prototype</code> → <code>/landing-wireframe</code>.</div>
 </details>
 
-<details class="ux-panel" open>
-  <summary>🎯 Рекомендованные UX-паттерны для ниши (ui-ux-pro-max)</summary>
-  <div class="ux-patterns-grid">
-    {{ux_patterns_html}}
-  </div>
+<details class="ux-panel">
+  <summary>🎯 Рекомендованные UX-паттерны для ниши</summary>
+  <div class="ux-patterns-grid">{{ux_patterns_html}}</div>
 </details>
 
 <details class="ux-rules-panel">
-  <summary>⚠️ Критические UX-правила (ux-guidelines + web-interface, ui-ux-pro-max)</summary>
-  <ul class="ux-rules-list">
-    {{ux_rules_html}}
-  </ul>
+  <summary>⚠️ Критические UX-правила</summary>
+  <ul class="ux-rules-list">{{ux_rules_html}}</ul>
 </details>
 
 <details class="palettes-panel">
-  <summary>🎨 Рекомендованные палитры для ниши (ui-ux-pro-max colors.csv)</summary>
-  <div class="palettes-grid">
-    {{palettes_html}}
-  </div>
+  <summary>🎨 Рекомендованные палитры для ниши</summary>
+  <div class="palettes-grid">{{palettes_html}}</div>
 </details>
 
 <details class="typography-panel">
-  <summary>✍️ Рекомендованные пары шрифтов (ui-ux-pro-max typography.csv)</summary>
-  <div class="typography-grid">
-    {{typography_html}}
-  </div>
+  <summary>✍️ Рекомендованные пары шрифтов</summary>
+  <div class="typography-grid">{{typography_html}}</div>
 </details>
 
 {{blocks_html}}
@@ -147,9 +293,11 @@
 </div>
 
 <script>
-// PR-Q: B/W mode and zoom controls
 document.getElementById('bw-toggle').addEventListener('change', function(e) {
   document.body.classList.toggle('wireframe-bw', e.target.checked);
+});
+document.getElementById('mobile-toggle').addEventListener('change', function(e) {
+  document.body.classList.toggle('show-mobile', e.target.checked);
 });
 document.getElementById('zoom-level').addEventListener('change', function(e) {
   document.body.className = document.body.className.replace(/wireframe-zoom-\d+/g, '').trim();
@@ -157,11 +305,13 @@ document.getElementById('zoom-level').addEventListener('change', function(e) {
 });
 
 function confirmSelections() {
-  const radios = document.querySelectorAll('input[type=radio]:checked');
+  const radios = document.querySelectorAll('input[type=radio][name^="b"]:checked');
   const sel = [];
   radios.forEach(r => {
+    const pos = r.getAttribute('data-position');
+    if (!pos) return;
     sel.push({
-      block_position: parseInt(r.getAttribute('data-position'), 10),
+      block_position: parseInt(pos, 10),
       chosen_variant: r.value,
     });
   });
