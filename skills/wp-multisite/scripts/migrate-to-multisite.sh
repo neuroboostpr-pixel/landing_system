@@ -55,3 +55,49 @@ if ! beget_subdomain_exists "$WILDCARD_FQDN"; then
 else
     echo "  wildcard already exists"
 fi
+
+# Phase 2: ensure linkDomain + PHP 8.3 for root and wildcard
+echo "▶ Phase 2: link domain + PHP 8.3"
+SITE_ID="${BEGET_SITE_ID:-}"
+if [ -z "$SITE_ID" ]; then
+    echo "  ERROR: BEGET_SITE_ID not in .env. Run beget_api site/getList to find it." >&2
+    echo "  Add BEGET_SITE_ID=<id> to <project>/.env and re-run." >&2
+    exit 2
+fi
+beget_site_link "$BEGET_DOMAIN_ID" "$SITE_ID" || echo "  (already linked)"
+WC_ID=$(beget_subdomain_id "$WILDCARD_FQDN") || true
+beget_site_link "$WC_ID" "$SITE_ID" || echo "  (already linked)"
+beget_set_php "$ROOT_DOMAIN" "8.3"
+beget_set_php "$WILDCARD_FQDN" "8.3"
+
+# Phase 3: WP multisite convert
+echo "▶ Phase 3: WordPress multisite-convert"
+ssh_beget "cd $BEGET_PATH && $REMOTE_WP_BIN config set WP_ALLOW_MULTISITE true --raw" || true
+ssh_beget "cd $BEGET_PATH && $REMOTE_WP_BIN core multisite-convert --subdomains" || \
+    { echo "ERROR: multisite-convert failed" >&2; exit 3; }
+
+# Phase 4: rewrite .htaccess
+echo "▶ Phase 4: write multisite .htaccess"
+ssh_beget "cat > $BEGET_PATH/.htaccess <<'HTACCESS'
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\\.php\$ - [L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?wp-admin\$ \$1wp-admin/ [R=301,L]
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?(wp-(content|admin|includes).*) \$2 [L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?(.*\\.php)\$ \$2 [L]
+RewriteRule . index.php [L]
+HTACCESS"
+
+# Phase 5: network-activate plugins
+echo "▶ Phase 5: network-activate lazy-blocks + seo-by-rank-math"
+ssh_beget "cd $BEGET_PATH && $REMOTE_WP_BIN plugin install lazy-blocks --activate-network" || true
+ssh_beget "cd $BEGET_PATH && $REMOTE_WP_BIN plugin install seo-by-rank-math --activate-network" || true
+
+# Phase 6: state — flip multisite flag
+echo "▶ Phase 6: update state"
+state_set_multisite_true "$STATE"
+
+echo "✅ Migration complete. Project is now multisite."
