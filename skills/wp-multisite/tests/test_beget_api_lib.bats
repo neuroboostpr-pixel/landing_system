@@ -133,3 +133,44 @@ MOCK
     [ "$status" -eq 0 ]
     [ "$output" = "77" ]
 }
+
+@test "beget_subdomain_exists handles fqdn with quotes safely (no injection)" {
+    cat > "$MOCK_DIR/curl" <<'MOCK'
+#!/bin/bash
+echo '{"status":"success","answer":{"status":"success","result":[{"id":1,"fqdn":"alpha.example.ru"}]}}'
+MOCK
+    chmod +x "$MOCK_DIR/curl"
+    # This input would inject Python code in vulnerable impl, but should just not-match
+    run beget_subdomain_exists "alpha'; import os; os.system('echo PWNED'); x='"
+    [ "$status" -eq 1 ]  # not found, but did not execute injected code
+    [[ "$output" != *"PWNED"* ]]
+}
+
+@test "beget_subdomain_add rejects invalid subdomain chars" {
+    run beget_subdomain_add 'bad"slug' 12345
+    [ "$status" -eq 1 ]
+    [[ "$output" == *"invalid subdomain"* ]]
+}
+
+@test "beget_subdomain_add rejects non-numeric root_id" {
+    run beget_subdomain_add "alpha" "not-a-number"
+    [ "$status" -eq 1 ]
+    [[ "$output" == *"numeric"* ]]
+}
+
+@test "beget_subdomain_add accepts wildcard '*' as subdomain" {
+    cat > "$MOCK_DIR/curl" <<'MOCK'
+#!/bin/bash
+echo '{"status":"success","answer":{"status":"success","result":555}}'
+MOCK
+    chmod +x "$MOCK_DIR/curl"
+    run beget_subdomain_add "*" 12345
+    [ "$status" -eq 0 ]
+    [ "$output" = "555" ]
+}
+
+@test "beget_set_php rejects malformed version" {
+    run beget_set_php "alpha.example.ru" "not-a-version"
+    [ "$status" -eq 1 ]
+    [[ "$output" == *"version"* ]]
+}

@@ -59,15 +59,20 @@ beget_subdomain_exists() {
     local fqdn="$1"
     local resp
     resp=$(beget_api "domain/getSubdomainList")
-    printf '%s' "$resp" | python -c "
-import sys, json
+    export FQDN="$fqdn"
+    local rc=0
+    printf '%s' "$resp" | python -c '
+import sys, json, os
+fqdn = os.environ["FQDN"]
 try:
     d = json.load(sys.stdin)
-    found = any(x.get('fqdn') == '$fqdn' for x in d.get('answer', {}).get('result', []))
+    found = any(x.get("fqdn") == fqdn for x in d.get("answer", {}).get("result", []))
     sys.exit(0 if found else 1)
 except Exception:
     sys.exit(1)
-"
+' || rc=$?
+    unset FQDN
+    return $rc
 }
 
 beget_subdomain_id() {
@@ -75,22 +80,35 @@ beget_subdomain_id() {
     local fqdn="$1"
     local resp
     resp=$(beget_api "domain/getSubdomainList")
-    printf '%s' "$resp" | python -c "
-import sys, json
+    export FQDN="$fqdn"
+    local rc=0
+    printf '%s' "$resp" | python -c '
+import sys, json, os
+fqdn = os.environ["FQDN"]
 try:
     d = json.load(sys.stdin)
-    for x in d.get('answer', {}).get('result', []):
-        if x.get('fqdn') == '$fqdn':
-            print(x['id']); sys.exit(0)
+    for x in d.get("answer", {}).get("result", []):
+        if x.get("fqdn") == fqdn:
+            print(x["id"]); sys.exit(0)
     sys.exit(1)
 except Exception:
     sys.exit(1)
-"
+' || rc=$?
+    unset FQDN
+    return $rc
 }
 
 beget_subdomain_add() {
     # beget_subdomain_add <subdomain> <root_domain_id> — print new subdomain id
     local sub="$1" root_id="$2"
+    [[ "$sub" =~ ^[a-zA-Z0-9*_-]+$ ]] || {
+        echo "beget_subdomain_add: invalid subdomain '$sub' (must match [a-zA-Z0-9*_-]+)" >&2
+        return 1
+    }
+    [[ "$root_id" =~ ^[0-9]+$ ]] || {
+        echo "beget_subdomain_add: root_id must be numeric, got '$root_id'" >&2
+        return 1
+    }
     local resp
     resp=$(beget_api "domain/addSubdomainVirtual" "{\"subdomain\":\"$sub\",\"domain_id\":$root_id}")
     if beget_ok "$resp"; then
@@ -122,6 +140,14 @@ beget_site_link() {
 beget_set_php() {
     # beget_set_php <full_fqdn> <version> — e.g. "alpha.ailexi.ru" "8.3"
     local fqdn="$1" version="$2"
+    [[ "$fqdn" =~ ^[a-zA-Z0-9.*_-]+$ ]] || {
+        echo "beget_set_php: invalid fqdn '$fqdn'" >&2
+        return 1
+    }
+    [[ "$version" =~ ^[0-9]+\.[0-9]+$ ]] || {
+        echo "beget_set_php: version must look like '8.3', got '$version'" >&2
+        return 1
+    }
     local resp
     resp=$(beget_api "domain/changePhpVersion" "{\"full_fqdn\":\"$fqdn\",\"php_version\":\"$version\"}")
     beget_ok "$resp" || {
