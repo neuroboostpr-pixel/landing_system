@@ -13,7 +13,7 @@ case "$LAST_MSG" in
     chore\(wiki\)*) exit 0 ;;
 esac
 
-SOURCE_PATTERN='^(agents/|skills/.*/SKILL\.md|commands/|template/.*/README\.md|docs/standards/|block-library/|config/.*\.yaml|docs/SETUP\.md)'
+SOURCE_PATTERN='^(agents/|skills/.*/SKILL\.md|commands/|template/.*/README\.md|docs/standards/|block-library/|config/.*\.yaml|docs/SETUP\.md|docs/ПЛАН-ДОРАБОТОК\.md|docs/BACKLOG\.md|docs/photo-selection-guide\.md|docs/superpowers/(specs|plans)/.*\.md|docs/superpowers/(DOKRUTKA-system|dokrutka).*\.md|tests/.*/README\.md|presets/.*\.(md|yaml)|scripts/.*\.doc\.md)'
 
 CHANGED="$(git diff-tree --no-commit-id --name-only -r HEAD 2>/dev/null || true)"
 if ! echo "$CHANGED" | grep -qE "$SOURCE_PATTERN"; then

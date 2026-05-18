@@ -26,6 +26,18 @@ SOURCES=(
     "block-library/_styles/*/README.md"
     "config/*.yaml"
     "docs/SETUP.md"
+    "docs/ПЛАН-ДОРАБОТОК.md"
+    "docs/BACKLOG.md"
+    "docs/photo-selection-guide.md"
+    "docs/superpowers/specs/*.md"
+    "docs/superpowers/plans/*.md"
+    "docs/superpowers/DOKRUTKA-system.md"
+    "tests/*/README.md"
+    "presets/*.md"
+    "presets/*.yaml"
+    "scripts/*.doc.md"
+    "scripts/*/*.doc.md"
+    "scripts/*/*/*.doc.md"
 )
 
 DESYNC=0

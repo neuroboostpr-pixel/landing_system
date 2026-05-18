@@ -33,6 +33,25 @@ SYSTEM_SOURCES = [
     {"path": "block-library/_styles/*/README.md", "concept_dir": "styles"},
     {"path": "config/*.yaml", "concept_dir": "config"},
     {"path": "docs/SETUP.md", "concept_dir": "docs"},
+    # === PR-T: полное покрытие системы ===
+    # Spec и plan документы (история разработки PR-F..PR-T)
+    {"path": "docs/superpowers/specs/*.md", "concept_dir": "specs"},
+    {"path": "docs/superpowers/plans/*.md", "concept_dir": "plans"},
+    # Дополнительные doc файлы (планы доработок, dokrutka)
+    {"path": "docs/ПЛАН-ДОРАБОТОК.md", "concept_dir": "docs"},
+    {"path": "docs/BACKLOG.md", "concept_dir": "docs"},
+    {"path": "docs/photo-selection-guide.md", "concept_dir": "docs"},
+    {"path": "docs/superpowers/DOKRUTKA-system.md", "concept_dir": "docs"},
+    {"path": "docs/superpowers/dokrutka*.md", "concept_dir": "docs"},
+    # Тесты — README по группам PR-* и phase-*
+    {"path": "tests/*/README.md", "concept_dir": "tests"},
+    # Presets — все *.md и *.yaml на верхнем уровне
+    {"path": "presets/*.md", "concept_dir": "presets"},
+    {"path": "presets/*.yaml", "concept_dir": "presets"},
+    # Auto-generated docs from scripts (см. scripts/generate-script-docs.py)
+    {"path": "scripts/*.doc.md", "concept_dir": "scripts"},
+    {"path": "scripts/*/*.doc.md", "concept_dir": "scripts"},
+    {"path": "scripts/*/*/*.doc.md", "concept_dir": "scripts"},
 ]
 
 # Источники для графа конкретного проекта (~/Lendings/<slug>/).

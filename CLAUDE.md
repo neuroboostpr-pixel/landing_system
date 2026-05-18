@@ -209,6 +209,13 @@ Master plan: [`docs/superpowers/plans/2026-05-03-landing-system-master-plan.md`]
 - `block-library/_styles/*/README.md`   — style moods (PR-S)
 - `config/*.yaml`                       — stage-gates и др. конфиги (PR-S)
 - `docs/SETUP.md`                       — главная инструкция (PR-S)
+- `docs/superpowers/specs/*.md`         — спецификации PR'ов (PR-T)
+- `docs/superpowers/plans/*.md`         — планы реализации (PR-T)
+- `docs/ПЛАН-ДОРАБОТОК.md`, `docs/BACKLOG.md`, `docs/photo-selection-guide.md` — главные планы и гайды (PR-T)
+- `docs/superpowers/DOKRUTKA-system.md` — общий план доработок (PR-T)
+- `tests/*/README.md`                   — описания тест-групп (PR-T)
+- `presets/*.{md,yaml}`                 — пресеты (PR-T)
+- `scripts/**/*.doc.md`                 — авто-сгенерированные доки скриптов из docstring/header (PR-T, см. `scripts/generate-script-docs.py`)
 
 **Авто-механика (PR-G):**
 - `.githooks/post-commit` запускается после каждого `git commit`.
