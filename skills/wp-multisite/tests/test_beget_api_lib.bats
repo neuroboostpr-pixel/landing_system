@@ -62,3 +62,31 @@ teardown() {
     run beget_ok "$resp"
     [ "$status" -eq 1 ]
 }
+
+@test "beget_error_text: standard nested errors array" {
+    resp='{"answer":{"errors":[{"error_text":"foo"}]}}'
+    run beget_error_text "$resp"
+    [ "$status" -eq 0 ]
+    [ "$output" = "foo" ]
+}
+
+@test "beget_error_text: top-level auth error" {
+    resp='{"status":"error","error_text":"auth"}'
+    run beget_error_text "$resp"
+    [ "$status" -eq 0 ]
+    [ "$output" = "auth" ]
+}
+
+@test "beget_error_text: garbage input returns parse_error or unknown" {
+    run beget_error_text "not json at all"
+    [ "$status" -eq 0 ]
+    [[ "$output" = "parse_error" || "$output" = "unknown" ]]
+}
+
+@test "beget_api fails clearly when BEGET_LOGIN is empty" {
+    BEGET_LOGIN=""
+    run beget_api "user/getAccountInfo"
+    [ "$status" -eq 1 ]
+    # bats merges stderr into $output; check combined output
+    [[ "$output" == *"missing required env vars"* ]]
+}
