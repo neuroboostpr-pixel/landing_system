@@ -1,0 +1,158 @@
+<style>.lp-process-minimal-grid-2 {
+  background: var(--lp-bg-alt);
+  color: var(--lp-text);
+  font-family: var(--lp-font-body);
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md);
+}
+
+.lp-process-minimal-grid-2__inner {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.lp-process-minimal-grid-2__header {
+  max-width: 720px;
+  margin-bottom: var(--lp-spacing-lg);
+}
+
+.lp-process-minimal-grid-2__eyebrow {
+  color: var(--lp-primary);
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.4;
+  margin: 0 0 var(--lp-spacing-xs);
+}
+
+.lp-process-minimal-grid-2__title {
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 2rem;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.lp-process-minimal-grid-2__subhead {
+  color: var(--lp-text-muted);
+  font-size: 1rem;
+  line-height: 1.7;
+  margin: var(--lp-spacing-sm) 0 0;
+}
+
+.lp-process-minimal-grid-2__list {
+  display: grid;
+  gap: var(--lp-spacing-md);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.lp-process-minimal-grid-2__item {
+  align-items: flex-start;
+  background: var(--lp-bg);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+  display: flex;
+  gap: var(--lp-spacing-md);
+  padding: var(--lp-spacing-lg);
+}
+
+.lp-process-minimal-grid-2__icon {
+  align-items: center;
+  background: var(--lp-accent);
+  border-radius: var(--lp-radius);
+  color: var(--lp-text);
+  display: flex;
+  flex: 0 0 auto;
+  font-family: var(--lp-font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  height: 3rem;
+  justify-content: center;
+  line-height: 1;
+  width: 3rem;
+}
+
+.lp-process-minimal-grid-2__content {
+  min-width: 0;
+}
+
+.lp-process-minimal-grid-2__number {
+  color: var(--lp-text-muted);
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: var(--lp-spacing-xs);
+}
+
+.lp-process-minimal-grid-2__item-title {
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 1.25rem;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.lp-process-minimal-grid-2__text {
+  color: var(--lp-text-muted);
+  font-size: 1rem;
+  line-height: 1.65;
+  margin: var(--lp-spacing-sm) 0 0;
+}
+
+@media (min-width: 768px) {
+  .lp-process-minimal-grid-2 {
+    padding: var(--lp-spacing-xl) var(--lp-spacing-lg);
+  }
+
+  .lp-process-minimal-grid-2__header {
+    margin-bottom: var(--lp-spacing-xl);
+  }
+
+  .lp-process-minimal-grid-2__title {
+    font-size: 2.75rem;
+  }
+
+  .lp-process-minimal-grid-2__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lp-process-minimal-grid-2__item {
+    min-height: 100%;
+  }
+}
+
+/* Forced mobile viewport for preview */
+@media (min-width: 0) {
+  body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
+}
+</style>
+<section class="lp-process-minimal-grid-2" aria-labelledby="lp-process-minimal-grid-2-title">
+  <div class="lp-process-minimal-grid-2__inner">
+    <div class="lp-process-minimal-grid-2__header">
+      <p class="lp-process-minimal-grid-2__eyebrow">{{slot:eyebrow}}</p>
+      <h2 class="lp-process-minimal-grid-2__title" id="lp-process-minimal-grid-2-title">{{slot:heading}}</h2>
+      <p class="lp-process-minimal-grid-2__subhead">{{slot:subhead}}</p>
+    </div>
+
+    <ol class="lp-process-minimal-grid-2__list">
+      <li class="lp-process-minimal-grid-2__item">
+        <div class="lp-process-minimal-grid-2__icon" aria-hidden="true">{{slot:step-1-icon}}</div>
+        <div class="lp-process-minimal-grid-2__content">
+          <span class="lp-process-minimal-grid-2__number">{{slot:step-1-label}}</span>
+          <h3 class="lp-process-minimal-grid-2__item-title">{{slot:step-1-title}}</h3>
+          <p class="lp-process-minimal-grid-2__text">{{slot:step-1-text}}</p>
+        </div>
+      </li>
+
+      <li class="lp-process-minimal-grid-2__item">
+        <div class="lp-process-minimal-grid-2__icon" aria-hidden="true">{{slot:step-2-icon}}</div>
+        <div class="lp-process-minimal-grid-2__content">
+          <span class="lp-process-minimal-grid-2__number">{{slot:step-2-label}}</span>
+          <h3 class="lp-process-minimal-grid-2__item-title">{{slot:step-2-title}}</h3>
+          <p class="lp-process-minimal-grid-2__text">{{slot:step-2-text}}</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>

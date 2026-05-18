@@ -1,0 +1,14 @@
+<section class="lp-cta-corporate-centered" aria-labelledby="lp-cta-corporate-centered-title">
+  <div class="lp-cta-corporate-centered__media" aria-hidden="true">
+    <img src="{{slot:background-image}}" alt="{{slot:background-image-alt}}" loading="lazy">
+  </div>
+
+  <div class="lp-cta-corporate-centered__inner">
+    <p class="lp-cta-corporate-centered__eyebrow">{{slot:eyebrow}}</p>
+    <h2 class="lp-cta-corporate-centered__title" id="lp-cta-corporate-centered-title">{{slot:heading}}</h2>
+    <p class="lp-cta-corporate-centered__text">{{slot:subhead}}</p>
+    <a class="lp-cta-corporate-centered__button" href="{{slot:primary-cta-url}}">
+      {{slot:primary-cta-label}}
+    </a>
+  </div>
+</section>

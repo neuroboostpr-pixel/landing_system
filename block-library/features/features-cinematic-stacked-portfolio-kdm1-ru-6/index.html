@@ -1,0 +1,52 @@
+<section class="lp-features-cinematic-stacked" aria-labelledby="features-cinematic-stacked-heading">
+  <div class="lp-features-cinematic-stacked__inner">
+    <div class="lp-features-cinematic-stacked__intro">
+      <p class="lp-features-cinematic-stacked__eyebrow">{{slot:eyebrow}}</p>
+      <h2 class="lp-features-cinematic-stacked__title" id="features-cinematic-stacked-heading">{{slot:heading}}</h2>
+      <p class="lp-features-cinematic-stacked__lead">{{slot:subhead}}</p>
+    </div>
+
+    <div class="lp-features-cinematic-stacked__grid">
+      <article class="lp-features-cinematic-stacked__card">
+        <figure class="lp-features-cinematic-stacked__media">
+          <img src="{{slot:feature-1-image}}" alt="{{slot:feature-1-image-alt}}" loading="lazy">
+        </figure>
+        <div class="lp-features-cinematic-stacked__content">
+          <p class="lp-features-cinematic-stacked__kicker">{{slot:feature-1-kicker}}</p>
+          <h3 class="lp-features-cinematic-stacked__card-title">{{slot:feature-1-title}}</h3>
+          <p class="lp-features-cinematic-stacked__text">{{slot:feature-1-text}}</p>
+        </div>
+      </article>
+
+      <article class="lp-features-cinematic-stacked__card">
+        <figure class="lp-features-cinematic-stacked__media">
+          <img src="{{slot:feature-2-image}}" alt="{{slot:feature-2-image-alt}}" loading="lazy">
+        </figure>
+        <div class="lp-features-cinematic-stacked__content">
+          <p class="lp-features-cinematic-stacked__kicker">{{slot:feature-2-kicker}}</p>
+          <h3 class="lp-features-cinematic-stacked__card-title">{{slot:feature-2-title}}</h3>
+          <p class="lp-features-cinematic-stacked__text">{{slot:feature-2-text}}</p>
+        </div>
+      </article>
+
+      <article class="lp-features-cinematic-stacked__card">
+        <figure class="lp-features-cinematic-stacked__media">
+          <img src="{{slot:feature-3-image}}" alt="{{slot:feature-3-image-alt}}" loading="lazy">
+        </figure>
+        <div class="lp-features-cinematic-stacked__content">
+          <p class="lp-features-cinematic-stacked__kicker">{{slot:feature-3-kicker}}</p>
+          <h3 class="lp-features-cinematic-stacked__card-title">{{slot:feature-3-title}}</h3>
+          <p class="lp-features-cinematic-stacked__text">{{slot:feature-3-text}}</p>
+        </div>
+      </article>
+    </div>
+
+    <div class="lp-features-cinematic-stacked__summary">
+      <div class="lp-features-cinematic-stacked__summary-text">
+        <h3 class="lp-features-cinematic-stacked__summary-title">{{slot:summary-heading}}</h3>
+        <p class="lp-features-cinematic-stacked__summary-copy">{{slot:summary-text}}</p>
+      </div>
+      <a class="lp-features-cinematic-stacked__cta" href="{{slot:primary-cta-url}}">{{slot:primary-cta-label}}</a>
+    </div>
+  </div>
+</section>

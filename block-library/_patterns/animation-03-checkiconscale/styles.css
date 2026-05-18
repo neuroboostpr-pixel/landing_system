@@ -1,0 +1,6 @@
+@keyframes checkIconScale {
+  /* extracted from real site */
+}
+.anim-03 {
+  animation: checkIconScale 1.2s ease forwards;
+}

@@ -1,0 +1,21 @@
+id: features-minimal-grid-2-zilant-group-6
+category: features
+display_name_ru: "Светлая секция с сегментированными аудиториями и компактными карточками потребно"
+description: "Светлая секция с сегментированными аудиториями и компактными карточками потребностей внутри."
+style_mood: minimal
+layout_pattern: grid-2
+ru_market: true
+has_animation: true
+niches_suitable:
+  - services
+  - b2b-saas
+  - education
+  - tech
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://zilant.group/"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

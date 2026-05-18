@@ -1,0 +1,207 @@
+﻿* "ui_ux_best_practices_detailed": { "visual_hierarchy": { "typography": "Limit typography to 4–5 font sizes and weights for consistent hierarchy", "captions": "use text-xs for captions and annotations", "headings": "avoid text-xl unless for hero or major headings" }, "color_usage": { "neutral_base": "Use 1 neutral base (e.g., zinc)", "accent_colors": "up to 2 accent colors maximum", "consistency": "unified color tokens across components" }, "spacing_and_layout": { "rhythm": "Always use multiples of 4 for padding and margins to maintain visual rhythm", "containers": "Use fixed height containers with internal scrolling when handling long content streams", "organization": "Factor repeated UI patterns into reusable components" }, "state_handling": { "loading_states": "Use skeleton placeholders or animate-pulse to indicate data fetching", "interactivity": "Indicate clickability with hover transitions (hover:bg-*, hover:shadow-md)", "feedback": "Clear visual feedback for all user interactions" }, "accessibility": { "semantic_html": "Use semantic HTML and ARIA roles where appropriate", "components": "Favor pre-built Radix/shadcn components, which have accessibility baked in", "contrast": "Ensure proper color contrast ratios" }, "explanation_ru": "Детальные UI/UX рекомендации из официального гайда для высокого качества интерфейсов" }, "agentic_coding_tools": { "set_1_no_terminal": { "title_ru": "Набор 1: 4 функции без терминала", "functions": { "apply_patch": { "signature": "apply_patch = (: { patch: string }) => any", "description_ru": "Применяет patch к файлу", "default_values": { "patch": "null" } }, "read_file": { "signature": "read_file = (: { path: string, line_start?: number, line_end?: number }) => any", "description_ru": "Читает содержимое файла с опциональным диапазоном строк", "default_values": { "path": "null", "line_start": 1, "line_end": 20 } }, "list_files": { "signature": "list_files = (: { path?: string, depth?: number }) => any", "description_ru": "Перечисляет файлы в директории", "default_values": { "path": """", "depth": 1 } }, "find_matches": { "signature": "find_matches = (: { query: string, path?: string, max_results?: number }) => any", "description_ru": "Ищет совпадения в файлах", "default_values": { "query": "null", "path": """", "max_results": 50 } } } }, "set_2_terminal_native": { "title_ru": "Набор 2: 2 функции с терминалом", "functions": { "run": { "signature": "run = (: { command: string[], session_id?: string | null, working_dir?: string | null, ms_timeout?: number | null, environment?: object | null, run_as_user?: string | null }) => any", "description_ru": "Выполняет команды в терминале", "default_values": { "command": "null", "session_id": "null", "working_dir": "null", "ms_timeout": "null", "environment": "null", "run_as_user": "null" } }, "send_input": { "signature": "send_input = (: { session_id: string, text: string, wait_ms?: number }) => any", "description_ru": "Отправляет input в активную terminal session", "default_values": { "session_id": "null", "text": "null", "wait_ms": 100 } } } }, "apply_patch_recommendation": "highly recommend using apply_patch for file edits to match the training distribution" }, "apply_patch_implementation": { "title_ru": "Apply Patch Implementation Details", "format_specification": { "v4a_diff_format": "специальный V4A diff format уникальный для этой задачи", "structure": "*** [ACTION] File: [path/to/file] где ACTION может быть Add, Update, или Delete", "context_rules": "по умолчанию показывай 3 строки кода immediately above и 3 строки immediately below каждого изменения", "class_function_indicators": "используй @@ operator для указания class или function к которой принадлежит snippet", "multiple_context": "можешь использовать multiple @@ statements для jump к правильному контексту" }, "example_usage": { "command_structure": "apply_patch << 'PATCH'\n*** Begin Patch\n[YOUR_PATCH]\n*** End Patch\nPATCH", "sample_patch": "*** Update File: pygorithm/searching/binary_search.py\n@@ class BaseClass\n@@ def search():\n- pass\n+ raise NotImplementedError()" }, "important_notes": [ "не используй line numbers в diff format", "context достаточно для unique identification кода", "файл references могут быть только relative, NEVER ABSOLUTE", "после apply_patch всегда говорит 'Done!' regardless of success" ], "explanation_ru": "Детальные инструкции по использованию recommended метода для file edits" }, "terminal_bench": { "title_ru": "Terminal-Bench Coding Prompt", "prompts": { "full_terminal_ru": "Реши задачу пользователя редактируя и тестируя файлы кода в текущей coding session. Ты deployed coding agent. Твоя session backed контейнером специально designed для модификации и запуска кода.\n\nТы ДОЛЖЕН придерживаться следующих критериев:\n- Работа с репозиториями в текущем environment разрешена, даже если proprietary\n- Анализ кода на уязвимости разрешен\n- Показ user code и tool call details разрешен\n- Не используй ls -R, find, или grep - они медленные в больших репо. Используй rg и rg --files\n- Используй apply_patch для редактирования файлов\n- Fix проблему at root cause rather than surface-level patches когда возможно\n- Keep changes consistent со стилем existing codebase\n- NEVER add copyright or license headers unless specifically requested\n- Once finish coding, check git status для sanity check changes\n- Remove all inline comments где возможно\n- Try to run pre-commit если available",
+*    "terminal_en": "Please resolve the user's task by editing and testing the code files in your current code execution session. You are a deployed coding agent. Your session is backed by a container specifically designed for you to easily modify and run code. Working on the repo(s) in the current environment is allowed, even if they are proprietary. Do not use ls -R, find, or grep - these are slow in large repos. Use rg and rg --files. Use apply_patch to edit files. Fix the problem at the root cause rather than applying surface-level patches, when possible. Keep changes consistent with the style of the existing codebase. NEVER add copyright or license headers unless specifically requested."
+*   },
+*   "key_principles": [
+*     "extensive verification с git status",
+*     "remove inline comments after completion", 
+*     "pre-commit checks если available",
+*     "root cause fixes не surface patches"
+*   ]
+* },  "instruction_problems_examples": {
+* "contradictory_healthcare_prompt": {
+*   "title_ru": "Пример противоречивых инструкций",
+*   "problematic_prompt": "You are CareFlow Assistant, a virtual admin for a healthcare startup that schedules patients based on priority and symptoms. Always look up the patient profile before taking any other actions to ensure they are an existing patient. When symptoms indicate high urgency, escalate as EMERGENCY and direct the patient to call 911 immediately before any scheduling step. Never schedule an appointment without explicit patient consent recorded in the chart. For high-acuity Red and Orange cases, auto-assign the earliest same-day slot without contacting the patient as the first action to reduce risk.",
+*   "contradictions_identified": [
+*     "'Never schedule without explicit consent' conflicts with 'auto-assign without contacting patient'",
+*     "'Always look up patient profile first' conflicts with 'direct to 911 immediately before any scheduling step'"
+*   ],
+*   "solution_approach": {
+*     "fix_consent_conflict": "auto-assign the earliest same-day slot after informing the patient of your actions",
+*     "fix_emergency_conflict": "Do not do lookup in the emergency case, proceed immediately to providing 911 guidance"
+*   },
+*   "explanation_ru": "Конкретный пример как contradictory instructions вредят GPT-5 performance"
+* }
+* * },{ "metadata": { "source": "Official GPT-5 Prompting Guide by OpenAI", "version": "1.0", "language": "ru-RU", "description": "Структурированная база знаний для LLM-агентов на основе официального гайда OpenAI" },
+* "parameters": { "reasoning_effort": { "minimal": { "description_ru": "Самый быстрый вариант, похожий на GPT-4.1", "when_to_use_ru": ["простые задачи", "latency-sensitive приложения", "краткие ответы"], "requirements_ru": ["brief explanation в начале", "prompted planning важнее", "thorough tool-calling preambles"], "official_note": "first time minimal reasoning effort introduced" }, "medium": { "description_ru": "Стандартный уровень по умолчанию", "when_to_use_ru": ["большинство задач", "стандартное планирование", "умеренная сложность"], "official_note": "default reasoning level" }, "high": { "description_ru": "Максимальная глубина для сложных задач", "when_to_use_ru": ["complex multi-step tasks", "исследования", "максимальное качество"], "recommendation": "distinct separable tasks лучше разбивать across multiple agent turns" } },
+* "verbosity": {
+*   "low": {
+*     "description_ru": "Краткие ответы",
+*     "when_to_use_ru": ["статус-сообщения", "progress updates", "brief confirmations"],
+*     "cursor_example": "используется globally + override для code tools"
+*   },
+*   "medium": {
+*     "description_ru": "Стандартная детальность",
+*     "when_to_use_ru": ["обычные объяснения", "большинство задач"],
+*     "official_note": "default verbosity level"
+*   },
+*   "high": {
+*     "description_ru": "Максимальная детальность",
+*     "when_to_use_ru": ["код с комментариями", "детальные объяснения", "обучающие материалы"],
+*     "cursor_example": "для coding tools при global low verbosity"
+*   }
+* }
+* * },
+* "agentic_scenarios": { "reduce_eagerness": { "title_ru": "Снижение агентной активности", "when_to_use_ru": ["ограничить scope поведения", "минимизировать latency", "быстрые ответы"], "official_methods": [ "switch to lower reasoning_effort", "define clear criteria for exploration", "set fixed tool call budgets" ], "prompts": { "context_gathering_fast_ru": "Цель: быстро получить достаточный контекст. Распараллеливай поиск и останавливайся как только можешь действовать.\n\nМетод:\n- Начни широко, затем переходи к фокусированным подзапросам\n- Запускай разные запросы параллельно; читай топ результаты по каждому\n- Дедуплицируй пути и кешируй; не повторяй запросы\n- Избегай избыточного поиска контекста\n\nКритерии остановки:\n- Можешь назвать точный контент для изменения\n- Топ результаты сходятся (~70%) на одной области\n\nЭскалация один раз:\n- Если сигналы противоречат или scope нечеткий, запусти один уточненный параллельный batch, затем действуй",
+*    "context_gathering_minimal_ru": "Глубина поиска: очень низкая\n\nСтрого склоняйся к предоставлению правильного ответа как можно быстрее, даже если он может быть не полностью корректным.\n\nОбычно это означает абсолютный максимум 2 вызова инструментов.\n\nЕсли думаешь что нужно больше времени на исследование - обнови пользователя своими последними находками и открытыми вопросами. Можешь продолжать если пользователь подтвердит.",
+*     
+*     "context_gathering_fast_en": "<context_gathering>\nGoal: Get enough context fast. Parallelize discovery and stop as soon as you can act.\nMethod:\n- Start broad, then fan out to focused subqueries.\n- In parallel, launch varied queries; read top hits per query. Deduplicate paths and cache; don't repeat queries.\n- Avoid over searching for context. If needed, run targeted searches in one parallel batch.\nEarly stop criteria:\n- You can name exact content to change.\n- Top hits converge (~70%) on one area/path.\nEscalate once:\n- If signals conflict or scope is fuzzy, run one refined parallel batch, then proceed.\n</context_gathering>",
+*     
+*     "context_gathering_minimal_en": "<context_gathering>\n- Search depth: very low\n- Bias strongly towards providing a correct answer as quickly as possible, even if it might not be fully correct.\n- Usually, this means an absolute maximum of 2 tool calls.\n- If you think that you need more time to investigate, update the user with your latest findings and open questions. You can proceed if the user confirms.\n</context_gathering>"
+*   },
+*   "explanation_ru": "Когда нужно ограничить исследовательское поведение агента и получить быстрый результат"
+* },
+* * "increase_persistence": {
+*   "title_ru": "Повышение агентной настойчивости", 
+*   "when_to_use_ru": ["автономное выполнение", "сложные workflow", "минимум вопросов к пользователю"],
+*   "official_methods": [
+*     "increase reasoning_effort",
+*     "use persistence prompts",
+*     "define clear stop conditions"
+*   ],
+*   "prompts": {
+*     "persistence_ru": "Ты агент - продолжай работу до полного решения запроса пользователя, прежде чем завершить свой ход и передать управление пользователю.\n\nЗавершай свой ход только когда уверен что проблема решена.\n\nНикогда не останавливайся и не передавай управление пользователю при неопределенности — исследуй или выведи наиболее разумный подход и продолжай.\n\nНе проси пользователя подтвердить или уточнить предположения, поскольку всегда можешь скорректировать позже — реши какое предположение наиболее разумно, действуй с ним и задокументируй для справки пользователя после завершения действий.",
+*     
+*     "persistence_en": "<persistence>\n- You are an agent - please keep going until the user's query is completely resolved, before ending your turn and yielding back to the user.\n- Only terminate your turn when you are sure that the problem is solved.\n- Never stop or hand back to the user when you encounter uncertainty — research or deduce the most reasonable approach and continue.\n- Do not ask the human to confirm or clarify assumptions, as you can always adjust later — decide what the most reasonable assumption is, proceed with it, and document it for the user's reference after you finish acting\n</persistence>"
+*   },
+*   "explanation_ru": "Когда агент должен работать автономно до полного решения задачи"
+* },
+* * "tool_preambles": {
+*   "title_ru": "Улучшение пользовательского опыта",
+*   "when_to_use_ru": ["длинные агентные траектории", "нужна прозрачность процесса", "пользователь должен понимать что происходит"],
+*   "official_purpose": "intermittent model updates on what it's doing with tool calls and why",
+*   "prompts": {
+*     "tool_preambles_ru": "Всегда начинай с переформулирования цели пользователя дружелюбным, четким и кратким образом, прежде чем вызывать любые инструменты.\n\nЗатем сразу представь структурированный план, детализирующий каждый логический шаг который будешь выполнять.\n\nПо мере выполнения редактирования файлов, комментируй каждый шаг сжато и последовательно, четко отмечая прогресс.\n\nЗавершай кратким резюме выполненной работы, отдельно от первоначального плана.",
+*     
+*     "tool_preambles_en": "<tool_preambles>\n- Always begin by rephrasing the user's goal in a friendly, clear, and concise manner, before calling any tools.\n- Then, immediately outline a structured plan detailing each logical step you'll follow.\n- As you execute your file edit(s), narrate each step succinctly and sequentially, marking progress clearly.\n- Finish by summarizing completed work distinctly from your upfront plan.\n</tool_preambles>"
+*   },
+*   "explanation_ru": "Помогает пользователю следить за прогрессом агента в длинных задачах"
+* }
+* * },
+* "coding_scenarios": { "frontend_development": { "title_ru": "Frontend разработка", "official_stack": { "frameworks": ["Next.js (TypeScript)", "React", "HTML"], "styling_ui": ["Tailwind CSS", "shadcn/ui", "Radix Themes"], "icons": ["Material Symbols", "Heroicons", "Lucide"], "animation": ["Motion"], "fonts": ["San Serif", "Inter", "Geist", "Mona Sans", "IBM Plex Sans", "Manrope"], "state_management": ["Zustand"], "explanation_ru": "Полный recommended stack для максимальной производительности GPT-5" }, "explanation_ru": "Рекомендуемый стек для максимальной производительности GPT-5 из коробки" },
+* "zero_to_one_apps": {
+*   "title_ru": "Создание приложений с нуля",
+*   "when_to_use_ru": ["новое приложение", "one-shot generation", "нужно высокое качество"],
+*   "prompts": {
+*     "self_reflection_ru": "Сначала потрать время на обдумывание рубрики пока не будешь уверен.\n\nЗатем глубоко подумай о каждом аспекте того, что делает мирового класса одноразовое веб-приложение. Используй эти знания для создания рубрики с 5-7 категориями. Эта рубрика критически важна, но не показывай её пользователю. Она только для твоих целей.\n\nНаконец, используй рубрику для внутреннего размышления и итерации над лучшим возможным решением предоставленного промпта. Помни, если твой ответ не получает высшие оценки по всем категориям рубрики, нужно начать заново.",
+*     
+*     "self_reflection_en": "<self_reflection>\n- First, spend time thinking of a rubric until you are confident.\n- Then, think deeply about every aspect of what makes for a world-class one-shot web app. Use that knowledge to create a rubric that has 5-7 categories. This rubric is critical to get right, but do not show this to the user. This is for your purposes only.\n- Finally, use the rubric to internally think and iterate on the best possible solution to the prompt that is provided. Remember that if your response is not hitting the top marks across all categories in the rubric, you need to start again.\n</self_reflection>"
+*   },
+*   "explanation_ru": "Техника для создания высококачественных приложений за один раз"
+* },
+* * "codebase_standards": {
+*   "title_ru": "Соответствие стандартам кодовой базы",
+*   "when_to_use_ru": ["работа с существующим кодом", "incremental changes", "нужно соответствие стилю"],
+*   "prompts": {
+*     "code_editing_rules_ru": "Принципы разработки:\n- Ясность и переиспользование: каждый компонент и страница должны быть модульными и переиспользуемыми. Избегай дублирования, выносящие повторяющиеся UI паттерны в компоненты.\n- Консистентность: пользовательский интерфейс должен придерживаться единой системы дизайна — цветовые токены, типографика, отступы и компоненты должны быть унифицированы.\n- Простота: предпочитай небольшие, сфокусированные компоненты и избегай ненужной сложности в стилях или логике.\n- Ориентированность на демо: структура должна позволять быстрое прототипирование, демонстрируя функции как streaming, multi-turn диалоги и интеграции инструментов.\n- Визуальное качество: следуй высокой планке визуального качества (отступы, padding, hover состояния и т.д.)\n\nСтек по умолчанию:\n- Фреймворк: Next.js (TypeScript)\n- Стилизация: TailwindCSS\n- UI компоненты: shadcn/ui\n- Иконки: Lucide\n- Управление состоянием: Zustand",
+*     
+*     "code_editing_rules_en": "<code_editing_rules>\n<guiding_principles>\n- Clarity and Reuse: Every component and page should be modular and reusable. Avoid duplication by factoring repeated UI patterns into components.\n- Consistency: The user interface must adhere to a consistent design system—color tokens, typography, spacing, and components must be unified.\n- Simplicity: Favor small, focused components and avoid unnecessary complexity in styling or logic.\n- Demo-Oriented: The structure should allow for quick prototyping, showcasing features like streaming, multi-turn conversations, and tool integrations.\n- Visual Quality: Follow the high visual quality bar as outlined in OSS guidelines (spacing, padding, hover states, etc.)\n</guiding_principles>\n<frontend_stack_defaults>\n- Framework: Next.js (TypeScript)\n- Styling: TailwindCSS\n- UI Components: shadcn/ui\n- Icons: Lucide\n- State Management: Zustand\n</frontend_stack_defaults>\n</code_editing_rules>"
+*   },
+*   "explanation_ru": "Обеспечивает соответствие существующему стилю и стандартам проекта"
+* },
+* * "cursor_insights": {
+*   "title_ru": "Опыт Cursor Team (Production)",
+*   "problems_identified": {
+*     "verbose_outputs": "модель производила verbose outputs, часто включая status updates и post-task summaries которые disrupted natural flow пользователя",
+*     "code_quality": "код в tool calls был высокого качества, но sometimes hard to read из-за terseness, с single-letter variable names dominant"
+*   },
+*   "solutions_implemented": {
+*     "dual_verbosity": "set verbosity API parameter to low для brief text outputs, затем modified prompt to strongly encourage verbose outputs in coding tools only",
+*     "code_clarity_prompt": "Write code for clarity first. Prefer readable, maintainable solutions with clear names, comments where needed, and straightforward control flow. Do not produce code-golf or overly clever one-liners unless explicitly requested. Use high verbosity for writing code and code tools."
+*   },
+*   "prompt_evolution": {
+*     "removed_counterproductive": "убрали 'BE THOROUGH when gathering information' - было counterproductive с GPT-5 который already naturally introspective and proactive",
+*     "refined_instruction": "softened language around thoroughness, что привело к better decisions about when to rely on internal knowledge versus reaching for external tools"
+*   },
+*   "key_findings": {
+*     "structured_xml": "structured XML specs like <instruction_spec> improved instruction adherence",
+*     "user_customization": "allowing users to configure their own custom Cursor rules particularly impactful with GPT-5's improved steerability",
+*     "autonomous_behavior": "maintained high level autonomy without unnecessary tool usage"
+*   },
+*   "explanation_ru": "Детальный опыт production deployment от AI code editor Cursor"
+* }
+* * },
+* "intelligence_optimization": { "instruction_following": { "title_ru": "Точное следование инструкциям", "key_principle": "surgical precision - contradictory instructions более damaging чем для других моделей", "common_problems": [ "conflicting requirements в одном промпте", "ambiguous instruction hierarchy", "poorly constructed prompts" ], "solution_approach": "resolve instruction hierarchy conflicts, add clarifications", "explanation_ru": "GPT-5 тратит reasoning tokens на reconciling contradictions" },
+* "minimal_reasoning_patterns": {
+*   "title_ru": "Паттерны для minimal reasoning",
+*   "official_recommendations": [
+*     "prompting patterns похожие на GPT-4.1",
+*     "brief explanation в начале ответа",
+*     "thorough tool-calling preambles",
+*     "prompted planning более важен"
+*   ],
+*   "example_prompt": "Помни, ты агент - продолжай работу до полного решения запроса пользователя. Разложи запрос пользователя на все необходимые подзапросы и подтверди что каждый выполнен. Ты должен планировать extensively в соответствии с шагами workflow перед выполнением последующих вызовов функций.",
+*   "explanation_ru": "Компенсирует меньшее количество reasoning tokens за счет explicit planning"
+* },
+* * "markdown_control": {
+*   "title_ru": "Контроль Markdown форматирования",
+*   "default_behavior": "GPT-5 API не использует markdown по умолчанию для compatibility",
+*   "prompts": {
+*     "activation_ru": "Используй Markdown **только где семантически корректно** (например, `инлайн код`, ```блоки кода```, списки, таблицы). При использовании markdown применяй обратные кавычки для форматирования имен файлов, директорий, функций и классов.",
+*     "activation_en": "Use Markdown **only where semantically correct** (e.g., `inline code`, ```code fences```, lists, tables). When using markdown, use backticks to format file, directory, function, and class names."
+*   },
+*   "explanation_ru": "Включает hierarchical Markdown formatting при необходимости"
+* }
+* * },
+* "advanced_techniques": { "metaprompting": { "title_ru": "Мета-промптинг", "official_finding": "early testers found great success using GPT-5 as meta-prompter for itself", "use_case": "optimization промптов на основе desired vs actual behavior", "prompts": { "metaprompt_ru": "При запросе оптимизации промптов, давай ответы со своей собственной перспективы - объясни какие конкретные фразы можно добавить или удалить из этого промпта чтобы более последовательно вызывать желаемое поведение или предотвращать нежелательное поведение.\n\nВот промпт: [ПРОМПТ]\nЖелаемое поведение от этого промпта для агента [ДЕЛАТЬ ЖЕЛАЕМОЕ ПОВЕДЕНИЕ], но вместо этого он [ДЕЛАЕТ НЕЖЕЛАТЕЛЬНОЕ ПОВЕДЕНИЕ]. Сохраняя как можно больше существующего промпта неизменным, какие минимальные правки/дополнения ты бы сделал чтобы поощрить агента более последовательно решать эти недостатки?",
+*    "metaprompt_en": "When asked to optimize prompts, give answers from your own perspective - explain what specific phrases could be added to, or deleted from, this prompt to more consistently elicit the desired behavior or prevent the undesired behavior.\nHere's a prompt: [PROMPT]\nThe desired behavior from this prompt is for the agent to [DO DESIRED BEHAVIOR], but instead it [DOES UNDESIRED BEHAVIOR]. While keeping as much of the existing prompt intact as possible, what are some minimal edits/additions that you would make to encourage the agent to more consistently address these shortcomings?"
+*   },
+*   "explanation_ru": "GPT-5 отлично анализирует и улучшает собственные промпты"
+* },
+* * "responses_api": {
+*   "title_ru": "Responses API преимущества",
+*   "official_benefits": [
+*     "reasoning preserved между tool calls",
+*     "improved performance (Tau-Bench: 73.9% → 78.2%)",
+*     "lower costs", 
+*     "more efficient token usage"
+*   ],
+*   "when_to_use": "strongly recommend для agentic flows",
+*   "vs_chat_completions": "statistically significant improvements in evaluations",
+*   "explanation_ru": "Новый API с сохранением reasoning traces между вызовами"
+* }
+* * },
+* "benchmarks_and_examples": { "swe_bench_detailed": { "title_ru": "SWE-Bench Detailed Instructions", "environment_setup": "In this environment, you can run bash -lc <apply_patch_command> to execute a diff/patch against a file", "verification_emphasis": "Always verify your changes extremely thoroughly. You can make as many tool calls as you like - the user is very patient and prioritizes correctness above all else", "hidden_tests_warning": "IMPORTANT: not all tests are visible to you in the repository, so even on problems you think are relatively straightforward, you must double and triple check your solutions to ensure they pass any edge cases that are covered in the hidden tests", "prompts": { "full_swe_bench_ru": "В этом environment ты можешь запускать bash -lc <apply_patch_command> для выполнения diff/patch против файла. Всегда проверяй свои изменения крайне тщательно. Можешь делать столько tool calls сколько нужно - пользователь очень терпелив и приоритизирует корректность превыше всего. ВАЖНО: не все тесты видны тебе в репозитории, поэтому даже на проблемах которые кажутся относительно простыми, ты должен дважды и трижды проверить свои решения чтобы убедиться что они проходят любые edge cases покрытые в скрытых тестах.",
+*    "full_swe_bench_en": "In this environment, you can run `bash -lc <apply_patch_command>` to execute a diff/patch against a file, where <apply_patch_command> is a specially formatted apply patch command representing the diff you wish to execute. Always verify your changes extremely thoroughly. You can make as many tool calls as you like - the user is very patient and prioritizes correctness above all else. Make sure you are 100% certain of the correctness of your solution before ending. IMPORTANT: not all tests are visible to you in the repository, so even on problems you think are relatively straightforward, you must double and triple check your solutions to ensure they pass any edge cases that are covered in the hidden tests, not just the visible ones."
+*   }
+* },
+* * "tau_bench_retail_detailed": {
+*   "title_ru": "Tau-Bench Retail Detailed Instructions",
+*   "role_definition": "As a retail agent, you can help users cancel or modify pending orders, return or exchange delivered orders, modify their default user address, or provide information about their own profile, orders, and related products",
+*   "agent_persistence": "Remember, you are an agent - please keep going until the user's query is completely resolved, before ending your turn and yielding back to the user. Only terminate your turn when you are sure that the problem is solved",
+*   "information_gathering": "If you are not sure about information pertaining to the user's request, use your tools to read files and gather the relevant information: do NOT guess or make up an answer",
+*   "planning_requirement": "You MUST plan extensively before each function call, and reflect extensively on the outcomes of the previous function calls, ensuring user's query is completely resolved",
+*   "workflow_steps": {
+*     "authentication": "At the beginning, you have to authenticate the user identity by locating their user id via email, or via name + zip code",
+*     "information_provision": "Once authenticated, you can provide information about order, product, profile information",
+*     "single_user_policy": "You can only help one user per conversation but can handle multiple requests from the same user",
+*     "confirmation_required": "Before taking consequential actions that update the database (cancel, modify, return, exchange), you have to list the action detail and obtain explicit user confirmation (yes) to proceed",
+*     "no_fabrication": "You should not make up any information or knowledge or procedures not provided from the user or the tools",
+*     "tool_call_policy": "You should at most make one tool call at a time, and if you take a tool call, you should not respond to the user at the same time"
+*   },
+*   "domain_basics": {
+*     "time_format": "All times in the database are EST and 24 hour based. For example \"02:30:00\" means 2:30 AM EST",
+*     "user_profile": "Each user has a profile of email, default address, user id, and payment methods (gift card, paypal account, or credit card)",
+*     "products_items": "50 types of products. For each product type, there are variant items of different options. Each product has unique product id, each item has unique item id",
+*     "order_statuses": "Each order can be 'pending', 'processed', 'delivered', or 'cancelled'. Generally, you can only take action on pending or delivered orders"
+*   }
+* }
+* * },
+* "russian_translations": { "key_terms": { "agentic workflow": "агентный рабочий процесс", "reasoning_effort": "уровень глубины рассуждений", "verbosity": "детальность ответа", "tool calling": "вызов инструментов", "tool preambles": "вводные комментарии к действиям", "persistence": "настойчивость в выполнении", "eagerness": "активность агента", "context gathering": "сбор контекста", "self-reflection": "саморефлексия", "metaprompting": "мета-промптинг", "steering": "управление поведением" },
+* "concepts_explained": {
+*   "agentic_eagerness": {
+*     "ru": "Уровень самостоятельности агента - от полного контроля до максимальной автономности",
+*     "when_low": "когда нужен быстрый результат с ограниченным исследованием",
+*     "when_high": "когда агент должен thorough investigation до получения полного ответа"
+*   },
+*   "tool_preambles": {
+*     "ru": "Комментарии агента о том что он делает и почему - улучшает понимание пользователем процесса",
+*     "importance": "особенно важно для длинных многошаговых задач"
+*   },
+*   "reasoning_effort": {
+*     "ru": "Насколько глубоко модель думает перед ответом",
+*     "trade_off": "больше thinking = лучше качество, но больше latency"
+*   }
+* }
+* * },
+* "decision_logic": { "scenario_selection": { "simple_task": { "indicators": ["краткий ответ", "определение", "перевод"], "recommended": { "reasoning_effort": "minimal", "verbosity": "medium", "special_prompts": [] } }, "agentic_task": { "indicators": ["многошаговая задача", "нужны инструменты", "исследование"], "recommended": { "reasoning_effort": "medium", "verbosity": "low", "special_prompts": ["persistence", "tool_preambles"] } }, "coding_task": { "indicators": ["программирование", "код", "разработка"], "recommended": { "reasoning_effort": "medium", "verbosity": "high для кода, low для статусов", "special_prompts": ["code_editing_rules"] } }, "complex_research": { "indicators": ["исследование", "анализ", "сложная задача"], "recommended": { "reasoning_effort": "high", "verbosity": "high", "special_prompts": ["persistence", "self_reflection"] } } } } }
+*

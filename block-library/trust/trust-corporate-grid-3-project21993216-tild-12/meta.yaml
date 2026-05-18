@@ -1,0 +1,21 @@
+id: trust-corporate-grid-3-project21993216-tild-12
+category: trust
+display_name_ru: "Секция документов с тремя карточками сертификатов на светло-голубом фоне."
+description: "Секция документов с тремя карточками сертификатов на светло-голубом фоне."
+style_mood: corporate
+layout_pattern: grid-3
+ru_market: true
+has_animation: false
+niches_suitable:
+  - medical
+  - services
+  - ecommerce
+  - tech
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://project21993216.tilda.ws/"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

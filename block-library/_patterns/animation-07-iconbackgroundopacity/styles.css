@@ -1,0 +1,6 @@
+@keyframes iconBackgroundOpacity {
+  /* extracted from real site */
+}
+.anim-07 {
+  animation: iconBackgroundOpacity 1.2s ease forwards;
+}

@@ -1,0 +1,6 @@
+@keyframes iconBackgroundTransform {
+  /* extracted from real site */
+}
+.anim-08 {
+  animation: iconBackgroundTransform 1.2s ease forwards;
+}

@@ -12,8 +12,63 @@ from pathlib import Path
 import yaml
 
 CHECKED_TPL = (
-    "#{rid}:checked ~ .variants-stage [data-variant=\"{rid}\"] {{ display: flex; }}"
+    "#{rid}:checked ~ .lp-preview-stage [data-variant=\"{rid}\"] {{ display: block; }}"
 )
+CHECKED_TAB_TPL = (
+    "#{rid}:checked ~ .lp-variant-tabs label[for=\"{rid}\"] {{ "
+    "background: #111; color: #fff; border-color: #111; }}"
+    "#{rid}:checked ~ .lp-variant-tabs label[for=\"{rid}\"] .lp-tab-title {{ color: #fff; }}"
+    "#{rid}:checked ~ .lp-variant-tabs label[for=\"{rid}\"] .lp-tab-id {{ color: #bbb; }}"
+)
+HIDDEN_RADIO_CSS = "input[name^=\"b\"][type=\"radio\"].lp-variant-radio { position: absolute; left: -9999px; opacity: 0; pointer-events: none; }"
+
+# Маппинг технического типа блока -> понятное русское название и цель
+BLOCK_TYPE_RU: dict[str, str] = {
+    "nav": "Навигация (шапка сайта)",
+    "header": "Шапка сайта",
+    "hero": "Первый экран сайта",
+    "features": "Преимущества / возможности",
+    "features-2": "Преимущества (вторая секция)",
+    "trust": "Доверие (логотипы / факты)",
+    "social-proof": "Социальное доказательство (отзывы / клиенты)",
+    "gallery": "Галерея (фотографии / модели)",
+    "models-gallery": "Каталог моделей (карусель)",
+    "process": "Процесс работы / этапы",
+    "pricing": "Цены / тарифы",
+    "cta": "Призыв к действию (форма заявки)",
+    "cta-form": "Форма заявки",
+    "form": "Форма",
+    "test-drive-form": "Форма записи на тест-драйв",
+    "faq": "Часто задаваемые вопросы (FAQ)",
+    "team": "Команда",
+    "contacts": "Контакты",
+    "footer": "Подвал сайта",
+    "quiz": "Квиз / опрос",
+}
+
+BLOCK_PURPOSE_RU: dict[str, str] = {
+    "hero": "Первое впечатление + главный CTA",
+    "features": "Объяснить ценность продукта/услуги",
+    "features-2": "Дополнительные преимущества / технические детали",
+    "social-proof": "Снять возражения через примеры/отзывы",
+    "trust": "Показать что вам можно доверять",
+    "gallery": "Дать визуальное представление о продукте",
+    "models-gallery": "Показать ассортимент / каталог",
+    "process": "Объяснить как происходит сделка",
+    "pricing": "Показать цены / варианты тарифов",
+    "cta": "Преобразовать интерес в заявку",
+    "cta-form": "Собрать контакт через короткую форму",
+    "form": "Собрать контакт",
+    "test-drive-form": "Записать на тест-драйв",
+    "faq": "Снять оставшиеся возражения",
+    "team": "Показать кто за компанией стоит",
+    "contacts": "Способы связи и адрес",
+    "footer": "Технические ссылки и соцсети",
+    "nav": "Навигация по разделам сайта",
+    "header": "Логотип + меню + быстрый CTA",
+    "quiz": "Квалификация и сбор контакта через игру",
+}
+
 
 UX_NOT_AVAILABLE_BANNER = (
     '<div style="margin:24px; padding:16px 24px; background:#fffbe6; border:1px solid #ffe58f; '
@@ -267,8 +322,8 @@ def main() -> None:
     p.add_argument("--project", required=True)
     p.add_argument("--library", required=True)
     p.add_argument("--template", required=True)
-    p.add_argument("--top", type=int, default=5,
-                   help="Max candidates shown per block (default: 5, was 3)")
+    p.add_argument("--top", type=int, default=8,
+                   help="Max candidates shown per block (default: 8, was 5)")
     p.add_argument(
         "--ux-rules",
         default=str(Path.home() / ".claude" / "skills" / "ui-ux-pro-max" / "data"),
@@ -281,7 +336,7 @@ def main() -> None:
     if not proto_path.exists():
         fail(f"no prototype.yaml at {proto_path}")
     proto = yaml.safe_load(proto_path.read_text())
-    niche = proto["project"]["niche"]
+    niche = (proto.get("project") or {}).get("niche") or "generic"
     slug = proto["project"]["slug"]
 
     matcher_script = Path(__file__).parent / "match-candidates.py"
@@ -332,6 +387,7 @@ def main() -> None:
 
     blocks_html_parts: list[str] = []
     checked_rules: list[str] = []
+    checked_tab_rules: list[str] = []
     candidates_log: dict = {"project_slug": slug, "blocks": []}
 
     # Check if enrichment-log.md exists alongside prototype.yaml
@@ -340,6 +396,18 @@ def main() -> None:
     if enrichment_log_path.exists():
         enrichment_log_content = enrichment_log_path.read_text()
 
+    total_blocks = len(proto.get("blocks", []))
+
+    # Count how many blocks live under each category folder in the library —
+    # so the footer of each section can show "shown N of M available <cat> blocks".
+    library_dir = Path(args.library)
+    category_counts: dict[str, int] = {}
+    if library_dir.exists():
+        for cat_dir in library_dir.iterdir():
+            if not cat_dir.is_dir() or cat_dir.name.startswith((".", "_")):
+                continue
+            n = sum(1 for d in cat_dir.iterdir() if d.is_dir() and not d.name.startswith("."))
+            category_counts[cat_dir.name] = n
     for block in proto["blocks"]:
         position = block["position"]
         btype = block["type"]
@@ -365,9 +433,19 @@ def main() -> None:
                 "candidates": [],
                 "warning": f"no candidates for {btype} / {niche}",
             })
+            type_ru = BLOCK_TYPE_RU.get(btype, btype)
+            purpose_ru = BLOCK_PURPOSE_RU.get(btype, "")
             blocks_html_parts.append(
-                f'<section class="block-slot"><strong>Block {position} ({btype})</strong>: '
-                f'no candidates found for niche {niche}.</section>'
+                f'<section class="lp-block-wrapper" data-block-position="{position}">'
+                f'<header class="lp-block-header">'
+                f'<div class="lp-block-counter">БЛОК {position} / {total_blocks}</div>'
+                f'<h2>{html.escape(type_ru)} <span class="lp-block-type-slug">({html.escape(btype)})</span></h2>'
+                f'<p class="lp-block-sub"><strong>Цель блока:</strong> {html.escape(purpose_ru) or "—"}</p>'
+                f'<p class="lp-block-sub" style="color:#c4424c;"><strong>⚠️ Нет подходящих кандидатов</strong> в block-library для ниши <code>{html.escape(niche)}</code>.</p>'
+                f'</header>'
+                f'<div class="lp-block-empty">Нужен новый блок? '
+                f'<code>python3 skills/block-library-management/scripts/scaffold-block.py --id &lt;new-id&gt; --category {html.escape(btype)}</code>'
+                f'</div></section>'
             )
             continue
 
@@ -378,7 +456,8 @@ def main() -> None:
         })
 
         radios = []
-        variants = []
+        variant_cards = []
+        tab_labels = []
         for i, cid in enumerate(candidate_ids):
             cat = _category_for(args.library, cid)
             block_dir = Path(args.library) / cat / cid
@@ -421,28 +500,48 @@ def main() -> None:
             # Load Russian display name and layout summary from meta.yaml
             meta_path = block_dir / "meta.yaml"
             meta = yaml.safe_load(meta_path.read_text()) if meta_path.exists() else {}
-            display_name = html.escape(meta.get("display_name_ru", cid))
-            layout_summary = html.escape(meta.get("layout_summary_ru", ""))
+            # display_name_ru — короткое человеко-понятное имя; layout_summary_ru — что в макете
+            display_name_full = meta.get("display_name_ru") or cid
+            # Trim until first dot/newline for a short headline; keep full as tooltip
+            short_name = display_name_full.split(".")[0].split("\n")[0].strip()
+            if len(short_name) > 90:
+                short_name = short_name[:87].rstrip() + "…"
+            short_name_html = html.escape(short_name)
+            layout_summary = html.escape(meta.get("layout_summary_ru", "") or display_name_full)
+            niches_meta = meta.get("use_cases") or meta.get("niches_suitable") or []
+            niches_str = ", ".join(niches_meta[:4]) if isinstance(niches_meta, list) else ""
+            mood_str = meta.get("style_mood") or ""
+            meta_tags_parts: list[str] = []
+            if niches_str:
+                meta_tags_parts.append(html.escape(niches_str))
+            if mood_str:
+                meta_tags_parts.append(html.escape(mood_str))
+            meta_tags = " · ".join(meta_tags_parts)
             radios.append(
-                f'<input type="radio" name="b{position}" id="{rid}" '
-                f'value="{cid}" data-position="{position}" {checked}>'
-                f'<label for="{rid}" title="{layout_summary}">'
-                f'{display_name}'
-                f'<span style="color:#999;font-size:11px;margin-left:6px;">({html.escape(cid)})</span>'
-                f'</label>'
+                f'<input type="radio" class="lp-variant-radio" name="b{position}" id="{rid}" '
+                f'value="{html.escape(cid, quote=True)}" data-position="{position}" {checked}>'
             )
-            variants.append(
-                f'<div class="variant" data-variant="{rid}">'
-                f'<div class="device desktop"><div class="device-label">Desktop · {cid}</div>'
+            variant_cards.append(
+                f'<div class="lp-preview-card" data-variant="{rid}">'
+                f'<div class="device desktop"><div class="device-label">Desktop · {html.escape(cid)}</div>'
                 f'<iframe sandbox srcdoc="{html.escape(tmpl_d, quote=True)}"></iframe></div>'
-                f'<div class="device mobile"><div class="device-label">Mobile · {cid}</div>'
+                f'<div class="device mobile"><div class="device-label">Mobile · {html.escape(cid)}</div>'
                 f'<iframe sandbox srcdoc="{html.escape(tmpl_m, quote=True)}"></iframe></div>'
                 f'</div>'
             )
+            tab_labels.append(
+                f'<label for="{rid}" title="{layout_summary}">'
+                f'<span class="lp-tab-title">Вариант {i+1} — {short_name_html}</span>'
+                f'<span class="lp-tab-id" style="display:block;font-size:11px;color:#888;margin-top:2px;">'
+                f'{html.escape(cid)}{(" · " + meta_tags) if meta_tags else ""}'
+                f'</span>'
+                f'</label>'
+            )
             checked_rules.append(CHECKED_TPL.format(rid=rid))
+            checked_tab_rules.append(CHECKED_TAB_TPL.format(rid=rid))
 
+        # Block-level hint
         hint = hint_for_block(btype, patterns)
-        # Use last candidate's meta for style hint (first variant, position 0)
         last_meta: dict = {}
         if candidate_ids:
             last_block_dir = Path(args.library) / _category_for(args.library, candidate_ids[0]) / candidate_ids[0]
@@ -456,16 +555,97 @@ def main() -> None:
         if style_hint:
             hint_parts.append(f"🎨 Стиль: {style_hint}")
         hint_html = (
-            f'<div class="block-ux-hint">{"<br>".join(hint_parts)}</div>' if hint_parts else ''
+            f'<div class="lp-block-hint">{"<br>".join(hint_parts)}</div>' if hint_parts else ''
         )
+
+        # Pull a short description of THIS block from prototype for the header
+        proto_block = block
+        # "Что здесь" — конкретный текст первой смысловой строки прототипа
+        what_here_text = ""
+        for k in ("headline", "title", "subhead", "subtitle", "primary_cta", "cta_primary", "cta"):
+            v = proto_block.get(k)
+            if v and isinstance(v, str) and v.strip():
+                what_here_text = v.strip()[:200]
+                break
+
+        # "Контент" — список slot-полей которые есть в прото-блоке
+        SLOT_KEYS_RU = {
+            "headline": "заголовок",
+            "title": "заголовок",
+            "subhead": "подзаголовок",
+            "subtitle": "подзаголовок",
+            "cta_primary": "главная кнопка",
+            "primary_cta": "главная кнопка",
+            "cta_secondary": "вторая кнопка",
+            "cta": "кнопка",
+            "photo_slot": "фото",
+            "image": "изображение",
+            "items": "список пунктов",
+            "features": "список преимуществ",
+            "logos": "логотипы",
+            "form": "форма",
+            "questions": "вопросы",
+            "badges": "бейджи",
+            "stats": "цифры",
+            "testimonials": "отзывы",
+            "models": "модели",
+            "faq": "вопросы-ответы",
+            "cards": "карточки",
+            "metrics": "метрики",
+        }
+        content_slots: list[str] = []
+        for k in proto_block.keys():
+            if k in ("id", "type", "position", "quiz_role", "notes"):
+                continue
+            ru = SLOT_KEYS_RU.get(k)
+            if ru and ru not in content_slots:
+                content_slots.append(ru)
+        content_slots_str = ", ".join(content_slots) if content_slots else "—"
+
+        type_ru = BLOCK_TYPE_RU.get(btype, btype)
+        purpose_ru = BLOCK_PURPOSE_RU.get(btype, "—")
+
+        # Composite header — 4 строки: счётчик, тип, что здесь, цель, контент
+        what_here_html = (
+            f'<p class="lp-block-sub"><strong>Что здесь:</strong> {html.escape(what_here_text)}</p>'
+            if what_here_text else ""
+        )
+
+        # Footer: "shown N of M available <category> blocks" + links
+        first_cat = _category_for(args.library, candidate_ids[0]) if candidate_ids else btype
+        cat_total = category_counts.get(first_cat, len(candidate_ids))
+        shown_n = len(candidate_ids)
+        # Link from <project>/07a_WIREFRAME/wireframe.html to landing-system block-library:
+        # use file:// absolute path so the link works regardless of cwd.
+        cat_dir_abs = (Path(args.library) / first_cat).resolve()
+        cat_dir_url = f"file://{cat_dir_abs}"
+        footer_html = (
+            f'<footer class="lp-block-footer">'
+            f'<p>Показано {shown_n} из <strong>{cat_total}</strong> доступных '
+            f'<code>{html.escape(first_cat)}</code> блоков. Все блоки →&nbsp;'
+            f'<a href="{html.escape(cat_dir_url, quote=True)}" target="_blank">'
+            f'открыть папку библиотеки</a> или&nbsp;'
+            f'<a href="file:///tmp/block-library-gallery.html" target="_blank">'
+            f'посмотреть полную галерею</a>.</p>'
+            f'</footer>'
+        )
+
         section = (
-            f'<section class="block-slot" data-block-position="{position}">'
-            f'<fieldset class="variant-picker">'
-            f'<legend>Блок {position} — {btype} — выбери вариант:</legend>'
-            f'{"".join(radios)}'
-            f'</fieldset>'
+            f'<section class="lp-block-wrapper" data-block-position="{position}">'
+            f'<header class="lp-block-header">'
+            f'<div class="lp-block-counter" style="font-size:11px;letter-spacing:1px;color:#888;text-transform:uppercase;font-weight:600;">'
+            f'БЛОК {position} / {total_blocks}</div>'
+            f'<h2 style="margin:4px 0 8px;">{html.escape(type_ru)} '
+            f'<span class="lp-block-type-slug" style="font-size:13px;color:#aaa;font-weight:400;">({html.escape(btype)})</span></h2>'
+            f'{what_here_html}'
+            f'<p class="lp-block-sub"><strong>Цель блока:</strong> {html.escape(purpose_ru)}</p>'
+            f'<p class="lp-block-sub" style="color:#666;font-size:13px;"><strong>Контент:</strong> {html.escape(content_slots_str)}</p>'
+            f'</header>'
             f'{hint_html}'
-            f'<div class="variants-stage">{"".join(variants)}</div>'
+            f'{"".join(radios)}'
+            f'<div class="lp-preview-stage">{"".join(variant_cards)}</div>'
+            f'<nav class="lp-variant-tabs">{"".join(tab_labels)}</nav>'
+            f'{footer_html}'
             f'</section>'
         )
         blocks_html_parts.append(section)
@@ -487,7 +667,8 @@ def main() -> None:
         .replace("{{niche}}", niche)
         .replace("{{prototype_source}}", html.escape(prototype_source_text))
         .replace("{{blocks_html}}", "\n".join(blocks_html_parts))
-        .replace("{{checked_rules}}", "\n".join(checked_rules))
+        .replace("{{checked_rules}}", HIDDEN_RADIO_CSS + "\n" + "\n".join(checked_rules))
+        .replace("{{checked_tab_rules}}", "\n".join(checked_tab_rules))
         .replace("{{ux_patterns_html}}", ux_patterns_html)
         .replace("{{ux_rules_html}}", ux_rules_html)
         .replace("{{palettes_html}}", palettes_html)

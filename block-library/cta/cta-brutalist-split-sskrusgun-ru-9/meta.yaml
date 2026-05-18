@@ -1,0 +1,20 @@
+id: cta-brutalist-split-sskrusgun-ru-9
+category: cta
+display_name_ru: "Яркий красный лид-магнит с фото людей, короткой формой и контрастной черной кноп"
+description: "Яркий красный лид-магнит с фото людей, короткой формой и контрастной черной кнопкой."
+style_mood: brutalist
+layout_pattern: split
+ru_market: true
+has_animation: false
+niches_suitable:
+  - services
+  - education
+  - b2b-saas
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://sskrusgun.ru/"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

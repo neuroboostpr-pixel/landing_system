@@ -101,3 +101,35 @@ If the WordPress editor shows an empty block sidebar:
 1. Verify ACF plugin is active: WP admin → Plugins → Advanced Custom Fields → Active.
 2. Verify the ACF JSON was imported: WP admin → ACF → Field Groups → there should be groups named after each landing section (Hero, Pricing, etc.).
 3. If groups are missing, re-import: from the project folder run `bash skills/wp-cli-deployer/scripts/deploy-wordpress.sh <project-dir>` — the deploy script now imports ACF fields and fails loudly if it can not.
+
+## Wiki разметка (PR-F)
+
+Система ведёт три слоя wiki:
+
+- `landing-system/wiki/` — карта архитектуры (агенты, скиллы, команды, этапы)
+- `~/Lendings/<slug>/wiki/` — граф структуры конкретного лендинга
+- `~/Lendings/<slug>/memory/` — память сессий по этому проекту
+
+Хуки `SessionStart` / `SessionEnd` / `PreCompact` инжектят индексы и сохраняют уроки автоматически.
+
+### Bootstrap
+
+```bash
+bash scripts/wiki/bootstrap-system.sh    # ~30 мин, использует Claude Max подписку
+```
+
+### Миграция существующего проекта
+
+```bash
+bash scripts/migrate-add-wiki.sh ~/Lendings/<slug>
+```
+
+### Obsidian (опционально)
+
+Папки `wiki/` и `memory/` совместимы с [Obsidian](https://obsidian.md/) — можно открыть как vault и увидеть граф связей.
+
+Опционально для удобства:
+- [Obsidian Web Clipper](https://obsidian.md/clipper) — сохранять статьи прямо в `wiki/raw/` (если будешь компилировать внешние материалы)
+- Плагин **Local Images Plus** — скачивать картинки в vault а не оставлять ссылки
+
+Подробнее: [spec](superpowers/specs/2026-05-15-wiki-graph-markup-design.md), [plan](superpowers/plans/2026-05-15-wiki-graph-pr-f1-plan.md).

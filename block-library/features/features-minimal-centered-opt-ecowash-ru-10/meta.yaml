@@ -1,0 +1,20 @@
+id: features-minimal-centered-opt-ecowash-ru-10
+category: features
+display_name_ru: "Белый блок сегментации с вопросом и набором цветных тегов для разных типов клиен"
+description: "Белый блок сегментации с вопросом и набором цветных тегов для разных типов клиентов."
+style_mood: minimal
+layout_pattern: centered
+ru_market: true
+has_animation: false
+niches_suitable:
+  - ecommerce
+  - services
+  - education
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://opt.ecowash.ru/"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

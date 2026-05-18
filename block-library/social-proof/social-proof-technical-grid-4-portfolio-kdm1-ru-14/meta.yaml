@@ -1,0 +1,21 @@
+id: social-proof-technical-grid-4-portfolio-kdm1-ru-14
+category: social-proof
+display_name_ru: "Статистический блок с крупными процентами, короткими подписями и темной инфограф"
+description: "Статистический блок с крупными процентами, короткими подписями и темной инфографичной подачей."
+style_mood: technical
+layout_pattern: grid-4
+ru_market: true
+has_animation: false
+niches_suitable:
+  - services
+  - education
+  - b2b-saas
+  - tech
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://portfolio.kdm1.ru/upload/iblock/b31/i0qylig13hzo7ow4qcpia0qhtn3i87pk/Onlai_n_shkola-Dmitriya-Vykhodtseva.pdf"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

@@ -1,0 +1,53 @@
+<section class="lp-process-technical-cards" aria-labelledby="process-technical-cards-title">
+  <div class="lp-process-technical-cards__inner">
+    <div class="lp-process-technical-cards__header">
+      <span class="lp-process-technical-cards__eyebrow">{{slot:process-eyebrow}}</span>
+      <h2 class="lp-process-technical-cards__title" id="process-technical-cards-title">{{slot:process-title}}</h2>
+      <p class="lp-process-technical-cards__lead">{{slot:process-subhead}}</p>
+    </div>
+
+    <div class="lp-process-technical-cards__tabs" role="tablist" aria-label="{{slot:process-tabs-label}}">
+      <button class="lp-process-technical-cards__tab lp-process-technical-cards__tab--active" type="button" role="tab" aria-selected="true">
+        {{slot:tab-1-label}}
+      </button>
+      <button class="lp-process-technical-cards__tab" type="button" role="tab" aria-selected="false">
+        {{slot:tab-2-label}}
+      </button>
+      <button class="lp-process-technical-cards__tab" type="button" role="tab" aria-selected="false">
+        {{slot:tab-3-label}}
+      </button>
+    </div>
+
+    <div class="lp-process-technical-cards__stage">
+      <div class="lp-process-technical-cards__orb" aria-hidden="true"></div>
+
+      <ol class="lp-process-technical-cards__list">
+        <li class="lp-process-technical-cards__card">
+          <span class="lp-process-technical-cards__number">{{slot:step-1-number}}</span>
+          <h3 class="lp-process-technical-cards__card-title">{{slot:step-1-title}}</h3>
+          <p class="lp-process-technical-cards__card-text">{{slot:step-1-text}}</p>
+        </li>
+        <li class="lp-process-technical-cards__card">
+          <span class="lp-process-technical-cards__number">{{slot:step-2-number}}</span>
+          <h3 class="lp-process-technical-cards__card-title">{{slot:step-2-title}}</h3>
+          <p class="lp-process-technical-cards__card-text">{{slot:step-2-text}}</p>
+        </li>
+        <li class="lp-process-technical-cards__card">
+          <span class="lp-process-technical-cards__number">{{slot:step-3-number}}</span>
+          <h3 class="lp-process-technical-cards__card-title">{{slot:step-3-title}}</h3>
+          <p class="lp-process-technical-cards__card-text">{{slot:step-3-text}}</p>
+        </li>
+        <li class="lp-process-technical-cards__card">
+          <span class="lp-process-technical-cards__number">{{slot:step-4-number}}</span>
+          <h3 class="lp-process-technical-cards__card-title">{{slot:step-4-title}}</h3>
+          <p class="lp-process-technical-cards__card-text">{{slot:step-4-text}}</p>
+        </li>
+      </ol>
+    </div>
+
+    <div class="lp-process-technical-cards__actions">
+      <a class="lp-process-technical-cards__cta" href="{{slot:primary-cta-url}}">{{slot:primary-cta-label}}</a>
+      <a class="lp-process-technical-cards__link" href="{{slot:secondary-cta-url}}">{{slot:secondary-cta-label}}</a>
+    </div>
+  </div>
+</section>

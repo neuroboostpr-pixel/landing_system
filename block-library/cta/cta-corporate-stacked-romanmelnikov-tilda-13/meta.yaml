@@ -1,0 +1,20 @@
+id: cta-corporate-stacked-romanmelnikov-tilda-13
+category: cta
+display_name_ru: "Финальный призыв с крупным текстом, контактной строкой и компактной формой в рам"
+description: "Финальный призыв с крупным текстом, контактной строкой и компактной формой в рамке."
+style_mood: corporate
+layout_pattern: stacked
+ru_market: true
+has_animation: false
+niches_suitable:
+  - services
+  - b2b-saas
+  - education
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://romanmelnikov.tilda.ws/"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

@@ -1,0 +1,6 @@
+id: glass-00
+type: pattern
+name: Glass 0
+description: "Glassmorphism with backdrop-filter"
+imported_at: "2026-05-16"
+import_method: css-pattern-extraction

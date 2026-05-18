@@ -1,0 +1,20 @@
+id: process-cinematic-timeline-portfolio-kdm1-ru-5
+category: process
+display_name_ru: "Процессный блок с центральным персонажем и симметричными шагами по сторонам на с"
+description: "Процессный блок с центральным персонажем и симметричными шагами по сторонам на сеточном фоне."
+style_mood: cinematic
+layout_pattern: timeline
+ru_market: true
+has_animation: false
+niches_suitable:
+  - services
+  - tech
+  - education
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://portfolio.kdm1.ru/upload/iblock/c4c/ejaxky0hmu17f3t0aymzbkm7osq54n8x/Spetsodezhda-Siti.pdf"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

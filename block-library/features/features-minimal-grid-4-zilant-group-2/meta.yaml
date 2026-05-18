@@ -1,0 +1,20 @@
+id: features-minimal-grid-4-zilant-group-2
+category: features
+display_name_ru: "Узкая строка преимуществ с маленькими иконками отделяет первый экран от следующе"
+description: "Узкая строка преимуществ с маленькими иконками отделяет первый экран от следующего контента."
+style_mood: minimal
+layout_pattern: grid-4
+ru_market: true
+has_animation: false
+niches_suitable:
+  - services
+  - b2b-saas
+  - tech
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://zilant.group/"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

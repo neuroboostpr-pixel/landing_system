@@ -1,0 +1,6 @@
+id: animation-06-fadeout
+type: pattern
+name: Animation fadeOut
+description: "Keyframe animation: fadeOut"
+imported_at: "2026-05-16"
+import_method: css-pattern-extraction

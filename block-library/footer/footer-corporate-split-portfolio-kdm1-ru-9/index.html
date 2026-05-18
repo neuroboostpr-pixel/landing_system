@@ -1,0 +1,57 @@
+<footer class="lp-footer-corporate-split" aria-labelledby="lp-footer-corporate-split-title">
+  <div class="lp-footer-corporate-split__inner">
+    <div class="lp-footer-corporate-split__brand">
+      <a class="lp-footer-corporate-split__brand-link" href="{{slot:brand-link}}">
+        <span class="lp-footer-corporate-split__logo" aria-hidden="true">{{slot:brand-mark}}</span>
+        <span id="lp-footer-corporate-split-title" class="lp-footer-corporate-split__name">{{slot:brand-name}}</span>
+      </a>
+      <p class="lp-footer-corporate-split__text">{{slot:footer-description}}</p>
+      <div class="lp-footer-corporate-split__social" aria-label="{{slot:social-nav-label}}">
+        <a class="lp-footer-corporate-split__social-link" href="{{slot:social-link-1}}" aria-label="{{slot:social-label-1}}">
+          <span aria-hidden="true">{{slot:social-icon-1}}</span>
+        </a>
+        <a class="lp-footer-corporate-split__social-link" href="{{slot:social-link-2}}" aria-label="{{slot:social-label-2}}">
+          <span aria-hidden="true">{{slot:social-icon-2}}</span>
+        </a>
+        <a class="lp-footer-corporate-split__social-link" href="{{slot:social-link-3}}" aria-label="{{slot:social-label-3}}">
+          <span aria-hidden="true">{{slot:social-icon-3}}</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="lp-footer-corporate-split__content">
+      <nav class="lp-footer-corporate-split__nav" aria-label="{{slot:footer-nav-label}}">
+        <div class="lp-footer-corporate-split__nav-group">
+          <h3 class="lp-footer-corporate-split__group-title">{{slot:nav-title-1}}</h3>
+          <ul class="lp-footer-corporate-split__list">
+            <li><a href="{{slot:nav-link-1-url}}">{{slot:nav-link-1-label}}</a></li>
+            <li><a href="{{slot:nav-link-2-url}}">{{slot:nav-link-2-label}}</a></li>
+            <li><a href="{{slot:nav-link-3-url}}">{{slot:nav-link-3-label}}</a></li>
+          </ul>
+        </div>
+        <div class="lp-footer-corporate-split__nav-group">
+          <h3 class="lp-footer-corporate-split__group-title">{{slot:nav-title-2}}</h3>
+          <ul class="lp-footer-corporate-split__list">
+            <li><a href="{{slot:nav-link-4-url}}">{{slot:nav-link-4-label}}</a></li>
+            <li><a href="{{slot:nav-link-5-url}}">{{slot:nav-link-5-label}}</a></li>
+            <li><a href="{{slot:nav-link-6-url}}">{{slot:nav-link-6-label}}</a></li>
+          </ul>
+        </div>
+      </nav>
+
+      <address class="lp-footer-corporate-split__contacts">
+        <span class="lp-footer-corporate-split__contact-line">{{slot:contact-line-1}}</span>
+        <a class="lp-footer-corporate-split__contact-line" href="{{slot:contact-link-1}}">{{slot:contact-label-1}}</a>
+        <a class="lp-footer-corporate-split__contact-line" href="{{slot:contact-link-2}}">{{slot:contact-label-2}}</a>
+      </address>
+    </div>
+  </div>
+
+  <div class="lp-footer-corporate-split__bottom">
+    <span>{{slot:copyright}}</span>
+    <div class="lp-footer-corporate-split__legal">
+      <a href="{{slot:legal-link-1-url}}">{{slot:legal-link-1-label}}</a>
+      <a href="{{slot:legal-link-2-url}}">{{slot:legal-link-2-label}}</a>
+    </div>
+  </div>
+</footer>

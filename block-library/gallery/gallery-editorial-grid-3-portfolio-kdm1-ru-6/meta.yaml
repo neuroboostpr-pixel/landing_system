@@ -1,0 +1,20 @@
+id: gallery-editorial-grid-3-portfolio-kdm1-ru-6
+category: gallery
+display_name_ru: "Мозаика фотографий и текстовых карточек показывает продукт в деталях, цветах и р"
+description: "Мозаика фотографий и текстовых карточек показывает продукт в деталях, цветах и реальных сценариях."
+style_mood: editorial
+layout_pattern: grid-3
+ru_market: true
+has_animation: false
+niches_suitable:
+  - ecommerce
+  - luxury
+  - services
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://portfolio.kdm1.ru/upload/iblock/f94/slk0g7ub4mnpodwty9jl8iyrq4zk33uv/LCase.pdf"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

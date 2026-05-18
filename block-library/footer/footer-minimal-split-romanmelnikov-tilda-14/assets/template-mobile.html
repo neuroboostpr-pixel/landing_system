@@ -1,0 +1,145 @@
+<style>.lp-footer-minimal-split {
+  background: var(--lp-bg);
+  color: var(--lp-text);
+  font-family: var(--lp-font-body);
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md);
+}
+
+.lp-footer-minimal-split__inner {
+  display: grid;
+  gap: var(--lp-spacing-lg);
+  margin: 0 auto;
+  max-width: 1280px;
+  border-top: 1px solid var(--lp-border);
+  padding-top: var(--lp-spacing-lg);
+}
+
+.lp-footer-minimal-split__brand {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+}
+
+.lp-footer-minimal-split__brand-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lp-spacing-sm);
+  width: fit-content;
+  color: var(--lp-text);
+  text-decoration: none;
+}
+
+.lp-footer-minimal-split__mark {
+  width: 0.75rem;
+  height: 0.75rem;
+  border: 1px solid var(--lp-accent);
+  border-radius: var(--lp-radius);
+  background: transparent;
+}
+
+.lp-footer-minimal-split__name {
+  font-family: var(--lp-font-display);
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.lp-footer-minimal-split__summary {
+  max-width: 34rem;
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.lp-footer-minimal-split__meta {
+  display: grid;
+  gap: var(--lp-spacing-md);
+  color: var(--lp-text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.lp-footer-minimal-split__contacts,
+.lp-footer-minimal-split__legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lp-spacing-xs) var(--lp-spacing-md);
+}
+
+.lp-footer-minimal-split__contacts {
+  margin: 0;
+  font-style: normal;
+}
+
+.lp-footer-minimal-split__contact,
+.lp-footer-minimal-split__legal a {
+  color: var(--lp-text-muted);
+  text-decoration: none;
+}
+
+.lp-footer-minimal-split__brand-link:focus-visible,
+.lp-footer-minimal-split__contact:focus-visible,
+.lp-footer-minimal-split__legal a:focus-visible {
+  outline: 2px solid var(--lp-accent);
+  outline-offset: 0.25rem;
+  border-radius: var(--lp-radius);
+}
+
+.lp-footer-minimal-split__copyright {
+  margin: 0;
+  color: var(--lp-text-muted);
+}
+
+@media (min-width: 768px) {
+  .lp-footer-minimal-split {
+    padding: var(--lp-spacing-xl) var(--lp-spacing-lg);
+  }
+
+  .lp-footer-minimal-split__inner {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.7fr);
+    align-items: start;
+    gap: var(--lp-spacing-xl);
+  }
+
+  .lp-footer-minimal-split__meta {
+    justify-items: end;
+    text-align: right;
+  }
+
+  .lp-footer-minimal-split__contacts,
+  .lp-footer-minimal-split__legal {
+    justify-content: flex-end;
+  }
+}
+
+/* Forced mobile viewport for preview */
+@media (min-width: 0) {
+  body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
+}
+</style>
+<footer class="lp-footer-minimal-split" aria-labelledby="lp-footer-minimal-split-title">
+  <div class="lp-footer-minimal-split__inner">
+    <div class="lp-footer-minimal-split__brand">
+      <a class="lp-footer-minimal-split__brand-link" href="{{slot:brand-url}}" aria-label="{{slot:brand-aria-label}}">
+        <span class="lp-footer-minimal-split__mark" aria-hidden="true"></span>
+        <span id="lp-footer-minimal-split-title" class="lp-footer-minimal-split__name">{{slot:brand-name}}</span>
+      </a>
+      <p class="lp-footer-minimal-split__summary">{{slot:footer-summary}}</p>
+    </div>
+
+    <div class="lp-footer-minimal-split__meta">
+      <address class="lp-footer-minimal-split__contacts">
+        <a href="{{slot:phone-url}}" class="lp-footer-minimal-split__contact">{{slot:phone-label}}</a>
+        <a href="{{slot:email-url}}" class="lp-footer-minimal-split__contact">{{slot:email-label}}</a>
+        <span class="lp-footer-minimal-split__contact">{{slot:address-line}}</span>
+      </address>
+
+      <nav class="lp-footer-minimal-split__legal" aria-label="{{slot:legal-nav-label}}">
+        <a href="{{slot:privacy-url}}">{{slot:privacy-label}}</a>
+        <a href="{{slot:terms-url}}">{{slot:terms-label}}</a>
+        <a href="{{slot:cookies-url}}">{{slot:cookies-label}}</a>
+      </nav>
+
+      <p class="lp-footer-minimal-split__copyright">{{slot:copyright}}</p>
+    </div>
+  </div>
+</footer>

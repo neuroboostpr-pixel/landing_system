@@ -1,0 +1,19 @@
+id: features-minimal-grid-2-sskrusgun-ru-4
+category: features
+display_name_ru: "Лаконичная витрина категорий с крупными изолированными изображениями на светлом "
+description: "Лаконичная витрина категорий с крупными изолированными изображениями на светлом фоне."
+style_mood: minimal
+layout_pattern: grid-2
+ru_market: true
+has_animation: false
+niches_suitable:
+  - ecommerce
+  - services
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://sskrusgun.ru/"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

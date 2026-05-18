@@ -1,0 +1,20 @@
+id: social-proof-minimal-centered-project21993216-tild-3
+category: social-proof
+display_name_ru: "Секция отзывов или клиентов с заголовком и маленькими кнопками карусели."
+description: "Секция отзывов или клиентов с заголовком и маленькими кнопками карусели."
+style_mood: minimal
+layout_pattern: centered
+ru_market: true
+has_animation: false
+niches_suitable:
+  - services
+  - ecommerce
+  - education
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://project21993216.tilda.ws/"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

@@ -1,0 +1,44 @@
+<section class="lp-faq-corporate-stacked" aria-labelledby="lp-faq-corporate-stacked-title">
+  <div class="lp-faq-corporate-stacked__inner">
+    <div class="lp-faq-corporate-stacked__header">
+      <p class="lp-faq-corporate-stacked__eyebrow">{{slot:eyebrow}}</p>
+      <h2 class="lp-faq-corporate-stacked__title" id="lp-faq-corporate-stacked-title">{{slot:heading}}</h2>
+      <p class="lp-faq-corporate-stacked__subhead">{{slot:subhead}}</p>
+    </div>
+
+    <div class="lp-faq-corporate-stacked__list">
+      <details class="lp-faq-corporate-stacked__item" open>
+        <summary class="lp-faq-corporate-stacked__question">{{slot:question-1}}</summary>
+        <div class="lp-faq-corporate-stacked__answer">
+          <p>{{slot:answer-1}}</p>
+        </div>
+      </details>
+
+      <details class="lp-faq-corporate-stacked__item">
+        <summary class="lp-faq-corporate-stacked__question">{{slot:question-2}}</summary>
+        <div class="lp-faq-corporate-stacked__answer">
+          <p>{{slot:answer-2}}</p>
+        </div>
+      </details>
+
+      <details class="lp-faq-corporate-stacked__item">
+        <summary class="lp-faq-corporate-stacked__question">{{slot:question-3}}</summary>
+        <div class="lp-faq-corporate-stacked__answer">
+          <p>{{slot:answer-3}}</p>
+        </div>
+      </details>
+
+      <details class="lp-faq-corporate-stacked__item">
+        <summary class="lp-faq-corporate-stacked__question">{{slot:question-4}}</summary>
+        <div class="lp-faq-corporate-stacked__answer">
+          <p>{{slot:answer-4}}</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="lp-faq-corporate-stacked__footer">
+      <p class="lp-faq-corporate-stacked__note">{{slot:note}}</p>
+      <a class="lp-faq-corporate-stacked__cta" href="{{slot:cta-link}}">{{slot:cta-label}}</a>
+    </div>
+  </div>
+</section>

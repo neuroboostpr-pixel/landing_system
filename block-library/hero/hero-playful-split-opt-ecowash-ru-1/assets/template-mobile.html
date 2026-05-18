@@ -1,0 +1,294 @@
+<style>.lp-hero-playful-split {
+  background: var(--lp-bg);
+  color: var(--lp-text);
+  font-family: var(--lp-font-body);
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md);
+}
+
+.lp-hero-playful-split__inner {
+  display: grid;
+  gap: var(--lp-spacing-lg);
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.lp-hero-playful-split__content,
+.lp-hero-playful-split__side {
+  display: grid;
+  gap: var(--lp-spacing-md);
+}
+
+.lp-hero-playful-split__badge {
+  display: inline-flex;
+  width: fit-content;
+  margin: 0;
+  padding: var(--lp-spacing-xs) var(--lp-spacing-sm);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+  background: var(--lp-bg-alt);
+  color: var(--lp-primary);
+  font-weight: 700;
+}
+
+.lp-hero-playful-split__title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: clamp(2.4rem, 12vw, 4.8rem);
+  line-height: 0.95;
+  letter-spacing: 0;
+}
+
+.lp-hero-playful-split__subhead {
+  margin: 0;
+  max-width: 42rem;
+  color: var(--lp-text-muted);
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.lp-hero-playful-split__bullets {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lp-hero-playful-split__bullets li {
+  position: relative;
+  padding: var(--lp-spacing-sm) var(--lp-spacing-md) var(--lp-spacing-sm) var(--lp-spacing-lg);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+  background: var(--lp-bg-alt);
+  color: var(--lp-text);
+}
+
+.lp-hero-playful-split__bullets li::before {
+  content: "";
+  position: absolute;
+  left: var(--lp-spacing-sm);
+  top: 50%;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: var(--lp-radius-lg);
+  background: var(--lp-accent);
+  transform: translateY(-50%);
+}
+
+.lp-hero-playful-split__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lp-spacing-sm);
+}
+
+.lp-hero-playful-split__cta,
+.lp-hero-playful-split__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.25rem;
+  padding: var(--lp-spacing-sm) var(--lp-spacing-lg);
+  border-radius: var(--lp-radius-lg);
+  font-weight: 800;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.lp-hero-playful-split__cta--primary,
+.lp-hero-playful-split__submit {
+  border: 1px solid var(--lp-primary);
+  background: var(--lp-primary);
+  color: var(--lp-bg);
+}
+
+.lp-hero-playful-split__cta--secondary {
+  border: 1px solid var(--lp-border);
+  background: transparent;
+  color: var(--lp-text);
+}
+
+.lp-hero-playful-split__trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lp-spacing-sm);
+  color: var(--lp-text-muted);
+  font-size: 0.95rem;
+}
+
+.lp-hero-playful-split__trust span {
+  padding: var(--lp-spacing-xs) var(--lp-spacing-sm);
+  border-radius: var(--lp-radius);
+  background: var(--lp-bg-alt);
+}
+
+.lp-hero-playful-split__side {
+  align-content: start;
+}
+
+.lp-hero-playful-split__media {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  margin: 0;
+  padding: var(--lp-spacing-md);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+  background: var(--lp-bg-alt);
+}
+
+.lp-hero-playful-split__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--lp-radius);
+  object-fit: cover;
+}
+
+.lp-hero-playful-split__media figcaption {
+  color: var(--lp-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.lp-hero-playful-split__form {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  padding: var(--lp-spacing-md);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+  background: var(--lp-bg-alt);
+}
+
+.lp-hero-playful-split__form-title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 1.45rem;
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+
+.lp-hero-playful-split__field {
+  display: grid;
+  gap: var(--lp-spacing-xs);
+  color: var(--lp-text);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.lp-hero-playful-split__field input,
+.lp-hero-playful-split__field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+  background: var(--lp-bg);
+  color: var(--lp-text);
+  font: inherit;
+  padding: var(--lp-spacing-sm);
+}
+
+.lp-hero-playful-split__field textarea {
+  resize: vertical;
+}
+
+.lp-hero-playful-split__notice {
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.lp-hero-playful-split__cta:focus-visible,
+.lp-hero-playful-split__submit:focus-visible,
+.lp-hero-playful-split__field input:focus-visible,
+.lp-hero-playful-split__field textarea:focus-visible {
+  outline: 2px solid var(--lp-accent);
+  outline-offset: 3px;
+}
+
+@media (min-width: 768px) {
+  .lp-hero-playful-split {
+    padding: var(--lp-spacing-xl) var(--lp-spacing-lg);
+  }
+
+  .lp-hero-playful-split__inner {
+    grid-template-columns: minmax(0, 1.05fr) minmax(20rem, 0.95fr);
+    align-items: center;
+    gap: var(--lp-spacing-xl);
+  }
+
+  .lp-hero-playful-split__side {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .lp-hero-playful-split__form {
+    margin-top: calc(var(--lp-spacing-lg) * -1);
+    justify-self: end;
+    width: min(100%, 28rem);
+  }
+}
+
+/* Forced mobile viewport for preview */
+@media (min-width: 0) {
+  body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
+}
+</style>
+<section class="lp-hero-playful-split" aria-labelledby="lp-hero-playful-split-title">
+  <div class="lp-hero-playful-split__inner">
+    <div class="lp-hero-playful-split__content">
+      <p class="lp-hero-playful-split__badge">{{slot:hero-badge}}</p>
+      <h1 class="lp-hero-playful-split__title" id="lp-hero-playful-split-title">{{slot:hero-title}}</h1>
+      <p class="lp-hero-playful-split__subhead">{{slot:hero-subhead}}</p>
+
+      <ul class="lp-hero-playful-split__bullets" aria-label="{{slot:hero-bullets-label}}">
+        <li>{{slot:hero-bullet-1}}</li>
+        <li>{{slot:hero-bullet-2}}</li>
+        <li>{{slot:hero-bullet-3}}</li>
+      </ul>
+
+      <div class="lp-hero-playful-split__actions">
+        <a class="lp-hero-playful-split__cta lp-hero-playful-split__cta--primary" href="{{slot:primary-cta-url}}">
+          {{slot:primary-cta-label}}
+        </a>
+        <a class="lp-hero-playful-split__cta lp-hero-playful-split__cta--secondary" href="{{slot:secondary-cta-url}}">
+          {{slot:secondary-cta-label}}
+        </a>
+      </div>
+
+      <div class="lp-hero-playful-split__trust" aria-label="{{slot:trust-label}}">
+        <span>{{slot:trust-item-1}}</span>
+        <span>{{slot:trust-item-2}}</span>
+      </div>
+    </div>
+
+    <div class="lp-hero-playful-split__side">
+      <figure class="lp-hero-playful-split__media">
+        <picture>
+          <source media="(max-width: 767px)" srcset="{{slot:hero-image-mobile}}">
+          <img src="{{slot:hero-image}}" alt="{{slot:hero-image-alt}}" loading="lazy">
+        </picture>
+        <figcaption>{{slot:hero-image-caption}}</figcaption>
+      </figure>
+
+      <form class="lp-hero-playful-split__form" action="{{slot:form-action}}" method="post" aria-label="{{slot:form-label}}">
+        <h2 class="lp-hero-playful-split__form-title">{{slot:form-title}}</h2>
+        <label class="lp-hero-playful-split__field">
+          <span>{{slot:name-label}}</span>
+          <input type="text" name="{{slot:name-field-name}}" placeholder="{{slot:name-placeholder}}">
+        </label>
+        <label class="lp-hero-playful-split__field">
+          <span>{{slot:phone-label}}</span>
+          <input type="tel" name="{{slot:phone-field-name}}" placeholder="{{slot:phone-placeholder}}">
+        </label>
+        <label class="lp-hero-playful-split__field">
+          <span>{{slot:message-label}}</span>
+          <textarea name="{{slot:message-field-name}}" placeholder="{{slot:message-placeholder}}" rows="3"></textarea>
+        </label>
+        <button class="lp-hero-playful-split__submit" type="submit">{{slot:form-submit-label}}</button>
+        <p class="lp-hero-playful-split__notice">{{slot:form-notice}}</p>
+      </form>
+    </div>
+  </div>
+</section>

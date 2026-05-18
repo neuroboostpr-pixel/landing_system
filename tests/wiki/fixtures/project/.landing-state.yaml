@@ -1,0 +1,9 @@
+project: test-project
+created: "2026-05-15T10:00:00Z"
+schema_version: 2
+stages:
+  "00_brief": {status: n/a, timestamp: ""}
+  "07a_prototype": {status: approved, timestamp: "2026-05-15T10:30:00Z"}
+  "07b_wireframe": {status: approved, timestamp: "2026-05-15T11:00:00Z"}
+  "07c_composed": {status: in_progress, timestamp: ""}
+  "07d_photos": {status: locked, timestamp: ""}

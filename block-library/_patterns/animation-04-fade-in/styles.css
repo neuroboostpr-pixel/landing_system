@@ -1,0 +1,6 @@
+@keyframes fade-in {
+  /* extracted from real site */
+}
+.anim-04 {
+  animation: fade-in 1.2s ease forwards;
+}

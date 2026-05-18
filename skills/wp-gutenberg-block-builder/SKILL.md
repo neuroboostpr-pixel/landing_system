@@ -20,6 +20,27 @@ Before running any generator the project must have:
 4. `08_КОД/block-spec.yaml` filled in (см. шаблон `template/08_КОД/block-spec.example.yaml`).
    Generators 2–5 read this file; without it they fail fast with a clear message.
 
+## Block Library Loader (PR-Q)
+
+Для чтения блоков из `block-library/` всегда используй универсальный loader
+`scripts/block-loader.py` — он поддерживает оба формата хранения:
+
+- **Старый формат** (ru-* блоки): `<cat>/<id>/assets/template.html` + `template-mobile.html`
+- **Новый формат** (imported блоки): `<cat>/<id>/index.html` + `styles.css`
+
+```python
+import sys
+sys.path.insert(0, "scripts")
+from block_loader import load_block  # noqa
+
+b = load_block("hero/hero-cinematic-split-antidiler-karpov-ru-1")
+# b["html"], b["css"], b["mobile_html"], b["meta"]
+```
+
+Loader возвращает `None` если блока нет, или dict с ключами `html`, `css`
+(опционально), `mobile_html` (опционально), `meta`, `path`. Не зашивай прямые
+обращения к `assets/template.html` — это сломает чтение новых блоков.
+
 ## Pipeline (5 generators, dependency order)
 
 Run them all via the orchestrator:

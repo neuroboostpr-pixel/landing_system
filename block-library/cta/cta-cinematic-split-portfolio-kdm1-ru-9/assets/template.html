@@ -1,0 +1,159 @@
+<style>.lp-cta-cinematic-split {
+  color: var(--lp-text);
+  background: var(--lp-bg);
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md);
+  font-family: var(--lp-font-body);
+}
+
+.lp-cta-cinematic-split__inner {
+  display: grid;
+  gap: var(--lp-spacing-lg);
+  max-width: 1280px;
+  margin: 0 auto;
+  align-items: center;
+}
+
+.lp-cta-cinematic-split__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lp-spacing-md);
+}
+
+.lp-cta-cinematic-split__eyebrow {
+  margin: 0;
+  color: var(--lp-accent);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.lp-cta-cinematic-split__title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: clamp(2.25rem, 8vw, 5.5rem);
+  line-height: 0.95;
+  letter-spacing: 0;
+  max-width: 10em;
+}
+
+.lp-cta-cinematic-split__text {
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  max-width: 38rem;
+}
+
+.lp-cta-cinematic-split__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lp-spacing-sm);
+  padding-top: var(--lp-spacing-xs);
+}
+
+.lp-cta-cinematic-split__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.25rem;
+  padding: var(--lp-spacing-sm) var(--lp-spacing-lg);
+  border-radius: var(--lp-radius);
+  border: 1px solid var(--lp-border);
+  color: var(--lp-text);
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.lp-cta-cinematic-split__button--primary {
+  background: var(--lp-accent);
+  border-color: var(--lp-accent);
+  color: var(--lp-bg);
+}
+
+.lp-cta-cinematic-split__button--secondary {
+  background: transparent;
+  color: var(--lp-text);
+}
+
+.lp-cta-cinematic-split__media {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--lp-radius-lg);
+  background: var(--lp-bg-alt);
+  border: 1px solid var(--lp-border);
+}
+
+.lp-cta-cinematic-split__media picture,
+.lp-cta-cinematic-split__media img {
+  display: block;
+  width: 100%;
+}
+
+.lp-cta-cinematic-split__media img {
+  aspect-ratio: 4 / 3;
+  height: auto;
+  object-fit: cover;
+}
+
+.lp-cta-cinematic-split__caption {
+  position: absolute;
+  left: var(--lp-spacing-md);
+  right: var(--lp-spacing-md);
+  bottom: var(--lp-spacing-md);
+  color: var(--lp-text);
+  background: var(--lp-bg);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+  padding: var(--lp-spacing-sm);
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+@media (min-width: 768px) {
+  .lp-cta-cinematic-split {
+    padding: var(--lp-spacing-xl) var(--lp-spacing-lg);
+  }
+
+  .lp-cta-cinematic-split__inner {
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+    gap: var(--lp-spacing-xl);
+  }
+
+  .lp-cta-cinematic-split__text {
+    font-size: 1.1875rem;
+  }
+
+  .lp-cta-cinematic-split__media img {
+    aspect-ratio: 16 / 11;
+  }
+}
+</style>
+<section class="lp-cta-cinematic-split" aria-labelledby="cta-cinematic-split-title">
+  <div class="lp-cta-cinematic-split__inner">
+    <div class="lp-cta-cinematic-split__content">
+      <p class="lp-cta-cinematic-split__eyebrow">{{slot:eyebrow}}</p>
+      <h2 class="lp-cta-cinematic-split__title" id="cta-cinematic-split-title">{{slot:heading}}</h2>
+      <p class="lp-cta-cinematic-split__text">{{slot:subhead}}</p>
+      <div class="lp-cta-cinematic-split__actions">
+        <a class="lp-cta-cinematic-split__button lp-cta-cinematic-split__button--primary" href="{{slot:primary-cta-link}}">
+          {{slot:primary-cta-label}}
+        </a>
+        <a class="lp-cta-cinematic-split__button lp-cta-cinematic-split__button--secondary" href="{{slot:secondary-cta-link}}">
+          {{slot:secondary-cta-label}}
+        </a>
+      </div>
+    </div>
+
+    <figure class="lp-cta-cinematic-split__media">
+      <picture>
+        <source media="(max-width: 767px)" srcset="{{slot:cta-image-mobile}}">
+        <img src="{{slot:cta-image}}" alt="{{slot:cta-image-alt}}" loading="lazy">
+      </picture>
+      <figcaption class="lp-cta-cinematic-split__caption">{{slot:image-caption}}</figcaption>
+    </figure>
+  </div>
+</section>

@@ -1,0 +1,20 @@
+id: footer-corporate-grid-4-zilant-group-10
+category: footer
+display_name_ru: "Мягкий бирюзовый футер с логотипом, навигационными колонками и контактной информ"
+description: "Мягкий бирюзовый футер с логотипом, навигационными колонками и контактной информацией."
+style_mood: corporate
+layout_pattern: grid-4
+ru_market: true
+has_animation: false
+niches_suitable:
+  - services
+  - b2b-saas
+  - education
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://zilant.group/"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

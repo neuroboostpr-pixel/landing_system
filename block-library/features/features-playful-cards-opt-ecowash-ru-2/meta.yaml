@@ -1,0 +1,20 @@
+id: features-playful-cards-opt-ecowash-ru-2
+category: features
+display_name_ru: "Горизонтальная подборка карточек аудиторий с округлыми белыми плитками и маленьк"
+description: "Горизонтальная подборка карточек аудиторий с округлыми белыми плитками и маленькими иллюстрациями."
+style_mood: playful
+layout_pattern: cards
+ru_market: true
+has_animation: false
+niches_suitable:
+  - ecommerce
+  - services
+  - education
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://opt.ecowash.ru/"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

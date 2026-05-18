@@ -1,0 +1,202 @@
+<style>.lp-features-minimal-grid-2 {
+  background: var(--lp-bg);
+  color: var(--lp-text);
+  font-family: var(--lp-font-body);
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md);
+}
+
+.lp-features-minimal-grid-2__inner {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.lp-features-minimal-grid-2__header {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  max-width: 760px;
+  margin-bottom: var(--lp-spacing-lg);
+}
+
+.lp-features-minimal-grid-2__eyebrow {
+  margin: 0;
+  color: var(--lp-primary);
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.lp-features-minimal-grid-2__title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 2rem;
+  line-height: 1.1;
+}
+
+.lp-features-minimal-grid-2__subhead {
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.lp-features-minimal-grid-2__grid {
+  display: grid;
+  gap: var(--lp-spacing-md);
+}
+
+.lp-features-minimal-grid-2__card {
+  display: grid;
+  overflow: hidden;
+  background: var(--lp-bg-alt);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+}
+
+.lp-features-minimal-grid-2__media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+  padding: var(--lp-spacing-md);
+  background: var(--lp-bg);
+  border-bottom: 1px solid var(--lp-border);
+}
+
+.lp-features-minimal-grid-2__media img {
+  display: block;
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+  object-fit: contain;
+}
+
+.lp-features-minimal-grid-2__content {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  align-content: start;
+  padding: var(--lp-spacing-md);
+}
+
+.lp-features-minimal-grid-2__badge {
+  width: fit-content;
+  margin: 0;
+  padding: var(--lp-spacing-xs) var(--lp-spacing-sm);
+  color: var(--lp-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+}
+
+.lp-features-minimal-grid-2__card-title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 1.35rem;
+  line-height: 1.2;
+}
+
+.lp-features-minimal-grid-2__text {
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.lp-features-minimal-grid-2__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-height: 44px;
+  margin-top: var(--lp-spacing-xs);
+  padding: var(--lp-spacing-sm) var(--lp-spacing-md);
+  color: var(--lp-bg);
+  background: var(--lp-primary);
+  border: 1px solid var(--lp-primary);
+  border-radius: var(--lp-radius);
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.lp-features-minimal-grid-2__button:focus-visible {
+  outline: 2px solid var(--lp-accent);
+  outline-offset: 3px;
+}
+
+@media (min-width: 768px) {
+  .lp-features-minimal-grid-2 {
+    padding: var(--lp-spacing-xl) var(--lp-spacing-lg);
+  }
+
+  .lp-features-minimal-grid-2__header {
+    margin-bottom: var(--lp-spacing-xl);
+  }
+
+  .lp-features-minimal-grid-2__title {
+    font-size: 3rem;
+  }
+
+  .lp-features-minimal-grid-2__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--lp-spacing-lg);
+  }
+
+  .lp-features-minimal-grid-2__card {
+    grid-template-rows: auto 1fr;
+  }
+
+  .lp-features-minimal-grid-2__media {
+    min-height: 280px;
+    padding: var(--lp-spacing-lg);
+  }
+
+  .lp-features-minimal-grid-2__content {
+    padding: var(--lp-spacing-lg);
+  }
+}
+
+/* Forced mobile viewport for preview */
+@media (min-width: 0) {
+  body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
+}
+</style>
+<section class="lp-features-minimal-grid-2" aria-labelledby="lp-features-minimal-grid-2-title">
+  <div class="lp-features-minimal-grid-2__inner">
+    <div class="lp-features-minimal-grid-2__header">
+      <p class="lp-features-minimal-grid-2__eyebrow">{{slot:eyebrow}}</p>
+      <h2 class="lp-features-minimal-grid-2__title" id="lp-features-minimal-grid-2-title">{{slot:title}}</h2>
+      <p class="lp-features-minimal-grid-2__subhead">{{slot:subhead}}</p>
+    </div>
+
+    <div class="lp-features-minimal-grid-2__grid">
+      <article class="lp-features-minimal-grid-2__card">
+        <div class="lp-features-minimal-grid-2__media">
+          <img src="{{slot:feature-1-image}}" alt="{{slot:feature-1-image-alt}}" loading="lazy">
+        </div>
+        <div class="lp-features-minimal-grid-2__content">
+          <p class="lp-features-minimal-grid-2__badge">{{slot:feature-1-badge}}</p>
+          <h3 class="lp-features-minimal-grid-2__card-title">{{slot:feature-1-title}}</h3>
+          <p class="lp-features-minimal-grid-2__text">{{slot:feature-1-text}}</p>
+          <a class="lp-features-minimal-grid-2__button" href="{{slot:feature-1-link}}">{{slot:feature-1-cta}}</a>
+        </div>
+      </article>
+
+      <article class="lp-features-minimal-grid-2__card">
+        <div class="lp-features-minimal-grid-2__media">
+          <img src="{{slot:feature-2-image}}" alt="{{slot:feature-2-image-alt}}" loading="lazy">
+        </div>
+        <div class="lp-features-minimal-grid-2__content">
+          <p class="lp-features-minimal-grid-2__badge">{{slot:feature-2-badge}}</p>
+          <h3 class="lp-features-minimal-grid-2__card-title">{{slot:feature-2-title}}</h3>
+          <p class="lp-features-minimal-grid-2__text">{{slot:feature-2-text}}</p>
+          <a class="lp-features-minimal-grid-2__button" href="{{slot:feature-2-link}}">{{slot:feature-2-cta}}</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>

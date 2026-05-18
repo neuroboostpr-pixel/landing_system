@@ -1,0 +1,20 @@
+id: features-technical-grid-2-romanmelnikov-tilda-3
+category: features
+display_name_ru: "Контрастный проблемный блок с большим заголовком и двумя колонками аргументов."
+description: "Контрастный проблемный блок с большим заголовком и двумя колонками аргументов."
+style_mood: technical
+layout_pattern: grid-2
+ru_market: true
+has_animation: false
+niches_suitable:
+  - services
+  - b2b-saas
+  - education
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://romanmelnikov.tilda.ws/"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

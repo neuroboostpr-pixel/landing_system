@@ -17,6 +17,16 @@ description: Stage 07c (PR-B) photo pipeline — intake, AI-classification via c
 6. **preview** — `scripts/preview-render.py` собирает `photo-preview.html` для финального approve.
 7. **compose re-render** — `inject-content.py` (PR-A) читает `07c_PHOTOS/selections.yaml` и подставляет реальные фотки в `composed.html`.
 
+## Pipeline через codex (PR-I.a, обязательно с 2026-05-15)
+
+Каждое фото перед попаданием в composed.html проходит:
+1. `codex-process-photo.sh` — codex image_gen с brand параметрами
+2. `identity-check.py` — perceptual hash контроль (не репеинтнули ли объект)
+3. Resize в точные размеры слота
+4. Сохранение + manifest.json
+
+Cache: `07c_PHOTOS/.cache/<hash>.jpg`. Повторный прогон с теми же параметрами не зовёт codex.
+
 ## Identity-safe
 
 См. [`IDENTITY_SAFE.md`](IDENTITY_SAFE.md). Кратко: клиентские фото никогда не репеинтятся; AI-генерация лиц требует явного `ai_approved_by_user: true`.

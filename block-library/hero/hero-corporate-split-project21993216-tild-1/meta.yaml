@@ -1,0 +1,20 @@
+id: hero-corporate-split-project21993216-tild-1
+category: hero
+display_name_ru: "Первый экран с крупным заголовком, фото продукта слева и формой заявки с выгодой"
+description: "Первый экран с крупным заголовком, фото продукта слева и формой заявки с выгодой справа."
+style_mood: corporate
+layout_pattern: split
+ru_market: true
+has_animation: false
+niches_suitable:
+  - ecommerce
+  - services
+  - education
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://project21993216.tilda.ws/"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

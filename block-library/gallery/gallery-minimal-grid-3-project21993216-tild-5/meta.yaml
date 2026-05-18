@@ -1,0 +1,20 @@
+id: gallery-minimal-grid-3-project21993216-tild-5
+category: gallery
+display_name_ru: "Каталог из трех крупных карточек категорий с мягкими градиентными фонами."
+description: "Каталог из трех крупных карточек категорий с мягкими градиентными фонами."
+style_mood: minimal
+layout_pattern: grid-3
+ru_market: true
+has_animation: false
+niches_suitable:
+  - ecommerce
+  - services
+  - education
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://project21993216.tilda.ws/"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

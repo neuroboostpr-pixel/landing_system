@@ -1,0 +1,6 @@
+id: animation-04-fade-in
+type: pattern
+name: Animation fade-in
+description: "Keyframe animation: fade-in"
+imported_at: "2026-05-16"
+import_method: css-pattern-extraction

@@ -1,0 +1,19 @@
+id: hero-playful-split-opt-ecowash-ru-1
+category: hero
+display_name_ru: "Первый экран с крупным оффером, продуктовой 3D-визуализацией, буллетами и формой"
+description: "Первый экран с крупным оффером, продуктовой 3D-визуализацией, буллетами и формой заявки справа."
+style_mood: playful
+layout_pattern: split
+ru_market: true
+has_animation: false
+niches_suitable:
+  - ecommerce
+  - services
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://opt.ecowash.ru/"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

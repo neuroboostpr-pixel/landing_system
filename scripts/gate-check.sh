@@ -50,6 +50,41 @@ if [ -n "$required" ]; then
     echo "✅ Required prior stages approved: $required"
 fi
 
+# 1b. Soft-lock warning: для soft-этапов — если предыдущий по pipeline не approved
+PIPELINE_ORDER=(
+    "00_brief" "01_context" "01a_niche_analysis" "02_assets" "03_references"
+    "04_brand" "05_design" "06_stack" "07_content" "07a_prototype"
+    "07b_wireframe" "07c_composed" "07d_photos" "07e_visuals" "07f_composed_final"
+    "08_build" "10_qa" "09_deploy" "11_analytics" "12_seo"
+)
+
+stage_lock="$(yq -r ".stages.\"$stage\".lock // \"soft\"" "$GATES_YAML")"
+
+if [ "$stage_lock" = "soft" ] && [ -z "$required" ]; then
+    # Найти предыдущий по pipeline_order
+    prev=""
+    for i in "${!PIPELINE_ORDER[@]}"; do
+        if [ "${PIPELINE_ORDER[$i]}" = "$stage" ] && [ "$i" -gt 0 ]; then
+            prev="${PIPELINE_ORDER[$((i-1))]}"
+            break
+        fi
+    done
+    if [ -n "$prev" ]; then
+        prev_status="$(bash "$GATE_STATE" get "$project" "$prev" 2>/dev/null || echo "locked")"
+        if [ "$prev_status" != "approved" ] && [ "$prev_status" != "n/a" ]; then
+            echo "⚠️  Soft warning: предыдущий этап '$prev' имеет статус '$prev_status'."
+            if [ "$auto" != "1" ] && [ -t 0 ]; then
+                printf "   Точно зайти на '%s'? [y/N] " "$stage"
+                read -r ans
+                if [ "$ans" != "y" ] && [ "$ans" != "Y" ]; then
+                    echo "Отменено."
+                    exit 1
+                fi
+            fi
+        fi
+    fi
+fi
+
 # 2. Run hard_checks
 fail=0
 # Legacy bypass: skip all hard checks if .landing-state.yaml contains "legacy: true"
@@ -168,4 +203,12 @@ if [ "$approve" = "1" ]; then
 else
     bash "$GATE_STATE" set "$project" "$stage" "in_progress"
     echo "✅ Gate passed for $stage (status: in_progress)"
+fi
+
+# === PR-G: Auto-update project-graph wiki after successful gate-check ===
+if [ "${fail:-1}" = "0" ] && [ -d "$project/wiki" ]; then
+    project_slug="$(basename "$project")"
+    cd "$REPO_ROOT" && python3 -m scripts.wiki.compile \
+        --source-mode=project-graph --project="$project_slug" \
+        >/dev/null 2>&1 || true
 fi

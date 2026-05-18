@@ -121,6 +121,22 @@ bash scripts/migrate-template-readmes.sh ~/Lendings/<existing-project>
 
 См. [spec](docs/superpowers/specs/2026-05-14-pr-e-onboarding-wizard-design.md), [plan](docs/superpowers/plans/2026-05-14-pr-e-onboarding-wizard-plan.md).
 
+## Quality Standards (обязательные)
+
+Каноничные стандарты качества для каждого этапа лежат в `docs/standards/`.
+Они переопределяют любые «по умолчанию» решения агентов.
+
+| Этап | Стандарт | Verify-скрипт |
+|---|---|---|
+| 07b Compose | [`docs/standards/premium-07b-checklist.md`](docs/standards/premium-07b-checklist.md) | `scripts/verify-composed-premium.sh` |
+
+**Правило:** HARD GATE 07b не закрывается, пока `verify-composed-premium.sh`
+не вернёт exit 0. Если фичи отсутствуют — `block-composer` обязан доработать
+composed.html, а не предлагать «и так сойдёт».
+
+Эталон-референс — `~/Lendings/dubai-avto-liza/07b_COMPOSED/composed.html`
+(1757 строк, все 13 premium-фич, реальные фото).
+
 ## Block Library
 
 Общая библиотека wireframe-блоков: `block-library/`. См. `block-library/README.md`.
@@ -141,6 +157,7 @@ bash scripts/migrate-template-readmes.sh ~/Lendings/<existing-project>
 ## Структура
 
 - `template/` — каноничный шаблон проекта-лендинга (13 папок 00–12)
+- `scripts/wiki/` — wiki-компайлер (3 режима: system / project-graph / conversations). См. `scripts/wiki/README.md`.
 - `skills/` — наши специализированные скиллы
 - `agents/` — специализированные агенты
 - `.claude/commands/` — slash-команды
@@ -176,3 +193,49 @@ Master plan: [`docs/superpowers/plans/2026-05-03-landing-system-master-plan.md`]
 - `landing-orchestrator` НЕ пропускает этапы, даже если пользователь просит
 
 Подробнее: [`docs/SETUP.md`](docs/SETUP.md), [`docs/superpowers/specs/2026-05-04-stage-gates-onboarding-mcp-design.md`](docs/superpowers/specs/2026-05-04-stage-gates-onboarding-mcp-design.md)
+
+## Wiki Auto-Sync (правило)
+
+С 2026-05-15 системная wiki (`landing-system/wiki/`) **обязана быть синхронной с исходниками** в каждом коммите.
+
+**Источники wiki:**
+- `agents/*.md`                         — агенты pipeline
+- `skills/*/SKILL.md`                   — описания скиллов
+- `commands/*.md`                       — слеш-команды
+- `template/*/README.md`                — этапы шаблона
+- `docs/standards/*.md`                 — правила (premium checklist)
+- `block-library/*/*/meta.yaml`         — все блоки (200+)
+- `block-library/_patterns/*/meta.yaml` — премиум-эффекты (PR-S)
+- `block-library/_styles/*/README.md`   — style moods (PR-S)
+- `config/*.yaml`                       — stage-gates и др. конфиги (PR-S)
+- `docs/SETUP.md`                       — главная инструкция (PR-S)
+- `docs/superpowers/specs/*.md`         — спецификации PR'ов (PR-T)
+- `docs/superpowers/plans/*.md`         — планы реализации (PR-T)
+- `docs/ПЛАН-ДОРАБОТОК.md`, `docs/BACKLOG.md`, `docs/photo-selection-guide.md` — главные планы и гайды (PR-T)
+- `docs/superpowers/DOKRUTKA-system.md` — общий план доработок (PR-T)
+- `tests/*/README.md`                   — описания тест-групп (PR-T)
+- `presets/*.{md,yaml}`                 — пресеты (PR-T)
+- `scripts/**/*.doc.md`                 — авто-сгенерированные доки скриптов из docstring/header (PR-T, см. `scripts/generate-script-docs.py`)
+
+**Авто-механика (PR-G):**
+- `.githooks/post-commit` запускается после каждого `git commit`.
+- Если коммит трогает любой из источников выше → `compile.py --source-mode=system`.
+- Хэш-кэш скипает неизменённое (~0 сек если ничего не менялось).
+- Если wiki/ обновилась → авто-`chore(wiki)` коммит без `--verify`.
+
+**Установка хука на новой машине:**
+```bash
+bash scripts/install-git-hooks.sh
+```
+
+**Проверить что wiki в синхроне:**
+```bash
+bash scripts/check-wiki-sync.sh
+# exit 0 — синхрон, exit 1 — нужно пересобрать
+```
+
+**Если правило нарушено:**
+- Хук не установлен → `bash scripts/install-git-hooks.sh`
+- Wiki разошлась с источниками → `python3 -m scripts.wiki.compile --source-mode=system && git add wiki/ && git commit -m "chore(wiki): manual resync"`
+
+**Никогда не коммить изменения в `agents/`, `skills/`, `commands/`, `template/`, `docs/standards/` без свежей wiki.** Хук это делает автоматом, но если хук отключён или упал — пересобирай руками.

@@ -1,0 +1,215 @@
+<style>.lp-faq-minimal-stacked {
+  background: var(--lp-bg);
+  color: var(--lp-text);
+  font-family: var(--lp-font-body);
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md);
+}
+
+.lp-faq-minimal-stacked__inner {
+  display: grid;
+  gap: var(--lp-spacing-lg);
+  margin: 0 auto;
+  max-width: 960px;
+}
+
+.lp-faq-minimal-stacked__header {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+}
+
+.lp-faq-minimal-stacked__eyebrow {
+  color: var(--lp-accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.lp-faq-minimal-stacked__title {
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: clamp(2rem, 5vw, 3.75rem);
+  line-height: 1.05;
+  margin: 0;
+}
+
+.lp-faq-minimal-stacked__subhead {
+  color: var(--lp-text-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 680px;
+}
+
+.lp-faq-minimal-stacked__list {
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+  overflow: hidden;
+}
+
+.lp-faq-minimal-stacked__item {
+  background: var(--lp-bg);
+  border-bottom: 1px solid var(--lp-border);
+}
+
+.lp-faq-minimal-stacked__item:last-child {
+  border-bottom: 0;
+}
+
+.lp-faq-minimal-stacked__question {
+  align-items: center;
+  color: var(--lp-text);
+  cursor: pointer;
+  display: grid;
+  font-family: var(--lp-font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  gap: var(--lp-spacing-md);
+  grid-template-columns: 1fr auto;
+  line-height: 1.35;
+  list-style: none;
+  padding: var(--lp-spacing-md);
+}
+
+.lp-faq-minimal-stacked__question::-webkit-details-marker {
+  display: none;
+}
+
+.lp-faq-minimal-stacked__question:focus-visible {
+  outline: 2px solid var(--lp-accent);
+  outline-offset: -2px;
+}
+
+.lp-faq-minimal-stacked__icon {
+  align-items: center;
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+  color: var(--lp-primary);
+  display: inline-flex;
+  flex: 0 0 auto;
+  height: 2rem;
+  justify-content: center;
+  width: 2rem;
+}
+
+.lp-faq-minimal-stacked__icon::before {
+  border: solid currentColor;
+  border-width: 0 2px 2px 0;
+  content: "";
+  display: block;
+  height: 0.45rem;
+  transform: rotate(45deg);
+  width: 0.45rem;
+}
+
+.lp-faq-minimal-stacked__item[open] .lp-faq-minimal-stacked__question {
+  background: var(--lp-bg-alt);
+}
+
+.lp-faq-minimal-stacked__item[open] .lp-faq-minimal-stacked__icon {
+  background: var(--lp-primary);
+  border-color: var(--lp-primary);
+  color: white;
+}
+
+.lp-faq-minimal-stacked__item[open] .lp-faq-minimal-stacked__icon::before {
+  transform: rotate(225deg);
+}
+
+.lp-faq-minimal-stacked__answer {
+  color: var(--lp-text-muted);
+  padding: 0 var(--lp-spacing-md) var(--lp-spacing-md);
+}
+
+.lp-faq-minimal-stacked__answer p {
+  font-size: 0.98rem;
+  line-height: 1.65;
+  margin: 0;
+  max-width: 760px;
+}
+
+@media (min-width: 768px) {
+  .lp-faq-minimal-stacked {
+    padding: var(--lp-spacing-xl) var(--lp-spacing-lg);
+  }
+
+  .lp-faq-minimal-stacked__inner {
+    gap: var(--lp-spacing-xl);
+  }
+
+  .lp-faq-minimal-stacked__header {
+    max-width: 780px;
+  }
+
+  .lp-faq-minimal-stacked__question {
+    font-size: 1.08rem;
+    padding: var(--lp-spacing-md) var(--lp-spacing-lg);
+  }
+
+  .lp-faq-minimal-stacked__answer {
+    padding: 0 var(--lp-spacing-lg) var(--lp-spacing-lg);
+  }
+}
+</style>
+<section class="lp-faq-minimal-stacked" aria-labelledby="faq-minimal-stacked-title">
+  <div class="lp-faq-minimal-stacked__inner">
+    <div class="lp-faq-minimal-stacked__header">
+      <p class="lp-faq-minimal-stacked__eyebrow">{{slot:eyebrow}}</p>
+      <h2 class="lp-faq-minimal-stacked__title" id="faq-minimal-stacked-title">{{slot:heading}}</h2>
+      <p class="lp-faq-minimal-stacked__subhead">{{slot:subhead}}</p>
+    </div>
+
+    <div class="lp-faq-minimal-stacked__list">
+      <details class="lp-faq-minimal-stacked__item">
+        <summary class="lp-faq-minimal-stacked__question">
+          <span>{{slot:question-1}}</span>
+          <span class="lp-faq-minimal-stacked__icon" aria-hidden="true"></span>
+        </summary>
+        <div class="lp-faq-minimal-stacked__answer">
+          <p>{{slot:answer-1}}</p>
+        </div>
+      </details>
+
+      <details class="lp-faq-minimal-stacked__item">
+        <summary class="lp-faq-minimal-stacked__question">
+          <span>{{slot:question-2}}</span>
+          <span class="lp-faq-minimal-stacked__icon" aria-hidden="true"></span>
+        </summary>
+        <div class="lp-faq-minimal-stacked__answer">
+          <p>{{slot:answer-2}}</p>
+        </div>
+      </details>
+
+      <details class="lp-faq-minimal-stacked__item">
+        <summary class="lp-faq-minimal-stacked__question">
+          <span>{{slot:question-3}}</span>
+          <span class="lp-faq-minimal-stacked__icon" aria-hidden="true"></span>
+        </summary>
+        <div class="lp-faq-minimal-stacked__answer">
+          <p>{{slot:answer-3}}</p>
+        </div>
+      </details>
+
+      <details class="lp-faq-minimal-stacked__item">
+        <summary class="lp-faq-minimal-stacked__question">
+          <span>{{slot:question-4}}</span>
+          <span class="lp-faq-minimal-stacked__icon" aria-hidden="true"></span>
+        </summary>
+        <div class="lp-faq-minimal-stacked__answer">
+          <p>{{slot:answer-4}}</p>
+        </div>
+      </details>
+
+      <details class="lp-faq-minimal-stacked__item">
+        <summary class="lp-faq-minimal-stacked__question">
+          <span>{{slot:question-5}}</span>
+          <span class="lp-faq-minimal-stacked__icon" aria-hidden="true"></span>
+        </summary>
+        <div class="lp-faq-minimal-stacked__answer">
+          <p>{{slot:answer-5}}</p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>

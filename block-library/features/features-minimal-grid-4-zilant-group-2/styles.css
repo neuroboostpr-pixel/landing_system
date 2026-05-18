@@ -1,0 +1,114 @@
+.lp-features-minimal-grid-4 {
+  background: var(--lp-bg-alt);
+  color: var(--lp-text);
+  font-family: var(--lp-font-body);
+  padding: var(--lp-spacing-lg) var(--lp-spacing-md);
+}
+
+.lp-features-minimal-grid-4__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  gap: var(--lp-spacing-md);
+}
+
+.lp-features-minimal-grid-4__header {
+  display: grid;
+  gap: var(--lp-spacing-xs);
+}
+
+.lp-features-minimal-grid-4__eyebrow {
+  margin: 0;
+  color: var(--lp-accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.lp-features-minimal-grid-4__title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: clamp(1.375rem, 4vw, 2rem);
+  line-height: 1.1;
+}
+
+.lp-features-minimal-grid-4__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--lp-spacing-sm);
+}
+
+.lp-features-minimal-grid-4__item {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: var(--lp-spacing-sm);
+  padding: var(--lp-spacing-sm);
+  background: var(--lp-bg);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+}
+
+.lp-features-minimal-grid-4__icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--lp-primary);
+  border-radius: var(--lp-radius);
+  overflow: hidden;
+}
+
+.lp-features-minimal-grid-4__icon img {
+  width: 1.125rem;
+  height: 1.125rem;
+  object-fit: contain;
+  display: block;
+}
+
+.lp-features-minimal-grid-4__content {
+  min-width: 0;
+  display: grid;
+  gap: var(--lp-spacing-xs);
+}
+
+.lp-features-minimal-grid-4__item-title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.lp-features-minimal-grid-4__text {
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+@media (min-width: 768px) {
+  .lp-features-minimal-grid-4 {
+    padding: var(--lp-spacing-xl) var(--lp-spacing-lg);
+  }
+
+  .lp-features-minimal-grid-4__inner {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 2fr);
+    align-items: center;
+    gap: var(--lp-spacing-lg);
+  }
+
+  .lp-features-minimal-grid-4__list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .lp-features-minimal-grid-4__item {
+    min-height: 100%;
+  }
+}

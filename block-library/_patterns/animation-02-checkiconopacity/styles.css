@@ -1,0 +1,6 @@
+@keyframes checkIconOpacity {
+  /* extracted from real site */
+}
+.anim-02 {
+  animation: checkIconOpacity 1.2s ease forwards;
+}

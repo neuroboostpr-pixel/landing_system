@@ -1,0 +1,20 @@
+id: hero-technical-split-portfolio-kdm1-ru-1
+category: hero
+display_name_ru: "Яркий первый экран с крупным заголовком слева и большим предметным фото продукта"
+description: "Яркий первый экран с крупным заголовком слева и большим предметным фото продукта справа."
+style_mood: technical
+layout_pattern: split
+ru_market: true
+has_animation: false
+niches_suitable:
+  - ecommerce
+  - services
+  - tech
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://portfolio.kdm1.ru/upload/iblock/c4c/ejaxky0hmu17f3t0aymzbkm7osq54n8x/Spetsodezhda-Siti.pdf"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

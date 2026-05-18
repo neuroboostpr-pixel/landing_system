@@ -1,0 +1,33 @@
+<section class="lp-hero-corporate-split" aria-labelledby="lp-hero-corporate-split-title">
+  <div class="lp-hero-corporate-split__inner">
+    <div class="lp-hero-corporate-split__content">
+      <p class="lp-hero-corporate-split__eyebrow">{{slot:eyebrow}}</p>
+      <h1 class="lp-hero-corporate-split__title" id="lp-hero-corporate-split-title">{{slot:heading}}</h1>
+      <p class="lp-hero-corporate-split__subhead">{{slot:subhead}}</p>
+      <div class="lp-hero-corporate-split__actions" aria-label="{{slot:actions-label}}">
+        <a class="lp-hero-corporate-split__button lp-hero-corporate-split__button--primary" href="{{slot:primary-cta-url}}">
+          {{slot:primary-cta-label}}
+        </a>
+        <a class="lp-hero-corporate-split__button lp-hero-corporate-split__button--secondary" href="{{slot:secondary-cta-url}}">
+          {{slot:secondary-cta-label}}
+        </a>
+      </div>
+      <ul class="lp-hero-corporate-split__badges" aria-label="{{slot:badges-label}}">
+        <li class="lp-hero-corporate-split__badge">{{slot:badge-1}}</li>
+        <li class="lp-hero-corporate-split__badge">{{slot:badge-2}}</li>
+        <li class="lp-hero-corporate-split__badge">{{slot:badge-3}}</li>
+      </ul>
+    </div>
+
+    <div class="lp-hero-corporate-split__media" aria-label="{{slot:media-label}}">
+      <picture>
+        <source media="(max-width: 767px)" srcset="{{slot:hero-image-mobile}}">
+        <img src="{{slot:hero-image}}" alt="{{slot:hero-image-alt}}" loading="lazy">
+      </picture>
+      <div class="lp-hero-corporate-split__stat">
+        <strong>{{slot:stat-value}}</strong>
+        <span>{{slot:stat-label}}</span>
+      </div>
+    </div>
+  </div>
+</section>

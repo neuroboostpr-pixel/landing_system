@@ -1,0 +1,33 @@
+<section class="lp-cta-minimal-split" aria-labelledby="lp-cta-minimal-split-title">
+  <div class="lp-cta-minimal-split__inner">
+    <div class="lp-cta-minimal-split__media">
+      <img src="{{slot:cta-image}}" alt="{{slot:cta-image-alt}}" loading="lazy">
+    </div>
+
+    <div class="lp-cta-minimal-split__card">
+      <p class="lp-cta-minimal-split__eyebrow">{{slot:cta-eyebrow}}</p>
+      <h2 class="lp-cta-minimal-split__title" id="lp-cta-minimal-split-title">{{slot:cta-heading}}</h2>
+      <p class="lp-cta-minimal-split__text">{{slot:cta-subhead}}</p>
+
+      <form class="lp-cta-minimal-split__form" action="{{slot:form-action}}" method="post">
+        <div class="lp-cta-minimal-split__field">
+          <label for="lp-cta-minimal-split-name">{{slot:name-label}}</label>
+          <input id="lp-cta-minimal-split-name" name="name" type="text" placeholder="{{slot:name-placeholder}}">
+        </div>
+
+        <div class="lp-cta-minimal-split__field">
+          <label for="lp-cta-minimal-split-contact">{{slot:contact-label}}</label>
+          <input id="lp-cta-minimal-split-contact" name="contact" type="text" placeholder="{{slot:contact-placeholder}}">
+        </div>
+
+        <div class="lp-cta-minimal-split__field">
+          <label for="lp-cta-minimal-split-message">{{slot:message-label}}</label>
+          <textarea id="lp-cta-minimal-split-message" name="message" rows="4" placeholder="{{slot:message-placeholder}}"></textarea>
+        </div>
+
+        <button class="lp-cta-minimal-split__button" type="submit">{{slot:submit-label}}</button>
+        <p class="lp-cta-minimal-split__note">{{slot:form-note}}</p>
+      </form>
+    </div>
+  </div>
+</section>

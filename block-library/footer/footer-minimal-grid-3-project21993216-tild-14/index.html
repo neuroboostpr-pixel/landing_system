@@ -1,0 +1,40 @@
+<footer class="lp-footer-minimal-grid-3" aria-labelledby="lp-footer-minimal-grid-3-title">
+  <div class="lp-footer-minimal-grid-3__inner">
+    <div class="lp-footer-minimal-grid-3__brand">
+      <a class="lp-footer-minimal-grid-3__logo" href="{{slot:brand-link}}" aria-label="{{slot:brand-aria-label}}">
+        <img src="{{slot:brand-logo}}" alt="{{slot:brand-logo-alt}}" loading="lazy">
+      </a>
+      <h2 class="lp-footer-minimal-grid-3__title" id="lp-footer-minimal-grid-3-title">{{slot:footer-title}}</h2>
+      <p class="lp-footer-minimal-grid-3__text">{{slot:footer-description}}</p>
+      <a class="lp-footer-minimal-grid-3__button" href="{{slot:primary-cta-link}}">{{slot:primary-cta-label}}</a>
+    </div>
+
+    <nav class="lp-footer-minimal-grid-3__nav" aria-label="{{slot:nav-aria-label}}">
+      <h3 class="lp-footer-minimal-grid-3__heading">{{slot:nav-title}}</h3>
+      <ul class="lp-footer-minimal-grid-3__list">
+        <li><a href="{{slot:nav-link-1-url}}">{{slot:nav-link-1-label}}</a></li>
+        <li><a href="{{slot:nav-link-2-url}}">{{slot:nav-link-2-label}}</a></li>
+        <li><a href="{{slot:nav-link-3-url}}">{{slot:nav-link-3-label}}</a></li>
+        <li><a href="{{slot:nav-link-4-url}}">{{slot:nav-link-4-label}}</a></li>
+      </ul>
+    </nav>
+
+    <address class="lp-footer-minimal-grid-3__contacts">
+      <h3 class="lp-footer-minimal-grid-3__heading">{{slot:contacts-title}}</h3>
+      <ul class="lp-footer-minimal-grid-3__list">
+        <li><a href="{{slot:contact-link-1-url}}">{{slot:contact-link-1-label}}</a></li>
+        <li><a href="{{slot:contact-link-2-url}}">{{slot:contact-link-2-label}}</a></li>
+        <li>{{slot:contact-line-1}}</li>
+        <li>{{slot:contact-line-2}}</li>
+      </ul>
+    </address>
+  </div>
+
+  <div class="lp-footer-minimal-grid-3__bottom">
+    <p>{{slot:legal-text}}</p>
+    <nav class="lp-footer-minimal-grid-3__legal" aria-label="{{slot:legal-nav-aria-label}}">
+      <a href="{{slot:legal-link-1-url}}">{{slot:legal-link-1-label}}</a>
+      <a href="{{slot:legal-link-2-url}}">{{slot:legal-link-2-label}}</a>
+    </nav>
+  </div>
+</footer>

@@ -1,0 +1,36 @@
+<section class="lp-cta-technical-centered" aria-labelledby="lp-cta-technical-centered-title">
+  <div class="lp-cta-technical-centered__inner">
+    <div class="lp-cta-technical-centered__badge">
+      {{slot:badge-text}}
+    </div>
+
+    <div class="lp-cta-technical-centered__content">
+      <h2 class="lp-cta-technical-centered__title" id="lp-cta-technical-centered-title">
+        {{slot:heading}}
+      </h2>
+      <p class="lp-cta-technical-centered__text">
+        {{slot:subhead}}
+      </p>
+    </div>
+
+    <form class="lp-cta-technical-centered__form" action="{{slot:form-action}}" method="post">
+      <label class="lp-cta-technical-centered__field">
+        <span class="lp-cta-technical-centered__label">{{slot:field-label}}</span>
+        <input
+          class="lp-cta-technical-centered__input"
+          type="text"
+          name="{{slot:field-name}}"
+          placeholder="{{slot:field-placeholder}}"
+          autocomplete="off"
+        >
+      </label>
+      <button class="lp-cta-technical-centered__button" type="submit">
+        {{slot:cta-label}}
+      </button>
+    </form>
+
+    <p class="lp-cta-technical-centered__note">
+      {{slot:helper-text}}
+    </p>
+  </div>
+</section>

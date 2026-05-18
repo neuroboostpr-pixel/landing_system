@@ -1,0 +1,159 @@
+<style>.lp-header-minimal-split {
+  color: var(--lp-text);
+  background: var(--lp-bg);
+  border-bottom: 1px solid var(--lp-border);
+  font-family: var(--lp-font-body);
+}
+
+.lp-header-minimal-split__inner {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: var(--lp-spacing-md);
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--lp-spacing-sm) var(--lp-spacing-md);
+}
+
+.lp-header-minimal-split__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lp-spacing-sm);
+  min-width: 0;
+  color: var(--lp-text);
+  text-decoration: none;
+}
+
+.lp-header-minimal-split__logo {
+  width: 2.25rem;
+  height: 2.25rem;
+  flex: 0 0 auto;
+  border-radius: var(--lp-radius);
+  object-fit: contain;
+  background: var(--lp-bg-alt);
+}
+
+.lp-header-minimal-split__brand-text {
+  overflow: hidden;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lp-header-minimal-split__nav {
+  display: none;
+}
+
+.lp-header-minimal-split__actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--lp-spacing-xs);
+}
+
+.lp-header-minimal-split__contact {
+  display: none;
+}
+
+.lp-header-minimal-split__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.5rem;
+  padding: var(--lp-spacing-xs) var(--lp-spacing-md);
+  border-radius: var(--lp-radius);
+  background: var(--lp-accent);
+  color: var(--lp-bg);
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.1;
+  text-align: center;
+  text-decoration: none;
+}
+
+.lp-header-minimal-split__button:focus-visible,
+.lp-header-minimal-split__nav-link:focus-visible,
+.lp-header-minimal-split__contact:focus-visible,
+.lp-header-minimal-split__brand:focus-visible {
+  outline: 2px solid var(--lp-primary);
+  outline-offset: 3px;
+}
+
+@media (min-width: 768px) {
+  .lp-header-minimal-split__inner {
+    grid-template-columns: auto 1fr auto;
+    padding: var(--lp-spacing-md) var(--lp-spacing-xl);
+  }
+
+  .lp-header-minimal-split__nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--lp-spacing-lg);
+    min-width: 0;
+  }
+
+  .lp-header-minimal-split__nav-link {
+    color: var(--lp-text-muted);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none;
+  }
+
+  .lp-header-minimal-split__nav-link:hover {
+    color: var(--lp-primary);
+  }
+
+  .lp-header-minimal-split__actions {
+    gap: var(--lp-spacing-sm);
+  }
+
+  .lp-header-minimal-split__contact {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--lp-text);
+    font-size: 0.9375rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .lp-header-minimal-split__button {
+    min-height: 2.75rem;
+    padding: var(--lp-spacing-sm) var(--lp-spacing-lg);
+  }
+}
+
+/* Forced mobile viewport for preview */
+@media (min-width: 0) {
+  body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
+}
+</style>
+<header class="lp-header-minimal-split" aria-label="{{slot:header-aria-label}}">
+  <div class="lp-header-minimal-split__inner">
+    <a class="lp-header-minimal-split__brand" href="{{slot:brand-link}}" aria-label="{{slot:brand-aria-label}}">
+      <img class="lp-header-minimal-split__logo" src="{{slot:brand-logo}}" alt="{{slot:brand-logo-alt}}" loading="lazy">
+      <span class="lp-header-minimal-split__brand-text">{{slot:brand-name}}</span>
+    </a>
+
+    <nav class="lp-header-minimal-split__nav" aria-label="{{slot:nav-aria-label}}">
+      <a class="lp-header-minimal-split__nav-link" href="{{slot:nav-link-1-url}}">{{slot:nav-link-1-label}}</a>
+      <a class="lp-header-minimal-split__nav-link" href="{{slot:nav-link-2-url}}">{{slot:nav-link-2-label}}</a>
+      <a class="lp-header-minimal-split__nav-link" href="{{slot:nav-link-3-url}}">{{slot:nav-link-3-label}}</a>
+      <a class="lp-header-minimal-split__nav-link" href="{{slot:nav-link-4-url}}">{{slot:nav-link-4-label}}</a>
+    </nav>
+
+    <div class="lp-header-minimal-split__actions">
+      <a class="lp-header-minimal-split__contact" href="{{slot:contact-url}}">{{slot:contact-label}}</a>
+      <a class="lp-header-minimal-split__button" href="{{slot:cta-url}}">{{slot:cta-label}}</a>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,21 @@
+id: features-technical-grid-3-portfolio-kdm1-ru-2
+category: features
+display_name_ru: "Темная секция с крупным заголовком и сеткой проблемных карточек с минимальными м"
+description: "Темная секция с крупным заголовком и сеткой проблемных карточек с минимальными маркерами."
+style_mood: technical
+layout_pattern: grid-3
+ru_market: true
+has_animation: false
+niches_suitable:
+  - services
+  - b2b-saas
+  - education
+  - tech
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://portfolio.kdm1.ru/upload/iblock/b31/i0qylig13hzo7ow4qcpia0qhtn3i87pk/Onlai_n_shkola-Dmitriya-Vykhodtseva.pdf"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation

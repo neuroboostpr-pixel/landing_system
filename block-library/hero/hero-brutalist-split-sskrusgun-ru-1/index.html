@@ -1,0 +1,26 @@
+<section class="lp-hero-brutalist-split" aria-labelledby="lp-hero-brutalist-split-title">
+  <div class="lp-hero-brutalist-split__content">
+    <p class="lp-hero-brutalist-split__eyebrow">{{slot:eyebrow}}</p>
+    <h1 class="lp-hero-brutalist-split__title" id="lp-hero-brutalist-split-title">{{slot:title}}</h1>
+    <p class="lp-hero-brutalist-split__subhead">{{slot:subhead}}</p>
+    <div class="lp-hero-brutalist-split__actions">
+      <a class="lp-hero-brutalist-split__button lp-hero-brutalist-split__button--primary" href="{{slot:primary-cta-link}}">
+        {{slot:primary-cta-label}}
+      </a>
+      <a class="lp-hero-brutalist-split__button lp-hero-brutalist-split__button--secondary" href="{{slot:secondary-cta-link}}">
+        {{slot:secondary-cta-label}}
+      </a>
+    </div>
+    <ul class="lp-hero-brutalist-split__badges" aria-label="{{slot:badges-label}}">
+      <li>{{slot:badge-1}}</li>
+      <li>{{slot:badge-2}}</li>
+      <li>{{slot:badge-3}}</li>
+    </ul>
+  </div>
+  <div class="lp-hero-brutalist-split__media">
+    <picture>
+      <source media="(max-width: 767px)" srcset="{{slot:hero-image-mobile}}">
+      <img src="{{slot:hero-image}}" alt="{{slot:hero-image-alt}}" loading="lazy">
+    </picture>
+  </div>
+</section>

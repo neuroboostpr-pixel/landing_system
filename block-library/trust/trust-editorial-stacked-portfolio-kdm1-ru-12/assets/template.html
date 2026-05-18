@@ -1,0 +1,209 @@
+<style>.lp-trust-editorial-stacked {
+  color: var(--lp-text);
+  background: var(--lp-bg);
+  font-family: var(--lp-font-body);
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md);
+}
+
+.lp-trust-editorial-stacked__inner {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  gap: var(--lp-spacing-lg);
+}
+
+.lp-trust-editorial-stacked__header {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+}
+
+.lp-trust-editorial-stacked__eyebrow {
+  margin: 0;
+  color: var(--lp-accent);
+  font-size: 0.82rem;
+  line-height: 1.3;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.lp-trust-editorial-stacked__title {
+  margin: 0;
+  max-width: 12em;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: clamp(2.4rem, 8vw, 5.4rem);
+  line-height: 0.95;
+  font-weight: 800;
+}
+
+.lp-trust-editorial-stacked__panel {
+  display: grid;
+  gap: var(--lp-spacing-lg);
+  padding: var(--lp-spacing-lg);
+  border-radius: var(--lp-radius-lg);
+  background: var(--lp-bg-alt);
+  border: 1px solid var(--lp-border);
+}
+
+.lp-trust-editorial-stacked__lead {
+  margin: 0;
+  max-width: 46em;
+  color: var(--lp-text-muted);
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+
+.lp-trust-editorial-stacked__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--lp-spacing-md);
+}
+
+.lp-trust-editorial-stacked__item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--lp-spacing-sm);
+  align-items: start;
+  padding-top: var(--lp-spacing-md);
+  border-top: 1px solid var(--lp-border);
+}
+
+.lp-trust-editorial-stacked__mark {
+  width: 0.75rem;
+  height: 0.75rem;
+  margin-top: 0.45rem;
+  border-radius: var(--lp-radius);
+  background: var(--lp-accent);
+}
+
+.lp-trust-editorial-stacked__content {
+  display: grid;
+  gap: var(--lp-spacing-xs);
+}
+
+.lp-trust-editorial-stacked__item-title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 1.1rem;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.lp-trust-editorial-stacked__item-text {
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+
+.lp-trust-editorial-stacked__stats {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  padding-top: var(--lp-spacing-md);
+  border-top: 1px solid var(--lp-border);
+}
+
+.lp-trust-editorial-stacked__stat {
+  display: grid;
+  gap: var(--lp-spacing-xs);
+  padding: var(--lp-spacing-md);
+  border-radius: var(--lp-radius);
+  background: var(--lp-bg);
+  border: 1px solid var(--lp-border);
+}
+
+.lp-trust-editorial-stacked__stat-value {
+  color: var(--lp-primary);
+  font-family: var(--lp-font-display);
+  font-size: 2rem;
+  line-height: 1;
+  font-weight: 800;
+}
+
+.lp-trust-editorial-stacked__stat-label {
+  color: var(--lp-text-muted);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+@media (min-width: 768px) {
+  .lp-trust-editorial-stacked {
+    padding: var(--lp-spacing-xl) var(--lp-spacing-lg);
+  }
+
+  .lp-trust-editorial-stacked__inner {
+    gap: var(--lp-spacing-xl);
+  }
+
+  .lp-trust-editorial-stacked__panel {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    align-items: start;
+    padding: var(--lp-spacing-xl);
+  }
+
+  .lp-trust-editorial-stacked__lead {
+    position: sticky;
+    top: var(--lp-spacing-lg);
+  }
+
+  .lp-trust-editorial-stacked__list {
+    grid-column: 2;
+  }
+
+  .lp-trust-editorial-stacked__stats {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+</style>
+<section class="lp-trust-editorial-stacked" aria-labelledby="trust-editorial-stacked-title">
+  <div class="lp-trust-editorial-stacked__inner">
+    <div class="lp-trust-editorial-stacked__header">
+      <p class="lp-trust-editorial-stacked__eyebrow">{{slot:trust-eyebrow}}</p>
+      <h2 class="lp-trust-editorial-stacked__title" id="trust-editorial-stacked-title">{{slot:trust-title}}</h2>
+    </div>
+
+    <div class="lp-trust-editorial-stacked__panel">
+      <p class="lp-trust-editorial-stacked__lead">{{slot:trust-lead}}</p>
+
+      <ul class="lp-trust-editorial-stacked__list" aria-label="{{slot:trust-list-label}}">
+        <li class="lp-trust-editorial-stacked__item">
+          <span class="lp-trust-editorial-stacked__mark" aria-hidden="true"></span>
+          <div class="lp-trust-editorial-stacked__content">
+            <h3 class="lp-trust-editorial-stacked__item-title">{{slot:trust-point-1-title}}</h3>
+            <p class="lp-trust-editorial-stacked__item-text">{{slot:trust-point-1-text}}</p>
+          </div>
+        </li>
+        <li class="lp-trust-editorial-stacked__item">
+          <span class="lp-trust-editorial-stacked__mark" aria-hidden="true"></span>
+          <div class="lp-trust-editorial-stacked__content">
+            <h3 class="lp-trust-editorial-stacked__item-title">{{slot:trust-point-2-title}}</h3>
+            <p class="lp-trust-editorial-stacked__item-text">{{slot:trust-point-2-text}}</p>
+          </div>
+        </li>
+        <li class="lp-trust-editorial-stacked__item">
+          <span class="lp-trust-editorial-stacked__mark" aria-hidden="true"></span>
+          <div class="lp-trust-editorial-stacked__content">
+            <h3 class="lp-trust-editorial-stacked__item-title">{{slot:trust-point-3-title}}</h3>
+            <p class="lp-trust-editorial-stacked__item-text">{{slot:trust-point-3-text}}</p>
+          </div>
+        </li>
+      </ul>
+
+      <div class="lp-trust-editorial-stacked__stats" aria-label="{{slot:trust-stats-label}}">
+        <div class="lp-trust-editorial-stacked__stat">
+          <strong class="lp-trust-editorial-stacked__stat-value">{{slot:trust-stat-1-value}}</strong>
+          <span class="lp-trust-editorial-stacked__stat-label">{{slot:trust-stat-1-label}}</span>
+        </div>
+        <div class="lp-trust-editorial-stacked__stat">
+          <strong class="lp-trust-editorial-stacked__stat-value">{{slot:trust-stat-2-value}}</strong>
+          <span class="lp-trust-editorial-stacked__stat-label">{{slot:trust-stat-2-label}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

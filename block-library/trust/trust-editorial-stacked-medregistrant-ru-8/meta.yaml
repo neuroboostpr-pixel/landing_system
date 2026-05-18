@@ -1,0 +1,20 @@
+id: trust-editorial-stacked-medregistrant-ru-8
+category: trust
+display_name_ru: "Минималистичный блок с крупной цитатой и небольшими реквизитами доверия сбоку."
+description: "Минималистичный блок с крупной цитатой и небольшими реквизитами доверия сбоку."
+style_mood: editorial
+layout_pattern: stacked
+ru_market: true
+has_animation: false
+niches_suitable:
+  - services
+  - medical
+  - education
+slots:
+  - type: text
+    name: heading
+    required: true
+imported:
+  source_url: "https://medregistrant.ru/"
+  imported_at: "2026-05-16"
+  import_method: codex-block-generation
