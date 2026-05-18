@@ -70,3 +70,30 @@ teardown() { rm -rf "$MOCK_DIR" "$PROJECT_DIR"; }
     [ "$status" -eq 0 ]
     grep -q "addSubdomainVirtual" "$BATS_TMPDIR/curl_calls.log"
 }
+
+@test "landing-segment runs wp site create" {
+    run bash "$SCRIPT" "$PROJECT_DIR" "family"
+    [ "$status" -eq 0 ]
+    grep -q "site create --slug=family" "$BATS_TMPDIR/ssh_calls.log"
+}
+
+@test "landing-segment creates project segment directory" {
+    run bash "$SCRIPT" "$PROJECT_DIR" "family"
+    [ "$status" -eq 0 ]
+    [ -d "$PROJECT_DIR/13_СЕГМЕНТЫ_ЦА/family" ]
+    [ -f "$PROJECT_DIR/13_СЕГМЕНТЫ_ЦА/family/subbrief.yaml" ]
+    [ -f "$PROJECT_DIR/13_СЕГМЕНТЫ_ЦА/family/.subsite-meta.yaml" ]
+}
+
+@test "landing-segment appends segment to state" {
+    run bash "$SCRIPT" "$PROJECT_DIR" "family"
+    [ "$status" -eq 0 ]
+    grep -q "slug: family" "$PROJECT_DIR/.landing-state.yaml"
+    grep -q "host: family.example.ru" "$PROJECT_DIR/.landing-state.yaml"
+}
+
+@test "landing-segment subsite-meta contains blog_id" {
+    run bash "$SCRIPT" "$PROJECT_DIR" "family"
+    [ "$status" -eq 0 ]
+    grep -q "blog_id: 5" "$PROJECT_DIR/13_СЕГМЕНТЫ_ЦА/family/.subsite-meta.yaml"
+}

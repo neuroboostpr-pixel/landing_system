@@ -57,4 +57,37 @@ fi
 beget_site_link "$NEW_SUB_ID" "$BEGET_SITE_ID"
 beget_set_php "$HOST" "8.3"
 
-echo "  (Phase 3: WP subsite — implemented in next Task)"
+
+# Phase 3: WP subsite
+echo "▶ Phase 3: wp site create --slug=$SLUG"
+BLOG_ID=$(ssh_beget "cd $BEGET_PATH && $REMOTE_WP_BIN site create --slug=$SLUG --title='$SLUG' --porcelain" | tail -1 | tr -d '\r')
+if ! [[ "$BLOG_ID" =~ ^[0-9]+$ ]]; then
+    echo "ERROR: wp site create did not return a numeric blog_id, got: $BLOG_ID" >&2
+    exit 4
+fi
+echo "  subsite created blog_id=$BLOG_ID"
+
+# Phase 4: create project segment directory from skeleton
+SEG_DIR="$PROJECT/13_СЕГМЕНТЫ_ЦА/$SLUG"
+SKELETON="$PROJECT/13_СЕГМЕНТЫ_ЦА/_skeleton"
+echo "▶ Phase 4: create $SEG_DIR from skeleton"
+mkdir -p "$SEG_DIR/prototype" "$SEG_DIR/photos"
+if [ -f "$SKELETON/subbrief.yaml.example" ]; then
+    cp "$SKELETON/subbrief.yaml.example" "$SEG_DIR/subbrief.yaml"
+fi
+
+# .subsite-meta.yaml — machine-readable, NOT to be edited by humans
+cat > "$SEG_DIR/.subsite-meta.yaml" <<META
+# Machine metadata for segment '$SLUG' — DO NOT edit manually.
+slug: $SLUG
+host: $HOST
+blog_id: $BLOG_ID
+created: $(date -u +%Y-%m-%dT%H:%M:%SZ)
+META
+
+# Phase 5: state update
+echo "▶ Phase 5: append to .landing-state.yaml::audience_segments"
+state_add_segment "$STATE" "$SLUG" "$HOST" "$BLOG_ID"
+
+echo "✅ Segment '$SLUG' created → http://$HOST/"
+echo "   Next: fill in $SEG_DIR/subbrief.yaml, then run pipeline for this segment (CD2+)."
