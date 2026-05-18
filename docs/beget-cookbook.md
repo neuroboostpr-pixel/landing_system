@@ -115,6 +115,25 @@ curl -s -X POST "https://api.beget.com/api/user/getAccountInfo" \
 
 **Решение:** выпустить Let's Encrypt (через панель или acme.sh — см. ниже).
 
+### 6. WordPress siteurl=https на домене без SSL = не зайти в админку
+
+**Симптом:** wp-login.php или wp-admin/ редиректят на сломанный HTTPS, браузер показывает «Не удаётся подключиться». Это происходит на тех. поддоменах вида `<login>.beget.tech` (на них SSL не выдаётся) или на новых проектах до заказа SSL.
+
+**Диагностика:**
+```bash
+wp option get siteurl   # https://... ?
+wp option get home      # https://... ?
+curl -sI https://<host>  # SSL handshake fails?
+```
+
+**Решение** — если SSL ещё не настроен, переключить на HTTP:
+```bash
+wp option update siteurl 'http://<host>/<path>'
+wp option update home 'http://<host>/<path>'
+```
+
+**Профилактика на новом проекте:** не ставить `siteurl=https://` пока SSL не настроен **и не проверен** через curl. Stage-08 генератор должен выставлять `http://` по умолчанию, апгрейдить на `https://` только после успешного выпуска SSL.
+
 ---
 
 ## Wildcard SSL: два рабочих способа
