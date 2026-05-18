@@ -1,0 +1,26 @@
+# subbrief.yaml — бриф сегмента ЦА
+# Заполняется маркетологом после создания сегмента командой /landing-segment.
+# Описывает что отличает этот сегмент от основного лендинга.
+
+audience:
+  description: ""               # "русскоязычные туристы в Дубае"
+  demographics: ""              # "30-50 лет, средний+ доход"
+  pain_points: []               # ["языковой барьер", "недоверие к местным агентствам"]
+  motivations: []               # ["комфорт", "знакомый сервис"]
+
+offer:
+  positioning: ""               # "Аренда с русскоговорящим менеджером"
+  unique_value: ""              # "Поддержка 24/7 на русском"
+  price_range: ""               # "от 800 AED/день" (если отличается от основного)
+
+content_overrides:
+  # Какие тексты заменяем относительно основного лендинга.
+  # Если пусто — landing-content генерит с нуля под этот сегмент.
+  hero_headline: ""
+  cta_primary: ""
+  testimonials_filter: ""       # "russian" — показывать только русские отзывы
+
+photo_overrides:
+  # Если нужны другие фото — описать тут.
+  hero_image: ""                # путь к фото в photos/ или slot-name из 07c_PHOTOS/
+  team_filter: ""               # "russian-speakers" — фильтр для team photos
