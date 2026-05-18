@@ -17,12 +17,12 @@ def main() -> None:
     args = p.parse_args()
 
     project = Path(args.project)
-    selections = yaml.safe_load((project / "07a_WIREFRAME" / "selections.yaml").read_text())
-    proto = yaml.safe_load((project / "07_ПРОТОТИП" / "prototype.yaml").read_text())
+    selections = yaml.safe_load((project / "07a_WIREFRAME" / "selections.yaml").read_text(encoding="utf-8"))
+    proto = yaml.safe_load((project / "07_ПРОТОТИП" / "prototype.yaml").read_text(encoding="utf-8"))
     tokens_path = project / "05_ДИЗАЙН-СИСТЕМА" / "tokens.json"
 
     library = Path(args.library)
-    catalog = yaml.safe_load((library / "catalog.yaml").read_text())
+    catalog = yaml.safe_load((library / "catalog.yaml").read_text(encoding="utf-8"))
     block_to_cat = {b["id"]: b["category"] for b in catalog["blocks"]}
 
     out_dir = project / "07b_COMPOSED"
@@ -63,11 +63,11 @@ def main() -> None:
                 stage2 = tmp_p / f"{position}-{kind}-2.html"
 
                 subprocess.run(
-                    ["python3", str(inject_tokens), str(src), str(tokens_path), str(stage1)],
+                    [sys.executable, str(inject_tokens), str(src), str(tokens_path), str(stage1)],
                     check=True,
                 )
                 inject_cmd = [
-                    "python3", str(inject_content),
+                    sys.executable, str(inject_content),
                     "--template", str(stage1),
                     "--prototype", str(project / "07_ПРОТОТИП" / "prototype.yaml"),
                     "--position", str(position),
@@ -79,7 +79,7 @@ def main() -> None:
                     inject_cmd += ["--visuals-dir", visuals_dir_arg]
                 subprocess.run(inject_cmd, check=True)
 
-                content = stage2.read_text()
+                content = stage2.read_text(encoding="utf-8")
 
                 # Extract <style> blocks from <head> to preserve token-injected CSS
                 style_blocks = re.findall(r"<style[^>]*>(.*?)</style>", content, re.DOTALL)
@@ -112,16 +112,18 @@ def main() -> None:
             slug=proto["project"]["slug"],
             styles="\n".join(desktop_styles),
             body="\n".join(desktop_parts),
-        )
+        ),
+        encoding="utf-8",
     )
     (out_dir / "composed-mobile.html").write_text(
         shell.format(
             slug=proto["project"]["slug"],
             styles="\n".join(mobile_styles),
             body="\n".join(mobile_parts),
-        )
+        ),
+        encoding="utf-8",
     )
-    (out_dir / "block-injection-log.md").write_text("\n".join(log))
+    (out_dir / "block-injection-log.md").write_text("\n".join(log), encoding="utf-8")
 
     print(f"OK: composed {len(selections['selections'])} blocks")
 

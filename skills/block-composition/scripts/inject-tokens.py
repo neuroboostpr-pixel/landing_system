@@ -28,8 +28,8 @@ def flatten(d: dict, prefix: str = "") -> dict[str, str]:
 
 
 def main(in_html: str, tokens_path: str, out_html: str) -> None:
-    html_text = Path(in_html).read_text()
-    tokens = json.loads(Path(tokens_path).read_text())
+    html_text = Path(in_html).read_text(encoding="utf-8")
+    tokens = json.loads(Path(tokens_path).read_text(encoding="utf-8"))
     flat = flatten(tokens)
 
     def repl(match: re.Match) -> str:
@@ -40,7 +40,7 @@ def main(in_html: str, tokens_path: str, out_html: str) -> None:
 
     pattern = re.compile(r"--([\w-]+):\s*[^;]+;")
     new_text = pattern.sub(repl, html_text)
-    Path(out_html).write_text(new_text)
+    Path(out_html).write_text(new_text, encoding="utf-8")
     print(f"OK: wrote {out_html}")
 
 

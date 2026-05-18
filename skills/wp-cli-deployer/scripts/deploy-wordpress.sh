@@ -14,6 +14,9 @@ SPEC="$PROJECT/08_КОД/block-spec.yaml"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ENV_FILE="$SCRIPT_DIR/../../../.env"
 [ -f "$ENV_FILE" ] && source "$ENV_FILE"
+# Per-project .env overrides system-level .env (e.g. BEGET_PATH per landing).
+PROJECT_ENV="$PROJECT/.env"
+[ -f "$PROJECT_ENV" ] && source "$PROJECT_ENV"
 
 : "${BEGET_USER:?BEGET_USER not set in .env}"
 : "${BEGET_HOST:?BEGET_HOST not set in .env}"
@@ -82,8 +85,13 @@ if [ -f "$PAGE_HTML" ]; then
     else
         PY=python
     fi
-    PAGE_SLUG="$($PY -c "import sys,yaml; d=yaml.safe_load(open(r'$SPEC',encoding='utf-8')); print((d.get('page') or {}).get('slug') or 'home')")"
-    PAGE_TITLE="$($PY -c "import sys,yaml; d=yaml.safe_load(open(r'$SPEC',encoding='utf-8')); print((d.get('page') or {}).get('title') or 'Home')")"
+    # Convert MSYS-style /d/... to Windows D:/... when running Windows Python from Git Bash.
+    SPEC_PY="$SPEC"
+    if command -v cygpath >/dev/null 2>&1; then
+        SPEC_PY="$(cygpath -w "$SPEC")"
+    fi
+    PAGE_SLUG="$($PY -c "import sys,yaml; d=yaml.safe_load(open(r'$SPEC_PY',encoding='utf-8')); print((d.get('page') or {}).get('slug') or 'home')")"
+    PAGE_TITLE="$($PY -c "import sys,yaml; d=yaml.safe_load(open(r'$SPEC_PY',encoding='utf-8')); print((d.get('page') or {}).get('title') or 'Home')")"
 
     REMOTE_HTML="${BEGET_PATH}/wp-content/themes/lp-${PROJECT_SLUG}/.page-content.html"
     scp "$TMP_HTML" "${BEGET_USER}@${BEGET_HOST}:${REMOTE_HTML}"
