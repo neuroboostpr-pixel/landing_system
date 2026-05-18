@@ -2,8 +2,8 @@
 
 > Авто-сгенерированный индекс. Обновляется при `python -m scripts.wiki.compile --source-mode=system`.
 
-**Концептов всего:** 323
-**Категории:** agent, block, command, rule, skill, stage, unknown
+**Концептов всего:** 489
+**Категории:** agent, block, command, rule, script, skill, stage, unknown
 
 **Известные ограничения:**
 - Блоки из `block-library/` ещё не в wiki — отдельная задача.
@@ -30,9 +30,31 @@
 - [[10-qa]] — 10-qa
 - [[11-analitika]] — 11-analytics
 - [[12-seo]] — stage-12-seo
+- [[2026-05-03-phase-1-skeleton]] — phase-1-skeleton
+- [[2026-05-04-phase-3-design-pipeline]] — phase-3-design-pipeline
+- [[2026-05-04-phase-4-wp-build-pipeline]] — phase-4-wp-build-pipeline
+- [[2026-05-04-phase-5-deploy-operations]] — phase-5-deploy-operations
+- [[2026-05-06-niche-analysis-design]] — 01a-analiz-nishi
+- [[2026-05-06-niche-analysis-implementation-plan]] — niche-analysis-implementation-plan
+- [[2026-05-06-niche-analysis-v2-design]] — niche-analysis-v2
+- [[2026-05-12-stage-08-acf-gutenberg-design]] — stage-08-acf-gutenberg
+- [[2026-05-12-stage-08-acf-gutenberg-plan]] — stage-08-acf-gutenberg-plan
+- [[2026-05-13-photo-pipeline-design]] — 07c-photos
+- [[2026-05-13-photo-pipeline-plan]] — photo-pipeline-plan
+- [[2026-05-13-stage08-lazy-blocks-migration]] — stage08-lazy-blocks-migration
+- [[2026-05-13-visual-generation-design]] — stage-07d-visuals
+- [[2026-05-13-visual-generation-plan]] — pr-c-visual-generation-plan
+- [[2026-05-14-pr-e-onboarding-wizard-plan]] — pr-e-onboarding-wizard-plan
+- [[2026-05-15-pr-i-a-photo-pipeline-design]] — pr-i-a-photo-pipeline
+- [[2026-05-15-pr-i-a-photo-pipeline-plan]] — pr-i-a-photo-pipeline-plan
+- [[2026-05-15-wiki-graph-pr-f3-plan]] — wiki-graph-pr-f3-plan
+- [[2026-05-15-wiki-graph-pr-f5-plan]] — pr-f5-lint-query-preview
 
 ## 🤖 Агенты
 
+- [[2026-05-13-frontend-builder-design]] — frontend-builder
+- [[2026-05-13-frontend-builder-implementation]] — frontend-builder
+- [[2026-05-13-frontend-builder-task-brief]] — frontend-builder
 - [[analytics-engineer]] — analytics-engineer
 - [[block-composer]] — block-composer
 - [[brand-architect]] — brand-architect
@@ -69,6 +91,8 @@
 
 ## 🛠 Скиллы
 
+- [[2026-05-16-pr-i-b-visual-qa-design]] — visual-qa
+- [[2026-05-16-pr-i-b-visual-qa-plan]] — visual-qa
 - [[block-composition]] — block-composition
 - [[block-library-management]] — block-library-management
 - [[brand-kit-build]] — brand-kit-build
@@ -96,6 +120,9 @@
 
 ## ⚡ Команды
 
+- [[2026-05-13-pr-d-orchestrator-integration-design]] — landing-go
+- [[2026-05-14-pr-e-onboarding-wizard-design]] — landing-start
+- [[import-from-url-sh-doc]] — import-from-url
 - [[landing-brand]] — landing-brand
 - [[landing-build]] — landing-build
 - [[landing-clone]] — landing-clone
@@ -124,15 +151,109 @@
 - [[landing-status]] — landing-status
 - [[landing-visuals]] — landing-visuals
 - [[landing-wireframe]] — landing-wireframe
+- [[migrate-state-add-01a-sh-doc]] — migrate-state-add-01a
+- [[migrate-state-for-prd-sh-doc]] — migrate-state-for-prd
+- [[migrate-template-readmes-sh-doc]] — migrate-template-readmes
+- [[test-pipeline-sh-doc]] — test-pipeline
 
 ## 📐 Правила (стандарты качества)
 
+- [[2026-05-03-landing-system-design]] — landing-system-design-spec
+- [[2026-05-03-landing-system-master-plan]] — landing-system-master-plan
+- [[2026-05-03-phase-2-brainstorming-pipeline]] — phase-2-brainstorming-pipeline
+- [[2026-05-04-stage-gates-onboarding-implementation-plan]] — stage-gates-onboarding-implementation-plan
+- [[2026-05-04-stage-gates-onboarding-mcp-design]] — stage-gates-onboarding-design
+- [[2026-05-06-niche-analysis-v2-implementation-plan]] — niche-analysis-v2-plan
+- [[2026-05-06-visual-requirements-design]] — visual-requirements
+- [[2026-05-06-visual-requirements-implementation-plan]] — visual-requirements-implementation-plan
+- [[2026-05-12-acf-block-rendering-research-needed]] — acf-block-rendering-research
+- [[2026-05-12-preview-panel-and-palette-library-design]] — preview-panel-and-palette-library
+- [[2026-05-12-preview-panel-and-palette-library-plan]] — preview-panel-and-palette-library-plan
+- [[2026-05-12-prototype-block-library-ux-composer-design]] — pr-a-prototype-block-library-ux-composer-design
+- [[2026-05-12-prototype-block-library-ux-composer-plan]] — pr-a-prototype-block-library-plan
+- [[2026-05-13-block-spec-format]] — block-spec-format
+- [[2026-05-13-pr-d-orchestrator-integration-plan]] — pr-d-orchestrator-integration-plan
+- [[2026-05-15-pr-g-stage-lock-auto-wiki-design]] — pr-g-stage-lock-auto-wiki
+- [[2026-05-15-pr-g-stage-lock-plan]] — pr-g-stage-lock-plan
+- [[2026-05-15-pr-h-content-preserve-design]] — content-preserve
+- [[2026-05-15-pr-h-content-preserve-plan]] — pr-h-content-preserve
+- [[2026-05-15-wiki-graph-markup-design]] — wiki-graph-markup-design
+- [[2026-05-15-wiki-graph-pr-f1-plan]] — pr-f1-wiki-infrastructure-plan
+- [[2026-05-15-wiki-graph-pr-f2-plan]] — pr-f2-wiki-compilation-plan
+- [[2026-05-15-wiki-graph-pr-f4-plan]] — wiki-pr-f4-hooks-conversation-memory
+- [[2026-05-16-pr-j-static-prompts-identity-design]] — pr-j-static-prompts-identity
+- [[api-validators]] — api-validators-tests
+- [[backlog]] — backlog
+- [[backport-acf-to-legacy-sh-doc]] — backport-acf-to-legacy
+- [[block-loader-py-doc]] — block-loader
+- [[build-patterns-library-py-doc]] — build-patterns-library
+- [[build-zip-sh-doc]] — build-zip
+- [[check-block-registration-sh-doc]] — check-block-registration
+- [[check-deps-sh-doc]] — check-deps
+- [[check-wiki-sync-sh-doc]] — check-wiki-sync
+- [[cleanup-broken-links-py-doc]] — cleanup-broken-links
+- [[codex-analyze-structure-sh-doc]] — codex-analyze-structure
+- [[config-py-doc]] — config-wiki-compiler
+- [[conversations-compiler-py-doc]] — conversations-compiler
+- [[deploy]] — tests-deploy
+- [[dokrutka-system]] — dokrutka-system
+- [[e2e]] — e2e-tests
+- [[gate-check-sh-doc]] — gate-check
+- [[gate-state-sh-doc]] — gate-state
+- [[generate-previews-sh-doc]] — generate-previews
+- [[hash-cache-py-doc]] — hash-cache
+- [[install-codex-sh-doc]] — install-codex
+- [[install-git-hooks-sh-doc]] — install-git-hooks
+- [[integration]] — integration-tests
+- [[landing-go-next-stage-py-doc]] — landing-go-next-stage
+- [[lint-py-doc]] — wiki-lint
+- [[mark-legacy-projects-sh-doc]] — mark-legacy-projects
 - [[memory]] — project-memory-folder
+- [[migrate-add-wiki-sh-doc]] — migrate-add-wiki
+- [[migrate-blocks-to-wireframe-format-py-doc]] — migrate-blocks-to-wireframe-format
 - [[niche-visual-rules]] — niche-visual-rules
+- [[onboarding]] — tests-onboarding
+- [[palettes]] — palettes
+- [[phase-1]] — phase-1-tests
+- [[phase-4]] — phase-4-tests
+- [[phase-5]] — phase-5-tests
+- [[phase-prc]] — phase-prc-tests
+- [[phase-prd]] — phase-prd-tests
+- [[phase-stage-08]] — phase-stage-08
+- [[photo-selection-guide]] — photo-selection-guide
+- [[plan-dorabotok]] — plan-dorabotok
 - [[positioning-modes]] — positioning-modes
+- [[pr-g]] — pr-g-tests
+- [[pr-o]] — pr-o-tests
+- [[pre-compact-py-doc]] — pre-compact-hook
+- [[preflight-sh-doc]] — preflight
 - [[premium-07b-checklist]] — premium-07b-checklist
+- [[selections-yaml-py-doc]] — selections-yaml-parser
+- [[session-end-py-doc]] — session-end-hook
+- [[session-start-py-doc]] — session-start-hook
 - [[setup]] — setup-guide
+- [[setup-flag-sh-doc]] — setup-flag
+- [[stage-08-helper-py-doc]] — stage-08-helper
 - [[stage-gates]] — stage-gates
+- [[state-yaml-py-doc]] — state-yaml-parser
+- [[system-compiler-py-doc]] — system-compiler
+- [[take-page-screenshot-py-doc]] — take-page-screenshot
+- [[update-catalog-py-doc]] — update-catalog
+- [[utils-py-doc]] — wiki-utils
+- [[validate-all-sh-doc]] — validate-all
+- [[validate-palettes-py-doc]] — validate-palettes
+- [[verify-composed-has-visuals-sh-doc]] — verify-composed-has-visuals
+- [[verify-composed-premium-sh-doc]] — verify-composed-premium
+- [[verify-content-preserved-py-doc]] — verify-content-preserved
+- [[verify-content-preserved-sh-doc]] — verify-content-preserved
+- [[verify-gutenberg-json-sh-doc]] — verify-gutenberg-json
+- [[verify-identity-preserved-sh-doc]] — verify-identity-preserved
+- [[verify-photo-pipeline-py-doc]] — verify-photo-pipeline
+- [[verify-photo-pipeline-sh-doc]] — verify-photo-pipeline
+- [[verify-php-syntax-sh-doc]] — verify-php-syntax
+- [[verify-site-url-sh-doc]] — verify-site-url
+- [[verify-visual-qa-py-doc]] — verify-visual-qa
+- [[verify-visual-qa-sh-doc]] — verify-visual-qa
 - [[wiki]] — project-wiki-folder
 
 ## 🧱 Блоки
@@ -349,6 +470,54 @@
 - [[trust-playful-stacked-opt-ecowash-ru-4]] — trust-playful-stacked-opt-ecowash-ru-4
 - [[trust-technical-grid-3-project21993216-tild-9]] — trust-technical-grid-3-project21993216-tild-9
 
+## 🛠 Скрипты
+
+- [[deploy-sh-doc]] — deploy
+- [[flush-py-doc]] — flush
+- [[generate-blocks-py-doc]] — generate-blocks
+- [[generate-wp-blocks-py-doc]] — generate-wp-blocks
+- [[migrate-niche-to-v2-sh-doc]] — migrate-niche-to-v2
+- [[migrate-to-preview-panel-sh-doc]] — migrate-to-preview-panel
+- [[preview-blocks-library-py-doc]] — preview-blocks-library
+- [[project-graph-compiler-py-doc]] — project-graph-compiler
+- [[scrape-css-sh-doc]] — scrape-css
+- [[sdk-client-py-doc]] — sdk-client
+- [[wizard-sh-doc]] — wizard
+
 ## ❓ Прочее
 
+- [[2026-05-16-pr-j-static-prompts-identity-plan]] — pr-j-static-prompts-identity-plan
+- [[compile-py-doc]] — compile-py
+- [[composed-html-py-doc]] — composed-html-py-doc
+- [[content-parser-py-doc]] — content-parser
+- [[derive-landing-structure-py-doc]] — derive-landing-structure
+- [[export-palettes-to-library-py-doc]] — export-palettes-to-library
+- [[extract-patterns-py-doc]] — extract-patterns
+- [[gate-check]] — gate-check
+- [[generate-axes-filter-py-doc]] — generate-axes-filter
+- [[generate-palette-css-py-doc]] — generate-palette-css
 - [[glass-00]] — glass-00
+- [[landing-final-check-sh-doc]] — landing-final-check-sh-doc
+- [[phase-2]] — phase-2
+- [[phase-3]] — phase-3
+- [[phase-niche]] — phase-niche
+- [[phase-pra]] — phase-pra-tests
+- [[phase-prb]] — phase-prb
+- [[phase-pre]] — phase-pre-tests
+- [[phase-preview-panel]] — phase-preview-panel
+- [[pr-h]] — pr-h-tests
+- [[pr-i-a]] — pr-i-a
+- [[pr-i-b]] — pr-i-b
+- [[pr-j]] — pr-j
+- [[pr-k]] — pr-k
+- [[pr-l]] — pr-l-tests
+- [[pr-m]] — pr-m
+- [[pr-n]] — pr-n
+- [[pr-p]] — pr-p
+- [[preflight]] — preflight
+- [[preview-py-doc]] — preview-py
+- [[query-py-doc]] — wiki-query
+- [[refresh-catalog-py-doc]] — refresh-catalog
+- [[snapshot-palettes-to-project-py-doc]] — snapshot-palettes-to-project-py-doc
+- [[tokens-json-py-doc]] — tokens-json-py-doc
+- [[wizard-check-materials-py-doc]] — wizard-check-materials
