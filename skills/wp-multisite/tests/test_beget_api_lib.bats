@@ -90,3 +90,46 @@ teardown() {
     # bats merges stderr into $output; check combined output
     [[ "$output" == *"missing required env vars"* ]]
 }
+
+@test "beget_subdomain_exists returns 0 when subdomain present in list" {
+    # Override mock to return one subdomain
+    cat > "$MOCK_DIR/curl" <<'MOCK'
+#!/bin/bash
+echo '{"status":"success","answer":{"status":"success","result":[{"id":42,"fqdn":"alpha.example.ru","domain_id":1}]}}'
+MOCK
+    chmod +x "$MOCK_DIR/curl"
+    run beget_subdomain_exists "alpha.example.ru"
+    [ "$status" -eq 0 ]
+}
+
+@test "beget_subdomain_exists returns 1 when subdomain absent" {
+    cat > "$MOCK_DIR/curl" <<'MOCK'
+#!/bin/bash
+echo '{"status":"success","answer":{"status":"success","result":[]}}'
+MOCK
+    chmod +x "$MOCK_DIR/curl"
+    run beget_subdomain_exists "alpha.example.ru"
+    [ "$status" -eq 1 ]
+}
+
+@test "beget_subdomain_add returns the new subdomain id on success" {
+    cat > "$MOCK_DIR/curl" <<'MOCK'
+#!/bin/bash
+echo '{"status":"success","answer":{"status":"success","result":99}}'
+MOCK
+    chmod +x "$MOCK_DIR/curl"
+    run beget_subdomain_add "alpha" 12513532
+    [ "$status" -eq 0 ]
+    [ "$output" = "99" ]
+}
+
+@test "beget_subdomain_id returns id of named subdomain when present" {
+    cat > "$MOCK_DIR/curl" <<'MOCK'
+#!/bin/bash
+echo '{"status":"success","answer":{"status":"success","result":[{"id":77,"fqdn":"beta.example.ru"}]}}'
+MOCK
+    chmod +x "$MOCK_DIR/curl"
+    run beget_subdomain_id "beta.example.ru"
+    [ "$status" -eq 0 ]
+    [ "$output" = "77" ]
+}

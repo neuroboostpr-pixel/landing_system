@@ -51,3 +51,81 @@ try:
     print(errs[0].get("error_text","unknown"))
 except: print("parse_error")' 2>/dev/null
 }
+
+# --- Subdomain helpers ----------------------------------------------------
+
+beget_subdomain_exists() {
+    # beget_subdomain_exists <fqdn> — exit 0 if subdomain found in account
+    local fqdn="$1"
+    local resp
+    resp=$(beget_api "domain/getSubdomainList")
+    printf '%s' "$resp" | python -c "
+import sys, json
+try:
+    d = json.load(sys.stdin)
+    found = any(x.get('fqdn') == '$fqdn' for x in d.get('answer', {}).get('result', []))
+    sys.exit(0 if found else 1)
+except Exception:
+    sys.exit(1)
+"
+}
+
+beget_subdomain_id() {
+    # beget_subdomain_id <fqdn> — print numeric id; exit 1 if not found
+    local fqdn="$1"
+    local resp
+    resp=$(beget_api "domain/getSubdomainList")
+    printf '%s' "$resp" | python -c "
+import sys, json
+try:
+    d = json.load(sys.stdin)
+    for x in d.get('answer', {}).get('result', []):
+        if x.get('fqdn') == '$fqdn':
+            print(x['id']); sys.exit(0)
+    sys.exit(1)
+except Exception:
+    sys.exit(1)
+"
+}
+
+beget_subdomain_add() {
+    # beget_subdomain_add <subdomain> <root_domain_id> — print new subdomain id
+    local sub="$1" root_id="$2"
+    local resp
+    resp=$(beget_api "domain/addSubdomainVirtual" "{\"subdomain\":\"$sub\",\"domain_id\":$root_id}")
+    if beget_ok "$resp"; then
+        printf '%s' "$resp" | python -c "
+import sys, json
+print(json.load(sys.stdin)['answer']['result'])
+"
+        return 0
+    fi
+    echo "beget_subdomain_add failed: $(beget_error_text "$resp")" >&2
+    return 1
+}
+
+# --- Site/domain linking --------------------------------------------------
+
+beget_site_link() {
+    # beget_site_link <domain_id> <site_id> — exit 0 on success
+    local dom_id="$1" site_id="$2"
+    local resp
+    resp=$(beget_api "site/linkDomain" "{\"domain_id\":$dom_id,\"site_id\":$site_id}")
+    beget_ok "$resp" || {
+        echo "beget_site_link failed: $(beget_error_text "$resp")" >&2
+        return 1
+    }
+}
+
+# --- PHP version ---------------------------------------------------------
+
+beget_set_php() {
+    # beget_set_php <full_fqdn> <version> — e.g. "alpha.ailexi.ru" "8.3"
+    local fqdn="$1" version="$2"
+    local resp
+    resp=$(beget_api "domain/changePhpVersion" "{\"full_fqdn\":\"$fqdn\",\"php_version\":\"$version\"}")
+    beget_ok "$resp" || {
+        echo "beget_set_php failed: $(beget_error_text "$resp")" >&2
+        return 1
+    }
+}
