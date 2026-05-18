@@ -61,7 +61,7 @@ echo "MOCK_OK"
 MOCK
     chmod +x "$MOCK_DIR/ssh"
 
-    rm -f "$BATS_TMPDIR/curl_calls.log" "$BATS_TMPDIR/ssh_calls.log"
+    rm -f "$BATS_TMPDIR/curl_calls.log" "$BATS_TMPDIR/ssh_calls.log" "$BATS_TMPDIR/getsubdomainlist_count"
     PATH="$MOCK_DIR:$PATH"
     export PATH MOCK_DIR PROJECT_DIR BATS_TMPDIR
 }
