@@ -13,7 +13,7 @@ case "$LAST_MSG" in
     chore\(wiki\)*) exit 0 ;;
 esac
 
-SOURCE_PATTERN='^(agents/|skills/.*/SKILL\.md|commands/|template/.*/README\.md|docs/standards/)'
+SOURCE_PATTERN='^(agents/|skills/.*/SKILL\.md|commands/|template/.*/README\.md|docs/standards/|block-library/|config/.*\.yaml|docs/SETUP\.md)'
 
 CHANGED="$(git diff-tree --no-commit-id --name-only -r HEAD 2>/dev/null || true)"
 if ! echo "$CHANGED" | grep -qE "$SOURCE_PATTERN"; then

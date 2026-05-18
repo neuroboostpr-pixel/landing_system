@@ -21,6 +21,11 @@ SOURCES=(
     "commands/*.md"
     "template/*/README.md"
     "docs/standards/*.md"
+    "block-library/*/*/meta.yaml"
+    "block-library/_patterns/*/meta.yaml"
+    "block-library/_styles/*/README.md"
+    "config/*.yaml"
+    "docs/SETUP.md"
 )
 
 DESYNC=0

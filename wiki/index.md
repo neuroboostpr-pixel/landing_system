@@ -2,7 +2,7 @@
 
 > Авто-сгенерированный индекс. Обновляется при `python -m scripts.wiki.compile --source-mode=system`.
 
-**Концептов всего:** 319
+**Концептов всего:** 323
 **Категории:** agent, block, command, rule, skill, stage, unknown
 
 **Известные ограничения:**
@@ -128,7 +128,11 @@
 ## 📐 Правила (стандарты качества)
 
 - [[memory]] — project-memory-folder
+- [[niche-visual-rules]] — niche-visual-rules
+- [[positioning-modes]] — positioning-modes
 - [[premium-07b-checklist]] — premium-07b-checklist
+- [[setup]] — setup-guide
+- [[stage-gates]] — stage-gates
 - [[wiki]] — project-wiki-folder
 
 ## 🧱 Блоки

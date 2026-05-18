@@ -28,6 +28,11 @@ SYSTEM_SOURCES = [
     {"path": "docs/standards/*.md", "concept_dir": "rules"},
     # PR-Q: блоки лежат на 2 уровнях вложенности — <category>/<block-id>/meta.yaml
     {"path": "block-library/*/*/meta.yaml", "concept_dir": "blocks"},
+    # PR-S: расширенное покрытие
+    {"path": "block-library/_patterns/*/meta.yaml", "concept_dir": "patterns"},
+    {"path": "block-library/_styles/*/README.md", "concept_dir": "styles"},
+    {"path": "config/*.yaml", "concept_dir": "config"},
+    {"path": "docs/SETUP.md", "concept_dir": "docs"},
 ]
 
 # Источники для графа конкретного проекта (~/Lendings/<slug>/).

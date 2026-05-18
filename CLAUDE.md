@@ -199,11 +199,16 @@ Master plan: [`docs/superpowers/plans/2026-05-03-landing-system-master-plan.md`]
 С 2026-05-15 системная wiki (`landing-system/wiki/`) **обязана быть синхронной с исходниками** в каждом коммите.
 
 **Источники wiki:**
-- `agents/*.md`
-- `skills/*/SKILL.md`
-- `commands/*.md`
-- `template/*/README.md`
-- `docs/standards/*.md`
+- `agents/*.md`                         — агенты pipeline
+- `skills/*/SKILL.md`                   — описания скиллов
+- `commands/*.md`                       — слеш-команды
+- `template/*/README.md`                — этапы шаблона
+- `docs/standards/*.md`                 — правила (premium checklist)
+- `block-library/*/*/meta.yaml`         — все блоки (200+)
+- `block-library/_patterns/*/meta.yaml` — премиум-эффекты (PR-S)
+- `block-library/_styles/*/README.md`   — style moods (PR-S)
+- `config/*.yaml`                       — stage-gates и др. конфиги (PR-S)
+- `docs/SETUP.md`                       — главная инструкция (PR-S)
 
 **Авто-механика (PR-G):**
 - `.githooks/post-commit` запускается после каждого `git commit`.
