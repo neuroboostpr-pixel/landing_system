@@ -1,0 +1,7 @@
+project: "test-project"
+created: "2026-05-18T10:00:00Z"
+schema_version: 2
+multisite: false
+audience_segments: []
+stages:
+  "09_deploy": {status: approved, timestamp: "2026-05-18T11:00:00Z"}
