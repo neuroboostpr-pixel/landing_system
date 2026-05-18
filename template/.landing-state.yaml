@@ -9,7 +9,7 @@ schema_version: 2     # bumped from 1 for PR-D
 
 
 # Multisite mode (set true by migrate-to-multisite.sh on first segment creation).
-# Existing projects stay false — single-site deploy continues to work.
+# Existing projects stay false â€” single-site deploy continues to work.
 multisite: false
 
 # List of audience segments (subsites in the multisite network).
