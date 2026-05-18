@@ -103,21 +103,23 @@ Stage-08 находится в активной миграции с ACF Blocks �
 
 ---
 
-## S2-CD — Multisite + Segment Cloning (объединённый, **СЕЙЧАС**)
+## S2-CD — Multisite + Segment Cloning (объединённый, **СПЕК ГОТОВ**)
 
 **Что закрывает:** п.6 (клонирование) + п.7 (поддомены/мультисайт).
 
-**Спек:** в работе, требует отдельный брейншторм-раунд. См. `2026-05-15-s2cd-multisite-cloning-design.md` (создаётся после брейншторма).
+**Спек:** [2026-05-18-s2cd-multisite-cloning-design.md](2026-05-18-s2cd-multisite-cloning-design.md) — POC-validated, готов к writing-plans.
 
-**Идея (предварительная):** один главный домен (`liauto.dubai`) + поддомены (`russian.liauto.dubai`, `family.liauto.dubai`, ...) на WP Multisite в subdomain mode. Один wp-admin управляет всеми. Клонирование = `wp site create` + копирование контента с существующего сайта сетки с заменой текста/фото/цен по правилам сегмента. Дизайн, структура, hardcoded-блоки не меняются.
+**Архитектура (validated на боевом Beget shared 2026-05-18):**
+- WordPress Multisite в subdomain mode на одном Beget-аккаунте
+- Один корневой домен клиента (`liauto.dubai`) + поддомены сегментов
+- Lazy Blocks через network-shared mu-plugin (один файл = блоки на всех subsites)
+- SEO/AI через 5 mu-plugins (robots, schema, llms, gsc, blocks) — все per-site без cross-leak
+- Клонирование через `wp site create` + content copy
+- SSL — manual one-click через панель Beget (бесплатный wildcard Let's Encrypt, авто-renew). Скрейп — следующая итерация.
 
-**Открытые вопросы для брейншторма:**
-- Subdomain mode vs subdirectory mode?
-- WP Multisite в одном инстансе vs N независимых инстансов за reverse-proxy?
-- Что шарится между сайтами сетки (бренд, дизайн, lazy-blocks definitions) vs per-site (тексты, фото, integrations, leads)?
-- Бегет: поддерживает wildcard SSL + multisite или нужен апгрейд?
-- Деплой: переписываем `deploy-wordpress.sh` под multisite целиком или добавляем `--mode=single|network`?
-- Lazy Blocks определения — network-shared (одна копия в сетке) или per-site (можно править отдельно)?
+**POC results:** 10/11 GREEN (1 косметический). Все архитектурные риски закрыты. См. [tests/poc/RESULTS.md](../../../tests/poc/RESULTS.md) и [docs/beget-cookbook.md](../../beget-cookbook.md).
+
+**Фазы имплементации (CD1-CD6):** см. §9 спека.
 
 ---
 

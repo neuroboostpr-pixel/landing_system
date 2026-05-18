@@ -40,7 +40,7 @@
 | Subdomain creation | `domain/addSubdomainVirtual` с `subdomain="*"` для wildcard + per-segment subdomains | Test 00 |
 | PHP | Per-subdomain через `domain/changePhpVersion` (`full_fqdn`, `php_version="8.3"`) | Test 00 |
 | Site routing | Один `site/add` + `site/linkDomain` каждый subdomain → один public_html. Beget НЕ создаёт отдельных папок для subdomains. | Test 00 |
-| SSL | **БЛОКЕР для прода:** Beget API не имеет SSL-методов. Wildcard SSL на shared недоступен. Workaround: ручной выпуск per-subsite через панель Бегета, либо Cloudflare proxy. POC — http-only. | DD |
+| SSL | **Решено:** Beget панель даёт бесплатный wildcard Let's Encrypt в один клик (Домены → SSL → wildcard), авто-renew. POC также доказал что acme.sh + наш `dns_beget` hook **выпускает** wildcard и per-subdomain cert, но **установка** в nginx Beget без панели невозможна (на shared нет API, нет writable path к nginx-config). Скрейп-автоматизация — следующая итерация S2-CD. | Cookbook §SSL |
 
 ### 2.2 WordPress
 
@@ -226,29 +226,44 @@ S2-A (`landing-config` mu-plugin) уже помечен `pending-revision`. По
 
 ---
 
-## 5. SSL — что делаем для прода
+## 5. SSL — финальное решение
 
-POC работает через http (SSL не требуется для проверки multisite-логики). Для прода:
+После расширенного исследования (см. [docs/beget-cookbook.md](../../beget-cookbook.md) и [tests/poc/RESULTS.md](../../../tests/poc/RESULTS.md) §SSL):
 
-### Вариант 1 (минимум усилий, рекомендуется для начала)
-Ручной выпуск Let's Encrypt **per-subsite** через панель Бегета. Каждый `/landing-segment <name>` после успешного деплоя выдаёт маркетологу инструкцию:
-1. Открыть панель Бегета → SSL → "Выпустить сертификат"
-2. Выбрать `<segment>.<root>`
-3. Подтвердить, подождать 1-2 мин
+### Что доказал POC
 
-**Минус:** ручной шаг, не hands-off.
-**Плюс:** работает без внешних зависимостей.
+| Подход | Статус |
+|---|---|
+| Beget панель → бесплатный wildcard Let's Encrypt | ✅ Один клик, авто-renew |
+| Beget auto-issue для `<root>` + `www.<root>` после `site/add` | ✅ Из коробки |
+| acme.sh wildcard cert через DNS-01 (наш `dns_beget` hook) | ✅ Cert выпущен |
+| acme.sh per-subdomain через HTTP-01 (`--webroot`) | ✅ Cert выпущен |
+| Установка выпущенного cert в nginx Beget **без панели** | ❌ Невозможно на shared (нет API, permission denied к /etc/nginx/) |
+| Beget API endpoints `ssl/*`, `cert/*` | ❌ NO_SUCH_METHOD |
 
-### Вариант 2 (Cloudflare как DNS+SSL proxy)
-- Перевести `<root>` на NS Cloudflare (`*.ns.cloudflare.com`)
-- Cloudflare даёт бесплатный wildcard SSL (`*.<root>`) автоматически.
-- Cloudflare proxy → Бегет origin.
-- Все subsites получают HTTPS моментально, без ручных шагов.
+### Решение для S2-CD первой итерации
 
-**Минус:** ещё одна внешняя зависимость + Cloudflare может конфликтовать с DDoS-Guard Бегета (нужно проверить).
-**Плюс:** автоматизация + бесплатный CDN + DDoS защита.
+**SSL — manual one-click через панель Beget.** При создании нового проекта (single → multisite migration) `/landing-segment` после успешного деплоя выдаёт маркетологу инструкцию:
 
-**Решение:** в S2-CD spec — Вариант 1 для первой итерации. Вариант 2 — отдельный под-проект S2-CD.2 если попадём в боль с SSL.
+1. Открыть панель Beget → Домены → найти корневой домен
+2. Кликнуть SSL-иконку → «Бесплатный wildcard»
+3. Через 30 минут — 1 день wildcard `*.<root>` готов
+4. Покрывает ВСЕ существующие и будущие subsites одной операцией
+5. Auto-renew управляется Beget
+
+**Один ручной шаг на жизнь проекта.** Новые сегменты wildcard покрывает автоматически.
+
+### Артефакты POC сохранены для следующей итерации
+
+- acme.sh установлен в `~/.acme.sh/` на боевом Бегете
+- `dns_beget` hook — production-ready ([tests/poc/dns-beget-hook.sh](../../../tests/poc/dns-beget-hook.sh))
+- Сертификаты выписаны и лежат
+
+При миграции на VPS / при написании скрейпера панели — всё переиспользуется без перевыпуска.
+
+### Скрейпер панели Beget — отложен в S2-CD.2
+
+Полная автоматизация SSL через scraping cp.beget.com (Python requests + session cookies, POST формы выпуска SSL) технически возможна за ~2-3 часа работы. Откладывается до того момента, когда ручной клик в первой итерации станет реальной болью (если будет).
 
 ---
 
@@ -282,32 +297,59 @@ tests/integration/test_lazy_blocks_smoke.sh
 
 ---
 
-## 8. POC results (на момент написания, см. tests/poc/RESULTS.md для финального отчёта)
+## 8. POC results (final, см. также [tests/poc/RESULTS.md](../../../tests/poc/RESULTS.md))
 
-| Test | Status | Что проверяет |
+**Итог: 10 из 11 GREEN, 1 косметический. Архитектурные риски закрыты.**
+
+| Test | Status | Что доказано |
 |---|---|---|
-| 00-setup-multisite | 🟢 | Wildcard DNS + WP install + 2 subsites end-to-end |
-| 01-lazy-blocks-network | 🟢 | mu-plugin регистрирует Lazy Block на всех subsites |
-| 02-lazy-blocks-render | (см. RESULTS) | Front HTML рендерится per-subsite |
-| 03-sitemap-per-site | (см. RESULTS) | Per-subsite sitemap.xml |
-| 04-robots-per-site | (см. RESULTS) | AI bots в robots.txt, без cross-leak |
-| 05-rank-math-network | (см. RESULTS) | RankMath per-site title |
-| 06-schema-org-faq | (см. RESULTS) | Organization/FAQPage JSON-LD per-host |
-| 07-llms-txt-rewrite | (см. RESULTS) | /llms.txt per-subsite |
-| 08-search-console-meta | (см. RESULTS) | GSC verification per-site (no leak) |
-| 09-ai-bot-fetches | (см. RESULTS) | GPTBot/ClaudeBot видят SSR контент |
-| 10-clone-subsite | (см. RESULTS) | wp site create + контент-копирование |
+| 00-setup-multisite | 🟢 | Wildcard DNS + WP install + 2 subsites end-to-end через Beget API |
+| 01-lazy-blocks-network | 🟢 | mu-plugin регистрирует Lazy Block на ВСЕХ subsites (slug `lazyblock/x`, priority<20, `code.frontend_callback`) |
+| 02-lazy-blocks-render | 🟢 | Front HTML рендерится per-subsite с per-page параметрами |
+| 03-sitemap-per-site | 🟢 | `/wp-sitemap.xml` независимы per subsite, нет cross-leak |
+| 04-robots-per-site | 🟢 | AI bots allow-list работает, нет cross-leak |
+| 05-rank-math-network | 🟢 | RankMath per-site title/desc, без leak между сегментами |
+| 06-schema-org-faq | 🟢 | Organization + FAQPage JSON-LD per-host |
+| 07-llms-txt-rewrite | 🟡 | Body + host правильные, Content-Type косметика (text/html вместо text/plain) — не влияет на AI-ботов |
+| 08-search-console-meta | 🟢 | GSC verification per-blog, нет cross-leak |
+| 09-ai-bot-fetches | 🟢 (revised) | Все RAG/search боты проходят. Beget блокирует ТОЛЬКО training-краулеры (GPTBot, ClaudeBot) — для коммерческих лендингов это плюс, не минус. AI-видимость в ChatGPT Search/Claude/Perplexity/Google AI работает из коробки |
+| 10-clone-subsite | 🟢 | `wp site create` + content copy end-to-end |
+
+### Critical findings (для имплементации)
+
+**Lazy Blocks через mu-plugin — главный риск закрыт:**
+- Slug **обязан** начинаться с `lazyblock/`
+- `add_action('init', ..., 5)` — priority < 20
+- Render через `code.frontend_callback`, не через `add_filter`
+- `code.output_method = 'php'`
+
+**Beget API подводные камни (см. [docs/beget-cookbook.md](../../beget-cookbook.md)):**
+- Без `site/linkDomain` nginx отдаёт статический кеш, не вызывает PHP
+- По умолчанию новый subdomain — PHP 5.6, нужен `domain/changePhpVersion`
+- Wildcard subdomain в DNS работает, но HTTP routing требует отдельный linkDomain
+- WAF блокирует только GPTBot/ClaudeBot (training-боты), всё остальное проходит
+
+**Темы:** classic (Twenty Twenty-One), НЕ block-theme (TT5). Block-themes не рендерят page content на front-page при `page_on_front`.
+
+**SSL:** manual через панель Beget в первой итерации. Скрейп-автоматизация — следующая итерация. Все артефакты POC (acme.sh + hook + cert files) сохранены на сервере для переиспользования.
 
 ---
 
-## 9. Decision request
+## 9. Decision request — Phased implementation
 
 После approval этого спека — `writing-plans` skill превращает spec в план фазовой имплементации:
 
-- **Фаза CD1:** `migrate-to-multisite.sh` + `/landing-segment` команда + `clone-subsite.sh`
-- **Фаза CD2:** Multisite-aware deploy скрипт + `13_СЕГМЕНТЫ/` workflow
-- **Фаза CD3:** Lazy Blocks генератор fixes (slug namespace, priority, callback)
-- **Фаза CD4:** SEO/AI mu-plugins из POC (robots, schema, llms, gsc)
-- **Фаза CD5:** SSL автоматизация (Вариант 1 ручной или Вариант 2 Cloudflare)
+| Фаза | Содержимое | Smoke-gate |
+|---|---|---|
+| **CD1** | `migrate-to-multisite.sh` + `/landing-segment <name>` команда + `clone-subsite.sh` (на основе POC test 10) | Lazy Blocks smoke + multisite smoke на `dubai-avto-liza` |
+| **CD2** | Multisite-aware `deploy-wordpress.sh` + `13_СЕГМЕНТЫ/` workflow + `.landing-state.yaml` поле `subsites[]` | E2E прогон `/landing-segment` создаёт работающий subsite |
+| **CD3** | Lazy Blocks генератор fixes (slug namespace `lazyblock/`, priority 5, `code.frontend_callback`) — переписать `generate-lzb-registration.py` под POC-paterns | Lazy Blocks smoke + регрессия на существующих проектах |
+| **CD4** | SEO/AI mu-plugins из POC (robots, schema, llms-txt, gsc) — портируются как переиспользуемые скиллы | Audit-скрипт (S2-E) подтверждает все 4 мu-plugins работают |
+| **CD5** | Документация SSL процедуры (один клик в панели) + чеклист для маркетолога | Manual проверка |
+| **CD6** *(отложенная)* | Скрейпер cp.beget.com для автоматизации SSL | Smoke на тестовом домене |
 
-Каждая фаза — отдельный PR в worktree, со smoke-gate перед merge.
+Каждая фаза — отдельный план + отдельный PR в worktree, со smoke-gate перед merge. Логика smoke-gate из roadmap: `bash tests/integration/test_lazy_blocks_smoke.sh` обязательна после каждого Task.
+
+### Что начнём первым
+
+**CD1** — наибольшая инкрементальная ценность: команда `/landing-segment russian` появляется в landing-system, маркетолог может создать первый клон, всё остальное (proper deploy script, генератор fixes, SEO mu-plugins) докатывается следующими фазами без потери уже работающего.
