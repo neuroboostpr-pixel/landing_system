@@ -58,8 +58,9 @@ for src_id in $PAGE_IDS; do
     ssh_beget "cat > $REMOTE_TMP <<'CLONE_EOF'
 $CONTENT
 CLONE_EOF"
-    NEW_ID=$(ssh_beget "cd $BEGET_PATH && $REMOTE_WP_BIN --url=$DEST_URL post create --post_type=page --post_status=publish --post_title=\"$TITLE\" --post_name=\"$NAME\" --post_content=\"\$(cat $REMOTE_TMP)\" --porcelain" | tail -1 | tr -d '\r')
-    ssh_beget "rm -f $REMOTE_TMP"
+    # Pipe tempfile to wp-cli via stdin (avoids shell-escape issues with quotes in content)
+    NEW_ID=$(ssh_beget "cd $BEGET_PATH && cat $REMOTE_TMP | $REMOTE_WP_BIN --url=$DEST_URL post create --post_type=page --post_status=publish --post_title=\"$TITLE\" --post_name=\"$NAME\" --post_content=- --porcelain" | tail -1 | tr -d '\r')
+    ssh_beget "rm -f $REMOTE_TMP" 2>/dev/null || true
     echo "  page $src_id → $NEW_ID"
 done
 
