@@ -179,3 +179,145 @@ function wp_remote_post($url, $args) {
 function is_wp_error($v) { return false; }
 function wp_remote_retrieve_response_code($r) { return $r['response']['code'] ?? 0; }
 function wp_remote_retrieve_body($r) { return $r['body'] ?? ''; }
+
+// CPT + post_meta + wp_kses mocks for snippets.php tests
+
+$GLOBALS['_mock_post_types'] = [];
+$GLOBALS['_mock_posts'] = [];
+$GLOBALS['_mock_post_meta'] = [];
+$GLOBALS['_mock_queried_object_id'] = 0;
+$GLOBALS['_mock_next_post_id'] = 1;
+$GLOBALS['_mock_kses_calls'] = [];
+
+if (!function_exists('register_post_type')) {
+    function register_post_type($name, $args = []) {
+        $GLOBALS['_mock_post_types'][$name] = $args;
+        return (object) ['name' => $name];
+    }
+}
+
+if (!function_exists('wp_insert_post')) {
+    function wp_insert_post($postarr, $wp_error = false) {
+        $id = $GLOBALS['_mock_next_post_id']++;
+        $GLOBALS['_mock_posts'][$id] = array_merge(
+            ['post_type' => 'post', 'post_status' => 'publish', 'post_title' => ''],
+            $postarr,
+            ['ID' => $id]
+        );
+        return $id;
+    }
+}
+
+if (!function_exists('wp_update_post')) {
+    function wp_update_post($postarr) {
+        $id = (int) ($postarr['ID'] ?? 0);
+        if ($id && isset($GLOBALS['_mock_posts'][$id])) {
+            $GLOBALS['_mock_posts'][$id] = array_merge($GLOBALS['_mock_posts'][$id], $postarr);
+        }
+        return $id;
+    }
+}
+
+if (!function_exists('wp_delete_post')) {
+    function wp_delete_post($id, $force = false) {
+        unset($GLOBALS['_mock_posts'][$id]);
+        unset($GLOBALS['_mock_post_meta'][$id]);
+        return true;
+    }
+}
+
+if (!function_exists('get_posts')) {
+    function get_posts($args = []) {
+        $type = $args['post_type'] ?? 'post';
+        $limit = $args['numberposts'] ?? $args['posts_per_page'] ?? -1;
+        $orderby = $args['orderby'] ?? 'date';
+        $order = strtoupper($args['order'] ?? 'DESC');
+        $results = [];
+        foreach ($GLOBALS['_mock_posts'] as $id => $p) {
+            if (($p['post_type'] ?? '') !== $type) continue;
+            if (($p['post_status'] ?? '') !== 'publish' && empty($args['post_status'])) continue;
+            $results[] = (object) $p;
+        }
+        if ($orderby === 'meta_value_num' && !empty($args['meta_key'])) {
+            $key = $args['meta_key'];
+            usort($results, function ($a, $b) use ($key, $order) {
+                $av = (int) ($GLOBALS['_mock_post_meta'][$a->ID][$key] ?? 0);
+                $bv = (int) ($GLOBALS['_mock_post_meta'][$b->ID][$key] ?? 0);
+                return $order === 'ASC' ? $av - $bv : $bv - $av;
+            });
+        }
+        if ($limit > 0) $results = array_slice($results, 0, $limit);
+        return $results;
+    }
+}
+
+if (!function_exists('get_post')) {
+    function get_post($id) {
+        return isset($GLOBALS['_mock_posts'][$id]) ? (object) $GLOBALS['_mock_posts'][$id] : null;
+    }
+}
+
+if (!function_exists('update_post_meta')) {
+    function update_post_meta($post_id, $key, $value) {
+        $GLOBALS['_mock_post_meta'][$post_id][$key] = $value;
+        return true;
+    }
+}
+
+if (!function_exists('get_post_meta')) {
+    function get_post_meta($post_id, $key = '', $single = false) {
+        if ($key === '') {
+            return $GLOBALS['_mock_post_meta'][$post_id] ?? [];
+        }
+        $value = $GLOBALS['_mock_post_meta'][$post_id][$key] ?? '';
+        return $single ? $value : ($value === '' ? [] : [$value]);
+    }
+}
+
+if (!function_exists('delete_post_meta')) {
+    function delete_post_meta($post_id, $key) {
+        unset($GLOBALS['_mock_post_meta'][$post_id][$key]);
+        return true;
+    }
+}
+
+if (!function_exists('get_queried_object_id')) {
+    function get_queried_object_id() {
+        return (int) $GLOBALS['_mock_queried_object_id'];
+    }
+}
+
+if (!function_exists('set_mock_queried_object_id')) {
+    function set_mock_queried_object_id($id) {
+        $GLOBALS['_mock_queried_object_id'] = (int) $id;
+    }
+}
+
+if (!function_exists('wp_kses')) {
+    function wp_kses($content, $allowed_html, $allowed_protocols = []) {
+        $GLOBALS['_mock_kses_calls'][] = ['content' => $content, 'allowed' => $allowed_html];
+        $allowed_tags = array_keys($allowed_html);
+        return strip_tags($content, $allowed_tags);
+    }
+}
+
+if (!function_exists('esc_textarea')) {
+    function esc_textarea($v) { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
+}
+if (!function_exists('esc_url')) {
+    function esc_url($v) { return filter_var((string)$v, FILTER_SANITIZE_URL); }
+}
+if (!function_exists('selected')) {
+    function selected($a, $b, $echo = true) {
+        $s = ((string)$a === (string)$b) ? ' selected="selected"' : '';
+        if ($echo) echo $s;
+        return $s;
+    }
+}
+if (!function_exists('checked')) {
+    function checked($a, $b = true, $echo = true) {
+        $s = ((bool)$a === (bool)$b) ? ' checked="checked"' : '';
+        if ($echo) echo $s;
+        return $s;
+    }
+}
