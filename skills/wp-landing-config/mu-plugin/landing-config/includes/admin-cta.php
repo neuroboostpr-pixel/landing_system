@@ -7,7 +7,7 @@ use function LandingConfig\CTA\list_ctas;
 use function LandingConfig\CTA\resolve_cta;
 use function LandingConfig\CTA\save_cta;
 use function LandingConfig\CTA\delete_cta;
-use function LandingConfig\CTA\has_override;
+use function LandingConfig\CTA\has_cta_override as has_override;
 use const LandingConfig\CTA\PRESET_NAMES;
 use const LandingConfig\CTA\VALID_TYPES;
 use function LandingConfig\SegmentSelector\render as render_selector;
@@ -67,7 +67,7 @@ function render_page(int $segment): void {
                     <p style="color:#646970;">Этот пресет наследуется от сетевого дефолта. Чтобы изменить для этого сегмента — нажмите «Override».</p>
                 <?php endif; ?>
 
-                <form method="post" action="<?php echo \esc_url(\admin_url('admin-post.php')); ?>">
+                <form method="post" action="<?php echo \esc_url(\network_admin_url('admin-post.php')); ?>">
                     <?php \wp_nonce_field('landing_cta_save_' . $preset_name); ?>
                     <input type="hidden" name="action" value="landing_cta_save">
                     <input type="hidden" name="preset_name" value="<?php echo \esc_attr($preset_name); ?>">
