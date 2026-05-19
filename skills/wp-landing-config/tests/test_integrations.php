@@ -1,0 +1,60 @@
+<?php
+require_once __DIR__ . '/fixtures/wp-bootstrap.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/includes/cascade.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/includes/encryption.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/includes/integrations.php';
+
+use function LandingConfig\Integrations\save_integration;
+use function LandingConfig\Integrations\get_integration;
+use function LandingConfig\Integrations\resolve_integration;
+use function LandingConfig\Integrations\list_integrations;
+use function LandingConfig\Integrations\delete_integration;
+
+$failures = 0; $tests = 0;
+function assert_test($c, $m) { global $failures, $tests; $tests++; if (!$c) { echo "FAIL: $m\n"; $failures++; } }
+
+function reset_int() {
+    $GLOBALS['_mock_posts'] = [];
+    $GLOBALS['_mock_post_meta'] = [];
+    $GLOBALS['_mock_next_post_id'] = 1;
+    $GLOBALS['_mock_current_blog_id'] = 1;
+    putenv('WP_LANDING_CONFIG_KEY=' . str_repeat('a', 32));
+}
+
+// T1 round-trip with encrypted field
+reset_int();
+$id = save_integration('telegram', ['bot_token' => 'SECRET123', 'chat_id' => '-1001'], true, 1, ['bot_token']);
+assert_test($id > 0, 'T1a save_integration returned id');
+$row = get_integration($id);
+assert_test($row['settings']['bot_token'] === 'SECRET123', 'T1b token decrypted on get');
+assert_test($row['adapter_name'] === 'telegram' && $row['is_network'] === true, 'T1c name+network correct');
+
+// T2 cascade override
+reset_int();
+save_integration('amocrm', ['domain' => 'net.amocrm.ru', 'token' => 'NET'], true, 1, ['token']);
+$GLOBALS['_mock_current_blog_id'] = 2;
+save_integration('amocrm', ['domain' => 'site.amocrm.ru', 'token' => 'SITE'], false, 2, ['token']);
+$r = resolve_integration('amocrm', 2);
+assert_test($r['settings']['domain'] === 'site.amocrm.ru', 'T2a site override domain');
+assert_test($r['settings']['token'] === 'SITE', 'T2b site override token decrypted');
+
+// T3 network fallback
+$r = resolve_integration('amocrm', 1);
+assert_test($r['settings']['domain'] === 'net.amocrm.ru', 'T3 network fallback');
+
+// T4 list merge
+reset_int();
+save_integration('email', ['to' => 'net@x.ru'], true, 1, []);
+$GLOBALS['_mock_current_blog_id'] = 2;
+save_integration('telegram', ['bot_token' => 'T', 'chat_id' => '1'], false, 2, ['bot_token']);
+$list = list_integrations(2);
+$names = array_column($list, 'adapter_name');
+assert_test(in_array('email', $names) && in_array('telegram', $names), 'T4 list merge');
+
+// T5 delete
+reset_int();
+$id = save_integration('email', ['to' => 'x@y.z'], false, 1, []);
+assert_test(delete_integration($id) === true && get_integration($id) === null, 'T5 delete works');
+
+echo "$tests tests, $failures failures\n";
+exit($failures > 0 ? 1 : 0);
