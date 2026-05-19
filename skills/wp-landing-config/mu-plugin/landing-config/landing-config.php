@@ -18,6 +18,7 @@ require_once LANDING_CONFIG_DIR . '/includes/encryption.php';
 require_once LANDING_CONFIG_DIR . '/includes/helpers.php';
 require_once LANDING_CONFIG_DIR . '/includes/rest-lead.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-pages.php';
+require_once LANDING_CONFIG_DIR . '/includes/admin-leads.php';
 
 add_action('init', function () {
     \LandingConfig\DB\maybe_install_or_migrate();
