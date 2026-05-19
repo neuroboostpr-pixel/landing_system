@@ -22,6 +22,7 @@ require_once LANDING_CONFIG_DIR . '/includes/admin-pages.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-leads.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-leads-network.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-cta.php';
+require_once LANDING_CONFIG_DIR . '/includes/admin-snippets.php';
 require_once LANDING_CONFIG_DIR . '/adapters/AdapterInterface.php';
 require_once LANDING_CONFIG_DIR . '/adapters/EmailAdapter.php';
 require_once LANDING_CONFIG_DIR . '/adapters/TelegramAdapter.php';
