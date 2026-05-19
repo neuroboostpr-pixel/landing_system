@@ -1,11 +1,22 @@
 <?php
 require_once __DIR__ . '/fixtures/wp-bootstrap.php';
 require_once __DIR__ . '/../mu-plugin/landing-config/includes/cascade.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/includes/encryption.php';
 require_once __DIR__ . '/../mu-plugin/landing-config/includes/cta.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/includes/integrations.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/adapters/AdapterInterface.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/adapters/EmailAdapter.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/adapters/TelegramAdapter.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/adapters/WhatsAppAdapter.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/adapters/AmoCRMAdapter.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/adapters/Bitrix24Adapter.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/adapters/HubSpotAdapter.php';
 require_once __DIR__ . '/../mu-plugin/landing-config/includes/migrate-to-s2a3.php';
 
 use function LandingConfig\Migrate\migrate_cta_from_options;
+use function LandingConfig\Migrate\migrate_integrations_from_options;
 use function LandingConfig\CTA\list_ctas;
+use function LandingConfig\Integrations\list_integrations;
 
 $failures = 0; $tests = 0;
 function assert_test($c, $m) { global $failures, $tests; $tests++; if (!$c) { echo "FAIL: $m\n"; $failures++; } }
@@ -58,6 +69,27 @@ $GLOBALS['_mock_options'][1]['landing_cta_presets'] = [
 ];
 $migrated = migrate_cta_from_options(1);
 assert_test($migrated === 1, "T4 only valid preset migrated (got $migrated, expected 1)");
+
+// T_INT_1..4: миграция integrations wp_options → CPT (per-field key layout)
+reset_mig();
+// Legacy data layout: per-field wp_options written by old admin-integrations.php
+\update_option('landing_integration_telegram_bot_token', 'X');
+\update_option('landing_integration_telegram_chat_id', '-1');
+\update_option('landing_integration_amocrm_subdomain', 'acme');
+\update_option('landing_integration_amocrm_access_token', 'Y');
+
+$migrated = migrate_integrations_from_options(1);
+assert_test($migrated === 2, "T_INT_1 migrated 2 integrations (got $migrated)");
+$list = list_integrations(1);
+assert_test(count($list) === 2, 'T_INT_2 2 CPT records exist');
+$by_name = [];
+foreach ($list as $r) { $by_name[$r['adapter_name']] = $r; }
+assert_test(isset($by_name['telegram']) && $by_name['telegram']['settings']['chat_id'] === '-1', 'T_INT_3 telegram migrated');
+assert_test(isset($by_name['amocrm']) && $by_name['amocrm']['settings']['subdomain'] === 'acme', 'T_INT_4 amocrm migrated');
+
+// T_INT_5: idempotent — second run is no-op
+$again = migrate_integrations_from_options(1);
+assert_test($again === 0, "T_INT_5 idempotent (got $again)");
 
 echo "$tests tests, $failures failures\n";
 exit($failures > 0 ? 1 : 0);
