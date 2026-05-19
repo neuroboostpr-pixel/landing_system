@@ -24,6 +24,8 @@ require_once LANDING_CONFIG_DIR . '/includes/admin-cta.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-head-seo.php';
 require_once LANDING_CONFIG_DIR . '/adapters/AdapterInterface.php';
 require_once LANDING_CONFIG_DIR . '/adapters/EmailAdapter.php';
+require_once LANDING_CONFIG_DIR . '/adapters/TelegramAdapter.php';
+require_once LANDING_CONFIG_DIR . '/adapters/WhatsAppAdapter.php';
 
 add_action('wp_head', 'landing_render_head_extras', 5);
 
