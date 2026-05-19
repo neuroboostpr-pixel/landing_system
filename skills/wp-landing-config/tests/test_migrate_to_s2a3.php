@@ -91,5 +91,17 @@ assert_test(isset($by_name['amocrm']) && $by_name['amocrm']['settings']['subdoma
 $again = migrate_integrations_from_options(1);
 assert_test($again === 0, "T_INT_5 idempotent (got $again)");
 
+// T_INT_6: migrate_cta_from_options does NOT set MARKER_OPTION on its own.
+// Regression for: marker was previously set inside migrate_cta and silently
+// skipped integrations migration on next maybe_run() call.
+reset_mig();
+$GLOBALS['_mock_options'][1]['landing_cta_presets'] = [
+    'primary' => ['type' => 'scroll', 'target' => '#x', 'label' => 'X',
+                  'phone' => '', 'form_id' => '', 'message_template' => ''],
+];
+migrate_cta_from_options(1);
+assert_test(\get_site_option(\LandingConfig\Migrate\MARKER_OPTION) !== '1',
+    'T_INT_6 migrate_cta does not set MARKER_OPTION (maybe_run owns marker)');
+
 echo "$tests tests, $failures failures\n";
 exit($failures > 0 ? 1 : 0);

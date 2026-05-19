@@ -49,9 +49,6 @@ function migrate_cta_from_options(int $network_blog_id): int {
         ], true, $network_blog_id);
         if ($id > 0) $count++;
     }
-    if ($count > 0) {
-        \update_site_option(MARKER_OPTION, '1');
-    }
     return $count;
 }
 
