@@ -190,10 +190,28 @@ Beget сам обновляет каждые 60 дней. Скрейп-авто�
 В wp-admin появляется меню «Лендинг» с подстраницами:
 - Заявки (список + CSV export)
 - CTA-кнопки (5 пресетов)
-- Head & SEO (счётчики, OG, GSC, raw HTML)
+- Снипеты (любые HTML/JS-вставки в head/body/footer; show inherited from network)
 - Интеграции (6 адаптеров + Test connection)
 
-Network admin показывает «Лендинг» → «Заявки (все сегменты)» — сводный просмотр со всех subsite.
+Network Admin → «Лендинг (сеть)» с подстраницами:
+- Заявки (все сегменты) — агрегатор по всем subsite
+- Снипеты — глобальные snippets применяются ко ВСЕМ subsites (можно перекрыть в site UI через одинаковый `name`)
+
+### Snippets manager (S2-A.2)
+
+Два уровня хранения:
+- **Network** (Super Admin → Лендинг (сеть) → Снипеты): применяется ко всем subsites
+- **Site** (Subsite Admin → Лендинг → Снипеты): только этот subsite
+
+**Override через `name`:** если site snippet имеет тот же машина-id (`name` field) что и network snippet — site **перекрывает** network (network скипается на этом subsite). Snippet без `name` — всегда append-only, не перекрывает.
+
+**Positions:** `head`, `body_open` (начало `<body>`), `body_close` (перед `</body>` / footer).
+
+**Page-scope (site only):** `global` (все страницы subsite) или `local` (только выбранные Page/Post).
+
+**Allowed HTML tags:** `<script>`, `<meta>`, `<link>`, `<style>`, `<noscript>`, `<iframe>`, `<div>`, `<span>`, `<img>`, `<a>`, `<p>`, `<br>` + типичные атрибуты (data-*, src, async, integrity, и т.д.).
+
+**Security:** capability `manage_options` (site) / `manage_network_options` (network) — единственная защита. `<script>` разрешён → admin-only по дизайну. Не давайте manage_options кому попало.
 
 ### Pre-requisites
 
