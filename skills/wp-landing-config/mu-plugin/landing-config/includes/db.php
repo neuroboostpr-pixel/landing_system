@@ -16,25 +16,43 @@ function get_lead_log_table_name(): string {
     return $wpdb->get_blog_prefix() . 'landing_lead_log';
 }
 
+/**
+ * Install schema on first run; let dbDelta handle additive column diffs on
+ * version bumps. Data migrations (e.g. backfill on schema change) require
+ * explicit branches on $current — not currently needed.
+ */
 function maybe_install_or_migrate(): void {
     $current = get_site_option(DB_VERSION_OPTION, '');
     if ($current === DB_VERSION) {
         return;
     }
 
-    // Per-blog tables: switch to each blog, create tables, restore.
-    if (function_exists('get_sites') && is_multisite()) {
-        $sites = get_sites(['number' => 999]);
+    $ok = true;
+    // Tables are per-blog (not network-wide) so each audience segment owns its leads — required for data-isolation between subsites.
+    if (is_multisite()) {
+        // 'number' => 0 means "no limit" in WP_Site_Query.
+        $sites = get_sites(['number' => 0]);
         foreach ($sites as $site) {
             switch_to_blog((int)$site->blog_id);
-            create_tables_for_current_blog();
-            restore_current_blog();
+            try {
+                create_tables_for_current_blog();
+            } catch (\Throwable $e) {
+                $ok = false;
+            } finally {
+                restore_current_blog();
+            }
         }
     } else {
-        create_tables_for_current_blog();
+        try {
+            create_tables_for_current_blog();
+        } catch (\Throwable $e) {
+            $ok = false;
+        }
     }
 
-    update_site_option(DB_VERSION_OPTION, DB_VERSION);
+    if ($ok) {
+        update_site_option(DB_VERSION_OPTION, DB_VERSION);
+    }
 }
 
 function create_tables_for_current_blog(): void {
@@ -57,7 +75,7 @@ function create_tables_for_current_blog(): void {
         utm_term VARCHAR(191) NOT NULL DEFAULT '',
         utm_content VARCHAR(191) NOT NULL DEFAULT '',
         ip VARCHAR(45) NOT NULL DEFAULT '',
-        user_agent VARCHAR(500) NOT NULL DEFAULT '',
+        user_agent TEXT NULL,
         processed_status VARCHAR(32) NOT NULL DEFAULT 'pending',
         PRIMARY KEY (id),
         KEY created_at (created_at),

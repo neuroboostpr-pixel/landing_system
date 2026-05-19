@@ -67,5 +67,28 @@ assert_test(
     "leads table schema includes id, created_at, name, phone, email"
 );
 
+// Test 7: dbDelta calls cover all multisite blogs (not just one)
+$GLOBALS['_mock_dbdelta_calls'] = [];
+$GLOBALS['_mock_site_meta']['landing_config_db_version'] = '';
+maybe_install_or_migrate();
+$all_sql = implode("\n", $GLOBALS['_mock_dbdelta_calls']);
+assert_test(
+    strpos($all_sql, 'wp_2_landing_leads') !== false &&
+        strpos($all_sql, 'wp_3_landing_leads') !== false,
+    "maybe_install_or_migrate creates tables for blogs 2 and 3, not just blog 1"
+);
+
+// Test 8: single-site path (is_multisite=false) still calls dbDelta
+$GLOBALS['_mock_dbdelta_calls'] = [];
+$GLOBALS['_mock_site_meta']['landing_config_db_version'] = '';
+$GLOBALS['_mock_is_multisite'] = false;
+set_mock_current_blog_id(1);
+maybe_install_or_migrate();
+assert_test(
+    count($GLOBALS['_mock_dbdelta_calls']) === 2,
+    "single-site path calls dbDelta twice (leads + lead_log), got: " . count($GLOBALS['_mock_dbdelta_calls'])
+);
+$GLOBALS['_mock_is_multisite'] = true; // reset
+
 echo "\n$tests tests, $failures failures\n";
 exit($failures > 0 ? 1 : 0);

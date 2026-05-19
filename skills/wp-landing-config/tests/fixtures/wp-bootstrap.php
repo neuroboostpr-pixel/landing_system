@@ -88,4 +88,5 @@ function restore_current_blog() {
     return true;
 }
 
-function is_multisite() { return true; }
+$GLOBALS['_mock_is_multisite'] = true;
+function is_multisite() { return (bool)$GLOBALS['_mock_is_multisite']; }
