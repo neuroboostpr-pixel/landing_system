@@ -172,3 +172,45 @@ function list_snippets(array $filter = [], bool $is_network = false): array {
 
 function list_site_snippets(array $filter = []): array    { return list_snippets($filter, false); }
 function list_network_snippets(array $filter = []): array { return list_snippets($filter, true); }
+
+add_action('wp_head',      __NAMESPACE__ . '\\render_head',       5);
+add_action('wp_body_open', __NAMESPACE__ . '\\render_body_open',  5);
+add_action('wp_footer',    __NAMESPACE__ . '\\render_body_close', 99);
+
+function render_head(): void       { render('head'); }
+function render_body_open(): void  { render('body_open'); }
+function render_body_close(): void { render('body_close'); }
+
+function render(string $position): void {
+    if (!in_array($position, VALID_POSITIONS, true)) return;
+
+    // Site snippets — page-scope filter (global or local matching current page)
+    $current = function_exists('get_queried_object_id') ? get_queried_object_id() : 0;
+    $site = list_site_snippets(['position' => $position, 'enabled' => true]);
+    $site = array_values(array_filter($site, function ($s) use ($current) {
+        if ($s['scope'] === 'global') return true;
+        return in_array($current, $s['target_post_ids'], true);
+    }));
+
+    // Names of site snippets → for network override
+    $site_names = [];
+    foreach ($site as $s) {
+        if ($s['name'] !== '') $site_names[] = $s['name'];
+    }
+
+    // Network snippets — skip those whose name matches a site snippet name
+    $network = list_network_snippets(['position' => $position, 'enabled' => true]);
+    $network = array_values(array_filter($network, function ($s) use ($site_names) {
+        return $s['name'] === '' || !in_array($s['name'], $site_names, true);
+    }));
+
+    $all = array_merge($network, $site);
+    usort($all, fn($a, $b) => $a['priority'] - $b['priority']);
+
+    foreach ($all as $s) {
+        $tag = $s['is_network'] ? 'network' : 'site';
+        printf("\n<!-- lp_snippet:%d \"%s\" [%s] -->\n", $s['id'], $s['title'], $tag);
+        echo $s['code'];
+        printf("\n<!-- /lp_snippet:%d -->\n", $s['id']);
+    }
+}
