@@ -29,6 +29,7 @@ require_once LANDING_CONFIG_DIR . '/adapters/WhatsAppAdapter.php';
 require_once LANDING_CONFIG_DIR . '/adapters/AmoCRMAdapter.php';
 require_once LANDING_CONFIG_DIR . '/adapters/Bitrix24Adapter.php';
 require_once LANDING_CONFIG_DIR . '/adapters/HubSpotAdapter.php';
+require_once LANDING_CONFIG_DIR . '/includes/admin-integrations.php';
 
 add_action('wp_head', 'landing_render_head_extras', 5);
 
