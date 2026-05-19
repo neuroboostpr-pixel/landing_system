@@ -2,7 +2,7 @@
 
 > Авто-сгенерированный индекс. Обновляется при `python -m scripts.wiki.compile --source-mode=system`.
 
-**Концептов всего:** 473
+**Концептов всего:** 469
 **Категории:** agent, block, command, rule, script, skill, stage, unknown
 
 **Известные ограничения:**
@@ -93,7 +93,6 @@
 
 - [[2026-05-16-pr-i-b-visual-qa-design]] — visual-qa
 - [[2026-05-16-pr-i-b-visual-qa-plan]] — visual-qa
-- [[2026-05-16-pr-i-b-visual-qa-plan-2]] — visual-qa
 - [[block-composition]] — block-composition
 - [[block-library-management]] — block-library-management
 - [[brand-kit-build]] — brand-kit-build
@@ -112,7 +111,6 @@
 - [[landing-content]] — landing-content
 - [[landing-deploy]] — landing-deploy
 - [[landing-design]] — landing-design
-- [[landing-final-check-2]] — landing-final-check
 - [[landing-from-context]] — landing-from-context
 - [[landing-go]] — landing-go
 - [[landing-help]] — landing-help
@@ -121,7 +119,6 @@
 - [[landing-niche]] — landing-niche
 - [[landing-onboarding]] — landing-onboarding
 - [[landing-photos]] — landing-photos
-- [[landing-previews-2]] — landing-previews
 - [[landing-prototype]] — landing-prototype
 - [[landing-qa]] — landing-qa
 - [[landing-references]] — landing-references
@@ -156,7 +153,6 @@
 - [[2026-05-13-pr-d-orchestrator-integration-plan]] — pr-d-orchestrator-integration-plan
 - [[2026-05-15-pr-g-stage-lock-auto-wiki-design]] — pr-g-stage-lock-auto-wiki
 - [[2026-05-15-pr-g-stage-lock-plan]] — pr-g-stage-lock-plan
-- [[2026-05-15-pr-g-stage-lock-plan-2]] — pr-g-stage-lock-auto-wiki
 - [[2026-05-15-pr-h-content-preserve-design]] — content-preserve
 - [[2026-05-15-pr-h-content-preserve-plan]] — pr-h-content-preserve
 - [[2026-05-15-wiki-graph-markup-design]] — wiki-graph-markup-design
