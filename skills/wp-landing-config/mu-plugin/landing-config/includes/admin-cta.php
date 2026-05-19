@@ -14,6 +14,20 @@ add_action('admin_menu', function () {
         'landing-config-cta',
         __NAMESPACE__ . '\\render_page'
     );
+
+    // Диагностика R1 ("Sorry, you are not allowed to access this page") на CTA.
+    // Логируем результат cap-проверки при добавлении пункта меню — если admin_menu
+    // вообще не сработал на этом запросе, в debug.log не будет строки 'lp_cta_menu'.
+    if (defined('WP_DEBUG_LOG') && WP_DEBUG_LOG) {
+        error_log(sprintf(
+            'lp_cta_menu blog_id=%d user_id=%d super=%d cap_manage=%d is_network_admin=%d',
+            function_exists('get_current_blog_id') ? get_current_blog_id() : 0,
+            function_exists('get_current_user_id') ? get_current_user_id() : 0,
+            function_exists('is_super_admin') ? (int) is_super_admin() : -1,
+            current_user_can('manage_options') ? 1 : 0,
+            function_exists('is_network_admin') ? (int) is_network_admin() : -1
+        ));
+    }
 });
 
 add_action('admin_init', function () {
