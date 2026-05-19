@@ -421,3 +421,30 @@ WordPress auto-loads ТОЛЬКО `wp-content/mu-plugins/*.php` (top-level), н�
 ### Pitfall #9: wp-cli --network не поддерживается на старом wp-cli
 
 Решение в `install-mu-plugin.sh`: вместо `--network option get siteurl` итерируем `wp site list --field=url` и хитим каждый subsite отдельно — это триггерит init-action на нужном блоге.
+
+## S2-A.2 Snippets manager live smoke (2026-05-19)
+
+Validated на ailexi.ru multisite (blog 1 ailexi.ru + blog 2 russian.ailexi.ru):
+
+### Setup
+- Re-deploy через `install-mu-plugin.sh` — мu-plugin перезалит с новой структурой (snippets.php + admin-snippets.php + admin-snippets-network.php)
+- Старый admin-head-seo.php и helper `landing_render_head_extras` удалены полностью (нет production-данных, migration не понадобилась)
+
+### CRUD verification (через wp eval)
+- `save_snippet([...], true)` создаёт network snippet (post_type=lp_snippet на blog 1, meta `_lp_snippet_is_network=1`)
+- `save_snippet([...], false)` создаёт site snippet (post_type=lp_snippet на текущем blog, meta `_lp_snippet_is_network=0`)
+- `delete_snippet($id, $is_network)` корректно очищает post + meta
+
+### Cascade verification
+- Создан network snippet `name='metrika'` → виден на ailexi.ru И russian.ailexi.ru (3 markers каждый: open-comment + script + close-comment)
+- Создан site snippet `name='metrika'` на ailexi.ru → **перекрыл** network: ailexi.ru показывает SITE_OVERRIDE, NETWORK_METRIKA скрыт. russian.ailexi.ru остался с NETWORK_METRIKA.
+- Создан site snippet без `name` (position=body_close) → сосуществует с site override (append-only, не перекрывает): оба видны в HTML.
+- Disable network snippet → исчезает на russian.ailexi.ru сразу (cb=timestamp обходит кеш Beget).
+
+### Admin UI URLs
+- Site admin: `http://<subsite>/wp-admin/admin.php?page=landing-config-snippets` (manage_options)
+- Network admin: `http://ailexi.ru/wp-admin/network/admin.php?page=landing-config-network-snippets` (manage_network_options)
+
+### Pitfall #10: wp eval namespaced function calls
+
+`wp-cli eval` требует двойного escape для namespaces: `\\LandingConfig\\Snippets\\save_snippet` (одна пара для bash, вторая для PHP).

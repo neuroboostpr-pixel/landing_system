@@ -280,7 +280,7 @@ clone-subsite + lib (beget-api, ssh-helpers, state).
 который даёт клиенту и маркетологу через wp-admin настраивать:
 - CRM/мессенджеры (6 адаптеров: Email, Telegram, WhatsApp, AmoCRM, Bitrix24, HubSpot)
 - CTA-кнопки (5 пресетов с per-site override)
-- Head & SEO (GA4, Y.Metrika, FB Pixel, GSC, OG, custom HTML)
+- Снипеты (произвольный HTML в head/body_open/footer; network-level + per-site override через `name`)
 - Заявки (per-blog таблицы wp_<bid>_landing_leads + admin UI)
 
 Multisite-aware: network defaults + per-site override; per-blog таблицы заявок.
