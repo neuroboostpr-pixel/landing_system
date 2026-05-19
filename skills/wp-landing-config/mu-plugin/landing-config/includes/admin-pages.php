@@ -43,7 +43,7 @@ function render_dashboard(): void {
         <ul>
             <li><strong>Заявки</strong> — список полученных заявок, экспорт CSV</li>
             <li><strong>CTA-кнопки</strong> — настройка 5 пресетов кнопок</li>
-            <li><strong>Head &amp; SEO</strong> — счётчики, мета-теги, верификации</li>
+            <li><strong>Снипеты</strong> — счётчики, мета-теги, виджеты, любой HTML в head/body/footer</li>
             <li><strong>Интеграции</strong> — подключение CRM, Telegram, WhatsApp</li>
         </ul>
         <p><em>Версия: <?php echo esc_html(LANDING_CONFIG_VERSION); ?></em></p>

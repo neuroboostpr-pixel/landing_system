@@ -21,7 +21,6 @@ require_once LANDING_CONFIG_DIR . '/includes/admin-pages.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-leads.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-leads-network.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-cta.php';
-require_once LANDING_CONFIG_DIR . '/includes/admin-head-seo.php';
 require_once LANDING_CONFIG_DIR . '/adapters/AdapterInterface.php';
 require_once LANDING_CONFIG_DIR . '/adapters/EmailAdapter.php';
 require_once LANDING_CONFIG_DIR . '/adapters/TelegramAdapter.php';
@@ -30,8 +29,6 @@ require_once LANDING_CONFIG_DIR . '/adapters/AmoCRMAdapter.php';
 require_once LANDING_CONFIG_DIR . '/adapters/Bitrix24Adapter.php';
 require_once LANDING_CONFIG_DIR . '/adapters/HubSpotAdapter.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-integrations.php';
-
-add_action('wp_head', 'landing_render_head_extras', 5);
 
 add_action('init', function () {
     \LandingConfig\DB\maybe_install_or_migrate();
