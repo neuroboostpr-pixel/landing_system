@@ -207,7 +207,7 @@ if (!function_exists('wp_insert_post')) {
         $GLOBALS['_mock_posts'][$id] = array_merge(
             ['post_type' => 'post', 'post_status' => 'publish', 'post_title' => ''],
             $postarr,
-            ['ID' => $id]
+            ['ID' => $id, '_mock_blog_id' => get_current_blog_id()]
         );
         return $id;
     }
@@ -239,10 +239,15 @@ if (!function_exists('get_posts')) {
         $order = strtoupper($args['order'] ?? 'DESC');
         $meta_query = $args['meta_query'] ?? [];
         $results = [];
+        $current_blog = get_current_blog_id();
         foreach ($GLOBALS['_mock_posts'] as $id => $p) {
             // Support both array and object storage (seed_cpt stores objects)
             $post_type   = is_object($p) ? ($p->post_type   ?? '') : ($p['post_type']   ?? '');
             $post_status = is_object($p) ? ($p->post_status ?? '') : ($p['post_status'] ?? '');
+            // Blog scoping: posts inserted via wp_insert_post carry _mock_blog_id; filter by current blog.
+            // Posts seeded directly (seed_cpt) have no _mock_blog_id and are not filtered.
+            $mock_blog_id = is_object($p) ? ($p->_mock_blog_id ?? null) : ($p['_mock_blog_id'] ?? null);
+            if ($mock_blog_id !== null && (int)$mock_blog_id !== $current_blog) continue;
             if ($post_type !== $type) continue;
             if ($post_status !== 'publish' && empty($args['post_status'])) continue;
             // Filter by meta_query (supports = operator only)
