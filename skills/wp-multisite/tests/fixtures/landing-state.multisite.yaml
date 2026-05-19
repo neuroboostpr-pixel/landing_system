@@ -1,0 +1,11 @@
+project: "test-project"
+created: "2026-05-18T10:00:00Z"
+schema_version: 2
+multisite: true
+audience_segments:
+  - slug: russian
+    host: russian.example.ru
+    blog_id: 2
+    created: "2026-05-18T12:00:00Z"
+stages:
+  "09_deploy": {status: approved, timestamp: "2026-05-18T11:00:00Z"}

@@ -133,3 +133,44 @@ bash scripts/migrate-add-wiki.sh ~/Lendings/<slug>
 - Плагин **Local Images Plus** — скачивать картинки в vault а не оставлять ссылки
 
 Подробнее: [spec](superpowers/specs/2026-05-15-wiki-graph-markup-design.md), [plan](superpowers/plans/2026-05-15-wiki-graph-pr-f1-plan.md).
+
+## Когда нужен multisite-режим
+
+Single-site (по умолчанию):
+- У клиента **один лендинг** под одну аудиторию.
+- Домен — один без поддоменов.
+
+Multisite (через `/landing-segment`):
+- У клиента **несколько лендингов** под разные сегменты ЦА.
+- Используются поддомены одного клиентского домена.
+- Один wp-admin управляет всеми сегментами.
+
+### Миграция single → multisite
+
+Автоматическая. При первом запуске `/landing-segment <slug>` для проекта,
+у которого `state.multisite=false`, запускается
+`skills/wp-multisite/scripts/migrate-to-multisite.sh`. Он:
+1. Создаёт wildcard subdomain в DNS через Beget API.
+2. Активирует `WP_ALLOW_MULTISITE` в `wp-config.php`.
+3. Запускает `wp core multisite-convert --subdomains`.
+4. Переписывает `.htaccess` под multisite (subdomain mode).
+5. Сетевая активация Lazy Blocks + RankMath SEO.
+6. Флипает `state.multisite=true`.
+
+После миграции существующий лендинг становится `blog_id=1` (главным сайтом
+сети). Контент не теряется.
+
+### Pre-requisites
+
+Помимо стандартных переменных `.env`, нужно:
+- `BEGET_SITE_ID` — числовой id «сайт-сущности» на Бегете (из `site/getList`).
+- `BEGET_DOMAIN_ID` — числовой id корневого домена (из `domain/getList`).
+- `ROOT_DOMAIN` — fqdn корневого клиентского домена.
+
+### SSL после миграции
+
+**Manual one-click через панель Beget** (Домены → SSL → бесплатный wildcard
+Let's Encrypt). Покрывает все existing и future subdomains.
+Beget сам обновляет каждые 60 дней. Скрейп-автоматизация — следующая фаза.
+
+См. [docs/beget-cookbook.md §SSL](beget-cookbook.md).

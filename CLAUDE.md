@@ -239,3 +239,37 @@ bash scripts/check-wiki-sync.sh
 - Wiki разошлась с источниками → `python3 -m scripts.wiki.compile --source-mode=system && git add wiki/ && git commit -m "chore(wiki): manual resync"`
 
 **Никогда не коммить изменения в `agents/`, `skills/`, `commands/`, `template/`, `docs/standards/` без свежей wiki.** Хук это делает автоматом, но если хук отключён или упал — пересобирай руками.
+
+## Multisite режим и сегменты ЦА (S2-CD CD1)
+
+С 2026-05-18 landing-system поддерживает multisite-режим: один клиентский
+корневой домен (`liauto.dubai`) может содержать N сегментов целевой
+аудитории (`russian.liauto.dubai`, `family.liauto.dubai`, ...),
+каждый — отдельный WordPress subsite в одной multisite-сети.
+
+### Команды
+
+- `/landing-segment <slug>` — создать новый сегмент ЦА (subdomain + WP subsite).
+  При первом сегменте автоматически мигрирует проект single-site → multisite.
+- `/landing-clone <source> <dest>` — byte-by-byte копия сегмента в новый сегмент.
+
+### Артефакты
+
+- `.landing-state.yaml::multisite` (bool) — флаг режима.
+- `.landing-state.yaml::audience_segments[]` — список сегментов с blog_id и host.
+- `13_СЕГМЕНТЫ_ЦА/<slug>/subbrief.yaml` — бриф сегмента (заполняет маркетолог).
+- `13_СЕГМЕНТЫ_ЦА/<slug>/.subsite-meta.yaml` — машинные метаданные.
+
+### Скилл
+
+`skills/wp-multisite/` — содержит migrate-to-multisite, landing-segment,
+clone-subsite + lib (beget-api, ssh-helpers, state).
+
+### Required .env
+
+Помимо стандартных BEGET_*, для multisite требуется `BEGET_SITE_ID`
+(integer id «site-entity» на Бегете — получить через
+`beget_api site/getList` для соответствующего public_html).
+
+См. также [docs/beget-cookbook.md](docs/beget-cookbook.md),
+[docs/superpowers/specs/2026-05-18-s2cd-multisite-cloning-design.md](docs/superpowers/specs/2026-05-18-s2cd-multisite-cloning-design.md).
