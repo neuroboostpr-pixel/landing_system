@@ -26,6 +26,9 @@ require_once LANDING_CONFIG_DIR . '/adapters/AdapterInterface.php';
 require_once LANDING_CONFIG_DIR . '/adapters/EmailAdapter.php';
 require_once LANDING_CONFIG_DIR . '/adapters/TelegramAdapter.php';
 require_once LANDING_CONFIG_DIR . '/adapters/WhatsAppAdapter.php';
+require_once LANDING_CONFIG_DIR . '/adapters/AmoCRMAdapter.php';
+require_once LANDING_CONFIG_DIR . '/adapters/Bitrix24Adapter.php';
+require_once LANDING_CONFIG_DIR . '/adapters/HubSpotAdapter.php';
 
 add_action('wp_head', 'landing_render_head_extras', 5);
 
