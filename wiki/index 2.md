@@ -2,7 +2,7 @@
 
 > Авто-сгенерированный индекс. Обновляется при `python -m scripts.wiki.compile --source-mode=system`.
 
-**Концептов всего:** 473
+**Концептов всего:** 489
 **Категории:** agent, block, command, rule, script, skill, stage, unknown
 
 **Известные ограничения:**
@@ -93,12 +93,30 @@
 
 - [[2026-05-16-pr-i-b-visual-qa-design]] — visual-qa
 - [[2026-05-16-pr-i-b-visual-qa-plan]] — visual-qa
-- [[2026-05-16-pr-i-b-visual-qa-plan-2]] — visual-qa
 - [[block-composition]] — block-composition
 - [[block-library-management]] — block-library-management
 - [[brand-kit-build]] — brand-kit-build
 - [[client-assets-collection]] — client-assets-collection
 - [[design-tokens-generation]] — design-tokens-generation
+- [[gpt5-prompting-engine]] — gpt5-prompting-engine
+- [[landing-from-context]] — landing-from-context
+- [[landing-onboarding]] — landing-onboarding
+- [[landing-project-init]] — landing-project-init
+- [[landing-versioning-and-cloning]] — landing-versioning-and-cloning
+- [[moodboard-creation]] — moodboard-creation
+- [[niche-analysis]] — niche-analysis
+- [[paralaximus-codex]] — paralaximus-codex
+- [[photo-curation]] — photo-curation
+- [[photo-styling]] — photo-styling
+- [[prototype-import]] — prototype-import
+- [[references-collection]] — references-collection
+- [[style-decomposition]] — style-decomposition
+- [[visual-generation]] — visual-generation
+- [[visual-qa]] — visual-qa
+- [[wireframe-rendering]] — wireframe-rendering
+- [[wp-cli-deployer]] — wp-cli-deployer
+- [[wp-gutenberg-block-builder]] — wp-gutenberg-block-builder
+- [[wp-theme-assembler]] — wp-theme-assembler
 
 ## ⚡ Команды
 
@@ -112,16 +130,17 @@
 - [[landing-content]] — landing-content
 - [[landing-deploy]] — landing-deploy
 - [[landing-design]] — landing-design
-- [[landing-final-check-2]] — landing-final-check
+- [[landing-final-check]] — landing-final-check
 - [[landing-from-context]] — landing-from-context
 - [[landing-go]] — landing-go
 - [[landing-help]] — landing-help
+- [[landing-import-blocks]] — landing-import-blocks
 - [[landing-moodboard]] — landing-moodboard
 - [[landing-new]] — landing-new
 - [[landing-niche]] — landing-niche
 - [[landing-onboarding]] — landing-onboarding
 - [[landing-photos]] — landing-photos
-- [[landing-previews-2]] — landing-previews
+- [[landing-previews]] — landing-previews
 - [[landing-prototype]] — landing-prototype
 - [[landing-qa]] — landing-qa
 - [[landing-references]] — landing-references
@@ -156,7 +175,6 @@
 - [[2026-05-13-pr-d-orchestrator-integration-plan]] — pr-d-orchestrator-integration-plan
 - [[2026-05-15-pr-g-stage-lock-auto-wiki-design]] — pr-g-stage-lock-auto-wiki
 - [[2026-05-15-pr-g-stage-lock-plan]] — pr-g-stage-lock-plan
-- [[2026-05-15-pr-g-stage-lock-plan-2]] — pr-g-stage-lock-auto-wiki
 - [[2026-05-15-pr-h-content-preserve-design]] — content-preserve
 - [[2026-05-15-pr-h-content-preserve-plan]] — pr-h-content-preserve
 - [[2026-05-15-wiki-graph-markup-design]] — wiki-graph-markup-design
@@ -216,7 +234,6 @@
 - [[setup]] — setup-guide
 - [[setup-flag-sh-doc]] — setup-flag
 - [[stage-08-helper-py-doc]] — stage-08-helper
-- [[stage-execution-protocol]] — stage-execution-protocol
 - [[stage-gates]] — stage-gates
 - [[state-yaml-py-doc]] — state-yaml-parser
 - [[system-compiler-py-doc]] — system-compiler
@@ -463,7 +480,6 @@
 - [[migrate-to-preview-panel-sh-doc]] — migrate-to-preview-panel
 - [[preview-blocks-library-py-doc]] — preview-blocks-library
 - [[project-graph-compiler-py-doc]] — project-graph-compiler
-- [[render-pipeline-map-sh-doc]] — render-pipeline-map
 - [[scrape-css-sh-doc]] — scrape-css
 - [[sdk-client-py-doc]] — sdk-client
 - [[wizard-sh-doc]] — wizard
