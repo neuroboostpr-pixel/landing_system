@@ -15,6 +15,24 @@ class Bitrix24Adapter implements AdapterInterface {
         ];
     }
 
+    public static function field_definitions(): array {
+        return [
+            'webhook_url'    => ['type' => 'url', 'label' => 'Webhook URL', 'encrypt' => true, 'required' => true,
+                                 'placeholder' => 'https://acme.bitrix24.ru/rest/N/TOKEN/'],
+            'category_id'    => ['type' => 'text', 'label' => 'Category ID (опционально)'],
+            'assigned_by_id' => ['type' => 'text', 'label' => 'Assigned user ID'],
+        ];
+    }
+
+    public static function settings(): array {
+        $r = \LandingConfig\Integrations\resolve_integration(static::name(), \get_current_blog_id());
+        if ($r === null) {
+            $legacy = \get_option('landing_integration_' . static::name(), []);
+            return is_array($legacy) ? $legacy : [];
+        }
+        return $r['settings'];
+    }
+
     public function send(array $lead): array {
         $url_enc = \landing_config_get('integration_bitrix24_webhook_url');
         $url = $url_enc ? decrypt($url_enc) : '';

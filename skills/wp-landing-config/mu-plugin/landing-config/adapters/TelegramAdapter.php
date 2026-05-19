@@ -17,6 +17,25 @@ class TelegramAdapter implements AdapterInterface {
         ];
     }
 
+    public static function field_definitions(): array {
+        return [
+            'bot_token' => ['type' => 'password', 'label' => 'Bot Token', 'encrypt' => true, 'required' => true,
+                            'placeholder' => '123456:ABC-DEF...'],
+            'chat_id'   => ['type' => 'text', 'label' => 'Chat ID', 'required' => true,
+                            'placeholder' => '-1001234567890'],
+        ];
+    }
+
+    public static function settings(): array {
+        $r = \LandingConfig\Integrations\resolve_integration(static::name(), \get_current_blog_id());
+        if ($r === null) {
+            // Legacy fallback
+            $legacy = \get_option('landing_integration_' . static::name(), []);
+            return is_array($legacy) ? $legacy : [];
+        }
+        return $r['settings'];
+    }
+
     public function send(array $lead): array {
         $token_enc = \landing_config_get('integration_telegram_bot_token');
         $token = $token_enc ? decrypt($token_enc) : '';

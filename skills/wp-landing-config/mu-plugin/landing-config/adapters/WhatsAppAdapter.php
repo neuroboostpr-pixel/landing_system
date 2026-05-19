@@ -23,6 +23,25 @@ class WhatsAppAdapter implements AdapterInterface {
         ];
     }
 
+    public static function field_definitions(): array {
+        return [
+            'phone_number_id' => ['type' => 'text', 'label' => 'Phone Number ID', 'required' => true],
+            'access_token'    => ['type' => 'password', 'label' => 'Access Token', 'encrypt' => true, 'required' => true],
+            'template_name'   => ['type' => 'text', 'label' => 'Template name', 'placeholder' => 'new_lead_notification'],
+            'to_number'       => ['type' => 'text', 'label' => 'WhatsApp получатель', 'required' => true,
+                                  'placeholder' => '+79001234567'],
+        ];
+    }
+
+    public static function settings(): array {
+        $r = \LandingConfig\Integrations\resolve_integration(static::name(), \get_current_blog_id());
+        if ($r === null) {
+            $legacy = \get_option('landing_integration_' . static::name(), []);
+            return is_array($legacy) ? $legacy : [];
+        }
+        return $r['settings'];
+    }
+
     public function send(array $lead): array {
         $token_enc = \landing_config_get('integration_whatsapp_access_token');
         $token = $token_enc ? decrypt($token_enc) : '';

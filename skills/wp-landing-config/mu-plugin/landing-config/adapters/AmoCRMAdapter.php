@@ -17,6 +17,25 @@ class AmoCRMAdapter implements AdapterInterface {
         ];
     }
 
+    public static function field_definitions(): array {
+        return [
+            'subdomain'           => ['type' => 'text', 'label' => 'AmoCRM поддомен', 'required' => true, 'placeholder' => 'acme'],
+            'access_token'        => ['type' => 'password', 'label' => 'Access Token (long-lived)', 'encrypt' => true, 'required' => true],
+            'pipeline_id'         => ['type' => 'text', 'label' => 'Pipeline ID', 'placeholder' => '7891234'],
+            'status_id'           => ['type' => 'text', 'label' => 'Status ID (новый лид)', 'placeholder' => '11223344'],
+            'responsible_user_id' => ['type' => 'text', 'label' => 'Responsible user ID', 'placeholder' => '5566'],
+        ];
+    }
+
+    public static function settings(): array {
+        $r = \LandingConfig\Integrations\resolve_integration(static::name(), \get_current_blog_id());
+        if ($r === null) {
+            $legacy = \get_option('landing_integration_' . static::name(), []);
+            return is_array($legacy) ? $legacy : [];
+        }
+        return $r['settings'];
+    }
+
     public function send(array $lead): array {
         $sub = \landing_config_get('integration_amocrm_subdomain');
         $token_enc = \landing_config_get('integration_amocrm_access_token');

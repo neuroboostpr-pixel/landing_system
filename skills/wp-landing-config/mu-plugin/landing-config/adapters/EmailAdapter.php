@@ -15,6 +15,23 @@ class EmailAdapter implements AdapterInterface {
         ];
     }
 
+    public static function field_definitions(): array {
+        return [
+            'to'      => ['type' => 'email', 'label' => 'Email получатель', 'required' => true, 'placeholder' => 'sales@company.ru'],
+            'subject' => ['type' => 'text', 'label' => 'Тема письма', 'placeholder' => 'Новая заявка с сайта'],
+            'from'    => ['type' => 'email', 'label' => 'From (опционально)', 'placeholder' => 'no-reply@site.ru'],
+        ];
+    }
+
+    public static function settings(): array {
+        $r = \LandingConfig\Integrations\resolve_integration(static::name(), \get_current_blog_id());
+        if ($r === null) {
+            $legacy = \get_option('landing_integration_' . static::name(), []);
+            return is_array($legacy) ? $legacy : [];
+        }
+        return $r['settings'];
+    }
+
     public function send(array $lead): array {
         $to = \landing_config_get('integration_email_to');
         if ($to === '') {
