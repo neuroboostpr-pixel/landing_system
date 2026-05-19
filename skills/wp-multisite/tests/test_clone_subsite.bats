@@ -84,7 +84,8 @@ teardown() { rm -rf "$MOCK_DIR" "$PROJECT_DIR"; }
     [ "$status" -eq 0 ]
     # Each page from source -> post get + post create on dest
     grep -q "post list --post_type=page" "$BATS_TMPDIR/ssh_calls.log"
-    grep -q "post create --post_type=page" "$BATS_TMPDIR/ssh_calls.log"
+    # post create reads content via stdin (`-` as positional arg, before flags)
+    grep -q "post create - --post_type=page" "$BATS_TMPDIR/ssh_calls.log"
 }
 
 @test "clone-subsite appends new segment to state" {

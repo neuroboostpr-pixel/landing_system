@@ -174,3 +174,39 @@ MOCK
     [ "$status" -eq 1 ]
     [[ "$output" == *"version"* ]]
 }
+
+@test "beget_api passes input_data JSON verbatim (no spurious closing brace)" {
+    # Regression for bug: local input_data="${2:-{}}" appended extra } to value.
+    # Mock prints out the input_data parameter so we can verify exact bytes.
+    cat > "$MOCK_DIR/curl" <<'MOCK'
+#!/bin/bash
+# Extract input_data argument verbatim and echo it (one per --data-urlencode pair)
+for arg in "$@"; do
+    case "$arg" in
+        input_data=*) echo "${arg#input_data=}"; exit 0 ;;
+    esac
+done
+echo "NO_INPUT_DATA"
+MOCK
+    chmod +x "$MOCK_DIR/curl"
+    run beget_api "domain/addSubdomainVirtual" '{"subdomain":"test","domain_id":12345}'
+    [ "$status" -eq 0 ]
+    [ "$output" = '{"subdomain":"test","domain_id":12345}' ]
+    # critically: no trailing }} or other corruption
+    [[ "$output" != *'}}' ]]
+}
+
+@test "beget_api defaults input_data to {} when not provided" {
+    cat > "$MOCK_DIR/curl" <<'MOCK'
+#!/bin/bash
+for arg in "$@"; do
+    case "$arg" in
+        input_data=*) echo "${arg#input_data=}"; exit 0 ;;
+    esac
+done
+MOCK
+    chmod +x "$MOCK_DIR/curl"
+    run beget_api "user/getAccountInfo"
+    [ "$status" -eq 0 ]
+    [ "$output" = '{}' ]
+}

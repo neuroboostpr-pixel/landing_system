@@ -14,7 +14,11 @@ beget_api() {
     # beget_api <category/method> [input_data_json]
     beget_check_env || return 1
     local method="$1"
-    local input_data="${2:-{}}"
+    # Default to empty JSON object. NOTE: ${2:-{}} would expand wrong —
+    # bash closes the expansion at the first `}`, appending the second `}`
+    # to the value. Use explicit conditional to avoid this footgun.
+    local input_data="${2-}"
+    [ -z "$input_data" ] && input_data='{}'
     local response
     response=$(curl -s -X POST "${BEGET_API}/${method}" \
         --data-urlencode "login=${BEGET_LOGIN}" \
