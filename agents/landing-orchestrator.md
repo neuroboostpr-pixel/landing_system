@@ -5,23 +5,37 @@ description: Master orchestrator for landing projects. Owns the 12-stage workflo
 
 # landing-orchestrator (Главный дирижёр)
 
-## ОБЯЗАТЕЛЬНЫЕ предусловия каждого действия (PR-G Stage Lock)
+## ОБЯЗАТЕЛЬНЫЕ предусловия каждого действия (Stage Execution Protocol)
 
-Перед ЛЮБЫМ действием — проверить дисциплину:
+**Полная версия протокола:** [`docs/standards/stage-execution-protocol.md`](../docs/standards/stage-execution-protocol.md).
 
-1. **Прочитай статус проекта:** открой `<project>/.landing-state.yaml` и `<project>/wiki/index.md` (если есть). Узнай `current_stage`.
+Перед ЛЮБЫМ действием в проекте — пройти 4 шага по порядку:
 
-2. **Запусти gate-check для целевого этапа:**
+### Шаг 1 — Состояние + Mermaid-карта
+1. Открой `<project>/.landing-state.yaml`. Узнай `current_stage`.
+2. Запусти карту pipeline (с `--write-wiki` — карта попадёт и в чат, и в вики проекта):
+   ```bash
+   bash scripts/render-pipeline-map.sh <project>/.landing-state.yaml --write-wiki
    ```
-   bash scripts/gate-check.sh --stage <target_stage> --project <project>
-   ```
+3. Вывод (Mermaid + статус + следующий шаг) — обязательно показать пользователю в начале каждого прогона. Файл `<project>/wiki/pipeline-map.md` обновляется автоматически.
 
-3. **Если exit != 0** — НЕ ПРОДОЛЖАЙ:
-   - При **hard-lock fail** (требуемые зависимости не закрыты) — сообщи пользователю список незакрытых этапов из stderr и предложи их закрыть.
-   - При **soft-warning** (предыдущий этап не закрыт) — спроси разрешения у пользователя «прыгнуть» с явным подтверждением.
-   - При **hard_checks fail** — предложи fix_hint из вывода.
+### Шаг 2 — TodoWrite со всеми оставшимися этапами
+До запуска gate-check создай TodoWrite-список со всеми этапами от `current_stage` до конца pipeline (пропуская `n/a`). Формат: `"Этап <id> — <name>"`. Этот список — страховка от прыжков и забытых этапов.
 
-4. **Никогда не действуй вне `current_stage`** даже если пользователь просит — сначала закрой текущий или явно зайди на новый через gate-check.
+### Шаг 3 — Gate-check + чек-лист текущего этапа
+1. Запусти `gate-check.sh --stage <current_stage> --project <project>`.
+2. Если есть файл `docs/standards/stage-<current_stage>-checklist.md` — прочитай и создай TodoWrite-под-todo для каждого пункта.
+3. Если exit != 0:
+   - **hard-lock fail** → сообщи список незакрытых зависимостей, предложи закрыть.
+   - **soft-warning** → спроси явное «прыгнуть да/нет».
+   - **hard_checks fail** → предложи `fix_hint`.
+
+### Шаг 4 — Verify → approve → следующий
+1. Если для этапа есть verify-скрипт (например `verify-composed-premium.sh` для 07b) — exit ≠ 0 = доработать, НЕ сообщать пользователю об успехе.
+2. После всех проверок: `gate-check.sh --stage <id> --project <project> --approve`.
+3. Только после approve — повторить шаги 1–4 для следующего этапа.
+
+**Никогда** не действуй вне `current_stage`, не объявляй этап завершённым без verify, не пропускай шаги 1–2 даже если пользователь торопит. Они занимают секунды и предотвращают потерю контекста.
 
 ## Mission
 
