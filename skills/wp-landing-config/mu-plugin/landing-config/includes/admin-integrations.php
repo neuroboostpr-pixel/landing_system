@@ -3,219 +3,214 @@ namespace LandingConfig\Admin\Integrations;
 
 if (!defined('ABSPATH')) { exit; }
 
-use LandingConfig\Adapters\EmailAdapter;
-use LandingConfig\Adapters\TelegramAdapter;
-use LandingConfig\Adapters\WhatsAppAdapter;
-use LandingConfig\Adapters\AmoCRMAdapter;
-use LandingConfig\Adapters\Bitrix24Adapter;
-use LandingConfig\Adapters\HubSpotAdapter;
-use function LandingConfig\Encryption\encrypt;
-use function LandingConfig\Encryption\decrypt;
-use function LandingConfig\Encryption\mask;
+use function LandingConfig\Integrations\list_integrations;
+use function LandingConfig\Integrations\resolve_integration;
+use function LandingConfig\Integrations\save_integration;
+use function LandingConfig\Integrations\delete_integration;
+use function LandingConfig\Integrations\has_override;
+use const LandingConfig\Integrations\VALID_ADAPTERS;
+use function LandingConfig\SegmentSelector\render as render_selector;
+use function LandingConfig\SegmentSelector\current_from_request;
 
-function all_adapters(): array {
-    return [
-        EmailAdapter::class,
-        TelegramAdapter::class,
-        WhatsAppAdapter::class,
-        AmoCRMAdapter::class,
-        Bitrix24Adapter::class,
-        HubSpotAdapter::class,
-    ];
+function adapter_class(string $name): string {
+    return match ($name) {
+        'email'    => '\\LandingConfig\\Adapters\\EmailAdapter',
+        'telegram' => '\\LandingConfig\\Adapters\\TelegramAdapter',
+        'whatsapp' => '\\LandingConfig\\Adapters\\WhatsAppAdapter',
+        'amocrm'   => '\\LandingConfig\\Adapters\\AmoCRMAdapter',
+        'bitrix24' => '\\LandingConfig\\Adapters\\Bitrix24Adapter',
+        'hubspot'  => '\\LandingConfig\\Adapters\\HubSpotAdapter',
+        default    => '',
+    };
 }
 
-add_action('admin_menu', function () {
-    add_submenu_page(
-        'landing-config',
+function mask_secret(string $val): string {
+    if ($val === '') return '— не задано —';
+    if (strlen($val) <= 4) return '••••';
+    return str_repeat('•', max(0, strlen($val) - 4)) . substr($val, -4);
+}
+
+\add_action('network_admin_menu', function () {
+    \add_submenu_page(
+        'landing-config-network',
         'Интеграции',
         'Интеграции',
-        'manage_options',
-        'landing-config-integrations',
-        __NAMESPACE__ . '\\render_page'
+        'manage_network_options',
+        'landing-config-network-integrations',
+        __NAMESPACE__ . '\\dispatch'
     );
 });
 
-add_action('admin_init', function () {
-    foreach (all_adapters() as $cls) {
-        $name = $cls::name();
-        register_setting('landing_integrations', "landing_integration_{$name}_enabled", ['type' => 'boolean']);
-        foreach ($cls::field_defs() as $field => $meta) {
-            register_setting('landing_integrations', "landing_integration_{$name}_{$field}", [
-                'type' => 'string',
-                'sanitize_callback' => $meta['type'] === 'password'
-                    ? __NAMESPACE__ . '\\sanitize_secret'
-                    : 'sanitize_text_field',
-            ]);
-        }
-    }
-});
+\add_action('admin_post_landing_int_save', __NAMESPACE__ . '\\handle_save');
+\add_action('admin_post_landing_int_toggle_override', __NAMESPACE__ . '\\handle_toggle_override');
 
-function sanitize_secret($input): string {
-    // If unchanged (still bullet-masked), signal to keep existing
-    if (preg_match('/^•+/u', $input)) {
-        return '';
-    }
-    return $input === '' ? '' : encrypt($input);
+function dispatch(): void {
+    if (!\current_user_can('manage_network_options')) { \wp_die('No.', 403); }
+    $segment = current_from_request();
+    render_page($segment);
 }
 
-// Pre-save hook: if sanitize returned '' (masked unchanged), restore previous value
-add_filter('pre_update_option', function ($value, $option) {
-    if (strpos($option, 'landing_integration_') === 0 && $value === '') {
-        $existing = get_option($option, '');
-        if ($existing !== '') return $existing;
-    }
-    return $value;
-}, 10, 2);
-
-function render_page(): void {
-    if (!current_user_can('manage_options')) { wp_die('Insufficient permissions'); }
+function render_page(int $segment): void {
+    $main_id = \function_exists('get_main_site_id') ? \get_main_site_id() : 1;
+    $blog_id = $segment === 0 ? $main_id : $segment;
     ?>
     <div class="wrap">
         <h1>Интеграции</h1>
-        <form method="post" action="options.php">
-            <?php settings_fields('landing_integrations'); ?>
-            <?php foreach (all_adapters() as $cls):
-                $name = $cls::name();
-                $enabled = (bool)get_option("landing_integration_{$name}_enabled");
-            ?>
-                <h2><?php echo esc_html($cls::label()); ?></h2>
-                <table class="form-table">
-                    <tr>
-                        <th>Включён</th>
-                        <td><label>
-                            <input type="checkbox" name="landing_integration_<?php echo $name; ?>_enabled" value="1" <?php checked($enabled); ?>>
-                            Отправлять заявки в <?php echo esc_html($cls::label()); ?>
-                        </label></td>
-                    </tr>
-                    <?php foreach ($cls::field_defs() as $field => $meta):
-                        $opt_key = "landing_integration_{$name}_{$field}";
-                        $stored = get_option($opt_key, '');
-                        $display_value = $meta['type'] === 'password' && $stored !== ''
-                            ? mask(decrypt($stored))
-                            : $stored;
-                    ?>
-                        <tr>
-                            <th><label for="<?php echo $opt_key; ?>"><?php echo esc_html($meta['label']); ?></label></th>
-                            <td>
-                                <input type="text" id="<?php echo $opt_key; ?>"
-                                    name="<?php echo $opt_key; ?>"
-                                    value="<?php echo esc_attr($display_value); ?>"
-                                    placeholder="<?php echo esc_attr($meta['placeholder'] ?? ''); ?>"
-                                    class="regular-text">
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                    <tr>
-                        <th></th>
-                        <td>
-                            <button type="button" class="button landing-test-btn" data-adapter="<?php echo $name; ?>">
-                                Test connection
-                            </button>
-                            <span class="landing-test-result" id="landing-test-result-<?php echo $name; ?>"></span>
-                        </td>
-                    </tr>
-                </table>
-            <?php endforeach; ?>
-            <?php submit_button(); ?>
-        </form>
+        <p>Подключите CRM/мессенджеры для отправки заявок. Сетевые настройки применяются ко всем сегментам;
+        сегмент может переопределить любой адаптер на свой аккаунт.</p>
+        <?php render_selector('landing-config-network-integrations', $segment); ?>
+
+        <?php foreach (VALID_ADAPTERS as $adapter_name):
+            $cls = adapter_class($adapter_name);
+            $defs = $cls ? $cls::field_definitions() : [];
+            $effective = resolve_integration($adapter_name, $blog_id);
+            $is_inherited = ($segment !== 0) && !has_override($adapter_name, $segment);
+            $is_override  = ($segment !== 0) && has_override($adapter_name, $segment);
+            $current_settings = $effective ? $effective['settings'] : array_fill_keys(array_keys($defs), '');
+        ?>
+            <div style="background:#fff; border:1px solid #c3c4c7; padding:16px 20px; margin:16px 0; border-radius:4px;">
+                <h2 style="margin-top:0; display:flex; align-items:center; gap:.6em;">
+                    <code><?php echo \esc_html($adapter_name); ?></code>
+                    <?php if ($segment === 0): ?>
+                        <span class="dashicons dashicons-admin-network" style="color:#2271b1;"></span>
+                    <?php elseif ($is_override): ?>
+                        <span style="background:#dba617; color:#fff; padding:2px 8px; border-radius:3px; font-size:11px; font-weight:600;">SITE OVERRIDE</span>
+                    <?php else: ?>
+                        <span style="background:#2271b1; color:#fff; padding:2px 8px; border-radius:3px; font-size:11px; font-weight:600;">INHERITED</span>
+                    <?php endif; ?>
+                </h2>
+
+                <?php if ($segment !== 0): ?>
+                    <form method="post" action="<?php echo \esc_url(\network_admin_url('admin-post.php')); ?>" style="margin-bottom:12px;">
+                        <?php \wp_nonce_field('landing_int_toggle_override_' . $adapter_name); ?>
+                        <input type="hidden" name="action" value="landing_int_toggle_override">
+                        <input type="hidden" name="adapter_name" value="<?php echo \esc_attr($adapter_name); ?>">
+                        <input type="hidden" name="segment" value="<?php echo (int) $segment; ?>">
+                        <label style="font-weight:600;">
+                            <input type="checkbox" name="override_enabled" value="1" <?php \checked($is_override); ?>
+                                onchange="this.form.submit();">
+                            Использовать свой <?php echo \esc_html($adapter_name); ?> для этого сегмента
+                        </label>
+                    </form>
+                <?php endif; ?>
+
+                <?php if ($segment !== 0 && $is_inherited): ?>
+                    <div style="background:#f6f7f7; padding:12px; border-radius:4px;">
+                        <p style="margin:0 0 8px;"><strong>Унаследовано от сети.</strong> Заявки этого сегмента уходят в:</p>
+                        <ul style="margin:0; color:#646970;">
+                            <?php foreach ($defs as $field => $meta):
+                                $val = $current_settings[$field] ?? '';
+                                if (!empty($meta['encrypt'])) $val = mask_secret((string) $val);
+                            ?>
+                                <li><strong><?php echo \esc_html($meta['label']); ?>:</strong> <code><?php echo \esc_html((string) $val); ?></code></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php else: ?>
+                    <form method="post" action="<?php echo \esc_url(\network_admin_url('admin-post.php')); ?>">
+                        <?php \wp_nonce_field('landing_int_save_' . $adapter_name); ?>
+                        <input type="hidden" name="action" value="landing_int_save">
+                        <input type="hidden" name="adapter_name" value="<?php echo \esc_attr($adapter_name); ?>">
+                        <input type="hidden" name="segment" value="<?php echo (int) $segment; ?>">
+                        <table class="form-table">
+                            <?php foreach ($defs as $field => $meta):
+                                $val = $current_settings[$field] ?? '';
+                                $input_type = $meta['type'] ?? 'text';
+                                if (!empty($meta['encrypt']) && $val !== '') {
+                                    $placeholder = '(сохранено: ' . mask_secret((string) $val) . ' — оставьте пустым чтобы не менять)';
+                                    $val_for_form = '';
+                                } else {
+                                    $placeholder = $meta['placeholder'] ?? '';
+                                    $val_for_form = $val;
+                                }
+                            ?>
+                                <tr>
+                                    <th><?php echo \esc_html($meta['label']); ?></th>
+                                    <td>
+                                        <input type="<?php echo \esc_attr($input_type); ?>"
+                                               name="field[<?php echo \esc_attr($field); ?>]"
+                                               value="<?php echo \esc_attr((string) $val_for_form); ?>"
+                                               placeholder="<?php echo \esc_attr($placeholder); ?>"
+                                               class="regular-text"
+                                               <?php if (!empty($meta['required']) && $val === '') echo 'required'; ?>>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </table>
+                        <p><button type="submit" class="button button-primary">Сохранить</button></p>
+                    </form>
+                <?php endif; ?>
+            </div>
+        <?php endforeach; ?>
     </div>
-    <script>
-    document.querySelectorAll('.landing-test-btn').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            const name = btn.dataset.adapter;
-            const result = document.getElementById('landing-test-result-' + name);
-            result.textContent = 'Тестирую...';
-            result.style.color = '#666';
-            const fd = new FormData();
-            fd.append('action', 'landing_test_adapter');
-            fd.append('adapter', name);
-            fd.append('_wpnonce', '<?php echo wp_create_nonce('landing_test_adapter'); ?>');
-            fetch(ajaxurl, {method: 'POST', body: fd})
-                .then(r => r.json())
-                .then(d => {
-                    result.textContent = (d.ok ? '✅ ' : '❌ ') + d.message;
-                    result.style.color = d.ok ? 'green' : 'red';
-                })
-                .catch(e => {
-                    result.textContent = '❌ ' + e.message;
-                    result.style.color = 'red';
-                });
-        });
-    });
-    </script>
     <?php
 }
 
-add_action('wp_ajax_landing_test_adapter', function () {
-    if (!current_user_can('manage_options')) { wp_send_json(['ok' => false, 'message' => 'No permissions']); }
-    check_admin_referer('landing_test_adapter');
+function handle_save(): void {
+    if (!\current_user_can('manage_network_options')) { \wp_die('No.', 403); }
+    $adapter_name = \sanitize_text_field($_POST['adapter_name'] ?? '');
+    if (!in_array($adapter_name, VALID_ADAPTERS, true)) \wp_die('Invalid', 400);
+    \check_admin_referer('landing_int_save_' . $adapter_name);
 
-    $name = sanitize_text_field($_POST['adapter'] ?? '');
-    foreach (all_adapters() as $cls) {
-        if ($cls::name() === $name) {
-            $result = (new $cls())->test_connection();
-            wp_send_json($result);
+    $segment = (int) ($_POST['segment'] ?? 0);
+    $is_network = ($segment === 0);
+    $main_id = \function_exists('get_main_site_id') ? \get_main_site_id() : 1;
+    $blog_id = $is_network ? $main_id : $segment;
+
+    $cls = adapter_class($adapter_name);
+    $defs = $cls::field_definitions();
+    $encrypted_fields = [];
+    foreach ($defs as $f => $meta) if (!empty($meta['encrypt'])) $encrypted_fields[] = $f;
+
+    $existing = resolve_integration($adapter_name, $blog_id);
+    $existing_settings = $existing ? $existing['settings'] : [];
+
+    $new_settings = [];
+    foreach ($defs as $field => $meta) {
+        $input = (string) ($_POST['field'][$field] ?? '');
+        if (!empty($meta['encrypt']) && $input === '' && isset($existing_settings[$field])) {
+            $new_settings[$field] = $existing_settings[$field];
+        } else {
+            $new_settings[$field] = \sanitize_text_field($input);
         }
     }
-    wp_send_json(['ok' => false, 'message' => 'Unknown adapter']);
-});
 
-// Dispatch lead to all enabled adapters when a lead is received
-add_action('landing_config_lead_received', function ($lead_id, $lead) {
-    foreach (all_adapters() as $cls) {
-        $name = $cls::name();
-        if (!get_option("landing_integration_{$name}_enabled")) continue;
-
-        $instance = new $cls();
-        $result = $instance->send($lead);
-
-        global $wpdb;
-        $log_table = \LandingConfig\DB\get_lead_log_table_name();
-        $wpdb->insert($log_table, [
-            'lead_id' => $lead_id,
-            'adapter' => $name,
-            'attempt' => 1,
-            'status' => $result['ok'] ? 'success' : 'failed',
-            'response_code' => $result['response_code'],
-            'response_body' => mb_substr((string)($result['response_body'] ?? ''), 0, 1000),
-            'error_text' => $result['error'],
-            'created_at' => current_time('mysql'),
-        ]);
-
-        if (!$result['ok']) {
-            wp_schedule_single_event(time() + 60, 'landing_retry_adapter', [$lead_id, $name, 2]);
+    foreach (list_integrations($blog_id) as $r) {
+        if ($r['adapter_name'] === $adapter_name && $r['is_network'] === $is_network) {
+            delete_integration($r['id']);
         }
     }
-}, 10, 2);
+    save_integration($adapter_name, $new_settings, $is_network, $blog_id, $encrypted_fields, true);
 
-// Retry handler
-add_action('landing_retry_adapter', function ($lead_id, $adapter_name, $attempt) {
-    if ($attempt > 3) return;
+    \wp_safe_redirect(\network_admin_url('admin.php?page=landing-config-network-integrations&segment=' . $segment . '&saved=1'));
+    exit;
+}
 
-    global $wpdb;
-    $leads = \LandingConfig\DB\get_leads_table_name();
-    $lead = $wpdb->get_row($wpdb->prepare("SELECT * FROM `$leads` WHERE id = %d", $lead_id), ARRAY_A);
-    if (!$lead) return;
+function handle_toggle_override(): void {
+    if (!\current_user_can('manage_network_options')) { \wp_die('No.', 403); }
+    $adapter_name = \sanitize_text_field($_POST['adapter_name'] ?? '');
+    if (!in_array($adapter_name, VALID_ADAPTERS, true)) \wp_die('Invalid', 400);
+    \check_admin_referer('landing_int_toggle_override_' . $adapter_name);
 
-    foreach (all_adapters() as $cls) {
-        if ($cls::name() !== $adapter_name) continue;
-        $result = (new $cls())->send($lead);
+    $segment = (int) ($_POST['segment'] ?? 0);
+    if ($segment === 0) \wp_die('Cannot toggle override on network level', 400);
+    $enable = !empty($_POST['override_enabled']);
 
-        $log_table = \LandingConfig\DB\get_lead_log_table_name();
-        $wpdb->insert($log_table, [
-            'lead_id' => $lead_id, 'adapter' => $adapter_name, 'attempt' => $attempt,
-            'status' => $result['ok'] ? 'success' : 'failed',
-            'response_code' => $result['response_code'],
-            'response_body' => mb_substr((string)($result['response_body'] ?? ''), 0, 1000),
-            'error_text' => $result['error'],
-            'created_at' => current_time('mysql'),
-        ]);
-
-        if (!$result['ok'] && $attempt < 3) {
-            $delays = [2 => 300, 3 => 1800];
-            wp_schedule_single_event(time() + $delays[$attempt + 1], 'landing_retry_adapter',
-                [$lead_id, $adapter_name, $attempt + 1]);
+    if (!$enable) {
+        foreach (list_integrations($segment) as $r) {
+            if ($r['adapter_name'] === $adapter_name && $r['is_network'] === false) {
+                delete_integration($r['id']);
+            }
         }
-        return;
+    } else {
+        $main_id = \function_exists('get_main_site_id') ? \get_main_site_id() : 1;
+        $net = resolve_integration($adapter_name, $main_id);
+        $settings = $net ? $net['settings'] : [];
+        $cls = adapter_class($adapter_name);
+        $encrypted_fields = [];
+        foreach ($cls::field_definitions() as $f => $m) if (!empty($m['encrypt'])) $encrypted_fields[] = $f;
+        save_integration($adapter_name, $settings, false, $segment, $encrypted_fields, true);
     }
-}, 10, 3);
+    \wp_safe_redirect(\network_admin_url('admin.php?page=landing-config-network-integrations&segment=' . $segment));
+    exit;
+}
