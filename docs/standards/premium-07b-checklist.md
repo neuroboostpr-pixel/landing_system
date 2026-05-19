@@ -400,3 +400,142 @@ function scrollTo(id) {
 ### 20. clip-path или mask-image для нестандартных форм
 Хотя бы один блок имеет нестандартную форму через clip-path (geometric mask, angled bottom) — премиум-маркер 2026.
 
+---
+
+## Дополнительные премиум-фичи (PR-Q, 2026-05-19)
+
+После наблюдения за Lovable/Vercel agent-skills и web-design-guidelines — добавлены 4 секции, закрывающие типичные «дешёвые» детали.
+
+### 21. Modular type scale — НЕ зоопарк размеров
+
+Все `font-size` в файле должны укладываться в **одну прогрессию** (1.250 / 1.333 / golden ratio). Не больше **8 уникальных размеров** на всю страницу.
+
+- [ ] В `composed-explained.md` указан выбранный scale (например `12 / 14 / 16 / 18 / 24 / 32 / 48 / 80`)
+- [ ] В CSS нет случайных значений типа `font-size: 27px` или `font-size: 19px`
+- [ ] Все hero/section заголовки используют `clamp()`, но min/max упираются в значения шкалы
+- [ ] Веса шрифта — максимум 4 на странице (например 400 / 500 / 700 / 900). Не 8.
+
+**Почему важно:** случайные размеры — главный визуальный маркер «AI-собранного» лендинга. Шкала делает страницу дороже без затрат.
+
+### 22. Focus states — клавиатурная навигация работает
+
+- [ ] Все интерактивы (`<button>`, `<a class*="btn">`, `<input>`, `<details>`, `<summary>`) имеют видимый `:focus-visible`
+- [ ] `:focus-visible` ≠ дефолтному синему outline браузера — это либо `outline: 2px solid var(--color-accent); outline-offset: 4px` либо `box-shadow: 0 0 0 3px rgba(accent, 0.4)`
+- [ ] `outline: none` без замены — **запрещено**
+- [ ] Tab по странице проходит логично: nav → hero CTA → форма → footer ссылки
+
+**Почему важно:** клавиатурная навигация — это и accessibility, и явный сигнал «сайт сделан руками, не AI». Лендинги для среднего бизнеса в РФ почти никогда не имеют focus-styles → выделяемся.
+
+### 23. Контраст текста — AA задокументирован
+
+- [ ] В `composed-explained.md` есть таблица **«Текст / Фон / Ratio»** для всех ключевых пар (hero h1 / hero bg, body / card bg, button text / button bg, eyebrow / section bg)
+- [ ] Ratio считается через формулу WCAG (например `getcontrast.com` или `npm run contrast-check`)
+- [ ] Body text — ≥ 4.5:1
+- [ ] Large headlines (≥ 24px bold) — ≥ 3:1
+- [ ] CTA-кнопка — ≥ 4.5:1 для текста к фону кнопки
+- [ ] Если используется текст поверх фото — overlay-gradient или `mix-blend-mode` обеспечивает ratio
+
+**Почему важно:** «выглядит контрастно» ≠ «есть контраст». Без замеров скрытые провалы (eyebrow на градиенте, текст на hero-фото) выглядят дёшево на проекторе и в Lighthouse.
+
+### 24. Meta + OpenGraph — превью соцсетей не пустое
+
+`<head>` обязательно содержит:
+
+- [ ] `<title>` — релевантный, до 60 символов, с УТП
+- [ ] `<meta name="description">` — до 160 символов, с CTA
+- [ ] `<meta name="viewport" content="width=device-width, initial-scale=1">`
+- [ ] `<meta property="og:title">` + `og:description` + `og:type="website"` + `og:url`
+- [ ] `<meta property="og:image">` — путь к 1200×630 превью (можно временно ссылка на hero-фото; финальное OG-превью генерится позже)
+- [ ] `<meta name="twitter:card" content="summary_large_image">`
+- [ ] favicon — минимум `<link rel="icon" href="data:image/svg+xml,...">` с инициалом бренда (НЕ дефолтный браузерный)
+- [ ] `<html lang="ru">` (или релевантный язык)
+
+**Почему важно:** ссылку в WhatsApp/TG/LinkedIn видят раньше, чем сам сайт. Пустое превью = «непонятная штука» = клик не происходит. Меняет CTR с переходов в соцсетях в разы.
+
+---
+
+## Дополнительные премиум-фичи (PR-Q v2, 2026-05-19)
+
+После прочтения исходников Vercel Web Interface Guidelines добавлены 5 секций — каждая закрывает «дешёвую деталь», которая делает лендинг визуально и тактильно «AI-собранным».
+
+### 25. Typography micro-rules — типографические детали
+
+Это то, что отличает «типографически грамотный сайт» от «текст набрали в Notion и вставили».
+
+- [ ] Многоточие — символ `…` (U+2026), НЕ `...` из трёх точек. Применить во всех loading-стейтах, плейсхолдерах, обрезаниях текста.
+- [ ] Кавычки — `«ёлочки»` для русского, `"curly"` для английского. Прямые `"кавычки"` — запрещены.
+- [ ] **Неразрывные пробелы** между числом и единицей: `10&nbsp;тыс. ₽`, `5&nbsp;мин`, `+7&nbsp;___`. Между предлогом и существительным на коротких словах: `в&nbsp;Москве`.
+- [ ] `font-variant-numeric: tabular-nums` — на блоках со сравнением чисел (статистика, цены в таблице сравнения, count-up счётчики). Иначе цифры дрожат при анимации.
+- [ ] `text-wrap: balance` или `text-pretty` на ВСЕХ `<h1>`/`<h2>` — убирает «вдовы» (последнее слово в одиночку на строке).
+- [ ] Loading-стейты и в плейсхолдерах форм — c `…` в конце: `«Загружаем…»`, `«Например, +7&nbsp;___…»`.
+
+**Почему важно:** это «дорогая» типографика — её замечают подсознательно. Один пропущенный `&nbsp;` («10 руб» с переносом «руб» на новую строку) выглядит дёшево.
+
+### 26. Form mechanics — формы, которые удобны на мобайле
+
+Лид-форма — главный конверсионный элемент. Большинство landings собирают её небрежно: `<input type="text" name="phone">`. Это убивает UX на мобайле.
+
+- [ ] **Корректный `type=`** для каждого поля: `type="email"` (открывает @-клавиатуру), `type="tel"` (открывает цифровую клавиатуру), `type="url"`, `type="number"` для возраста и т.д. Никогда `type="text"` для email/телефона.
+- [ ] **`autocomplete=`** на каждом поле: `autocomplete="name"`, `autocomplete="email"`, `autocomplete="tel"`, `autocomplete="organization"`. Браузер сам подставит данные.
+- [ ] **Плейсхолдеры с примером и `…`**: `placeholder="Например, +7 999 123-45-67…"` — НЕ `placeholder="Телефон"`.
+- [ ] `spellcheck="false"` на полях с email/паролем/кодом — иначе подчёркивается красным.
+- [ ] **`<label>` clickable** — либо `<label for="id">` либо `<label><input>...</label>`. НЕ просто `<div>` рядом.
+- [ ] Submit-кнопка **остаётся `enabled` до старта запроса** (не disabled на пустом инпуте). При клике — spinner, потом результат.
+- [ ] Ошибка валидации — **inline под полем**, не alert, не в шапке формы. Фокус автоматом скроллится на первое ошибочное поле.
+- [ ] **Никогда** `onpaste="return false"` — это запрещает вставку пароля/телефона из буфера, бесит пользователя.
+
+**Почему важно:** на мобайле правильный `type="tel"` экономит пользователю 3 нажатия → конверсия формы +5-10%. Это самый дешёвый uplift в системе.
+
+### 27. Animation correctness — анимации, которые не дёргаются
+
+Анимация на `transition: all` или на `width`/`height` — это lag и jank. Премиум-сайт чувствуется плавным потому, что аниматит правильные свойства.
+
+- [ ] **Анимируем ТОЛЬКО `transform` и `opacity`** — они идут в compositor thread без relayout. Всё остальное (`width`, `height`, `top`, `left`, `margin`, `background-color`) — лагает.
+- [ ] **НЕТ `transition: all`** — всегда явный список: `transition: transform 0.3s, opacity 0.3s`. `all` тормозит и аниматит unintended properties.
+- [ ] **`transform-origin`** задан явно для `scale()`/`rotate()` (по умолчанию `center` — но при асимметрии стоит указать).
+- [ ] Все анимации **прерываемы** — если пользователь скроллит во время reveal-анимации, она не блокирует scroll.
+- [ ] SVG-анимации: трансформируем `<g>` wrapper, не сам `<svg>` (Safari-баги). Если уж сам — `transform-box: fill-box; transform-origin: center`.
+- [ ] Все интерактивные state-changes (hover/focus/active) с `transition` 200-300ms, **не 0ms** (резкий) и не 600ms+ (медленный).
+
+**Почему важно:** разница между «дешёвый сайт» и «дорогой» на 60% — это плавность. Тестировать в Chrome DevTools Performance → Frames: всё должно быть 60fps, без красных Long Tasks при scroll.
+
+### 28. Image performance — Lighthouse Performance ≥ 85
+
+Картинки — главный убийца CLS (Cumulative Layout Shift) и LCP (Largest Contentful Paint). Vercel-стандарт обязывает:
+
+- [ ] **Каждый `<img>` имеет explicit `width=` и `height=`** в HTML-атрибутах. Это резервирует место и убирает CLS (прыжок layout при загрузке фото). Размеры — реальные пиксели исходника, CSS меняет визуальный размер через `width: 100%; height: auto`.
+- [ ] **`loading="lazy"`** на всех фото below-the-fold (всё что НЕ в hero). На hero-фото — `fetchpriority="high"` или `loading="eager"`.
+- [ ] **`<link rel="preconnect" href="https://fonts.googleapis.com">`** — для Google Fonts. Плюс `<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>`.
+- [ ] **`font-display: swap`** в `@font-face` или `&display=swap` в URL Google Fonts — текст отрисуется fallback-шрифтом сразу, не ждёт загрузки.
+- [ ] **`<link rel="preload" as="image">`** на критичное hero-фото — грузится раньше CSS.
+- [ ] WebP/AVIF — где возможно, через `<picture><source type="image/webp">`. JPEG — fallback.
+- [ ] Размер hero-фото ≤ 300 KB; остальные ≤ 150 KB. Через mozjpeg/squoosh.
+
+**Почему важно:** Lighthouse Performance < 85 — это «жёлтый» индикатор в Google Search Console и потеря позиций в SEO. У премиум-лендинга стандарт — **≥ 90**.
+
+### 29. Mobile/touch + theme integration
+
+То, что сайт «чувствуется как нативное приложение» — это `touch-action`, `env(safe-area-inset)` и `theme-color`. Их добавляют 5% сайтов в РФ — но 100% дорогих сайтов.
+
+- [ ] **`touch-action: manipulation`** на всех clickable элементах (`.btn`, `<a>`, `<button>`) — убирает 300ms delay на тапе (legacy от двойного тапа для zoom).
+- [ ] **`-webkit-tap-highlight-color`** задан осознанно (либо нужный цвет, либо `transparent` если есть свой ripple-эффект). Не серый дефолт.
+- [ ] **`overscroll-behavior: contain`** на модалах/lightbox — при скролле внутри модала body не уезжает.
+- [ ] **`env(safe-area-inset-*)`** учтён в `padding` хедера и футера для iPhone с нотчем: `padding-top: max(20px, env(safe-area-inset-top))`.
+- [ ] **`<meta name="theme-color">`** — цвет шапки браузера на mobile (Safari, Chrome Android). Минимум — основной цвет фона страницы. Идеально — `media="(prefers-color-scheme: dark)"` + `media="(prefers-color-scheme: light)"`.
+- [ ] **`color-scheme: dark`** (или `light`/`dark light`) на `<html>` или через `<meta name="color-scheme">` — фиксит цвет скроллбара и нативных контролов под тему сайта.
+- [ ] **Адресная строка не дёргается на iOS** при scroll — `100vh` → `100dvh` где hero full-screen.
+
+**Почему важно:** на mobile-сайтах живёт 60-70% трафика премиум-лендингов в РФ. Эти 7 деталей дают тактильное ощущение «дорогого», которое не передать словами.
+
+---
+
+## Anti-patterns — список ЗАПРЕЩЕНО (auto-fail в verify)
+
+`verify-composed-premium.sh` НЕГАТИВНО проверяет — если найдено, гейт сразу падает:
+
+- ❌ `user-scalable=no` или `maximum-scale=1` — запрет zoom (accessibility violation, Lighthouse fail)
+- ❌ `transition: all` — антипаттерн анимации (см. §27)
+- ❌ `<div onclick=...>` или `<span onclick=...>` — должен быть `<button>` (accessibility, keyboard nav)
+- ❌ `outline: none` без замены через `:focus-visible` (см. §22)
+- ❌ `onpaste="return false"` / `onpaste` с `preventDefault` — блокирует вставку в формы
+
