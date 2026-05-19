@@ -36,20 +36,36 @@ function landing_config_set_network_default(string $key, $value): bool {
 
 /**
  * Get URL/href for a CTA preset — used in theme block.php templates.
- * Implementation completed in Phase A3.
+ * Reads via cascade resolver (network → site override per blog_id).
+ * Falls back to legacy wp_options if no CPT record exists (pre-S2-A.3 data).
  */
 function landing_get_cta(string $preset_name, ?string $url_override = null, array $context = []): string {
     if ($url_override !== null && $url_override !== '') {
         return $url_override;
     }
-    $presets = get_option('landing_cta_presets', []);
-    if (empty($presets)) {
-        $presets = get_site_option('landing_defaults_cta_presets', []);
+
+    // Primary: cascade-resolved CTA from lp_cta CPT
+    $p = null;
+    if (function_exists('\\LandingConfig\\CTA\\resolve_cta')) {
+        $blog_id = function_exists('get_current_blog_id') ? (int) get_current_blog_id() : 1;
+        $resolved = \LandingConfig\CTA\resolve_cta($preset_name, $blog_id);
+        if (is_array($resolved)) {
+            $p = $resolved;
+        }
     }
-    $p = $presets[$preset_name] ?? null;
+
+    // Legacy fallback: pre-S2-A.3 wp_options storage
+    if ($p === null) {
+        $presets = get_option('landing_cta_presets', []);
+        if (empty($presets)) {
+            $presets = get_site_option('landing_defaults_cta_presets', []);
+        }
+        $p = $presets[$preset_name] ?? null;
+    }
+
     if (!$p) return '#';
 
-    switch ($p['type']) {
+    switch ($p['type'] ?? '') {
         case 'tel':
             return !empty($p['phone']) ? 'tel:' . preg_replace('/[^0-9+]/', '', $p['phone']) : '#contact-form';
         case 'whatsapp':
