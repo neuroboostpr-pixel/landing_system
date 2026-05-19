@@ -60,18 +60,23 @@ function _decrypt_settings(array $settings, array $encrypted_fields): array {
     foreach ($encrypted_fields as $f) {
         if (isset($settings[$f]) && is_string($settings[$f]) && $settings[$f] !== '') {
             $decrypted = decrypt($settings[$f]);
-            if ($decrypted !== null) $settings[$f] = $decrypted;
+            if ($decrypted !== '') $settings[$f] = $decrypted;
         }
     }
     return $settings;
 }
 
-function save_integration(string $adapter_name, array $settings, bool $is_network, int $blog_id, array $encrypted_fields = [], bool $enabled = true): int {
+function save_integration(string $adapter_name, array $settings, bool $is_network, int $blog_id, array $encrypted_fields = [], bool $enabled = true, int $post_id = 0): int {
     if (!in_array($adapter_name, VALID_ADAPTERS, true)) return 0;
 
-    return _with_blog($blog_id, function () use ($adapter_name, $settings, $is_network, $encrypted_fields, $enabled) {
+    return _with_blog($blog_id, function () use ($adapter_name, $settings, $is_network, $encrypted_fields, $enabled, $post_id) {
         $post = ['post_type' => POST_TYPE, 'post_status' => 'publish', 'post_title' => $adapter_name];
-        $id = \wp_insert_post($post);
+        if ($post_id > 0) {
+            $post['ID'] = $post_id;
+            $id = \wp_update_post($post);
+        } else {
+            $id = \wp_insert_post($post);
+        }
         \update_post_meta($id, NAME_META, $adapter_name);
         \update_post_meta($id, SETTINGS_META, _encrypt_settings($settings, $encrypted_fields));
         \update_post_meta($id, ENCRYPTED_FIELDS_META, $encrypted_fields);

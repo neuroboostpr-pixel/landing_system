@@ -56,5 +56,29 @@ reset_int();
 $id = save_integration('email', ['to' => 'x@y.z'], false, 1, []);
 assert_test(delete_integration($id) === true && get_integration($id) === null, 'T5 delete works');
 
+// T6 update path — repeated save with $post_id updates instead of duplicating
+reset_int();
+$id1 = save_integration('telegram', ['bot_token' => 'OLD', 'chat_id' => '1'], false, 1, ['bot_token']);
+$id2 = save_integration('telegram', ['bot_token' => 'NEW', 'chat_id' => '2'], false, 1, ['bot_token'], true, $id1);
+assert_test($id1 === $id2, 'T6a update reuses same post id');
+$row = get_integration($id1);
+assert_test($row['settings']['chat_id'] === '2', 'T6b updated value persists');
+$list = list_integrations(1);
+$tg_count = 0;
+foreach ($list as $r) if ($r['adapter_name'] === 'telegram') $tg_count++;
+assert_test($tg_count === 1, 'T6c no duplicate row after update');
+
+// T7 decrypt failure preserves ciphertext (does not silently blank)
+reset_int();
+// Manually inject garbled ciphertext into post_meta — bypass encryption layer
+$post_id = \wp_insert_post(['post_type' => 'lp_integration', 'post_status' => 'publish', 'post_title' => 'email']);
+\update_post_meta($post_id, '_lp_int_adapter_name', 'email');
+\update_post_meta($post_id, '_lp_int_settings', ['api_key' => 'NOT_VALID_CIPHERTEXT_xxxx']);
+\update_post_meta($post_id, '_lp_int_encrypted_fields', ['api_key']);
+\update_post_meta($post_id, '_lp_int_is_network', '0');
+$row = get_integration($post_id);
+// On decrypt failure, value must NOT be silently blanked; either ciphertext preserved or null/error sentinel
+assert_test($row['settings']['api_key'] !== '', 'T7 decrypt failure does not silently blank field');
+
 echo "$tests tests, $failures failures\n";
 exit($failures > 0 ? 1 : 0);
