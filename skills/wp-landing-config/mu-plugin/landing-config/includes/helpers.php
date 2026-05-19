@@ -39,7 +39,74 @@ function landing_config_set_network_default(string $key, $value): bool {
  * Implementation completed in Phase A4.
  */
 function landing_render_head_extras(): void {
-    // A4 stub — actual output added in Task 14.
+    echo "\n<!-- landing-config head extras -->\n";
+
+    $ga4 = landing_config_get('ga4_id');
+    if ($ga4 !== '') {
+        printf(
+            '<script async src="https://www.googletagmanager.com/gtag/js?id=%1$s"></script>'
+            . '<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}'
+            . 'gtag("js",new Date());gtag("config","%1$s");</script>' . "\n",
+            esc_attr($ga4)
+        );
+    }
+
+    $ym = landing_config_get('yandex_metrika_id');
+    if ($ym !== '') {
+        printf(
+            '<script>(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};'
+            . 'm[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,'
+            . 'a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");'
+            . 'ym(%1$s,"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true});</script>'
+            . '<noscript><div><img src="https://mc.yandex.ru/watch/%1$s" style="position:absolute;left:-9999px"/></div></noscript>'
+            . "\n",
+            esc_attr($ym)
+        );
+    }
+
+    $fb = landing_config_get('fb_pixel_id');
+    if ($fb !== '') {
+        printf(
+            '<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq("init","%1$s");fbq("track","PageView");</script>'
+            . "\n",
+            esc_attr($fb)
+        );
+    }
+
+    $gsc = landing_config_get('gsc_verification');
+    if ($gsc !== '') {
+        printf('<meta name="google-site-verification" content="%s">' . "\n", esc_attr($gsc));
+    }
+
+    $ym_wm = landing_config_get('yandex_webmaster_id');
+    if ($ym_wm !== '') {
+        printf('<meta name="yandex-verification" content="%s">' . "\n", esc_attr($ym_wm));
+    }
+
+    $og_image = landing_config_get('og_default_image');
+    if ($og_image !== '') {
+        printf('<meta property="og:image" content="%s">' . "\n", esc_url($og_image));
+    }
+    $og_title = landing_config_get('og_default_title');
+    if ($og_title !== '') {
+        printf('<meta property="og:title" content="%s">' . "\n", esc_attr($og_title));
+    }
+    $og_desc = landing_config_get('og_default_description');
+    if ($og_desc !== '') {
+        printf('<meta property="og:description" content="%s">' . "\n", esc_attr($og_desc));
+    }
+
+    $fonts = landing_config_get('fonts_google_url');
+    if ($fonts !== '') {
+        printf('<link rel="stylesheet" href="%s">' . "\n", esc_url($fonts));
+    }
+
+    $raw = landing_config_get('raw_html_head');
+    if ($raw !== '') {
+        echo $raw . "\n";
+    }
+
+    echo "<!-- /landing-config head extras -->\n";
 }
 
 /**
