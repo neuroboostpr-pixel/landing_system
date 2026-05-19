@@ -36,6 +36,13 @@ const ALLOWED_HTML = [
 add_action('init', __NAMESPACE__ . '\\register', 5);
 
 function register(): void {
+    // CPT управляется только через наш admin-snippets dispatcher
+    // (current_user_can('manage_options') там). show_ui=false ⇒ WP не строит
+    // edit.php-страницу. При map_meta_cap=true указывать в `capabilities`
+    // singular meta-caps (edit_post/read_post/delete_post) — антипаттерн:
+    // WP мапит meta→meta рекурсивно и пишет notices в debug.log.
+    // Оставляем только plural primitive caps; этого достаточно для
+    // wp_insert_post/wp_update_post/wp_delete_post при is_super_admin / admin.
     register_post_type(POST_TYPE, [
         'public'          => false,
         'show_ui'         => false,
@@ -45,12 +52,11 @@ function register(): void {
         'capability_type' => 'post',
         'map_meta_cap'    => true,
         'capabilities'    => [
-            'edit_post'         => 'manage_options',
             'edit_posts'        => 'manage_options',
             'edit_others_posts' => 'manage_options',
             'publish_posts'     => 'manage_options',
-            'read_post'         => 'manage_options',
-            'delete_post'       => 'manage_options',
+            'delete_posts'      => 'manage_options',
+            'read'              => 'read',
         ],
     ]);
 }
