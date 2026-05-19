@@ -35,5 +35,11 @@ save_integration('telegram', ['bot_token' => 'SITEBOT', 'chat_id' => '-200'], fa
 $s = TelegramAdapter::settings();
 assert_test($s['bot_token'] === 'SITEBOT', 'T2b site override via cascade');
 
+// T3: legacy wp_options fallback when no CPT row exists
+reset_ad();
+\update_option('landing_integration_telegram_chat_id', '-9999');
+$s = TelegramAdapter::settings();
+assert_test($s['chat_id'] === '-9999', 'T3 legacy wp_options fallback reads per-field key');
+
 echo "$tests tests, $failures failures\n";
 exit($failures > 0 ? 1 : 0);

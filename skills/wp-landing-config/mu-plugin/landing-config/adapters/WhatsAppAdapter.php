@@ -28,18 +28,28 @@ class WhatsAppAdapter implements AdapterInterface {
             'phone_number_id' => ['type' => 'text', 'label' => 'Phone Number ID', 'required' => true],
             'access_token'    => ['type' => 'password', 'label' => 'Access Token', 'encrypt' => true, 'required' => true],
             'template_name'   => ['type' => 'text', 'label' => 'Template name', 'placeholder' => 'new_lead_notification'],
-            'to_number'       => ['type' => 'text', 'label' => 'WhatsApp получатель', 'required' => true,
+            'to_phone'        => ['type' => 'text', 'label' => 'WhatsApp получатель', 'required' => true,
                                   'placeholder' => '+79001234567'],
         ];
     }
 
     public static function settings(): array {
         $r = \LandingConfig\Integrations\resolve_integration(static::name(), \get_current_blog_id());
-        if ($r === null) {
-            $legacy = \get_option('landing_integration_' . static::name(), []);
-            return is_array($legacy) ? $legacy : [];
+        if ($r !== null) {
+            return $r['settings'];
         }
-        return $r['settings'];
+        // Legacy fallback: old admin-integrations.php stored each field as a separate wp_options key:
+        // landing_integration_{name}_{field}. Password-type fields were stored encrypted — callers
+        // that need plaintext must call decrypt() themselves (same as current send()/test_connection()).
+        $name = static::name();
+        $out = [];
+        foreach (array_keys(static::field_defs()) as $field) {
+            $val = \get_option("landing_integration_{$name}_{$field}", '');
+            if ($val !== '' && $val !== false) {
+                $out[$field] = $val;
+            }
+        }
+        return $out;
     }
 
     public function send(array $lead): array {
