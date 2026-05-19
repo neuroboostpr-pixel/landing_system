@@ -16,6 +16,7 @@ define('LANDING_CONFIG_URL', plugins_url('', __FILE__));
 require_once LANDING_CONFIG_DIR . '/includes/db.php';
 require_once LANDING_CONFIG_DIR . '/includes/encryption.php';
 require_once LANDING_CONFIG_DIR . '/includes/helpers.php';
+require_once LANDING_CONFIG_DIR . '/includes/cascade.php';
 require_once LANDING_CONFIG_DIR . '/includes/snippets.php';
 require_once LANDING_CONFIG_DIR . '/includes/rest-lead.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-pages.php';
