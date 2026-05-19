@@ -385,3 +385,39 @@ Implemented:
        admin-integrations с AJAX Test connection + async retry
 
 Live E2E smoke на ailexi.ru запланирован после merge.
+
+## S2-A Live E2E smoke (2026-05-19)
+
+**Validated на ailexi.ru multisite (blog 1 + russian/blog 2):**
+
+### Install
+- `install-mu-plugin.sh` upload mu-plugin + loader-stub в `wp-content/mu-plugins/`
+- `wp plugin list --status=must-use` показывает `landing-config-loader`
+- 4 таблицы созданы: `wp_landing_leads`, `wp_landing_lead_log`, `wp_2_landing_leads`, `wp_2_landing_lead_log`
+- `wp_sitemeta::landing_config_db_version = 1.0.0`
+
+### REST endpoint
+- `POST /wp-json/landing/v1/lead` на оба сегмента → HTTP 200 `{"ok":true,"lead_id":N}`
+- Honeypot `website` filled → HTTP 400 `{"ok":false,"error":"invalid"}`
+- Rate-limit: 10 req/IP/hour → 11-й HTTP 429
+- Per-blog routing: lead с `ailexi.ru` → `wp_landing_leads`, с `russian.ailexi.ru` → `wp_2_landing_leads`
+
+### Front-end
+- Главная страница загружается (HTTP 200)
+- `<!-- landing-config head extras -->` блок присутствует в HTML
+- wp-admin login + network admin страницы отвечают HTTP 200
+
+### Pitfall #7: mu-plugins subdirectories
+
+WordPress auto-loads ТОЛЬКО `wp-content/mu-plugins/*.php` (top-level), не subdirectories.
+Решение: `mu-plugins/landing-config-loader.php` — stub с одним `require_once __DIR__ . '/landing-config/landing-config.php';`.
+Реальный плагин остаётся в подпапке `landing-config/` (легче деплоить/обновлять).
+
+### Pitfall #8: rsync на Windows Git Bash
+
+`install-mu-plugin.sh` использует `rsync` если есть, иначе fallback на `tar -czf - | ssh ... tar -xzf -`.
+На plain Git Bash (Windows) rsync обычно не установлен — tar-fallback работает.
+
+### Pitfall #9: wp-cli --network не поддерживается на старом wp-cli
+
+Решение в `install-mu-plugin.sh`: вместо `--network option get siteurl` итерируем `wp site list --field=url` и хитим каждый subsite отдельно — это триггерит init-action на нужном блоге.

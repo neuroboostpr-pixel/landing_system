@@ -27,7 +27,13 @@ echo "OK"
 MOCK
     chmod +x "$MOCK_DIR/ssh"
 
-    rm -f "$BATS_TMPDIR/rsync_calls.log" "$BATS_TMPDIR/ssh_calls.log"
+    cat > "$MOCK_DIR/scp" <<'MOCK'
+#!/bin/bash
+echo "SCP $*" >> "$BATS_TMPDIR/scp_calls.log"
+MOCK
+    chmod +x "$MOCK_DIR/scp"
+
+    rm -f "$BATS_TMPDIR/rsync_calls.log" "$BATS_TMPDIR/ssh_calls.log" "$BATS_TMPDIR/scp_calls.log"
     PATH="$MOCK_DIR:$PATH"
     export PATH
 }
@@ -59,4 +65,10 @@ teardown() { rm -rf "$MOCK_DIR" "$PROJECT_DIR"; }
     run bash "$SCRIPT" "$PROJECT_DIR"
     [ "$status" -eq 0 ]
     grep -q "wp-cli.phar" "$BATS_TMPDIR/ssh_calls.log"
+}
+
+@test "install-mu-plugin uploads loader stub via scp" {
+    run bash "$SCRIPT" "$PROJECT_DIR"
+    [ "$status" -eq 0 ]
+    grep -q "landing-config-loader.php" "$BATS_TMPDIR/scp_calls.log"
 }
