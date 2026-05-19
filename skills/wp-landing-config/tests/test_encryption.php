@@ -22,8 +22,8 @@ function assert_test($condition, $message) {
 $plaintext = 'amocrm-token-abc123XYZ';
 $encrypted = encrypt($plaintext);
 assert_test(
-    is_string($encrypted) && strpos($encrypted, ':') !== false,
-    "encrypt returns 'iv_b64:ct_b64' format (got: $encrypted)"
+    is_string($encrypted) && substr_count($encrypted, ':') === 3 && strpos($encrypted, 'v1:') === 0,
+    "encrypt returns 'v1:iv:tag:ct' format (got: $encrypted)"
 );
 assert_test(
     decrypt($encrypted) === $plaintext,
@@ -58,7 +58,11 @@ assert_test(
 // Test 5: malformed ciphertext returns empty string (not error/exception)
 assert_test(
     decrypt('not-a-valid:base64-here') === '',
-    "malformed ciphertext returns empty string (not exception)"
+    "malformed ciphertext (wrong part count) returns empty string"
+);
+assert_test(
+    decrypt('v2:aa:bb:cc') === '',
+    "wrong FORMAT_VERSION returns empty string"
 );
 assert_test(
     decrypt('') === '',
@@ -73,6 +77,30 @@ assert_test(
 assert_test(
     mask('abc') === '•••',
     "mask of short string returns all bullets (got: " . mask('abc') . ")"
+);
+
+// Test 7: tampered ciphertext fails authentication
+$enc = encrypt('original');
+// Flip a byte in the ct portion
+$parts = explode(':', $enc);
+$ct_decoded = base64_decode($parts[3], true);
+$ct_decoded[0] = chr(ord($ct_decoded[0]) ^ 0x01);
+$parts[3] = base64_encode($ct_decoded);
+$tampered = implode(':', $parts);
+assert_test(
+    decrypt($tampered) === '',
+    "tampered ciphertext fails GCM auth and returns empty string"
+);
+
+// Test 8: IVs are unique across 50 calls
+$ivs = [];
+for ($i = 0; $i < 50; $i++) {
+    $e = encrypt('same-input');
+    $ivs[] = explode(':', $e)[1];
+}
+assert_test(
+    count(array_unique($ivs)) === 50,
+    "50 encrypt calls produce 50 unique IVs"
 );
 
 echo "\n$tests tests, $failures failures\n";
