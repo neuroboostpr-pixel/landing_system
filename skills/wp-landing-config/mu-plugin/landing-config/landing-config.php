@@ -18,6 +18,7 @@ require_once LANDING_CONFIG_DIR . '/includes/encryption.php';
 require_once LANDING_CONFIG_DIR . '/includes/helpers.php';
 require_once LANDING_CONFIG_DIR . '/includes/cascade.php';
 require_once LANDING_CONFIG_DIR . '/includes/cta.php';
+require_once LANDING_CONFIG_DIR . '/includes/migrate-to-s2a3.php';
 require_once LANDING_CONFIG_DIR . '/includes/snippets.php';
 require_once LANDING_CONFIG_DIR . '/includes/rest-lead.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-pages.php';
@@ -38,3 +39,9 @@ require_once LANDING_CONFIG_DIR . '/includes/admin-integrations.php';
 add_action('init', function () {
     \LandingConfig\DB\maybe_install_or_migrate();
 }, 1);
+
+add_action('admin_init', function () {
+    if (\function_exists('current_user_can') && \current_user_can('manage_network_options')) {
+        \LandingConfig\Migrate\maybe_run();
+    }
+});
