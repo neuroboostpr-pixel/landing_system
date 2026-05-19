@@ -212,3 +212,10 @@ if [ "${fail:-1}" = "0" ] && [ -d "$project/wiki" ]; then
         --source-mode=project-graph --project="$project_slug" \
         >/dev/null 2>&1 || true
 fi
+
+# === Stage Execution Protocol: refresh pipeline map after every gate-check ===
+# Map stays current in <project>/wiki/pipeline-map.md without manual intervention.
+if [ -f "$project/.landing-state.yaml" ]; then
+    bash "$REPO_ROOT/scripts/render-pipeline-map.sh" \
+        "$project/.landing-state.yaml" --write-wiki >/dev/null 2>&1 || true
+fi

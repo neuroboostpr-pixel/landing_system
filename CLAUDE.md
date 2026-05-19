@@ -126,13 +126,15 @@ bash scripts/migrate-template-readmes.sh ~/Lendings/<existing-project>
 Каноничные стандарты качества для каждого этапа лежат в `docs/standards/`.
 Они переопределяют любые «по умолчанию» решения агентов.
 
-| Этап | Стандарт | Verify-скрипт |
+| Стандарт | Применяется | Verify-скрипт |
 |---|---|---|
-| 07b Compose | [`docs/standards/premium-07b-checklist.md`](docs/standards/premium-07b-checklist.md) | `scripts/verify-composed-premium.sh` |
+| [`stage-execution-protocol.md`](docs/standards/stage-execution-protocol.md) | **Все этапы** — обязательный протокол для orchestrator и любых stage-агентов | `scripts/render-pipeline-map.sh` (показывает карту) |
+| [`premium-07b-checklist.md`](docs/standards/premium-07b-checklist.md) | 07b Compose | `scripts/verify-composed-premium.sh` |
 
-**Правило:** HARD GATE 07b не закрывается, пока `verify-composed-premium.sh`
-не вернёт exit 0. Если фичи отсутствуют — `block-composer` обязан доработать
-composed.html, а не предлагать «и так сойдёт».
+**Stage Execution Protocol (главное правило):**
+Перед ЛЮБЫМ действием на этапе агент обязан: (1) прочитать `.landing-state.yaml` и показать Mermaid-карту через `render-pipeline-map.sh`, (2) выписать все оставшиеся этапы в TodoWrite, (3) подгрузить `stage-<id>-checklist.md` если есть и создать под-todo, (4) verify → approve. Не пропускать шаги, даже если пользователь торопит.
+
+**Правило 07b:** HARD GATE 07b не закрывается, пока `verify-composed-premium.sh` не вернёт exit 0. Если фичи отсутствуют — `block-composer` обязан доработать composed.html, а не предлагать «и так сойдёт».
 
 Эталон-референс — `~/Lendings/dubai-avto-liza/07b_COMPOSED/composed.html`
 (1757 строк, все 13 premium-фич, реальные фото).

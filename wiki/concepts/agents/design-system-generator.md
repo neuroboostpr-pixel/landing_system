@@ -2,56 +2,51 @@
 type: agent
 name: design-system-generator
 sources: ["agents/design-system-generator.md"]
-updated: 2026-05-15
+updated: 2026-05-19
 triggers: []
 stage: "05"
-uses:
-  - brand-architect
-  - brand-kit-build
-  - design-tokens-generation
-  - stack-planner
-  - scene-director
-tags:
-  - дизайн-система
-  - токены
-  - этап-05
+uses: ["brand-architect", "design-tokens-generation", "frontend-design", "moodboard-composer"]
+tags: ["design", "tokens", "stage-05", "brand"]
 ---
 
 # design-system-generator (Генератор дизайн-системы)
 
 ## Что делает
-
-Берёт готовый бренд-кит и превращает его в полноценную дизайн-систему: файл с токенами, машиночитаемый JSON и живой HTML-превью с компонентами. Это «единый источник истины» для всех следующих этапов: цвета, шрифты, отступы, тени, сетка и анимации — всё в одном месте с указанием откуда взялось каждое значение (провенанс).
+Берёт утверждённый `brand-kit.md` и строит полную дизайн-систему: выбирает смелую визуальную концепцию (editorial / brutalist / swiss-minimal и т.д.), генерирует дизайн-токены и рендерит живой HTML-превью компонентов. Главная задача — уйти от «AI-slop» (пурпурный градиент, центрированный hero) к конкретной, узнаваемой эстетике.
 
 ## Когда вызывать / в каком этапе
-
-Этап **05 — Дизайн-система**. Запускается строго после того, как агент [[brand-architect]] завершил работу и файл `04_БРЕНД/brand-kit.md` существует. До этого запускать нельзя — нечего будет читать. Переход к этапу 06 ([[stack-planner]]) возможен только после явного подтверждения пользователя (`утверждаю`, `ok`, `дальше`) — это **HARD GATE**.
+Этап **05**. Вызывается после того, как [[brand-architect]] завершил работу и в `04_БРЕНД/brand-kit.md` зафиксированы цвета, шрифты и иконки. Активируется командой `/landing-design` или оркестратором.
 
 ## Что на вход / на выход
 
 **Вход:**
-- `04_БРЕНД/brand-kit.md` — бренд-кит с цветами, шрифтами, иконками, motion-параметрами и сеткой
+- `04_БРЕНД/brand-kit.md` — источник цветов, шрифтов, иконок, motion и сетки
+- `03_РЕФЕРЕНСЫ/moodboard.md` — mood-контекст для выбора концепции
+- `00_БРИФ/brief.md` — тональность и ниша
 
 **Выход:**
-- `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` — единый источник истины, токены с YAML frontmatter и провенансом (каждый цвет/шрифт ссылается на источник)
-- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — машиночитаемые токены для сборки темы
-- `05_ДИЗАЙН-СИСТЕМА/design-preview.html` — интерактивный превью живых компонентов по токенам
+- `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` — единый источник истины токенов (YAML frontmatter + секция §2 Visual Direction)
+- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — машиночитаемые токены (colors, typography, spacing, grid, radius, shadow, breakpoints, motion)
+- `05_ДИЗАЙН-СИСТЕМА/design-preview.html` — живые компоненты по токенам
 
-**Структура токенов:**
-цвета (primary / secondary / accent / text / bg), типографика (display / body / sizes), отступы (xs→3xl), сетка (columns / gap / max_width), скругления, тени, брейкпоинты (mobile / tablet / desktop), анимации (duration_fast/base/slow, easing).
+**HARD GATE:** агент ждёт явного утверждения пользователя перед переходом к этапу 06.
 
-**Скрипты:**
-- `skills/design-tokens-generation/scripts/build-tokens.py <project-dir>` — строит DESIGN.md и tokens.json
-- `skills/design-tokens-generation/scripts/render-preview.py <project-dir>` — рендерит design-preview.html
+## Алгоритм работы
+1. Вызывает скилл [[frontend-design]] — выбирает конкретную aesthetic-стратегию.
+2. Читает `brand-kit.md`, извлекает токены.
+3. Запускает `build-tokens.py` → `tokens.json` и `DESIGN.md`.
+4. Запускает `render-preview.py` → `design-preview.html`.
+5. Сообщает пользователю путь к превью и одной фразой описывает выбранную концепцию.
+6. Ждёт утверждения.
+
+**Anti-slop правила:** запрещены формулировки «modern minimalist clean», запрещён дефолтный градиент 135deg, запрещён центрированный hero без явного требования из бриф. Концепция должна иметь один «герой» — типографику, цвет или композицию.
 
 ## Связанные концепты
-
-- [[brand-architect]] — предшествующий агент, создаёт brand-kit.md, который этот агент читает
-- [[brand-kit-build]] — скилл-владелец: design-system-generator входит в его область ответственности
-- [[design-tokens-generation]] — скилл, которому принадлежит агент; содержит скрипты build-tokens и render-preview
-- [[stack-planner]] — следующий этап (06): получает токены и определяет плагины/библиотеки
-- [[scene-director]] — альтернативный следующий шаг (только cinematic mode): использует tokens.json для motion-плана
+- [[brand-architect]] — предшественник, создаёт brand-kit.md, который читает этот агент
+- [[design-tokens-generation]] — скилл-владелец агента, содержит скрипты build-tokens.py и render-preview.py
+- [[frontend-design]] — скилл, вызывается первым для выбора визуальной концепции
+- [[moodboard-composer]] — создаёт moodboard.md, контекст для выбора концепции
+- [[ux-composer]] — следующий этап, использует DESIGN.md и tokens.json для wireframe
 
 ## Источник
-
 - `agents/design-system-generator.md`
