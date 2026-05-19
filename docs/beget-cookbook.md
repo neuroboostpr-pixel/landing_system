@@ -336,3 +336,88 @@ add_action('init', function () {
 - `~/.acme.sh/ailexi.ru_ecc/` — wildcard cert `*.ailexi.ru + ailexi.ru` (валидный, но не установлен в nginx)
 - `~/.acme.sh/alpha.ailexi.ru_ecc/` — single cert `alpha.ailexi.ru` (тоже не установлен)
 - Beget сам отдаёт Let's Encrypt cert для `ailexi.ru` (он его auto-выпустил), но subdomains — без SSL
+
+## S2-A landing-config — установка и проверка (2026-05-19)
+
+### Установка mu-plugin
+
+```bash
+bash skills/wp-landing-config/scripts/install-mu-plugin.sh <project-dir>
+```
+
+Что делает:
+- rsync `mu-plugin/landing-config/` → `<BEGET_PATH>/wp-content/mu-plugins/landing-config/`
+- триггерит миграцию БД через `wp-cli --network option get siteurl` (init-хук создаёт таблицы во всех subsite)
+
+### Smoke REST endpoint
+
+```bash
+bash skills/wp-landing-config/scripts/test-smoke-rest.sh <project-dir>
+```
+
+Читает `audience_segments` из `.landing-state.yaml`, POSTит SmokeTest lead
+на каждый subsite, ожидает HTTP 200.
+
+### Pitfall: PHP CLI на Beget
+
+Wp-cli shim `/usr/local/bin/wp` использует PHP 7.4. Для PHP 8.3:
+```
+/usr/local/bin/php8.3 /usr/local/bin/wp-cli.phar
+```
+
+### Артефакты на WP
+
+- `wp_<bid>_landing_leads` — заявки (per-blog)
+- `wp_<bid>_landing_lead_log` — лог CRM-доставок (per-blog)
+- `wp_options::landing_*` — per-site настройки (CTA, head/SEO, integrations)
+- `wp_options::landing_integration_<adapter>_<field>` — креды адаптера (password-поля зашифрованы AES-256-GCM)
+- `wp_sitemeta::landing_defaults_*` — network defaults
+- `wp_sitemeta::landing_config_db_version` — версия схемы
+
+### Phase A1-A5 ready for merge
+
+Implemented:
+- A1: каркас, БД, REST, email-fallback, rate-limit, honeypot
+- A2: admin-leads (per-site + network aggregate)
+- A3: CTA presets + landing_get_cta() helper
+- A4: head & SEO admin + landing_render_head_extras()
+- A5: 6 adapters (Email/Telegram/WhatsApp/AmoCRM/Bitrix24/HubSpot) +
+       admin-integrations с AJAX Test connection + async retry
+
+Live E2E smoke на ailexi.ru запланирован после merge.
+
+## S2-A Live E2E smoke (2026-05-19)
+
+**Validated на ailexi.ru multisite (blog 1 + russian/blog 2):**
+
+### Install
+- `install-mu-plugin.sh` upload mu-plugin + loader-stub в `wp-content/mu-plugins/`
+- `wp plugin list --status=must-use` показывает `landing-config-loader`
+- 4 таблицы созданы: `wp_landing_leads`, `wp_landing_lead_log`, `wp_2_landing_leads`, `wp_2_landing_lead_log`
+- `wp_sitemeta::landing_config_db_version = 1.0.0`
+
+### REST endpoint
+- `POST /wp-json/landing/v1/lead` на оба сегмента → HTTP 200 `{"ok":true,"lead_id":N}`
+- Honeypot `website` filled → HTTP 400 `{"ok":false,"error":"invalid"}`
+- Rate-limit: 10 req/IP/hour → 11-й HTTP 429
+- Per-blog routing: lead с `ailexi.ru` → `wp_landing_leads`, с `russian.ailexi.ru` → `wp_2_landing_leads`
+
+### Front-end
+- Главная страница загружается (HTTP 200)
+- `<!-- landing-config head extras -->` блок присутствует в HTML
+- wp-admin login + network admin страницы отвечают HTTP 200
+
+### Pitfall #7: mu-plugins subdirectories
+
+WordPress auto-loads ТОЛЬКО `wp-content/mu-plugins/*.php` (top-level), не subdirectories.
+Решение: `mu-plugins/landing-config-loader.php` — stub с одним `require_once __DIR__ . '/landing-config/landing-config.php';`.
+Реальный плагин остаётся в подпапке `landing-config/` (легче деплоить/обновлять).
+
+### Pitfall #8: rsync на Windows Git Bash
+
+`install-mu-plugin.sh` использует `rsync` если есть, иначе fallback на `tar -czf - | ssh ... tar -xzf -`.
+На plain Git Bash (Windows) rsync обычно не установлен — tar-fallback работает.
+
+### Pitfall #9: wp-cli --network не поддерживается на старом wp-cli
+
+Решение в `install-mu-plugin.sh`: вместо `--network option get siteurl` итерируем `wp site list --field=url` и хитим каждый subsite отдельно — это триггерит init-action на нужном блоге.
