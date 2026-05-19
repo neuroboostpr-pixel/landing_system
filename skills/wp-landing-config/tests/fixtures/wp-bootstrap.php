@@ -12,6 +12,7 @@ if (!defined('ABSPATH')) { define('ABSPATH', '/tmp/mock-wp/'); }
 $GLOBALS['_mock_options'] = [];     // [blog_id => [key => value]]
 $GLOBALS['_mock_site_meta'] = [];   // [key => value] — for network options
 $GLOBALS['_mock_current_blog_id'] = 1;
+$GLOBALS['_mock_blog_stack'] = [];  // stack for switch_to_blog/restore_current_blog
 $GLOBALS['_mock_dbdelta_calls'] = [];
 
 function get_current_blog_id() {
@@ -79,12 +80,16 @@ function get_sites($args = []) {
 }
 
 function switch_to_blog($blog_id) {
+    $GLOBALS['_mock_blog_stack'][] = $GLOBALS['_mock_current_blog_id'];
     set_mock_current_blog_id($blog_id);
     return true;
 }
 
 function restore_current_blog() {
-    set_mock_current_blog_id(1);
+    if (!empty($GLOBALS['_mock_blog_stack'])) {
+        $prev = array_pop($GLOBALS['_mock_blog_stack']);
+        set_mock_current_blog_id($prev);
+    }
     return true;
 }
 
@@ -232,11 +237,29 @@ if (!function_exists('get_posts')) {
         $limit = $args['numberposts'] ?? $args['posts_per_page'] ?? -1;
         $orderby = $args['orderby'] ?? 'date';
         $order = strtoupper($args['order'] ?? 'DESC');
+        $meta_query = $args['meta_query'] ?? [];
         $results = [];
         foreach ($GLOBALS['_mock_posts'] as $id => $p) {
-            if (($p['post_type'] ?? '') !== $type) continue;
-            if (($p['post_status'] ?? '') !== 'publish' && empty($args['post_status'])) continue;
-            $results[] = (object) $p;
+            // Support both array and object storage (seed_cpt stores objects)
+            $post_type   = is_object($p) ? ($p->post_type   ?? '') : ($p['post_type']   ?? '');
+            $post_status = is_object($p) ? ($p->post_status ?? '') : ($p['post_status'] ?? '');
+            if ($post_type !== $type) continue;
+            if ($post_status !== 'publish' && empty($args['post_status'])) continue;
+            // Filter by meta_query (supports = operator only)
+            $meta_match = true;
+            foreach ($meta_query as $clause) {
+                if (!is_array($clause) || !isset($clause['key'])) continue;
+                $mk = $clause['key'];
+                $mv = $clause['value'] ?? '';
+                $op = $clause['compare'] ?? '=';
+                $actual = $GLOBALS['_mock_post_meta'][$id][$mk] ?? '';
+                if ($op === '=' && (string)$actual !== (string)$mv) {
+                    $meta_match = false;
+                    break;
+                }
+            }
+            if (!$meta_match) continue;
+            $results[] = is_object($p) ? $p : (object) $p;
         }
         if ($orderby === 'meta_value_num' && !empty($args['meta_key'])) {
             $key = $args['meta_key'];
@@ -267,7 +290,13 @@ if (!function_exists('update_post_meta')) {
 if (!function_exists('get_post_meta')) {
     function get_post_meta($post_id, $key = '', $single = false) {
         if ($key === '') {
-            return $GLOBALS['_mock_post_meta'][$post_id] ?? [];
+            // WP returns array<meta_key, array<int, string>> when no key given
+            $raw = $GLOBALS['_mock_post_meta'][$post_id] ?? [];
+            $out = [];
+            foreach ($raw as $k => $v) {
+                $out[$k] = is_array($v) ? $v : [(string)$v];
+            }
+            return $out;
         }
         $value = $GLOBALS['_mock_post_meta'][$post_id][$key] ?? '';
         return $single ? $value : ($value === '' ? [] : [$value]);
