@@ -1,17 +1,35 @@
-# S2-A.2: Snippets manager (replaces Head & SEO)
+# S2-A.2: Snippets manager (replaces Head & SEO) + Network scope
 
-> Status: ready for plan
+> Status: rescoped 2026-05-19 — add network-level snippets so super-admin может
+> настраивать GA4/Y.Metrika/CTA/credentials **один раз** на всю multisite-сеть,
+> а subsite только перекрывает по необходимости.
 > Branch: `worktree-s2a2-snippets-manager`
-> Spec author: Claude (S2-A live UX testing на ailexi.ru показал, что 11 фиксированных полей Head & SEO слишком жёсткие; пользователи копируют готовые snippet'ы целиком, и не могут добавить произвольный счётчик/виджет/JSON-LD/chat-widget. Решение — заменить весь экран на универсальный snippets manager.)
+> Spec author: Claude (S2-A live UX testing на ailexi.ru показал, что 11 фиксированных полей Head & SEO слишком жёсткие; пользователи копируют готовые snippet'ы целиком, и не могут добавить произвольный счётчик/виджет/JSON-LD/chat-widget. Дополнительный UX-сигнал: пользователь не хочет править одни и те же снипеты на каждом subsite — нужны network defaults.)
 
 ## 1. Цель
 
-Дать маркетологу/клиенту через wp-admin вставлять **произвольное количество HTML-snippet'ов** в `<head>`, начало `<body>` или footer любой страницы. Снипеты:
+Дать маркетологу/клиенту через wp-admin вставлять **произвольное количество HTML-snippet'ов** в `<head>`, начало `<body>` или footer любой страницы.
 
-- **Глобальные** (на весь subsite) или **локальные** (на конкретные Page/Post).
-- Локальные имеют приоритет (выводятся ПОСЛЕ глобальных в той же позиции → каскадно перебивают).
-- Включаются/выключаются галочкой без удаления.
-- Поддерживают любой HTML: `<script>`, `<meta>`, `<link>`, `<style>`, `<noscript>`, `<iframe>`, `<div>` (любые виджеты, schema.org JSON-LD, font preload, chat-виджеты, Tag Manager и т.д.).
+**Два уровня хранения:**
+
+| Уровень | Где UI | Где хранится | Применяется к |
+|---|---|---|---|
+| **Network** | Network Admin → Лендинг (сеть) → Снипеты | CPT `lp_snippet` на blog_id=1 + meta `_lp_snippet_is_network=1` | ВСЕМ subsites (если не перекрыто) |
+| **Site** | Subsite Admin → Лендинг → Снипеты | CPT `lp_snippet` на текущем subsite + meta `_lp_snippet_is_network=0` | только этому subsite |
+
+**Cascade (override):**
+
+- Снипет имеет опциональное поле `name` (machine-id, например `ga4`, `jivosite`).
+- Если на site есть snippet с тем же `name` что и network → network скипается для этой position+name.
+- Snippet без `name` (default) → всегда append (network и site сосуществуют).
+
+**Дополнительные оси:**
+
+- **Position:** `head` / `body_open` / `body_close`
+- **Page-scope** (внутри site): `global` (все страницы subsite) / `local` (на выбранные Page/Post)
+- **Enabled** (on/off)
+- **Priority** (порядок вывода в той же position; меньшее = раньше)
+- **Allow-list:** `<script>`, `<meta>`, `<link>`, `<style>`, `<noscript>`, `<iframe>`, `<div>` (любые виджеты, schema.org JSON-LD, font preload, chat-виджеты, Tag Manager и т.д.).
 
 ## 2. Удаление старой Head & SEO
 
@@ -58,27 +76,27 @@ CPT регистрируется на каждом subsite (per-blog). post_meta
 | `_lp_snippet_target_post_ids` | array of int | при scope=local — список Page/Post IDs, на которых рендерить |
 | `_lp_snippet_enabled` | bool | on/off (default true) |
 | `_lp_snippet_priority` | int | порядок вывода в той же position (default 10, lower=earlier) |
+| `_lp_snippet_is_network` | bool | `true` если это network-snippet (хранится на blog 1, render на всех subsites) |
+| `_lp_snippet_name` | string | machine-id для override логики (например `ga4`, `jivosite`). Если на site есть snippet с тем же `name` → network snippet с этим name скипается. `''` (default) → всегда append, нет override |
 
 ### 3.2 Renderer
 
-Три hook'а в `helpers.php` (или новый `includes/snippets.php`):
+Три hook'а в `includes/snippets.php`:
 
 ```php
-add_action('wp_head',       'landing_snippets_render_head',       5);
-add_action('wp_body_open',  'landing_snippets_render_body_open',  5);
-add_action('wp_footer',     'landing_snippets_render_body_close', 99);
-
-function landing_snippets_render_head() {
-    landing_snippets_render('head');
-}
-// аналогично для body_open / body_close
+add_action('wp_head',       'LandingConfig\\Snippets\\render_head',       5);
+add_action('wp_body_open',  'LandingConfig\\Snippets\\render_body_open',  5);
+add_action('wp_footer',     'LandingConfig\\Snippets\\render_body_close', 99);
 ```
 
-Логика `landing_snippets_render($position)`:
+Логика `render($position)`:
 
-1. Глобальные снипеты (`scope=global`, `enabled=true`, `position=$position`) — отсортированы по `priority ASC`.
-2. Локальные снипеты (`scope=local`, `enabled=true`, `position=$position`, `target_post_ids` содержит `get_queried_object_id()`).
-3. Вывод: для каждого — оборачивается комментариями `<!-- lp_snippet:<id> "<title>" -->` для дебага, затем echo `code` (уже прошедший wp_kses при save).
+1. **Собрать site snippets** для текущего subsite: enabled=true, position=$position, scope/target проверка.
+2. **Собрать network snippets** через `switch_to_blog(1)`: enabled=true, position=$position, is_network=true. Restore_current_blog.
+3. **Override**: построить set `$site_names = [name for site snippet if !empty(name)]`. Скипать network-snippet если `name in $site_names`.
+4. **Page-scope filter**: для site snippets — оставить только `scope=global` ИЛИ (`scope=local` И `get_queried_object_id() in target_post_ids`). Network snippets всегда `scope=global` (page-scope для них не поддерживается в MVP).
+5. **Sort by priority ASC** (network и site вместе в одном списке).
+6. **Вывод**: для каждого — обёртка `<!-- lp_snippet:N "Title" [network|site] -->` + echo code + close-comment.
 
 ### 3.3 Sanitization при save
 
@@ -117,37 +135,63 @@ const ALLOWED_HTML = [
 
 ### 3.4 Admin UI
 
-#### 3.4.1 Список (Лендинг → Снипеты)
+#### 3.4.1 Список — Site Admin (Лендинг → Снипеты)
 
-WP_List_Table-style страница: `admin.php?page=landing-config-snippets`
+URL: `admin.php?page=landing-config-snippets`
 
-Колонки:
+Две таблицы:
 
-| Title | Position | Scope | Enabled | Updated | Actions |
-|---|---|---|---|---|---|
-| GA4 main | head | global | ✅ | 2026-05-19 | Edit / Delete |
-| GTM noscript | body_open | global | ✅ | 2026-05-19 | Edit / Delete |
-| Schema.org HomePage | head | local (3 pages) | ✅ | 2026-05-19 | Edit / Delete |
-| JivoSite chat | body_close | global | ❌ | 2026-05-19 | Edit / Delete |
+**A. Site snippets (этого subsite):**
 
-Кнопка `Add new` сверху → форма создания.
+| Name | Title | Position | Scope | Enabled | Priority | Actions |
+|---|---|---|---|---|---|---|
+| ga4 | GA4 main | head | global | ✅ | 5 | Edit / Delete |
+| — | Schema HomePage | head | local (3 pages) | ✅ | 10 | Edit / Delete |
 
-#### 3.4.2 Форма создания/редактирования
+Кнопка «Добавить snippet» → форма.
 
-`admin.php?page=landing-config-snippets&action=edit&id=<N>`
+**B. Inherited from network (read-only):**
+
+| Name | Title | Position | Status | Action |
+|---|---|---|---|---|
+| ga4 | Sitewide GA4 | head | Overridden by site `ga4` | — |
+| jivosite | JivoSite chat | body_close | Active (inherited) | «Override» (copy to site) |
+
+Если у site есть snippet с тем же `name` — показываем «Overridden by site `<name>`». Иначе «Active (inherited)» + кнопка «Override» которая клонирует network snippet в site и открывает на редактирование.
+
+#### 3.4.2 Список — Network Admin (Лендинг (сеть) → Снипеты)
+
+URL: `network/admin.php?page=landing-config-network-snippets` (новая страница, добавляем).
+
+Только одна таблица:
+
+| Name | Title | Position | Enabled | Priority | Overridden by | Actions |
+|---|---|---|---|---|---|---|
+| ga4 | Sitewide GA4 | head | ✅ | 5 | russian.ailexi.ru | Edit / Delete |
+| jivosite | JivoSite chat | body_close | ✅ | 10 | — | Edit / Delete |
+
+«Overridden by» — список subsites где есть site snippet с тем же name (показ только при наличии).
+
+Кнопка «Добавить network snippet» → форма (без поля «target pages» — network всегда global).
+
+#### 3.4.3 Форма создания/редактирования (общая для site + network)
+
+`admin.php?page=landing-config-snippets&action=edit&id=<N>` (site)
+`network/admin.php?page=landing-config-network-snippets&action=edit&id=<N>` (network)
 
 Поля:
 
 - **Title** (text, required) — для админки
+- **Name** (text, optional) — machine-id для override (например `ga4`). Пустое = всегда append
 - **Position** (radio): `head` / `body_open` / `body_close`
-- **Scope** (radio): `global (all pages)` / `local (selected pages)`
-- **Target pages** (multi-select, visible when scope=local) — список Page+Post с поиском
+- **Scope** (radio): `global (all pages of subsite)` / `local (selected pages)` — **скрыто на network** (всегда global)
+- **Target pages** (multi-select, visible when scope=local) — список Page+Post; — **скрыто на network**
 - **Enabled** (checkbox, default true)
 - **Priority** (number, default 10) — для порядка вывода
-- **Code** (textarea, monospace, ~15 rows, syntax-highlight через CodeMirror если доступен)
+- **Code** (textarea, monospace, ~15 rows)
 - **Save** / **Cancel** / **Delete (if editing)**
 
-#### 3.4.3 Meta-box в редакторе Page/Post
+#### 3.4.4 Meta-box в редакторе Page/Post
 
 В Pages/Posts edit screen — meta-box «Лендинг: ad-hoc snippets»:
 
@@ -173,8 +217,9 @@ WP_List_Table-style страница: `admin.php?page=landing-config-snippets`
 
 ### 5.1 Новые
 
-- `skills/wp-landing-config/mu-plugin/landing-config/includes/snippets.php` — CPT registration + renderer (3 hook'а)
-- `skills/wp-landing-config/mu-plugin/landing-config/includes/admin-snippets.php` — list + edit page + meta-box
+- `skills/wp-landing-config/mu-plugin/landing-config/includes/snippets.php` — CPT registration + CRUD + renderer (с network-cascade)
+- `skills/wp-landing-config/mu-plugin/landing-config/includes/admin-snippets.php` — site admin: list (own+inherited) + edit + Override action
+- `skills/wp-landing-config/mu-plugin/landing-config/includes/admin-snippets-network.php` — network admin: list + edit + cross-subsite usage hints
 
 ### 5.2 Изменённые
 
