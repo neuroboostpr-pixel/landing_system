@@ -25,15 +25,15 @@ function all_adapters(): array {
 }
 
 add_action('admin_menu', function () {
-    global $submenu;
-    if (isset($submenu['landing-config'])) {
-        foreach ($submenu['landing-config'] as &$item) {
-            if ($item[2] === 'landing-config-integrations') {
-                $item[3] = __NAMESPACE__ . '\\render_page';
-            }
-        }
-    }
-}, 99);
+    add_submenu_page(
+        'landing-config',
+        'Интеграции',
+        'Интеграции',
+        'manage_options',
+        'landing-config-integrations',
+        __NAMESPACE__ . '\\render_page'
+    );
+});
 
 add_action('admin_init', function () {
     foreach (all_adapters() as $cls) {

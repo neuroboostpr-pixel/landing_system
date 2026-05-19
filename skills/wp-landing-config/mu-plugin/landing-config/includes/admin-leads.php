@@ -5,17 +5,16 @@ if (!defined('ABSPATH')) { exit; }
 
 use function LandingConfig\DB\get_leads_table_name;
 
-// Replace the __return_null stub from admin-pages.php
 add_action('admin_menu', function () {
-    global $submenu;
-    if (isset($submenu['landing-config'])) {
-        foreach ($submenu['landing-config'] as &$item) {
-            if ($item[2] === 'landing-config-leads') {
-                $item[3] = __NAMESPACE__ . '\\render_page';
-            }
-        }
-    }
-}, 99);
+    add_submenu_page(
+        'landing-config',
+        'Заявки',
+        'Заявки',
+        'manage_options',
+        'landing-config-leads',
+        __NAMESPACE__ . '\\render_page'
+    );
+});
 
 function render_page(): void {
     if (!current_user_can('manage_options')) { wp_die('Insufficient permissions'); }

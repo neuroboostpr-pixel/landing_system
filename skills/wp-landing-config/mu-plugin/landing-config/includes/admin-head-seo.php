@@ -18,15 +18,15 @@ const FIELDS = [
 ];
 
 add_action('admin_menu', function () {
-    global $submenu;
-    if (isset($submenu['landing-config'])) {
-        foreach ($submenu['landing-config'] as &$item) {
-            if ($item[2] === 'landing-config-head-seo') {
-                $item[3] = __NAMESPACE__ . '\\render_page';
-            }
-        }
-    }
-}, 99);
+    add_submenu_page(
+        'landing-config',
+        'Head & SEO',
+        'Head & SEO',
+        'manage_options',
+        'landing-config-head-seo',
+        __NAMESPACE__ . '\\render_page'
+    );
+});
 
 add_action('admin_init', function () {
     foreach (FIELDS as $key => $meta) {

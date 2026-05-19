@@ -6,15 +6,15 @@ if (!defined('ABSPATH')) { exit; }
 const PRESET_NAMES = ['primary', 'whatsapp', 'phone', 'form_modal', 'learn_more'];
 
 add_action('admin_menu', function () {
-    global $submenu;
-    if (isset($submenu['landing-config'])) {
-        foreach ($submenu['landing-config'] as &$item) {
-            if ($item[2] === 'landing-config-cta') {
-                $item[3] = __NAMESPACE__ . '\\render_page';
-            }
-        }
-    }
-}, 99);
+    add_submenu_page(
+        'landing-config',
+        'CTA-кнопки',
+        'CTA-кнопки',
+        'manage_options',
+        'landing-config-cta',
+        __NAMESPACE__ . '\\render_page'
+    );
+});
 
 add_action('admin_init', function () {
     register_setting('landing_cta', 'landing_cta_presets', [

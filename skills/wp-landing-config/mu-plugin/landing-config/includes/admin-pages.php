@@ -17,41 +17,10 @@ add_action('admin_menu', function () {
         58
     );
 
-    add_submenu_page(
-        MENU_SLUG,
-        'Заявки',
-        'Заявки',
-        CAP_MANAGE,
-        MENU_SLUG . '-leads',
-        '__return_null'
-    );
-
-    add_submenu_page(
-        MENU_SLUG,
-        'CTA-кнопки',
-        'CTA-кнопки',
-        CAP_MANAGE,
-        MENU_SLUG . '-cta',
-        '__return_null'
-    );
-
-    add_submenu_page(
-        MENU_SLUG,
-        'Head & SEO',
-        'Head & SEO',
-        CAP_MANAGE,
-        MENU_SLUG . '-head-seo',
-        '__return_null'
-    );
-
-    add_submenu_page(
-        MENU_SLUG,
-        'Интеграции',
-        'Интеграции',
-        CAP_MANAGE,
-        MENU_SLUG . '-integrations',
-        '__return_null'
-    );
+    // Sub-pages (Заявки / CTA / Head&SEO / Интеграции) регистрируются
+    // каждым admin-*.php самостоятельно через add_submenu_page с реальным
+    // callback. Stub'ы с '__return_null' вызывали пустые страницы, потому что
+    // patch $submenu[slug][N][3] в дочерних файлах меняет TITLE, а не callback.
 });
 
 add_action('network_admin_menu', function () {
