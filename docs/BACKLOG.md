@@ -189,12 +189,61 @@
   отдельно.
 - **Зависимости:** S2-A (готов).
 
+### B19. Lead status workflow (S2-A.3)
+
+- **Проблема:** в таблице `wp_<bid>_landing_leads` есть колонка `processed_status`
+  (default `'pending'`), но в админке «Заявки» **нет UI для смены статуса**.
+  Маркетолог видит список — но не может пометить заявку как «обработана» / «в работе» /
+  «закрыта». На multisite с десятками заявок в неделю это критично.
+- **Что нужно:**
+  1. **Vocabulary статусов** — минимум: `pending` (новая), `in_progress` (в работе),
+     `won` (закрыта успешно), `lost` (отказ), `spam`. Обсудить custom-статусы.
+  2. **UI:** dropdown в строке таблицы для смены статуса inline (AJAX),
+     или bulk-actions «отметить выбранные как X».
+  3. **Фильтр по статусу** сверху списка (вкладки `Все | Новые | В работе | Закрыто | Спам`,
+     как в WP Posts).
+  4. **Двусторонняя синхронизация с CRM:** когда CRM меняет статус заявки (через webhook),
+     обновлять `processed_status` в БД. Когда маркетолог меняет в админке — пушить в CRM.
+     (Каждый адаптер должен расширить interface методом `update_status($lead_id, $status)`,
+     если CRM это поддерживает.)
+  5. **История изменений:** writes в `wp_<bid>_landing_lead_log` с adapter='admin' +
+     status='manual_update' + error_text=old→new.
+- **Размер:** средний. Если без CRM-sync — мелкий (admin UI + AJAX endpoint + миграция
+  допустимых значений). CRM-sync — отдельная фаза, требует расширения AdapterInterface.
+- **Зависимости:** S2-A (готов).
+
+### B20. Live testing для adapters (Telegram/WhatsApp/AmoCRM/Bitrix24/HubSpot)
+
+- **Не тестировались** в Live E2E smoke S2-A (на ailexi.ru): только Email-adapter
+  имеет проверенную реализацию через `wp_mail`. Остальные 5 адаптеров (Telegram Bot API,
+  WhatsApp Cloud API, AmoCRM v4, Bitrix24 webhook, HubSpot v3) написаны по docs API,
+  но **не запускались с реальными credentials**.
+- **Что нужно для каждого:**
+  1. Получить test-credentials (test bot / sandbox account).
+  2. Заполнить в админке «Интеграции», нажать «Test connection» — убедиться что 200 OK.
+  3. POST в `/wp-json/landing/v1/lead` — убедиться что lead доставлен в CRM (контакт/сделка
+     создан, в Telegram пришло сообщение, и т.д.).
+  4. Проверить `wp_<bid>_landing_lead_log` — должна быть запись `status=success`.
+  5. Принудительно сломать (неверный token) — убедиться что retry планируется (60s/5min/30min)
+     и логируется как `failed`.
+- **Особенно проверить:**
+  - **AmoCRM:** payload v4/leads/complex (lead+contact в одном вызове) — может потребовать
+    custom_fields_values корректировку под реальный аккаунт.
+  - **Bitrix24:** webhook URL — реальный формат `https://*.bitrix24.ru/rest/N/TOKEN/`.
+  - **HubSpot:** lifecyclestage = 'lead' может конфликтовать с pipeline-config аккаунта.
+  - **WhatsApp Cloud:** требует verified business account + approved template для
+    proactive messages. Если только tests — может работать только в test-mode.
+  - **Encryption round-trip:** убедиться что AES-256-GCM шифрование при save и decrypt
+    при send работают корректно (на ailexi.ru не проверялось — все adapter fields пусты).
+- **Размер:** N×30мин на adapter с обновлением spec'а под реальные API quirks.
+- **Зависимости:** S2-A (готов), test-credentials от пользователя.
+
 ---
 
 ## Прогресс
 
 - ✅ MVP (stage-gates + onboarding) — реализован
 - ⏳ B1–B4 — рекомендую брать в первую очередь
-- 🔮 B5–B18 — по мере роста системы
+- 🔮 B5–B20 — по мере роста системы
 
 Если вопросы по конкретной задаче — спроси через `/brainstorming <id>` (например `/brainstorming B6`).
