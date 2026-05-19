@@ -6,6 +6,7 @@ if (!defined('ABSPATH')) { exit; }
 use function LandingConfig\Cascade\resolve_for_blog;
 use function LandingConfig\Cascade\list_for_blog;
 use function LandingConfig\Cascade\has_site_override;
+use function LandingConfig\Cascade\_with_blog;
 
 const POST_TYPE = 'lp_cta';
 const NAME_META = '_lp_cta_preset_name';
@@ -32,14 +33,6 @@ function register(): void {
             'read'              => 'read',
         ],
     ]);
-}
-
-function _with_blog(int $blog_id, callable $fn) {
-    $prev = \get_current_blog_id();
-    if ($prev === $blog_id) return $fn();
-    \switch_to_blog($blog_id);
-    try { return $fn(); }
-    finally { \restore_current_blog(); }
 }
 
 function save_cta(array $args, bool $is_network, int $blog_id): int {
@@ -90,6 +83,7 @@ function delete_cta(int $id): bool {
     return (bool) \wp_delete_post($id, true);
 }
 
+/** Return all CTA records visible to $blog_id (network defaults + site overrides). Each row includes 'id'. */
 function list_ctas(int $blog_id): array {
     $raw = list_for_blog(POST_TYPE, NAME_META, NETWORK_META, $blog_id);
     $out = [];
@@ -109,6 +103,7 @@ function list_ctas(int $blog_id): array {
     return $out;
 }
 
+/** Return effective CTA for ($preset_name, $blog_id) via cascade. Row does NOT include 'id' (lookup-by-name, not by post). */
 function resolve_cta(string $preset_name, int $blog_id): ?array {
     $row = resolve_for_blog(POST_TYPE, NAME_META, NETWORK_META, $preset_name, $blog_id);
     if (!$row) return null;
@@ -124,6 +119,6 @@ function resolve_cta(string $preset_name, int $blog_id): ?array {
     ];
 }
 
-function has_override(string $preset_name, int $blog_id): bool {
+function has_cta_override(string $preset_name, int $blog_id): bool {
     return has_site_override(POST_TYPE, NAME_META, NETWORK_META, $preset_name, $blog_id);
 }

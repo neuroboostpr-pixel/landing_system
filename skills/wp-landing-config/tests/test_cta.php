@@ -61,5 +61,16 @@ $id = save_cta(['preset_name' => 'phone', 'type' => 'tel', 'label' => 'Call', 't
 assert_test(delete_cta($id) === true, 'T5a delete returns true');
 assert_test(get_cta($id) === null, 'T5b deleted CTA returns null');
 
+// T6: invalid preset_name → save_cta returns 0
+reset_cta();
+$id = save_cta(['preset_name' => 'nonexistent', 'type' => 'scroll', 'label' => 'X',
+    'target' => '', 'phone' => '', 'form_id' => '', 'message_template' => ''], false, 1);
+assert_test($id === 0, 'T6 invalid preset returns 0');
+
+// T7: get_cta on wrong post_type returns null
+reset_cta();
+$wrong_id = \wp_insert_post(['post_type' => 'post', 'post_status' => 'publish', 'post_title' => 'not a CTA']);
+assert_test(get_cta($wrong_id) === null, 'T7 get_cta returns null on wrong post_type');
+
 echo "$tests tests, $failures failures\n";
 exit($failures > 0 ? 1 : 0);
