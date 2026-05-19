@@ -56,5 +56,55 @@ assert_test(
     "landing_config_set_network_default writes to wp_sitemeta with landing_defaults_ prefix"
 );
 
+
+// CTA helper tests
+
+// Test 7: url_override takes precedence
+$GLOBALS['_mock_options'][1]['landing_cta_presets'] = [
+    'primary' => ['type' => 'scroll', 'target' => '#default'],
+];
+assert_test(
+    landing_get_cta('primary', 'https://custom.example/url') === 'https://custom.example/url',
+    "landing_get_cta override URL wins"
+);
+
+// Test 8: scroll preset returns target
+assert_test(
+    landing_get_cta('primary') === '#default',
+    "scroll preset returns target (got: " . landing_get_cta('primary') . ")"
+);
+
+// Test 9: tel preset returns tel: URL
+$GLOBALS['_mock_options'][1]['landing_cta_presets']['phone'] = ['type' => 'tel', 'phone' => '+7 (911) 123-45-67'];
+assert_test(
+    landing_get_cta('phone') === 'tel:+79111234567',
+    "tel preset returns cleaned tel: URL (got: " . landing_get_cta('phone') . ")"
+);
+
+// Test 10: whatsapp preset substitutes template
+$GLOBALS['_mock_options'][1]['landing_cta_presets']['wa'] = [
+    'type' => 'whatsapp',
+    'phone' => '+79001234567',
+    'message_template' => 'Hello {model}',
+];
+$result = landing_get_cta('wa', null, ['model' => 'L9']);
+assert_test(
+    strpos($result, 'wa.me/79001234567') !== false && strpos($result, 'Hello%20L9') !== false,
+    "whatsapp preset substitutes {model} (got: $result)"
+);
+
+// Test 11: missing preset returns #
+assert_test(
+    landing_get_cta('nonexistent') === '#',
+    "missing preset returns #"
+);
+
+// Test 12: whatsapp with empty phone falls back
+$GLOBALS['_mock_options'][1]['landing_cta_presets']['wa2'] = ['type' => 'whatsapp', 'phone' => ''];
+assert_test(
+    landing_get_cta('wa2') === '#contact-form',
+    "whatsapp with empty phone falls back to #contact-form"
+);
+
 echo "\n$tests tests, $failures failures\n";
 exit($failures > 0 ? 1 : 0);

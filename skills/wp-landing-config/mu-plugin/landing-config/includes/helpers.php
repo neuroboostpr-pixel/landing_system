@@ -47,9 +47,38 @@ function landing_render_head_extras(): void {
  * Implementation completed in Phase A3.
  */
 function landing_get_cta(string $preset_name, ?string $url_override = null, array $context = []): string {
-    // A3 stub — returns # so themes can use it without crashing pre-A3.
     if ($url_override !== null && $url_override !== '') {
         return $url_override;
     }
-    return '#';
+    $presets = get_option('landing_cta_presets', []);
+    if (empty($presets)) {
+        $presets = get_site_option('landing_defaults_cta_presets', []);
+    }
+    $p = $presets[$preset_name] ?? null;
+    if (!$p) return '#';
+
+    switch ($p['type']) {
+        case 'tel':
+            return !empty($p['phone']) ? 'tel:' . preg_replace('/[^0-9+]/', '', $p['phone']) : '#contact-form';
+        case 'whatsapp':
+            if (empty($p['phone'])) return '#contact-form';
+            $msg = $p['message_template'] ?? '';
+            $msg = strtr($msg, ['{block_context}' => $context['block_context'] ?? '']);
+            foreach ($context as $k => $v) {
+                $msg = str_replace('{' . $k . '}', (string)$v, $msg);
+            }
+            $phone_clean = preg_replace('/[^0-9]/', '', $p['phone']);
+            return 'https://wa.me/' . $phone_clean . ($msg !== '' ? '?text=' . rawurlencode($msg) : '');
+        case 'mailto':
+            return !empty($p['target']) ? 'mailto:' . $p['target'] : '#';
+        case 'modal':
+            return '#';
+        case 'scroll':
+        case 'anchor':
+            return !empty($p['target']) ? $p['target'] : '#contact-form';
+        case 'url':
+            return $p['target'] ?? '#';
+        default:
+            return '#';
+    }
 }
