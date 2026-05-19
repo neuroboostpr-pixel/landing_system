@@ -174,3 +174,45 @@ Let's Encrypt). Покрывает все existing и future subdomains.
 Beget сам обновляет каждые 60 дней. Скрейп-автоматизация — следующая фаза.
 
 См. [docs/beget-cookbook.md §SSL](beget-cookbook.md).
+
+## Установка mu-plugin landing-config
+
+После создания multisite-проекта (через `/landing-segment`) — установить admin-плагин:
+
+```
+/landing-admin-install
+```
+
+Плагин копируется в `<BEGET_PATH>/wp-content/mu-plugins/landing-config/` и
+автоматически активируется (mu-plugins always-active). Создаёт таблицы
+`wp_<bid>_landing_leads` + `wp_<bid>_landing_lead_log` в каждом subsite.
+
+В wp-admin появляется меню «Лендинг» с подстраницами:
+- Заявки (список + CSV export)
+- CTA-кнопки (5 пресетов)
+- Head & SEO (счётчики, OG, GSC, raw HTML)
+- Интеграции (6 адаптеров + Test connection)
+
+Network admin показывает «Лендинг» → «Заявки (все сегменты)» — сводный просмотр со всех subsite.
+
+### Pre-requisites
+
+`.env` должен содержать BEGET_USER/HOST/SSH_KEY/PATH (стандартные).
+Дополнительных переменных НЕ требуется — все настройки рантайм через wp-admin.
+
+### Безопасность
+
+API-ключи (Telegram bot token, AmoCRM access token, etc.) шифруются AES-256-GCM
+с ключом из `wp_salt('secure_auth')`. В админке отображаются masked (bullets + последние 4 символа).
+
+### Email-fallback
+
+`wp_mail` использует PHP `mail()` если SMTP не настроен. На Beget shared
+письма часто попадают в спам. Рекомендация: настроить SMTP через любой
+plugin типа WP Mail SMTP, либо использовать email-fallback только как back-up.
+
+### Retry политика
+
+Если CRM-доставка падает (HTTP != 2xx), задача планируется через
+`wp_schedule_single_event` с backoff: 60 сек → 5 мин → 30 мин (max 3 попытки).
+Каждая попытка логируется в `wp_<bid>_landing_lead_log`.

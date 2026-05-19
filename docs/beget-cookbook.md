@@ -336,3 +336,52 @@ add_action('init', function () {
 - `~/.acme.sh/ailexi.ru_ecc/` — wildcard cert `*.ailexi.ru + ailexi.ru` (валидный, но не установлен в nginx)
 - `~/.acme.sh/alpha.ailexi.ru_ecc/` — single cert `alpha.ailexi.ru` (тоже не установлен)
 - Beget сам отдаёт Let's Encrypt cert для `ailexi.ru` (он его auto-выпустил), но subdomains — без SSL
+
+## S2-A landing-config — установка и проверка (2026-05-19)
+
+### Установка mu-plugin
+
+```bash
+bash skills/wp-landing-config/scripts/install-mu-plugin.sh <project-dir>
+```
+
+Что делает:
+- rsync `mu-plugin/landing-config/` → `<BEGET_PATH>/wp-content/mu-plugins/landing-config/`
+- триггерит миграцию БД через `wp-cli --network option get siteurl` (init-хук создаёт таблицы во всех subsite)
+
+### Smoke REST endpoint
+
+```bash
+bash skills/wp-landing-config/scripts/test-smoke-rest.sh <project-dir>
+```
+
+Читает `audience_segments` из `.landing-state.yaml`, POSTит SmokeTest lead
+на каждый subsite, ожидает HTTP 200.
+
+### Pitfall: PHP CLI на Beget
+
+Wp-cli shim `/usr/local/bin/wp` использует PHP 7.4. Для PHP 8.3:
+```
+/usr/local/bin/php8.3 /usr/local/bin/wp-cli.phar
+```
+
+### Артефакты на WP
+
+- `wp_<bid>_landing_leads` — заявки (per-blog)
+- `wp_<bid>_landing_lead_log` — лог CRM-доставок (per-blog)
+- `wp_options::landing_*` — per-site настройки (CTA, head/SEO, integrations)
+- `wp_options::landing_integration_<adapter>_<field>` — креды адаптера (password-поля зашифрованы AES-256-GCM)
+- `wp_sitemeta::landing_defaults_*` — network defaults
+- `wp_sitemeta::landing_config_db_version` — версия схемы
+
+### Phase A1-A5 ready for merge
+
+Implemented:
+- A1: каркас, БД, REST, email-fallback, rate-limit, honeypot
+- A2: admin-leads (per-site + network aggregate)
+- A3: CTA presets + landing_get_cta() helper
+- A4: head & SEO admin + landing_render_head_extras()
+- A5: 6 adapters (Email/Telegram/WhatsApp/AmoCRM/Bitrix24/HubSpot) +
+       admin-integrations с AJAX Test connection + async retry
+
+Live E2E smoke на ailexi.ru запланирован после merge.

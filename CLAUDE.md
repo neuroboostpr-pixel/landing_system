@@ -273,3 +273,41 @@ clone-subsite + lib (beget-api, ssh-helpers, state).
 
 См. также [docs/beget-cookbook.md](docs/beget-cookbook.md),
 [docs/superpowers/specs/2026-05-18-s2cd-multisite-cloning-design.md](docs/superpowers/specs/2026-05-18-s2cd-multisite-cloning-design.md).
+
+## Landing-config mu-plugin (S2-A)
+
+С 2026-05-19 landing-system включает pre-built mu-plugin `landing-config`
+который даёт клиенту и маркетологу через wp-admin настраивать:
+- CRM/мессенджеры (6 адаптеров: Email, Telegram, WhatsApp, AmoCRM, Bitrix24, HubSpot)
+- CTA-кнопки (5 пресетов с per-site override)
+- Head & SEO (GA4, Y.Metrika, FB Pixel, GSC, OG, custom HTML)
+- Заявки (per-blog таблицы wp_<bid>_landing_leads + admin UI)
+
+Multisite-aware: network defaults + per-site override; per-blog таблицы заявок.
+
+### Установка на проект
+
+```
+/landing-admin-install
+```
+
+### REST endpoint для форм
+
+```
+POST /wp-json/landing/v1/lead
+Body: name=... phone=... email=... message=... source_block=... utm_source=...
+```
+
+Защита: honeypot-поле `website` (должно быть пустым), rate-limit 10 req/hour per IP.
+
+### Helper-функции для тем
+
+```php
+landing_get_cta('primary', $url_override = null, ['model' => 'X']);
+landing_render_head_extras();  // вызывается автоматически на wp_head
+landing_config_get('key', $default);
+```
+
+### Spec
+
+[docs/superpowers/specs/2026-05-19-s2a-landing-config-revised.md](docs/superpowers/specs/2026-05-19-s2a-landing-config-revised.md)
