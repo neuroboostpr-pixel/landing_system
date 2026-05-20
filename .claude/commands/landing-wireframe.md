@@ -28,6 +28,6 @@ description: Stage 07a — render interactive wireframe.html with 2-3 block-libr
 
 Запускай `/landing-compose`.
 
-## NOTE (PR-A scope)
+## Запуск
 
-Не интегрировано в `landing-orchestrator` и `.landing-state.yaml` — задача PR-D.
+Автоматически через `/landing-go` (рекомендуется) или вручную этой командой. Этап интегрирован в `landing-orchestrator` и `.landing-state.yaml`.
