@@ -95,3 +95,50 @@ EOF
     [ "$status" -ne 0 ]
     rm -rf "$PRO"
 }
+
+@test "dir_has_files passes when dir has >=1 matching file" {
+    PRO="$(mktemp -d)"
+    mkdir -p "$PRO/inbox"
+    touch "$PRO/inbox/photo1.jpg"
+    cat > "$TEST_GATES" <<EOF
+stages:
+  "test_stage":
+    name: "Test"
+    lock: hard
+    require_approved: []
+    hard_checks:
+      - id: photos_in_inbox
+        type: dir_has_files
+        path: "$PRO/inbox"
+        pattern: "*.jpg"
+        min_count: 1
+        required: true
+EOF
+    run env GATES_YAML="$TEST_GATES" bash "$REPO_ROOT/scripts/gate-check.sh" \
+        --stage test_stage --project "$PRO" --auto
+    [ "$status" -eq 0 ]
+    rm -rf "$PRO"
+}
+
+@test "dir_has_files fails when dir is empty" {
+    PRO="$(mktemp -d)"
+    mkdir -p "$PRO/inbox"
+    cat > "$TEST_GATES" <<EOF
+stages:
+  "test_stage":
+    name: "Test"
+    lock: hard
+    require_approved: []
+    hard_checks:
+      - id: photos_in_inbox
+        type: dir_has_files
+        path: "$PRO/inbox"
+        pattern: "*.jpg"
+        min_count: 1
+        required: true
+EOF
+    run env GATES_YAML="$TEST_GATES" bash "$REPO_ROOT/scripts/gate-check.sh" \
+        --stage test_stage --project "$PRO" --auto
+    [ "$status" -ne 0 ]
+    rm -rf "$PRO"
+}

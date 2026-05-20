@@ -127,6 +127,25 @@ for i in $(seq 0 $((checks_count - 1))); do
                 fail=1
             fi
             ;;
+        dir_has_files)
+            path="$(yq -r ".stages.\"$stage\".hard_checks[$i].path" "$GATES_YAML" | sed "s|{project}|$project|g")"
+            pattern="$(yq -r ".stages.\"$stage\".hard_checks[$i].pattern // \"*\"" "$GATES_YAML")"
+            min_count="$(yq -r ".stages.\"$stage\".hard_checks[$i].min_count // 1" "$GATES_YAML")"
+            if [ ! -d "$path" ]; then
+                echo "  ❌ $check_id: directory $path missing"
+                [ -n "$fix_hint" ] && echo "     → $fix_hint"
+                fail=1
+            else
+                count="$(find "$path" -maxdepth 1 -type f -name "$pattern" 2>/dev/null | wc -l | tr -d ' ')"
+                if [ "$count" -ge "$min_count" ]; then
+                    echo "  ✅ $check_id ($count files matching $pattern in $path)"
+                else
+                    echo "  ❌ $check_id: $path has $count files matching '$pattern', need ≥$min_count"
+                    [ -n "$fix_hint" ] && echo "     → $fix_hint"
+                    fail=1
+                fi
+            fi
+            ;;
         http_ping)
             url="$(yq -r ".stages.\"$stage\".hard_checks[$i].url" "$GATES_YAML")"
             if curl -sfI --max-time 10 "$url" >/dev/null 2>&1; then
