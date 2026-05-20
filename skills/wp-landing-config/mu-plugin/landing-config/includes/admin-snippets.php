@@ -399,9 +399,12 @@ function handle_delete_network(): void {
 
 function render_list_site(int $segment): void {
     \switch_to_blog($segment);
-    $site_snippets    = list_site_snippets();
-    $network_snippets = list_network_snippets();
-    \restore_current_blog();
+    try {
+        $site_snippets    = list_site_snippets();
+        $network_snippets = list_network_snippets();
+    } finally {
+        \restore_current_blog();
+    }
 
     // Build map of site snippet names (non-empty) for override-detection.
     $site_names = [];
@@ -517,10 +520,13 @@ function render_edit_form_site(int $segment): void {
     $id      = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
     \switch_to_blog($segment);
-    $snippet = $id > 0 ? get_snippet($id, false) : null;
-    $pages   = \get_posts(['post_type' => 'page', 'posts_per_page' => 200, 'post_status' => 'publish', 'orderby' => 'title', 'order' => 'ASC']);
-    $posts   = \get_posts(['post_type' => 'post', 'posts_per_page' => 200, 'post_status' => 'publish', 'orderby' => 'title', 'order' => 'ASC']);
-    \restore_current_blog();
+    try {
+        $snippet = $id > 0 ? get_snippet($id, false) : null;
+        $pages   = \get_posts(['post_type' => 'page', 'posts_per_page' => 200, 'post_status' => 'publish', 'orderby' => 'title', 'order' => 'ASC']);
+        $posts   = \get_posts(['post_type' => 'post', 'posts_per_page' => 200, 'post_status' => 'publish', 'orderby' => 'title', 'order' => 'ASC']);
+    } finally {
+        \restore_current_blog();
+    }
 
     $defaults = [
         'id'              => 0,
@@ -650,18 +656,21 @@ function render_edit_form_site(int $segment): void {
 
 function handle_save_site(int $segment): void {
     \switch_to_blog($segment);
-    $id = save_snippet([
-        'id'              => isset($_POST['id']) ? (int) $_POST['id'] : 0,
-        'title'           => \sanitize_text_field($_POST['title'] ?? ''),
-        'name'            => \sanitize_key($_POST['name'] ?? ''),
-        'code'            => \wp_unslash($_POST['code'] ?? ''),
-        'position'        => \sanitize_key($_POST['position'] ?? 'head'),
-        'scope'           => \sanitize_key($_POST['scope'] ?? 'global'),
-        'target_post_ids' => array_map('intval', (array) ($_POST['target_post_ids'] ?? [])),
-        'enabled'         => !empty($_POST['enabled']),
-        'priority'        => (int) ($_POST['priority'] ?? 10),
-    ], false);
-    \restore_current_blog();
+    try {
+        $id = save_snippet([
+            'id'              => isset($_POST['id']) ? (int) $_POST['id'] : 0,
+            'title'           => \sanitize_text_field($_POST['title'] ?? ''),
+            'name'            => \sanitize_key($_POST['name'] ?? ''),
+            'code'            => \wp_unslash($_POST['code'] ?? ''),
+            'position'        => \sanitize_key($_POST['position'] ?? 'head'),
+            'scope'           => \sanitize_key($_POST['scope'] ?? 'global'),
+            'target_post_ids' => array_map('intval', (array) ($_POST['target_post_ids'] ?? [])),
+            'enabled'         => !empty($_POST['enabled']),
+            'priority'        => (int) ($_POST['priority'] ?? 10),
+        ], false);
+    } finally {
+        \restore_current_blog();
+    }
 
     \wp_safe_redirect(page_url($segment, ['saved' => $id]));
     exit;
@@ -671,8 +680,11 @@ function handle_delete_site(int $segment): void {
     $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
     if ($id > 0) {
         \switch_to_blog($segment);
-        delete_snippet($id, false);
-        \restore_current_blog();
+        try {
+            delete_snippet($id, false);
+        } finally {
+            \restore_current_blog();
+        }
     }
     \wp_safe_redirect(page_url($segment, ['deleted' => 1]));
     exit;
@@ -686,16 +698,19 @@ function handle_override_site(int $segment): void {
     }
 
     \switch_to_blog($segment);
-    $new_id = save_snippet([
-        'title'           => $source['title'] . ' (site override)',
-        'name'            => $source['name'],
-        'code'            => $source['code'],
-        'position'        => $source['position'],
-        'scope'           => 'global',
-        'enabled'         => $source['enabled'],
-        'priority'        => $source['priority'],
-    ], false);
-    \restore_current_blog();
+    try {
+        $new_id = save_snippet([
+            'title'           => $source['title'] . ' (site override)',
+            'name'            => $source['name'],
+            'code'            => $source['code'],
+            'position'        => $source['position'],
+            'scope'           => 'global',
+            'enabled'         => $source['enabled'],
+            'priority'        => $source['priority'],
+        ], false);
+    } finally {
+        \restore_current_blog();
+    }
 
     \wp_safe_redirect(page_url($segment, ['action' => 'edit', 'id' => $new_id]));
     exit;
