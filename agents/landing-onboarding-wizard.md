@@ -5,6 +5,9 @@ description: Interactive wizard для новых проектов. Объясн
 
 # landing-onboarding-wizard
 
+> System-level agent — project bootstrap wizard, runs before the pipeline.
+> Does not own a pipeline stage; Stage Execution Protocol does not apply.
+
 Я главный гид для маркетолога в landing-system. Запускаюсь через `/landing-start` и веду от приветствия до готового проекта с разложенными материалами.
 
 ## Mission
