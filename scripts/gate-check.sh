@@ -110,6 +110,23 @@ for i in $(seq 0 $((checks_count - 1))); do
                 fail=1
             fi
             ;;
+        file_or_dir_exists)
+            path="$(yq -r ".stages.\"$stage\".hard_checks[$i].path" "$GATES_YAML" | sed "s|{project}|$project|g")"
+            if [ -e "$path" ]; then
+                # If directory, require non-empty (otherwise file_or_dir_exists is just file_exists with a misleading name)
+                if [ -d "$path" ] && [ -z "$(ls -A "$path" 2>/dev/null)" ]; then
+                    echo "  ❌ $check_id: directory $path exists but is empty"
+                    [ -n "$fix_hint" ] && echo "     → $fix_hint"
+                    fail=1
+                else
+                    echo "  ✅ $check_id ($path)"
+                fi
+            else
+                echo "  ❌ $check_id: missing $path"
+                [ -n "$fix_hint" ] && echo "     → $fix_hint"
+                fail=1
+            fi
+            ;;
         http_ping)
             url="$(yq -r ".stages.\"$stage\".hard_checks[$i].url" "$GATES_YAML")"
             if curl -sfI --max-time 10 "$url" >/dev/null 2>&1; then
