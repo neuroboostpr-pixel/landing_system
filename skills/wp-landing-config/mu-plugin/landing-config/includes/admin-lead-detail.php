@@ -180,19 +180,29 @@ function handle_change_status(): void {
     $from_status = (string) $current;
 
     // Транзакция: log + UPDATE
+    // wp_die вынесен ЗА пределы try-catch через флаг $error_message:
+    // в некоторых конфигурациях WP wp_die() бросает WP_Die_Exception extends \Exception,
+    // которое catch(\Throwable) ловил бы → double-ROLLBACK + потеря оригинального кода.
     $wpdb->query('START TRANSACTION');
+    $error_message = null;
     try {
         $log_id = log_status_change($lead_id, $from_status !== '' ? $from_status : null, $to_status, \get_current_user_id() ?: null, $comment !== '' ? $comment : null);
         if ($log_id === 0) {
-            $wpdb->query('ROLLBACK');
-            \wp_die('Не удалось записать историю.', 500);
+            throw new \RuntimeException('log_status_change вернул 0 (whitelist отверг to_status или DB-ошибка)');
         }
-        $wpdb->update($table, ['processed_status' => $to_status], ['id' => $lead_id], ['%s'], ['%d']);
+        $updated = $wpdb->update($table, ['processed_status' => $to_status], ['id' => $lead_id], ['%s'], ['%d']);
+        if ($updated === false) {
+            throw new \RuntimeException('wpdb->update failed: ' . $wpdb->last_error);
+        }
         $wpdb->query('COMMIT');
     } catch (\Throwable $e) {
         $wpdb->query('ROLLBACK');
-        \error_log('[landing-config] handle_change_status failed: ' . $e->getMessage());
-        \wp_die('Ошибка сохранения. Подробности в debug.log.', 500);
+        \error_log('[landing-config] handle_change_status lead_id=' . $lead_id . ' failed: ' . $e->getMessage());
+        $error_message = 'Ошибка сохранения. Подробности в debug.log.';
+    }
+
+    if ($error_message !== null) {
+        \wp_die($error_message, 500);
     }
 
     \wp_safe_redirect(\admin_url('admin.php?page=landing-config-lead-detail&id=' . $lead_id . '&saved=1'));
