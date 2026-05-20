@@ -20,6 +20,7 @@ require_once LANDING_CONFIG_DIR . '/includes/cascade.php';
 require_once LANDING_CONFIG_DIR . '/includes/cta.php';
 require_once LANDING_CONFIG_DIR . '/includes/integrations.php';
 require_once LANDING_CONFIG_DIR . '/includes/lead-statuses.php';
+require_once LANDING_CONFIG_DIR . '/includes/lead-status-log.php';
 require_once LANDING_CONFIG_DIR . '/includes/migrate-to-s2a3.php';
 require_once LANDING_CONFIG_DIR . '/includes/segment-selector.php';
 require_once LANDING_CONFIG_DIR . '/includes/snippets.php';

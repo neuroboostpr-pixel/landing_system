@@ -16,6 +16,11 @@ function get_lead_log_table_name(): string {
     return $wpdb->get_blog_prefix() . 'landing_lead_log';
 }
 
+function get_lead_status_log_table_name(): string {
+    global $wpdb;
+    return $wpdb->get_blog_prefix() . 'landing_lead_status_log';
+}
+
 /**
  * Install schema on first run; let dbDelta handle additive column diffs on
  * version bumps. Data migrations (e.g. backfill on schema change) require
@@ -60,6 +65,7 @@ function create_tables_for_current_blog(): void {
     $charset = $wpdb->get_charset_collate();
     $leads = get_leads_table_name();
     $log = get_lead_log_table_name();
+    $status_log = get_lead_status_log_table_name();
 
     $leads_sql = "CREATE TABLE $leads (
         id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -97,9 +103,23 @@ function create_tables_for_current_blog(): void {
         KEY status_adapter (status, adapter)
     ) $charset;";
 
+    $status_log_sql = "CREATE TABLE $status_log (
+        id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+        lead_id BIGINT(20) UNSIGNED NOT NULL,
+        user_id BIGINT(20) UNSIGNED NULL,
+        from_status VARCHAR(64) NULL,
+        to_status VARCHAR(64) NOT NULL,
+        comment TEXT NULL,
+        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (id),
+        KEY lead_id (lead_id),
+        KEY created_at (created_at)
+    ) $charset;";
+
     if (!function_exists('dbDelta')) {
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
     }
     dbDelta($leads_sql);
     dbDelta($log_sql);
+    dbDelta($status_log_sql);
 }

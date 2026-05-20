@@ -105,6 +105,7 @@ $GLOBALS['_mock_transients'] = [];
 $GLOBALS['_mock_actions_fired'] = [];
 
 if (!defined('HOUR_IN_SECONDS')) { define('HOUR_IN_SECONDS', 3600); }
+if (!defined('ARRAY_A')) { define('ARRAY_A', 'ARRAY_A'); }
 
 function register_rest_route($namespace, $route, $args) {
     $GLOBALS['_mock_rest_routes'][] = [$namespace, $route, $args];
@@ -156,10 +157,53 @@ function set_transient($key, $value, $ttl = 0) {
 
 class MockWpdbInsert extends MockWpdb {
     public $insert_id = 0;
+
     public function insert($table, $data, $formats = null) {
+        if (strpos($table, 'landing_lead_status_log') !== false) {
+            if (!isset($GLOBALS['_mock_status_log'])) { $GLOBALS['_mock_status_log'] = []; }
+            if (!isset($GLOBALS['_mock_next_status_log_id'])) { $GLOBALS['_mock_next_status_log_id'] = 1; }
+            $id = $GLOBALS['_mock_next_status_log_id']++;
+            $data['id'] = $id;
+            $data['created_at'] = $data['created_at'] ?? date('Y-m-d H:i:s');
+            // Normalise types: user_id and from_status may be null
+            if (!array_key_exists('user_id', $data)) { $data['user_id'] = null; }
+            if (!array_key_exists('from_status', $data)) { $data['from_status'] = null; }
+            if (!array_key_exists('comment', $data)) { $data['comment'] = null; }
+            // Cast user_id to int if not null, preserve null
+            if ($data['user_id'] !== null) { $data['user_id'] = (int) $data['user_id']; }
+            $GLOBALS['_mock_status_log'][] = $data;
+            $this->insert_id = $id;
+            return 1;
+        }
         $GLOBALS['_mock_inserted_leads'][] = ['table' => $table, 'data' => $data];
         $this->insert_id = count($GLOBALS['_mock_inserted_leads']) + 100;
         return 1;
+    }
+
+    public function get_results($sql, $output = OBJECT) {
+        if (strpos($sql, 'landing_lead_status_log') !== false) {
+            if (!isset($GLOBALS['_mock_status_log'])) { $GLOBALS['_mock_status_log'] = []; }
+            if (preg_match('/WHERE\s+lead_id\s*=\s*(\d+)/i', $sql, $m)) {
+                $lead_id = (int) $m[1];
+                $rows = array_values(array_filter($GLOBALS['_mock_status_log'], fn($r) => (int) $r['lead_id'] === $lead_id));
+            } else {
+                $rows = $GLOBALS['_mock_status_log'];
+            }
+            // Sort by created_at desc, id desc
+            usort($rows, fn($a, $b) => ($b['created_at'] ?? '') <=> ($a['created_at'] ?? '') ?: (int)($b['id'] ?? 0) <=> (int)($a['id'] ?? 0));
+            return $output === ARRAY_A ? $rows : array_map(fn($r) => (object) $r, $rows);
+        }
+        return [];
+    }
+
+    public function prepare($sql, ...$args) {
+        $i = 0;
+        return preg_replace_callback('/%[dsf]/', function($m) use (&$i, $args) {
+            $v = $args[$i++] ?? '';
+            if ($m[0] === '%d') return (int) $v;
+            if ($m[0] === '%f') return (float) $v;
+            return "'" . addslashes((string) $v) . "'";
+        }, $sql);
     }
 }
 
