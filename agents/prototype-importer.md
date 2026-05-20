@@ -43,10 +43,10 @@ description: Use during stage 07 (Прототип) to import a user-provided pr
 - `<project>/07_ПРОТОТИП/import-log.md` — что понял агент, какие вопросы задавал
 - `<project>/07_ПРОТОТИП/enrichment-log.md` — отчёт о квиз-фаннел обогащении (создаётся автоматически)
 
-> **Автоматическое обогащение квиз-фаннела:** после конвертации md→yaml конвейер автоматически
-> запускает `enrich-quiz-funnel.py`. Если прототип содержит 1–4 квиз-блока, они расширяются
-> в полный Marquiz-фаннел (welcome → вопросы → лоадер → скидка → лид-форма → спасибо).
-> Это даёт +25–40% CR по RU-рынку. Подробнее в `enrichment-log.md`.
+> **Обогащение квиз-фаннела (шаг 6.5 workflow):** после `md-to-yaml.py` агент сам запускает
+> `python3 skills/wireframe-rendering/scripts/enrich-quiz-funnel.py prototype.yaml`. Если прототип
+> содержит 1–4 квиз-блока, они расширяются в полный Marquiz-фаннел (welcome → вопросы → лоадер →
+> скидка → лид-форма → спасибо). Это даёт +25–40% CR по RU-рынку. Отчёт пишется в `enrichment-log.md`.
 
 ## Workflow
 
@@ -77,8 +77,9 @@ description: Use during stage 07 (Прототип) to import a user-provided pr
 
    Ответы запиши в `import-log.md`.
 6. Запусти конвертер: `python3 skills/prototype-import/scripts/md-to-yaml.py prototype.md prototype.yaml`
-7. Запусти валидатор: `python3 skills/prototype-import/scripts/validate-prototype.py prototype.yaml`
-8. Если валидация упала — исправь `prototype.md` и повтори.
+7. **Обогати квиз-фаннел (если есть quiz-блоки):** `python3 skills/wireframe-rendering/scripts/enrich-quiz-funnel.py prototype.yaml` — пишет отчёт в `enrichment-log.md`.
+8. Запусти валидатор: `python3 skills/prototype-import/scripts/validate-prototype.py prototype.yaml`
+9. Если валидация упала — исправь `prototype.md` и повтори.
 
 ## CRITICAL CONSTRAINT — no inventing
 
