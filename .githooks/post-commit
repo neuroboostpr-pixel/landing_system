@@ -45,7 +45,7 @@ fi
 
 if [ -n "$(git status wiki/ --short 2>/dev/null)" ]; then
     # Точечный add (а не папка целиком) — снижает риск зацепить секреты.
-    git add wiki/index.md wiki/log.md wiki/concepts/ wiki/preview.html 2>/dev/null || true
+    git add wiki/index.md wiki/log.md wiki/concepts/ wiki/preview.html wiki/.cache.json 2>/dev/null || true
     # Без --no-verify: если pre-commit secret-scanner упал — это сигнал,
     # а не повод обходить. Если у репо нет pre-commit hooks — git это просто молча пропустит.
     if git commit -m "chore(wiki): авто-обновление после изменений системы" 2>&1; then
