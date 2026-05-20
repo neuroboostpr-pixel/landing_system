@@ -52,8 +52,8 @@ description: Stage 07d (PR-C) — генерация иконок и инфог�
 
 `07b_COMPOSED/composed.html` перерендерится — placeholders `[SLOT: ...]` и `[INFOGRAPHIC: ...]` заменятся на реальные `<img class="lp-icon">` / `<img class="lp-infographic">`.
 
-## NOTE (PR-C scope)
+## Запуск
 
-PR-C команда вызывается **вручную**, не через `landing-orchestrator`. Полная интеграция в orchestrator + `config/stage-gates.yaml` — задача PR-D.
+Автоматически через `/landing-go` (рекомендуется) или вручную этой командой. Этап интегрирован в `landing-orchestrator` и `config/stage-gates.yaml`.
 
 См. [spec](../docs/superpowers/specs/2026-05-13-visual-generation-design.md) и [plan](../docs/superpowers/plans/2026-05-13-visual-generation-plan.md).

@@ -61,9 +61,9 @@ description: Stage 07c (PR-B) — обработка клиентских фот
 
 `07b_COMPOSED/composed.html` перерендерится — placeholders `[photo slot: ...]` заменятся на реальные `<img>` (или `<picture>` с mobile-вариантом, если у блока есть `mobile_ratio`).
 
-## NOTE (PR-B scope)
+## Запуск
 
-PR-B команда вызывается **вручную**, не через `landing-orchestrator`. Полная интеграция в orchestrator + `config/stage-gates.yaml` — задача PR-D.
+Автоматически через `/landing-go` (рекомендуется) или вручную этой командой. Этап интегрирован в `landing-orchestrator` и `config/stage-gates.yaml`.
 
 См. [spec](../docs/superpowers/specs/2026-05-13-photo-pipeline-design.md) и [plan](../docs/superpowers/plans/2026-05-13-photo-pipeline-plan.md).
 
