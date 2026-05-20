@@ -36,7 +36,7 @@ allowed-tools: Bash, Read, Write, Edit
 ## Prerequisites
 
 - `08_КОД/wp-theme/functions.php` создан wp-builder
-- `08_КОД/acf-fields.json` содержит поле `form_id` для секции form
+- `08_КОД/block-spec.yaml` содержит блок `form` с полем `form_id`
 - `.env` проекта содержит `TELEGRAM_BOT_TOKEN`, `TELEGRAM_LEADS_CHAT_ID` (или `CRM_WEBHOOK_URL`)
 
 ## What I do
