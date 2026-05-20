@@ -2,48 +2,56 @@
 type: agent
 name: prototype-importer
 sources: ["agents/prototype-importer.md"]
-updated: 2026-05-15
-triggers: ["импортировать прототип", "загрузить PDF прототип", "разобрать прототип", "преобразовать прототип в yaml"]
-stage: "07"
-uses: ["prototype-import", "landing-prototype", "ux-composer", "validate-prototype"]
-tags: ["prototype", "import", "pdf", "yaml", "stage-07"]
+updated: 2026-05-20
+triggers:
+  - "/landing-prototype"
+  - "импортировать прототип"
+  - "загрузить prototype.pdf"
+  - "распознать прототип"
+stage: "07a_prototype"
+uses:
+  - stage-execution-protocol
+  - landing-wireframe
+  - validate-prototype
+  - md-to-yaml
+  - enrich-quiz-funnel
+tags: [prototype, import, pdf, yaml, stage-07, quiz-funnel]
 ---
 
-# prototype-importer — Импорт и нормализация прототипа
+# Prototype Importer — импорт пользовательского прототипа
 
 ## Что делает
 
-Принимает пользовательский прототип (PDF или Markdown) из папки `source/`, извлекает структуру, задаёт уточняющие вопросы при неясностях и сохраняет нормализованные артефакты для дальнейшей работы системы. Дополнительно автоматически обогащает квиз-блоки до полноценного Marquiz-фаннела, что повышает CR на 25–40%.
+Берёт прототип лендинга (PDF или Markdown), извлекает структуру блоков и текстов, нормализует в два файла: `prototype.md` (читаемый) и `prototype.yaml` (машинный). Если в прототипе есть квиз-блоки — автоматически обогащает их в полный Marquiz-фаннел, что даёт +25–40% CR на российском рынке. Если что-то непонятно — агент спрашивает пользователя вместо того, чтобы угадывать.
 
 ## Когда вызывать / в каком этапе
 
-Этап **07 — Прототип**. Активируется командой `/landing-prototype`. Запускается после того, как пользователь положил `prototype.pdf` или `prototype.md` в папку `<project>/07_ПРОТОТИП/source/`. Перед запуском wireframe (этап 07a) прототип должен быть успешно импортирован и проверен.
+Вызывается командой `/landing-prototype` на этапе **07a_prototype**. Активируется только если в `.landing-state.yaml` текущий этап — `07a_prototype`. После завершения передаёт управление этапу `/landing-wireframe`.
 
 ## Что на вход / на выход
 
 **Вход:**
-- `<project>/07_ПРОТОТИП/source/prototype.pdf` — PDF прототип (текстовый или сканированный)
-- `<project>/07_ПРОТОТИП/source/prototype.md` — Markdown прототип (альтернатива)
+- `<project>/07_ПРОТОТИП/source/prototype.pdf` **или** `source/prototype.md` (один из двух обязателен)
 
 **Выход:**
-- `prototype.md` — нормализованный human-readable прототип с блоками, хедлайнами, CTA и слотами
-- `prototype.yaml` — machine-readable версия, валидируется скриптом `validate-prototype.py`
-- `import-log.md` — журнал: что агент понял, какие вопросы задавал, какие CTA/поля были пустыми
-- `enrichment-log.md` — отчёт об автоматическом расширении квиз-фаннела
+- `prototype.md` — нормализованный прототип, читаемый человеком
+- `prototype.yaml` — машинный формат, валидируется скриптом `validate-prototype.py`
+- `import-log.md` — что агент понял, какие вопросы задавал пользователю
+- `enrichment-log.md` — отчёт об обогащении квиз-фаннела (создаётся автоматически при наличии квиз-блоков)
 
-## Ключевые правила
-
-- **Не выдумывать:** если CTA или тип блока не найден в прототипе — записывается пустое значение (`cta: ""`), а в `import-log.md` фиксируется пропуск.
-- **Задавать вопросы:** при неопределённой нише, неясном типе блока или спорных элементах (калькулятор = quiz или pricing?) агент спрашивает у пользователя, а не угадывает.
-- **OCR fallback:** если PDF сканированный (нет текстового слоя), подключается скилл `anthropic-skills:pdf` для распознавания.
-- **HARD GATE:** после записи артефактов агент явно сообщает пользователю о необходимости проверить `prototype.md` перед переходом к `/landing-wireframe`.
+**Ключевые ограничения:**
+- Если в прототипе нет CTA или других данных — агент пишет пустое поле и фиксирует пропуск в `import-log.md`. Ничего не выдумывает.
+- PDF без текстового слоя (сканы) — обрабатываются через OCR-скилл `anthropic-skills:pdf`.
 
 ## Связанные концепты
 
-- [[landing-prototype]] — slash-команда, которая вызывает этот агент
-- [[ux-composer]] — следующий агент в цепочке, потребляет `prototype.yaml` для wireframe
-- [[prototype-import]] — скилл с вспомогательными скриптами (extract-pdf-text, md-to-yaml, validate-prototype)
-- [[landing-wireframe]] — команда следующего этапа, доступна только после успешного импорта
+- [[stage-execution-protocol]] — обязательный протокол: проверка gate-check и отображение Mermaid-карты перед любым Write/Edit
+- [[landing-wireframe]] — следующий этап после успешного импорта прототипа
+- [[landing-prototype]] — slash-команда, запускающая этого агента
+- [[enrich-quiz-funnel]] — скрипт обогащения квиз-блоков (шаг 6.5 workflow)
+- [[validate-prototype]] — скрипт валидации `prototype.yaml`
+- [[md-to-yaml]] — скрипт конвертации `prototype.md` → `prototype.yaml`
+- [[photo-curator]] — следующий этап по pipeline (07c), использует тот же `prototype.yaml` для слотов
 
 ## Источник
 

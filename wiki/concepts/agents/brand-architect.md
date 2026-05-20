@@ -5,49 +5,47 @@ sources: ["agents/brand-architect.md"]
 updated: 2026-05-20
 triggers: []
 stage: "04"
-uses: ["style-extractor", "brand-kit-build", "niche-analyst", "design-system-generator", "landing-orchestrator"]
-tags: ["brand", "stage-04", "palette", "fonts", "icons", "provenance"]
+uses: ["style-extractor", "brand-kit-build", "niche-analyst", "design-system-generator", "references-curator"]
+tags: ["brand", "design", "stage-04", "provenance"]
 ---
 
-# Brand Architect — Архитектор бренд-кита
+# Brand Architect — сборщик бренд-кита
 
 ## Что делает
-
-Собирает все извлечённые стилевые данные (цвета, шрифты, иконки, сетку, анимации) в единый бренд-кит с полной прослеживаемостью источников. Каждый цвет, шрифт и иконка в итоговом документе указывает, откуда он взят. Рендерит визуальный HTML-превью для утверждения клиентом.
+Собирает единый бренд-кит проекта: берёт все извлечённые стилевые данные (цвета, шрифты, иконки, сетку, анимацию) и синтезирует из них `brand-kit.md` с полной трассировкой источников — каждый цвет, шрифт и иконка ссылается на конкретный файл-источник. Параллельно рендерит визуальный HTML-превью со свотчами и образцами типографики.
 
 ## Когда вызывать / в каком этапе
+Запускается на **этапе 04 (Бренд)** после того, как агент [[style-extractor]] завершил извлечение и в `04_БРЕНД/extracted/` появились все 5 артефактов. До этапа 05 (Design System) не переходить, пока пользователь не утвердил `brand-kit.html`.
 
-Этап **04_brand**. Запускается после того, как `style-extractor` завершил работу и все 5 файлов в `04_БРЕНД/extracted/` присутствуют: `palette.yaml`, `fonts.yaml`, `icons.yaml`, `grid.md`, `motion.md`. До запуска `design-system-generator` (этап 05) не продвигаться — бренд-кит должен быть утверждён пользователем.
-
-Активируется командой `/landing-brand` или вызывается `landing-orchestrator` автоматически.
+Предусловие: `.landing-state.yaml` должен показывать `current_stage == 04_brand`, иначе агент останавливается.
 
 ## Что на вход / на выход
 
-**Входные артефакты:**
-- `04_БРЕНД/extracted/palette.yaml` — цвета из референсов
-- `04_БРЕНД/extracted/fonts.yaml` — найденные шрифты
-- `04_БРЕНД/extracted/icons.yaml` — подобранные иконки
+**Вход:**
+- `04_БРЕНД/extracted/palette.yaml` — цвета (из `extract-palette.py`)
+- `04_БРЕНД/extracted/fonts.yaml` — шрифты (из `identify-fonts.py`)
+- `04_БРЕНД/extracted/icons.yaml` — иконки (из `match-icons.py`)
 - `04_БРЕНД/extracted/grid.md` — система сетки и отступов
 - `04_БРЕНД/extracted/motion.md` — токены анимации
 - `03_РЕФЕРЕНСЫ/index.yaml` — список утверждённых референсов
-- `01a_АНАЛИЗ_НИШИ/positioning.md` — режим позиционирования (влияет на выбор палитры и типографики)
-- `01a_АНАЛИЗ_НИШИ/market-profile.md` — уровень премиальности и культурный контекст
+- `01a_АНАЛИЗ_НИШИ/positioning.md` — режим позиционирования (`emotional_aspiration` / `trust_authority` / `rational`) — влияет на выбор палитры и типографики
+- `01a_АНАЛИЗ_НИШИ/market-profile.md` — `accessibility_tier` и `cultural_context` — задают уровень премиальности и культурные ограничения
 - `01a_АНАЛИЗ_НИШИ/landing-structure.md` — список блоков, которые бренд-кит обязан покрыть
 
-**Выходные артефакты:**
+**Выход:**
 - `04_БРЕНД/brand-kit.md` — канонический бренд-кит с провенансом
-- `04_БРЕНД/brand-kit.html` — визуальный превью: свотчи палитры, образцы шрифтов, миниатюры иконок
+- `04_БРЕНД/brand-kit.html` — визуальный превью (свотчи, образцы шрифтов, иконки)
 
-**HARD GATE:** агент не закрывает этап 04 и не передаёт управление этапу 05 до явного утверждения `brand-kit.html` пользователем.
+**Процесс:** вызывает два Python-скрипта через Bash:
+1. `skills/brand-kit-build/scripts/build.py` → `brand-kit.md`
+2. `skills/brand-kit-build/scripts/render-html.py` → `brand-kit.html`
 
 ## Связанные концепты
-
-- [[style-extractor]] — предшественник: готовит все 5 extracted-файлов, без которых brand-architect не стартует
-- [[brand-kit-build]] — скилл, владелец бизнес-логики; агент вызывает его Python-скрипты `build.py` и `render-html.py`
-- [[niche-analyst]] — поставляет `positioning.md` и `market-profile.md`, от которых зависит выбор стиля
-- [[design-system-generator]] — следующий этап: потребляет `brand-kit.md` как источник истины
-- [[landing-orchestrator]] — диспатчит агента в нужный момент пайплайна
+- [[style-extractor]] — обязательный предшественник, поставляет `extracted/*.yaml`
+- [[brand-kit-build]] — скилл, которому принадлежит агент; содержит логику build.py и render-html.py
+- [[niche-analyst]] — поставляет `positioning.md` и `market-profile.md`, влияющие на выбор стиля
+- [[references-curator]] — поставляет утверждённый `index.yaml` референсов
+- [[design-system-generator]] — следующий этап (05), потребляет `brand-kit.md`
 
 ## Источник
-
 - `agents/brand-architect.md`
