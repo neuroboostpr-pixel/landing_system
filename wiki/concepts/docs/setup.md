@@ -5,55 +5,60 @@ sources: ["docs/SETUP.md"]
 updated: 2026-05-20
 triggers: []
 stage: ""
-uses: ["landing-onboarding", "system-setup", "landing-orchestrator", "landing-new", "landing-build", "landing-deploy", "landing-qa", "wp-deployer", "analytics-engineer", "seo-optimizer"]
-tags: ["setup", "onboarding", "api", "workflow-lock", "acf", "wiki"]
+uses:
+  - landing-onboarding
+  - landing-orchestrator
+  - landing-new
+  - landing-go
+  - landing-build
+  - landing-deploy
+  - wp-deployer
+  - qa-auditor
+  - analytics-engineer
+  - seo-optimizer
+tags: [setup, onboarding, installation, api, workflow-lock, stage-gate]
 ---
 
-# Setup Guide — Установка и первый запуск
+# Setup Guide — Руководство по установке системы
 
 ## Что делает
-
-Полный гайд по первичной установке landing-system на новой машине. Описывает зависимости, API-ключи, порядок onboarding'а и workflow-lock — систему, которая не даёт пропускать обязательные этапы.
+Пошаговый гайд по первой установке landing-system на новой машине: проверяет зависимости, объясняет API-ключи, описывает механику workflow lock и HARD GATE между этапами пайплайна.
 
 ## Когда вызывать / в каком этапе
+Читается **один раз** при первом знакомстве с системой — до создания первого проекта. Является предусловием для `/landing-onboarding`. Без пройденного onboarding'а команда `/landing-new` не запустится — перенаправит сюда.
 
-Читается один раз при первом развёртывании системы на машине — до запуска любой `/landing-*` команды. Без прохождения onboarding'а команды будут падать с ошибкой и направлять сюда.
+Также актуален при:
+- переносе системы на новую машину;
+- отладке заблокированного PreToolUse-хука;
+- настройке ACF-полей для контент-менеджеров после деплоя.
 
 ## Что на вход / на выход
 
-**На вход:**
-- Клонированный репозиторий `landing-system`
-- Доступ к Beget SSH, аккаунтам Firecrawl / Pexels / Yandex / Telegram
+**Вход:** чистая машина без настроек, клонированный репозиторий `landing-system`.
 
-**На выход:**
-- Файл флага `~/.landing-system/setup_complete` — подтверждение готовности
-- Заполненный `.env` с валидными API-ключами
-- Настроенный Firecrawl MCP в `~/.claude/settings.json`
-- Установленный хук `.githooks/post-commit` для авто-синхронизации wiki
+**Выход:**
+- Заполненный `.env` с валидными API-ключами (Firecrawl, Pexels, Yandex, Telegram и др.)
+- Флаг `~/.landing-system/setup_complete` (создаёт `wizard.sh`)
+- Настроенный SSH-доступ к серверу Бегет
+- Установленные локальные зависимости: `wp-cli`, `rsync`, `python`, `jq`
+- Подключённый PreToolUse-хук `enforce_stage_gate.py` в `.claude/settings.json`
 
-**Ключевые концепции, описанные в гайде:**
+**API-ключи (все free tier):** Firecrawl, Pexels, Unsplash, Pixabay, HuggingFace, Yandex Wordstat, Yandex Metrika, Telegram Bot, amoCRM/Bitrix24, Beget API, Cloudflare/Reg.ru.
 
-1. **Workflow lock** — `.landing-state.yaml` в каждом проекте фиксирует статусы 13 этапов (`locked` / `in_progress` / `approved`). `/landing-build` не запустится, пока этапы 02–07 не имеют статус `approved`.
+## Ключевые правила из документа
 
-2. **API-список** — 13 сервисов (Firecrawl, Pexels, Unsplash, Pixabay, HuggingFace, Yandex Wordstat, Yandex Metrika, Telegram Bot, amoCRM/Bitrix24, Beget API, Cloudflare, Reg.ru) — все с free tier.
-
-3. **ACF и Gutenberg** — после деплоя менеджеры редактируют тексты через WP-admin без PHP. Если поля исчезли — импортировать `08_КОД/acf-fields.json` через deploy-скрипт.
-
-4. **Wiki-слои** — три уровня: `landing-system/wiki/` (архитектура), `~/Lendings/<slug>/wiki/` (проект), `~/Lendings/<slug>/memory/` (сессии). Bootstrap занимает ~30 мин.
-
-5. **PreToolUse hook** — с 2026-05-20 хук `enforce_stage_gate.py` блокирует Write/Edit в файлы этапа, чьи предыдущие этапы не закрыты.
+- **Workflow lock:** в каждом проекте — `.landing-state.yaml` со статусами этапов (`locked` / `in_progress` / `approved`). Перепрыгивать этапы нельзя.
+- **PreToolUse-хук** физически блокирует Write/Edit к файлам этапа, у которого не закрыты предшественники. При ошибке чтения — fail-open (пропускает с warning).
+- **ACF-поля для менеджеров:** после деплоя весь редактируемый контент доступен через боковую панель WP-блоков без правки PHP. Схема полей — `08_КОД/acf-fields.json`.
+- **Wiki-слои:** `landing-system/wiki/` (архитектура системы), `~/Lendings/<slug>/wiki/` (граф лендинга), `~/Lendings/<slug>/memory/` (память сессий).
 
 ## Связанные концепты
-
-- [[landing-onboarding]] — команда первичной настройки, описана в этом гайде
-- [[system-setup]] — агент, запускаемый внутри `/landing-onboarding`
-- [[landing-orchestrator]] — главный дирижёр, работает только после setup_complete
-- [[landing-new]] — создание проекта, требует пройденного onboarding'а
-- [[landing-build]] — этап 08, проверяет workflow-lock перед запуском
-- [[wp-deployer]] — деплой на Beget, упоминается в troubleshooting
-- [[analytics-engineer]] — использует Yandex Metrika API из `.env`
-- [[seo-optimizer]] — использует Yandex Wordstat API из `.env`
+- [[landing-onboarding]] — wizard, который проходит все проверки и создаёт флаг setup_complete
+- [[landing-go]] — главная точка входа после onboarding
+- [[landing-orchestrator]] — дирижёр 12 этапов, использует `.landing-state.yaml`
+- [[landing-build]] — требует `approved` для этапов 02–07 перед запуском
+- [[wp-deployer]] — деплой на Бегет через SSH+rsync+wp-cli
+- [[qa-auditor]] — этап 10, проверяет live-сайт
 
 ## Источник
-
 - `docs/SETUP.md`
