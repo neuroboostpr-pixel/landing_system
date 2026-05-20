@@ -2,47 +2,50 @@
 type: agent
 name: stack-planner
 sources: ["agents/stack-planner.md"]
-updated: 2026-05-15
+updated: 2026-05-20
 triggers: []
 stage: "06"
-uses: ["design-system-generator", "brand-kit-build", "design-tokens-generation"]
-tags: ["wordpress", "stack", "fonts", "icons", "plugins", "stage-06"]
+uses: ["design-system-generator", "brand-architect", "landing-stack", "stage-execution-protocol"]
+tags: ["wordpress", "plugins", "fonts", "icons", "stack", "stage-06"]
 ---
 
 # stack-planner — Планировщик технического стека
 
 ## Что делает
-Выбирает и фиксирует набор WordPress-плагинов, JS-библиотек, иконок и шрифтов на основе готовой дизайн-системы. Результат — `design-stack.yaml`, единственный разрешённый источник зависимостей для всего проекта.
+Выбирает WordPress-плагины, JS-библиотеки, иконочный набор и CDN шрифтов на основе утверждённого дизайна. Фиксирует все технические решения в одном yaml-файле до написания кода — чтобы разработчики (агенты этапа 08) не гадали, что использовать.
 
 ## Когда вызывать / в каком этапе
-Этап **06 — Стек**. Запускается вручную или оркестратором **после** того, как `design-system-generator` сгенерировал `DESIGN.md` и `tokens.json`. Завершается **HARD GATE**: агент показывает `design-stack.yaml` пользователю и ждёт явного подтверждения перед переходом к этапу 07.
+Запускается на **этапе 06** командой `/landing-stack`, строго после завершения этапа 05 (`design-system-generator`). Агент проверяет `current_stage == 06_stack` в `.landing-state.yaml` — если предшественники не закрыты, останавливается. Harness-хук `enforce_stage_gate.py` физически блокирует запись файлов до закрытия предшественника.
 
 ## Что на вход / на выход
 
-**Входные артефакты:**
-- `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` — описание дизайн-системы
+**Вход:**
+- `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` — полная дизайн-система с блоками
 - `05_ДИЗАЙН-СИСТЕМА/tokens.json` — дизайн-токены
-- `04_БРЕНД/brand-kit.md` — семейства шрифтов и иконки из бренд-кита
-- `00_БРИФ/brief.md` — флаг `cinematic` (если есть, подключает GSAP/Lenis)
+- `04_БРЕНД/brand-kit.md` — шрифты и иконки из бренд-кита
+- `00_БРИФ/brief.md` — флаг режима (`standard` или `cinematic`)
 
-**Выходные артефакты:**
-- `06_СТЕК/design-stack.yaml` — главный файл: режим, плагины, шрифты, иконки, JS-библиотеки
-- `06_СТЕК/component-library-plan.md` — откуда берётся каждый UI-компонент
-- `06_СТЕК/effects-plan.md` — анимации и motion (пуст в standard-режиме; в cinematic — GSAP, ScrollTrigger, Lenis, Split-Type)
+**Выход:**
+- `06_СТЕК/design-stack.yaml` — полный стек: тема, плагины, шрифты, иконки, JS-библиотеки
+- `06_СТЕК/component-library-plan.md` — откуда берётся каждый компонент
+- `06_СТЕК/effects-plan.md` — план анимаций (заполняется только в cinematic-режиме)
 - `06_СТЕК/font-and-color-plan.md` — маппинг шрифтов и цветов к токенам
 
-**Жёсткие правила выбора:**
-- ✅ GeneratePress + GenerateBlocks, ACF, FluentForm
-- ✅ Bunny Fonts CDN (GDPR и РФ-совместимый)
-- ✅ Iconify API (без ключа, Lucide-набор)
+После генерации — **HARD GATE**: показывает `design-stack.yaml` пользователю и ждёт явного утверждения перед продолжением.
+
+**Жёсткие ограничения стека:**
+- ✅ GeneratePress (тема) + GenerateBlocks (free) + ACF + FluentForm
+- ✅ Bunny Fonts CDN (GDPR/РФ-friendly), Iconify API (без ключа)
+- ✅ В cinematic-режиме: GSAP, ScrollTrigger, Lenis, SplitType
 - ❌ Tailwind, Elementor, shadcn, Radix — запрещены
-- ❌ Любые пакеты вне `design-stack.yaml` — запрещены
+- ❌ Любые ad-hoc пакеты вне `design-stack.yaml`
 
 ## Связанные концепты
-- [[design-system-generator]] — предшествующий агент, генерирует DESIGN.md и tokens.json, без него stack-planner не запускается
-- [[brand-kit-build]] — поставляет шрифты и иконки из бренд-кита
-- [[design-tokens-generation]] — скилл, создающий tokens.json, который читает этот агент
-- [[wp-builder]] — следующий агент в цепочке, потребляет design-stack.yaml как единственный источник зависимостей
+- [[design-system-generator]] — обязательный предшественник: создаёт DESIGN.md и tokens.json, которые читает стек-планировщик
+- [[brand-architect]] — поставляет brand-kit.md со шрифтами и иконками
+- [[landing-stack]] — slash-команда, которая запускает этого агента
+- [[stage-execution-protocol]] — обязательный протокол: pipeline-карта, gate-check, TodoWrite перед любым действием
+- [[wp-builder]] — потребитель результата: читает design-stack.yaml при генерации кода на этапе 08
 
 ## Источник
 - `agents/stack-planner.md`

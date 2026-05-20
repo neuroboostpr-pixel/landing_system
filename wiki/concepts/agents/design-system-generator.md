@@ -2,56 +2,49 @@
 type: agent
 name: design-system-generator
 sources: ["agents/design-system-generator.md"]
-updated: 2026-05-15
+updated: 2026-05-20
 triggers: []
 stage: "05"
-uses:
-  - brand-architect
-  - brand-kit-build
-  - design-tokens-generation
-  - stack-planner
-  - scene-director
-tags:
-  - дизайн-система
-  - токены
-  - этап-05
+uses: ["brand-architect", "design-tokens-generation", "stage-execution-protocol", "stack-planner", "landing-orchestrator"]
+tags: ["design", "tokens", "stage-05", "дизайн-система"]
 ---
 
 # design-system-generator (Генератор дизайн-системы)
 
 ## Что делает
-
-Берёт готовый бренд-кит и превращает его в полноценную дизайн-систему: файл с токенами, машиночитаемый JSON и живой HTML-превью с компонентами. Это «единый источник истины» для всех следующих этапов: цвета, шрифты, отступы, тени, сетка и анимации — всё в одном месте с указанием откуда взялось каждое значение (провенанс).
+Превращает готовый `brand-kit.md` в полноценную дизайн-систему: токены, типографику, отступы, анимации — и выдаёт живой HTML-превью, чтобы заказчик мог сразу увидеть, как всё выглядит.
 
 ## Когда вызывать / в каком этапе
-
-Этап **05 — Дизайн-система**. Запускается строго после того, как агент [[brand-architect]] завершил работу и файл `04_БРЕНД/brand-kit.md` существует. До этого запускать нельзя — нечего будет читать. Переход к этапу 06 ([[stack-planner]]) возможен только после явного подтверждения пользователя (`утверждаю`, `ok`, `дальше`) — это **HARD GATE**.
+Запускается на **этапе 05 (05_ДИЗАЙН-СИСТЕМА)** после того, как [[brand-architect]] завершил работу и `04_БРЕНД/brand-kit.md` уже существует. Вызывается агентом [[landing-orchestrator]] или вручную через скилл [[design-tokens-generation]]. Без утверждённого `brand-kit.md` агент остановится.
 
 ## Что на вход / на выход
 
 **Вход:**
-- `04_БРЕНД/brand-kit.md` — бренд-кит с цветами, шрифтами, иконками, motion-параметрами и сеткой
+- `04_БРЕНД/brand-kit.md` — полный бренд-кит с палитрой, шрифтами, иконками (создаётся [[brand-architect]])
+- `<project>/.landing-state.yaml` — должен быть `current_stage == 05_design`
 
 **Выход:**
-- `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` — единый источник истины, токены с YAML frontmatter и провенансом (каждый цвет/шрифт ссылается на источник)
-- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — машиночитаемые токены для сборки темы
-- `05_ДИЗАЙН-СИСТЕМА/design-preview.html` — интерактивный превью живых компонентов по токенам
+- `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` — единый источник истины: все токены с YAML frontmatter и провенансом (каждый цвет/шрифт трассируется к источнику)
+- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — машиночитаемые токены для сборщика (цвета, типографика, отступы xs→3xl, сетка, радиусы, тени, брейкпоинты, motion)
+- `05_ДИЗАЙН-СИСТЕМА/design-preview.html` — интерактивный превью живых компонентов
 
-**Структура токенов:**
-цвета (primary / secondary / accent / text / bg), типографика (display / body / sizes), отступы (xs→3xl), сетка (columns / gap / max_width), скругления, тени, брейкпоинты (mobile / tablet / desktop), анимации (duration_fast/base/slow, easing).
+## Порядок работы
+1. Читает `.landing-state.yaml` и проверяет, что этап 05 активен; иначе STOP.
+2. Запускает `render-pipeline-map.sh` — показывает Mermaid-карту пайплайна.
+3. Создаёт TodoWrite со всеми оставшимися этапами.
+4. Проходит `gate-check.sh --stage 05_design` — если не exit 0, блокируется.
+5. Запускает `build-tokens.py` → `render-preview.py`.
+6. Показывает путь к `design-preview.html`.
+7. **HARD GATE:** ждёт явного `утверждаю` / `ok` / `дальше` от пользователя перед переходом к этапу 06.
 
-**Скрипты:**
-- `skills/design-tokens-generation/scripts/build-tokens.py <project-dir>` — строит DESIGN.md и tokens.json
-- `skills/design-tokens-generation/scripts/render-preview.py <project-dir>` — рендерит design-preview.html
+Физическая блокировка через `PreToolUse` hook (`enforce_stage_gate.py`) — обойти нельзя, нужно закрыть предшественников.
 
 ## Связанные концепты
-
-- [[brand-architect]] — предшествующий агент, создаёт brand-kit.md, который этот агент читает
-- [[brand-kit-build]] — скилл-владелец: design-system-generator входит в его область ответственности
-- [[design-tokens-generation]] — скилл, которому принадлежит агент; содержит скрипты build-tokens и render-preview
-- [[stack-planner]] — следующий этап (06): получает токены и определяет плагины/библиотеки
-- [[scene-director]] — альтернативный следующий шаг (только cinematic mode): использует tokens.json для motion-плана
+- [[brand-architect]] — создаёт `brand-kit.md`, который является основным входом
+- [[design-tokens-generation]] — скилл, которому принадлежит агент; содержит скрипты `build-tokens.py` и `render-preview.py`
+- [[stack-planner]] — следующий агент этапа 06, ожидает закрытого `05_design`
+- [[landing-orchestrator]] — диспатчит агента в рамках общего пайплайна
+- [[stage-execution-protocol]] — обязательный протокол перед любым действием
 
 ## Источник
-
 - `agents/design-system-generator.md`

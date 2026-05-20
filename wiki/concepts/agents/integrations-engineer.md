@@ -2,45 +2,45 @@
 type: agent
 name: integrations-engineer
 sources: ["agents/integrations-engineer.md"]
-updated: 2026-05-15
+updated: 2026-05-20
 triggers: []
-stage: "08"
-uses: ["wp-builder", "analytics-engineer"]
-tags: ["forms", "webhook", "telegram", "crm", "fluent-forms", "functions.php"]
+stage: "08_build"
+uses: ["wp-builder", "analytics-engineer", "stage-execution-protocol"]
+tags: ["forms", "telegram", "crm", "webhooks", "stage-08"]
 ---
 
-# Integrations Engineer (Инженер интеграций)
+# integrations-engineer (Инженер интеграций)
 
 ## Что делает
-Настраивает формы захвата лидов и вебхуки: подключает Fluent Forms к Telegram-боту и/или CRM, чтобы каждая заявка с лендинга мгновенно уходила в нужный канал.
+Настраивает формы сбора заявок и вебхуки: подключает Fluent Forms к Telegram-боту и/или CRM-системе, чтобы каждый лид с лендинга мгновенно уходил в нужный канал.
 
 ## Когда вызывать / в каком этапе
-Этап **08**, строго после [[wp-builder]]. Активируется автоматически через [[landing-orchestrator]] или вручную в рамках команды `/landing-build`. Требует, чтобы `wp-builder` уже создал `functions.php`.
+Запускается на этапе **08_build**, строго после того, как [[wp-builder]] создал `functions.php` и `acf-fields.json`. До запуска агент проверяет `.landing-state.yaml` (должен быть `current_stage == 08_build`) и выполняет полный [[stage-execution-protocol]]: читает state, рисует Mermaid-карту, создаёт TodoWrite, прогоняет `gate-check.sh`. Если предшественники не закрыты — STOP.
 
 ## Что на вход / на выход
 
 **Вход:**
-- `08_КОД/wp-theme/functions.php` — файл темы, созданный `wp-builder`; должен содержать placeholder `// [FLUENT_WEBHOOK]`
+- `08_КОД/wp-theme/functions.php` — создан wp-builder, содержит placeholder `// [FLUENT_WEBHOOK]`
 - `08_КОД/acf-fields.json` — поле `form_id` для секции формы
 - `.env` проекта — переменные `TELEGRAM_BOT_TOKEN`, `TELEGRAM_LEADS_CHAT_ID` и/или `CRM_WEBHOOK_URL`
 
 **Выход:**
-- `08_КОД/wp-theme/functions.php` — дополнен PHP-хуком `lp_send_lead_to_telegram()` для Fluent Forms, плюс опциональным хуком отправки в CRM
+- `08_КОД/wp-theme/functions.php` — дополнен PHP-хуком отправки лида в Telegram и/или CRM
 
-**Логика добавления:**
-1. Читает `.env` (или `.env.example`) — определяет, какие токены есть.
-2. Если `TELEGRAM_BOT_TOKEN` + `TELEGRAM_LEADS_CHAT_ID` — добавляет хук `fluentform/submission_inserted` → `wp_remote_post` к Telegram API.
-3. Если `CRM_WEBHOOK_URL` — добавляет аналогичный хук с отправкой данных формы на CRM-эндпоинт.
-4. **HARD GATE**: показывает добавленный код и ждёт явного утверждения пользователя.
+**Ход работы:**
+1. Читает `.env` (или `.env.example`) — определяет, какие интеграции нужны.
+2. Генерирует `lp_send_lead_to_telegram()` с `add_action('fluentform/submission_inserted', ...)` и вставляет вместо `// [FLUENT_WEBHOOK]`.
+3. Если задан `CRM_WEBHOOK_URL` — добавляет аналогичный хук с `wp_remote_post` к CRM.
+4. **HARD GATE:** показывает добавленный код пользователю и ждёт утверждения перед записью.
 
 **Правила безопасности:**
-- Токены никогда не хардкодятся — только через `getenv()`
-- Все пользовательские данные экранируются через `esc_html()` перед отправкой
+- Токены только через `getenv()`, никакого хардкода.
+- Все пользовательские данные оборачиваются в `esc_html()` перед отправкой.
 
 ## Связанные концепты
-- [[wp-builder]] — создаёт `functions.php` с placeholder `// [FLUENT_WEBHOOK]`, который этот агент заменяет
-- [[analytics-engineer]] — следующий этап 08; добавляет счётчик Яндекс Метрики в тот же `functions.php`
-- [[landing-orchestrator]] — управляет очерёдностью запуска агентов на этапе 08
+- [[wp-builder]] — создаёт `functions.php` до запуска этого агента
+- [[analytics-engineer]] — следующий агент в цепочке этапа 08
+- [[stage-execution-protocol]] — обязательный протокол перед любым Write/Edit
 
 ## Источник
 - `agents/integrations-engineer.md`
