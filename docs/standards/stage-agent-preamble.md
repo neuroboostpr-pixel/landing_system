@@ -39,3 +39,13 @@ Per `audit/03-agents-skills-commands.md` C1, ONLY `landing-orchestrator.md` carr
 preamble. Other 28+ stage-owner agents had no gate-check call, no state-file read,
 no TodoWrite-with-remaining-stages instruction. If any of them is dispatched directly
 (Task tool, or by user), the pipeline lock is bypassed.
+
+---
+
+## Note: orchestrator has its own expanded variant
+
+`agents/landing-orchestrator.md` uses a richer 4-step preamble (with soft-warning/hard-lock distinction, explicit reference to verify-composed-premium.sh, etc). This is intentional — orchestrator is the dispatcher and needs more context. **Do NOT overwrite orchestrator's preamble with this canonical block.**
+
+When adding NEW stage-owner agents, use this canonical block (with `<STAGE>` substituted). When editing landing-orchestrator.md, preserve its existing preamble structure.
+
+Both link to `stage-execution-protocol.md` and are functionally equivalent — drift is only in wording/structure.
