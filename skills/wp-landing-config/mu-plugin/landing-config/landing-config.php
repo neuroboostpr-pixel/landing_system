@@ -32,6 +32,8 @@ require_once LANDING_CONFIG_DIR . '/includes/admin-cta.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-cta-readonly.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-snippets.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-snippets-readonly.php';
+require_once LANDING_CONFIG_DIR . '/includes/admin-lead-statuses.php';
+require_once LANDING_CONFIG_DIR . '/includes/admin-lead-statuses-readonly.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-integrations-readonly.php';
 require_once LANDING_CONFIG_DIR . '/adapters/AdapterInterface.php';
 require_once LANDING_CONFIG_DIR . '/adapters/EmailAdapter.php';
