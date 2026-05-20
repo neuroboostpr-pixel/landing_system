@@ -2,84 +2,71 @@
 type: command
 name: landing-go
 sources: ["commands/landing-go.md"]
-updated: 2026-05-15
+updated: 2026-05-20
 triggers:
-  - "запустить лендинг с нуля"
-  - "поехали по этапам"
-  - "продолжить конвейер"
+  - "запусти конвейер лендинга"
+  - "веди меня по этапам"
   - "следующий этап проекта"
-  - "провести через все этапы"
+  - "начни сборку сайта"
+  - "продолжи пайплайн"
 stage: ""
 uses:
   - landing-orchestrator
-  - prototype-importer
-  - references-curator
-  - brand-architect
-  - design-system-generator
-  - stack-planner
-  - content-writer
-  - ux-composer
-  - block-composer
-  - photo-curator
-  - visual-curator
-  - wp-builder
-  - wp-deployer
-  - qa-auditor
-  - analytics-engineer
-  - seo-optimizer
-tags: ["orchestrator", "entry-point", "pipeline", "auto-fix"]
+  - landing-prototype
+  - landing-wireframe
+  - landing-compose
+  - landing-photos
+  - landing-visuals
+  - gate-check
+  - lifecycle-keeper
+tags: [command, orchestration, entry-point]
 ---
 
-# /landing-go — Главная команда конвейера
+# /landing-go — главная команда конвейера
 
 ## Что делает
 
-Единая точка входа для всего производства лендинга. Запускаешь один раз — команда сама читает статус проекта, находит следующий этап и ведёт тебя от прототипа до живого сайта на Бегете, не давая пропустить ни один шаг.
+Единственная точка входа в весь pipeline лендинга. Запускаешь один раз — и команда сама ведёт проект от прототипа до живого сайта на Бегете, шаг за шагом, с проверками и авто-фиксами на каждом переходе.
 
 ## Когда вызывать / в каком этапе
 
-Вызывать после того, как прототип (`prototype.pdf` или `prototype.md`) положен в `<project>/07_ПРОТОТИП/source/`. Подходит и для старта с нуля, и для возобновления застрявшего проекта — команда читает `.landing-state.yaml` и подхватывает с нужного места. Этапы 00–02 (бриф, контекст, ниша, материалы клиента) считаются сделанными до системы и помечаются `n/a` автоматически.
+Вызывается вручную в начале работы над проектом (или для продолжения после паузы). Перед запуском нужно положить `prototype.pdf` или `prototype.md` в `<project>/07_ПРОТОТИП/source/`. Команда сама определяет режим **prototype-first** и помечает upstream-этапы (00, 01, 01a, 02) как `n/a`, чтобы гейты по ним не блокировали прогресс. Если проект использует полный флоу с брифом — upstream-этапы остаются в статусе `locked` и проходят стандартные проверки.
 
-**Синтаксис:**
-```
-/landing-go [--project <slug>] [--auto-fix yes|no] [--skip-gate <id>]
-```
+Поддерживаемые флаги:
+- `--project <slug>` — указать папку проекта (по умолчанию текущая)
+- `--auto-fix yes` — применять авто-фиксы без подтверждения
+- `--skip-gate <id>` — пропустить конкретный гейт для отладки
 
 ## Что на вход / на выход
 
 **Вход:**
-- `<project>/.landing-state.yaml` — текущий статус этапов проекта
-- `<project>/07_ПРОТОТИП/source/prototype.pdf` (или `.md`) — исходный прототип
-- Опциональные флаги: `--project`, `--auto-fix yes`, `--skip-gate <id>`
+- `<project>/.landing-state.yaml` — состояние всех 13 этапов
+- `<project>/07_ПРОТОТИП/source/prototype.{pdf,md}` — исходный прототип
+- `config/stage-gates.yaml` — правила гейтов и подсказки для авто-фикса
 
 **Выход:**
-- Последовательный проход через все 13+ этапов конвейера с HTML-превью на каждом gate
-- Финальный результат: задеплоенный WordPress-сайт на Бегете + QA + аналитика + SEO
-- При падении гейта — `fix_hint` из `config/stage-gates.yaml` и авто-фикс на `yes`
+- Последовательное прохождение всех этапов: 07a → 03 → 04 → 05 → 06 → 07 → 07b → 07c → **07d ⇆ 07e** (параллельно) → 07f → 08 → 09 → 10–12
+- На каждом переходе — результат `gate-check.sh`: pass или предложение авто-фикса
+- Финал — задеплоенный сайт, прошедший QA, аналитику и SEO
 
-**Особый режим:** на этапах 07d (фото) и 07e (визуалы) оркестратор диспатчит оба субагента **параллельно**, сокращая время сборки.
+## Механика
 
-## Ключевые этапы
+1. `scripts/landing-go-next-stage.py` читает `.landing-state.yaml` и возвращает следующий незакрытый этап.
+2. `landing-orchestrator` диспатчит нужного агента или команду.
+3. При падении гейта смотрит `fix_hint` из `stage-gates.yaml`: если начинается с `auto_fix:` — предлагает запустить указанную команду и при согласии перезапускает проверку.
+4. Этапы 07d (фото) и 07e (визуал) запускаются **параллельно** двумя субагентами.
 
-| Этап | Режим | Агент |
-|---|---|---|
-| 07a prototype | авто | `prototype-importer` |
-| 03–05 бренд | руками + AI | `brand-architect`, `design-system-generator` |
-| 06–07 стек + контент | авто | `stack-planner`, `content-writer` |
-| 07b–07c wireframe + compose | маркетолог утверждает | `ux-composer`, `block-composer` |
-| **07d ⇆ 07e** фото + визуалы | **параллельно** | `photo-curator` ‖ `visual-curator` |
-| 08–12 build → QA → SEO | авто | `wp-builder`, `wp-deployer`, QA, SEO |
-
-Ручные команды `/landing-photos`, `/landing-visuals`, `/landing-prototype`, `/landing-wireframe`, `/landing-compose` продолжают работать независимо.
+Ручные команды `/landing-photos`, `/landing-visuals`, `/landing-prototype`, `/landing-wireframe`, `/landing-compose` продолжают работать независимо как отдельные точки входа.
 
 ## Связанные концепты
 
-- [[landing-orchestrator]] — агент, которого вызывает команда для диспетчеризации этапов
-- [[prototype-importer]] — первый автоматический шаг: парсит `prototype.pdf` → `prototype.yaml`
-- [[photo-curator]] — параллельный этап 07d: классификация и matching клиентских фото
-- [[visual-curator]] — параллельный этап 07e: AI-генерация иконок и инфографики
-- [[wp-builder]] — этап 08: генерация WordPress-темы из собранных артефактов
-- [[landing-start]] — точка входа для новых проектов (wizard перед `/landing-go`)
+- [[landing-orchestrator]] — агент, которого диспатчит команда на каждом этапе
+- [[landing-prototype]] — вызывается на этапе 07a автоматически
+- [[landing-wireframe]] — этап 07b, маркетолог выбирает варианты блоков
+- [[landing-compose]] — этапы 07c и 07f, сборка composed.html
+- [[landing-photos]] — этап 07d, параллельный прогон фото
+- [[landing-visuals]] — этап 07e, параллельный прогон иконок/инфографики
+- [[landing-start]] — точка входа для новичков, создаёт проект перед `/landing-go`
 
 ## Источник
 
