@@ -311,3 +311,30 @@ landing_config_get('key', $default);
 ### Spec
 
 [docs/superpowers/specs/2026-05-19-s2a-landing-config-revised.md](docs/superpowers/specs/2026-05-19-s2a-landing-config-revised.md)
+
+### S2-A.3 — Network-Admin Unification (2026-05-20)
+
+Все настройки (CTA / Интеграции / Снипеты) теперь в **Network admin → Лендинг**
+с селектором сегмента `?segment=N` (0 = network default, N = blog_id сегмента).
+Cascade: network запись → site override по machine-id
+(preset_name / adapter_name / snippet name).
+
+- 3 CPT: `lp_cta`, `lp_integration`, `lp_snippet`
+- Общий резолвер: `includes/cascade.php` (resolve_for_blog / list_for_blog / has_site_override)
+- Сегмент-селектор: `includes/segment-selector.php` (render + current_from_request)
+- Network admin pages: `admin-cta.php`, `admin-integrations.php`, `admin-snippets.php`
+  (последний — merged из бывшего `admin-snippets-network.php`)
+- Read-only view на subsite: `admin-cta-readonly.php`, `admin-integrations-readonly.php`,
+  `admin-snippets-readonly.php`
+- Миграция wp_options → CPT (идемпотентно, один раз):
+  - `migrate_cta_from_options`
+  - `migrate_integrations_from_options` (per-network)
+  - `migrate_subsite_integrations` (per-subsite, для каждого blog_id)
+  - Маркер `landing_config_migration_s2a3_cta` ставится в `maybe_run()` после
+    ВСЕХ миграций (не из отдельных миграционных функций).
+- Адаптеры расширены: `field_definitions()` (декларативная схема с encrypt/required)
+  + `settings()` (cascade-aware reader с legacy fallback на per-field wp_options).
+- Live smoke: `skills/wp-landing-config/tests/integration/test_s2a3_smoke.sh`
+
+См. [spec](docs/superpowers/specs/2026-05-19-s2a3-network-admin-unification-design.md)
+и [plan](docs/superpowers/plans/2026-05-19-s2a3-network-admin-unification-plan.md).
