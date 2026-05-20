@@ -2,7 +2,7 @@
 
 > Авто-сгенерированный индекс. Обновляется при `python -m scripts.wiki.compile --source-mode=system`.
 
-**Концептов всего:** 470
+**Концептов всего:** 471
 **Категории:** agent, block, command, rule, script, skill, stage, unknown
 
 **Известные ограничения:**
@@ -213,6 +213,7 @@
 - [[setup]] — setup-guide
 - [[setup-flag-sh-doc]] — setup-flag
 - [[stage-08-helper-py-doc]] — stage-08-helper
+- [[stage-agent-preamble]] — stage-agent-preamble
 - [[stage-execution-protocol]] — stage-execution-protocol
 - [[stage-gates]] — stage-gates-config
 - [[state-yaml-py-doc]] — state-yaml-parser
