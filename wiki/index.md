@@ -2,7 +2,7 @@
 
 > Авто-сгенерированный индекс. Обновляется при `python -m scripts.wiki.compile --source-mode=system`.
 
-**Концептов всего:** 471
+**Концептов всего:** 472
 **Категории:** agent, block, command, rule, script, skill, stage, unknown
 
 **Известные ограничения:**
@@ -127,6 +127,7 @@
 - [[landing-stack]] — landing-stack
 - [[landing-start]] — landing-start
 - [[landing-status]] — landing-status
+- [[landing-style]] — landing-style
 - [[landing-visuals]] — landing-visuals
 - [[landing-wireframe]] — landing-wireframe
 - [[migrate-state-add-01a-sh-doc]] — migrate-state-add-01a
