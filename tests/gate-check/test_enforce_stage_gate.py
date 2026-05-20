@@ -71,3 +71,37 @@ def test_paths_outside_project_pass(tmp_path: Path) -> None:
     # Файлы вне проекта (system-level) — hook не вмешивается
     code, _ = _invoke_hook(tmp_path / "outside.txt")
     assert code == 0
+
+
+def test_missing_predecessor_treated_as_na(tmp_path):
+    """If a predecessor stage isn't in the state file at all, treat it as n/a.
+
+    This is load-bearing for prototype-first projects which legitimately omit
+    00/01/01a/02 from state files (see CLAUDE.md).
+    """
+    proj = _make_project(tmp_path, {"04_brand": "in_progress"})
+    target = proj / "04_БРЕНД" / "x.md"
+    target.parent.mkdir(parents=True)
+    code, stderr = _invoke_hook(target)
+    assert code == 0, (
+        f"Expected pass (predecessors missing = implicit n/a), got "
+        f"exit={code}, stderr={stderr}"
+    )
+
+
+def test_corrupt_state_file_allows_edit(tmp_path):
+    """Fail-open: a broken state file should not brick the user's session.
+
+    Hook logs warning to stderr but returns 0 so user can still edit (e.g. fix
+    the corrupt state file itself).
+    """
+    proj = tmp_path / "proj"
+    proj.mkdir()
+    (proj / ".landing-state.yaml").write_text("this is :: not valid YAML\n%%%")
+    target = proj / "04_БРЕНД" / "x.md"
+    target.parent.mkdir(parents=True)
+    code, stderr = _invoke_hook(target)
+    assert code == 0
+    assert "error" in stderr.lower() or "allowing" in stderr.lower(), (
+        f"Expected warning in stderr, got: {stderr}"
+    )

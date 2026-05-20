@@ -37,8 +37,11 @@ PIPELINE_ORDER = [
     "03_references", "04_brand", "05_design", "06_stack", "07_content",
     "07a_prototype", "07b_wireframe", "07c_composed",
     "07d_photos", "07e_visuals", "07f_composed_final",
-    "08_build", "08b_style", "09_deploy", "10_qa", "11_analytics", "12_seo",
+    "08_build", "09_deploy", "10_qa", "11_analytics", "12_seo",
 ]
+# Note: 08b_style is intentionally omitted — it's a sub-phase of 08_build
+# (frontend-builder agent operates in the same 08_КОД/ folder). Path mapping
+# routes 08_КОД/** to 08_build, which handles both sub-stages.
 
 
 def _load_path_map() -> dict[str, Any]:
@@ -76,19 +79,23 @@ def _stage_for_path(file_path: Path, project_root: Path, path_map: dict) -> str 
 
 
 def _stage_predecessors_approved(state: dict, stage: str) -> tuple[bool, str]:
-    """Возвращает (ok, reason). ok=False если предшественник не approved."""
+    """Returns (ok, reason). ok=False if any predecessor isn't approved/n/a.
+
+    Stages not present in state file are treated as implicit n/a (consistent
+    with prototype-first design — many projects don't populate every stage)."""
     try:
         idx = PIPELINE_ORDER.index(stage)
     except ValueError:
-        return True, ""  # неизвестная стадия — не блокируем
+        return True, ""
 
-    stages_in_state = state.get("stages", {}) or {}
+    stages_in_state = (state or {}).get("stages", {}) or {}
     for prev_stage in PIPELINE_ORDER[:idx]:
-        if prev_stage not in stages_in_state:
-            # стадия не объявлена в state-файле → считаем её n/a
-            continue
         st = stages_in_state.get(prev_stage, {})
-        status = st.get("status") if isinstance(st, dict) else None
+        if not isinstance(st, dict):
+            continue
+        status = st.get("status")
+        if status is None:
+            continue  # missing key → implicit n/a
         if status not in ("approved", "n/a"):
             return False, (
                 f"Cannot Write/Edit to '{stage}' — predecessor '{prev_stage}' "
@@ -99,10 +106,25 @@ def _stage_predecessors_approved(state: dict, stage: str) -> tuple[bool, str]:
 
 
 def main() -> int:
+    try:
+        return _main_inner()
+    except Exception as ex:
+        # Fail-open policy: a broken hook should not brick the user's editing
+        # session. Real gate enforcement happens via gate-check.sh anyway —
+        # this hook is a fast pre-flight. If it can't decide, get out of the way.
+        sys.stderr.write(
+            f"⚠️  enforce_stage_gate hook error (allowing edit): "
+            f"{type(ex).__name__}: {ex}\n"
+        )
+        return 0
+
+
+def _main_inner() -> int:
     raw = sys.stdin.read()
     try:
         payload = json.loads(raw)
-    except json.JSONDecodeError:
+    except json.JSONDecodeError as ex:
+        sys.stderr.write(f"⚠️  enforce_stage_gate: bad payload, allowing: {ex}\n")
         return 0
 
     tool_input = payload.get("tool_input", {})
@@ -110,7 +132,7 @@ def main() -> int:
     if not file_path_str:
         return 0
 
-    file_path = Path(file_path_str)
+    file_path = Path(file_path_str).resolve()
     proj_root = _find_project_root(file_path)
     if proj_root is None:
         return 0
@@ -120,11 +142,11 @@ def main() -> int:
     if stage is None or stage == "__outside_pipeline__":
         return 0
 
-    state = yaml.safe_load((proj_root / ".landing-state.yaml").read_text())
+    state = yaml.safe_load((proj_root / ".landing-state.yaml").read_text()) or {}
     ok, reason = _stage_predecessors_approved(state, stage)
     if not ok:
         sys.stderr.write(f"❌ Stage gate enforcement: {reason}\n")
-        return 2  # 2 = block + show stderr to model
+        return 2
 
     return 0
 
