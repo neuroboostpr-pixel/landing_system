@@ -8,10 +8,11 @@ trap 'echo "post-commit failed at line $LINENO" >&2; exit 0' ERR
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 cd "$REPO_ROOT"
 
-# Защита от рекурсии — если последний коммит уже chore(wiki) — выходим
+# Защита от рекурсии — если последний коммит уже chore(wiki|commands) — выходим
 LAST_MSG="$(git log -1 --pretty=%B 2>/dev/null | head -1)"
 case "$LAST_MSG" in
     chore\(wiki\)*) exit 0 ;;
+    chore\(commands\)*) exit 0 ;;
 esac
 
 # Защита от запуска во время merge/rebase/cherry-pick/bisect.
@@ -52,6 +53,21 @@ if [ -n "$(git status wiki/ --short 2>/dev/null)" ]; then
         echo "✅ wiki/ авто-закоммичено"
     else
         echo "⚠️  wiki/ commit заблокирован (pre-commit hook?). Запусти руками."
+    fi
+fi
+
+# Sync commands/ → .claude/commands/ if commands/ changed in this commit.
+# commands/ — source of truth (humans edit). .claude/commands/ — runtime copy.
+if echo "$CHANGED" | grep -qE "^commands/"; then
+    echo "📋 commands/ изменилось, синхронизирую .claude/commands/..."
+    bash scripts/sync-commands.sh 2>&1 | tail -10 || true
+    if [ -n "$(git status .claude/commands/ --short 2>/dev/null)" ]; then
+        git add .claude/commands/ 2>/dev/null || true
+        if git commit -m "chore(commands): авто-синхронизация .claude/commands/ из commands/" 2>&1; then
+            echo "✅ .claude/commands/ авто-закоммичено"
+        else
+            echo "⚠️  .claude/commands/ commit заблокирован. Запусти руками."
+        fi
     fi
 fi
 
