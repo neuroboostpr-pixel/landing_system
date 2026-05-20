@@ -35,7 +35,10 @@ function render_page(): void {
     // Filter: ?status=<slug> или ?status=all (default)
     $active_status = sanitize_key($_GET['status'] ?? 'all');
 
-    // Counts по статусам — один SQL
+    // Counts по статусам — один SQL.
+    // $table = $wpdb->prefix . 'landing_leads' (генерируется в DB\get_leads_table_name из доверенного
+    // $wpdb->prefix, не из user input). prepare() не используется потому что не нужны placeholders.
+    // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery
     $count_rows = $wpdb->get_results("SELECT processed_status AS s, COUNT(*) AS n FROM `$table` GROUP BY processed_status", ARRAY_A);
     $counts_by_slug = [];
     $total = 0;
@@ -161,7 +164,7 @@ function render_page(): void {
         if ($total_pages > 1) {
             echo '<div class="tablenav"><div class="tablenav-pages">';
             echo paginate_links([
-                'base'      => add_query_arg('paged', '%#%'),
+                'base'      => add_query_arg(['status' => $active_status, 'paged' => '%#%'], $base_url),
                 'format'    => '',
                 'total'     => $total_pages,
                 'current'   => $page,
