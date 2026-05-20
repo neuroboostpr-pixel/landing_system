@@ -37,12 +37,12 @@ allowed-tools: Bash, Read, Write, Edit
 
 - `07_КОНТЕНТ/seo-copy.md` — SEO-варианты заголовков и descriptions
 - `08_КОД/wp-theme/functions.php` существует
-- `00_БРИФ/approved-design-brief.md` — ниша, ЦА, ключевые слова
+- `00_БРИФ/brief.md` — ниша, ЦА, ключевые слова
 
 ## What I do
 
 1. Читаю `07_КОНТЕНТ/seo-copy.md` — title, description, h1 варианты.
-2. Читаю `00_БРИФ/approved-design-brief.md` — ниша, гео, CTA.
+2. Читаю `00_БРИФ/brief.md` — ниша, гео, CTA.
 3. Генерирую PHP-функцию мета-тегов и добавляю в `functions.php` (заменяю `// [SEO_META]`):
 
 ```php
