@@ -5,61 +5,55 @@ sources: ["agents/scene-director.md"]
 updated: 2026-05-20
 triggers: []
 stage: "05"
-uses: ["design-system-generator", "brand-architect", "stage-execution-protocol", "landing-orchestrator"]
-tags: ["cinematic", "motion", "gsap", "premium", "stage-05"]
+uses: ["design-system-generator", "brand-architect", "landing-orchestrator"]
+tags: ["cinematic", "motion", "gsap", "stage-05", "premium"]
 ---
 
 # scene-director — Режиссёр кинематографических сцен
 
 ## Что делает
-
-Проектирует анимационную архитектуру лендинга: разбивает страницу на 6–8 кинематографических сцен со своей логикой параллакса, GSAP-движения и mobile-fallback. Нужен только в «cinematic»-режиме — для премиальных проектов с богатым motion-дизайном.
+Проектирует анимационную архитектуру лендинга: разбивает страницу на 6–8 кинематографических сцен и описывает, как каждая из них должна двигаться при скролле. Результат — пошаговый план с инструкциями для GSAP/ScrollTrigger, который потом ложится в основу верстки.
 
 ## Когда вызывать / в каком этапе
+Активируется **только в cinematic-режиме** — при создании проекта с флагом `--cinematic` или по явному запросу пользователя. Запускается на этапе **05_design**, строго после того, как `design-system-generator` создал `DESIGN.md` с motion-токенами. Вызывается агентом `landing-orchestrator` или вручную.
 
-Активируется **только при флаге `--cinematic`** или явном запросе пользователя, строго после того как `design-system-generator` завершил этап `05_design` и создал `DESIGN.md`. Предшественник должен быть закрыт через `gate-state.sh approve` — иначе Pre-Tool-Use хук заблокирует запись файлов.
-
-Перед любым действием агент обязан:
-1. Прочитать `.landing-state.yaml` и убедиться, что `current_stage == 05_design`.
-2. Показать Mermaid-карту pipeline через `render-pipeline-map.sh`.
-3. Запустить `gate-check.sh --stage 05_design` и дождаться exit 0.
+Предусловия (обязательные перед любым действием):
+- `current_stage == 05_design` в `.landing-state.yaml`
+- `gate-check.sh --stage 05_design` возвращает exit 0
+- показана Mermaid-карта pipeline через `render-pipeline-map.sh`
 
 ## Что на вход / на выход
 
 **Вход:**
-- `00_БРИФ/brief.md` — ниша, целевая аудитория, тональность
-- `04_БРЕНД/brand-kit.md` — цвета, motion-стиль, фирменные токены
+- `00_БРИФ/brief.md` — ниша, целевая аудитория, тон коммуникации
+- `04_БРЕНД/brand-kit.md` — цвета, motion-принципы бренда
 - `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` — motion-токены дизайн-системы
 
 **Выход:**
-- `05_ДИЗАЙН-СИСТЕМА/scenes.md` — scene grammar для каждой из 6–8 сцен: название, тип, визуальное описание, инструкции GSAP / ScrollTrigger / Lenis, параллакс-логика, mobile-упрощение
+- `05_ДИЗАЙН-СИСТЕМА/scenes.md` — полный scene grammar: название, тип, описание визуала, GSAP/ScrollTrigger/Lenis инструкции, parallax-логика и mobile fallback для каждой из 6–8 сцен
 
-**Запрещено:**
-- Scroll hijacking
-- Particle systems
-- Fade-up на каждом блоке (однообразие)
+**Motion Rules (строгие ограничения):**
+- ❌ Scroll hijack запрещён
+- ❌ Particle systems запрещены
+- ❌ Fade-up на каждом блоке запрещён
 
-## Типовые сцены (8 штук)
+## Восемь типовых сцен
 
-| # | Сцена | Суть |
-|---|---|---|
-| 1 | Hero Film Frame | Full-height, layered planes, медленный параллакс |
-| 2 | Chaos to Clarity | Текстовые слои, фоновые орбиты |
+| # | Тип сцены | Суть |
+|---|-----------|------|
+| 1 | Hero Film Frame | Full-height split, layered planes, slow parallax |
+| 2 | Chaos to Clarity | Текстовые слои + фоновые орбиты разной скоростью |
 | 3 | What You Get | Карточки с controlled stagger |
-| 4 | The Diagnostic Process | Quasi-timeline с параллаксом |
-| 5 | About the Expert | Portrait scene, light-depth эффект |
-| 6 | Proof / Trust | Цифры и кейсы, сдержанный motion |
-| 7 | FAQ | Лёгкие взаимодействия |
+| 4 | Diagnostic Process | Quasi-timeline с parallax |
+| 5 | About the Expert | Portrait scene, premium light-depth |
+| 6 | Proof / Trust | Цифры, кейсы, restrained motion |
+| 7 | FAQ | Лёгкая сцена, чёткие взаимодействия |
 | 8 | Final Call | Кульминация, contrast shift |
 
 ## Связанные концепты
-
-- [[design-system-generator]] — обязательный предшественник: даёт `DESIGN.md` с motion-токенами
-- [[brand-architect]] — источник `brand-kit.md` с цветами и motion-стилем
-- [[stage-execution-protocol]] — обязательный протокол перед любым Write/Edit действием
-- [[landing-orchestrator]] — управляет порядком этапов и проверяет gate-check перед запуском агента
-- [[block-composer]] — использует `scenes.md` на этапе 07b при сборке composed.html в cinematic-режиме
+- [[design-system-generator]] — предоставляет DESIGN.md с motion-токенами; обязателен перед запуском
+- [[brand-architect]] — создаёт brand-kit.md, из которого берутся цветовые и motion-принципы
+- [[landing-orchestrator]] — диспатчит scene-director при cinematic-режиме в рамках этапа 05
 
 ## Источник
-
 - `agents/scene-director.md`

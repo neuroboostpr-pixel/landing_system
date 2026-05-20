@@ -5,52 +5,54 @@ sources: ["agents/style-extractor.md"]
 updated: 2026-05-20
 triggers: []
 stage: "04"
-uses: ["brand-architect", "moodboard-composer", "references-curator", "style-decomposition", "stage-execution-protocol"]
+uses: ["moodboard-composer", "brand-architect", "references-curator", "style-decomposition", "landing-brand"]
 tags: ["brand", "palette", "fonts", "icons", "stage-04"]
 ---
 
-# Style Extractor — извлечение стилей из референсов
+# style-extractor — извлечение стилей из референсов
 
 ## Что делает
-Анализирует одобренные референсы (картинки и URL-адреса) и вытягивает из них конкретную систему стиля: цвета, шрифты, иконки, сетку и анимацию. Результат — 5 структурированных файлов, готовых к использованию в коде.
+Анализирует утверждённые референсы (картинки и URL-адреса) и вытаскивает из них готовую к использованию систему стилей: цветовую палитру, шрифты, иконки, сетку и правила анимации. Результат — пять YAML/MD-файлов, с которыми дальше работает [[brand-architect]].
 
 ## Когда вызывать / в каком этапе
-Запускается на **этапе 04 (04_brand)** после того, как мудборд одобрен пользователем. Является обязательным предшественником агента [[brand-architect]] — тот не может стартовать, пока не готовы все 5 выходных файлов.
+Запускается на **этапе 04** (`04_brand`) — после того, как мудборд утверждён ([[moodboard-composer]] завершил работу и `03_РЕФЕРЕНСЫ/index.yaml` содержит записи со статусом `approved`). Вызывается командой `/landing-brand` или напрямую агентом [[landing-orchestrator]].
 
-Предусловие: в `.landing-state.yaml` должно быть `current_stage == 04_brand`. Если нет — агент останавливается и сообщает об этом. Gate-check выполняется скриптом `gate-check.sh --stage 04_brand`.
+Перед стартом агент проверяет:
+- `.landing-state.yaml` → `current_stage == 04_brand`
+- `bash scripts/gate-check.sh --stage 04_brand` → exit 0
+- Если предшественники не закрыты — STOP (hook `enforce_stage_gate.py` физически блокирует запись файлов).
 
 ## Что на вход / на выход
 
 **Вход:**
-- `03_РЕФЕРЕНСЫ/index.yaml` — список референсов со статусом `approved`
-- Файлы изображений и URL из одобренного набора референсов
+- `03_РЕФЕРЕНСЫ/index.yaml` — список утверждённых референсов (status: `approved`)
+- Файлы изображений и URL из папки `03_РЕФЕРЕНСЫ/`
 
 **Выход (5 файлов в `04_БРЕНД/extracted/`):**
 | Файл | Содержимое |
 |---|---|
-| `palette.yaml` | Цветовая палитра с HEX-кодами и ролями |
-| `fonts.yaml` | Шрифты (семейства, начертания, размеры) |
-| `icons.yaml` | Иконки с вариантами под нишу |
-| `grid.md` | Сетка и отступы |
-| `motion.md` | Паттерны анимации |
+| `palette.yaml` | Цветовая палитра с hex-кодами |
+| `fonts.yaml` | Шрифтовые пары и размеры |
+| `icons.yaml` | Подобранный набор иконок |
+| `grid.md` | Сеточная система (колонки, отступы) |
+| `motion.md` | Принципы анимации |
 
-**HARD GATE:** все 5 файлов должны быть созданы до запуска [[brand-architect]].
+**HARD GATE:** все 5 файлов обязаны существовать, иначе [[brand-architect]] не запустится.
 
 ## Как работает внутри
-1. Читает `03_РЕФЕРЕНСЫ/index.yaml`, берёт только `approved` референсы.
-2. Для изображений — запускает `extract-palette.py` (извлечение цветов).
-3. Для URL — запускает `identify-fonts.py` (определение шрифтов).
-4. Запускает `match-icons.py` со стандартным списком нужных иконок.
-5. Запускает `orchestrate.py` — агрегирует все выходы в единый набор.
-6. Создаёт `grid.md` и `motion.md` как заготовки, если их нет.
-7. По завершении — прогоняет `verify-04_brand.sh` и закрывает этап через `gate-state.sh approve`.
+1. Читает `index.yaml`, отбирает только `approved`-референсы.
+2. Для картинок запускает `skills/style-decomposition/scripts/extract-palette.py`.
+3. Для URL запускает `scripts/identify-fonts.py`.
+4. Прогоняет `scripts/match-icons.py` по стандартному списку потребностей.
+5. Агрегирует всё через `scripts/orchestrate.py`.
+6. Дописывает `grid.md` и `motion.md` если их ещё нет.
 
 ## Связанные концепты
-- [[references-curator]] — поставляет одобренные референсы (`index.yaml`)
-- [[moodboard-composer]] — предшествует: без мудборда референсы не одобрены
-- [[brand-architect]] — следующий агент, потребляет все 5 extracted-файлов
-- [[style-decomposition]] — скилл с Python-скриптами извлечения
-- [[stage-execution-protocol]] — обязательный протокол перед любым Write/Edit
+- [[moodboard-composer]] — предшественник: формирует утверждённые референсы
+- [[brand-architect]] — преемник: синтезирует `brand-kit.md` из 5 выходных файлов
+- [[references-curator]] — управляет `index.yaml` со статусами референсов
+- [[style-decomposition]] — скилл с Python-скриптами, которые вызывает агент
+- [[landing-brand]] — команда, инициирующая этот этап
 
 ## Источник
 - `agents/style-extractor.md`

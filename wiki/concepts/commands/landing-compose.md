@@ -2,59 +2,59 @@
 type: command
 name: landing-compose
 sources: ["commands/landing-compose.md"]
-updated: 2026-05-15
+updated: 2026-05-20
 triggers:
-  - "собери composed.html"
-  - "запусти compose"
-  - "этап 07b"
-  - "сборка блоков с токенами"
+  - "собрать composed.html"
+  - "запустить этап 07b"
+  - "скомпоновать блоки с токенами"
+  - "вставить дизайн-токены в wireframe"
 stage: "07b"
 uses:
   - block-composer
-  - prototype-import
-  - wireframe-rendering
-  - design-tokens-generation
+  - prototype-importer
+  - ux-composer
+  - design-system-generator
 tags:
   - compose
-  - stage-07b
-  - html
-  - design-tokens
+  - 07b
+  - tokens
+  - wireframe
 ---
 
-# /landing-compose — сборка composed.html
+# /landing-compose — Сборка composed.html (этап 07b)
 
 ## Что делает
 
-Собирает финальный HTML-файл лендинга с подставленными дизайн-токенами и текстами из прототипа. Визуальный контент (фото, иконки, инфографика) пока остаётся в виде именованных placeholder-ов — они заполняются на этапах PR-B и PR-C.
+Собирает финальный HTML-файл страницы: берёт выбранные блоки из wireframe, подставляет дизайн-токены (цвета, шрифты, отступы) и тексты из прототипа. Визуальный контент — фото, иконки, инфографика — остаётся в виде плейсхолдеров и заполняется позже на этапах 07c и 07d.
 
 ## Когда вызывать / в каком этапе
 
-Вызывается вручную на **этапе 07b** после того, как:
-- пользователь выбрал варианты блоков в `wireframe.html` и сохранил `selections.yaml` в папку `07a_WIREFRAME/`;
-- в папке `05_ДИЗАЙН-СИСТЕМА/` лежит готовый `tokens.json`.
+Вызывается на **этапе 07b** — после того как пользователь выбрал варианты блоков в `wireframe.html` и положил скачанный `selections.yaml` в папку `07a_WIREFRAME/`. Также должен быть готов `tokens.json` из этапа 05.
 
-Команда **не интегрирована в `landing-orchestrator`** — это задача PR-D. До выхода PR-D запускается вручную через `/landing-compose`.
+Запускается автоматически через `/landing-go` (рекомендуется) или вручную командой `/landing-compose`.
 
 ## Что на вход / на выход
 
-**Вход:**
-- `07_ПРОТОТИП/prototype.yaml` — машинное представление прототипа с текстами блоков
-- `07a_WIREFRAME/selections.yaml` — выбор вариантов блоков, сделанный пользователем в wireframe.html
-- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — дизайн-токены (цвета, шрифты, отступы)
+**Вход (все три обязательны):**
+- `07_ПРОТОТИП/prototype.yaml` — машиночитаемый прототип с текстами
+- `07a_WIREFRAME/selections.yaml` — выбор вариантов блоков пользователем
+- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — дизайн-токены (цвета, типографика, отступы)
 
 **Выход:**
-- `07b_COMPOSED/composed.html` — основной файл: блоки со стилями и реальными текстами, визуальные слоты — placeholder-ы
+- `07b_COMPOSED/composed.html` — десктопная версия страницы с токенами и текстами
 - `07b_COMPOSED/composed-mobile.html` — мобильная версия
-- `07b_COMPOSED/block-injection-log.md` — лог подстановки блоков
+- `07b_COMPOSED/block-injection-log.md` — лог инъекции блоков (какой блок куда вставлен)
 
 ## Связанные концепты
 
-- [[block-composer]] — агент, выполняющий фактическую сборку; команда делегирует работу ему
-- [[prototype-import]] — поставляет `prototype.yaml`, без которого команда не запустится
-- [[wireframe-rendering]] — поставляет `selections.yaml` с выбором вариантов блоков
-- [[design-tokens-generation]] — поставляет `tokens.json` с брендовыми переменными
-- [[landing-photos]] — этап PR-B, заменяет фото-placeholder-ы реальными снимками
-- [[landing-visuals]] — этап PR-C, заменяет icon/infographic-placeholder-ы сгенерированными PNG
+- [[block-composer]] — агент, который выполняет фактическую сборку composed.html
+- [[ux-composer]] — предшествующий агент этапа 07a, производит wireframe.html и selections.yaml
+- [[prototype-importer]] — агент этапа 07, создаёт prototype.yaml как один из входов
+- [[design-system-generator]] — агент этапа 05, создаёт tokens.json
+- [[photo-curator]] — этап 07c, заполняет фото-плейсхолдеры после compose
+- [[visual-curator]] — этап 07d, заполняет иконки и инфографику после compose
+- [[landing-go]] — основная команда-оркестратор, вызывает /landing-compose автоматически
+- [[block-composition]] — скилл, реализующий логику сборки
 
 ## Источник
 
