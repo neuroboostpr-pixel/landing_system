@@ -133,3 +133,17 @@ bash scripts/migrate-add-wiki.sh ~/Lendings/<slug>
 - Плагин **Local Images Plus** — скачивать картинки в vault а не оставлять ссылки
 
 Подробнее: [spec](superpowers/specs/2026-05-15-wiki-graph-markup-design.md), [plan](superpowers/plans/2026-05-15-wiki-graph-pr-f1-plan.md).
+
+## Enforcement: PreToolUse hook
+
+С 2026-05-20 в `.claude/settings.json` подключён хук
+`scripts/hooks/enforce_stage_gate.py`. Он блокирует Write/Edit к файлам
+стадии, у которой не закрыты предыдущие этапы (по `.landing-state.yaml`).
+
+Если хук кажется ошибочным — проверь:
+1. Статусы стадий: `bash scripts/gate-state.sh show <project>`
+2. Path→stage маппинг: `scripts/hooks/_stage_paths.yaml`
+3. Логи: hook пишет stderr напрямую агенту
+
+Временно отключить — закомментировать блок `PreToolUse` в `.claude/settings.json`.
+НЕ убирать на постоянку без обновления плана аудита.
