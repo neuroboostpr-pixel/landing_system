@@ -180,6 +180,11 @@ def compile_system(
                 content = _compile_concept(source_path, repo_root)
             except sdk_client.SDKError as e:
                 errors.append(f"{rel_key}: {e}")
+                # Кэшируем hash даже при ошибке — иначе post-commit будет
+                # звать SDK на этот файл КАЖДЫЙ раз. Пользователь увидит
+                # ошибку в errors[], кэш починится при следующем коммите
+                # с обновлённым source-файлом.
+                cache[rel_key] = hash_cache.compute_hash(source_path)
                 continue
 
             meta, _ = utils.parse_frontmatter(content)
@@ -197,7 +202,9 @@ def compile_system(
             compiled.append(rel_key)
 
     # Финальный save кэша — один раз за прогон, не в цикле (O(N²) → O(N)).
-    if not dry_run and compiled:
+    # Сохраняем и при ошибках: hash «сломанных» источников остаётся в кэше,
+    # чтобы post-commit не звал SDK на них каждый раз.
+    if not dry_run and (compiled or errors):
         hash_cache.save_cache(cache_path, cache)
 
     # Индекс

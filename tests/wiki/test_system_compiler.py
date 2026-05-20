@@ -159,3 +159,35 @@ def test_cache_saved_once_per_compile_run(tmp_path: Path) -> None:
         f"save_cache called {mock_save.call_count} times — should be ≤2 "
         "(once for bootstrap pre-pop, once at end). Per-file save = O(N²) IO."
     )
+
+
+def test_failed_sdk_call_still_caches_source_hash(tmp_path: Path) -> None:
+    """Если _compile_concept падает SDK-ошибкой — hash источника ВСЁ РАВНО
+    должен попасть в кэш, чтобы на следующем коммите этот файл не звал SDK снова.
+
+    Audit finding: system_compiler.py:179-183 — error logged but hash never
+    cached → defeats hash-cache purpose for chronically-broken files.
+    """
+    from scripts.wiki import hash_cache, sdk_client
+
+    repo_root = tmp_path / "repo"
+    wiki_dir = tmp_path / "wiki"
+    (repo_root / "agents").mkdir(parents=True)
+    src = repo_root / "agents" / "broken.md"
+    src.write_text("---\nname: broken\n---\nX", encoding="utf-8")
+
+    sources = [{"path": "agents/*.md", "concept_dir": "agents"}]
+
+    with patch("scripts.wiki.system_compiler._compile_concept",
+               side_effect=sdk_client.SDKError("simulated")):
+        system_compiler.compile_system(
+            repo_root=repo_root, wiki_dir=wiki_dir,
+            sources=sources, dry_run=False,
+        )
+
+    cache = hash_cache.load_cache(wiki_dir / ".cache.json")
+    assert "agents/broken.md" in cache, (
+        "Source hash not cached after SDK error — file will re-call SDK "
+        "on every subsequent commit (token leak)."
+    )
+    assert cache["agents/broken.md"] == hash_cache.compute_hash(src)
