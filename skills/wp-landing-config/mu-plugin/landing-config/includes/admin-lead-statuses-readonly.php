@@ -4,7 +4,6 @@ namespace LandingConfig\Admin\LeadStatusesReadOnly;
 if (!defined('ABSPATH')) { exit; }
 
 use function LandingConfig\LeadStatuses\list_lead_statuses;
-use function LandingConfig\LeadStatuses\has_override;
 
 \add_action('admin_menu', function () {
     \add_submenu_page(

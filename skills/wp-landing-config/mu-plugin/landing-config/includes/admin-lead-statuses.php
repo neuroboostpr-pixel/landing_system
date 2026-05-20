@@ -4,10 +4,8 @@ namespace LandingConfig\Admin\LeadStatuses;
 if (!defined('ABSPATH')) { exit; }
 
 use function LandingConfig\LeadStatuses\list_lead_statuses;
-use function LandingConfig\LeadStatuses\resolve_lead_status;
 use function LandingConfig\LeadStatuses\save_lead_status;
 use function LandingConfig\LeadStatuses\delete_lead_status;
-use function LandingConfig\LeadStatuses\get_lead_status;
 use function LandingConfig\LeadStatuses\has_override;
 use function LandingConfig\SegmentSelector\render as render_selector;
 use function LandingConfig\SegmentSelector\current_from_request;
@@ -39,6 +37,11 @@ function render_page(int $segment): void {
     $list = list_lead_statuses($blog_id);
     ?>
     <div class="wrap">
+        <?php if (isset($_GET['saved'])): ?>
+            <div class="notice notice-success is-dismissible"><p>Статус сохранён.</p></div>
+        <?php elseif (isset($_GET['deleted'])): ?>
+            <div class="notice notice-success is-dismissible"><p>Статус удалён.</p></div>
+        <?php endif; ?>
         <h1>Статусы заявок</h1>
         <p>Словарь статусов для админки «Заявки». Сетевые статусы видны на всех сегментах;
         сегмент может переопределить статус по slug или добавить свой.</p>
@@ -69,8 +72,10 @@ function render_page(int $segment): void {
                         <td><?php echo \esc_html($s['label']); ?></td>
                         <td><?php echo (int) $s['order']; ?></td>
                         <td>
-                            <?php if ($s['is_network']): ?>
+                            <?php if ($s['is_network'] && $segment === 0): ?>
                                 <span style="background:#2271b1; color:#fff; padding:2px 8px; border-radius:3px; font-size:11px;">NETWORK</span>
+                            <?php elseif ($s['is_network'] && $segment !== 0): ?>
+                                <span style="background:#2271b1; color:#fff; padding:2px 8px; border-radius:3px; font-size:11px;">INHERITED</span>
                             <?php else: ?>
                                 <span style="background:#dba617; color:#fff; padding:2px 8px; border-radius:3px; font-size:11px;">SITE OVERRIDE</span>
                             <?php endif; ?>
