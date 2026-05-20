@@ -21,6 +21,7 @@
 """
 from __future__ import annotations
 
+import functools
 import json
 import re
 import sys
@@ -45,7 +46,9 @@ PIPELINE_ORDER = [
 # 08b_style intentionally omitted (sub-phase of 08_build, same folder).
 
 
+@functools.lru_cache(maxsize=1)
 def _load_path_map() -> dict[str, Any]:
+    """Parse _stage_paths.yaml once per process (cached)."""
     return yaml.safe_load(PATH_MAP_FILE.read_text())
 
 
