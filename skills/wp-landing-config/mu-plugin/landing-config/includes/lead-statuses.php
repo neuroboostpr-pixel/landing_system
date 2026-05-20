@@ -46,7 +46,8 @@ function _is_valid_color(string $color): bool {
 
 function save_lead_status(array $args, bool $is_network, int $blog_id, int $post_id = 0): int {
     return _with_blog($blog_id, function () use ($args, $is_network, $post_id) {
-        $slug = (string) ($args['slug'] ?? '');
+        $raw = $args['slug'] ?? '';
+        $slug = is_string($raw) ? $raw : '';
         if (!_is_valid_slug($slug)) return 0;
 
         $label = \sanitize_text_field($args['label'] ?? '');

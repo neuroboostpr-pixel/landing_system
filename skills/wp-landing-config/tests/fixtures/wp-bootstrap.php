@@ -222,9 +222,10 @@ if (!function_exists('wp_insert_post')) {
 if (!function_exists('wp_update_post')) {
     function wp_update_post($postarr) {
         $id = (int) ($postarr['ID'] ?? 0);
-        if ($id && isset($GLOBALS['_mock_posts'][$id])) {
-            $GLOBALS['_mock_posts'][$id] = array_merge($GLOBALS['_mock_posts'][$id], $postarr);
+        if ($id <= 0 || !isset($GLOBALS['_mock_posts'][$id])) {
+            return 0;  // real WP behavior on missing post
         }
+        $GLOBALS['_mock_posts'][$id] = array_merge($GLOBALS['_mock_posts'][$id], $postarr);
         return $id;
     }
 }

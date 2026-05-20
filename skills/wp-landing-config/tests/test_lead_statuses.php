@@ -18,6 +18,7 @@ function reset_ls() {
     $GLOBALS['_mock_post_meta'] = [];
     $GLOBALS['_mock_next_post_id'] = 1;
     $GLOBALS['_mock_current_blog_id'] = 1;
+    $GLOBALS['_mock_blog_stack'] = [];
 }
 
 // T1: save+get round-trip
@@ -86,6 +87,11 @@ assert_test($id1 === $id2, 'T8a update reuses post id');
 $list = list_lead_statuses(1);
 assert_test(count($list) === 1, 'T8b no duplicate row');
 assert_test($list[0]['label'] === 'New', 'T8c updated label persists');
+
+// T8d: update path с несуществующим post_id → 0 (real WP behavior)
+reset_ls();
+$id_bad = save_lead_status(['slug' => 'ghost', 'label' => 'X', 'color' => '#000000', 'order' => 10], true, 1, 9999);
+assert_test($id_bad === 0, 'T8d update with nonexistent post_id returns 0');
 
 echo "$tests tests, $failures failures\n";
 exit($failures > 0 ? 1 : 0);
