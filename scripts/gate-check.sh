@@ -83,7 +83,11 @@ if [ -f "$state_file" ]; then
         echo "    Allowlist: $legacy_allowed"
         LEGACY_LOG="${LANDING_SYSTEM_ROOT:-$REPO_ROOT}/audit/legacy-bypass.log"
         mkdir -p "$(dirname "$LEGACY_LOG")"
-        echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) $project $stage \"$legacy_reason\"" >> "$LEGACY_LOG"
+        reason_escaped="${legacy_reason//$'\t'/ }"
+        project_escaped="${project//$'\t'/ }"
+        printf '%s\t%s\t%s\t%s\n' \
+            "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$project_escaped" "$stage" "$reason_escaped" \
+            >> "$LEGACY_LOG"
         bypass_hard_checks=1
     fi
 fi
@@ -187,6 +191,14 @@ for i in $(if [ "$checks_count" -gt 0 ]; then seq 0 $((checks_count - 1)); fi); 
                 [ -n "$fix_hint" ] && echo "     → $fix_hint"
                 fail=1
             else
+                case "$pattern" in
+                    *\{*)
+                        echo "  ❌ $check_id: brace patterns not supported ($pattern)"
+                        echo "     → use a single fnmatch glob (e.g. '*.jpg') or call this check multiple times"
+                        fail=1
+                        continue
+                        ;;
+                esac
                 count="$(find "$path" -maxdepth 1 -type f -name "$pattern" 2>/dev/null | wc -l | tr -d ' ')"
                 if [ "$count" -ge "$min_count" ]; then
                     echo "  ✅ $check_id ($count files matching $pattern in $path)"
