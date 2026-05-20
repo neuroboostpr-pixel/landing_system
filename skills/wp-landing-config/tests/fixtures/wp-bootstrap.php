@@ -125,6 +125,12 @@ function do_action($hook, ...$args) {
 
 function wp_unslash($v) { return is_string($v) ? stripslashes($v) : $v; }
 function sanitize_text_field($v) { return is_string($v) ? trim(strip_tags($v)) : ''; }
+if (!function_exists('sanitize_key')) {
+    function sanitize_key($key) {
+        $key = strtolower((string)$key);
+        return preg_replace('/[^a-z0-9_-]/', '', $key);
+    }
+}
 function sanitize_email($v) { return is_string($v) ? filter_var(trim($v), FILTER_SANITIZE_EMAIL) : ''; }
 function esc_html($v) { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 function current_time($fmt) { return date('Y-m-d H:i:s'); }
