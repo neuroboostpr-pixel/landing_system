@@ -2,64 +2,57 @@
 type: rule
 name: setup-guide
 sources: ["docs/SETUP.md"]
-updated: 2026-05-18
-triggers:
-  - "как установить систему"
-  - "первый запуск на новой машине"
-  - "настройка API-ключей"
-  - "onboarding с нуля"
+updated: 2026-05-20
+triggers: []
 stage: ""
-uses:
-  - landing-orchestrator
-  - landing-onboarding
-  - wp-deployer
-  - system-setup
-  - landing-new
-  - landing-build
-  - landing-deploy
-  - landing-qa
-tags: [setup, onboarding, api, dependencies, workflow-lock]
+uses: ["landing-onboarding", "system-setup", "landing-orchestrator", "landing-new", "landing-build", "landing-deploy", "landing-qa", "wp-deployer", "analytics-engineer", "seo-optimizer"]
+tags: ["setup", "onboarding", "api", "workflow-lock", "acf", "wiki"]
 ---
 
-# Setup Guide — Установка landing-system на новой машине
+# Setup Guide — Установка и первый запуск
 
 ## Что делает
 
-Пошаговый гайд по первичной настройке landing-system: установка зависимостей, регистрация API-ключей и активация workflow lock. После прохождения машина полностью готова к созданию WordPress-лендингов.
+Полный гайд по первичной установке landing-system на новой машине. Описывает зависимости, API-ключи, порядок onboarding'а и workflow-lock — систему, которая не даёт пропускать обязательные этапы.
 
 ## Когда вызывать / в каком этапе
 
-Выполняется **один раз** на новой машине до запуска любого проекта. Если флаг `~/.landing-system/setup_complete` отсутствует — команды `/landing-new` и `/landing-*` автоматически перенаправляют сюда. Триггер: `/landing-onboarding` или `bash scripts/wizard.sh`.
+Читается один раз при первом развёртывании системы на машине — до запуска любой `/landing-*` команды. Без прохождения onboarding'а команды будут падать с ошибкой и направлять сюда.
 
 ## Что на вход / на выход
 
-**Вход:**
-- Установленный git, Python, `wp-cli`, `ssh`, `rsync`, `jq`
-- Плагин `superpowers` в Claude Code
-- Firecrawl MCP в `~/.claude/settings.json`
-- Заполненный `.env` (13 API-ключей: Firecrawl, Pexels, Unsplash, Pixabay, HuggingFace, Yandex Wordstat, Yandex Metrika, Telegram Bot, amoCRM/Bitrix24, Beget API, Cloudflare/Reg.ru)
+**На вход:**
+- Клонированный репозиторий `landing-system`
+- Доступ к Beget SSH, аккаунтам Firecrawl / Pexels / Yandex / Telegram
 
-**Выход:**
-- Флаг `~/.landing-system/setup_complete`
-- Валидированный `.env` с рабочими ключами
-- Готовая рабочая среда для 12-этапного pipeline
+**На выход:**
+- Файл флага `~/.landing-system/setup_complete` — подтверждение готовности
+- Заполненный `.env` с валидными API-ключами
+- Настроенный Firecrawl MCP в `~/.claude/settings.json`
+- Установленный хук `.githooks/post-commit` для авто-синхронизации wiki
 
-## Ключевые правила
+**Ключевые концепции, описанные в гайде:**
 
-- **Workflow lock**: каждый проект имеет `.landing-state.yaml` со статусами этапов (`locked` / `in_progress` / `approved`). Этапы 02–07 должны быть `approved` перед `/landing-build`.
-- **Нет перепрыгивания**: `landing-orchestrator` не пропускает этапы даже по явной просьбе.
-- **HARD GATE**: каждый агент ждёт явного approve перед переходом к следующему этапу.
-- **ACF-поля**: после деплоя все текстовые блоки редактируются в WP-админке без PHP — через боковую панель ACF.
+1. **Workflow lock** — `.landing-state.yaml` в каждом проекте фиксирует статусы 13 этапов (`locked` / `in_progress` / `approved`). `/landing-build` не запустится, пока этапы 02–07 не имеют статус `approved`.
+
+2. **API-список** — 13 сервисов (Firecrawl, Pexels, Unsplash, Pixabay, HuggingFace, Yandex Wordstat, Yandex Metrika, Telegram Bot, amoCRM/Bitrix24, Beget API, Cloudflare, Reg.ru) — все с free tier.
+
+3. **ACF и Gutenberg** — после деплоя менеджеры редактируют тексты через WP-admin без PHP. Если поля исчезли — импортировать `08_КОД/acf-fields.json` через deploy-скрипт.
+
+4. **Wiki-слои** — три уровня: `landing-system/wiki/` (архитектура), `~/Lendings/<slug>/wiki/` (проект), `~/Lendings/<slug>/memory/` (сессии). Bootstrap занимает ~30 мин.
+
+5. **PreToolUse hook** — с 2026-05-20 хук `enforce_stage_gate.py` блокирует Write/Edit в файлы этапа, чьи предыдущие этапы не закрыты.
 
 ## Связанные концепты
 
-- [[landing-onboarding]] — команда, запускающая wizard установки
-- [[landing-orchestrator]] — главный дирижёр 12-этапного pipeline
-- [[system-setup]] — агент, выполняющий preflight-проверки и конфигурацию
-- [[landing-new]] — создание проекта (требует пройденного onboarding)
-- [[wp-deployer]] — деплой на Бегет (этап 09)
-- [[memory]] — правило хранения памяти сессий проекта
-- [[wiki]] — правило ведения wiki проекта
+- [[landing-onboarding]] — команда первичной настройки, описана в этом гайде
+- [[system-setup]] — агент, запускаемый внутри `/landing-onboarding`
+- [[landing-orchestrator]] — главный дирижёр, работает только после setup_complete
+- [[landing-new]] — создание проекта, требует пройденного onboarding'а
+- [[landing-build]] — этап 08, проверяет workflow-lock перед запуском
+- [[wp-deployer]] — деплой на Beget, упоминается в troubleshooting
+- [[analytics-engineer]] — использует Yandex Metrika API из `.env`
+- [[seo-optimizer]] — использует Yandex Wordstat API из `.env`
 
 ## Источник
 
