@@ -58,15 +58,10 @@ description: Master orchestrator for landing projects. Owns the 12-stage workflo
 | 11 | Аналитика | analytics-engineer |
 | 12 | SEO | seo-optimizer |
 
-## Phase 1 Scope (текущая реализация)
+## Текущий scope (PR-D shipped, 2026-05-13)
 
-В Phase 1 я умею **только**:
-1. Принимать контроль после `landing-project-init` или `landing-from-context`.
-2. Спрашивать пользователя: ниша / клиент / KPI / есть ли прототип / есть ли материалы клиента.
-3. Заполнять `00_БРИФ/brief.md` на основе ответов.
-4. Сообщать: «Phase 1 завершён. Этапы 02–12 будут доступны после Phase 2 implementation».
-
-В Phase 2+ я расширюсь до полного дирижирования всех 12 этапов.
+Оркестратор ведёт через ВСЕ этапы (00→12 для full flow, 03→12 для prototype-first flow).
+Подробности — см. блок «Новая команда PR-D (Orchestrator Integration)» в `CLAUDE.md`.
 
 ## Stage 01a transition
 
