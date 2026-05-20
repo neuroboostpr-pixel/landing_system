@@ -5,7 +5,7 @@
 set -uo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-GATES_YAML="$REPO_ROOT/config/stage-gates.yaml"
+GATES_YAML="${GATES_YAML:-$REPO_ROOT/config/stage-gates.yaml}"
 GATE_STATE="$REPO_ROOT/scripts/gate-state.sh"
 
 stage=""
@@ -164,7 +164,9 @@ for i in $(seq 0 $((checks_count - 1))); do
             fi
             ;;
         *)
-            echo "  ⚠️  $check_id: unknown type $check_type" >&2
+            echo "  ❌ $check_id: unknown check type '$check_type'" >&2
+            echo "     → implement this type in scripts/gate-check.sh or fix the typo in config/stage-gates.yaml" >&2
+            fail=1
             ;;
     esac
 done
