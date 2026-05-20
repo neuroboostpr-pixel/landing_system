@@ -30,9 +30,11 @@ function log_status_change(int $lead_id, ?string $from_status, string $to_status
         'to_status'   => $to_status,
         'comment'     => $comment_value,
     ];
-    $format = ['%d', $user_id === null ? null : '%d', $from_status === null ? null : '%s', '%s', $comment_value === null ? null : '%s'];
 
-    $wpdb->insert($table, $data, $format);
+    // Drop $format arg: WP_DB->insert auto-detects formats, и null значения
+    // в $data корректно конвертируются в SQL NULL. Передача null внутри
+    // $format массива — некорректное использование WP API (sprintf падает).
+    $wpdb->insert($table, $data);
     return (int) $wpdb->insert_id;
 }
 
