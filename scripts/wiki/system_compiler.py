@@ -194,8 +194,11 @@ def compile_system(
             if not dry_run:
                 utils.atomic_write(concept_path, content)
                 cache[rel_key] = hash_cache.compute_hash(source_path)
-                hash_cache.save_cache(cache_path, cache)
             compiled.append(rel_key)
+
+    # Финальный save кэша — один раз за прогон, не в цикле (O(N²) → O(N)).
+    if not dry_run and compiled:
+        hash_cache.save_cache(cache_path, cache)
 
     # Индекс
     if concepts_summary:
@@ -206,7 +209,7 @@ def compile_system(
         except sdk_client.SDKError as e:
             errors.append(f"index: {e}")
 
-    # Лог + кэш
+    # Лог
     if not dry_run:
         _append_log(
             wiki_dir / "log.md",
@@ -214,6 +217,5 @@ def compile_system(
             + [f"skipped {p}" for p in skipped]
             + [f"error {e}" for e in errors],
         )
-        hash_cache.save_cache(cache_path, cache)
 
     return {"compiled": compiled, "skipped": skipped, "errors": errors}
