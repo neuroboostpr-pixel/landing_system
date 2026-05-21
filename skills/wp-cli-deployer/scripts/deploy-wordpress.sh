@@ -71,20 +71,28 @@ if [ -f "$PAGE_HTML" ]; then
     echo "▶ Seed front page from page-content.html"
     TMP_HTML="$(mktemp)"
     cp "$PAGE_HTML" "$TMP_HTML"
-    # Replace __IMAGE_ATTACHMENT_ID__<fname>__ with the bare integer ID.
-    # generate-page-content.py emits this placeholder UNQUOTED in JSON so the
-    # final result is `"id": 42`, a proper JSON integer.
+    # Write photo map (fname|attachment_id, one per line) for fix-page-content-images.py
+    PHOTO_MAP_TXT="$(mktemp)"
     for fname in "${!IMG_IDS[@]}"; do
-        id="${IMG_IDS[$fname]}"
-        sed -i.bak "s|__IMAGE_ATTACHMENT_ID__${fname}__|${id}|g" "$TMP_HTML"
+        echo "${fname}|${IMG_IDS[$fname]}" >> "$PHOTO_MAP_TXT"
     done
 
-    # Resolve a working Python (Windows ships `python`, Linux/mac ship `python3`)
+    # fix-page-content-images.py делает 3 трансформации:
+    # 1. __IMAGE_ATTACHMENT_ID__assets/photos/<fname>__ → real attachment ID
+    # 2. "assets/photos/X.jpg" string paths → IDs (для card sub-blocks)
+    # 3. URL-encode image attribute objects {"id":N,"url":""} в JSON string
+    #    (Lazy Blocks image-control ожидает rawurlencode(json_encode(...)))
     if command -v python3 >/dev/null 2>&1 && python3 -c '' >/dev/null 2>&1; then
         PY=python3
     else
         PY=python
     fi
+    "$PY" "$SCRIPT_DIR/fix-page-content-images.py" "$TMP_HTML" "$PHOTO_MAP_TXT" || {
+        echo "ERROR: fix-page-content-images.py failed" >&2
+        exit 1
+    }
+    rm -f "$PHOTO_MAP_TXT"
+
     # Convert MSYS-style /d/... to Windows D:/... when running Windows Python from Git Bash.
     SPEC_PY="$SPEC"
     if command -v cygpath >/dev/null 2>&1; then
