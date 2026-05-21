@@ -15,6 +15,33 @@ class EmailAdapter implements AdapterInterface {
         ];
     }
 
+    public static function field_definitions(): array {
+        return [
+            'to'      => ['type' => 'email', 'label' => 'Email получатель', 'required' => true, 'placeholder' => 'sales@company.ru'],
+            'subject' => ['type' => 'text', 'label' => 'Тема письма', 'placeholder' => 'Новая заявка с сайта'],
+            'from'    => ['type' => 'email', 'label' => 'From (опционально)', 'placeholder' => 'no-reply@site.ru'],
+        ];
+    }
+
+    public static function settings(): array {
+        $r = \LandingConfig\Integrations\resolve_integration(static::name(), \get_current_blog_id());
+        if ($r !== null) {
+            return $r['settings'];
+        }
+        // Legacy fallback: old admin-integrations.php stored each field as a separate wp_options key:
+        // landing_integration_{name}_{field}. Password-type fields were stored encrypted — callers
+        // that need plaintext must call decrypt() themselves (same as current send()/test_connection()).
+        $name = static::name();
+        $out = [];
+        foreach (array_keys(static::field_defs()) as $field) {
+            $val = \get_option("landing_integration_{$name}_{$field}", '');
+            if ($val !== '' && $val !== false) {
+                $out[$field] = $val;
+            }
+        }
+        return $out;
+    }
+
     public function send(array $lead): array {
         $to = \landing_config_get('integration_email_to');
         if ($to === '') {

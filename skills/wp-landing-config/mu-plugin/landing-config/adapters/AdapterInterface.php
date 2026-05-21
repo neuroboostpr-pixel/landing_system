@@ -35,4 +35,17 @@ interface AdapterInterface {
      * The 'password' type is auto-encrypted on save and masked in display.
      */
     public static function field_defs(): array;
+
+    /**
+     * Field schema for cascade-aware admin UI.
+     * @return array<string, array{type: string, label: string, encrypt?: bool, required?: bool, placeholder?: string}>
+     */
+    public static function field_definitions(): array;
+
+    /**
+     * Effective settings for the current blog_id, resolved via cascade
+     * (network defaults + site overrides). Falls back to legacy wp_option
+     * 'landing_integration_<name>' if no CPT row exists.
+     */
+    public static function settings(): array;
 }

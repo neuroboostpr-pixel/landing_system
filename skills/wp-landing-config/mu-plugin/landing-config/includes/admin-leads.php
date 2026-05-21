@@ -4,6 +4,9 @@ namespace LandingConfig\Admin\Leads;
 if (!defined('ABSPATH')) { exit; }
 
 use function LandingConfig\DB\get_leads_table_name;
+use function LandingConfig\LeadStatuses\list_lead_statuses;
+use function LandingConfig\LeadStatuses\resolve_lead_status;
+use function LandingConfig\LeadStatusLog\log_status_change;
 
 add_action('admin_menu', function () {
     add_submenu_page(
@@ -15,6 +18,9 @@ add_action('admin_menu', function () {
         __NAMESPACE__ . '\\render_page'
     );
 });
+
+add_action('admin_post_landing_leads_bulk_intent', __NAMESPACE__ . '\\handle_bulk_intent');
+add_action('admin_post_landing_leads_bulk_status', __NAMESPACE__ . '\\handle_bulk_status');
 
 function render_page(): void {
     if (!current_user_can('manage_options')) { wp_die('Insufficient permissions'); }
@@ -30,58 +36,146 @@ function render_page(): void {
     $per_page = 20;
     $page = max(1, (int)($_GET['paged'] ?? 1));
     $offset = ($page - 1) * $per_page;
+    $blog_id = get_current_blog_id();
 
-    $rows = $wpdb->get_results($wpdb->prepare(
-        "SELECT * FROM `$table` ORDER BY created_at DESC LIMIT %d OFFSET %d",
-        $per_page, $offset
-    ), ARRAY_A);
-    $total = (int)$wpdb->get_var("SELECT COUNT(*) FROM `$table`");
+    // Filter: ?status=<slug> или ?status=all (default)
+    $active_status = sanitize_key($_GET['status'] ?? 'all');
+
+    // Counts по статусам — один SQL.
+    // $table = $wpdb->prefix . 'landing_leads' (генерируется в DB\get_leads_table_name из доверенного
+    // $wpdb->prefix, не из user input). prepare() не используется потому что не нужны placeholders.
+    // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery
+    $count_rows = $wpdb->get_results("SELECT processed_status AS s, COUNT(*) AS n FROM `$table` GROUP BY processed_status", ARRAY_A);
+    $counts_by_slug = [];
+    $total = 0;
+    foreach ($count_rows as $cr) {
+        $counts_by_slug[(string) $cr['s']] = (int) $cr['n'];
+        $total += (int) $cr['n'];
+    }
+
+    // WHERE clause для основной выборки
+    if ($active_status === 'all') {
+        $rows = $wpdb->get_results($wpdb->prepare(
+            "SELECT * FROM `$table` ORDER BY created_at DESC LIMIT %d OFFSET %d",
+            $per_page, $offset
+        ), ARRAY_A);
+        $filtered_total = $total;
+    } else {
+        $rows = $wpdb->get_results($wpdb->prepare(
+            "SELECT * FROM `$table` WHERE processed_status = %s ORDER BY created_at DESC LIMIT %d OFFSET %d",
+            $active_status, $per_page, $offset
+        ), ARRAY_A);
+        $filtered_total = $counts_by_slug[$active_status] ?? 0;
+    }
+
+    $vocab = list_lead_statuses($blog_id);
+    $vocab_by_slug = [];
+    foreach ($vocab as $v) $vocab_by_slug[$v['slug']] = $v;
 
     $export_url = wp_nonce_url(
         admin_url('admin.php?page=landing-config-leads&action=export_csv'),
         'landing_export_leads'
     );
+    $base_url = admin_url('admin.php?page=landing-config-leads');
     ?>
     <div class="wrap">
+        <?php if (isset($_GET['bulk_updated'])): $bu = (int) $_GET['bulk_updated']; $bf = (int) ($_GET['bulk_failed'] ?? 0); ?>
+            <div class="notice notice-success is-dismissible"><p>Обновлено заявок: <strong><?php echo $bu; ?></strong>.<?php if ($bf > 0): ?> Не удалось: <strong><?php echo $bf; ?></strong> (см. debug.log).<?php endif; ?></p></div>
+        <?php elseif (isset($_GET['bulk_error'])): ?>
+            <div class="notice notice-error is-dismissible"><p>Ошибка: <code><?php echo esc_html((string) $_GET['bulk_error']); ?></code>. Проверь выбор заявок и параметры.</p></div>
+        <?php endif; ?>
         <h1>Заявки <a href="<?php echo esc_url($export_url); ?>" class="page-title-action">Экспорт CSV</a></h1>
-        <p>Всего заявок: <strong><?php echo (int)$total; ?></strong></p>
-        <table class="wp-list-table widefat striped">
-            <thead>
-                <tr>
-                    <th>ID</th><th>Дата</th><th>Имя</th><th>Телефон</th><th>Email</th>
-                    <th>Сообщение</th><th>Источник</th><th>UTM</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (empty($rows)): ?>
-                    <tr><td colspan="8"><em>Заявок пока нет.</em></td></tr>
-                <?php else: foreach ($rows as $r): ?>
+
+        <ul class="subsubsub">
+            <li>
+                <a href="<?php echo esc_url(add_query_arg('status', 'all', $base_url)); ?>" class="<?php echo $active_status === 'all' ? 'current' : ''; ?>">
+                    Все <span class="count">(<?php echo (int) $total; ?>)</span>
+                </a>
+            </li>
+            <?php foreach ($vocab as $v):
+                $n = (int) ($counts_by_slug[$v['slug']] ?? 0);
+                $is_active = $active_status === $v['slug'];
+            ?>
+                | <li>
+                    <a href="<?php echo esc_url(add_query_arg('status', $v['slug'], $base_url)); ?>" class="<?php echo $is_active ? 'current' : ''; ?>">
+                        <?php echo esc_html($v['label']); ?> <span class="count">(<?php echo $n; ?>)</span>
+                    </a>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+        <div style="clear:both;"></div>
+
+        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+            <?php wp_nonce_field('landing_leads_bulk_intent'); ?>
+            <input type="hidden" name="action" value="landing_leads_bulk_intent">
+            <input type="hidden" name="status" value="<?php echo esc_attr($active_status); ?>">
+
+            <div class="tablenav top">
+                <div class="alignleft actions bulkactions">
+                    <select name="bulk_action">
+                        <option value="">— Действие —</option>
+                        <option value="change_status">Изменить статус…</option>
+                    </select>
+                    <button type="submit" class="button action">Применить</button>
+                </div>
+            </div>
+
+            <table class="wp-list-table widefat striped">
+                <thead>
                     <tr>
-                        <td><?php echo (int)$r['id']; ?></td>
-                        <td><?php echo esc_html($r['created_at']); ?></td>
-                        <td><?php echo esc_html($r['name']); ?></td>
-                        <td><?php echo esc_html($r['phone']); ?></td>
-                        <td><?php echo esc_html($r['email']); ?></td>
-                        <td><?php echo esc_html(mb_substr($r['message'] ?? '', 0, 60)); ?></td>
-                        <td><?php echo esc_html($r['source_block']); ?></td>
-                        <td><?php
-                            $utm = array_filter([
-                                $r['utm_source'] ? "src={$r['utm_source']}" : '',
-                                $r['utm_medium'] ? "med={$r['utm_medium']}" : '',
-                                $r['utm_campaign'] ? "cmp={$r['utm_campaign']}" : '',
-                            ]);
-                            echo esc_html(implode(' ', $utm));
-                        ?></td>
+                        <td class="check-column"><input type="checkbox" id="cb-select-all"></td>
+                        <th>ID</th><th>Дата</th><th>Имя</th><th>Телефон</th><th>Email</th>
+                        <th>Статус</th>
+                        <th>Сообщение</th><th>Источник</th><th>UTM</th>
                     </tr>
-                <?php endforeach; endif; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php if (empty($rows)): ?>
+                        <tr><td colspan="10"><em>Заявок нет.</em></td></tr>
+                    <?php else: foreach ($rows as $r):
+                        $status_slug = (string) ($r['processed_status'] ?? '');
+                        $v = $vocab_by_slug[$status_slug] ?? null;
+                        $badge_label = $v ? $v['label'] : ($status_slug !== '' ? $status_slug : '—');
+                        $badge_color = $v ? $v['color'] : '#646970';
+                        $badge_warn = $v ? '' : ' title="Статус не найден в vocab"';
+                        $detail_url = admin_url('admin.php?page=landing-config-lead-detail&id=' . (int) $r['id']);
+                    ?>
+                        <tr>
+                            <th scope="row" class="check-column"><input type="checkbox" name="lead_ids[]" value="<?php echo (int) $r['id']; ?>"></th>
+                            <td><?php echo (int) $r['id']; ?></td>
+                            <td><?php echo esc_html($r['created_at']); ?></td>
+                            <td><a href="<?php echo esc_url($detail_url); ?>"><?php echo esc_html($r['name'] ?: '— без имени —'); ?></a></td>
+                            <td><?php echo esc_html($r['phone']); ?></td>
+                            <td><?php echo esc_html($r['email']); ?></td>
+                            <td><span<?php echo $badge_warn; ?> style="background:<?php echo esc_attr($badge_color); ?>; color:#fff; padding:3px 10px; border-radius:3px; font-size:12px;"><?php echo esc_html($badge_label); ?></span></td>
+                            <td><?php echo esc_html(mb_substr($r['message'] ?? '', 0, 60)); ?></td>
+                            <td><?php echo esc_html($r['source_block']); ?></td>
+                            <td><?php
+                                $utm = array_filter([
+                                    $r['utm_source'] ? "src={$r['utm_source']}" : '',
+                                    $r['utm_medium'] ? "med={$r['utm_medium']}" : '',
+                                    $r['utm_campaign'] ? "cmp={$r['utm_campaign']}" : '',
+                                ]);
+                                echo esc_html(implode(' ', $utm));
+                            ?></td>
+                        </tr>
+                    <?php endforeach; endif; ?>
+                </tbody>
+            </table>
+
+            <script>
+            document.getElementById('cb-select-all')?.addEventListener('change', function() {
+                document.querySelectorAll('input[name="lead_ids[]"]').forEach(cb => cb.checked = this.checked);
+            });
+            </script>
+        </form>
+
         <?php
-        $total_pages = (int)ceil($total / $per_page);
+        $total_pages = (int) ceil($filtered_total / $per_page);
         if ($total_pages > 1) {
             echo '<div class="tablenav"><div class="tablenav-pages">';
             echo paginate_links([
-                'base'      => add_query_arg('paged', '%#%'),
+                'base'      => add_query_arg(['status' => $active_status, 'paged' => '%#%'], $base_url),
                 'format'    => '',
                 'total'     => $total_pages,
                 'current'   => $page,
@@ -118,5 +212,128 @@ function export_csv(): void {
         fputcsv($out, ['id', 'created_at', 'name', 'phone', 'email', 'message']);
     }
     fclose($out);
+    exit;
+}
+
+/**
+ * Bulk action: показывает страницу-форму с выбором целевого статуса + комментария
+ * для всех выбранных заявок. lead_ids передаются в hidden inputs до bulk_status handler.
+ */
+function handle_bulk_intent(): void {
+    if (!current_user_can('manage_options')) { wp_die('No.', 403); }
+    check_admin_referer('landing_leads_bulk_intent');
+
+    $bulk_action = sanitize_key($_POST['bulk_action'] ?? '');
+    $lead_ids = array_map('intval', (array) ($_POST['lead_ids'] ?? []));
+    $lead_ids = array_values(array_filter($lead_ids, fn($i) => $i > 0));
+    $return_status = sanitize_key($_POST['status'] ?? 'all');
+
+    if ($bulk_action !== 'change_status') {
+        wp_safe_redirect(admin_url('admin.php?page=landing-config-leads&status=' . $return_status));
+        exit;
+    }
+    if (empty($lead_ids)) {
+        wp_safe_redirect(admin_url('admin.php?page=landing-config-leads&status=' . $return_status . '&bulk_error=no_selection'));
+        exit;
+    }
+
+    $blog_id = get_current_blog_id();
+    $vocab = list_lead_statuses($blog_id);
+    $back_url = admin_url('admin.php?page=landing-config-leads&status=' . $return_status);
+    ?>
+    <div class="wrap">
+        <h1>Массовая смена статуса</h1>
+        <p>Выбрано заявок: <strong><?php echo count($lead_ids); ?></strong>. Выберите целевой статус и комментарий (опционально). Комментарий будет одинаковым у всех выбранных заявок в истории.</p>
+
+        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="background:#fff; padding:20px; border:1px solid #c3c4c7; border-radius:4px; max-width:600px;">
+            <?php wp_nonce_field('landing_leads_bulk_status'); ?>
+            <input type="hidden" name="action" value="landing_leads_bulk_status">
+            <input type="hidden" name="return_status" value="<?php echo esc_attr($return_status); ?>">
+            <?php foreach ($lead_ids as $id): ?>
+                <input type="hidden" name="lead_ids[]" value="<?php echo (int) $id; ?>">
+            <?php endforeach; ?>
+
+            <p>
+                <label><strong>Новый статус:</strong></label><br>
+                <select name="to_status" required style="width:100%;">
+                    <option value="">— Выберите —</option>
+                    <?php foreach ($vocab as $v): ?>
+                        <option value="<?php echo esc_attr($v['slug']); ?>"><?php echo esc_html($v['label']); ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </p>
+            <p>
+                <label><strong>Комментарий (опционально):</strong></label><br>
+                <textarea name="comment" rows="3" style="width:100%;" placeholder="Массовая обработка ботов / повторных заявок / ..."></textarea>
+            </p>
+            <p>
+                <button type="submit" class="button button-primary">Применить ко всем выбранным</button>
+                <a href="<?php echo esc_url($back_url); ?>" class="button" style="margin-left:8px;">Отмена</a>
+            </p>
+        </form>
+    </div>
+    <?php
+}
+
+/**
+ * Bulk apply: цикл по выбранным заявкам с per-lead транзакцией.
+ * Ошибка одной заявки не блокирует остальные.
+ * Lessons из B19.5: throw RuntimeException внутри try → catch ROLLBACK; wp_die вне try;
+ * $wpdb->update проверяется === false.
+ */
+function handle_bulk_status(): void {
+    if (!current_user_can('manage_options')) { wp_die('No.', 403); }
+    check_admin_referer('landing_leads_bulk_status');
+
+    $lead_ids = array_map('intval', (array) ($_POST['lead_ids'] ?? []));
+    $lead_ids = array_values(array_filter($lead_ids, fn($i) => $i > 0));
+    $to_status = sanitize_key($_POST['to_status'] ?? '');
+    $comment = sanitize_textarea_field($_POST['comment'] ?? '');
+    $return_status = sanitize_key($_POST['return_status'] ?? 'all');
+    $blog_id = get_current_blog_id();
+
+    if (empty($lead_ids) || $to_status === '') {
+        wp_safe_redirect(admin_url('admin.php?page=landing-config-leads&status=' . $return_status . '&bulk_error=missing_params'));
+        exit;
+    }
+    if (resolve_lead_status($to_status, $blog_id) === null) {
+        wp_die('Статус не существует в словаре.', 400);
+    }
+
+    global $wpdb;
+    $table = get_leads_table_name();
+    $user_id = get_current_user_id() ?: null;
+    $comment_value = $comment !== '' ? $comment : null;
+
+    $updated = 0;
+    $failed = 0;
+    foreach ($lead_ids as $lid) {
+        $current = $wpdb->get_var($wpdb->prepare("SELECT processed_status FROM `$table` WHERE id = %d", $lid));
+        if ($current === null) { $failed++; continue; }
+        $from_status = (string) $current;
+
+        // Per-lead транзакция: throw внутри try → catch ROLLBACK + counter++.
+        // Никаких wp_die внутри try (lesson B19.5: WP_Die_Exception ловился catch и портил поток).
+        $wpdb->query('START TRANSACTION');
+        try {
+            $log_id = log_status_change($lid, $from_status !== '' ? $from_status : null, $to_status, $user_id, $comment_value);
+            if ($log_id === 0) {
+                throw new \RuntimeException('log_status_change returned 0 (whitelist?)');
+            }
+            $upd = $wpdb->update($table, ['processed_status' => $to_status], ['id' => $lid], ['%s'], ['%d']);
+            if ($upd === false) {
+                throw new \RuntimeException('wpdb->update failed: ' . $wpdb->last_error);
+            }
+            $wpdb->query('COMMIT');
+            $updated++;
+        } catch (\Throwable $e) {
+            $wpdb->query('ROLLBACK');
+            error_log('[landing-config] bulk_status lead_id=' . $lid . ' failed: ' . $e->getMessage());
+            $failed++;
+        }
+    }
+
+    $redirect = admin_url('admin.php?page=landing-config-leads&status=' . $return_status . '&bulk_updated=' . $updated . ($failed > 0 ? '&bulk_failed=' . $failed : ''));
+    wp_safe_redirect($redirect);
     exit;
 }

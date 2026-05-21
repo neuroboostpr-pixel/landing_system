@@ -17,6 +17,34 @@ class TelegramAdapter implements AdapterInterface {
         ];
     }
 
+    public static function field_definitions(): array {
+        return [
+            'bot_token' => ['type' => 'password', 'label' => 'Bot Token', 'encrypt' => true, 'required' => true,
+                            'placeholder' => '123456:ABC-DEF...'],
+            'chat_id'   => ['type' => 'text', 'label' => 'Chat ID', 'required' => true,
+                            'placeholder' => '-1001234567890'],
+        ];
+    }
+
+    public static function settings(): array {
+        $r = \LandingConfig\Integrations\resolve_integration(static::name(), \get_current_blog_id());
+        if ($r !== null) {
+            return $r['settings'];
+        }
+        // Legacy fallback: old admin-integrations.php stored each field as a separate wp_options key:
+        // landing_integration_{name}_{field}. Password-type fields were stored encrypted — callers
+        // that need plaintext must call decrypt() themselves (same as current send()/test_connection()).
+        $name = static::name();
+        $out = [];
+        foreach (array_keys(static::field_defs()) as $field) {
+            $val = \get_option("landing_integration_{$name}_{$field}", '');
+            if ($val !== '' && $val !== false) {
+                $out[$field] = $val;
+            }
+        }
+        return $out;
+    }
+
     public function send(array $lead): array {
         $token_enc = \landing_config_get('integration_telegram_bot_token');
         $token = $token_enc ? decrypt($token_enc) : '';

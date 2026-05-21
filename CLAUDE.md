@@ -311,3 +311,70 @@ landing_config_get('key', $default);
 ### Spec
 
 [docs/superpowers/specs/2026-05-19-s2a-landing-config-revised.md](docs/superpowers/specs/2026-05-19-s2a-landing-config-revised.md)
+
+### S2-A.3 — Network-Admin Unification (2026-05-20)
+
+Все настройки (CTA / Интеграции / Снипеты) теперь в **Network admin → Лендинг**
+с селектором сегмента `?segment=N` (0 = network default, N = blog_id сегмента).
+Cascade: network запись → site override по machine-id
+(preset_name / adapter_name / snippet name).
+
+- 3 CPT: `lp_cta`, `lp_integration`, `lp_snippet`
+- Общий резолвер: `includes/cascade.php` (resolve_for_blog / list_for_blog / has_site_override)
+- Сегмент-селектор: `includes/segment-selector.php` (render + current_from_request)
+- Network admin pages: `admin-cta.php`, `admin-integrations.php`, `admin-snippets.php`
+  (последний — merged из бывшего `admin-snippets-network.php`)
+- Read-only view на subsite: `admin-cta-readonly.php`, `admin-integrations-readonly.php`,
+  `admin-snippets-readonly.php`
+- Миграция wp_options → CPT (идемпотентно, один раз):
+  - `migrate_cta_from_options`
+  - `migrate_integrations_from_options` (per-network)
+  - `migrate_subsite_integrations` (per-subsite, для каждого blog_id)
+  - Маркер `landing_config_migration_s2a3_cta` ставится в `maybe_run()` после
+    ВСЕХ миграций (не из отдельных миграционных функций).
+- Адаптеры расширены: `field_definitions()` (декларативная схема с encrypt/required)
+  + `settings()` (cascade-aware reader с legacy fallback на per-field wp_options).
+- Live smoke: `skills/wp-landing-config/tests/integration/test_s2a3_smoke.sh`
+
+См. [spec](docs/superpowers/specs/2026-05-19-s2a3-network-admin-unification-design.md)
+и [plan](docs/superpowers/plans/2026-05-19-s2a3-network-admin-unification-plan.md).
+
+### S2-A.4 — Lead Status Workflow MVP (B19, 2026-05-20)
+
+Маркетолог управляет статусами заявок через wp-admin:
+
+- 4-я ось cascade S2-A.3: CPT `lp_lead_status` (slug/label/color/order) с network→site override
+- Network admin → Статусы заявок: редактирование словаря с селектором сегмента
+  (slug `landing-config-network-lead-statuses`, cap `manage_network_options`)
+- На subsite: `Лендинг → Статусы заявок` — read-only список с deep-link на network editor
+  (slug `landing-config-lead-statuses`, cap `manage_options`)
+- Карточка заявки: клик по имени в списке → детальная страница с timeline истории
+  и модальным окном смены статуса (select + textarea для комментария)
+  (slug `landing-config-lead-detail?id=N`, скрытая)
+- Список заявок (`landing-config-leads`) расширен: subsubsub-табы по статусу со
+  счётчиками, колонка «Статус» с цветным бейджем (warning-style если slug
+  не в vocab), checkbox-колонка, bulk-action «Изменить статус» с modal-like
+  страницей-формой
+- Per-blog таблица `wp_<bid>_landing_lead_status_log` (lead_id/user_id/from/to/
+  comment/created_at) — полная история изменений
+- Транзакции на смену статуса: log_status_change + UPDATE landing_leads атомарны;
+  bulk-action использует per-lead транзакции — ошибка одной не блокирует остальные
+- Whitelist валидация to_status в двух местах: handler и `log_status_change`
+  (defense-in-depth)
+- Lessons из transaction safety: `wp_die` ВНЕ try-catch через флаг (избегаем
+  double-ROLLBACK при WP_Die_Exception); `$wpdb->update` проверяется `=== false`
+  → throw RuntimeException → catch ROLLBACK
+- Seed 5 default-статусов (pending/in_progress/won/lost/spam) в `maybe_run()`.
+  Идемпотентно — если хоть один статус есть, не трогает. На уже-мигрированных
+  сайтах с выставленным marker — ручной вызов:
+  ```bash
+  wp eval 'LandingConfig\\Migrate\\seed_default_lead_statuses(1);'
+  ```
+- Live smoke расширен T7/T8 (CPT count + lead-detail URL)
+
+CRM sync (двусторонняя — webhook из CRM в админку и push из админки в CRM)
+явно вне scope MVP. Требует расширения AdapterInterface::update_status() и
+тестов с реальными credentials всех 5 адаптеров (B20).
+
+См. [spec](docs/superpowers/specs/2026-05-20-b19-lead-status-workflow-design.md)
+и [plan](docs/superpowers/plans/2026-05-20-b19-lead-status-workflow-plan.md).

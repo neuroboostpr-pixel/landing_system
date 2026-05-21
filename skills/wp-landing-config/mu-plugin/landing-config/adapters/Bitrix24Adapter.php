@@ -15,6 +15,34 @@ class Bitrix24Adapter implements AdapterInterface {
         ];
     }
 
+    public static function field_definitions(): array {
+        return [
+            'webhook_url'    => ['type' => 'url', 'label' => 'Webhook URL', 'encrypt' => true, 'required' => true,
+                                 'placeholder' => 'https://acme.bitrix24.ru/rest/N/TOKEN/'],
+            'category_id'    => ['type' => 'text', 'label' => 'Category ID (опционально)'],
+            'assigned_by_id' => ['type' => 'text', 'label' => 'Assigned user ID'],
+        ];
+    }
+
+    public static function settings(): array {
+        $r = \LandingConfig\Integrations\resolve_integration(static::name(), \get_current_blog_id());
+        if ($r !== null) {
+            return $r['settings'];
+        }
+        // Legacy fallback: old admin-integrations.php stored each field as a separate wp_options key:
+        // landing_integration_{name}_{field}. Password-type fields were stored encrypted — callers
+        // that need plaintext must call decrypt() themselves (same as current send()/test_connection()).
+        $name = static::name();
+        $out = [];
+        foreach (array_keys(static::field_defs()) as $field) {
+            $val = \get_option("landing_integration_{$name}_{$field}", '');
+            if ($val !== '' && $val !== false) {
+                $out[$field] = $val;
+            }
+        }
+        return $out;
+    }
+
     public function send(array $lead): array {
         $url_enc = \landing_config_get('integration_bitrix24_webhook_url');
         $url = $url_enc ? decrypt($url_enc) : '';

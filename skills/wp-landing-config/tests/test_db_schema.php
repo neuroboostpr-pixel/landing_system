@@ -85,8 +85,8 @@ $GLOBALS['_mock_is_multisite'] = false;
 set_mock_current_blog_id(1);
 maybe_install_or_migrate();
 assert_test(
-    count($GLOBALS['_mock_dbdelta_calls']) === 2,
-    "single-site path calls dbDelta twice (leads + lead_log), got: " . count($GLOBALS['_mock_dbdelta_calls'])
+    count($GLOBALS['_mock_dbdelta_calls']) === 3,
+    "single-site path calls dbDelta three times (leads + lead_log + status_log), got: " . count($GLOBALS['_mock_dbdelta_calls'])
 );
 $GLOBALS['_mock_is_multisite'] = true; // reset
 
