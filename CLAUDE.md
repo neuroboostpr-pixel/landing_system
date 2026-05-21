@@ -130,6 +130,7 @@ bash scripts/migrate-template-readmes.sh ~/Lendings/<existing-project>
 |---|---|---|
 | [`stage-execution-protocol.md`](docs/standards/stage-execution-protocol.md) | **Все этапы** — обязательный протокол для orchestrator и любых stage-агентов | `scripts/render-pipeline-map.sh` (показывает карту) |
 | [`premium-07b-checklist.md`](docs/standards/premium-07b-checklist.md) | 07b Compose | `scripts/verify-composed-premium.sh` |
+| [`asset-pipeline.md`](docs/asset-pipeline.md) | 08 Build — фото, SVG, фавиконы, логотипы, CSS-фоны | `pytest tests/phase-stage-08/test-fix-page-content-images.py` |
 
 **Stage Execution Protocol (главное правило):**
 Перед ЛЮБЫМ действием на этапе агент обязан: (1) прочитать `.landing-state.yaml` и показать Mermaid-карту через `render-pipeline-map.sh`, (2) выписать все оставшиеся этапы в TodoWrite, (3) подгрузить `stage-<id>-checklist.md` если есть и создать под-todo, (4) verify → approve. Не пропускать шаги, даже если пользователь торопит.
@@ -138,6 +139,26 @@ bash scripts/migrate-template-readmes.sh ~/Lendings/<existing-project>
 
 Эталон-референс — `~/Lendings/dubai-avto-liza/07b_COMPOSED/composed.html`
 (1757 строк, все 13 premium-фич, реальные фото).
+
+## Asset Pipeline (Stage-08)
+
+Любой ассет лендинга — фото, иконка (inline SVG или файловая), фон,
+фавикон, логотип — проходит через единый контракт, описанный в
+[`docs/asset-pipeline.md`](docs/asset-pipeline.md).
+
+**Правила в одну строку:**
+- Фото и raster-иконки → `wp media import` → `{id,url}` URL-encoded JSON-строкой
+  в page-content (`IMAGE_ATTR_KEYS`).
+- Inline SVG → raw `<svg>` URL-encoded строкой в textarea-attr
+  (`SVG_ATTR_KEYS`); block.php рендерит через `wp_kses(rawurldecode(...), $svg_allowed)`.
+- CSS-фоны → НЕ через page-content, а в `assets/css/main.css` через
+  `url('../photos/X.jpg')`.
+- Фавикон / site icon → site-level через `wp_options`, не атрибут блока.
+
+Любые изменения трансформации — только в
+[`skills/wp-cli-deployer/scripts/fix-page-content-images.py`](skills/wp-cli-deployer/scripts/fix-page-content-images.py)
++ тест в `tests/phase-stage-08/test-fix-page-content-images.py`. Двойной
+источник правды — баг.
 
 ## Block Library
 
