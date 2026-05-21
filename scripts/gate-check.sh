@@ -5,7 +5,7 @@
 set -uo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-GATES_YAML="$REPO_ROOT/config/stage-gates.yaml"
+GATES_YAML="${GATES_YAML:-$REPO_ROOT/config/stage-gates.yaml}"
 GATE_STATE="$REPO_ROOT/scripts/gate-state.sh"
 
 stage=""
@@ -40,14 +40,70 @@ fi
 
 echo "═══ Gate check: stage=$stage project=$(basename "$project") ═══"
 
-# 1. Check require_approved
-required="$(yq -r ".stages.\"$stage\".require_approved // [] | join(\",\")" "$GATES_YAML")"
-if [ -n "$required" ]; then
-    if ! bash "$GATE_STATE" all_approved "$project" "$required"; then
-        echo "❌ Previous stages not approved. Cannot run $stage."
-        exit 1
+# 0. Legacy bypass — strict: stage must be in config/stage-gates.yaml legacy_allowed
+# list AND state-file must provide non-empty legacy_reason. Every bypass logged.
+# Evaluated BEFORE require_approved (legacy projects skip prior-stage approval too).
+bypass_hard_checks=0
+state_file="$project/.landing-state.yaml"
+if [ -f "$state_file" ]; then
+    legacy_flag="$(yq -r ".stages.\"$stage\".legacy // false" "$state_file" 2>/dev/null || echo "false")"
+    # Also support top-level "legacy: true" (pre-PR-D state file format)
+    if [ "$legacy_flag" != "true" ]; then
+        top_level_legacy="$(yq -r '.legacy // false' "$state_file" 2>/dev/null || echo "false")"
+        if [ "$top_level_legacy" = "true" ]; then
+            legacy_flag="true"
+        fi
     fi
-    echo "✅ Required prior stages approved: $required"
+
+    if [ "$legacy_flag" = "true" ]; then
+        legacy_allowed="$(yq -r '.legacy_allowed // [] | join(" ")' "$GATES_YAML" 2>/dev/null || echo "")"
+        legacy_reason="$(yq -r ".stages.\"$stage\".legacy_reason // \"\"" "$state_file" 2>/dev/null || echo "")"
+        # Fallback to top-level legacy_reason
+        if [ -z "$legacy_reason" ]; then
+            legacy_reason="$(yq -r '.legacy_reason // ""' "$state_file" 2>/dev/null || echo "")"
+        fi
+
+        case " $legacy_allowed " in
+            *" $stage "*) ;;
+            *)
+                echo "❌ Stage $stage marked legacy: true, but '$stage' not in legacy_allowed list"
+                echo "   → fix: либо убери legacy: true, либо добавь в config/stage-gates.yaml legacy_allowed:"
+                exit 1
+                ;;
+        esac
+
+        if [ -z "$legacy_reason" ]; then
+            echo "❌ Stage $stage marked legacy: true but missing legacy_reason field"
+            echo "   → fix: добавь legacy_reason: \"<обоснование>\" в state-файл"
+            exit 1
+        fi
+
+        echo "⚠️  LEGACY BYPASS: stage $stage hard-checks skipped"
+        echo "    Reason: $legacy_reason"
+        echo "    Allowlist: $legacy_allowed"
+        LEGACY_LOG="${LANDING_SYSTEM_ROOT:-$REPO_ROOT}/audit/legacy-bypass.log"
+        mkdir -p "$(dirname "$LEGACY_LOG")"
+        reason_escaped="${legacy_reason//$'\t'/ }"
+        project_escaped="${project//$'\t'/ }"
+        printf '%s\t%s\t%s\t%s\n' \
+            "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$project_escaped" "$stage" "$reason_escaped" \
+            >> "$LEGACY_LOG"
+        bypass_hard_checks=1
+    fi
+fi
+
+# 1. Check require_approved (skipped under legacy bypass)
+if [ "$bypass_hard_checks" != "1" ]; then
+    required="$(yq -r ".stages.\"$stage\".require_approved // [] | join(\",\")" "$GATES_YAML")"
+    if [ -n "$required" ]; then
+        if ! bash "$GATE_STATE" all_approved "$project" "$required"; then
+            echo "❌ Previous stages not approved. Cannot run $stage."
+            exit 1
+        fi
+        echo "✅ Required prior stages approved: $required"
+    fi
+else
+    required=""
 fi
 
 # 1b. Soft-lock warning: для soft-этапов — если предыдущий по pipeline не approved
@@ -87,14 +143,13 @@ fi
 
 # 2. Run hard_checks
 fail=0
-# Legacy bypass: skip all hard checks if .landing-state.yaml contains "legacy: true"
-if [ -f "$project/.landing-state.yaml" ] && grep -q "^[[:space:]]*legacy:[[:space:]]*true" "$project/.landing-state.yaml" 2>/dev/null; then
-    echo "  ⚠ legacy:true — skipping all hard checks for $stage"
+if [ "$bypass_hard_checks" = "1" ]; then
+    echo "  (skipped — legacy bypass)"
     checks_count=0
 else
     checks_count="$(yq -r ".stages.\"$stage\".hard_checks // [] | length" "$GATES_YAML")"
 fi
-for i in $(seq 0 $((checks_count - 1))); do
+for i in $(if [ "$checks_count" -gt 0 ]; then seq 0 $((checks_count - 1)); fi); do
     check_id="$(yq -r ".stages.\"$stage\".hard_checks[$i].id" "$GATES_YAML")"
     check_type="$(yq -r ".stages.\"$stage\".hard_checks[$i].type" "$GATES_YAML")"
     fix_hint="$(yq -r ".stages.\"$stage\".hard_checks[$i].fix_hint // \"\"" "$GATES_YAML")"
@@ -108,6 +163,50 @@ for i in $(seq 0 $((checks_count - 1))); do
                 echo "  ❌ $check_id: missing $path"
                 [ -n "$fix_hint" ] && echo "     → $fix_hint"
                 fail=1
+            fi
+            ;;
+        file_or_dir_exists)
+            path="$(yq -r ".stages.\"$stage\".hard_checks[$i].path" "$GATES_YAML" | sed "s|{project}|$project|g")"
+            if [ -e "$path" ]; then
+                # If directory, require non-empty (otherwise file_or_dir_exists is just file_exists with a misleading name)
+                if [ -d "$path" ] && [ -z "$(ls -A "$path" 2>/dev/null)" ]; then
+                    echo "  ❌ $check_id: directory $path exists but is empty"
+                    [ -n "$fix_hint" ] && echo "     → $fix_hint"
+                    fail=1
+                else
+                    echo "  ✅ $check_id ($path)"
+                fi
+            else
+                echo "  ❌ $check_id: missing $path"
+                [ -n "$fix_hint" ] && echo "     → $fix_hint"
+                fail=1
+            fi
+            ;;
+        dir_has_files)
+            path="$(yq -r ".stages.\"$stage\".hard_checks[$i].path" "$GATES_YAML" | sed "s|{project}|$project|g")"
+            pattern="$(yq -r ".stages.\"$stage\".hard_checks[$i].pattern // \"*\"" "$GATES_YAML")"
+            min_count="$(yq -r ".stages.\"$stage\".hard_checks[$i].min_count // 1" "$GATES_YAML")"
+            if [ ! -d "$path" ]; then
+                echo "  ❌ $check_id: directory $path missing"
+                [ -n "$fix_hint" ] && echo "     → $fix_hint"
+                fail=1
+            else
+                case "$pattern" in
+                    *\{*)
+                        echo "  ❌ $check_id: brace patterns not supported ($pattern)"
+                        echo "     → use a single fnmatch glob (e.g. '*.jpg') or call this check multiple times"
+                        fail=1
+                        continue
+                        ;;
+                esac
+                count="$(find "$path" -maxdepth 1 -type f -name "$pattern" 2>/dev/null | wc -l | tr -d ' ')"
+                if [ "$count" -ge "$min_count" ]; then
+                    echo "  ✅ $check_id ($count files matching $pattern in $path)"
+                else
+                    echo "  ❌ $check_id: $path has $count files matching '$pattern', need ≥$min_count"
+                    [ -n "$fix_hint" ] && echo "     → $fix_hint"
+                    fail=1
+                fi
             fi
             ;;
         http_ping)
@@ -164,7 +263,9 @@ for i in $(seq 0 $((checks_count - 1))); do
             fi
             ;;
         *)
-            echo "  ⚠️  $check_id: unknown type $check_type" >&2
+            echo "  ❌ $check_id: unknown check type '$check_type'" >&2
+            echo "     → implement this type in scripts/gate-check.sh or fix the typo in config/stage-gates.yaml" >&2
+            fail=1
             ;;
     esac
 done
@@ -211,4 +312,11 @@ if [ "${fail:-1}" = "0" ] && [ -d "$project/wiki" ]; then
     cd "$REPO_ROOT" && python3 -m scripts.wiki.compile \
         --source-mode=project-graph --project="$project_slug" \
         >/dev/null 2>&1 || true
+fi
+
+# === Stage Execution Protocol: refresh pipeline map after every gate-check ===
+# Map stays current in <project>/wiki/pipeline-map.md without manual intervention.
+if [ -f "$project/.landing-state.yaml" ]; then
+    bash "$REPO_ROOT/scripts/render-pipeline-map.sh" \
+        "$project/.landing-state.yaml" --write-wiki >/dev/null 2>&1 || true
 fi

@@ -5,6 +5,10 @@ description: Use during stage 02 to process client photos identity-safe (cutout,
 
 # photo-stylist
 
+> Helper agent — dispatched by `photo-curator`. Stage Execution Protocol is
+> enforced by the parent agent; this helper does not own a stage and should
+> not be invoked directly.
+
 ## Mission
 
 Process raw client photos for use in landing scenes. Identity-safe rules apply absolutely.

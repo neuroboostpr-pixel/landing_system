@@ -1,6 +1,6 @@
 """Тесты system_compiler с моком SDK."""
 from pathlib import Path
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -127,3 +127,67 @@ def test_dry_run_does_not_write(fake_repo, tmp_path, mocker):
     )
     assert not (wiki / "concepts" / "agents" / "sample-agent.md").exists()
     assert not (wiki / "index.md").exists()
+
+
+def test_cache_saved_once_per_compile_run(tmp_path: Path) -> None:
+    """save_cache должен вызываться один раз за прогон, а не в цикле.
+
+    Эта регрессия ловит то что описано в audit/01-scripts-wiki-python.md:
+    раньше save_cache(...) звался ВНУТРИ цикла → O(N²) IO для 473 концептов.
+    """
+    repo_root = tmp_path / "repo"
+    wiki_dir = tmp_path / "wiki"
+    (repo_root / "agents").mkdir(parents=True)
+    (repo_root / "agents" / "a.md").write_text("---\nname: a\n---\nA", encoding="utf-8")
+    (repo_root / "agents" / "b.md").write_text("---\nname: b\n---\nB", encoding="utf-8")
+    (repo_root / "agents" / "c.md").write_text("---\nname: c\n---\nC", encoding="utf-8")
+
+    sources = [{"path": "agents/*.md", "concept_dir": "agents"}]
+
+    with patch("scripts.wiki.hash_cache.save_cache") as mock_save, \
+         patch("scripts.wiki.system_compiler._compile_concept", return_value="---\nname: x\n---\nX"):
+        system_compiler.compile_system(
+            repo_root=repo_root,
+            wiki_dir=wiki_dir,
+            sources=sources,
+            dry_run=False,
+        )
+
+    # Bootstrap pre-population + финальный save = максимум 2 вызова.
+    # Если save_cache внутри цикла — будет ≥3 (по числу файлов).
+    assert mock_save.call_count <= 2, (
+        f"save_cache called {mock_save.call_count} times — should be ≤2 "
+        "(once for bootstrap pre-pop, once at end). Per-file save = O(N²) IO."
+    )
+
+
+def test_failed_sdk_call_still_caches_source_hash(tmp_path: Path) -> None:
+    """Если _compile_concept падает SDK-ошибкой — hash источника ВСЁ РАВНО
+    должен попасть в кэш, чтобы на следующем коммите этот файл не звал SDK снова.
+
+    Audit finding: system_compiler.py:179-183 — error logged but hash never
+    cached → defeats hash-cache purpose for chronically-broken files.
+    """
+    from scripts.wiki import hash_cache, sdk_client
+
+    repo_root = tmp_path / "repo"
+    wiki_dir = tmp_path / "wiki"
+    (repo_root / "agents").mkdir(parents=True)
+    src = repo_root / "agents" / "broken.md"
+    src.write_text("---\nname: broken\n---\nX", encoding="utf-8")
+
+    sources = [{"path": "agents/*.md", "concept_dir": "agents"}]
+
+    with patch("scripts.wiki.system_compiler._compile_concept",
+               side_effect=sdk_client.SDKError("simulated")):
+        system_compiler.compile_system(
+            repo_root=repo_root, wiki_dir=wiki_dir,
+            sources=sources, dry_run=False,
+        )
+
+    cache = hash_cache.load_cache(wiki_dir / ".cache.json")
+    assert "agents/broken.md" in cache, (
+        "Source hash not cached after SDK error — file will re-call SDK "
+        "on every subsequent commit (token leak)."
+    )
+    assert cache["agents/broken.md"] == hash_cache.compute_hash(src)

@@ -21,7 +21,24 @@ description: Single entry point для конвейера landing-system. Чит
 
 Положи `prototype.pdf` или `prototype.md` в `<project>/07_ПРОТОТИП/source/`.
 
-Этапы 00 (бриф), 01 (контекст), 01a (анализ ниши), 02 (материалы клиента) автоматически помечены `n/a` — они происходят до landing-system.
+Этапы 00 (бриф), 01 (контекст), 01a (анализ ниши), 02 (материалы клиента) автоматически помечаются `n/a` — они происходят до landing-system.
+
+### Mark upstream stages n/a (prototype-first)
+
+Перед стартом оркестратора проверь флоу. Если в `<project>/07_ПРОТОТИП/source/` лежит `prototype.pdf` или `prototype.md` — флоу определяется как **prototype-first**. В этом случае явно помечай upstream-этапы как `n/a`, чтобы `gate-check.sh` не пытался их валидировать:
+
+```bash
+PROJECT="${1:-$PWD}"  # либо --project <slug>
+if [ -f "$PROJECT/07_ПРОТОТИП/source/prototype.pdf" ] || \
+   [ -f "$PROJECT/07_ПРОТОТИП/source/prototype.md" ]; then
+  for stage in 00_brief 01_context 01a_niche_analysis 02_assets; do
+    # TODO: pass legacy_reason after Phase 4 Task 4.4 lands
+    bash scripts/gate-state.sh set "$PROJECT" "$stage" n/a
+  done
+fi
+```
+
+Если флоу полный (есть бриф, нужен анализ ниши) — оставь статусы `locked`, `gate-check` пройдёт по ним нормально. Раньше эти статусы по умолчанию стояли `n/a` в шаблоне, что молча обходило 14 hard-checks этапа `01a_niche_analysis` (audit gap). Теперь дефолт — `locked`, а переход в `n/a` происходит явно здесь.
 
 ## Что происходит
 

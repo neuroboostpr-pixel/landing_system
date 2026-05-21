@@ -2,47 +2,48 @@
 type: agent
 name: photo-matcher
 sources: ["agents/photo-matcher.md"]
-updated: 2026-05-15
+updated: 2026-05-20
 triggers: []
 stage: "07c"
-uses: ["photo-curator", "photo-classifier", "photo-preview-board", "landing-photos"]
-tags: ["photos", "pr-b", "codex", "identity-safe", "matching"]
+uses: ["photo-curator", "photo-curation", "photo-classifier", "photo-preview-board"]
+tags: ["photo", "matching", "identity-safe", "codex"]
 ---
 
-# Photo Matcher — ранжирование фотографий по слотам
+# Photo Matcher — ранжирование фото по слотам
 
 ## Что делает
-Один раз анализирует каталог клиентских фотографий и автоматически подбирает топ-3 кандидата для каждого фото-слота в wireframe. Если подходящих фото нет — выставляет флаг «нужна AI-генерация». Для слотов с людьми (отзывы, команда, эксперты) требует явного согласия пользователя.
+Сопоставляет загруженные фотографии клиента с визуальными слотами на лендинге. Для каждого слота выбирает три лучших кандидата и помечает, нужна ли AI-генерация или обязательное согласие пользователя.
 
 ## Когда вызывать / в каком этапе
-Вызывается на этапе **07c** в рамках пайплайна `/landing-photos`. Запускается агентом `photo-curator` автоматически — после того как `photo-classifier` разметил все фото в `catalog.yaml`. Не вызывается напрямую пользователем.
+Вспомогательный агент этапа **07c** (Photos). Вызывается исключительно агентом `photo-curator` — напрямую не запускать. Запускается после того, как `photo-classifier` заполнил `catalog.yaml` тегами.
 
 ## Что на вход / на выход
 
 **Вход:**
-- `<project_dir>` — путь к папке проекта
-- `07c_PHOTOS/catalog.yaml` — каталог фото, размеченный `photo-classifier`
-- `07_ПРОТОТИП/prototype.yaml` — список всех слотов
-- `07a_WIREFRAME/selections.yaml` — выбранные пользователем варианты блоков (фильтрует только активные `type: photo` слоты)
+- `<project_dir>` — корневая папка проекта
+- `07c_PHOTOS/catalog.yaml` — каталог с тегами всех загруженных фото (создаётся `photo-classifier`)
+- `07a_WIREFRAME/selections.yaml` — утверждённые варианты блоков (только выбранные варианты, только слоты типа `photo`)
+- `07_ПРОТОТИП/prototype.yaml` — список слотов из прототипа
 
 **Выход:**
-- `07c_PHOTOS/selections.draft.yaml` — файл с топ-3 кандидатами на каждый слот, флагами `ai_fallback_needed` и `required_user_approval`
+- `07c_PHOTOS/selections.draft.yaml` — YAML с топ-3 кандидатами на каждый слот, флагами `ai_fallback_needed` и `required_user_approval`
 
-## Процесс работы
+## Процесс
 
-1. Строит временный `_slots-input.yaml` — только активные фото-слоты из выбранных вариантов wireframe.
-2. Запускает `skills/photo-curation/scripts/codex-match.sh` через bash — codex читает `catalog.yaml` + список слотов и возвращает ранжированных кандидатов.
-3. Проверяет, что результат — корректный YAML со структурой `slots: [...]`. При ошибке парсинга — два автоматических ретрая; если после них YAML невалиден — останавливается и просит пользователя проверить лог codex.
+1. Строит `_slots-input.yaml` из `prototype.yaml`, фильтруя по `selections.yaml` (только активные варианты, только photo-слоты).
+2. Запускает `skills/photo-curation/scripts/codex-match.sh` — codex получает полный каталог и список слотов, возвращает ранжированные кандидаты.
+3. Валидирует YAML-вывод. При невалидном YAML — две попытки повтора. Если после двух попыток ошибка сохраняется — прерывает работу и просит пользователя проверить лог codex.
+4. Пустой список кандидатов для слота → `ai_fallback_needed: true` (штатная ситуация, не ошибка).
 
-**Обработка пустых слотов:** если для слота нет ни одного кандидата — это штатная ситуация, выставляется `ai_fallback_needed: true`.
+## Правило identity-safe
 
-**Identity-safe правило:** слоты типа testimonial/expert/team получают `required_user_approval: true` — это требование прописано в промпте для codex и дополнительно валидируется скриптом `selections-validator.py` и UI `photo-board.html`.
+Для слотов типа testimonial / expert / team codex обязан выставить `required_user_approval: true`. Это правило прописано в `IDENTITY_SAFE.md` и проверяется downstream: `selections-validator.py` и UI `photo-board.html` не дают пройти дальше без явного согласия пользователя.
 
 ## Связанные концепты
-- [[photo-curator]] — оркестратор этапа 07c, который вызывает photo-matcher
-- [[photo-classifier]] — создаёт `catalog.yaml` до запуска photo-matcher
-- [[photo-preview-board]] — использует `selections.draft.yaml` для рендера превью
-- [[landing-photos]] — команда, запускающая весь пайплайн 07c
+- [[photo-curator]] — родительский агент, который диспатчит photo-matcher и управляет всем этапом 07c
+- [[photo-classifier]] — предшественник: тегирует фото и заполняет catalog.yaml, который читает этот агент
+- [[photo-preview-board]] — следующий шаг: использует selections.yaml для рендера превью и финального подтверждения
+- [[photo-curation]] — скилл-оркестратор этапа 07c, владеет скриптами и IDENTITY_SAFE правилами
 
 ## Источник
 - `agents/photo-matcher.md`

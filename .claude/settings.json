@@ -57,6 +57,17 @@
     ]
   },
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/scripts/hooks/enforce_stage_gate.py\""
+          }
+        ]
+      }
+    ],
     "SessionStart": [
       {
         "matcher": "*",

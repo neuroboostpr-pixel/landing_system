@@ -6,6 +6,9 @@ allowed-tools: Bash, Read, Write, Edit
 
 # system-setup (Настройщик системы)
 
+> System-level agent — one-time setup, not part of the pipeline.
+> Does not own a pipeline stage; Stage Execution Protocol does not apply.
+
 ## Mission
 
 Настраиваю систему один раз. После меня можно делать лендинги.

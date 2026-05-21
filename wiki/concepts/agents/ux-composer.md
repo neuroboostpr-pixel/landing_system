@@ -2,58 +2,53 @@
 type: agent
 name: ux-composer
 sources: ["agents/ux-composer.md"]
-updated: 2026-05-15
+updated: 2026-05-20
 triggers: []
 stage: "07a"
-uses: ["prototype-importer", "block-library-management", "block-composer", "wireframe-rendering", "ui-ux-pro-max", "design-tokens-generation", "brand-kit-build"]
-tags: ["wireframe", "ux", "stage-07a", "block-library"]
+uses: ["prototype-importer", "block-composer", "landing-wireframe", "wireframe-rendering", "block-library-management", "ui-ux-pro-max", "stage-execution-protocol"]
+tags: ["wireframe", "07a", "block-library", "ux", "prototype"]
 ---
 
-# UX Composer — интерактивный вайрфрейм по прототипу
+# ux-composer — Сборщик интерактивного wireframe
 
 ## Что делает
-
-Превращает утверждённый прототип (`prototype.yaml`) в интерактивный `wireframe.html`: для каждого блока страницы предлагает 2–3 варианта компоновки с radio-переключателями. Маркетолог выбирает нужные варианты и скачивает `selections.yaml` для передачи в следующий этап.
+Берёт одобренный прототип (`prototype.yaml`) и для каждого блока подбирает 2–3 готовых варианта из block-library. Собирает `wireframe.html` с radio-переключателями, чтобы пользователь мог выбрать понравившийся вариант на каждый блок и скачать `selections.yaml`. **Никогда не придумывает блоки сам** — только выбирает из библиотеки.
 
 ## Когда вызывать / в каком этапе
+Этап **07a (UX Wireframe)**. Запускается через команду `/landing-wireframe` или `landing-orchestrator` после того, как:
+- этап `07_ПРОТОТИП` закрыт (существует `prototype.yaml` и он прошёл валидацию),
+- `.landing-state.yaml` содержит `current_stage == 07b_wireframe`.
 
-Этап **07a (UX Wireframe)**. Вызывается командой `/landing-wireframe` или агентом `landing-orchestrator`. Требует, чтобы были готовы:
-- `07_ПРОТОТИП/prototype.yaml` (этап 07 завершён)
-- `05_ДИЗАЙН-СИСТЕМА/tokens.json` (этап 05 завершён)
-- `04_БРЕНД/brand-kit.md` (этап 04 завершён)
-- Плагин `ui-ux-pro-max` с CSV-файлами UX-паттернов, цветов, шрифтов и стилей
-
-Если плагин `ui-ux-pro-max` не установлен — агент немедленно останавливается и выводит инструкцию по установке.
+Если `.landing-state.yaml` не соответствует — агент останавливается и сообщает об ошибке.
 
 ## Что на вход / на выход
 
 **Вход:**
-- `07_ПРОТОТИП/prototype.yaml` — структурированный прототип
+- `07_ПРОТОТИП/prototype.yaml` — список блоков с типами и текстами
+- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — дизайн-токены
+- `04_БРЕНД/brand-kit.md` — брендинг
 - `block-library/catalog.yaml` — каталог доступных блоков
-- `04_БРЕНД/brand-kit.md`, `05_ДИЗАЙН-СИСТЕМА/tokens.json` — бренд и токены
-- 6 CSV-файлов из `ui-ux-pro-max` (UX-паттерны, правила, цвета, шрифты, стили)
-- 2–3 DESIGN.md reference из `vendor/opendesign-extracts/`
+- CSV-файлы из `ui-ux-pro-max`: `landing.csv`, `ux-guidelines.csv`, `web-interface.csv`, `styles.csv`, `colors.csv`, `typography.csv` — UX-паттерны, стили, палитры, типографика
 
 **Выход:**
-- `07a_WIREFRAME/wireframe.html` — интерактивный вайрфрейм с вариантами блоков
-- `07a_WIREFRAME/candidates.yaml` — кандидаты блоков с UX-мета
-- `07a_WIREFRAME/selections.yaml` — выбор пользователя (создаётся вручную через UI)
+- `07a_WIREFRAME/wireframe.html` — интерактивный wireframe с radio-вариантами на каждый блок
+- `07a_WIREFRAME/candidates.yaml` — список кандидатов из library для каждого блока
+- `07a_WIREFRAME/selections.yaml` — заполняется пользователем после выбора в браузере (скачивается кнопкой «Confirm»)
 
-## Ключевые правила
+**HARD GATE:** пока `selections.yaml` не появился в папке — переход к этапу 07b (compose) заблокирован.
 
-1. **Никогда не придумывает блоки**: если в `block-library` нет подходящего блока для секции прототипа — возвращает `needs_new_block: true` и предлагает создать блок через `scaffold-block.py`.
-2. **HARD GATE**: следующий этап (07b Compose) недоступен, пока `selections.yaml` не появится в папке `07a_WIREFRAME/`.
-3. UX-правила из CSV инжектируются в wireframe.html как вкладки (`{{ux_patterns_html}}`, `{{ux_rules_html}}` и т.д.) — маркетолог видит рекомендации прямо в браузере.
+## Особые правила
+- Если для блока прототипа `candidates: []` — агент не генерирует fallback, а сообщает пользователю и предлагает scaffoldить новый блок командой `scaffold-block.py`.
+- Если `ui-ux-pro-max` не установлен — агент останавливается с инструкцией по установке.
+- `PreToolUse` hook (`enforce_stage_gate.py`) физически блокирует Write/Edit, если предшественники этапа не закрыты — обходить нельзя.
 
 ## Связанные концепты
-
-- [[prototype-importer]] — создаёт `prototype.yaml`, который является входом для ux-composer
-- [[block-library-management]] — хранит каталог блоков; ux-composer выбирает только из него
-- [[block-composer]] — следующий этап: берёт `selections.yaml` и рендерит `composed.html`
-- [[wireframe-rendering]] — скилл, содержащий скрипт `render-wireframe.py` и шаблон `wireframe-shell.html`
-- ui-ux-pro-max — обязательная зависимость с CSV-данными UX-паттернов и палитр
-- [[landing-orchestrator]] — вызывает ux-composer в рамках общего workflow
+- [[prototype-importer]] — создаёт `prototype.yaml`, который ux-composer читает на вход
+- [[block-composer]] — следующий этап (07b): принимает `selections.yaml` и собирает `composed.html`
+- [[wireframe-rendering]] — скилл с шаблоном и скриптом `render-wireframe.py`
+- [[block-library-management]] — скилл для создания новых блоков через `scaffold-block.py`
+- [[landing-wireframe]] — slash-команда, запускающая этот агент
+- [[stage-execution-protocol]] — обязательный протокол перед любым действием агента
 
 ## Источник
-
 - `agents/ux-composer.md`

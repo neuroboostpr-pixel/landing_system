@@ -2,67 +2,60 @@
 type: agent
 name: content-writer
 sources: ["agents/content-writer.md"]
-updated: 2026-05-15
+updated: 2026-05-20
 triggers: []
 stage: "07"
-uses: ["niche-analyst", "prototype-importer", "design-system-generator", "stack-planner", "client-assets-collector"]
+uses: ["niche-analyst", "prototype-importer", "design-system-generator", "stack-planner", "client-assets-collector", "landing-orchestrator"]
 tags: ["content", "copywriting", "seo", "stage-07"]
 ---
 
-# Content Writer — Контент-райтер
+# content-writer (Контент-райтер)
 
 ## Что делает
 
-Берёт черновой прототип текста лендинга и превращает его в готовый копирайт, разложенный по конкретным блокам страницы. Параллельно пишет SEO-копию с мета-заголовками и вариантами h1.
+Берёт исходный прототип текста и адаптирует его под конкретные блоки лендинга: формирует финальные тексты по каждому блоку с учётом позиционирования бренда (рациональное, эмоциональное, доверительное), а также пишет SEO-копирайт.
 
 ## Когда вызывать / в каком этапе
 
-Запускается на **этапе 07** после того, как завершены: анализ ниши (01a), дизайн-система (05), подбор стека (06) и импорт прототипа (07). Агент не переходит дальше без явного одобрения пользователем итогового `final-copy.md`.
+Запускается на **этапе 07 (Контент)**. Предшественники должны быть закрыты: `.landing-state.yaml` обязан показывать `current_stage == 07_content`. До запуска агент проверяет gate через `gate-check.sh`; если предшественники не утверждены — останавливается.
 
 ## Что на вход / на выход
 
-**Входные артефакты:**
+**Вход:**
+- `01a_АНАЛИЗ_НИШИ/positioning.md` — режим позиционирования (`rational` / `emotional_aspiration` / `trust_authority` / `hybrid`)
+- `01a_АНАЛИЗ_НИШИ/landing-structure.md` — таблица блоков лендинга (источник истины по порядку и составу блоков)
+- `01a_АНАЛИЗ_НИШИ/market-profile.md` — тон и культурный контекст (`accessibility_tier`, `cultural_context`)
+- `01a_АНАЛИЗ_НИШИ/competitors.yaml` — ключевые сообщения конкурентов (чтобы их не повторять)
+- `07_ПРОТОТИП/prototype.md` — исходный прототип текста
+- `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` — типографика и структура секций
+- `06_СТЕК/design-stack.yaml` — компонентная библиотека
+- `02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/` и `assets-manifest.yaml` — реальные отзывы и ассеты клиента
 
-| Файл | Зачем |
-|------|-------|
-| `01a_АНАЛИЗ_НИШИ/positioning.md` | Режим позиционирования (`rational` / `emotional_aspiration` / `trust_authority` / `hybrid`) |
-| `01a_АНАЛИЗ_НИШИ/landing-structure.md` | Эталонный список и порядок блоков лендинга |
-| `01a_АНАЛИЗ_НИШИ/market-profile.md` | Тон: `accessibility_tier` и `cultural_context` |
-| `01a_АНАЛИЗ_НИШИ/competitors.yaml` | Поле `key_messages` — что НЕ повторять |
-| `07_КОНТЕНТ/prototype.md` | Исходный прототип текста |
-| `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` | Детали секций, типографика |
-| `06_СТЕК/design-stack.yaml` | Компонентная библиотека |
-| `02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/` | Реальные отзывы клиентов |
-| `02_МАТЕРИАЛЫ_КЛИЕНТА/assets-manifest.yaml` | Список доступных фото/иконок |
-
-**Выходные артефакты:**
-
-- `07_КОНТЕНТ/final-copy.md` — копирайт, разложенный по блокам из `landing-structure.md`
+**Выход:**
+- `07_КОНТЕНТ/final-copy.md` — финальные тексты, разбитые по блокам из `landing-structure.md`
 - `07_КОНТЕНТ/seo-copy.md` — SEO-заголовки, description, варианты h1
 
-**Жёсткие правила:**
+**HARD GATE:** после создания файлов агент показывает `final-copy.md` пользователю и ждёт явного утверждения перед закрытием этапа.
 
-- Запрещён Lorem ipsum — только реальные данные из `prototype.md` и `testimonials/`
-- Каждый блок содержит явную ссылку на иконку/фото из `assets-manifest`
-- HARD GATE: показывает `final-copy.md` пользователю и ждёт подтверждения
+## Ключевые правила
 
-## Режимы тона (mode-aware)
-
-Агент адаптирует регистр копирайта под режим позиционирования:
-
-- **rational** — факты, цифры, без аспирации
-- **emotional_aspiration** — эмоциональный крюк, структура StoryBrand
-- **trust_authority** — каждый claim с доказательством (имя, число, дата)
-- **hybrid:X+Y** — основной тон + поддержка 1–2 блоками вторичного
-- **legacy_v1** — без mode-аугментации (старые проекты до 2026-05-06)
+- Блоки берутся строго из `landing-structure.md`, а не угадываются из DESIGN.md.
+- Lorem ipsum в `final-copy.md` **запрещён** — только реальные данные из прототипа и отзывов.
+- Тон копирайта определяется полем `Mode` из `positioning.md`:
+  - `rational` — факты, цифры, без аспирации;
+  - `emotional_aspiration` — эмоциональный крючок, структура StoryBrand;
+  - `trust_authority` — каждый claim подкреплён доказательством (число, имя, дата);
+  - `hybrid:X+Y` — основной тон + 1–2 вспомогательных блока.
+- Не повторять ключевые сообщения конкурентов из `competitors.yaml`.
 
 ## Связанные концепты
 
-- [[niche-analyst]] — поставляет `positioning.md`, `landing-structure.md`, `competitors.yaml`
-- [[prototype-importer]] — поставляет `prototype.md` как сырой входной текст
-- [[design-system-generator]] — поставляет `DESIGN.md` с деталями секций
+- [[niche-analyst]] — формирует `positioning.md` и `landing-structure.md`, которые контент-райтер использует как основу
+- [[prototype-importer]] — производит `prototype.md`, исходный текст для адаптации
+- [[design-system-generator]] — создаёт `DESIGN.md` с деталями секций
 - [[stack-planner]] — поставляет `design-stack.yaml` с компонентной библиотекой
-- [[client-assets-collector]] — поставляет `testimonials/` и `assets-manifest.yaml`
+- [[client-assets-collector]] — собирает отзывы и ассеты клиента
+- [[landing-orchestrator]] — диспатчит агента в нужный момент pipeline
 
 ## Источник
 

@@ -5,6 +5,10 @@ description: Ranks photos as candidates for each photo-slot in the wireframe. Ou
 
 # photo-matcher
 
+> Helper agent — dispatched by `photo-curator`. Stage Execution Protocol is
+> enforced by the parent agent; this helper does not own a stage and should
+> not be invoked directly.
+
 ## Mission
 
 Single-shot ranking: codex reads full `catalog.yaml` + active slot list → returns top-3 candidates per slot + `ai_fallback_needed` flag + `required_user_approval` flag for identity-safe slots.

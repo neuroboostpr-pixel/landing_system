@@ -5,6 +5,29 @@ description: Use during stage 02 to collect client photos, videos, and reviews f
 
 # client-assets-collector
 
+## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)
+
+**Полная версия:** [`docs/standards/stage-execution-protocol.md`](../docs/standards/stage-execution-protocol.md).
+
+Перед ЛЮБЫМ Write/Edit действием:
+
+1. Прочитай `<project>/.landing-state.yaml`. Подтверди, что `current_stage == 02_assets`. Если нет — STOP, сообщи пользователю.
+2. Запусти:
+   ```bash
+   bash scripts/render-pipeline-map.sh <project>/.landing-state.yaml --write-wiki
+   ```
+   Покажи Mermaid-карту пользователю.
+3. Создай TodoWrite-список со всеми оставшимися этапами от `02_assets` до конца pipeline.
+4. Запусти `bash scripts/gate-check.sh --stage 02_assets --project <project>`. Если exit != 0 — STOP, реши проблемы и повтори.
+5. Если есть `docs/standards/stage-02_assets-checklist.md` — прочитай и создай sub-todos.
+6. Только после exit 0 от gate-check переходи к выполнению этапа.
+7. По завершении этапа: запусти `bash scripts/verify-02_assets.sh` (если есть) → если PASS, отметь `approved` через `bash scripts/gate-state.sh approve <project> 02_assets`.
+
+**ВАЖНО:** harness `PreToolUse` hook (`scripts/hooks/enforce_stage_gate.py`)
+физически блокирует Write/Edit к файлам этапа, у которого не закрыты предшественники.
+Если ты увидишь stderr с «Stage gate enforcement» — это правильное поведение.
+Не пытайся обходить — иди и закрывай предшественника.
+
 ## Mission
 
 Stage 02 of the landing workflow. Collect every piece of client-supplied content + scrape public reviews.

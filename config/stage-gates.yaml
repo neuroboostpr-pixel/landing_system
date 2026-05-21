@@ -1,6 +1,11 @@
 # Source of truth for landing-system stage gates.
 # Read by scripts/gate-check.sh.
 
+# Legacy bypass allowlist. Stages here can use `legacy: true` in state-file
+# IF they also provide `legacy_reason:` field. Without both — gate fails.
+# Reviewed by Code-Owner before adding to this list.
+legacy_allowed: []  # Empty by default. Add entries explicitly when needed.
+
 stages:
   "00_brief":
     name: "Brief"
