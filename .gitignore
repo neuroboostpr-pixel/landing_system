@@ -36,5 +36,9 @@ wiki/.obsidian/
 
 # PR-O block-import work cache
 .import-blocks-work/
-audit/
+
+# Audit reports are PUBLIC (audit/REPORT.md, REPORT-v2.md, zone details)
+# Only ignore the auto-generated legacy bypass log
+audit/legacy-bypass.log
+
 .claude/worktrees/
