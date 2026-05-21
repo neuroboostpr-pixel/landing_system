@@ -11,12 +11,15 @@ require_once __DIR__ . '/../mu-plugin/landing-config/adapters/WhatsAppAdapter.ph
 require_once __DIR__ . '/../mu-plugin/landing-config/adapters/AmoCRMAdapter.php';
 require_once __DIR__ . '/../mu-plugin/landing-config/adapters/Bitrix24Adapter.php';
 require_once __DIR__ . '/../mu-plugin/landing-config/adapters/HubSpotAdapter.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/includes/lead-statuses.php';
 require_once __DIR__ . '/../mu-plugin/landing-config/includes/migrate-to-s2a3.php';
 
 use function LandingConfig\Migrate\migrate_cta_from_options;
 use function LandingConfig\Migrate\migrate_integrations_from_options;
+use function LandingConfig\Migrate\seed_default_lead_statuses;
 use function LandingConfig\CTA\list_ctas;
 use function LandingConfig\Integrations\list_integrations;
+use function LandingConfig\LeadStatuses\list_lead_statuses;
 
 $failures = 0; $tests = 0;
 function assert_test($c, $m) { global $failures, $tests; $tests++; if (!$c) { echo "FAIL: $m\n"; $failures++; } }
@@ -102,6 +105,20 @@ $GLOBALS['_mock_options'][1]['landing_cta_presets'] = [
 migrate_cta_from_options(1);
 assert_test(\get_site_option(\LandingConfig\Migrate\MARKER_OPTION) !== '1',
     'T_INT_6 migrate_cta does not set MARKER_OPTION (maybe_run owns marker)');
+
+// T_SEED_1..4: seed_default_lead_statuses создаёт 5 default-статусов на свежем сайте
+reset_mig();
+$seeded = seed_default_lead_statuses(1);
+assert_test($seeded === 5, "T_SEED_1 seeded 5 statuses (got $seeded)");
+$list = list_lead_statuses(1);
+assert_test(count($list) === 5, 'T_SEED_2 5 records in vocab');
+$slugs = array_column($list, 'slug');
+assert_test(in_array('pending', $slugs) && in_array('won', $slugs) && in_array('spam', $slugs),
+    'T_SEED_3 contains pending/won/spam');
+
+// T_SEED_4: идемпотентность — второй запуск 0
+$again = seed_default_lead_statuses(1);
+assert_test($again === 0, "T_SEED_4 idempotent (got $again)");
 
 echo "$tests tests, $failures failures\n";
 exit($failures > 0 ? 1 : 0);

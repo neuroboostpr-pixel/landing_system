@@ -189,6 +189,7 @@ function maybe_run(): void {
     $main = \function_exists('get_main_site_id') ? \get_main_site_id() : 1;
     migrate_cta_from_options($main);
     migrate_integrations_from_options($main);
+    seed_default_lead_statuses($main);
     if (\function_exists('get_sites')) {
         foreach (\get_sites(['number' => 0]) as $site) {
             if ((int) $site->blog_id === $main) continue;
@@ -196,4 +197,29 @@ function maybe_run(): void {
         }
     }
     \update_site_option(MARKER_OPTION, '1');
+}
+
+/**
+ * Создать 5 default-статусов для свежего сайта (B19). Идемпотентно:
+ * если хоть один статус уже есть — возвращает 0 без действий.
+ * Маркетолог может удалить/переименовать/добавить — seed повторно не сработает.
+ */
+function seed_default_lead_statuses(int $network_blog_id): int {
+    $existing = \LandingConfig\LeadStatuses\list_lead_statuses($network_blog_id);
+    if (!empty($existing)) return 0;
+
+    $defaults = [
+        ['slug' => 'pending',     'label' => 'Новая',            'color' => '#2271b1', 'order' => 10],
+        ['slug' => 'in_progress', 'label' => 'В работе',         'color' => '#dba617', 'order' => 20],
+        ['slug' => 'won',         'label' => 'Закрыта успешно',  'color' => '#00a32a', 'order' => 30],
+        ['slug' => 'lost',        'label' => 'Отказ',            'color' => '#d63638', 'order' => 40],
+        ['slug' => 'spam',        'label' => 'Спам',             'color' => '#646970', 'order' => 50],
+    ];
+
+    $count = 0;
+    foreach ($defaults as $d) {
+        $id = \LandingConfig\LeadStatuses\save_lead_status($d, true, $network_blog_id);
+        if ($id > 0) $count++;
+    }
+    return $count;
 }
