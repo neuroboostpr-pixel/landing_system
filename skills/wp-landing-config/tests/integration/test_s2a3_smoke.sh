@@ -16,28 +16,28 @@ WP_PATH=/home/e/esper21/ailexi.ru/public_html
 WPCLI="/usr/local/bin/php8.3 /usr/local/bin/wp-cli.phar --path=$WP_PATH"
 
 echo "▶ T1: lp_cta CPT records exist (≥1)"
-n=$($SSH "$WPCLI post list --post_type=lp_cta --url=http://ailexi.ru/ --format=count")
+n=$($SSH "$WPCLI post list --post_type=lp_cta --url=https://ailexi.ru/ --format=count")
 test "$n" -ge 1 || { echo "FAIL: lp_cta count=$n, expected >=1"; exit 1; }
 echo "  OK ($n records)"
 
 echo "▶ T2: lp_integration CPT registered (count ≥ 0 OK)"
-m=$($SSH "$WPCLI post list --post_type=lp_integration --url=http://ailexi.ru/ --format=count")
+m=$($SSH "$WPCLI post list --post_type=lp_integration --url=https://ailexi.ru/ --format=count")
 echo "  OK ($m records)"
 
 echo "▶ T3: lp_snippet CPT registered (count ≥ 0 OK)"
-s=$($SSH "$WPCLI post list --post_type=lp_snippet --url=http://ailexi.ru/ --format=count")
+s=$($SSH "$WPCLI post list --post_type=lp_snippet --url=https://ailexi.ru/ --format=count")
 echo "  OK ($s records)"
 
 echo "▶ T4: HTTP code на network admin страницах (200=auth ok, 302=login redirect, оба ок)"
 for slug in landing-config-network landing-config-network-cta landing-config-network-integrations landing-config-network-snippets landing-config-network-lead-statuses; do
-    code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 "http://ailexi.ru/wp-admin/network/admin.php?page=$slug" || echo "000")
+    code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 "https://ailexi.ru/wp-admin/network/admin.php?page=$slug" || echo "000")
     test "$code" = "200" -o "$code" = "302" || { echo "FAIL: network $slug returned $code"; exit 1; }
     echo "  OK $slug → $code"
 done
 
 echo "▶ T5: HTTP code на subsite read-only страницах"
 for slug in landing-config-cta landing-config-integrations landing-config-snippets landing-config-lead-statuses; do
-    code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 "http://russian.ailexi.ru/wp-admin/admin.php?page=$slug" || echo "000")
+    code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 "https://russian.ailexi.ru/wp-admin/admin.php?page=$slug" || echo "000")
     test "$code" = "200" -o "$code" = "302" || { echo "FAIL: subsite $slug returned $code"; exit 1; }
     echo "  OK $slug → $code"
 done
@@ -48,11 +48,11 @@ test -z "$recent" || { echo "FAIL: fresh fatals in our code:"; echo "$recent"; e
 echo "  OK (no fatals)"
 
 echo "▶ T7: lp_lead_status CPT registered (count >= 0 OK, count >= 5 после seed)"
-ls=$($SSH "$WPCLI post list --post_type=lp_lead_status --url=http://ailexi.ru/ --format=count")
+ls=$($SSH "$WPCLI post list --post_type=lp_lead_status --url=https://ailexi.ru/ --format=count")
 echo "  OK ($ls records — если 0, нужен ручной seed: wp eval 'LandingConfig\\\\Migrate\\\\seed_default_lead_statuses(1);')"
 
 echo "▶ T8: lead-detail URL liveness (любой id, 200/302/400/404 — все говорят что страница зарегистрирована)"
-code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 "http://russian.ailexi.ru/wp-admin/admin.php?page=landing-config-lead-detail&id=1" || echo "000")
+code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 "https://russian.ailexi.ru/wp-admin/admin.php?page=landing-config-lead-detail&id=1" || echo "000")
 case "$code" in
     200|302|400|404) echo "  OK lead-detail → $code" ;;
     *) echo "FAIL: lead-detail returned $code"; exit 1 ;;
