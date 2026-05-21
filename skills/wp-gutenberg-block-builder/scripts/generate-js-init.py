@@ -148,7 +148,18 @@ def main(argv: list) -> int:
     try:
         project = _find_project_root(Path(argv[1]))
         stack = _load_stack(project)
-        js_libs = [lib.lower() for lib in (stack.get("js_libraries") or [])]
+        # js_libraries может быть в двух форматах:
+        #   ["swiper", "gsap"]                                     — список строк
+        #   [{name: "Swiper.js", reason: "..."}, ...]              — список dict'ов
+        _raw_libs = stack.get("js_libraries") or []
+        js_libs = []
+        for _lib in _raw_libs:
+            if isinstance(_lib, str):
+                js_libs.append(_lib.lower())
+            elif isinstance(_lib, dict):
+                _name = _lib.get("name", _lib.get("id", ""))
+                if _name:
+                    js_libs.append(_name.lower())
         ui_libs_cfg = stack.get("ui_libraries") or {}
         ui_libs = [k for k, v in ui_libs_cfg.items() if v]
         all_libs = js_libs + [lib for lib in ui_libs if lib not in js_libs]
