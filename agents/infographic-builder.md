@@ -5,6 +5,10 @@ description: Generates ONE infographic PNG via codex image_gen. Uses prompt-pick
 
 # infographic-builder
 
+> Helper agent — dispatched by `visual-curator`. Stage Execution Protocol is
+> enforced by the parent agent; this helper does not own a stage and should
+> not be invoked directly.
+
 ## Mission
 
 Generate ONE infographic PNG for one slot_name. Used by visual-curator in stage 07d.

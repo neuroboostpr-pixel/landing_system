@@ -5,6 +5,29 @@ description: Stage 07c orchestrator (PR-B). Runs intake, dispatches photo-classi
 
 # photo-curator
 
+## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)
+
+**Полная версия:** [`docs/standards/stage-execution-protocol.md`](../docs/standards/stage-execution-protocol.md).
+
+Перед ЛЮБЫМ Write/Edit действием:
+
+1. Прочитай `<project>/.landing-state.yaml`. Подтверди, что `current_stage == 07d_photos`. Если нет — STOP, сообщи пользователю.
+2. Запусти:
+   ```bash
+   bash scripts/render-pipeline-map.sh <project>/.landing-state.yaml --write-wiki
+   ```
+   Покажи Mermaid-карту пользователю.
+3. Создай TodoWrite-список со всеми оставшимися этапами от `07d_photos` до конца pipeline.
+4. Запусти `bash scripts/gate-check.sh --stage 07d_photos --project <project>`. Если exit != 0 — STOP, реши проблемы и повтори.
+5. Если есть `docs/standards/stage-07d_photos-checklist.md` — прочитай и создай sub-todos.
+6. Только после exit 0 от gate-check переходи к выполнению этапа.
+7. По завершении этапа: запусти `bash scripts/verify-07d_photos.sh` (если есть) → если PASS, отметь `approved` через `bash scripts/gate-state.sh approve <project> 07d_photos`.
+
+**ВАЖНО:** harness `PreToolUse` hook (`scripts/hooks/enforce_stage_gate.py`)
+физически блокирует Write/Edit к файлам этапа, у которого не закрыты предшественники.
+Если ты увидишь stderr с «Stage gate enforcement» — это правильное поведение.
+Не пытайся обходить — иди и закрывай предшественника.
+
 ## ОБЯЗАТЕЛЬНО: codex post-process для каждой фотки (PR-I.a)
 
 С 2026-05-15 ни одна фотка не идёт в composed.html в сыром виде.

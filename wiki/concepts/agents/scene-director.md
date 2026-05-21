@@ -2,50 +2,58 @@
 type: agent
 name: scene-director
 sources: ["agents/scene-director.md"]
-updated: 2026-05-15
+updated: 2026-05-20
 triggers: []
 stage: "05"
-uses: ["design-system-generator", "brand-kit-build", "niche-analysis"]
-tags: ["cinematic", "motion", "gsap", "premium", "stage-05"]
+uses: ["design-system-generator", "brand-architect", "landing-orchestrator"]
+tags: ["cinematic", "motion", "gsap", "stage-05", "premium"]
 ---
 
-# scene-director (Режиссёр сцен — Cinematic Premium)
+# scene-director — Режиссёр кинематографических сцен
 
 ## Что делает
-Проектирует кинематографическую архитектуру лендинга: делит страницу на 6–8 сцен с описанием визуала, анимаций и параллакса. Результат — готовый motion-план, по которому фронтенд-разработчик подключает GSAP и ScrollTrigger.
+Проектирует анимационную архитектуру лендинга: разбивает страницу на 6–8 кинематографических сцен и описывает, как каждая из них должна двигаться при скролле. Результат — пошаговый план с инструкциями для GSAP/ScrollTrigger, который потом ложится в основу верстки.
 
 ## Когда вызывать / в каком этапе
-Этап **05 (Дизайн-система)**, только при флаге `--cinematic` при создании проекта или при явном запросе пользователя. Запускается строго **после** того, как `design-system-generator` создал `DESIGN.md` с motion-токенами.
+Активируется **только в cinematic-режиме** — при создании проекта с флагом `--cinematic` или по явному запросу пользователя. Запускается на этапе **05_design**, строго после того, как `design-system-generator` создал `DESIGN.md` с motion-токенами. Вызывается агентом `landing-orchestrator` или вручную.
+
+Предусловия (обязательные перед любым действием):
+- `current_stage == 05_design` в `.landing-state.yaml`
+- `gate-check.sh --stage 05_design` возвращает exit 0
+- показана Mermaid-карта pipeline через `render-pipeline-map.sh`
 
 ## Что на вход / на выход
 
 **Вход:**
-- `00_БРИФ/brief.md` — ниша, целевая аудитория, тон
-- `04_БРЕНД/brand-kit.md` — цвета, motion-параметры
-- `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` — motion-токены
+- `00_БРИФ/brief.md` — ниша, целевая аудитория, тон коммуникации
+- `04_БРЕНД/brand-kit.md` — цвета, motion-принципы бренда
+- `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` — motion-токены дизайн-системы
 
 **Выход:**
-- `05_ДИЗАЙН-СИСТЕМА/scenes.md` — scene grammar (название, тип, визуал, глубина), GSAP / ScrollTrigger / Lenis-инструкции, parallax-логика, mobile fallback для каждой из 6–8 сцен
+- `05_ДИЗАЙН-СИСТЕМА/scenes.md` — полный scene grammar: название, тип, описание визуала, GSAP/ScrollTrigger/Lenis инструкции, parallax-логика и mobile fallback для каждой из 6–8 сцен
 
-**Жёсткие запреты (Motion Rules):**
-- ❌ scroll hijack
-- ❌ particle systems
-- ❌ fade-up на каждом блоке
+**Motion Rules (строгие ограничения):**
+- ❌ Scroll hijack запрещён
+- ❌ Particle systems запрещены
+- ❌ Fade-up на каждом блоке запрещён
 
-**8 типовых сцен-шаблонов:**
-1. Hero Film Frame — full-height split, слоевый параллакс
-2. Chaos to Clarity — текстовые слои, фоновые орбиты
-3. What You Get — карточки с controlled stagger
-4. The Diagnostic Process — псевдо-таймлайн с параллаксом
-5. About the Expert — портретная сцена, световая глубина
-6. Proof / Trust — цифры, кейсы, сдержанный motion
-7. FAQ — лёгкие взаимодействия
-8. Final Call — кульминация, контрастный сдвиг
+## Восемь типовых сцен
+
+| # | Тип сцены | Суть |
+|---|-----------|------|
+| 1 | Hero Film Frame | Full-height split, layered planes, slow parallax |
+| 2 | Chaos to Clarity | Текстовые слои + фоновые орбиты разной скоростью |
+| 3 | What You Get | Карточки с controlled stagger |
+| 4 | Diagnostic Process | Quasi-timeline с parallax |
+| 5 | About the Expert | Portrait scene, premium light-depth |
+| 6 | Proof / Trust | Цифры, кейсы, restrained motion |
+| 7 | FAQ | Лёгкая сцена, чёткие взаимодействия |
+| 8 | Final Call | Кульминация, contrast shift |
 
 ## Связанные концепты
-- [[design-system-generator]] — должен отработать первым и поставить motion-токены в `DESIGN.md`
-- [[brand-kit-build]] — поставляет цвета и motion-параметры через `brand-kit.md`
-- [[niche-analysis]] — через `brief.md` определяет тон и ЦА, которые влияют на выбор сцен
+- [[design-system-generator]] — предоставляет DESIGN.md с motion-токенами; обязателен перед запуском
+- [[brand-architect]] — создаёт brand-kit.md, из которого берутся цветовые и motion-принципы
+- [[landing-orchestrator]] — диспатчит scene-director при cinematic-режиме в рамках этапа 05
 
 ## Источник
 - `agents/scene-director.md`

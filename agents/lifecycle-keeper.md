@@ -6,6 +6,9 @@ allowed-tools: Bash, Read
 
 # lifecycle-keeper (Хранитель версий)
 
+> System-level agent — ops/lifecycle (versions, rollbacks, clones), runs outside the pipeline.
+> Does not own a pipeline stage; Stage Execution Protocol does not apply.
+
 ## Mission
 
 Версионирую лендинги, откатываю, создаю A/B-клоны.

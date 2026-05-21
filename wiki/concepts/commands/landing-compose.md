@@ -2,59 +2,49 @@
 type: command
 name: landing-compose
 sources: ["commands/landing-compose.md"]
-updated: 2026-05-15
-triggers:
-  - "собери composed.html"
-  - "запусти compose"
-  - "этап 07b"
-  - "сборка блоков с токенами"
+updated: 2026-05-20
+triggers: ["собрать composed.html", "запустить этап 07b", "вставить токены дизайна в вайрфрейм", "склеить блоки с контентом"]
 stage: "07b"
-uses:
-  - block-composer
-  - prototype-import
-  - wireframe-rendering
-  - design-tokens-generation
-tags:
-  - compose
-  - stage-07b
-  - html
-  - design-tokens
+uses: ["block-composer", "landing-go", "landing-wireframe", "landing-prototype", "design-tokens-generation"]
+tags: ["compose", "07b", "composed-html", "design-tokens", "prototype"]
 ---
 
 # /landing-compose — сборка composed.html
 
 ## Что делает
 
-Собирает финальный HTML-файл лендинга с подставленными дизайн-токенами и текстами из прототипа. Визуальный контент (фото, иконки, инфографика) пока остаётся в виде именованных placeholder-ов — они заполняются на этапах PR-B и PR-C.
+Запускает этап **07b_COMPOSED**: берёт выбранные блоки вайрфрейма, вставляет в них дизайн-токены (цвета, шрифты, отступы) и тексты из прототипа, и рендерит финальный HTML-макет `composed.html`. Визуальные заглушки для фото и иконок остаются — они заполняются позднее на этапах 07c/07d.
 
 ## Когда вызывать / в каком этапе
 
-Вызывается вручную на **этапе 07b** после того, как:
-- пользователь выбрал варианты блоков в `wireframe.html` и сохранил `selections.yaml` в папку `07a_WIREFRAME/`;
-- в папке `05_ДИЗАЙН-СИСТЕМА/` лежит готовый `tokens.json`.
+Вызывается **после** того, как:
+- завершён импорт прототипа (`/landing-prototype`) и существует `07_ПРОТОТИП/prototype.yaml`,
+- пользователь выбрал варианты блоков в wireframe.html и положил `07a_WIREFRAME/selections.yaml`,
+- сгенерирована дизайн-система (`/landing-design`) и существует `05_ДИЗАЙН-СИСТЕМА/tokens.json`.
 
-Команда **не интегрирована в `landing-orchestrator`** — это задача PR-D. До выхода PR-D запускается вручную через `/landing-compose`.
+Рекомендуется запускать автоматически через `/landing-go` — оркестратор сам проверяет готовность всех предусловий. Ручной вызов `/landing-compose` допустим для повторного прогона или отладки.
 
 ## Что на вход / на выход
 
 **Вход:**
-- `07_ПРОТОТИП/prototype.yaml` — машинное представление прототипа с текстами блоков
-- `07a_WIREFRAME/selections.yaml` — выбор вариантов блоков, сделанный пользователем в wireframe.html
-- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — дизайн-токены (цвета, шрифты, отступы)
+- `07_ПРОТОТИП/prototype.yaml` — машинная версия прототипа с текстами блоков
+- `07a_WIREFRAME/selections.yaml` — выбор пользователя: какой вариант каждого блока использовать
+- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — дизайн-токены проекта (цвета, типографика, spacing)
 
 **Выход:**
-- `07b_COMPOSED/composed.html` — основной файл: блоки со стилями и реальными текстами, визуальные слоты — placeholder-ы
+- `07b_COMPOSED/composed.html` — десктопная сборка с инъекцией токенов и реального текста
 - `07b_COMPOSED/composed-mobile.html` — мобильная версия
-- `07b_COMPOSED/block-injection-log.md` — лог подстановки блоков
+- `07b_COMPOSED/block-injection-log.md` — лог: какой блок из какого источника и с каким контентом попал в сборку
 
 ## Связанные концепты
 
-- [[block-composer]] — агент, выполняющий фактическую сборку; команда делегирует работу ему
-- [[prototype-import]] — поставляет `prototype.yaml`, без которого команда не запустится
-- [[wireframe-rendering]] — поставляет `selections.yaml` с выбором вариантов блоков
-- [[design-tokens-generation]] — поставляет `tokens.json` с брендовыми переменными
-- [[landing-photos]] — этап PR-B, заменяет фото-placeholder-ы реальными снимками
-- [[landing-visuals]] — этап PR-C, заменяет icon/infographic-placeholder-ы сгенерированными PNG
+- [[block-composer]] — агент, который выполняет непосредственную сборку composed.html
+- [[landing-go]] — рекомендуемый способ запуска: оркестратор автоматически диспатчит этот этап
+- [[landing-wireframe]] — предшествующий этап: пользователь выбирает варианты блоков
+- [[landing-prototype]] — поставляет `prototype.yaml` с текстовым контентом
+- [[design-tokens-generation]] — скилл, создающий `tokens.json`, которые инъектируются в HTML
+- [[landing-photos]] — этап 07c: после compose заполняет фото-слоты в composed.html
+- [[landing-visuals]] — этап 07d: после compose заполняет иконки/инфографику в composed.html
 
 ## Источник
 

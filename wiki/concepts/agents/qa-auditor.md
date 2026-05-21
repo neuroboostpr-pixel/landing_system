@@ -2,49 +2,60 @@
 type: agent
 name: qa-auditor
 sources: ["agents/qa-auditor.md"]
-updated: 2026-05-15
-triggers: ["после деплоя", "проверка сайта", "/landing-deploy завершён", "QA аудит"]
-stage: "10"
-uses: ["landing-deploy", "wp-deployer", "integrations-engineer", "analytics-engineer"]
-tags: ["qa", "audit", "deploy", "checklist"]
+updated: 2026-05-20
+triggers: ["после деплоя сайта", "проверить качество сайта", "qa проверка", "аудит после публикации"]
+stage: "10_qa"
+uses: ["landing-deploy", "analytics-engineer", "integrations-engineer", "landing-orchestrator"]
+tags: ["qa", "аудит", "деплой", "проверка", "мета-теги", "https"]
 ---
 
-# qa-auditor — QA-аудитор задеплоенного лендинга
+# qa-auditor (QA-аудитор)
 
 ## Что делает
 
-Автоматически проверяет живой сайт по 7 критериям качества сразу после деплоя: от доступности и HTTPS до форм и аналитики. Формирует отчёт в виде таблицы и ждёт утверждения перед переходом к следующему этапу.
+После деплоя лендинга проверяет 7 ключевых критериев качества живого сайта и формирует отчёт `qa-report.md`. Убеждается, что сайт доступен, безопасен, правильно проиндексируем и корректно работает на мобильных.
 
 ## Когда вызывать / в каком этапе
 
-Вызывается на **этапе 10** — после того как агент [[wp-deployer]] завершил деплой (`/landing-deploy`). Запуск через `/landing-qa` или автоматически через [[landing-orchestrator]].
+Запускается на **этапе 10 (QA)** — строго после завершения `/landing-deploy` (этап 09). Агент требует, чтобы `.landing-state.yaml` имел `current_stage == 10_qa`; если это не так — останавливается и сообщает пользователю.
+
+Перед любыми действиями обязательно:
+1. Читает `.landing-state.yaml`, подтверждает этап.
+2. Запускает `render-pipeline-map.sh` — показывает Mermaid-карту pipeline.
+3. Проверяет gate через `gate-check.sh --stage 10_qa`.
+4. Создаёт TodoWrite-список оставшихся этапов.
+
+Физически заблокирован `PreToolUse` hook (`enforce_stage_gate.py`) — не пытайся обойти гейт.
 
 ## Что на вход / на выход
 
 **Вход:**
-- `00_БРИФ/brief.md` — содержит URL задеплоенного сайта
-- Живой HTML сайта (скачивается через `curl`)
+- `00_БРИФ/brief.md` — URL задеплоенного сайта
+- Живой сайт (HTTP-доступ)
 
 **Выход:**
-- `10_QA/qa-report.md` — таблица с результатами по 7 критериям (✅ / ❌)
+- `10_QA/qa-report.md` — таблица с результатами 7 проверок (✅ / ❌ по каждому пункту)
 
-**Семь проверяемых критериев:**
-1. Доступность — HTTP 200
-2. HTTPS + редирект с HTTP → HTTPS (301)
-3. Meta-теги — `<title>`, `<meta description>`, `og:title`
-4. Яндекс Метрика — счётчик `mc.yandex.ru` в HTML
-5. Google Tag Manager — контейнер `googletagmanager` в HTML
-6. Fluent Forms — shortcode `fluentform` отрендерен в HTML
-7. Viewport — `<meta name="viewport">` для мобайла
+**7 критериев проверки:**
+| # | Что проверяется | Метод |
+|---|---|---|
+| 1 | Доступность (HTTP 200) | `curl -sI <URL>` |
+| 2 | HTTPS + редирект с http | `curl -sI http://...` → 301 |
+| 3 | Meta title, description, og:title | grep в HTML |
+| 4 | Яндекс Метрика | grep `mc.yandex.ru` |
+| 5 | Google Tag Manager | grep `googletagmanager` |
+| 6 | Fluent Forms shortcode | grep `fluentform` |
+| 7 | Viewport meta (мобайл) | grep `name="viewport"` |
 
-**HARD GATE:** после формирования отчёта агент показывает его пользователю и ждёт явного подтверждения. Следующий этап не открывается до approve.
+После формирования отчёта — **HARD GATE**: показывает таблицу пользователю и ждёт утверждения. При PASS вызывает `gate-state.sh approve ... 10_qa`.
 
 ## Связанные концепты
 
-- [[wp-deployer]] — выполняет деплой, после которого запускается qa-auditor
-- [[integrations-engineer]] — настраивает Fluent Forms и Telegram webhook (проверяется в п. 6)
-- [[analytics-engineer]] — добавляет счётчик Яндекс Метрики (проверяется в п. 4)
-- [[landing-orchestrator]] — управляет порядком этапов и HARD GATE между ними
+- [[landing-deploy]] — предшественник: деплой должен быть завершён до QA
+- [[analytics-engineer]] — добавляет ЯМ счётчик, который проверяется в п. 4
+- [[integrations-engineer]] — настраивает Fluent Forms, проверяется в п. 6
+- [[landing-orchestrator]] — диспатчит qa-auditor на этапе 10
+- [[seo-optimizer]] — мета-теги, которые проверяются в п. 3
 
 ## Источник
 

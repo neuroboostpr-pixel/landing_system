@@ -2,55 +2,53 @@
 type: agent
 name: seo-optimizer
 sources: ["agents/seo-optimizer.md"]
-updated: 2026-05-15
-triggers: ["оптимизировать SEO", "добавить мета-теги", "настроить Schema.org", "создать robots.txt", "ключевые слова для лендинга"]
-stage: "08"
-uses: ["analytics-engineer", "content-writer", "niche-analyst", "wp-builder"]
-tags: ["seo", "meta-tags", "schema-org", "robots-txt", "wordpress", "stage-08"]
+updated: 2026-05-20
+triggers: []
+stage: "12"
+uses: ["analytics-engineer", "content-writer", "niche-analyst", "landing-orchestrator"]
+tags: ["seo", "meta-tags", "schema-org", "wordpress", "stage-12"]
 ---
 
 # seo-optimizer — SEO-оптимизатор лендинга
 
 ## Что делает
-
-Подключает лендинг к поисковым системам: прописывает мета-теги, Open Graph, Schema.org и robots.txt на основе готового SEO-текста и данных брифа. Делает страницу видимой и правильно отображаемой в Google и Яндексе.
+Добавляет мета-теги, Open Graph, Schema.org, robots.txt и список ключевых слов к готовому WordPress-лендингу. Превращает технически работающий сайт в сайт, понятный поисковым системам.
 
 ## Когда вызывать / в каком этапе
+Запускается на **этапе 12 (12_SEO)** после того, как отработал [[analytics-engineer]] (этап 11). Агент проверяет `current_stage == 12_seo` в `.landing-state.yaml` и не начинает работу, пока предшествующие этапы не закрыты gate-check'ом.
 
-Запускается на **этапе 08** — строго после `analytics-engineer`. Вызывается агентом `landing-orchestrator` в рамках команды `/landing-build` или `/landing-go`. Вручную не вызывается. Перед запуском обязательны: утверждённый SEO-текст (`07_КОНТЕНТ/seo-copy.md`), бриф (`00_БРИФ/approved-design-brief.md`) и существующий `functions.php` от `wp-builder`.
+Прямой вызов через [[landing-orchestrator]] или вручную в рамках шага `/landing-build`.
 
 ## Что на вход / на выход
 
 **Вход:**
-- `07_КОНТЕНТ/seo-copy.md` — title, description, h1 варианты от `content-writer`
-- `00_БРИФ/approved-design-brief.md` — ниша, гео, CTA, ключевые слова
-- `01a_АНАЛИЗ_НИШИ/competitors.yaml` — ключевые сообщения конкурентов для расширения семантики
-- `08_КОД/wp-theme/functions.php` — WordPress-файл с маркером `// [SEO_META]`
+- `07_КОНТЕНТ/seo-copy.md` — SEO-варианты заголовков и description'ов (создаёт [[content-writer]])
+- `08_КОД/wp-theme/functions.php` — уже существующий файл темы с маркером `// [SEO_META]`
+- `00_БРИФ/brief.md` — ниша, гео, целевая аудитория, ключевые слова
+- `01a_АНАЛИЗ_НИШИ/competitors.yaml` — поле `key_messages` как источник семантики (создаёт [[niche-analyst]])
 
 **Выход:**
-- `08_КОД/wp-theme/functions.php` — дополнен функциями `lp_seo_meta()` и `lp_schema_org()`
-- `12_SEO/meta-tags.yaml` — title / description / og-поля
+- `08_КОД/wp-theme/functions.php` — дополнен PHP-функциями `lp_seo_meta()` и `lp_schema_org()`
+- `12_SEO/meta-tags.yaml` — title, description, og-теги по правилам (50–60 / 140–160 символов)
 - `12_SEO/structured-data.json` — Schema.org объект (LocalBusiness / Course / Organization)
-- `12_SEO/robots.txt` — запрет служебных страниц WP, Allow: /
+- `12_SEO/robots.txt` — закрывает служебные страницы WP, открывает корень
 - `12_SEO/keywords.md` — список ключевых слов из брифа
 
-**HARD GATE:** после генерации агент показывает `meta-tags.yaml` и `structured-data.json` и ждёт явного утверждения пользователем перед завершением этапа.
+После генерации — **HARD GATE**: показывает `meta-tags.yaml` + `structured-data.json` и ждёт явного утверждения пользователя.
 
-## SEO-правила агента
-
-- Title: 50–60 символов, ключевое слово стоит первым
-- Description: 140–160 символов, содержит призыв к действию
-- h1 — один на странице, совпадает с тематикой title
-- Schema.org тип выбирается по нише: `LocalBusiness` (услуги), `Course` (обучение), `Organization` (бренд)
+## Правила SEO внутри агента
+- Title: 50–60 символов, ключевое слово первым
+- Description: 140–160 символов, призыв к действию
+- Один `h1` на странице, тематически совпадающий с title
+- Канонический URL и Open Graph добавляются всегда
+- Тип Schema.org выбирается по нише: `LocalBusiness` (услуги), `Course` (обучение), `Organization` (бренд)
 
 ## Связанные концепты
-
-- [[analytics-engineer]] — должен завершиться перед запуском seo-optimizer (добавляет Яндекс.Метрику)
-- [[content-writer]] — поставляет `seo-copy.md` с вариантами SEO-текста
-- [[niche-analyst]] — поставляет `competitors.yaml` с ключевыми сообщениями ниши
-- [[wp-builder]] — создаёт `functions.php`, в который агент вписывает SEO-функции
-- [[landing-orchestrator]] — вызывает агента в нужный момент этапа 08
+- [[analytics-engineer]] — должен отработать перед seo-optimizer (этап 11)
+- [[content-writer]] — создаёт `seo-copy.md`, который агент использует как основу мета-текстов
+- [[niche-analyst]] — создаёт `competitors.yaml` с семантикой конкурентов
+- [[landing-orchestrator]] — диспатчит агента в рамках общего pipeline
+- [[wp-builder]] — создаёт `functions.php`, куда агент дописывает SEO-функции
 
 ## Источник
-
 - `agents/seo-optimizer.md`

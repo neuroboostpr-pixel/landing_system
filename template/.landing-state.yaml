@@ -16,11 +16,13 @@ multisite: false
 # Each entry: {slug, host, blog_id, created}. Added by landing-segment.sh.
 audience_segments: []
 stages:
-  # Upstream stages (n/a in prototype-first flow)
-  "00_brief":             {status: n/a, timestamp: ""}
-  "01_context":           {status: n/a, timestamp: ""}
-  "01a_niche_analysis":   {status: n/a, timestamp: ""}
-  "02_assets":            {status: n/a, timestamp: ""}
+  # Upstream stages — default "locked" until /landing-go or /landing-start
+  # explicitly sets "n/a" for prototype-first flow. Previously defaulted to
+  # n/a, which silently bypassed 14 hard-checks of niche-analysis (audit gap).
+  "00_brief":             {status: locked, timestamp: ""}
+  "01_context":           {status: locked, timestamp: ""}
+  "01a_niche_analysis":   {status: locked, timestamp: ""}
+  "02_assets":            {status: locked, timestamp: ""}
 
   # User-interactive design stages
   "03_references":        {status: locked, timestamp: ""}

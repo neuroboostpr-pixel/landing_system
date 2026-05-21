@@ -11,11 +11,15 @@ STATE="$REPO/template/.landing-state.yaml"
     done
 }
 
-@test "state.yaml marks upstream stages 00/01/01a/02 as n/a (prototype-first)" {
-    grep -E '"00_brief":\s*\{status:\s*n/a' "$STATE"
-    grep -E '"01_context":\s*\{status:\s*n/a' "$STATE"
-    grep -E '"01a_niche_analysis":\s*\{status:\s*n/a' "$STATE"
-    grep -E '"02_assets":\s*\{status:\s*n/a' "$STATE"
+@test "upstream stages (00/01/01a/02) default to 'locked', not 'n/a'" {
+    # Phase 3 (audit M5): upstream stages default to "locked" so that
+    # /landing-go or /landing-start must explicitly flip them to "n/a"
+    # for prototype-first flow. Previous default of "n/a" silently
+    # bypassed 14 hard-checks of niche-analysis (audit gap).
+    grep -E '"00_brief":\s*\{status:\s*locked' "$STATE"
+    grep -E '"01_context":\s*\{status:\s*locked' "$STATE"
+    grep -E '"01a_niche_analysis":\s*\{status:\s*locked' "$STATE"
+    grep -E '"02_assets":\s*\{status:\s*locked' "$STATE"
 }
 
 @test "07a_prototype is the new entry stage with in_progress status" {

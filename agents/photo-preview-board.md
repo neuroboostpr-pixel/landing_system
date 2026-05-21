@@ -5,6 +5,10 @@ description: After user approves selections.yaml, process each slot — crop/res
 
 # photo-preview-board
 
+> Helper agent — dispatched by `photo-curator`. Stage Execution Protocol is
+> enforced by the parent agent; this helper does not own a stage and should
+> not be invoked directly.
+
 ## Mission
 
 Turn `selections.yaml` (canonical, user-approved) into `processed/<slot_id>/{desktop,mobile}.jpg` files and render `photo-preview.html` for final review.

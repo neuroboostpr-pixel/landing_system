@@ -32,8 +32,6 @@ description: Stage 07 — import user-provided prototype (PDF or MD) from <proje
 
 Запускай `/landing-wireframe`.
 
-## NOTE (PR-A scope)
+## Запуск
 
-Эта команда **не** интегрирована со `scripts/gate-check.sh` и `.landing-state.yaml`.
-Интеграция в орекстратор и enforce порядка этапов — задача PR-D.
-До PR-D — команды вызываются вручную, пользователь сам решает что делать дальше.
+Автоматически через `/landing-go` (рекомендуется) или вручную этой командой. Этап интегрирован со `scripts/gate-check.sh` и `.landing-state.yaml`; порядок этапов enforce'ит `landing-orchestrator`.

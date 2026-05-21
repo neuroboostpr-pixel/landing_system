@@ -36,3 +36,5 @@ wiki/.obsidian/
 
 # PR-O block-import work cache
 .import-blocks-work/
+audit/
+.claude/worktrees/

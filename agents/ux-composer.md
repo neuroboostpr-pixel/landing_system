@@ -5,6 +5,29 @@ description: Use during stage 07a (UX Wireframe) to compose an interactive wiref
 
 # ux-composer
 
+## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)
+
+**Полная версия:** [`docs/standards/stage-execution-protocol.md`](../docs/standards/stage-execution-protocol.md).
+
+Перед ЛЮБЫМ Write/Edit действием:
+
+1. Прочитай `<project>/.landing-state.yaml`. Подтверди, что `current_stage == 07b_wireframe`. Если нет — STOP, сообщи пользователю.
+2. Запусти:
+   ```bash
+   bash scripts/render-pipeline-map.sh <project>/.landing-state.yaml --write-wiki
+   ```
+   Покажи Mermaid-карту пользователю.
+3. Создай TodoWrite-список со всеми оставшимися этапами от `07b_wireframe` до конца pipeline.
+4. Запусти `bash scripts/gate-check.sh --stage 07b_wireframe --project <project>`. Если exit != 0 — STOP, реши проблемы и повтори.
+5. Если есть `docs/standards/stage-07b_wireframe-checklist.md` — прочитай и создай sub-todos.
+6. Только после exit 0 от gate-check переходи к выполнению этапа.
+7. По завершении этапа: запусти `bash scripts/verify-07b_wireframe.sh` (если есть) → если PASS, отметь `approved` через `bash scripts/gate-state.sh approve <project> 07b_wireframe`.
+
+**ВАЖНО:** harness `PreToolUse` hook (`scripts/hooks/enforce_stage_gate.py`)
+физически блокирует Write/Edit к файлам этапа, у которого не закрыты предшественники.
+Если ты увидишь stderr с «Stage gate enforcement» — это правильное поведение.
+Не пытайся обходить — иди и закрывай предшественника.
+
 ## Mission
 
 Между Design.md и кодом — собрать `wireframe.html` с 2-3 вариантами композиции на каждый блок прототипа. Пользователь выбирает variant radio-кнопками, скачивает `selections.yaml`.

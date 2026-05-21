@@ -134,6 +134,68 @@ bash scripts/migrate-add-wiki.sh ~/Lendings/<slug>
 
 Подробнее: [spec](superpowers/specs/2026-05-15-wiki-graph-markup-design.md), [plan](superpowers/plans/2026-05-15-wiki-graph-pr-f1-plan.md).
 
+## Enforcement: PreToolUse hook
+
+С 2026-05-20 в `.claude/settings.json` подключён хук
+`scripts/hooks/enforce_stage_gate.py`. Он **физически блокирует** Write/Edit/MultiEdit/Bash
+операции к файлам стадии, у которой не закрыты предыдущие этапы (по `.landing-state.yaml`).
+
+### Когда сработает
+
+Хук получает каждый Write/Edit/MultiEdit/Bash и применяет такую логику:
+
+1. Путь в `always_allowed` (state.yaml, wiki/, CLAUDE.md, .env, deploy.sh) → **пропускает**
+2. Путь не в `_stage_paths.yaml` mapping (вне pipeline) → **пропускает**
+3. Путь в pipeline, но предшественники не approved/n/a → **БЛОКИРУЕТ**
+
+### Bash tool coverage (added 2026-05-20)
+
+Хук теперь также перехватывает `Bash` — детектирует:
+- `>`, `>>`, `| tee` redirects
+- `cp`, `mv`, `rm`, `chmod`, `chown`, `touch`, `mkdir`, `install` с целевым путём в pipeline
+
+Сложные конструкции (`$(...)`, backticks, heredocs `<<`, переменные `${...}`,
+`eval`, `exec`) — **fail-open** (пропускает с предупреждением в stderr).
+Это компромисс: не блокируем honest agents с нетривиальными командами,
+но ловим простые обходы вида `cat > path` / `echo >> path`.
+
+Полные read-only команды (cat, ls, grep, find, git status, python ...) —
+проходят немедленно без анализа (нет write-паттернов).
+
+**Чтобы matcher активировался** для Bash, в `.claude/settings.json`
+поле `matcher` должно содержать `Bash`:
+
+```json
+"matcher": "Write|Edit|MultiEdit|Bash"
+```
+
+Сообщение об ошибке выглядит так:
+
+```
+❌ Stage gate enforcement: Cannot Write/Edit to '05_design' —
+predecessor '04_brand' has status 'locked'. Run gate-check.sh and
+approve previous stages before editing this one.
+```
+
+### Когда хук падает (fail-open)
+
+Если хук не может прочитать state-файл или маппинг (corrupt YAML, отсутствует),
+он печатает warning в stderr и **разрешает** правку. Это сделано чтобы пользователь
+мог починить state-файл — иначе вся сессия редактирования заблокирована навечно.
+Реальная валидация — `gate-check.sh`, который надо запускать явно.
+
+### Отладка
+
+Если хук кажется ошибочным:
+1. Статусы стадий: `bash scripts/gate-state.sh show <project>`
+2. Path→stage маппинг: `scripts/hooks/_stage_paths.yaml`
+3. Проверить state YAML на валидность: `yq . <project>/.landing-state.yaml`
+4. Сам код хука: `scripts/hooks/enforce_stage_gate.py`
+
+### Временно отключить
+
+Закомментировать блок `PreToolUse` в `.claude/settings.json`. **НЕ убирать
+на постоянку** — это главный enforcement-механизм. См. [audit/REPORT.md](../audit/REPORT.md).
 ## Когда нужен multisite-режим
 
 Single-site (по умолчанию):
