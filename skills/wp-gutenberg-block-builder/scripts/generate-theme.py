@@ -193,10 +193,20 @@ def _write_functions_php(theme_dir: Path, stack: dict) -> None:
     families = fonts.get("families", [])
 
     base_url = "https://fonts.bunny.net/css" if cdn == "bunny" else "https://fonts.googleapis.com/css2"
-    font_query = "|".join(
-        f"{f.get('name', f.get('family', 'inter')).lower().replace(' ', '-')}:{','.join(str(w) for w in f.get('weights', [400]))}"
-        for f in families
-    )
+
+    # families может быть в двух форматах:
+    #   ["Inter", "Roboto"]                                    — список строк (старый/упрощённый)
+    #   [{name: "Inter", weights: [400, 700]}, ...]            — список dict'ов (новый)
+    def _font_spec(f):
+        if isinstance(f, str):
+            name = f
+            weights = [400, 700]
+        else:
+            name = f.get('name', f.get('family', 'inter'))
+            weights = f.get('weights', [400])
+        return f"{name.lower().replace(' ', '-')}:{','.join(str(w) for w in weights)}"
+
+    font_query = "|".join(_font_spec(f) for f in families)
     font_url = f"{base_url}?family={font_query}" if font_query else f"{base_url}?family=inter:400"
 
     js_libs = stack.get("js_libraries", [])
