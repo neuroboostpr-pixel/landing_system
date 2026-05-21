@@ -338,3 +338,43 @@ Cascade: network запись → site override по machine-id
 
 См. [spec](docs/superpowers/specs/2026-05-19-s2a3-network-admin-unification-design.md)
 и [plan](docs/superpowers/plans/2026-05-19-s2a3-network-admin-unification-plan.md).
+
+### S2-A.4 — Lead Status Workflow MVP (B19, 2026-05-20)
+
+Маркетолог управляет статусами заявок через wp-admin:
+
+- 4-я ось cascade S2-A.3: CPT `lp_lead_status` (slug/label/color/order) с network→site override
+- Network admin → Статусы заявок: редактирование словаря с селектором сегмента
+  (slug `landing-config-network-lead-statuses`, cap `manage_network_options`)
+- На subsite: `Лендинг → Статусы заявок` — read-only список с deep-link на network editor
+  (slug `landing-config-lead-statuses`, cap `manage_options`)
+- Карточка заявки: клик по имени в списке → детальная страница с timeline истории
+  и модальным окном смены статуса (select + textarea для комментария)
+  (slug `landing-config-lead-detail?id=N`, скрытая)
+- Список заявок (`landing-config-leads`) расширен: subsubsub-табы по статусу со
+  счётчиками, колонка «Статус» с цветным бейджем (warning-style если slug
+  не в vocab), checkbox-колонка, bulk-action «Изменить статус» с modal-like
+  страницей-формой
+- Per-blog таблица `wp_<bid>_landing_lead_status_log` (lead_id/user_id/from/to/
+  comment/created_at) — полная история изменений
+- Транзакции на смену статуса: log_status_change + UPDATE landing_leads атомарны;
+  bulk-action использует per-lead транзакции — ошибка одной не блокирует остальные
+- Whitelist валидация to_status в двух местах: handler и `log_status_change`
+  (defense-in-depth)
+- Lessons из transaction safety: `wp_die` ВНЕ try-catch через флаг (избегаем
+  double-ROLLBACK при WP_Die_Exception); `$wpdb->update` проверяется `=== false`
+  → throw RuntimeException → catch ROLLBACK
+- Seed 5 default-статусов (pending/in_progress/won/lost/spam) в `maybe_run()`.
+  Идемпотентно — если хоть один статус есть, не трогает. На уже-мигрированных
+  сайтах с выставленным marker — ручной вызов:
+  ```bash
+  wp eval 'LandingConfig\\Migrate\\seed_default_lead_statuses(1);'
+  ```
+- Live smoke расширен T7/T8 (CPT count + lead-detail URL)
+
+CRM sync (двусторонняя — webhook из CRM в админку и push из админки в CRM)
+явно вне scope MVP. Требует расширения AdapterInterface::update_status() и
+тестов с реальными credentials всех 5 адаптеров (B20).
+
+См. [spec](docs/superpowers/specs/2026-05-20-b19-lead-status-workflow-design.md)
+и [plan](docs/superpowers/plans/2026-05-20-b19-lead-status-workflow-plan.md).
