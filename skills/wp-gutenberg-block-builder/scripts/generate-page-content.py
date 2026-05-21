@@ -26,7 +26,12 @@ def _attr_value(c: Control, override: dict | None = None) -> object:
         return override[c.name]
     d = c.default
     if c.type == "image" and d:
-        # Placeholder; deploy substitutes real attachment ID after wp media import
+        # Lazy Blocks image-control ожидает url-encoded JSON string
+        # (как repeater), не raw dict. См. wp-content/plugins/lazy-blocks/
+        # controls/image/index.php::filter_control_value() — там json_decode(rawurldecode(...)).
+        # Deploy шаг должен заменить __IMAGE_ATTACHMENT_ID__... на real attachment ID,
+        # затем re-encode value через urlencode(json.dumps(...)).
+        # Эмитим placeholder с raw dict; deploy-helper потом перекодирует.
         return {"id": f"__IMAGE_ATTACHMENT_ID__{d}__", "url": ""}
     if c.type == "toggle":
         if isinstance(d, bool):
