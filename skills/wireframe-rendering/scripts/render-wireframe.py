@@ -413,7 +413,7 @@ def main() -> None:
         btype = block["type"]
         quiz_role = block.get("quiz_role", "")
         matcher_cmd = [
-            "python3", str(matcher_script),
+            sys.executable, str(matcher_script),
             "--library", args.library,
             "--type", btype,
             "--niche", niche,
@@ -476,7 +476,7 @@ def main() -> None:
                     try:
                         subprocess.run(
                             [
-                                "python3", str(inject_content_script),
+                                sys.executable, str(inject_content_script),
                                 "--template", str(src_html),
                                 "--prototype", str(proto_path),
                                 "--position", str(position),

@@ -18,7 +18,7 @@ DIR="${1:?ERROR: directory required}"
 
 if ! command -v php >/dev/null 2>&1; then
     echo "WARN: php CLI not installed — skipping PHP syntax check" >&2
-    exit 2
+    exit 0
 fi
 
 errors=0

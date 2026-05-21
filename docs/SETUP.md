@@ -196,3 +196,103 @@ approve previous stages before editing this one.
 
 Закомментировать блок `PreToolUse` в `.claude/settings.json`. **НЕ убирать
 на постоянку** — это главный enforcement-механизм. См. [audit/REPORT.md](../audit/REPORT.md).
+## Когда нужен multisite-режим
+
+Single-site (по умолчанию):
+- У клиента **один лендинг** под одну аудиторию.
+- Домен — один без поддоменов.
+
+Multisite (через `/landing-segment`):
+- У клиента **несколько лендингов** под разные сегменты ЦА.
+- Используются поддомены одного клиентского домена.
+- Один wp-admin управляет всеми сегментами.
+
+### Миграция single → multisite
+
+Автоматическая. При первом запуске `/landing-segment <slug>` для проекта,
+у которого `state.multisite=false`, запускается
+`skills/wp-multisite/scripts/migrate-to-multisite.sh`. Он:
+1. Создаёт wildcard subdomain в DNS через Beget API.
+2. Активирует `WP_ALLOW_MULTISITE` в `wp-config.php`.
+3. Запускает `wp core multisite-convert --subdomains`.
+4. Переписывает `.htaccess` под multisite (subdomain mode).
+5. Сетевая активация Lazy Blocks + RankMath SEO.
+6. Флипает `state.multisite=true`.
+
+После миграции существующий лендинг становится `blog_id=1` (главным сайтом
+сети). Контент не теряется.
+
+### Pre-requisites
+
+Помимо стандартных переменных `.env`, нужно:
+- `BEGET_SITE_ID` — числовой id «сайт-сущности» на Бегете (из `site/getList`).
+- `BEGET_DOMAIN_ID` — числовой id корневого домена (из `domain/getList`).
+- `ROOT_DOMAIN` — fqdn корневого клиентского домена.
+
+### SSL после миграции
+
+**Manual one-click через панель Beget** (Домены → SSL → бесплатный wildcard
+Let's Encrypt). Покрывает все existing и future subdomains.
+Beget сам обновляет каждые 60 дней. Скрейп-автоматизация — следующая фаза.
+
+См. [docs/beget-cookbook.md §SSL](beget-cookbook.md).
+
+## Установка mu-plugin landing-config
+
+После создания multisite-проекта (через `/landing-segment`) — установить admin-плагин:
+
+```
+/landing-admin-install
+```
+
+Плагин копируется в `<BEGET_PATH>/wp-content/mu-plugins/landing-config/` и
+автоматически активируется (mu-plugins always-active). Создаёт таблицы
+`wp_<bid>_landing_leads` + `wp_<bid>_landing_lead_log` в каждом subsite.
+
+В wp-admin появляется меню «Лендинг» с подстраницами:
+- Заявки (список + CSV export)
+- CTA-кнопки (5 пресетов)
+- Снипеты (любые HTML/JS-вставки в head/body/footer; show inherited from network)
+- Интеграции (6 адаптеров + Test connection)
+
+Network Admin → «Лендинг (сеть)» с подстраницами:
+- Заявки (все сегменты) — агрегатор по всем subsite
+- Снипеты — глобальные snippets применяются ко ВСЕМ subsites (можно перекрыть в site UI через одинаковый `name`)
+
+### Snippets manager (S2-A.2)
+
+Два уровня хранения:
+- **Network** (Super Admin → Лендинг (сеть) → Снипеты): применяется ко всем subsites
+- **Site** (Subsite Admin → Лендинг → Снипеты): только этот subsite
+
+**Override через `name`:** если site snippet имеет тот же машина-id (`name` field) что и network snippet — site **перекрывает** network (network скипается на этом subsite). Snippet без `name` — всегда append-only, не перекрывает.
+
+**Positions:** `head`, `body_open` (начало `<body>`), `body_close` (перед `</body>` / footer).
+
+**Page-scope (site only):** `global` (все страницы subsite) или `local` (только выбранные Page/Post).
+
+**Allowed HTML tags:** `<script>`, `<meta>`, `<link>`, `<style>`, `<noscript>`, `<iframe>`, `<div>`, `<span>`, `<img>`, `<a>`, `<p>`, `<br>` + типичные атрибуты (data-*, src, async, integrity, и т.д.).
+
+**Security:** capability `manage_options` (site) / `manage_network_options` (network) — единственная защита. `<script>` разрешён → admin-only по дизайну. Не давайте manage_options кому попало.
+
+### Pre-requisites
+
+`.env` должен содержать BEGET_USER/HOST/SSH_KEY/PATH (стандартные).
+Дополнительных переменных НЕ требуется — все настройки рантайм через wp-admin.
+
+### Безопасность
+
+API-ключи (Telegram bot token, AmoCRM access token, etc.) шифруются AES-256-GCM
+с ключом из `wp_salt('secure_auth')`. В админке отображаются masked (bullets + последние 4 символа).
+
+### Email-fallback
+
+`wp_mail` использует PHP `mail()` если SMTP не настроен. На Beget shared
+письма часто попадают в спам. Рекомендация: настроить SMTP через любой
+plugin типа WP Mail SMTP, либо использовать email-fallback только как back-up.
+
+### Retry политика
+
+Если CRM-доставка падает (HTTP != 2xx), задача планируется через
+`wp_schedule_single_event` с backoff: 60 сек → 5 мин → 30 мин (max 3 попытки).
+Каждая попытка логируется в `wp_<bid>_landing_lead_log`.

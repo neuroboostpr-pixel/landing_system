@@ -140,10 +140,110 @@
 
 ---
 
+### B17. CTA Library + Lazy Blocks integration (S2-A.1)
+- **Проблема:** текущая модель CTA в `landing-config` (S2-A) — только 5 фиксированных
+  пресетов в `wp_options::landing_cta_presets` (primary/whatsapp/phone/form_modal/learn_more).
+  Каждый пресет = только канал связи (тип+URL+label), без визуала и без превью.
+  Маркетолог сохраняет настройки и **не видит** где эти кнопки используются,
+  как выглядят, и сколько их на сайте. На multisite (N сегментов × N кнопок на странице)
+  навигация невозможна.
+- **Что нужно (по словам пользователя):**
+  1. **Библиотека произвольных CTA-кнопок** (CPT `lp_cta` или аналог) —
+     любое кол-во кнопок с лейблами/типами/визуалами, не привязано к 5 жёстким именам.
+  2. **Связывание с Lazy Blocks** — каждый блок, использующий CTA, имеет dropdown
+     «выбрать кнопку из библиотеки». Когда библиотека меняется — кнопка обновляется
+     везде.
+  3. **Usage map в админке** — для каждого сайта (и сводно по всей multisite-сети):
+     список «кнопка X используется в N блоках на страницах Y/Z» + превью кнопки.
+- **Размер:** большой PR (новый CPT, миграция со старых 5 пресетов, Lazy Blocks meta,
+  REST endpoint для usage-scan, новая admin-CTA с list table + preview, network
+  aggregate). Требует отдельный spec + plan + worktree.
+- **Зависимости:** S2-A (готов), требует rescan блоков на каждом сайте при изменении.
+- **Обратная совместимость:** `landing_get_cta('primary'/...)` должен продолжать работать
+  — миграция превращает 5 пресетов в 5 первых записей CPT.
+
+### B18. Snippet-input для счётчиков/пикселей/верификаций (S2-A.2)
+- **Проблема:** текущие поля Head & SEO ожидают **только ID** (например `93902743`),
+  а пользователи Яндекс.Метрики / GA4 / FB Pixel / GSC копируют с сервиса **готовый
+  HTML-snippet** (`<script>...</script>`, `<meta name="...">`). Сейчас если вставить
+  весь snippet — он сохранится как «ID», и сгенерированная разметка в `wp_head` будет
+  битая. Маркетолог не знает «надо вырезать только цифры».
+- **Что нужно:**
+  1. **Auto-detect:** поле принимает либо ID, либо snippet. Если snippet — извлечь ID
+     регулярками (`ym\((\d+),`, `G-[A-Z0-9]+`, `fbq\('init','(\d+)'\)`, `content="([a-zA-Z0-9_-]+)"`
+     для verification и т.д.). Если ID — сохранить как было.
+  2. **Превью «как будет в `<head>`»** под полем — показать сгенерированный snippet
+     (тот же что `landing_render_head_extras` выдаёт), чтобы пользователь увидел
+     что код корректный.
+  3. **Альтернатива:** разрешить «raw snippet override» режим — если пользователь
+     хочет вставить именно свой код (например custom Tag Manager wrapper), он
+     выбирает «raw» и его snippet идёт в `<head>` как есть (через `wp_kses_post`
+     или с расширенным allow-list — `raw_html_head` уже это умеет).
+  4. **Help-текст** «Можете вставить как ID, так и весь скрипт — мы распарсим».
+- **Применимо ко всем полям Head & SEO** (GA4, Y.Metrika, FB Pixel, TikTok Pixel,
+  GSC, Y.Webmaster). Скорее всего такое же поведение нужно и для **integrations**
+  (Telegram webhook URL, AmoCRM token и т.д. — пользователи копируют URL целиком
+  с querystring или с лишними пробелами).
+- **Размер:** средний — добавить parser-функции в `sanitize_callback` для каждого
+  поля + JS-превью в admin-head-seo.php. Можно сделать в той же ветке что B17 или
+  отдельно.
+- **Зависимости:** S2-A (готов).
+
+### B19. Lead status workflow (S2-A.3)
+
+- **Проблема:** в таблице `wp_<bid>_landing_leads` есть колонка `processed_status`
+  (default `'pending'`), но в админке «Заявки» **нет UI для смены статуса**.
+  Маркетолог видит список — но не может пометить заявку как «обработана» / «в работе» /
+  «закрыта». На multisite с десятками заявок в неделю это критично.
+- **Что нужно:**
+  1. **Vocabulary статусов** — минимум: `pending` (новая), `in_progress` (в работе),
+     `won` (закрыта успешно), `lost` (отказ), `spam`. Обсудить custom-статусы.
+  2. **UI:** dropdown в строке таблицы для смены статуса inline (AJAX),
+     или bulk-actions «отметить выбранные как X».
+  3. **Фильтр по статусу** сверху списка (вкладки `Все | Новые | В работе | Закрыто | Спам`,
+     как в WP Posts).
+  4. **Двусторонняя синхронизация с CRM:** когда CRM меняет статус заявки (через webhook),
+     обновлять `processed_status` в БД. Когда маркетолог меняет в админке — пушить в CRM.
+     (Каждый адаптер должен расширить interface методом `update_status($lead_id, $status)`,
+     если CRM это поддерживает.)
+  5. **История изменений:** writes в `wp_<bid>_landing_lead_log` с adapter='admin' +
+     status='manual_update' + error_text=old→new.
+- **Размер:** средний. Если без CRM-sync — мелкий (admin UI + AJAX endpoint + миграция
+  допустимых значений). CRM-sync — отдельная фаза, требует расширения AdapterInterface.
+- **Зависимости:** S2-A (готов).
+
+### B20. Live testing для adapters (Telegram/WhatsApp/AmoCRM/Bitrix24/HubSpot)
+
+- **Не тестировались** в Live E2E smoke S2-A (на ailexi.ru): только Email-adapter
+  имеет проверенную реализацию через `wp_mail`. Остальные 5 адаптеров (Telegram Bot API,
+  WhatsApp Cloud API, AmoCRM v4, Bitrix24 webhook, HubSpot v3) написаны по docs API,
+  но **не запускались с реальными credentials**.
+- **Что нужно для каждого:**
+  1. Получить test-credentials (test bot / sandbox account).
+  2. Заполнить в админке «Интеграции», нажать «Test connection» — убедиться что 200 OK.
+  3. POST в `/wp-json/landing/v1/lead` — убедиться что lead доставлен в CRM (контакт/сделка
+     создан, в Telegram пришло сообщение, и т.д.).
+  4. Проверить `wp_<bid>_landing_lead_log` — должна быть запись `status=success`.
+  5. Принудительно сломать (неверный token) — убедиться что retry планируется (60s/5min/30min)
+     и логируется как `failed`.
+- **Особенно проверить:**
+  - **AmoCRM:** payload v4/leads/complex (lead+contact в одном вызове) — может потребовать
+    custom_fields_values корректировку под реальный аккаунт.
+  - **Bitrix24:** webhook URL — реальный формат `https://*.bitrix24.ru/rest/N/TOKEN/`.
+  - **HubSpot:** lifecyclestage = 'lead' может конфликтовать с pipeline-config аккаунта.
+  - **WhatsApp Cloud:** требует verified business account + approved template для
+    proactive messages. Если только tests — может работать только в test-mode.
+  - **Encryption round-trip:** убедиться что AES-256-GCM шифрование при save и decrypt
+    при send работают корректно (на ailexi.ru не проверялось — все adapter fields пусты).
+- **Размер:** N×30мин на adapter с обновлением spec'а под реальные API quirks.
+- **Зависимости:** S2-A (готов), test-credentials от пользователя.
+
+---
+
 ## Прогресс
 
 - ✅ MVP (stage-gates + onboarding) — реализован
 - ⏳ B1–B4 — рекомендую брать в первую очередь
-- 🔮 B5–B16 — по мере роста системы
+- 🔮 B5–B20 — по мере роста системы
 
 Если вопросы по конкретной задаче — спроси через `/brainstorming <id>` (например `/brainstorming B6`).
