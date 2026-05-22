@@ -28,7 +28,9 @@ if [ "$BLOCK_REFS" -lt 1 ]; then
 fi
 
 # 3. mu-plugin cookie-banner source существует в landing-system
-SYSTEM_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
+# Find the landing-system root via git (handles worktrees correctly)
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SYSTEM_ROOT="$(cd "$SCRIPT_DIR" && git rev-parse --show-toplevel)"
 MU_PLUGIN_SRC="$SYSTEM_ROOT/skills/wp-landing-config/mu-plugin/landing-config/includes/cookie-banner/cpt.php"
 [ -f "$MU_PLUGIN_SRC" ] || MISSING+=("mu-plugin cookie-banner source missing: $MU_PLUGIN_SRC")
 
