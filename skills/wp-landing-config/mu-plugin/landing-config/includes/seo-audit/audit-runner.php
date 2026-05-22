@@ -25,8 +25,11 @@ function build_python_command(array $opts, string $python_bin, string $script_pa
 /** Detect first available python binary. */
 function detect_python_bin(): ?string {
     foreach (PYTHON_BIN_CANDIDATES as $bin) {
-        $out = @shell_exec($bin . ' --version 2>&1');
-        if ($out && stripos($out, 'python') !== false) {
+        // Match real `python --version` output: "Python 3.x.y" at start of line.
+        // shell_exec captures stderr's "not found" too, so a name-only match
+        // (e.g. stripos for 'python') would false-positive on the error string itself.
+        $out = (string) @shell_exec(escapeshellcmd($bin) . ' --version 2>&1');
+        if (preg_match('/^Python\s+\d+\.\d+/m', $out)) {
             return $bin;
         }
     }
