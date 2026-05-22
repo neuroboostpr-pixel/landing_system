@@ -37,9 +37,7 @@ if (!defined('ABSPATH')) { exit; }
                 </button>
             <?php endif; ?>
             <?php if (!empty($settings['btn_reject_text'])): ?>
-                <button type="button" class="lp-cb__btn lp-cb__btn--ghost" data-action="reject">
-                    <?php echo esc_html($settings['btn_reject_text']); ?>
-                </button>
+                <button type="button" class="lp-cb__btn lp-cb__btn--ghost" data-action="reject"><?php echo esc_html($settings['btn_reject_text']); ?></button>
             <?php endif; ?>
             <button type="button" class="lp-cb__btn lp-cb__btn--primary" data-action="accept-all">
                 <?php echo esc_html($settings['btn_accept_all_text']); ?>

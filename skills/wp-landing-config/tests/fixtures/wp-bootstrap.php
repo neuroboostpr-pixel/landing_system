@@ -399,6 +399,9 @@ if (!function_exists('wp_kses')) {
     }
 }
 
+if (!function_exists('esc_attr')) {
+    function esc_attr($v) { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
+}
 if (!function_exists('esc_textarea')) {
     function esc_textarea($v) { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 }
