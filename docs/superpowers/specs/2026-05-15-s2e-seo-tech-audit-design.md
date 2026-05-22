@@ -310,3 +310,82 @@ deploy success → wait 30s → /landing-audit <slug>
 - Парсить ли pr-cy.ru параллельно как «второе мнение» (без зависимости от него)? **Предложение:** нет, как обсуждено — лишняя fragile зависимость.
 
 Решения принимаются на этапе писания плана.
+
+---
+
+## 13. Revision (2026-05-22) — Multisite + Фазы
+
+Дополнение к исходному spec'у. Не меняет п.1-12, добавляет multisite batch-mode и явно фиксирует поэтапную реализацию.
+
+### 13.1 Multisite batch-mode
+
+После [S2-CD](2026-05-18-s2cd-multisite-cloning-design.md) проект может иметь N поддоменов сегментов
+(например `ailexi.ru`, `russian.ailexi.ru`, `dubai-avto-liza.ailexi.ru`). Audit должен уметь:
+
+**CLI:**
+```bash
+/landing-audit <project-slug>                 # все поддомены проекта (default в multisite-mode)
+/landing-audit <project-slug> --site <host>   # один конкретный поддомен
+/landing-audit <url>                          # любой URL (ad-hoc, как было)
+/landing-audit <project-slug> --batch         # явный батч-режим, синоним default'а
+```
+
+**Discovery поддоменов:**
+- `.landing-state.yaml::audience_segments[]` (от S2-CD) — список `{slug, host}` сегментов
+- Главный домен — из `.landing-state.yaml::project::primary_domain`
+- Резерв: `wp site list --field=url` через SSH+wp-cli
+
+**Output структура для multisite:**
+```
+11_QA/
+  audit-report.md                  # сводный отчёт (главный + все сегменты, таблица сравнения)
+  audit-report.json                # { sites: [{host, score, hard_gates, soft_gates, checks: {...}}] }
+  audit-report.html                # single-file HTML
+  per-site/
+    ailexi.ru.json
+    ailexi.ru.md
+    russian.ailexi.ru.json
+    russian.ailexi.ru.md
+    dubai-avto-liza.ailexi.ru.json
+    dubai-avto-liza.ailexi.ru.md
+  history/
+    <timestamp>/                   # каждый запуск — отдельный snapshot
+      audit-report.json
+      per-site/...
+```
+
+**Stage-11 gate в multisite:**
+- Hard-gates должны быть зелёные **на каждом** поддомене, не только на главном.
+- Если хоть один поддомен красный — stage-11 не закрывается.
+- Сводный отчёт показывает таблицу «домен → score → failed checks count».
+
+**Парallelism:** N сайтов × M runners — изначально последовательно по сайтам, параллельно по runners (как уже описано в §2). Параллельный batch добавим только если время прогона на N=10 сайтах превысит 10 минут.
+
+### 13.2 Поэтапная реализация (E1 → E2 → E3 → E4)
+
+Реализация бьётся на 4 фазы. Каждая фаза = отдельный plan + worktree + merge.
+
+| Фаза | Содержимое | Покрывает проверки из §3 | Размер |
+|---|---|---|---|
+| **E1 (P0, эта итерация)** | Каркас `seo-tech-audit/` skill, `run-audit.py` оркестратор, `html_checks.py` (25), `network_checks.py` (13), `schema_checks.py` (5), Markdown + JSON отчёт, **multisite batch-mode**, `/landing-audit` slash-команда, stage-11 gate integration без auto-fix | §3.1, §3.3, §3.5 (43 проверки) | ~600 SLOC, 1-2 дня |
+| **E2** | `vitals.py` (Lighthouse CLI), `crawler.py` (битые ссылки), HTML отчёт (`audit-report.html`), `tests/integration/test_audit_e2e.sh` | §3.4, §3.6 (25 проверок) | ~400 SLOC, 1-2 дня |
+| **E3** | `content_metrics.py` (тошнота/вода/Flesch RU), `lib/russian_text.py`, snapshot history (`11_QA/history/<ts>/`) | §3.2 (7 проверок) | ~250 SLOC, 1 день |
+| **E4** | `ai_readiness.py` (llms.txt, schema, no-JS render), `external_apis.py` (opt-in PageSpeed/GSC/Yandex Webmaster), auto-fix логика в orchestrator | §3.7, §3.8 (3+3 проверок + AI fix-loop) | ~400 SLOC, 2 дня |
+
+**Что E1 НЕ делает (явно out of scope этой фазы):**
+- Lighthouse Web Vitals (E2)
+- Crawler битых ссылок (E2)
+- HTML-версия отчёта (E2)
+- Content-metrics RU (E3)
+- Snapshot history (E3 для динамики, но в E1 можно класть `11_QA/audit-report.{md,json}` без history)
+- AI-readiness и external APIs (E4)
+- Auto-fix логика в orchestrator (E4 — в E1 stage-11 gate просто `fail/pass` без auto-recovery)
+
+**Acceptance E1:**
+- `/landing-audit dubai-avto-liza` запускает audit по всем поддоменам ailexi.ru сети (ailexi.ru + dubai-avto-liza.ailexi.ru), пишет `11_QA/audit-report.md` со сводной таблицей
+- Все 43 проверки (HTML/Network/Schema) реально выполняются и попадают в отчёт
+- Hard-gates корректно идентифицируют failed checks
+- `tests/test_runners.py` — каждый runner покрыт unit-тестами на фикстурах good/bad
+- exit 0 если все hard-gates ✓, exit 1 если хоть один fail (на любом поддомене)
+- Без зависимости от Lighthouse / Node.js (E1 = pure Python)
+
