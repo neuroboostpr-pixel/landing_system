@@ -114,7 +114,65 @@ function render_page(): void {
 
         <?php render(MENU_SLUG, $segment); ?>
 
-        <form method="post" action="<?php echo esc_url(\network_admin_url('admin-post.php')); ?>">
+        <?php
+        // Inline mini-preview of currently saved banner (resolved for this segment).
+        // Allows admin to see exactly what visitors see without leaving the page.
+        $preview_settings = $post_id
+            ? array_merge(\LandingConfig\CookieBanner\Resolver\DEFAULTS, array_filter(
+                $current,
+                static function ($v) { return $v !== null; }
+            ))
+            : \LandingConfig\CookieBanner\Resolver\DEFAULTS;
+        if (!in_array($preview_settings['layout'], VALID_LAYOUTS, true)) {
+            $preview_settings['layout'] = 'bottom-bar';
+        }
+        // Enqueue banner CSS/JS for admin preview (not loaded otherwise on admin pages).
+        $base_url = \plugins_url('assets/cookie-banner', dirname(dirname(__DIR__)) . '/landing-config.php');
+        ?>
+        <style>
+            .lp-cb-admin-preview {
+                position: relative;
+                margin: 24px 0;
+                padding: 16px;
+                background: #f6f7f7;
+                border: 1px dashed #c3c4c7;
+                min-height: 160px;
+            }
+            .lp-cb-admin-preview h3 { margin: 0 0 12px; font-size: 13px; color: #646970; text-transform: uppercase; letter-spacing: 0.05em; }
+            /* Constrain banner inside preview container — position:fixed is overridden */
+            .lp-cb-admin-preview .lp-cb {
+                position: static;
+                display: block;
+                margin: 0 auto;
+                transform: none;
+                max-width: 100%;
+            }
+            .lp-cb-admin-preview .lp-cb[hidden] { display: block !important; }
+            .lp-cb-admin-preview .lp-cb__backdrop { display: none; }
+            .lp-cb-admin-preview .lp-cb-reopen { display: none; }
+        </style>
+        <link rel="stylesheet" href="<?php echo esc_url($base_url . '/core.css'); ?>?ver=admin">
+        <link rel="stylesheet" href="<?php
+            $css_layout = $preview_settings['layout'];
+            if (strpos($css_layout, 'floating-card-') === 0) $css_layout = 'floating-card';
+            echo esc_url($base_url . '/layouts/' . $css_layout . '.css');
+        ?>?ver=admin">
+        <div class="lp-cb-admin-preview">
+            <h3>Текущий баннер (как видит посетитель)</h3>
+            <?php
+            // Reuse the public render with the preview settings
+            \LandingConfig\CookieBanner\Render\render_with_settings($preview_settings);
+            ?>
+            <p style="margin-top:16px; color:#646970; font-size:12px;">
+                ↑ Это превью текущей <strong>сохранённой</strong> версии.
+                Чтобы увидеть изменения формы — нажми «Сохранить», страница перезагрузится.
+                <a href="<?php echo esc_url(\home_url('/?lp_cookie_banner_preview=1&segment=' . $segment)); ?>" target="_blank">
+                    Открыть на главной ↗
+                </a>
+            </p>
+        </div>
+
+        <form method="post" action="<?php echo esc_url(\admin_url('admin-post.php')); ?>">
             <input type="hidden" name="action" value="lp_cb_save">
             <input type="hidden" name="segment" value="<?php echo esc_attr($segment); ?>">
             <?php \wp_nonce_field('lp_cb_save'); ?>

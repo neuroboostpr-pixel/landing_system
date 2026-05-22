@@ -40,12 +40,25 @@ function _compose_color_overrides_css(array $settings): string {
 }
 
 function on_head(): void {
-    $settings = resolve_for_blog(\get_current_blog_id());
-    if ($settings === null) return;
-
-    // Preview mode: force banner show even if user has consented (admin only).
+    // Preview mode: force banner show + allow segment override via query param
+    // (admin can preview another segment's banner on its own site).
     $is_preview = isset($_GET['lp_cookie_banner_preview'])
         && \current_user_can('manage_options');
+
+    if ($is_preview && isset($_GET['segment']) && is_numeric($_GET['segment'])) {
+        // Resolve for the requested segment (0 = network default)
+        $resolve_blog_id = (int) $_GET['segment'];
+        if ($resolve_blog_id === 0) {
+            // Network default — resolve_for_blog uses get_current_blog_id internally
+            // for site lookup; passing 0 means "no site override expected"
+            $settings = resolve_for_blog(0);
+        } else {
+            $settings = resolve_for_blog($resolve_blog_id);
+        }
+    } else {
+        $settings = resolve_for_blog(\get_current_blog_id());
+    }
+    if ($settings === null) return;
 
     // 1. Google Consent Mode v2 default DENIED
     echo "<script>"
