@@ -71,11 +71,22 @@ function run_audit_for_urls(array $urls): array {
         return ['ok' => false, 'data' => null, 'error' => 'python3 not found in PATH', 'stderr' => null];
     }
 
-    $script_path = realpath(dirname(__DIR__, 4) . '/seo-tech-audit/scripts/run-audit.py');
-    if (!$script_path) {
-        // Fallback: assume mu-plugin is deployed alongside skills/ symlinked.
-        // Deploy guidance: rsync skills/seo-tech-audit/ to a known path.
-        $script_path = sys_get_temp_dir() . '/seo-tech-audit/scripts/run-audit.py';
+    // __DIR__ is .../mu-plugins/landing-config/includes/seo-audit
+    // dirname(__DIR__, 3) is .../mu-plugins; sibling seo-tech-audit/ holds the Python skill.
+    $candidates = [
+        dirname(__DIR__, 3) . '/seo-tech-audit/scripts/run-audit.py',
+        // Dev fallback: monorepo layout (skills/wp-landing-config + skills/seo-tech-audit)
+        dirname(__DIR__, 5) . '/seo-tech-audit/scripts/run-audit.py',
+    ];
+    $script_path = null;
+    foreach ($candidates as $cand) {
+        $resolved = realpath($cand);
+        if ($resolved) { $script_path = $resolved; break; }
+    }
+    if ($script_path === null) {
+        return ['ok' => false, 'data' => null,
+                'error' => 'run-audit.py not found — tried: ' . implode(', ', $candidates),
+                'stderr' => null];
     }
 
     $tmp = sys_get_temp_dir() . '/lp-audit-' . wp_generate_password(8, false);
