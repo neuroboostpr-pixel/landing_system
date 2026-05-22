@@ -16,9 +16,20 @@ def discover_hosts(state_path: Path, filter_host: str | None = None) -> list[str
 
     data = yaml.safe_load(state_path.read_text(encoding="utf-8")) or {}
 
-    primary = (data.get("project") or {}).get("primary_domain", "").strip()
+    # Support two schemas:
+    #   new:  project: {primary_domain: "...", slug: "..."}
+    #   old:  project: "slug"  (primary_domain at top level or absent)
+    project_val = data.get("project")
+    if isinstance(project_val, dict):
+        primary = (project_val.get("primary_domain") or "").strip()
+    else:
+        primary = (data.get("primary_domain") or "").strip()
+
     if not primary:
-        raise ValueError(f"primary_domain missing in {state_path}")
+        raise ValueError(
+            f"primary_domain missing in {state_path}. "
+            "Use --url <https://your-domain.com> to audit directly."
+        )
 
     is_multisite = bool(data.get("multisite"))
     hosts = [primary]
