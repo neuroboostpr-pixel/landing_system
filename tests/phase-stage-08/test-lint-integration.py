@@ -36,6 +36,28 @@ def test_cli_good_spec_minimal_errors(tmp_path):
     assert "multi-paragraph" in r.stdout
 
 
+def test_per_card_multi_paragraph_not_inflated_by_sibling_cards(tmp_path):
+    """With card_probe_selector, section-level multi-paragraph for
+    `feat_statement` must see only the section header (without cards) — NOT
+    inflated by every <p> inside each feature-card child.
+
+    The per-card-spec fixture has 2 cards with filled icon_svg, so the
+    inline-svg-icon error must NOT fire. Only the statement default mismatch
+    (or its absence after card-decompose) should drive output.
+    """
+    r = _run(FIX / "brutalist-features-section.html", FIX / "per-card-spec.yaml")
+    # inline-svg-icon must NOT appear: each card template row has a value
+    assert "inline-svg-icon" not in r.stdout
+    # If multi-paragraph appears, it must be about a number ≤ 4 (statement card
+    # only), never 10 (the inflated count we saw against the whole section).
+    if "multi-paragraph" in r.stdout:
+        # Extract the number reported. Pattern: "composed has N paragraphs"
+        import re as _re
+        for m in _re.finditer(r"composed has (\d+) paragraphs", r.stdout):
+            n = int(m.group(1))
+            assert n <= 4, f"per-card refactor should cap multi-paragraph count at 4, got {n}"
+
+
 def test_cli_fix_writes_backup_and_modifies_spec(tmp_path):
     # Copy broken spec to a tmp location so we don't mutate the fixture
     import shutil

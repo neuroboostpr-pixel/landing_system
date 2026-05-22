@@ -35,13 +35,37 @@ python3 skills/wp-gutenberg-block-builder/scripts/lint-composed-vs-spec.py \
 
 ## probe_selector contract
 
-Every block in `block-spec.yaml` that should be linted MUST set:
+Every block in `block-spec.yaml` that should be linted MUST set `probe_selector`.
+Section blocks (`probe_kind: card-collection`) SHOULD also set
+`card_probe_selector` — otherwise card-level heuristics fall back to scanning
+the entire section soup, which inflates `<p>`/`<li>` counts and produces
+false positives.
 
 ```yaml
-- slug: model-card
-  probe_selector: '.model-card'    # CSS selector that finds this block in composed.html
-  probe_kind: card-collection      # "single" | "card-collection"; default "single"
+# Single block — one DOM instance:
+- slug: nav
+  probe_selector: '.nav-bar'
+  probe_kind: single             # default; can be omitted
+
+# Section block with repeating cards inside:
+- slug: features
+  probe_selector: '.features-section'
+  probe_kind: card-collection
+  card_probe_selector: '.feature-card'   # picks individual cards inside the section
 ```
+
+**How card_probe_selector changes heuristic scope:**
+
+| Heuristic | Without `card_probe_selector` | With `card_probe_selector` |
+|---|---|---|
+| `bullets` / `color-swatches` | scanned across whole section | scanned per individual card |
+| `multi-paragraph` (section controls) | counts every `<p>` in section | section soup minus card subtrees |
+| `multi-paragraph` (card controls) | n/a — runs against section | runs per card, against that card only |
+| `slider-images` / `inline-svg-icon` | `template_index` = section index | `template_index` = card index within section |
+
+Note: `multi-paragraph` is skipped for textarea fields whose name is in the
+SVG attribute list (`icon_svg`, `svg`, `background_svg`, …) since those carry
+raw markup, not human paragraphs.
 
 If `probe_selector` is missing, the block is **skipped** with a warning. To
 enforce coverage, run with `--json` and grep for `"warning"`.

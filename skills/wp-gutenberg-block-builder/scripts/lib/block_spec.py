@@ -65,6 +65,11 @@ class Block:
     wrapper_close_html: Optional[str] = None
     probe_selector: Optional[str] = None
     probe_kind: str = "single"  # "single" | "card-collection"
+    # For probe_kind="card-collection": selector that picks individual cards
+    # inside the matched section. Used so card-level heuristics
+    # (multi-paragraph, slider-images, inline-svg-icon) iterate per card,
+    # not over the entire section soup.
+    card_probe_selector: Optional[str] = None
 
 
 @dataclass
@@ -141,6 +146,7 @@ def load(path: Path | str) -> BlockSpec:
             wrapper_close_html=b.get("wrapper_close_html"),
             probe_selector=b.get("probe_selector"),
             probe_kind=b.get("probe_kind", "single"),
+            card_probe_selector=b.get("card_probe_selector"),
         ))
     return BlockSpec(
         version=int(data.get("version", 0)),
