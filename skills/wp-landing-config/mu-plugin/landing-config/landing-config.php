@@ -47,6 +47,7 @@ require_once LANDING_CONFIG_DIR . '/includes/admin-integrations.php';
 
 add_action('init', function () {
     \LandingConfig\DB\maybe_install_or_migrate();
+    \LandingConfig\DB\maybe_migrate_b1_pd_consent();
 }, 1);
 
 add_action('admin_init', function () {

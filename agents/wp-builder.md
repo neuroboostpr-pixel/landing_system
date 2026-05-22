@@ -145,3 +145,70 @@ $bg_url     = $bg_image ? esc_url($bg_image['url']) : '';
 3. **Catalog assets check:** если Section 4 говорит `studio`, проверить файлы моделей. Файлы с landscape-фоном — warning.
 4. **Запрет fallback на stock:** в коде темы (`block-hero.php`, `block-models.php` и т.д.) запрещены fallback-картинки на сторонние URL (Pexels, Unsplash и т.п.) без явного разрешения в visual-requirements. Если fallback нужен — должен быть локальный файл, проверенный против Section 5.
 5. **Code review:** grep по теме на признаки запрещённых паттернов (например, имена файлов `*-stock-*`, `*-pexels-*`).
+
+## Legal & Cookie-banner (152-ФЗ compliance)
+
+После генерации темы и блоков — обязательная юр-инфраструктура для прод-деплоя в РФ:
+
+### 1. Cookie-banner в footer
+
+В `wp-theme/footer.php` перед `<?php wp_footer(); ?>`:
+
+```php
+<?php get_template_part('template-parts/cookie-banner'); ?>
+```
+
+В `wp-theme/header.php` в `<head>`, **ДО** любых analytics-скриптов (gtag/Yandex.Metrica/GTM):
+
+```php
+<?php get_template_part('template-parts/consent-init'); ?>
+```
+
+### 2. Подключить CSS и JS cookie-banner
+
+В `wp-theme/functions.php` в `wp_enqueue_scripts` callback:
+
+```php
+wp_enqueue_style('lp-cookie-banner', get_template_directory_uri() . '/template-parts/cookie-banner.css', [], '1.0');
+wp_enqueue_script('lp-cookie-banner', get_template_directory_uri() . '/template-parts/cookie-banner.js', [], '1.0', true);
+```
+
+Скопировать файлы:
+- `template/08_КОД/template-parts/cookie-banner.php` → `wp-theme/template-parts/cookie-banner.php`
+- `template/08_КОД/template-parts/cookie-banner.js` → `wp-theme/template-parts/cookie-banner.js`
+- `template/08_КОД/template-parts/cookie-banner.css` → `wp-theme/template-parts/cookie-banner.css`
+- `template/08_КОД/template-parts/consent-init.php` → `wp-theme/template-parts/consent-init.php`
+- `template/08_КОД/template-parts/legal-block.php` → `wp-theme/template-parts/legal-block.php`
+
+### 3. Legal-block в каждую форму заявки
+
+В каждой Gutenberg-блок-шаблоне с формой (Hero, Contact, Footer-CTA) ПЕРЕД `<button type="submit">`:
+
+```php
+<?php get_template_part('template-parts/legal-block'); ?>
+```
+
+Это checkbox с required-валидацией согласия на ПД (152-ФЗ ст.9).
+
+### 4. Генерация юр-страниц /policy и /consent
+
+После деплоя темы запусти:
+
+```bash
+bash skills/wp-builder/scripts/install_legal_pages.sh <project-dir>
+```
+
+Скрипт:
+1. Парсит ## Legal из `<project>/04_БРЕНД/brand-kit.md`
+2. Если incomplete или TODO_LEGAL — выбрасывает ошибку и блокирует деплой
+3. Подставляет реквизиты в `template/08_КОД/legal-pages/{policy,consent}.html.template`
+4. Через wp-cli создаёт WordPress Pages (или обновляет существующие по meta `_lp_legal_page`)
+
+### 5. Проверки
+
+Перед закрытием этапа 08:
+- `/policy` отдаёт 200 (curl https://<domain>/policy)
+- `/consent` отдаёт 200
+- View source главной страницы содержит cookie-banner DOM
+- Submit формы без checkbox → браузер показывает «Заполните это поле»
+- Submit с checkbox → 200 ok=true и `pd_consent_granted_at != NULL` в БД

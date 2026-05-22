@@ -32,6 +32,15 @@ function handle_lead($request) {
     }
     set_transient($rl_key, $rl_count + 1, HOUR_IN_SECONDS);
 
+    // pd_consent (152-ФЗ ст.9): обязательное явное согласие. Принимаем только '1'.
+    $pd_consent = (string) ($params['pd_consent'] ?? '');
+    if ($pd_consent !== '1') {
+        return new \WP_REST_Response(
+            ['ok' => false, 'error' => 'pd_consent_required'],
+            400
+        );
+    }
+
     // Required: at least one of phone or email
     $name = sanitize_text_field(wp_unslash($params['name'] ?? ''));
     $phone = sanitize_text_field(wp_unslash($params['phone'] ?? ''));
@@ -57,7 +66,8 @@ function handle_lead($request) {
         'ip'               => sanitize_text_field($ip),
         'user_agent'       => sanitize_text_field($_SERVER['HTTP_USER_AGENT'] ?? ''),
         'created_at'       => current_time('mysql'),
-        'processed_status' => 'pending',
+        'processed_status'      => 'pending',
+        'pd_consent_granted_at' => current_time('mysql'),
     ];
 
     global $wpdb;

@@ -58,4 +58,28 @@ case "$code" in
     *) echo "FAIL: lead-detail returned $code"; exit 1 ;;
 esac
 
+echo "▶ T9: POST /lead без pd_consent → 400"
+code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 -X POST \
+    "https://russian.ailexi.ru/wp-json/landing/v1/lead" \
+    -d "name=Test&phone=+71234567890&email=test@example.com&website=")
+test "$code" = "400" || { echo "FAIL: expected 400 without pd_consent, got $code"; exit 1; }
+echo "  OK no-consent → 400"
+
+echo "▶ T10: POST /lead с pd_consent=1 → 200"
+resp=$(curl -s --max-time 10 -X POST \
+    "https://russian.ailexi.ru/wp-json/landing/v1/lead" \
+    -d "name=SmokeTest&phone=+79991234567&email=smoke@test.ru&website=&pd_consent=1")
+echo "$resp" | grep -q '"ok":true' || { echo "FAIL: expected ok:true, got: $resp"; exit 1; }
+echo "  OK with-consent → 200"
+
+echo "▶ T11: /policy и /consent отдают 200 (если legal-pages засеяны)"
+for slug in policy consent; do
+    code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 "https://russian.ailexi.ru/$slug" || echo "000")
+    case "$code" in
+        200) echo "  OK /$slug → 200" ;;
+        404) echo "  SKIP /$slug → 404 (legal-pages не засеяны на этом сегменте — это OK для smoke)" ;;
+        *) echo "FAIL: /$slug returned $code"; exit 1 ;;
+    esac
+done
+
 echo "✅ S2-A.3 + B19 live smoke GREEN"

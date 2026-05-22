@@ -358,8 +358,10 @@ stages:
         args: ["--project", "{project}"]
         fix_hint: "Run: python3 skills/wp-gutenberg-block-builder/scripts/lint-composed-vs-spec.py --project {project} --fix"
     soft_checks:
-      - id: legal_blocks
-        prompt: "152-ФЗ блок и cookie-баннер присутствуют в HTML? (yes / no / partial)"
+      - id: legal_blocks_present
+        title: "Cookie-banner, consent-init, legal-block присутствуют в теме"
+        command: "bash scripts/checks/check_legal_blocks.sh {project_dir}"
+        blocking: false
 
   "08b_style":
     name: "Frontend style"

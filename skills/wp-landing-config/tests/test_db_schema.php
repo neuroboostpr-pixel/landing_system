@@ -90,5 +90,12 @@ assert_test(
 );
 $GLOBALS['_mock_is_multisite'] = true; // reset
 
+// T_PD_DB_1: pd_consent_granted_at column declared in landing_leads CREATE TABLE
+$leads_sql = $GLOBALS['_mock_dbdelta_calls'][0] ?? '';
+assert_test(strpos($leads_sql, 'pd_consent_granted_at') !== false,
+    'T_PD_DB_1 column pd_consent_granted_at declared in landing_leads');
+assert_test(strpos($leads_sql, 'DATETIME NULL') !== false,
+    'T_PD_DB_2 type is DATETIME NULL');
+
 echo "\n$tests tests, $failures failures\n";
 exit($failures > 0 ? 1 : 0);

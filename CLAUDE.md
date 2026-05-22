@@ -402,3 +402,34 @@ CRM sync (двусторонняя — webhook из CRM в админку и pus
 
 См. [spec](docs/superpowers/specs/2026-05-20-b19-lead-status-workflow-design.md)
 и [plan](docs/superpowers/plans/2026-05-20-b19-lead-status-workflow-plan.md).
+
+### B1 — Cookie-banner + 152-ФЗ согласие на ПД (2026-05-21)
+
+Template-level юр-инфраструктура для каждого лендинга:
+
+- **brand-kit.md ## Legal секция** — реквизиты Оператора ПД (company_name, entity_type,
+  inn, ogrn, legal_address, contact_email, dpo_email). Собирается brand-architect'ом
+  на этапе 04, парсится через `skills/brand-kit-build/scripts/parse_legal.py`.
+- **Cookie-banner с категориями** (`template/08_КОД/template-parts/cookie-banner.{php,js,css}`)
+  — Necessary (locked) / Analytics / Marketing. localStorage `lp_cookie_consent`
+  с версионированием. Появляется при первом визите, footer-кнопка для
+  переоткрытия.
+- **Google Consent Mode v2** (`consent-init.php`) — gtag('consent','default','denied')
+  в <head> ДО загрузки Metrica/GTM/GA4. После save в баннере — consent.update.
+- **Legal-block в формах** (`legal-block.php`) — обязательный checkbox согласия
+  на ПД с required-валидацией. Не pre-checked (152-ФЗ ст.9 — явное согласие).
+- **Бэкенд-валидация** в REST /wp-json/landing/v1/lead — 400 если pd_consent != '1',
+  при успехе пишет timestamp `pd_consent_granted_at` в landing_leads (формальное
+  доказательство согласия для возможных проверок Роскомнадзора).
+- **Юр-страницы** (`template/08_КОД/legal-pages/{policy,consent}.html.template`) —
+  типовые тексты с {{placeholders}} для подстановки реквизитов из brand-kit.
+  Создаются через `skills/wp-builder/scripts/install_legal_pages.sh` (wp-cli upsert
+  по meta `_lp_legal_page`).
+- **Stage-gate soft-check** `legal_blocks_present` — grep по wp-theme что
+  cookie-banner/consent-init/legal-block подключены в footer/header/блоках форм.
+
+ВАЖНО: тексты policy/consent — типовые, основаны на формулировках Роскомнадзора.
+Перед прод-деплоем у клиента — обязательная проверка юристом.
+
+См. [spec](docs/superpowers/specs/2026-05-21-b1-cookie-banner-pd-consent-design.md)
+и [plan](docs/superpowers/plans/2026-05-21-b1-cookie-banner-pd-consent-plan.md).

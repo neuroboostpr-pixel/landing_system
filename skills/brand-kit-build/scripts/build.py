@@ -58,6 +58,56 @@ def _count_approved_refs(index_path: Path) -> int:
     return sum(1 for r in refs if isinstance(r, dict) and r.get("status") == "approved")
 
 
+def load_legal_input(project_dir):
+    """Load legal: input from 04_БРЕНД/extracted/legal.yaml if exists."""
+    legal_path = Path(project_dir) / '04_БРЕНД' / 'extracted' / 'legal.yaml'
+    if not legal_path.exists():
+        return None
+    try:
+        with open(legal_path, encoding='utf-8') as f:
+            return yaml.safe_load(f)
+    except (yaml.YAMLError, IOError):
+        return None
+
+
+def build_legal_section(legal_input):
+    """Build the ## Legal section from input dict.
+
+    If legal_input is None or missing — emits TODO_LEGAL placeholders.
+
+    Args:
+        legal_input: dict with 7 keys (company_name, entity_type, inn, ogrn,
+                     legal_address, contact_email, dpo_email) or None.
+
+    Returns:
+        Markdown string with '## Legal' header and YAML block.
+    """
+    if not legal_input:
+        legal_input = {
+            'company_name': 'TODO_LEGAL',
+            'entity_type': 'TODO_LEGAL',
+            'inn': 'TODO_LEGAL',
+            'ogrn': 'TODO_LEGAL',
+            'legal_address': 'TODO_LEGAL',
+            'contact_email': 'TODO_LEGAL',
+            'dpo_email': 'TODO_LEGAL',
+        }
+
+    lines = ['## Legal', '', '```yaml']
+    if any(v == 'TODO_LEGAL' for v in legal_input.values()):
+        lines.append('# TODO_LEGAL: заполнить до прод-деплоя — без этого лендинг не может запускаться в РФ')
+
+    for key in ['company_name', 'entity_type', 'inn', 'ogrn',
+                'legal_address', 'contact_email', 'dpo_email']:
+        val = legal_input.get(key, 'TODO_LEGAL')
+        # Quote string values to preserve special chars
+        lines.append(f"{key}: '{val}'")
+
+    lines.append('```')
+    lines.append('')
+    return '\n'.join(lines)
+
+
 def build_brand_kit(project_dir: str) -> Path:
     base = Path(project_dir)
     extracted = base / "04_БРЕНД" / "extracted"
@@ -194,7 +244,8 @@ Selected: {icon_ids}
 {grid_note}
 """
 
-    content = f"---\n{yaml_block}---\n\n{md_body}"
+    legal_section = build_legal_section(load_legal_input(project_dir))
+    content = f"---\n{yaml_block}---\n\n{md_body}\n{legal_section}"
 
     out = base / "04_БРЕНД" / "brand-kit.md"
     out.parent.mkdir(parents=True, exist_ok=True)

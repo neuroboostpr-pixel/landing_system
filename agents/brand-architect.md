@@ -47,6 +47,34 @@ Stage 04 of the landing workflow. Synthesize all extracted style data into a coh
 2. Run `python3 skills/brand-kit-build/scripts/render-html.py <project-dir>` — produces `04_БРЕНД/brand-kit.html`
 3. Open `04_БРЕНД/brand-kit.html` for user review.
 
+## Сбор legal-реквизитов (для 152-ФЗ compliance)
+
+После генерации brand-kit спроси у пользователя legal-данные Оператора ПД (обязательно для запуска в РФ):
+
+1. Полное юр-имя (например: «Общество с ограниченной ответственностью "Ромашка"»)
+2. Тип сущности: ИП / ООО / АО
+3. ИНН (10 цифр для ЮЛ, 12 для ИП)
+4. ОГРН (15 цифр для ЮЛ) или ОГРНИП (15 цифр для ИП)
+5. Юридический адрес (с индексом)
+6. Контактный email для запросов субъектов ПД
+7. Email представителя по ПД (часто = контактный email)
+
+Запиши ответы в `04_БРЕНД/extracted/legal.yaml`:
+
+```yaml
+company_name: '...'
+entity_type: '...'
+inn: '...'
+ogrn: '...'
+legal_address: '...'
+contact_email: '...'
+dpo_email: '...'
+```
+
+Затем перезапусти `python3 skills/brand-kit-build/scripts/build.py <project-dir>` — секция `## Legal` появится в brand-kit.md.
+
+**Если пользователь не знает данных:** не блокируй pipeline. Запиши `TODO_LEGAL` во все поля и предупреди: «Лендинг не может выкатиться в продакшен в РФ без legal-реквизитов. Заполни `04_БРЕНД/extracted/legal.yaml` до запуска `/landing-deploy`.»
+
 ## HARD GATE
 
 - Requires all 5 extracted outputs to be present before running.
