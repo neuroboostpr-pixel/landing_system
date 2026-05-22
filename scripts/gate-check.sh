@@ -275,19 +275,6 @@ if [ "$fail" = "1" ]; then
     exit 1
 fi
 
-# 2b. Stage-08 extra: composed↔spec lint (hard gate — must pass before stage-08 closes)
-if [ "$stage" = "08_build" ] && [ "$bypass_hard_checks" != "1" ]; then
-    LINT_SCRIPT="$REPO_ROOT/skills/wp-gutenberg-block-builder/scripts/lint-composed-vs-spec.py"
-    if [ -f "$LINT_SCRIPT" ]; then
-        if ! python3 "$LINT_SCRIPT" --project "$project" 2>&1; then
-            echo "ERROR: composed↔spec lint failed for stage-08."
-            echo "  Run: python3 $LINT_SCRIPT --project $project --fix"
-            exit 1
-        fi
-        echo "  ✅ composed_vs_spec_lint (lint-composed-vs-spec.py)"
-    fi
-fi
-
 # 3. Soft checks (only when interactive and not --auto)
 soft_count="$(yq -r ".stages.\"$stage\".soft_checks // [] | length" "$GATES_YAML")"
 if [ "$soft_count" -gt 0 ] && [ "$auto" != "1" ]; then

@@ -31,7 +31,8 @@ def main(argv):
     ap.add_argument("--composed", help="Path to composed.html (overrides --project default)")
     ap.add_argument("--spec", help="Path to block-spec.yaml (overrides --project default)")
     ap.add_argument("--json", action="store_true", help="Output JSON")
-    ap.add_argument("--fix", action="store_true", help="Auto-apply safe fixes to spec.yaml")
+    ap.add_argument("--fix", action="store_true",
+                    help="Auto-apply safe fixes to spec.yaml (only multi-paragraph; only inline-dict default format)")
     args = ap.parse_args(argv[1:])
 
     if args.spec:
@@ -110,6 +111,8 @@ def main(argv):
             print(f"  WARN  [{i.heuristic}] {i.block_slug}: {i.message}")
         print(f"\nTotal: {len(errors)} error(s), {len(warnings)} warning(s)")
 
+    # NOTE: --fix v1 supports only multi-paragraph extraction and only inline-dict
+    # YAML defaults (`default: "..."`). Block-scalar defaults are not matched.
     if args.fix and errors:
         import shutil, time, re as _re
         ts = time.strftime("%Y%m%d-%H%M%S")
