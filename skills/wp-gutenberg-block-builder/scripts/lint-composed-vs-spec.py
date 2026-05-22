@@ -31,6 +31,7 @@ def main(argv):
     ap.add_argument("--composed", help="Path to composed.html (overrides --project default)")
     ap.add_argument("--spec", help="Path to block-spec.yaml (overrides --project default)")
     ap.add_argument("--json", action="store_true", help="Output JSON")
+    ap.add_argument("--fix", action="store_true", help="Auto-apply safe fixes to spec.yaml")
     args = ap.parse_args(argv[1:])
 
     if args.spec:
@@ -108,6 +109,55 @@ def main(argv):
         for i in warnings:
             print(f"  WARN  [{i.heuristic}] {i.block_slug}: {i.message}")
         print(f"\nTotal: {len(errors)} error(s), {len(warnings)} warning(s)")
+
+    if args.fix and errors:
+        import shutil, time, re as _re
+        ts = time.strftime("%Y%m%d-%H%M%S")
+        backup = spec_path.with_suffix(spec_path.suffix + f".bak.{ts}")
+        shutil.copy(spec_path, backup)
+        print(f"Backup written: {backup}")
+
+        spec_text = spec_path.read_text(encoding="utf-8")
+        applied = 0
+
+        for issue in errors:
+            if issue.heuristic == "multi-paragraph":
+                # Message format: "<slug>.<field>: composed has N paragraphs but spec default has only M"
+                m = _re.match(r"([^.]+)\.(\w+):", issue.message)
+                if not m:
+                    continue
+                slug, field = m.group(1), m.group(2)
+                sb = next((b for b in spec.blocks if b.slug == slug), None)
+                if not sb or not sb.probe_selector:
+                    continue
+                dom = dom_blocks.get(sb.probe_selector)
+                if not dom or not dom.matches:
+                    continue
+                paragraphs = [p.get_text(" ", strip=True) for p in dom.matches[0].soup.find_all("p")]
+                paragraphs = [p for p in paragraphs if p]
+                if not paragraphs:
+                    continue
+                new_default = "\n\n".join(paragraphs)
+                # Replace default in inline-dict spec format:
+                #   { id: ..., name: feat_statement, ..., default: "..." }
+                pattern = _re.compile(
+                    rf"(\{{[^}}]*name:\s*{_re.escape(field)}[^}}]*default:\s*)\"[^\"]*\"",
+                    _re.DOTALL,
+                )
+                quoted = new_default.replace('\\', '\\\\').replace('"', '\\"').replace("\n", "\\n")
+                new_text, n = pattern.subn(
+                    rf'\1"{quoted}"  # AUTO-LINT {ts}: filled from composed.html',
+                    spec_text, count=1,
+                )
+                if n:
+                    spec_text = new_text
+                    applied += 1
+
+        if applied:
+            spec_path.write_text(spec_text, encoding="utf-8")
+            print(f"Applied {applied} auto-fix(es). Re-run without --fix to verify.")
+        else:
+            print("No auto-fixable issues found.")
 
     return 1 if errors else 0
 

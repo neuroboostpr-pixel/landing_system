@@ -34,3 +34,20 @@ def test_cli_good_spec_minimal_errors(tmp_path):
     r = _run(FIX / "brutalist-features-section.html", FIX / "good-spec.yaml")
     # multi-paragraph should fire because composed has 4 <p> but good-spec default has 1 para
     assert "multi-paragraph" in r.stdout
+
+
+def test_cli_fix_writes_backup_and_modifies_spec(tmp_path):
+    # Copy broken spec to a tmp location so we don't mutate the fixture
+    import shutil
+    spec_copy = tmp_path / "spec.yaml"
+    shutil.copy(FIX / "broken-spec.yaml", spec_copy)
+    r = _run(FIX / "brutalist-features-section.html", spec_copy, "--fix")
+    # Backup exists
+    backups = list(tmp_path.glob("spec.yaml.bak.*"))
+    assert len(backups) == 1
+    # Spec was modified (contains AUTO-LINT comment)
+    new_text = spec_copy.read_text(encoding="utf-8")
+    assert "AUTO-LINT" in new_text
+    # Re-run without --fix: errors should be reduced
+    r2 = _run(FIX / "brutalist-features-section.html", spec_copy)
+    assert "multi-paragraph" not in r2.stdout
