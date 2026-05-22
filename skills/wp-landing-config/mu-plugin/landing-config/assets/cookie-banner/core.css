@@ -1,11 +1,18 @@
 .lp-cb {
-    --cb-bg:      var(--color-bg-card, #ffffff);
-    --cb-text:    var(--color-text-primary, #1d2327);
-    --cb-text-2:  var(--color-text-secondary, #646970);
-    --cb-accent:  var(--color-accent, #2271b1);
-    --cb-border:  var(--color-border, #c3c4c7);
+    /* Theme CSS vars chain — supports both naming conventions:
+       (a) "long" — --color-bg-card, --color-accent, ... (default brand-kit)
+       (b) "short" — --bg-card, --yellow, --text-2, --border, ... (brutalist + others)
+       Last value = hardcoded fallback for themes without any vars. */
+    --cb-bg:      var(--color-bg-card, var(--bg-card, var(--bg, #ffffff)));
+    --cb-text:    var(--color-text-primary, var(--text, var(--white, #1d2327)));
+    --cb-text-2:  var(--color-text-secondary, var(--text-2, #646970));
+    --cb-accent:  var(--color-accent, var(--yellow, var(--accent, #2271b1)));
+    --cb-border:  var(--color-border, var(--border, #c3c4c7));
     --cb-radius:  var(--radius-md, 6px);
-    --cb-font:    var(--font-body, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+    --cb-font:    var(--font-body, var(--font, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif));
+    /* Accent text colour: most brutalist themes use dark text on yellow accent,
+       most light themes use white text on blue accent. Theme can override. */
+    --cb-accent-text: var(--color-on-accent, var(--text-on-yel, #ffffff));
 
     position: fixed;
     z-index: 99999;
@@ -66,7 +73,7 @@
 .lp-cb__btn:hover { opacity: 0.85; }
 .lp-cb__btn--primary {
     background: var(--cb-accent);
-    color: #ffffff;
+    color: var(--cb-accent-text);
     border-color: var(--cb-accent);
 }
 .lp-cb__btn--ghost { background: transparent; }
