@@ -82,4 +82,23 @@ for slug in policy consent; do
     esac
 done
 
+echo "▶ T_CB_1: главная страница содержит DOM cookie-banner (id=lp-cb)"
+html=$(curl -s "https://russian.ailexi.ru/" || echo "")
+echo "$html" | grep -q 'id="lp-cb"' || { echo "FAIL: id=lp-cb not in homepage HTML"; exit 1; }
+echo "  OK lp-cb DOM present"
+
+echo "▶ T_CB_2: главная содержит consent-init (gtag default denied)"
+echo "$html" | grep -q "gtag('consent','default'" || { echo "FAIL: consent-init script missing"; exit 1; }
+echo "  OK consent-init present"
+
+echo "▶ T_CB_3: layout класс задан (по умолчанию bottom-bar)"
+echo "$html" | grep -qE 'lp-cb--(top-bar|bottom-bar|floating-card-left|floating-card-right|center-modal)' \
+    || { echo "FAIL: no layout class on banner"; exit 1; }
+echo "  OK layout class present"
+
+echo "▶ T_CB_4: CSS+JS подключены"
+echo "$html" | grep -q "/cookie-banner/core.css" || { echo "FAIL: core.css not enqueued"; exit 1; }
+echo "$html" | grep -q "/cookie-banner/banner.js" || { echo "FAIL: banner.js not enqueued"; exit 1; }
+echo "  OK assets enqueued"
+
 echo "✅ S2-A.3 + B19 live smoke GREEN"
