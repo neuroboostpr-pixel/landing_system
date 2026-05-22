@@ -57,7 +57,7 @@ def test_ai2_schema_org_missing_org_type():
 
 
 def test_ai3_no_js_sufficient_content():
-    good = (FIXTURES / "good-schema.html").read_text(encoding="utf-8")
+    good = (FIXTURES / "good-body.html").read_text(encoding="utf-8")
     r = check_no_js_render(good, "https://x/")
     assert r["id"] == "AI3"
     assert r["passed"] is True

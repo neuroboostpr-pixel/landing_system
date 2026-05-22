@@ -47,7 +47,10 @@ def check_schema_org_types(html, url):
     found_types = []
     for b in blocks:
         try:
-            data = json.loads(b.get_text("") or "")
+            raw = (b.get_text("") or "").strip().lstrip("﻿")
+            if not raw:
+                continue
+            data = json.loads(raw)
         except json.JSONDecodeError:
             continue
         # JSON-LD can be a single object or a list
