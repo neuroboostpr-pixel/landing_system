@@ -22,18 +22,22 @@ from pathlib import Path
 SKILL_SCRIPTS = Path(__file__).resolve().parent
 sys.path.insert(0, str(SKILL_SCRIPTS))
 
+from lib.fix_actions import get_fix_action
 from lib.http_client import fetch
 from lib.report import build_aggregate_report, build_site_report, render_markdown
 from lib.site_discovery import discover_hosts
 from lib.thresholds import load_thresholds
+from runners.ai_readiness import check_llms_txt
+from runners.ai_readiness import run_all as run_ai_checks
 from runners.html_checks import check_html
 from runners.network_checks import run_all as run_network_checks
 from runners.schema_checks import check_schema
 
 
 def audit_one_url(url: str) -> list[dict]:
-    """Fetch URL once, run all 3 runner modules."""
+    """Fetch URL once, run all runner modules including AI readiness."""
     results: list[dict] = []
+    html = None
     try:
         resp = fetch(url)
         html = resp.text
@@ -47,6 +51,16 @@ def audit_one_url(url: str) -> list[dict]:
     except Exception as e:
         # Network total failure — mark H1 as fail and proceed with network checks
         results.append({"id": "H1", "passed": False, "evidence": f"fetch_error: {e}"})
+
+    # AI runner: AI1 always (own endpoint), AI2/AI3 only if html available
+    if html is not None:
+        results.extend(run_ai_checks(url, html))
+    else:
+        # AI1 still meaningful (own fetch); AI2/AI3 marked as fetch-error fails
+        results.append(check_llms_txt(url))
+        results.append({"id": "AI2", "passed": False, "evidence": "no_html (fetch failed)"})
+        results.append({"id": "AI3", "passed": False, "evidence": "no_html (fetch failed)"})
+
     # Network checks always run (they hit different endpoints)
     results.extend(run_network_checks(url))
     return results
@@ -61,6 +75,8 @@ def main(argv: list[str]) -> int:
     p.add_argument("--site", help="filter: only this host (with --project)")
     p.add_argument("--out", help="output directory (default: <project>/11_QA or ./11_QA)")
     p.add_argument("--json", action="store_true", help="JSON only, skip Markdown")
+    p.add_argument("--with-fix-hints", action="store_true",
+                   help="Enrich each failure with fix_action metadata from fix_actions catalog")
     args = p.parse_args(argv[1:])
 
     # Resolve hosts
@@ -115,6 +131,14 @@ def main(argv: list[str]) -> int:
             (per_site_dir / f"{host_key}.md").write_text(single_md, encoding="utf-8")
         print(f"  {'PASS' if rep['passed'] else 'FAIL'} hard={rep['hard_passed']}/{rep['hard_total']} "
               f"soft={rep['soft_passed']}/{rep['soft_total']}", flush=True)
+
+    # Enrich failures with fix_action metadata if requested
+    if args.with_fix_hints:
+        for rep in site_reports:
+            for f in rep["failures"]:
+                fa = get_fix_action(f["id"])
+                if fa is not None:
+                    f["fix_action"] = fa
 
     # Aggregate
     agg = build_aggregate_report(site_reports)
