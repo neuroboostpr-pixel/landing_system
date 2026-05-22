@@ -1,4 +1,5 @@
 """Tests for parse_legal — reading legal: section from brand-kit.md."""
+import os
 import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent / 'scripts'))
@@ -15,6 +16,7 @@ class TestParseLegal(unittest.TestCase):
         f = tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False, encoding='utf-8')
         f.write(content)
         f.close()
+        self.addCleanup(os.unlink, f.name)
         return f.name
 
     def test_parses_full_legal_section(self):
