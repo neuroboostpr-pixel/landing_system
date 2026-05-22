@@ -12,9 +12,9 @@ function build_python_command(array $opts, string $python_bin, string $script_pa
          . ' --json --with-fix-hints';
 
     if (!empty($opts['hosts_file'])) {
-        $cmd .= ' --hosts-file ' . $opts['hosts_file'];
+        $cmd .= ' --hosts-file ' . escapeshellarg($opts['hosts_file']);
     } elseif (!empty($opts['urls']) && count($opts['urls']) === 1) {
-        $cmd .= ' --url ' . $opts['urls'][0];
+        $cmd .= ' --url ' . escapeshellarg($opts['urls'][0]);
     }
     if (!empty($opts['out_dir'])) {
         $cmd .= ' --out ' . escapeshellarg($opts['out_dir']);

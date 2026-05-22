@@ -16,7 +16,7 @@ $cmd = \LandingConfig\SEOAudit\Runner\build_python_command(
     '/usr/bin/python3',
     '/path/to/run-audit.py'
 );
-assert_test(strpos($cmd, '--url https://example.com/') !== false,
+assert_test(strpos($cmd, '--url ') !== false && strpos($cmd, 'example.com') !== false,
     'T1a single URL mode has --url');
 assert_test(strpos($cmd, '--with-fix-hints') !== false,
     'T1b always includes --with-fix-hints');
@@ -29,7 +29,7 @@ $cmd2 = \LandingConfig\SEOAudit\Runner\build_python_command(
     '/usr/bin/python3',
     '/path/to/run-audit.py'
 );
-assert_test(strpos($cmd2, '--hosts-file /tmp/h.txt') !== false,
+assert_test(strpos($cmd2, '--hosts-file ') !== false && strpos($cmd2, 'h.txt') !== false,
     'T2a multi-URL uses --hosts-file');
 assert_test(strpos($cmd2, '--url ') === false,
     'T2b multi-URL does NOT include --url');
