@@ -12,6 +12,7 @@ class InspectedControl:
     type: str
     has_default: bool
     default_value: object
+    target_selector: Optional[str] = None
 
 
 @dataclass
@@ -24,6 +25,7 @@ class InspectedSpecBlock:
     card_controls: list[InspectedControl] = field(default_factory=list)
     template: list[dict] = field(default_factory=list)
     card_probe_selector: Optional[str] = None
+    card_skip_selector: Optional[str] = None
 
 
 @dataclass
@@ -37,6 +39,7 @@ def _to_inspected_control(c) -> InspectedControl:
         type=c.type,
         has_default=c.default is not None and c.default != "",
         default_value=c.default,
+        target_selector=getattr(c, "target_selector", None),
     )
 
 
@@ -59,5 +62,6 @@ def inspect_spec(spec_path: Path) -> InspectedSpec:
             card_controls=card_controls,
             template=template,
             card_probe_selector=b.card_probe_selector,
+            card_skip_selector=b.card_skip_selector,
         ))
     return InspectedSpec(blocks=blocks)

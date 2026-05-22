@@ -91,6 +91,13 @@ def main(argv):
                 # into section counts).
                 card_matches = match.soup.select(sb.card_probe_selector)
 
+                # Filter out cards that match card_skip_selector (decorative
+                # cards rendered by the parent block, not by a template entry —
+                # e.g. .feature-statement which shares .feature-card class).
+                if sb.card_skip_selector:
+                    skip_set = set(id(el) for el in match.soup.select(sb.card_skip_selector))
+                    card_matches = [c for c in card_matches if id(c) not in skip_set]
+
                 # Card-level heuristics: bullets, swatches, multi-paragraph,
                 # slider, svg — one pass per card with its template row.
                 for card_idx, card_soup in enumerate(card_matches):

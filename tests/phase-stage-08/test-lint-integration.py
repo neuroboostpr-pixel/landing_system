@@ -58,6 +58,33 @@ def test_per_card_multi_paragraph_not_inflated_by_sibling_cards(tmp_path):
             assert n <= 4, f"per-card refactor should cap multi-paragraph count at 4, got {n}"
 
 
+def test_card_skip_selector_excludes_statement_card(tmp_path):
+    """`card_skip_selector` removes decorative cards from per-card iteration.
+
+    Refined spec has card_skip_selector='.feature-statement' and template
+    length=2 (matching 2 non-statement cards in the fixture). Linter must
+    NOT report template[2]/[3] overflow.
+    """
+    r = _run(FIX / "brutalist-features-section.html", FIX / "refined-spec.yaml")
+    assert "template[2]" not in r.stdout
+    # The statement-card's <p>×4 must not appear as a card-level multi-p
+    # for the `text` control (it has target_selector='.feature-text').
+    assert "features.text:" not in r.stdout
+
+
+def test_target_selector_scopes_multi_paragraph(tmp_path):
+    """`target_selector` on a textarea limits <p> counting to that sub-element.
+
+    `feat_statement` has target_selector='.feature-statement' so it sees
+    exactly 4 <p> matching the 4 paragraphs in the default → no error.
+    """
+    r = _run(FIX / "brutalist-features-section.html", FIX / "refined-spec.yaml")
+    assert "feat_statement" not in r.stdout, (
+        f"feat_statement should not appear in errors when target_selector "
+        f"matches scope and default has same paragraph count.\nOutput:\n{r.stdout}"
+    )
+
+
 def test_cli_fix_writes_backup_and_modifies_spec(tmp_path):
     # Copy broken spec to a tmp location so we don't mutate the fixture
     import shutil
