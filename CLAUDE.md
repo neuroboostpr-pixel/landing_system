@@ -433,3 +433,32 @@ Template-level юр-инфраструктура для каждого ленд�
 
 См. [spec](docs/superpowers/specs/2026-05-21-b1-cookie-banner-pd-consent-design.md)
 и [plan](docs/superpowers/plans/2026-05-21-b1-cookie-banner-pd-consent-plan.md).
+
+### B2 — Cookie-banner Library (5 layouts + admin, 2026-05-22)
+
+Replaces B1's hardcoded cookie-banner with a mu-plugin-owned library:
+
+- **5 layouts:** top-bar / bottom-bar / floating-card-{left,right} / center-modal.
+  Маркетолог выбирает radio-button'ами с preview-thumbnail'ами в Network admin.
+- **Admin UI:** Network admin → Лендинг → Cookie-banner с селектором сегмента
+  (network default + per-segment override через cascade S2-A.3 паттерн).
+  Поля: layout, тексты (заголовок/описание/кнопки/policy-link/reopen),
+  категории (repeater с slug/name/desc/locked/default_on), цвета (4 hex
+  поля — bg/text/accent/border, пусто = inherit из brand-kit темы),
+  consent version (bump → re-prompt всем).
+- **Token-driven design:** banner-local CSS-vars (`--cb-bg`, `--cb-accent`,
+  `--cb-text`, `--cb-border`) по умолчанию ссылаются на theme vars
+  (`var(--color-bg-card, ...)` etc). Admin-override эмитится inline `<style>`
+  с более высоким specificity.
+- **Google Consent Mode v2:** `gtag('consent','default','denied')` в `wp_head`
+  с priority 1 (до загрузки analytics). После save в banner →
+  `gtag('consent','update', {...})` per-category через GTAG_MAP.
+- **B1 deprecation:** файлы `template/08_КОД/template-parts/cookie-banner.*` +
+  `consent-init.php` удалены — mu-plugin полностью владеет рендером. Это
+  решает баг «functions.php регенерируется без B1-хуков».
+- **Migration:** `landing_config_migration_b2_cookie_banner` marker seed'ит
+  network default запись с 3 категориями (necessary/analytics/marketing) при
+  первой загрузке wp-admin.
+
+См. [spec](docs/superpowers/specs/2026-05-22-b2-cookie-banner-library-design.md)
+и [plan](docs/superpowers/plans/2026-05-22-b2-cookie-banner-library-plan.md).
