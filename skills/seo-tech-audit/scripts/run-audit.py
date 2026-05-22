@@ -22,6 +22,13 @@ from pathlib import Path
 SKILL_SCRIPTS = Path(__file__).resolve().parent
 sys.path.insert(0, str(SKILL_SCRIPTS))
 
+# Bundled vendor dir for shared-hosting deployments where bs4/lxml aren't
+# globally installed and PHP-FPM runs as a different user than the one who
+# can pip install. Layout: <skill_root>/vendor/{bs4,lxml,...}
+VENDOR = SKILL_SCRIPTS.parent / "vendor"
+if VENDOR.is_dir():
+    sys.path.insert(0, str(VENDOR))
+
 from lib.fix_actions import get_fix_action
 from lib.http_client import fetch
 from lib.report import build_aggregate_report, build_site_report, render_markdown
