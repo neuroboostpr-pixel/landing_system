@@ -56,6 +56,9 @@ if (\is_admin() || \is_network_admin()) {
     require_once __DIR__ . '/includes/cookie-banner/admin-site-readonly.php';
 }
 
+// SEO head injector (meta description + Open Graph + favicon)
+require_once __DIR__ . '/includes/head-seo.php';
+
 add_action('init', function () {
     \LandingConfig\DB\maybe_install_or_migrate();
     \LandingConfig\DB\maybe_migrate_b1_pd_consent();
