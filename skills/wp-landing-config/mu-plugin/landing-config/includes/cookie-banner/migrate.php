@@ -11,6 +11,14 @@ const MARKER = 'landing_config_migration_b2_cookie_banner';
 function maybe_run(): void {
     if (\get_site_option(MARKER) === '1') return;
 
+    // Seed network default record in NETWORK_BLOG_ID (root).
+    $target = \LandingConfig\CookieBanner\Resolver\NETWORK_BLOG_ID;
+    $switched = false;
+    if (function_exists('switch_to_blog') && $target !== \get_current_blog_id()) {
+        \switch_to_blog($target);
+        $switched = true;
+    }
+
     $existing = \LandingConfig\CookieBanner\Resolver\get_post_id_for_segment(0);
     if (!$existing) {
         $defaults = \LandingConfig\CookieBanner\Resolver\DEFAULTS;
@@ -32,6 +40,10 @@ function maybe_run(): void {
         \update_post_meta($post_id, '_lp_cb_show_categories', '0');
         \update_post_meta($post_id, '_lp_cb_categories', \wp_json_encode($defaults['categories'], JSON_UNESCAPED_UNICODE));
         \update_post_meta($post_id, '_lp_cb_consent_version', (string) $defaults['consent_version']);
+    }
+
+    if ($switched) {
+        \restore_current_blog();
     }
 
     \update_site_option(MARKER, '1');
