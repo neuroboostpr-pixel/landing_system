@@ -430,6 +430,13 @@ stages:
     name: "QA"
     lock: hard
     require_approved: ["08_build"]
+    hard_checks:
+      - id: seo_audit_pass
+        type: script
+        script: "skills/seo-tech-audit/scripts/run-audit.py"
+        args: ["--project", "{project}", "--json"]
+        required: true
+        fix_hint: "Открой 11_QA/audit-report.md — список failed checks с описанием. Чтобы запустить руками: python skills/seo-tech-audit/scripts/run-audit.py --project <path>"
     soft_checks:
       - id: site_live
         prompt: "Сайт открывается по HTTPS? (yes / no)"
