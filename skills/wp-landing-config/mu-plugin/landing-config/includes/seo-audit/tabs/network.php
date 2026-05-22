@@ -28,10 +28,11 @@ $admin_root = is_multisite() ? \network_site_url('wp-admin/') : \admin_url();
     <h3 style="margin-top:24px;"><?php echo esc_html($site['host'] ?? '?'); ?></h3>
     <?php
     $blog_id = \LandingConfig\SEOAudit\Admin\host_to_blog_id($site['host'] ?? '') ?? 0;
-    $results = $site['results'] ?? [];
-    $cat_results = array_filter($results, static fn($r) =>
+    // Use $site['failures'] not $site['results'] — failures are pre-enriched with
+    // 'desc' (from quality-thresholds.yaml) and 'severity' by build_site_report.
+    $failures = $site['failures'] ?? [];
+    $cat_failures = array_filter($failures, static fn($r) =>
         str_starts_with((string)($r['id'] ?? ''), $prefix_filter));
-    $cat_failures = array_filter($cat_results, static fn($r) => empty($r['passed']));
     if (empty($cat_failures)):
         ?>
         <p>✅ Все проверки этой категории пройдены.</p>
