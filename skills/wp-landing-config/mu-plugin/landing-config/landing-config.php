@@ -45,6 +45,17 @@ require_once LANDING_CONFIG_DIR . '/adapters/Bitrix24Adapter.php';
 require_once LANDING_CONFIG_DIR . '/adapters/HubSpotAdapter.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-integrations.php';
 
+// B2 cookie-banner
+require_once __DIR__ . '/includes/cookie-banner/cpt.php';
+require_once __DIR__ . '/includes/cookie-banner/resolver.php';
+require_once __DIR__ . '/includes/cookie-banner/render.php';
+require_once __DIR__ . '/includes/cookie-banner/enqueue.php';
+require_once __DIR__ . '/includes/cookie-banner/migrate.php';
+if (\is_admin() || \is_network_admin()) {
+    require_once __DIR__ . '/includes/cookie-banner/admin-network.php';
+    require_once __DIR__ . '/includes/cookie-banner/admin-site-readonly.php';
+}
+
 add_action('init', function () {
     \LandingConfig\DB\maybe_install_or_migrate();
     \LandingConfig\DB\maybe_migrate_b1_pd_consent();
@@ -53,5 +64,6 @@ add_action('init', function () {
 add_action('admin_init', function () {
     if (\function_exists('current_user_can') && \current_user_can('manage_network_options')) {
         \LandingConfig\Migrate\maybe_run();
+        \LandingConfig\CookieBanner\Migrate\maybe_run();
     }
 });

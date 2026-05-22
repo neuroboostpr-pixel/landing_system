@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# check_legal_blocks.sh — проверяет что в сгенерированной wp-theme есть
-# cookie-banner, legal-block, consent-init.
+# check_legal_blocks.sh — проверяет наличие legal-block.php в теме +
+# mu-plugin landing-config cookie-banner source в landing-system.
 #
 # Usage: bash check_legal_blocks.sh <project-dir>
 # Exit: 0 если всё OK, 1 если чего-то не хватает.
@@ -18,29 +18,21 @@ THEME_DIR="$PROJECT/08_КОД/wp-theme"
 
 MISSING=()
 
-# 1. cookie-banner.php присутствует
-[ -f "$THEME_DIR/template-parts/cookie-banner.php" ] || MISSING+=("cookie-banner.php")
-# 2. consent-init.php присутствует
-[ -f "$THEME_DIR/template-parts/consent-init.php" ] || MISSING+=("consent-init.php")
-# 3. legal-block.php присутствует
+# 1. legal-block.php присутствует в теме
 [ -f "$THEME_DIR/template-parts/legal-block.php" ] || MISSING+=("legal-block.php")
-# 4. footer.php содержит вызов cookie-banner
-if [ -f "$THEME_DIR/footer.php" ]; then
-    grep -q "cookie-banner" "$THEME_DIR/footer.php" || MISSING+=("footer.php missing cookie-banner reference")
-else
-    MISSING+=("footer.php")
-fi
-# 5. header.php содержит consent-init (ДО analytics)
-if [ -f "$THEME_DIR/header.php" ]; then
-    grep -q "consent-init" "$THEME_DIR/header.php" || MISSING+=("header.php missing consent-init reference")
-else
-    MISSING+=("header.php")
-fi
-# 6. Хотя бы один блок-шаблон ссылается на legal-block
+
+# 2. Хотя бы один блок-шаблон ссылается на legal-block
 BLOCK_REFS=$(grep -rl "legal-block" "$THEME_DIR/blocks/" 2>/dev/null | wc -l)
 if [ "$BLOCK_REFS" -lt 1 ]; then
     MISSING+=("no block templates reference legal-block (forms missing PD checkbox)")
 fi
+
+# 3. mu-plugin cookie-banner source существует в landing-system
+# Find the landing-system root via git (handles worktrees correctly)
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SYSTEM_ROOT="$(cd "$SCRIPT_DIR" && git rev-parse --show-toplevel)"
+MU_PLUGIN_SRC="$SYSTEM_ROOT/skills/wp-landing-config/mu-plugin/landing-config/includes/cookie-banner/cpt.php"
+[ -f "$MU_PLUGIN_SRC" ] || MISSING+=("mu-plugin cookie-banner source missing: $MU_PLUGIN_SRC")
 
 if [ ${#MISSING[@]} -eq 0 ]; then
     echo "✅ legal_blocks_present: OK"
