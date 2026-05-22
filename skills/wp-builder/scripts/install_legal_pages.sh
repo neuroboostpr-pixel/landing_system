@@ -86,7 +86,7 @@ upsert_page() {
     local existing_id=$($SSH "$WP post list --post_type=page --meta_key=_lp_legal_page --meta_value=$slug --format=ids" 2>/dev/null | head -1 | tr -d '[:space:]')
 
     if [ -n "$existing_id" ]; then
-        $SSH "$WP post update $existing_id --post_content=\"\$(cat $content_path)\" --post_title='$title'"
+        $SSH "$WP post update $existing_id $content_path --post_title='$title'"
         $SSH "rm $content_path"
         echo "Updated existing /$slug page (id=$existing_id)"
     else

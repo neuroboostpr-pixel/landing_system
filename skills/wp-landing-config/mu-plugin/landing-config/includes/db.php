@@ -60,6 +60,43 @@ function maybe_install_or_migrate(): void {
     }
 }
 
+/**
+ * One-time migration: add pd_consent_granted_at column to existing installs.
+ * Runs dbDelta for all blogs so the column is backfilled on sites that already
+ * passed the DB_VERSION check before this column was introduced (B1 cookie-banner).
+ * Marker: landing_config_migration_b1_pd_consent
+ */
+function maybe_migrate_b1_pd_consent(): void {
+    if (get_site_option('landing_config_migration_b1_pd_consent')) {
+        return;
+    }
+
+    $ok = true;
+    if (is_multisite()) {
+        $sites = get_sites(['number' => 0]);
+        foreach ($sites as $site) {
+            switch_to_blog((int)$site->blog_id);
+            try {
+                create_tables_for_current_blog();
+            } catch (\Throwable $e) {
+                $ok = false;
+            } finally {
+                restore_current_blog();
+            }
+        }
+    } else {
+        try {
+            create_tables_for_current_blog();
+        } catch (\Throwable $e) {
+            $ok = false;
+        }
+    }
+
+    if ($ok) {
+        update_site_option('landing_config_migration_b1_pd_consent', true);
+    }
+}
+
 function create_tables_for_current_blog(): void {
     global $wpdb;
     $charset = $wpdb->get_charset_collate();
