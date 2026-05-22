@@ -84,14 +84,52 @@ def main(argv):
             ))
 
         for idx, match in enumerate(dom_block.matches):
-            issues.extend(lh.check_bullets(sb, match.soup))
-            issues.extend(lh.check_color_swatches(sb, match.soup))
-            for c in sb.controls + sb.card_controls:
-                if c.type == "textarea":
-                    issues.extend(lh.check_multi_paragraph(sb, match.soup, target_field=c.name))
-            if sb.probe_kind == "card-collection":
-                issues.extend(lh.check_slider_images(sb, match.soup, template_index=idx))
-                issues.extend(lh.check_inline_svg_icon(sb, match.soup, template_index=idx))
+            if sb.probe_kind == "card-collection" and sb.card_probe_selector:
+                # Iterate per individual card. Card-level heuristics run on each
+                # card's soup; section-level heuristics run on the section soup
+                # AFTER detaching cards (so their inner <p>/<li>/etc. don't leak
+                # into section counts).
+                card_matches = match.soup.select(sb.card_probe_selector)
+
+                # Card-level heuristics: bullets, swatches, multi-paragraph,
+                # slider, svg — one pass per card with its template row.
+                for card_idx, card_soup in enumerate(card_matches):
+                    # Bullets/swatches typically belong to cards in our layouts.
+                    issues.extend(lh.check_bullets(sb, card_soup))
+                    issues.extend(lh.check_color_swatches(sb, card_soup))
+                    for c in sb.card_controls:
+                        if c.type == "textarea":
+                            issues.extend(lh.check_multi_paragraph(
+                                sb, card_soup, target_field=c.name
+                            ))
+                    issues.extend(lh.check_slider_images(sb, card_soup, template_index=card_idx))
+                    issues.extend(lh.check_inline_svg_icon(sb, card_soup, template_index=card_idx))
+
+                # Section-level: detach card subtrees from a soup copy, then
+                # run section-control multi-paragraph against the remainder.
+                # We use a clone via str(soup) → re-parse to avoid mutating.
+                from bs4 import BeautifulSoup as _BS
+                section_clone = _BS(str(match.soup), "html.parser")
+                for card in section_clone.select(sb.card_probe_selector):
+                    card.decompose()
+                for c in sb.controls:
+                    if c.type == "textarea":
+                        issues.extend(lh.check_multi_paragraph(
+                            sb, section_clone, target_field=c.name
+                        ))
+            else:
+                # Legacy / single-block path: all heuristics run against the
+                # whole match.soup. Same as the v1 behaviour.
+                issues.extend(lh.check_bullets(sb, match.soup))
+                issues.extend(lh.check_color_swatches(sb, match.soup))
+                for c in sb.controls + sb.card_controls:
+                    if c.type == "textarea":
+                        issues.extend(lh.check_multi_paragraph(sb, match.soup, target_field=c.name))
+                if sb.probe_kind == "card-collection":
+                    # card-collection without card_probe_selector — best-effort
+                    # using section-wide template index.
+                    issues.extend(lh.check_slider_images(sb, match.soup, template_index=idx))
+                    issues.extend(lh.check_inline_svg_icon(sb, match.soup, template_index=idx))
 
     errors = [i for i in issues if i.severity == "error"]
     warnings = [i for i in issues if i.severity == "warning"]

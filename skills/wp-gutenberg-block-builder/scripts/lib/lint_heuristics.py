@@ -83,6 +83,10 @@ def check_color_swatches(spec_block, soup_match):
 
 
 def check_multi_paragraph(spec_block, soup_match, target_field):
+    # SVG textarea fields carry inline markup, not human-readable paragraphs.
+    # Skip them so multi-paragraph noise doesn't shadow real inline-svg-icon issues.
+    if target_field in SVG_ATTR_NAMES:
+        return []
     p_count = len(soup_match.find_all("p"))
     if p_count <= 1:
         return []

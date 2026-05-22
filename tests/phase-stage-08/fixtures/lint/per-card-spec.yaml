@@ -1,0 +1,28 @@
+version: 1
+page:
+  title: Per-Card Test Landing
+  slug: home
+blocks:
+  - slug: features
+    title: Features
+    icon: star
+    category: design
+    type: section-card
+    probe_selector: '.features-section'
+    probe_kind: card-collection
+    card_probe_selector: '.feature-card'
+    section_grid_class: 'features-grid'
+    controls:
+      - { id: c_feat_stmt, name: feat_statement, type: textarea, label: Statement, default: "Only one paragraph in spec" }
+    card:
+      slug: feature-card
+      title: Feature Card
+      controls:
+        - { id: c_fc_title, name: title, type: text, label: Title, default: "Feat" }
+        - { id: c_fc_icon,  name: icon_svg, type: textarea, label: Icon, default: "" }
+      template:
+        # 3 entries to match the 3 .feature-card elements in
+        # brutalist-features-section.html (1 statement + 2 features).
+        - { title: "Statement",  icon_svg: "%3Csvg%3E%3C/svg%3E" }
+        - { title: "Confidence", icon_svg: "%3Csvg%3E%3C/svg%3E" }
+        - { title: "Quietness",  icon_svg: "%3Csvg%3E%3C/svg%3E" }

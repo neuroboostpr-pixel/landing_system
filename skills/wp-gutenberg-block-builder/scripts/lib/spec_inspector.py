@@ -23,6 +23,7 @@ class InspectedSpecBlock:
     controls: list[InspectedControl] = field(default_factory=list)
     card_controls: list[InspectedControl] = field(default_factory=list)
     template: list[dict] = field(default_factory=list)
+    card_probe_selector: Optional[str] = None
 
 
 @dataclass
@@ -57,5 +58,6 @@ def inspect_spec(spec_path: Path) -> InspectedSpec:
             controls=[_to_inspected_control(c) for c in b.controls],
             card_controls=card_controls,
             template=template,
+            card_probe_selector=b.card_probe_selector,
         ))
     return InspectedSpec(blocks=blocks)
