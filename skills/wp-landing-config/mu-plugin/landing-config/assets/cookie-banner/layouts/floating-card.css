@@ -1,0 +1,13 @@
+.lp-cb--floating-card-left,
+.lp-cb--floating-card-right {
+    bottom: 24px;
+    width: 360px;
+    max-width: calc(100vw - 48px);
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 16px 20px;
+    border-radius: var(--cb-radius, 8px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+.lp-cb--floating-card-left  { left:  24px; right: auto; }
+.lp-cb--floating-card-right { right: 24px; left:  auto; }

@@ -64,7 +64,11 @@ function on_head(): void {
     // 3. Enqueue CSS + JS
     $base_url = \plugins_url('assets/cookie-banner', dirname(dirname(__DIR__)) . '/landing-config.php');
     \wp_enqueue_style('lp-cb-core', $base_url . '/core.css', [], VERSION);
-    \wp_enqueue_style('lp-cb-layout', $base_url . '/layouts/' . $settings['layout'] . '.css', ['lp-cb-core'], VERSION);
+    $css_layout = $settings['layout'];
+    if (strpos($css_layout, 'floating-card-') === 0) {
+        $css_layout = 'floating-card';
+    }
+    \wp_enqueue_style('lp-cb-layout', $base_url . '/layouts/' . $css_layout . '.css', ['lp-cb-core'], VERSION);
     \wp_enqueue_script('lp-cb', $base_url . '/banner.js', [], VERSION, true);
 
     \wp_localize_script('lp-cb', 'LP_CB_CONFIG', [

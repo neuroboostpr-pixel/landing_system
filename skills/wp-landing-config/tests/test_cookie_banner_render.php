@@ -61,5 +61,14 @@ ob_start();
 $html = ob_get_clean();
 assert_test(strpos($html, 'data-version="1"') !== false, 'T10 data-version attribute present');
 
+// T_LAYOUTS: each of 5 layouts emits its specific class
+foreach (['top-bar', 'bottom-bar', 'floating-card-left', 'floating-card-right', 'center-modal'] as $L) {
+    $s = array_merge(\LandingConfig\CookieBanner\Resolver\DEFAULTS, ['layout' => $L]);
+    ob_start();
+    \LandingConfig\CookieBanner\Render\render_with_settings($s);
+    $h = ob_get_clean();
+    assert_test(strpos($h, 'lp-cb--' . $L) !== false, "T_LAYOUTS each layout renders: $L");
+}
+
 echo "$tests tests, $failures failures\n";
 exit($failures > 0 ? 1 : 0);
