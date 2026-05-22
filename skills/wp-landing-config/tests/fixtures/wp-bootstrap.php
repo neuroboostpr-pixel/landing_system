@@ -126,6 +126,9 @@ function do_action($hook, ...$args) {
 
 function wp_unslash($v) { return is_string($v) ? stripslashes($v) : $v; }
 function sanitize_text_field($v) { return is_string($v) ? trim(strip_tags($v)) : ''; }
+if (!function_exists('sanitize_textarea_field')) {
+    function sanitize_textarea_field($v) { return is_string($v) ? trim(strip_tags($v)) : ''; }
+}
 if (!function_exists('sanitize_key')) {
     function sanitize_key($key) {
         $key = strtolower((string)$key);
@@ -413,6 +416,9 @@ if (!function_exists('esc_textarea')) {
 }
 if (!function_exists('esc_url')) {
     function esc_url($v) { return filter_var((string)$v, FILTER_SANITIZE_URL); }
+}
+if (!function_exists('esc_url_raw')) {
+    function esc_url_raw($v) { return filter_var((string)$v, FILTER_SANITIZE_URL); }
 }
 if (!function_exists('selected')) {
     function selected($a, $b, $echo = true) {
