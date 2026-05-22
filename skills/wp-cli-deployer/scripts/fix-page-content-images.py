@@ -94,11 +94,29 @@ def transform(html: str, photo_map: dict[str, str]) -> tuple[str, dict[str, int]
         repl_placeholder, html
     )
 
-    # 2. "assets/<sub>/X.<ext>" → "<id>" (string-only image refs in sub-blocks)
+    # 2. "<key>": "assets/<sub>/X.<ext>"  →  "<key>": "<url-encoded {id,url}>"
+    #    If <key> is an image-attr (photoN, hero_bg, model_image, …), the value
+    #    becomes URL-encoded JSON so Lazy Blocks accepts it. Otherwise it stays
+    #    a bare ID string (legacy callers may need that form).
+    image_keys_pattern = "|".join(IMAGE_ATTR_KEYS)
+
     def repl_string(m):
-        return f'"{photo_map.get(m.group(1), "0")}"'
+        key = m.group(1)
+        fname = m.group(2)
+        att_id = photo_map.get(fname, "0")
+        # Image-attr keys → URL-encoded {id,url} JSON
+        if re.fullmatch(image_keys_pattern, key) or re.fullmatch(r"photo\d+", key):
+            try:
+                obj = {"id": int(att_id), "url": ""}
+            except ValueError:
+                obj = {"id": 0, "url": ""}
+            encoded = urllib.parse.quote(json.dumps(obj, ensure_ascii=False))
+            return f'"{key}": "{encoded}"'
+        return f'"{key}": "{att_id}"'
+
     html, stats["string_paths"] = re.subn(
-        rf'"assets/[^/"]+/([^"]+\.(?:{ext_alt}))"', repl_string, html
+        rf'"(\w+)":\s*"assets/[^/"]+/([^"]+\.(?:{ext_alt}))"',
+        repl_string, html
     )
 
     # 3. URL-encode image attribute objects {"id": N, "url": "..."}

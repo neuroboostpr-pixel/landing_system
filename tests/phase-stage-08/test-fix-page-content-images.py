@@ -61,6 +61,28 @@ def test_string_path_webp():
     assert stats["string_paths"] == 1
 
 
+def test_string_path_image_key_url_encoded_object():
+    """photoN keys are image attrs — must produce URL-encoded {id,url} JSON,
+    not a bare ID string (Lazy Blocks image control needs the object form)."""
+    html = '"photo1": "assets/photos/hero.jpg"'
+    out, stats = transform(html, PHOTO_MAP)
+    assert stats["string_paths"] == 1
+    # Decoded value must equal {"id": 10, "url": ""}
+    encoded = out.split('"photo1": "')[1].rstrip('"')
+    decoded = json.loads(urllib.parse.unquote(encoded))
+    assert decoded == {"id": 10, "url": ""}
+
+
+def test_string_path_hero_bg_url_encoded_object():
+    """hero_bg is in IMAGE_ATTR_KEYS — string path must also become URL-encoded JSON."""
+    html = '"hero_bg": "assets/photos/hero.jpg"'
+    out, stats = transform(html, PHOTO_MAP)
+    assert stats["string_paths"] == 1
+    encoded = out.split('"hero_bg": "')[1].rstrip('"')
+    decoded = json.loads(urllib.parse.unquote(encoded))
+    assert decoded == {"id": 10, "url": ""}
+
+
 def test_image_object_url_encoded():
     html = '"hero_bg": {"id": 10, "url": ""}'
     out, stats = transform(html, PHOTO_MAP)
