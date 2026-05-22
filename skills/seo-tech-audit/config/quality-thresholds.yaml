@@ -49,3 +49,8 @@ S2: { hard: false, value: { width: 1200, height: 630 }, desc: "og:image ≥1200�
 S3: { hard: false, desc: "Twitter Card: card/title/image" }
 S4: { hard: false, desc: "Schema.org JSON-LD присутствует и парсится" }
 S5: { hard: true,  desc: "Favicon присутствует (32 или 180px)" }
+
+# === AI Readiness (AI1-AI3) ===
+AI1: { hard: false, desc: "llms.txt валиден (llmstxt.org spec)" }
+AI2: { hard: false, desc: "JSON-LD Organization/LocalBusiness/Product/FAQPage" }
+AI3: { hard: false, desc: "Body содержит ≥1KB текста без JS execution" }
