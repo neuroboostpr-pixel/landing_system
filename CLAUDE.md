@@ -499,3 +499,34 @@ Skill `seo-tech-audit` + slash-команда `/landing-audit` запускаю�
 **Pure Python:** без зависимости от Lighthouse/Node (`requests`+`beautifulsoup4`+`lxml`+`python-whois`).
 
 См. [spec §13](docs/superpowers/specs/2026-05-15-s2e-seo-tech-audit-design.md) и [plan E1](docs/superpowers/plans/2026-05-22-s2e-e1-seo-audit-skill-plan.md).
+
+### S2-E.4 — Audit Dashboard + Head & SEO Settings (2026-05-22)
+
+Network admin интерфейс для запуска audit и редактирования SEO-параметров:
+
+- **Меню `Лендинг → Аудит`** с табами Обзор / HTML / Network / Schema / AI readiness.
+  Селектор сегмента (all/0/N) переключает между multisite-aggregate, network default
+  и конкретными subsites. Кнопка «Запустить» — shell_exec в Python skill `seo-tech-audit`.
+- **Меню `Лендинг → Head & SEO`** — settings page (description, OG image picker,
+  OG type, Twitter card, llms.txt content) с **live preview** OG-карточки
+  (стиль Facebook/Telegram) и SERP-сниппета (стиль Google).
+- **Cascade** для head-seo settings (network default + per-site override) — тот же
+  паттерн что Cookie-banner (`switch_to_blog(NETWORK_BLOG_ID)`).
+- **Deep-links на failures** — каждый failed check в admin получает кнопку «Открыть»
+  ведущую в нужное место WP admin (settings page / post editor / Customizer).
+  Каталог fix-actions: 46 записей (43 + AI1/AI2/AI3), генерится Python'ом в JSON
+  для PHP consumption.
+- **AI readiness (3 проверки)** — `AI1` llms.txt валиден, `AI2` JSON-LD
+  Organization/Product/FAQ, `AI3` body содержит ≥1KB текста без JS.
+  Добавлено в Python skill `seo-tech-audit`.
+- **CLI расширение:** `run-audit.py --hosts-file <file>` (multisite batch
+  без `.landing-state.yaml`), `--with-fix-hints` (enrich failures с
+  fix_action metadata).
+- **llms.txt rewrite rule** — mu-plugin регистрирует `add_rewrite_rule` для `/llms.txt`,
+  content берётся из option `landing_seo_llms_txt` (редактируется в Head & SEO admin).
+  После деплоя нужен `wp rewrite flush` (или Settings → Permalinks → Save).
+- **Out of scope (S2-E.4):** auto-fix кнопки (только deep-links), cron,
+  history snapshots, page-level overrides.
+
+См. [spec](docs/superpowers/specs/2026-05-22-s2e-e4-audit-dashboard-design.md)
+и [plan](docs/superpowers/plans/2026-05-22-s2e-e4-audit-dashboard-plan.md).
