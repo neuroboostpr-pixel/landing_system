@@ -92,6 +92,11 @@ function handle_run(): void {
     ];
     if (!$res['ok']) {
         $args['error'] = urlencode($res['error'] ?? 'unknown');
+        // Stash stderr in a transient (URLs have length limits — can't pass full stderr)
+        $stderr = (string) ($res['stderr'] ?? '');
+        if ($stderr !== '') {
+            \set_site_transient('lp_audit_last_stderr', substr($stderr, 0, 4000), 600);
+        }
     }
     \wp_safe_redirect(\add_query_arg($args, \network_admin_url('admin.php')));
     exit;
@@ -155,7 +160,19 @@ function render_page(): void {
         <?php endif; ?>
         <?php if (!empty($_GET['error'])): ?>
             <div class="notice notice-error is-dismissible">
-                <p>Ошибка: <?php echo esc_html(urldecode((string) $_GET['error'])); ?></p>
+                <p><strong>Ошибка:</strong> <?php echo esc_html(urldecode((string) $_GET['error'])); ?></p>
+                <?php $stderr = \get_site_transient('lp_audit_last_stderr');
+                if ($stderr): ?>
+                    <details style="margin-top:8px;">
+                        <summary style="cursor:pointer;">stderr (для отладки)</summary>
+                        <pre style="background:#f6f7f7;padding:8px;font-size:11px;max-height:300px;overflow:auto;"><?php echo esc_html($stderr); ?></pre>
+                    </details>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
+        <?php if (!empty($_GET['audited']) && (int)$_GET['audited'] === 0 && empty($_GET['error'])): ?>
+            <div class="notice notice-error is-dismissible">
+                <p><strong>Аудит не выполнен.</strong> Параметр audited=0 без error — handle_run завершился аномально.</p>
             </div>
         <?php endif; ?>
 
