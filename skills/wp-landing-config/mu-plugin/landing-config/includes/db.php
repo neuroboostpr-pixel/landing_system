@@ -83,6 +83,7 @@ function create_tables_for_current_blog(): void {
         ip VARCHAR(45) NOT NULL DEFAULT '',
         user_agent TEXT NULL,
         processed_status VARCHAR(32) NOT NULL DEFAULT 'pending',
+        pd_consent_granted_at DATETIME NULL,
         PRIMARY KEY (id),
         KEY created_at (created_at),
         KEY processed_status (processed_status)
