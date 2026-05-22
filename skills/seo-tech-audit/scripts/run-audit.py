@@ -57,13 +57,25 @@ def main(argv: list[str]) -> int:
     g = p.add_mutually_exclusive_group(required=True)
     g.add_argument("--project", help="project root with .landing-state.yaml")
     g.add_argument("--url", help="single ad-hoc URL to audit")
+    g.add_argument("--hosts-file", help="text file with URLs, one per line")
     p.add_argument("--site", help="filter: only this host (with --project)")
     p.add_argument("--out", help="output directory (default: <project>/11_QA or ./11_QA)")
     p.add_argument("--json", action="store_true", help="JSON only, skip Markdown")
     args = p.parse_args(argv[1:])
 
     # Resolve hosts
-    if args.url:
+    if args.hosts_file:
+        hosts_path = Path(args.hosts_file)
+        if not hosts_path.exists():
+            print(f"ERROR: hosts file not found: {hosts_path}", file=sys.stderr)
+            return 2
+        raw = hosts_path.read_text(encoding="utf-8").splitlines()
+        hosts = [line.strip().rstrip("/") for line in raw if line.strip()]
+        if not hosts:
+            print(f"ERROR: hosts file is empty: {hosts_path}", file=sys.stderr)
+            return 2
+        out_root = Path(args.out) if args.out else Path("./11_QA")
+    elif args.url:
         hosts = [args.url.rstrip("/")]
         out_root = Path(args.out) if args.out else Path("./11_QA")
     else:
