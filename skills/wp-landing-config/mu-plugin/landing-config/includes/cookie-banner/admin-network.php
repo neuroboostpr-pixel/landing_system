@@ -39,6 +39,15 @@ function handle_save(): void {
     \check_admin_referer('lp_cb_save');
     $segment = (int) ($_POST['segment'] ?? 0);
 
+    // segment=0 (network) → records live in NETWORK_BLOG_ID (root).
+    // segment=N (site override) → records live in blog N.
+    $target_blog = ($segment === 0) ? \LandingConfig\CookieBanner\Resolver\NETWORK_BLOG_ID : $segment;
+    $switched = false;
+    if (function_exists('switch_to_blog') && $target_blog !== \get_current_blog_id()) {
+        \switch_to_blog($target_blog);
+        $switched = true;
+    }
+
     $post_id = get_post_id_for_segment($segment);
     if (!$post_id) {
         $post_id = \wp_insert_post([
@@ -90,6 +99,10 @@ function handle_save(): void {
 
     _save_field($post_id, '_lp_cb_consent_version', (int) ($_POST['_lp_cb_consent_version'] ?? 1));
 
+    if ($switched) {
+        \restore_current_blog();
+    }
+
     \wp_safe_redirect(\add_query_arg(['page' => MENU_SLUG, 'segment' => $segment, 'saved' => 1], \network_admin_url('admin.php')));
     exit;
 }
@@ -98,7 +111,7 @@ function render_page(): void {
     if (!\current_user_can('manage_network_options')) wp_die('forbidden');
     $segment = current_from_request();
     $post_id = get_post_id_for_segment($segment);
-    $current = $post_id ? read_settings($post_id) : [];
+    $current = $post_id ? read_settings($post_id, $segment) : [];
     $get = function(string $field, $default = '') use ($current) {
         $val = $current[$field] ?? null;
         return $val === null ? $default : $val;
