@@ -1,0 +1,6 @@
+project:
+  slug: simple-project
+  primary_domain: simple-project.example.com
+multisite: false
+stages:
+  09_deploy: {status: approved}

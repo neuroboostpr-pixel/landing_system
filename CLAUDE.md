@@ -462,3 +462,40 @@ Replaces B1's hardcoded cookie-banner with a mu-plugin-owned library:
 
 См. [spec](docs/superpowers/specs/2026-05-22-b2-cookie-banner-library-design.md)
 и [plan](docs/superpowers/plans/2026-05-22-b2-cookie-banner-library-plan.md).
+
+### S2-E.1 — SEO/Tech Audit Skill (2026-05-22)
+
+Skill `seo-tech-audit` + slash-команда `/landing-audit` запускают аудит задеплоенного лендинга — 43 HTTP-проверки (HTML on-page, network/infra, schema). Multisite-aware: auto-discovery поддоменов из `.landing-state.yaml::audience_segments`.
+
+**Что проверяется (E1):**
+- HTML (25): title/meta/h1/canonical/lang/img-alt/anchor-noopener
+- Network (13): SSL валиден ≥7 дней, www→non-www 301, robots.txt + sitemap.xml + ссылка из robots, 404 не soft-200, security headers ≥3/4, Whois (info)
+- Schema (5): Open Graph 5 свойств, Twitter Card, JSON-LD парсится, favicon
+
+**Что НЕ в E1 (отдельные итерации):**
+- Lighthouse Web Vitals (LCP/CLS/INP) — E2
+- Crawler битых ссылок — E2
+- Content metrics RU (тошнота/Flesch/водность) — E3
+- AI readiness (llms.txt extended) + auto-fix loop в orchestrator — E4
+
+**Использование:**
+```bash
+/landing-audit dubai-avto-liza             # все поддомены проекта
+/landing-audit https://example.com         # ad-hoc URL
+/landing-audit dubai-avto-liza --site russian.ailexi.ru
+```
+
+**Output:**
+```
+<project>/11_QA/
+├── audit-report.md       # сводный (все поддомены, таблица)
+├── audit-report.json     # машино-читаемый
+└── per-site/
+    └── <host>.{md,json}
+```
+
+**Stage-11 gate:** `seo_audit_pass` в `config/stage-gates.yaml`. Stage-11 не закрывается пока hard-gate fails на любом поддомене.
+
+**Pure Python:** без зависимости от Lighthouse/Node (`requests`+`beautifulsoup4`+`lxml`+`python-whois`).
+
+См. [spec §13](docs/superpowers/specs/2026-05-15-s2e-seo-tech-audit-design.md) и [plan E1](docs/superpowers/plans/2026-05-22-s2e-e1-seo-audit-skill-plan.md).
