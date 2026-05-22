@@ -31,6 +31,36 @@ const OPTION_DESCRIPTION = 'landing_seo_description';
 const OPTION_OG_IMAGE    = 'landing_seo_og_image';
 const OPTION_OG_TYPE     = 'landing_seo_og_type';
 const OPTION_TW_CARD     = 'landing_seo_twitter_card';
+const NETWORK_BLOG_ID    = 1;
+
+/**
+ * Cascade-aware read: site override → network default → empty.
+ *
+ * @param string $option_key e.g. 'landing_seo_description'
+ * @param int    $blog_id    Current blog id
+ * @return string Always a string (empty if nothing set)
+ */
+function resolve_setting_cascade(string $option_key, int $blog_id): string {
+    // 1. Try site override (non-network blog)
+    if ($blog_id !== NETWORK_BLOG_ID && function_exists('switch_to_blog')) {
+        \switch_to_blog($blog_id);
+        $site_val = (string) \get_option($option_key, '');
+        \restore_current_blog();
+        if ($site_val !== '') return $site_val;
+    } else {
+        $site_val = (string) \get_option($option_key, '');
+        if ($site_val !== '') return $site_val;
+    }
+
+    // 2. Fall back to network default (blog_id = 1)
+    if (function_exists('switch_to_blog')) {
+        \switch_to_blog(NETWORK_BLOG_ID);
+        $network_val = (string) \get_option($option_key, '');
+        \restore_current_blog();
+        return $network_val;
+    }
+    return '';
+}
 
 add_action('wp_head', __NAMESPACE__ . '\\emit', 2);
 
@@ -44,14 +74,14 @@ function emit(): void {
         $title = \get_bloginfo('name');
     }
 
-    $description = (string) \get_option(OPTION_DESCRIPTION, '');
+    $description = resolve_setting_cascade(OPTION_DESCRIPTION, \get_current_blog_id());
     if ($description === '') {
         $description = (string) \get_bloginfo('description');
     }
 
     $url = \home_url(\add_query_arg(null, null));
 
-    $og_image = (string) \get_option(OPTION_OG_IMAGE, '');
+    $og_image = resolve_setting_cascade(OPTION_OG_IMAGE, \get_current_blog_id());
     if ($og_image === '') {
         $site_icon = \get_site_icon_url(512);
         if ($site_icon) {
@@ -59,15 +89,9 @@ function emit(): void {
         }
     }
 
-    $og_type = (string) \get_option(OPTION_OG_TYPE, 'website');
-    if ($og_type === '') {
-        $og_type = 'website';
-    }
+    $og_type = resolve_setting_cascade(OPTION_OG_TYPE, \get_current_blog_id()) ?: 'website';
 
-    $tw_card = (string) \get_option(OPTION_TW_CARD, 'summary_large_image');
-    if ($tw_card === '') {
-        $tw_card = 'summary_large_image';
-    }
+    $tw_card = resolve_setting_cascade(OPTION_TW_CARD, \get_current_blog_id()) ?: 'summary_large_image';
 
     $favicon = \get_site_icon_url(32);
 

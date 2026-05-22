@@ -59,6 +59,15 @@ if (\is_admin() || \is_network_admin()) {
 // SEO head injector (meta description + Open Graph + favicon)
 require_once __DIR__ . '/includes/head-seo.php';
 
+// S2-E.4: SEO Audit dashboard + Head & SEO admin + llms.txt rewrite
+require_once __DIR__ . '/includes/seo-audit/audit-runner.php';
+require_once __DIR__ . '/includes/seo-audit/deep-links.php';
+require_once __DIR__ . '/includes/llms-txt-rewrite.php';
+if (\is_admin() || \is_network_admin()) {
+    require_once __DIR__ . '/includes/seo-audit/admin-network.php';
+    require_once __DIR__ . '/includes/head-seo-admin.php';
+}
+
 add_action('init', function () {
     \LandingConfig\DB\maybe_install_or_migrate();
     \LandingConfig\DB\maybe_migrate_b1_pd_consent();
