@@ -43,6 +43,10 @@ function on_head(): void {
     $settings = resolve_for_blog(\get_current_blog_id());
     if ($settings === null) return;
 
+    // Preview mode: force banner show even if user has consented (admin only).
+    $is_preview = isset($_GET['lp_cookie_banner_preview'])
+        && \current_user_can('manage_options');
+
     // 1. Google Consent Mode v2 default DENIED
     echo "<script>"
        . "window.dataLayer=window.dataLayer||[];"
@@ -77,6 +81,7 @@ function on_head(): void {
         'categories'      => $settings['categories'],
         'gtag_map'        => GTAG_MAP,
         'show_categories' => (bool) $settings['show_categories'],
+        'force_show'      => $is_preview,
     ]);
 }
 

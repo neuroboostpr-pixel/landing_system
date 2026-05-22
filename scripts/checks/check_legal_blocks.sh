@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# check_legal_blocks.sh — проверяет что в сгенерированной wp-theme есть
-# cookie-banner, legal-block, consent-init.
+# check_legal_blocks.sh — проверяет наличие legal-block.php в теме +
+# mu-plugin landing-config cookie-banner source в landing-system.
 #
 # Usage: bash check_legal_blocks.sh <project-dir>
 # Exit: 0 если всё OK, 1 если чего-то не хватает.

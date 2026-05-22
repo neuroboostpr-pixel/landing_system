@@ -68,7 +68,10 @@
     }
 
     var existing = loadConsent();
-    if (!existing || existing.version !== cfg.version) {
+    if (cfg.force_show) {
+        // Admin preview mode — show banner regardless of stored consent.
+        showBanner();
+    } else if (!existing || existing.version !== cfg.version) {
         showBanner();
     } else {
         hideBanner();
