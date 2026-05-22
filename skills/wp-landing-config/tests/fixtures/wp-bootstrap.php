@@ -314,6 +314,15 @@ if (!function_exists('get_posts')) {
                     break;
                 }
             }
+            // Also support flat meta_key / meta_value args (WP_Query compat)
+            if ($meta_match && isset($args['meta_key']) && isset($args['meta_value'])) {
+                $mk = $args['meta_key'];
+                $mv = $args['meta_value'];
+                $actual = $GLOBALS['_mock_post_meta'][$id][$mk] ?? '';
+                if ((string)$actual !== (string)$mv) {
+                    $meta_match = false;
+                }
+            }
             if (!$meta_match) continue;
             $results[] = is_object($p) ? $p : (object) $p;
         }
@@ -326,6 +335,10 @@ if (!function_exists('get_posts')) {
             });
         }
         if ($limit > 0) $results = array_slice($results, 0, $limit);
+        // Support fields => 'ids' (return array of IDs instead of objects)
+        if (($args['fields'] ?? '') === 'ids') {
+            return array_map(fn($p) => (int) $p->ID, $results);
+        }
         return $results;
     }
 }
