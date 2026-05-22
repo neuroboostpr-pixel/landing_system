@@ -67,6 +67,48 @@ Note: `multi-paragraph` is skipped for textarea fields whose name is in the
 SVG attribute list (`icon_svg`, `svg`, `background_svg`, …) since those carry
 raw markup, not human paragraphs.
 
+### card_skip_selector — exclude decorative cards
+
+Some sections render a static "statement" card from the parent block rather
+than from a card-template entry — but it shares the card class
+(`.feature-statement` also has `.feature-card`). Without intervention, the
+linter counts it as an extra card-template instance and reports a phantom
+`template[N]` overflow.
+
+```yaml
+- slug: features
+  probe_selector: '.features-section'
+  card_probe_selector: '.feature-card'
+  card_skip_selector: '.feature-statement'   # exclude statement from per-card loop
+```
+
+DOM matches are filtered: `card_probe_selector` minus `card_skip_selector`.
+The skipped element is still available for section-level checks via
+`target_selector` (see below).
+
+### target_selector — scope multi-paragraph to a sub-element
+
+A card may contain multiple sibling `<p>` blocks belonging to different
+controls (e.g. `.model-tagline` + `.model-description` + `.model-disclaimer`).
+The default `multi-paragraph` heuristic counts all of them — a false positive
+for a control like `description` which actually owns only the middle block.
+
+Set `target_selector` on the control to scope the check:
+
+```yaml
+controls:
+  - id: c_mc_description
+    name: description
+    type: textarea
+    target_selector: '.model-description'   # count <p> only inside this
+    default: "…"
+```
+
+If `target_selector` is set but does not match any element in the current
+scope, the check is silently skipped (no error, no warning). This makes it
+safe to apply `target_selector` even when the same control rendering is
+optional.
+
 If `probe_selector` is missing, the block is **skipped** with a warning. To
 enforce coverage, run with `--json` and grep for `"warning"`.
 

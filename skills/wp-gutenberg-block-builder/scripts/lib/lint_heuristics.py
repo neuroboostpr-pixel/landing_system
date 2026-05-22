@@ -87,12 +87,20 @@ def check_multi_paragraph(spec_block, soup_match, target_field):
     # Skip them so multi-paragraph noise doesn't shadow real inline-svg-icon issues.
     if target_field in SVG_ATTR_NAMES:
         return []
-    p_count = len(soup_match.find_all("p"))
-    if p_count <= 1:
-        return []
     control = next((c for c in spec_block.controls + spec_block.card_controls
                     if c.name == target_field), None)
     if control is None or control.type != "textarea":
+        return []
+    # Scope <p> count to the control's target_selector if provided. Avoids
+    # false positives when a card contains sibling <p> belonging to other
+    # controls (e.g. .model-tagline + .model-description + .model-disclaimer).
+    scope = soup_match
+    if getattr(control, "target_selector", None):
+        scope = soup_match.select_one(control.target_selector)
+        if scope is None:
+            return []
+    p_count = len(scope.find_all("p"))
+    if p_count <= 1:
         return []
     default_str = str(control.default_value or "")
     # Count paragraphs in default by splitting on \n\n
