@@ -399,6 +399,12 @@ if (!function_exists('wp_kses')) {
     }
 }
 
+if (!function_exists('wp_json_encode')) {
+    function wp_json_encode($data, $options = 0, $depth = 512) {
+        return json_encode($data, $options, $depth);
+    }
+}
+
 if (!function_exists('esc_attr')) {
     function esc_attr($v) { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 }
