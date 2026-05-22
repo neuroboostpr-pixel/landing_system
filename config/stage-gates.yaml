@@ -352,6 +352,11 @@ stages:
         script: "scripts/lib/stage_08_helper.py"
         args: ["{project}"]
         fix_hint: "Run: python scripts/generate-wp-blocks.py --project {project}"
+      - id: composed_vs_spec_lint
+        type: script
+        script: "skills/wp-gutenberg-block-builder/scripts/lint-composed-vs-spec.py"
+        args: ["--project", "{project}"]
+        fix_hint: "Run: python3 skills/wp-gutenberg-block-builder/scripts/lint-composed-vs-spec.py --project {project} --fix"
     soft_checks:
       - id: legal_blocks
         prompt: "152-ФЗ блок и cookie-баннер присутствуют в HTML? (yes / no / partial)"
