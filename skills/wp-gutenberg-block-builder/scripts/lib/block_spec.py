@@ -63,6 +63,8 @@ class Block:
     element: Optional[str] = None
     wrapper_open_html: Optional[str] = None
     wrapper_close_html: Optional[str] = None
+    probe_selector: Optional[str] = None
+    probe_kind: str = "single"  # "single" | "card-collection"
 
 
 @dataclass
@@ -137,6 +139,8 @@ def load(path: Path | str) -> BlockSpec:
             element=b.get("element"),
             wrapper_open_html=b.get("wrapper_open_html"),
             wrapper_close_html=b.get("wrapper_close_html"),
+            probe_selector=b.get("probe_selector"),
+            probe_kind=b.get("probe_kind", "single"),
         ))
     return BlockSpec(
         version=int(data.get("version", 0)),
@@ -193,6 +197,10 @@ def validate(spec: BlockSpec) -> None:
                 raise BlockSpecError(f"block '{b.slug}': type=single must not have 'card:' sub-object")
             if b.section_grid_class is not None:
                 raise BlockSpecError(f"block '{b.slug}': type=single must not have section_grid_class")
+        if b.probe_kind not in ("single", "card-collection"):
+            raise BlockSpecError(
+                f"block {b.slug}: probe_kind must be 'single' or 'card-collection', got {b.probe_kind!r}"
+            )
         _validate_controls(f"block '{b.slug}'", b.controls)
         if b.card is not None:
             _validate_controls(f"block '{b.slug}'.card", b.card.controls)

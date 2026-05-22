@@ -131,6 +131,7 @@ bash scripts/migrate-template-readmes.sh ~/Lendings/<existing-project>
 | [`stage-execution-protocol.md`](docs/standards/stage-execution-protocol.md) | **Все этапы** — обязательный протокол для orchestrator и любых stage-агентов | `scripts/render-pipeline-map.sh` (показывает карту) |
 | [`premium-07b-checklist.md`](docs/standards/premium-07b-checklist.md) | 07b Compose | `scripts/verify-composed-premium.sh` |
 | [`asset-pipeline.md`](docs/asset-pipeline.md) | 08 Build — фото, SVG, фавиконы, логотипы, CSS-фоны | `pytest tests/phase-stage-08/test-fix-page-content-images.py` |
+| [`stage-08-spec-lint.md`](docs/standards/stage-08-spec-lint.md) | 08 Build — composed↔spec соответствие | `python3 skills/wp-gutenberg-block-builder/scripts/lint-composed-vs-spec.py --project <p>` |
 
 **Stage Execution Protocol (главное правило):**
 Перед ЛЮБЫМ действием на этапе агент обязан: (1) прочитать `.landing-state.yaml` и показать Mermaid-карту через `render-pipeline-map.sh`, (2) выписать все оставшиеся этапы в TodoWrite, (3) подгрузить `stage-<id>-checklist.md` если есть и создать под-todo, (4) verify → approve. Не пропускать шаги, даже если пользователь торопит.
