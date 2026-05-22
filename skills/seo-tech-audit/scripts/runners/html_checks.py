@@ -58,12 +58,21 @@ def check_html(html: str, url: str, status_code: int = 200,
 
     # H9: heading hierarchy (no skips H2→H4 without H3)
     headings = [int(t.name[1]) for t in soup.find_all(re.compile(r"^h[1-6]$"))]
-    has_skip = False
-    for prev, cur in zip(headings, headings[1:]):
+    skip_at = None
+    for i, (prev, cur) in enumerate(zip(headings, headings[1:])):
         if cur > prev + 1:
-            has_skip = True
+            skip_at = (i + 1, prev, cur)
             break
-    out.append(_result("H9", not has_skip, f"headings={headings[:10]}"))
+    if skip_at is None:
+        h9_evidence = f"{len(headings)} заголовков, иерархия корректна (без скачков уровней)"
+    else:
+        idx, prev, cur = skip_at
+        seq = ",".join(f"H{n}" for n in headings[:idx + 2])
+        h9_evidence = (
+            f"скачок: H{prev}→H{cur} (через {cur - prev - 1} уровней) "
+            f"на позиции #{idx}. Последовательность: {seq}..."
+        )
+    out.append(_result("H9", skip_at is None, h9_evidence))
 
     # H10: <html lang=...> present
     html_tag = soup.find("html")
@@ -120,13 +129,19 @@ def check_html(html: str, url: str, status_code: int = 200,
         (i.get("src", "") or "").lower().endswith(ext) for ext in (".webp", ".avif")
     ))
     ratio_modern = modern / len(imgs) if imgs else 1.0
-    out.append(_result("H18", ratio_modern >= 0.5, f"modern_ratio={ratio_modern:.2f}"))
+    out.append(_result(
+        "H18", ratio_modern >= 0.5,
+        f"WebP/AVIF: {ratio_modern:.0%} ({modern} из {len(imgs)} картинок); лимит ≥50%"
+    ))
 
     # H19: inline CSS ≤10KB
     style_tags = soup.find_all("style")
     inline_css_size = sum(len(s.get_text("")) for s in style_tags)
     inline_css_kb = inline_css_size / 1024
-    out.append(_result("H19", inline_css_kb <= 10, f"inline_css={inline_css_kb:.1f}KB"))
+    out.append(_result(
+        "H19", inline_css_kb <= 10,
+        f"inline CSS: {inline_css_kb:.1f}KB в {len(style_tags)} <style> тегах; лимит 10KB"
+    ))
 
     # H20: render-blocking resources ≤3 (heuristic: <link rel=stylesheet> in head without media print)
     head = soup.find("head")
@@ -136,7 +151,10 @@ def check_html(html: str, url: str, status_code: int = 200,
             media = (link.get("media", "") or "").lower()
             if "print" not in media:
                 rb += 1
-    out.append(_result("H20", rb <= 3, f"render_blocking={rb}"))
+    out.append(_result(
+        "H20", rb <= 3,
+        f"render-blocking CSS файлов: {rb} в <head>; лимит 3"
+    ))
 
     # H21: internal links ≥5
     host = urlparse(url).netloc
@@ -164,24 +182,42 @@ def check_html(html: str, url: str, status_code: int = 200,
                 noopener_issues.append(href)
         else:
             internal += 1
-    out.append(_result("H21", internal >= 5, f"internal={internal}"))
+    out.append(_result(
+        "H21", internal >= 5,
+        f"внутренних ссылок: {internal} (внешних: {external}); минимум 5"
+    ))
 
     # H22: external links → rel=noopener
-    out.append(_result("H22", not noopener_issues, f"missing_noopener={len(noopener_issues)}"))
+    out.append(_result(
+        "H22", not noopener_issues,
+        f"внешних без rel=noopener: {len(noopener_issues)} (из {external} внешних)"
+    ))
 
     # H23: «click here»/«тут» <5%
     click_ratio = anchor_clicks / anchor_total if anchor_total else 0
-    out.append(_result("H23", click_ratio < 0.05, f"click_ratio={click_ratio:.2%}"))
+    out.append(_result(
+        "H23", click_ratio < 0.05,
+        f"обобщённых анкоров: {click_ratio:.0%} ({anchor_clicks} из {anchor_total}); лимит <5%"
+    ))
 
     # H24: tel: links present
     has_tel = bool(soup.find("a", href=re.compile(r"^tel:")))
-    out.append(_result("H24", has_tel, f"has_tel={has_tel}"))
+    out.append(_result(
+        "H24", has_tel,
+        "tel: ссылка найдена" if has_tel
+        else "tel: ссылка не найдена — мобильные пользователи не могут позвонить в один клик"
+    ))
 
     # H25: mailto: links if email in text
     body_text = soup.get_text(" ")
     has_email_in_text = bool(re.search(r"[\w.+-]+@[\w-]+\.[\w.-]+", body_text))
     has_mailto = bool(soup.find("a", href=re.compile(r"^mailto:")))
-    out.append(_result("H25", has_mailto or not has_email_in_text,
-                       f"email_in_text={has_email_in_text} mailto={has_mailto}"))
+    if has_mailto:
+        h25_evidence = "mailto: ссылка найдена"
+    elif not has_email_in_text:
+        h25_evidence = "email на странице не найден — mailto не требуется"
+    else:
+        h25_evidence = "email найден в тексте, но без <a href=mailto:> — кликнуть нельзя"
+    out.append(_result("H25", has_mailto or not has_email_in_text, h25_evidence))
 
     return out
