@@ -25,7 +25,11 @@ function register_menu(): void {
 }
 
 function enqueue_assets($hook): void {
-    if (strpos((string) $hook, MENU_SLUG) === false) return;
+    // Hook name on network admin pages is typically "<slug>_page_<menu_slug>"
+    // (e.g. "landing_page_landing-config-head-seo"). Belt-and-braces: also check
+    // $_GET['page'] in case the hook arrives empty or in unexpected format.
+    $page = isset($_GET['page']) ? (string) $_GET['page'] : '';
+    if (strpos((string) $hook, MENU_SLUG) === false && $page !== MENU_SLUG) return;
     $base = \plugins_url('assets/seo-audit', dirname(__DIR__) . '/landing-config.php');
     \wp_enqueue_style('lp-head-seo-preview', $base . '/preview.css', [], '1.0');
     \wp_enqueue_script('lp-head-seo-preview', $base . '/preview.js', [], '1.0', true);

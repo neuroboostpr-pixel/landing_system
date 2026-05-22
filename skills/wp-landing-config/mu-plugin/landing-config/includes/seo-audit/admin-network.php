@@ -27,7 +27,8 @@ function register_menu(): void {
 }
 
 function enqueue_assets($hook): void {
-    if (strpos((string) $hook, MENU_SLUG) === false) return;
+    $page = isset($_GET['page']) ? (string) $_GET['page'] : '';
+    if (strpos((string) $hook, MENU_SLUG) === false && $page !== MENU_SLUG) return;
     $url = \plugins_url('assets/seo-audit/admin.css',
                         dirname(dirname(__DIR__)) . '/landing-config.php');
     \wp_enqueue_style('lp-seo-audit-admin', $url, [], '1.0');
