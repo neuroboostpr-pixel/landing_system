@@ -35,10 +35,10 @@ def _read_or_empty(p: Path, max_chars: int = 8000) -> str:
 
 
 def _detect_project_slug(cwd: Path) -> str | None:
-    """Если cwd внутри ~/Lendings/<slug>/ — вернуть slug."""
-    lendings = Path.home() / "Lendings"
+    """Если cwd внутри LANDINGS_ROOT/<slug>/ — вернуть slug."""
+    from scripts.lib.paths import LANDINGS_ROOT
     try:
-        rel = cwd.resolve().relative_to(lendings)
+        rel = cwd.resolve().relative_to(LANDINGS_ROOT)
     except ValueError:
         return None
     parts = rel.parts
@@ -77,10 +77,11 @@ def main() -> int:
     except ValueError:
         pass
 
-    # Проектный wiki — если работаем в ~/Lendings/<slug>/
+    # Проектный wiki — если работаем в LANDINGS_ROOT/<slug>/
     slug = _detect_project_slug(cwd)
     if slug:
-        project = Path.home() / "Lendings" / slug
+        from scripts.lib.paths import project_dir
+        project = project_dir(slug)
         proj_index = _read_or_empty(project / "wiki" / "index.md")
         if proj_index:
             chunks.append(f"<project_wiki_index project=\"{slug}\">\n{proj_index}\n</project_wiki_index>")

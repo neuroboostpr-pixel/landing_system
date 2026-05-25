@@ -68,9 +68,9 @@ def main(argv=None) -> int:
         return 0
 
     if args.source_mode == "project-graph":
-        from pathlib import Path
+        from scripts.lib.paths import project_dir
         from scripts.wiki import project_graph_compiler
-        project_root = Path.home() / "Lendings" / args.project
+        project_root = project_dir(args.project)
         if not project_root.exists():
             print(f"ERROR: проект не найден: {project_root}", file=sys.stderr)
             return 2
@@ -85,9 +85,9 @@ def main(argv=None) -> int:
         return 0
 
     if args.source_mode == "conversations":
-        from pathlib import Path
+        from scripts.lib.paths import project_dir
         from scripts.wiki import conversations_compiler
-        memory_root = Path.home() / "Lendings" / args.project / "memory"
+        memory_root = project_dir(args.project) / "memory"
         if not memory_root.exists():
             print(f"ERROR: memory dir not found: {memory_root}", file=sys.stderr)
             return 2

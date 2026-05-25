@@ -38,7 +38,9 @@ fi
 # --- Resolve paths ---
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LS_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-PROJECT="$HOME/Lendings/$SLUG"
+# shellcheck source=lib/paths.sh
+source "$SCRIPT_DIR/lib/paths.sh"
+PROJECT="$LANDINGS_ROOT/$SLUG"
 
 # Resolve absolute path of prototype (handle ~ and relative)
 PROTOTYPE_ABS="$(cd "$(dirname "$PROTOTYPE")" 2>/dev/null && pwd)/$(basename "$PROTOTYPE")" || {

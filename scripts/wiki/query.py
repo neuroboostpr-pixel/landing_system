@@ -49,9 +49,11 @@ def main() -> int:
     parser.add_argument("--file-back", action="store_true", help="Сохранить ответ в memory/qa/")
     args = parser.parse_args()
 
+    from scripts.lib.paths import project_dir
+
     wiki_dirs = [config.WIKI_DIR]
     if args.project:
-        project_root = Path.home() / "Lendings" / args.project
+        project_root = project_dir(args.project)
         if (project_root / "wiki").exists():
             wiki_dirs.append(project_root / "wiki")
         if (project_root / "memory" / "compiled").exists():
@@ -61,7 +63,7 @@ def main() -> int:
     print(answer)
 
     if args.file_back and args.project:
-        qa_dir = Path.home() / "Lendings" / args.project / "memory" / "compiled" / "qa"
+        qa_dir = project_dir(args.project) / "memory" / "compiled" / "qa"
         qa_dir.mkdir(parents=True, exist_ok=True)
         slug = utils.slugify(args.question)[:60]
         out = qa_dir / f"{date.today().isoformat()}-{slug}.md"

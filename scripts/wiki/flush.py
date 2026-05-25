@@ -57,11 +57,11 @@ def format_transcript(msgs: list[dict]) -> str:
 
 def _detect_memory_dir(cwd: Path) -> Path:
     """По cwd определяет куда писать memory/."""
-    lendings = Path.home() / "Lendings"
+    from scripts.lib.paths import LANDINGS_ROOT
     try:
-        rel = cwd.resolve().relative_to(lendings)
+        rel = cwd.resolve().relative_to(LANDINGS_ROOT)
         slug = rel.parts[0]
-        return lendings / slug / "memory"
+        return LANDINGS_ROOT / slug / "memory"
     except (ValueError, IndexError):
         pass
     # Fallback — landing-system/memory/

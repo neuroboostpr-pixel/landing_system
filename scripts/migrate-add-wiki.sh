@@ -1,13 +1,15 @@
 #!/bin/bash
 # scripts/migrate-add-wiki.sh
 # Добавляет wiki/ и memory/ к существующему проекту-лендингу.
-# Использование: bash scripts/migrate-add-wiki.sh ~/Lendings/<slug>
+# Использование: bash scripts/migrate-add-wiki.sh <путь к проекту>
 
 set -euo pipefail
+# shellcheck source=lib/paths.sh
+source "$(dirname "$0")/lib/paths.sh"
 
 if [ $# -ne 1 ]; then
     echo "Использование: $0 <путь к проекту>"
-    echo "Пример: $0 ~/Lendings/dubai-avto-liza"
+    echo "Пример: $0 $LANDINGS_ROOT/dubai-avto-liza"
     exit 1
 fi
 
