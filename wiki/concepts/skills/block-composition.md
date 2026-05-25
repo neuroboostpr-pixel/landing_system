@@ -2,61 +2,40 @@
 type: skill
 name: block-composition
 sources: ["skills/block-composition/SKILL.md"]
-updated: 2026-05-15
-triggers: ["/landing-compose", "собрать composed.html", "скомпоновать лендинг", "этап 07b"]
+updated: 2026-05-25
+triggers: []
 stage: "07b"
-uses: ["block-composer", "prototype-import", "wireframe-rendering", "design-tokens-generation", "landing-compose"]
-tags: ["compose", "blocks", "tokens", "html", "07b", "assembly"]
+uses: ["landing-compose", "block-composer", "landing-wireframe", "landing-prototype", "landing-design"]
+tags: ["compose", "tokens", "html", "blocks", "07b"]
 ---
 
-# Block Composition — сборка итогового HTML лендинга
+# Block Composition — Сборка composed.html
 
 ## Что делает
-
-Берёт утверждённые блоки из wireframe, дизайн-токены и тексты из прототипа — и собирает из них единый HTML-файл лендинга (`composed.html`). Это финальная сборка перед тем, как добавить реальные фото и иконки.
+Собирает финальный HTML-файл лендинга из утверждённых блоков, подставляя дизайн-токены (цвета, шрифты) и реальные тексты из прототипа. Результат — готовый к вёрстке `composed.html` с мобильной версией.
 
 ## Когда вызывать / в каком этапе
-
-Этап **07b**. Запускается командой `/landing-compose` после того, как:
-1. Пользователь выбрал варианты блоков в `wireframe.html` и сохранил `selections.yaml` в `07a_WIREFRAME/`.
-2. Готовы дизайн-токены (`tokens.json`) из этапа 05.
-3. Импортирован прототип (`prototype.yaml`) из этапа 07.
-
-Выполняется агентом **block-composer**. HARD GATE 07b не закрывается, пока скрипт `scripts/verify-composed-premium.sh` не вернёт exit 0 (13 premium-фич обязательны).
+Этап **07b**. Вызывается командой `/landing-compose` или агентом `block-composer` после того, как пользователь утвердил варианты блоков в `wireframe.html` и сохранил `selections.yaml`. До этого должны быть готовы: прототип (07a), дизайн-система (05).
 
 ## Что на вход / на выход
 
-**Вход:**
-- `<project>/07_ПРОТОТИП/prototype.yaml` — структура и тексты лендинга
-- `<project>/07a_WIREFRAME/selections.yaml` — выбранные варианты блоков
-- `<project>/05_ДИЗАЙН-СИСТЕМА/tokens.json` — цвета, шрифты, отступы
-- `block-library/` — общая библиотека HTML-шаблонов блоков
+**Входные артефакты:**
+- `<project>/07_ПРОТОТИП/prototype.yaml` — структура и тексты прототипа
+- `<project>/07a_WIREFRAME/selections.yaml` — выбранные пользователем варианты блоков
+- `<project>/05_ДИЗАЙН-СИСТЕМА/tokens.json` — дизайн-токены (цвета, шрифты, отступы)
+- `block-library/` — общая библиотека шаблонов блоков
 
-**Выход:**
-- `<project>/07b_COMPOSED/composed.html` — desktop-версия лендинга
+**Выходные артефакты:**
+- `<project>/07b_COMPOSED/composed.html` — десктопная версия
 - `<project>/07b_COMPOSED/composed-mobile.html` — мобильная версия
-- `<project>/07b_COMPOSED/block-injection-log.md` — лог подстановок
-
-Визуальный контент (фото, иконки, инфографика) на этом этапе остаётся в виде подписанных плейсхолдеров — они заполняются на этапах 07c (PR-B) и 07d (PR-C).
-
-## Скрипты
-
-Скилл использует четыре вспомогательных скрипта:
-- `scripts/validate-selections.py` — проверить корректность `selections.yaml`
-- `scripts/inject-tokens.py` — подставить CSS-переменные из `tokens.json`
-- `scripts/inject-content.py` — вставить заголовки, тексты и CTA из `prototype.yaml`
-- `scripts/compose-blocks.py` — собрать финальный `composed.html`
+- `<project>/07b_COMPOSED/block-injection-log.md` — лог подстановки блоков
 
 ## Связанные концепты
-
-- [[block-composer]] — агент, выполняющий сборку на этапе 07b
-- [[prototype-import]] — поставляет `prototype.yaml` со структурой и текстами
-- [[wireframe-rendering]] — этап 07a, производит `selections.yaml` с выбранными блоками
-- [[design-tokens-generation]] — этап 05, производит `tokens.json` с дизайн-токенами
-- [[landing-compose]] — slash-команда, запускающая этот скилл
-- [[photo-curation]] — этап 07c, заполняет фото-плейсхолдеры в `composed.html`
-- [[visual-generation]] — этап 07d, заполняет иконки и инфографику
+- [[landing-compose]] — slash-команда, которая запускает этот скилл
+- [[landing-wireframe]] — предыдущий этап (07a), формирует `selections.yaml`
+- [[landing-prototype]] — этап разбора прототипа, даёт `prototype.yaml`
+- [[landing-design]] — этап дизайн-системы (05), даёт `tokens.json`
+- [[block-composer]] — агент, использующий этот скилл для сборки
 
 ## Источник
-
 - `skills/block-composition/SKILL.md`

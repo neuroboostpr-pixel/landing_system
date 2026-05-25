@@ -2,57 +2,55 @@
 type: agent
 name: wp-builder
 sources: ["agents/wp-builder.md"]
-updated: 2026-05-20
+updated: 2026-05-25
 triggers: []
 stage: "08"
-uses:
-  - design-system-generator
-  - content-writer
-  - niche-analyst
-  - stack-planner
-  - scene-director
-  - landing-orchestrator
-  - integrations-engineer
-tags: [wordpress, lazy-blocks, php, css, js, stage-08]
+uses: ["landing-orchestrator", "design-system-generator", "content-writer", "landing-style", "wp-cli-deployer"]
+tags: ["wordpress", "lazy-blocks", "php", "css", "stage-08", "build"]
 ---
 
 # wp-builder (WP-сборщик)
 
 ## Что делает
 
-Генерирует готовый WordPress-код лендинга: PHP-шаблоны блоков на Lazy Blocks Free, регистрацию блоков в `functions.php`, CSS со стилями через дизайн-токены и JS с интеракциями. На выходе — тема, которую можно сразу загрузить на сервер и импортировать контент в WordPress.
+Генерирует готовый PHP-код WordPress-темы на основе дизайн-токенов и финального контента: создаёт Lazy Blocks-шаблоны для каждого блока лендинга, подключает их в `functions.php`, собирает CSS/JS-ассеты и формирует Gutenberg-разметку для импорта в страницу сайта.
 
 ## Когда вызывать / в каком этапе
 
-Этап **08_build**. Запускается после того, как утверждены этап 05 (дизайн-система), этап 06 (стек), этап 07 (финальный контент) и заполнен `08_КОД/block-spec.yaml`. Вызывается командой `/landing-build` через `landing-orchestrator`. Перед любым действием проверяет `.landing-state.yaml` и запускает `gate-check.sh --stage 08_build` — при ошибке полностью останавливается.
+Запускается на **этапе 08 (08_build)** после того, как утверждены:
+- этап 05 — дизайн-система и токены,
+- этап 06 — стек (standard или cinematic),
+- этап 07 — финальный текст по блокам.
+
+Оркестратор диспатчит агента автоматически через `/landing-go`. Ручной запуск — только если `current_stage == 08_build` в `.landing-state.yaml`. Перед любыми действиями агент обязан выполнить Stage Execution Protocol: прочитать state, показать Mermaid-карту, запустить `gate-check.sh`.
 
 ## Что на вход / на выход
 
 **Вход:**
-- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — цвета, шрифты, отступы
-- `06_СТЕК/design-stack.yaml` — режим (standard / cinematic) и стек плагинов
-- `07_КОНТЕНТ/final-copy.md` — финальный текст по блокам
-- `08_КОД/block-spec.yaml` — источник истины: список блоков и поля каждого
-- `01a_АНАЛИЗ_НИШИ/landing-structure.md` — контракт: какие блоки создавать
-- `01a_АНАЛИЗ_НИШИ/market-profile.md` — уровень продукта (luxury → утилитарный), влияет на отображение цен
-- `01a_АНАЛИЗ_НИШИ/positioning.md` — режим позиционирования (rational / emotional_aspiration / trust_authority / hybrid)
+- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — дизайн-токены
+- `06_СТЕК/design-stack.yaml` — стек и режим сборки
+- `07_КОНТЕНТ/final-copy.md` — финальный контент
+- `08_КОД/block-spec.yaml` — **источник истины**: список блоков и поля каждого блока
+- `01a_АНАЛИЗ_НИШИ/landing-structure.md` — контракт списка блоков
+- `01a_АНАЛИЗ_НИШИ/market-profile.md` — тир продукта (влияет на отображение цены)
+- `01a_АНАЛИЗ_НИШИ/positioning.md` — режим (`emotional_aspiration`, `trust_authority`, `rational` и др.)
 
 **Выход:**
-- `08_КОД/wp-theme/blocks/lazyblock-<slug>/block.php` — один файл на блок
-- `08_КОД/wp-theme/functions.php` — регистрация всех блоков через `lzb/init`
+- `08_КОД/wp-theme/blocks/lazyblock-<slug>/block.php` — по одному файлу на блок
+- `08_КОД/wp-theme/functions.php` — секция `lzb/init` с регистрацией всех блоков
 - `08_КОД/wp-theme/assets/css/main.css` — стили через CSS-переменные
-- `08_КОД/wp-theme/assets/js/main.js` — интеракции (FAQ, scroll-to-form, GSAP если cinematic)
+- `08_КОД/wp-theme/assets/js/main.js` — интеракции (FAQ-аккордеон, GSAP при cinematic-режиме)
 - `08_КОД/page-content.html` — Gutenberg-разметка для импорта в WP-страницу
+
+Дополнительно: файлы cookie-banner (152-ФЗ), legal-block для форм, юридические страницы `/policy` и `/consent`.
 
 ## Связанные концепты
 
-- [[design-system-generator]] — поставляет `tokens.json` (этап 05), без него wp-builder не запускается
-- [[content-writer]] — поставляет `final-copy.md` (этап 07)
-- [[stack-planner]] — поставляет `design-stack.yaml` с выбором режима и библиотек
-- [[niche-analyst]] — поставляет `market-profile.md` и `positioning.md`, управляет поведением блоков
-- [[scene-director]] — поставляет `scenes.md` при cinematic-режиме для GSAP-анимаций
-- [[landing-orchestrator]] — диспатчит wp-builder в нужный момент pipeline
-- [[integrations-engineer]] — следующий агент после wp-builder: добавляет Fluent Forms, Telegram webhook
+- [[landing-orchestrator]] — диспатчит агента на этапе 08, управляет stage-gate
+- [[design-system-generator]] — поставляет `tokens.json` и `scenes.md` (cinematic)
+- [[content-writer]] — поставляет `final-copy.md` с текстами по блокам
+- [[landing-style]] — этап 08b, дополняет CSS после wp-builder (stage 08b)
+- [[wp-cli-deployer]] — следующий этап 09: деплоит собранную тему на Бегет
 
 ## Источник
 

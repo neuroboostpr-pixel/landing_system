@@ -2,61 +2,46 @@
 type: agent
 name: content-writer
 sources: ["agents/content-writer.md"]
-updated: 2026-05-20
+updated: 2026-05-25
 triggers: []
-stage: "07"
-uses: ["niche-analyst", "prototype-importer", "design-system-generator", "stack-planner", "client-assets-collector", "landing-orchestrator"]
-tags: ["content", "copywriting", "seo", "stage-07"]
+stage: "07_content"
+uses: ["landing-orchestrator", "niche-analyst", "brand-architect", "design-system-builder"]
+tags: ["copywriting", "content", "stage-07", "seo"]
 ---
 
 # content-writer (Контент-райтер)
 
 ## Что делает
-
-Берёт исходный прототип текста и адаптирует его под конкретные блоки лендинга: формирует финальные тексты по каждому блоку с учётом позиционирования бренда (рациональное, эмоциональное, доверительное), а также пишет SEO-копирайт.
+Превращает сырой прототип текста в готовые тексты для каждого блока лендинга. Адаптирует тон под стратегический режим (rational / emotional / trust), исключает Lorem ipsum, использует только реальные данные клиента.
 
 ## Когда вызывать / в каком этапе
-
-Запускается на **этапе 07 (Контент)**. Предшественники должны быть закрыты: `.landing-state.yaml` обязан показывать `current_stage == 07_content`. До запуска агент проверяет gate через `gate-check.sh`; если предшественники не утверждены — останавливается.
+Активируется на **этапе 07_content**. Запускается оркестратором (`landing-orchestrator`) или вручную через `/landing-content`. До запуска требует закрытых этапов 01a (анализ ниши), 05 (дизайн-система) и 06 (стек). `PreToolUse`-хук физически блокирует запись файлов, если предшественники не закрыты.
 
 ## Что на вход / на выход
 
-**Вход:**
-- `01a_АНАЛИЗ_НИШИ/positioning.md` — режим позиционирования (`rational` / `emotional_aspiration` / `trust_authority` / `hybrid`)
-- `01a_АНАЛИЗ_НИШИ/landing-structure.md` — таблица блоков лендинга (источник истины по порядку и составу блоков)
-- `01a_АНАЛИЗ_НИШИ/market-profile.md` — тон и культурный контекст (`accessibility_tier`, `cultural_context`)
-- `01a_АНАЛИЗ_НИШИ/competitors.yaml` — ключевые сообщения конкурентов (чтобы их не повторять)
+**Входные артефакты:**
+- `01a_АНАЛИЗ_НИШИ/positioning.md` — режим (Mode) и углы отстройки
+- `01a_АНАЛИЗ_НИШИ/landing-structure.md` — таблица блоков (источник истины по порядку)
+- `01a_АНАЛИЗ_НИШИ/market-profile.md` — тир доступности, культурный контекст
 - `07_ПРОТОТИП/prototype.md` — исходный прототип текста
-- `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` — типографика и структура секций
+- `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` — детали секций
 - `06_СТЕК/design-stack.yaml` — компонентная библиотека
-- `02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/` и `assets-manifest.yaml` — реальные отзывы и ассеты клиента
+- `02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/` — реальные отзывы
+- `02_МАТЕРИАЛЫ_КЛИЕНТА/assets-manifest.yaml` — перечень ассетов
 
-**Выход:**
-- `07_КОНТЕНТ/final-copy.md` — финальные тексты, разбитые по блокам из `landing-structure.md`
-- `07_КОНТЕНТ/seo-copy.md` — SEO-заголовки, description, варианты h1
+**Выходные артефакты:**
+- `07_КОНТЕНТ/final-copy.md` — финальные тексты, разложенные по блокам лендинга
+- `07_КОНТЕНТ/seo-copy.md` — SEO-заголовки, meta description, варианты h1
 
-**HARD GATE:** после создания файлов агент показывает `final-copy.md` пользователю и ждёт явного утверждения перед закрытием этапа.
-
-## Ключевые правила
-
-- Блоки берутся строго из `landing-structure.md`, а не угадываются из DESIGN.md.
-- Lorem ipsum в `final-copy.md` **запрещён** — только реальные данные из прототипа и отзывов.
-- Тон копирайта определяется полем `Mode` из `positioning.md`:
-  - `rational` — факты, цифры, без аспирации;
-  - `emotional_aspiration` — эмоциональный крючок, структура StoryBrand;
-  - `trust_authority` — каждый claim подкреплён доказательством (число, имя, дата);
-  - `hybrid:X+Y` — основной тон + 1–2 вспомогательных блока.
-- Не повторять ключевые сообщения конкурентов из `competitors.yaml`.
+**Hard gate:** показывает `final-copy.md` пользователю и ждёт явного утверждения перед закрытием этапа.
 
 ## Связанные концепты
-
-- [[niche-analyst]] — формирует `positioning.md` и `landing-structure.md`, которые контент-райтер использует как основу
-- [[prototype-importer]] — производит `prototype.md`, исходный текст для адаптации
-- [[design-system-generator]] — создаёт `DESIGN.md` с деталями секций
-- [[stack-planner]] — поставляет `design-stack.yaml` с компонентной библиотекой
-- [[client-assets-collector]] — собирает отзывы и ассеты клиента
-- [[landing-orchestrator]] — диспатчит агента в нужный момент pipeline
+- [[landing-orchestrator]] — вызывает агента в рамках pipeline как часть stage-07
+- [[niche-analyst]] — поставляет positioning.md и landing-structure.md (источник истины по блокам)
+- [[brand-architect]] — поставляет brand-kit и тональность, необходимые для адаптации режима
+- [[design-system-builder]] — поставляет DESIGN.md с деталями типографики и секций
+- [[block-composer]] — использует final-copy.md на этапе 07b для наполнения composed.html
+- [[stage-execution-protocol]] — обязательный протокол: gate-check → Mermaid-карта → TodoWrite → verify → approve
 
 ## Источник
-
 - `agents/content-writer.md`

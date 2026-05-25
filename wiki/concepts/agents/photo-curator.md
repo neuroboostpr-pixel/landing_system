@@ -2,54 +2,58 @@
 type: agent
 name: photo-curator
 sources: ["agents/photo-curator.md"]
-updated: 2026-05-20
-triggers: ["обработать фотографии клиента", "расставить фото по слотам", "запустить фото-пайплайн", "/landing-photos"]
+updated: 2026-05-25
+triggers: []
 stage: "07c"
-uses: ["photo-classifier", "photo-matcher", "photo-preview-board", "block-composition", "landing-photos", "ux-composer", "design-system-generator"]
-tags: ["photos", "pipeline", "stage-07c", "identity-safe", "orchestrator"]
+uses: ["photo-classifier", "photo-matcher", "photo-preview-board", "landing-photos", "landing-orchestrator"]
+tags: ["photos", "pipeline", "stage-07c", "pr-b"]
 ---
 
-# photo-curator — Оркестратор фото-пайплайна (этап 07c)
+# photo-curator — оркестратор фото-пайплайна (Stage 07c)
 
 ## Что делает
-Принимает клиентские фотографии, автоматически классифицирует их через AI, подбирает к слотам wireframe-а, показывает галерею для ручной расстановки, обрабатывает утверждённые фото через codex и встраивает их в `composed.html` вместо placeholder-ов.
+
+Управляет полным циклом обработки клиентских фотографий: принимает фотки из папки `inbox/`, классифицирует их через AI, подбирает фото к слотам макета, показывает интерактивную галерею для ручной расстановки, обрабатывает финальные фото через codex и встраивает их в `composed.html`. Все лица и объекты клиента остаются нетронутыми — AI только улучшает обрамление и пропорции.
 
 ## Когда вызывать / в каком этапе
-Вызывается командой `/landing-photos` на этапе **07c**. Запускается вручную после того, как утверждены этапы **05 (design-system)** и **07a (wireframe)**. Требует наличия фотографий в `07c_PHOTOS/inbox/`.
+
+Активируется командой `/landing-photos` как часть stage **07c**. Требует, чтобы:
+- этап **05_design** имел статус `approved` (дизайн-система утверждена),
+- этап **07a_wireframe** имел `approved` или существовал файл `selections.yaml` из wireframe.
+
+Без этих условий агент завершается с сообщением об ошибке на русском языке. Запускается вручную — не через `landing-orchestrator` (интеграция в оркестратор запланирована на PR-D).
 
 ## Что на вход / на выход
 
 **Вход:**
-- Фотографии клиента в `07c_PHOTOS/inbox/` (7 подпапок по типу: портреты, процесс, объекты и т.д.)
-- Опционально: фото из `02_МАТЕРИАЛЫ_КЛИЕНТА/photos/original/` (обратная совместимость)
-- `07_ПРОТОТИП/prototype.yaml` — список слотов
-- `07a_WIREFRAME/selections.yaml` — выбранные блоки
-- `tokens.json` и `market-profile.md` — параметры бренда и ниши для codex-обработки
+- Клиентские фотографии в `07c_PHOTOS/inbox/` (7 подпапок по типу контента)
+- `07_ПРОТОТИП/prototype.yaml` — список слотов для фото
+- `07a_WIREFRAME/selections.yaml` — выбранные варианты блоков
+- `tokens.json` и `market-profile.md` — бренд-параметры для codex-обработки
 
 **Выход:**
 - `07c_PHOTOS/catalog.yaml` — каталог всех фото с тегами
-- `07c_PHOTOS/selections.draft.yaml` — авто-подбор фото к слотам
-- `07c_PHOTOS/photo-board.html` — интерактивная галерея для ручного drag-drop расстановки
+- `07c_PHOTOS/photo-board.html` — интерактивная галерея для ручной расстановки
+- `07c_PHOTOS/selections.yaml` — финальный маппинг слотов (подтверждается пользователем)
 - `07c_PHOTOS/photo-preview.html` — превью как фото лягут в макет
-- `07c_PHOTOS/processed/<slot>.jpg` — обработанные фото (desktop + mobile)
-- Обновлённый `07b_COMPOSED/composed.html` с реальными фото вместо placeholder-ов
-- `07c_PHOTOS/STATE.yaml` — статус всех подэтапов
+- `07c_PHOTOS/processed/<slot>.jpg` — обработанные через codex фото
+- Обновлённый `07b_COMPOSED/composed.html` с реальными фотографиями вместо placeholders
 
-**Два HARD GATE:**
-1. После рендера `photo-board.html` — ждёт, пока пользователь расставит фото и положит `selections.yaml`
-2. После рендера `photo-preview.html` — ждёт явного approve перед финальным перерендером
+## Ключевые правила
 
-## Identity-safe правила
-Клиентские фото **никогда не репеинтятся** через AI. Codex-постобработка меняет только фон/стиль окружения, но не объект (лицо, автомобиль, товар). AI-генерация лиц в слотах testimonial/expert/team требует явного флага `ai_approved_by_user`. Нарушение ловит `verify-photo-pipeline.sh` на HARD GATE.
+Каждое фото проходит обязательный codex post-process: валидация пропорций слота → codex enhancement (без перекраски объекта клиента) → resize → кэш по хэшу. **HARD GATE:** ни один SVG-placeholder не должен оставаться в финальном composed.html — `verify-photo-pipeline.sh` заблокирует закрытие этапа, если найдёт сырые или незаменённые фото.
+
+Агент идемпотентен: при перезапуске читает `07c_PHOTOS/STATE.yaml` и продолжает с первого незавершённого шага.
 
 ## Связанные концепты
-- [[photo-classifier]] — диспатчится пакетами по 5 фото, классифицирует через codex CLI `--image`
-- [[photo-matcher]] — подбирает лучшие фото к каждому слоту, пишет `selections.draft.yaml`
-- [[photo-preview-board]] — обрабатывает утверждённые фото, рендерит `photo-preview.html`
-- [[block-composition]] — используется для финального перерендера `composed.html` с реальными фото
-- [[landing-photos]] — slash-команда, которая запускает этот агент
-- [[ux-composer]] — формирует wireframe и `selections.yaml`, которые photo-curator читает как prerequisite
-- [[design-system-generator]] — его выход (`tokens.json`) нужен для codex-постобработки фото
+
+- [[photo-classifier]] — AI-классификация фото через codex CLI (батчи по 5)
+- [[photo-matcher]] — подбор фото к слотам на основе каталога и prototype.yaml
+- [[photo-preview-board]] — генерация photo-preview.html и финальная обработка
+- [[landing-photos]] — slash-команда, запускающая этого агента
+- [[landing-orchestrator]] — главный оркестратор pipeline (интеграция планируется)
+- [[landing-compose]] — stage 07b, compose-blocks.py перерендеривает composed.html после approve
 
 ## Источник
+
 - `agents/photo-curator.md`

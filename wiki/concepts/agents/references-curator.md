@@ -2,51 +2,49 @@
 type: agent
 name: references-curator
 sources: ["agents/references-curator.md"]
-updated: 2026-05-20
-triggers: ["собери референсы", "добавь референс", "этап 03 референсы", "/landing-references"]
+updated: 2026-05-25
+triggers: []
 stage: "03"
-uses: ["moodboard-composer", "stage-execution-protocol", "niche-analyst", "landing-orchestrator"]
-tags: ["stage-03", "references", "visual", "index"]
+uses: ["landing-orchestrator", "moodboard-composer", "niche-analyst"]
+tags: ["stage-03", "references", "visual", "curator"]
 ---
 
-# references-curator — сборщик визуальных референсов
+# References Curator — Агент сбора визуальных референсов
 
 ## Что делает
 
-Собирает визуальные референсы для будущего дизайна лендинга: принимает ссылки на сайты, Behance, Dribbble и скриншоты, присваивает каждому статус и ведёт структурированный файл `03_РЕФЕРЕНСЫ/index.yaml`. Когда набрано минимум три одобренных референса — передаёт управление агенту [[moodboard-composer]].
+Собирает визуальные референсы для лендинга (ссылки на сайты, Behance, скриншоты), присваивает каждому статус (candidate / approved / rejected) и ведёт файл `03_РЕФЕРЕНСЫ/index.yaml`. Когда набирается минимум 3 одобренных референса — передаёт управление агенту moodboard-composer.
 
 ## Когда вызывать / в каком этапе
 
-Активируется на **этапе 03** (`03_references`) после завершения анализа ниши (01a). Запускается командой `/landing-references` или оркестратором. Требует, чтобы `.landing-state.yaml` показывал `current_stage == 03_references`; если нет — останавливается и сообщает пользователю.
-
-Перед любым действием агент обязан:
-1. Прочитать `.landing-state.yaml` и показать Mermaid-карту через `render-pipeline-map.sh`.
-2. Пройти `gate-check.sh --stage 03_references` (exit 0).
-3. Создать TodoWrite со всеми оставшимися этапами.
+Запускается в **этапе 03 (03_references)** pipeline. Активируется автоматически через `landing-orchestrator` или вручную. Перед стартом проверяет `.landing-state.yaml` — должен быть `current_stage == 03_references`, иначе останавливается и сообщает об ошибке.
 
 ## Что на вход / на выход
 
-**Вход:**
-- `01a_АНАЛИЗ_НИШИ/competitors.yaml` — поле `visual_notes` конкурентов (что нельзя копировать).
-- `01a_АНАЛИЗ_НИШИ/visual-requirements.md` — Section 6 «red flags»: запрещённые визуальные приёмы.
-- Ссылки и скриншоты от пользователя (URL, Behance, Dribbble, перетащенные файлы в `03_РЕФЕРЕНСЫ/refs/`).
+**Входящие артефакты:**
+- `01a_АНАЛИЗ_НИШИ/competitors.yaml` — визуальные заметки по конкурентам (поле `visual_notes`); агент читает их, чтобы не клонировать визуал лидеров
+- `01a_АНАЛИЗ_НИШИ/visual-requirements.md` — раздел 6 (red flags); каждый референс проверяется на запрещённые паттерны
 
-**Выход:**
-- `03_РЕФЕРЕНСЫ/index.yaml` — список референсов с полями: url / file, status (`candidate` / `approved` / `rejected`), примечания.
-- **HARD GATE:** минимум 3 референса со статусом `approved`. Без этого [[moodboard-composer]] не запустится.
+**Исходящие артефакты:**
+- `03_РЕФЕРЕНСЫ/index.yaml` — индекс всех референсов с указанием URL, пути к файлу и статуса
+- `03_РЕФЕРЕНСЫ/refs/` — папка со скриншотами и файлами
 
-## Ключевые ограничения
+**Жёсткий гейт (HARD GATE):** минимум 3 референса со статусом `approved` — только тогда этап закрывается.
 
-- Референсы, попадающие под «red flags» из `visual-requirements.md`, **отклоняются автоматически** со ссылкой на конкретный пункт.
-- Нельзя клонировать визуал лидеров категории — агент ищет незанятые визуальные «gaps».
-- Физический блок на Write/Edit через хук `enforce_stage_gate.py` — не обходить, закрывать предшественника.
+## Процесс
+
+1. Просит пользователя предоставить референсы: URL, файлы Behance/Dribbble, перетаскиваемые скриншоты в `03_РЕФЕРЕНСЫ/refs/`
+2. Для каждого URL пытается сохранить скриншот (в текущей фазе — только URL, без headless-браузера)
+3. Спрашивает пользователя статус каждого референса: candidate / approved / rejected
+4. Управляет `index.yaml` через `python3 skills/references-collection/scripts/index.py add|update|list`
+5. Проверяет каждый референс по red-flags из `visual-requirements.md`; нарушающие запреты — отклоняет со ссылкой на конкретный пункт
+6. По достижении 3 approved — закрывает этап через `gate-state.sh approve`
 
 ## Связанные концепты
 
-- [[moodboard-composer]] — принимает управление после набора 3+ approved-референсов
-- [[niche-analyst]] — поставляет `competitors.yaml` и `visual-requirements.md` как обязательный input
-- [[stage-execution-protocol]] — протокол запуска любого этапа (чтение state, gate-check, TodoWrite)
-- [[landing-orchestrator]] — вызывает агента в нужный момент pipeline
+- [[landing-orchestrator]] — вызывает этого агента в рамках общего pipeline
+- [[moodboard-composer]] — принимает управление после закрытия этапа 03
+- [[niche-analyst]] — поставляет `competitors.yaml` и `visual-requirements.md`, которые агент обязан прочесть перед работой
 
 ## Источник
 

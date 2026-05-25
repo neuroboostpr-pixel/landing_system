@@ -2,49 +2,61 @@
 type: command
 name: landing-compose
 sources: ["commands/landing-compose.md"]
-updated: 2026-05-20
-triggers: ["собрать composed.html", "запустить этап 07b", "вставить токены дизайна в вайрфрейм", "склеить блоки с контентом"]
+updated: 2026-05-25
+triggers:
+  - "собрать composed.html"
+  - "запустить этап 07b"
+  - "скомпоновать лендинг с токенами"
+  - "подставить контент из прототипа в wireframe"
 stage: "07b"
-uses: ["block-composer", "landing-go", "landing-wireframe", "landing-prototype", "design-tokens-generation"]
-tags: ["compose", "07b", "composed-html", "design-tokens", "prototype"]
+uses:
+  - landing-wireframe
+  - landing-prototype
+  - block-composer
+  - landing-photos
+  - landing-visuals
+  - landing-go
+tags:
+  - compose
+  - stage-07b
+  - html
+  - design-tokens
 ---
 
-# /landing-compose — сборка composed.html
+# /landing-compose — Сборка composed.html (этап 07b)
 
 ## Что делает
 
-Запускает этап **07b_COMPOSED**: берёт выбранные блоки вайрфрейма, вставляет в них дизайн-токены (цвета, шрифты, отступы) и тексты из прототипа, и рендерит финальный HTML-макет `composed.html`. Визуальные заглушки для фото и иконок остаются — они заполняются позднее на этапах 07c/07d.
+Собирает финальный HTML-документ лендинга: берёт выбранные варианты блоков из wireframe, подставляет реальные тексты из прототипа и инжектирует дизайн-токены (цвета, шрифты, отступы). Визуальные заглушки (фото, иконки) на этом этапе остаются — они заполняются позже командами `/landing-photos` и `/landing-visuals`.
 
 ## Когда вызывать / в каком этапе
 
-Вызывается **после** того, как:
-- завершён импорт прототипа (`/landing-prototype`) и существует `07_ПРОТОТИП/prototype.yaml`,
-- пользователь выбрал варианты блоков в wireframe.html и положил `07a_WIREFRAME/selections.yaml`,
-- сгенерирована дизайн-система (`/landing-design`) и существует `05_ДИЗАЙН-СИСТЕМА/tokens.json`.
+Вызывается на этапе **07b** после того, как:
+- пользователь выбрал варианты блоков в `wireframe.html` и сохранил `selections.yaml` в папку `07a_WIREFRAME/`;
+- дизайн-система (этап 05) завершена и `tokens.json` присутствует в `05_ДИЗАЙН-СИСТЕМА/`.
 
-Рекомендуется запускать автоматически через `/landing-go` — оркестратор сам проверяет готовность всех предусловий. Ручной вызов `/landing-compose` допустим для повторного прогона или отладки.
+Рекомендуется запускать через `/landing-go` (оркестратор сам вызовет команду в нужный момент). Допустим и ручной вызов.
 
 ## Что на вход / на выход
 
-**Вход:**
-- `07_ПРОТОТИП/prototype.yaml` — машинная версия прототипа с текстами блоков
-- `07a_WIREFRAME/selections.yaml` — выбор пользователя: какой вариант каждого блока использовать
-- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — дизайн-токены проекта (цвета, типографика, spacing)
+**Входные артефакты:**
+- `07_ПРОТОТИП/prototype.yaml` — структура и тексты блоков
+- `07a_WIREFRAME/selections.yaml` — выбор пользователя по вариантам блоков
+- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — дизайн-токены проекта
 
-**Выход:**
-- `07b_COMPOSED/composed.html` — десктопная сборка с инъекцией токенов и реального текста
+**Выходные артефакты:**
+- `07b_COMPOSED/composed.html` — главный HTML лендинга с токенами и текстами
 - `07b_COMPOSED/composed-mobile.html` — мобильная версия
-- `07b_COMPOSED/block-injection-log.md` — лог: какой блок из какого источника и с каким контентом попал в сборку
+- `07b_COMPOSED/block-injection-log.md` — лог подстановки блоков
 
 ## Связанные концепты
 
-- [[block-composer]] — агент, который выполняет непосредственную сборку composed.html
-- [[landing-go]] — рекомендуемый способ запуска: оркестратор автоматически диспатчит этот этап
-- [[landing-wireframe]] — предшествующий этап: пользователь выбирает варианты блоков
-- [[landing-prototype]] — поставляет `prototype.yaml` с текстовым контентом
-- [[design-tokens-generation]] — скилл, создающий `tokens.json`, которые инъектируются в HTML
-- [[landing-photos]] — этап 07c: после compose заполняет фото-слоты в composed.html
-- [[landing-visuals]] — этап 07d: после compose заполняет иконки/инфографику в composed.html
+- [[landing-wireframe]] — предыдущий этап: генерирует wireframe.html с вариантами блоков и `selections.yaml`
+- [[landing-prototype]] — ещё раньше: парсит прототип клиента в `prototype.yaml`
+- [[block-composer]] — агент, выполняющий фактическую сборку composed.html
+- [[landing-photos]] — следующий этап 07c: заменяет фото-заглушки реальными снимками
+- [[landing-visuals]] — следующий этап 07d: заменяет иконки и инфографику AI-генерацией
+- [[landing-go]] — главная команда-оркестратор, вызывающая `/landing-compose` автоматически
 
 ## Источник
 

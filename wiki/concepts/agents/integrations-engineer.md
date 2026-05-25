@@ -2,46 +2,45 @@
 type: agent
 name: integrations-engineer
 sources: ["agents/integrations-engineer.md"]
-updated: 2026-05-20
+updated: 2026-05-25
 triggers: []
 stage: "08"
-uses: ["wp-builder", "analytics-engineer", "landing-build"]
-tags: ["integrations", "fluent-forms", "telegram", "crm", "webhook", "stage-08"]
+uses: ["landing-orchestrator", "wp-builder", "stage-execution-protocol"]
+tags: ["integrations", "telegram", "crm", "fluent-forms", "stage-08", "webhooks"]
 ---
 
-# Integrations Engineer — Агент интеграций форм и вебхуков
+# Integrations Engineer (Инженер интеграций)
 
 ## Что делает
-Настраивает формы захвата лидов на лендинге: подключает Fluent Forms к Telegram-боту и CRM-системе. После его работы каждая заявка с лендинга автоматически уходит в чат и/или CRM.
+Настраивает передачу заявок с лендинга в Telegram и CRM: добавляет вебхуки в WordPress-тему так, чтобы каждый новый лид сразу уходил менеджеру в мессенджер или в CRM-систему.
 
 ## Когда вызывать / в каком этапе
-Запускается на **этапе 08 (08_build)** после того, как [[wp-builder]] создал тему и `functions.php`. Следует за wp-builder, предшествует [[analytics-engineer]]. Вызывается в рамках команды [[landing-build]] (или `/landing-go`).
-
-Перед запуском агент обязан:
-1. Проверить `.landing-state.yaml` — убедиться, что `current_stage == 08_build`.
-2. Показать Mermaid-карту pipeline через `render-pipeline-map.sh`.
-3. Пройти gate-check (`gate-check.sh --stage 08_build`) — при exit ≠ 0 остановиться.
+Вызывается на **этапе 08 (build)** — после того как `wp-builder` создал файл `functions.php` темы. Агент не запускается сам: его вызывает `landing-orchestrator` в рамках stage 08. Требуется, чтобы `current_stage == 08_build` в `.landing-state.yaml`; если нет — агент останавливается и сообщает об ошибке.
 
 ## Что на вход / на выход
 
 **Вход:**
-- `08_КОД/wp-theme/functions.php` — создан wp-builder, содержит placeholder `// [FLUENT_WEBHOOK]`
+- `08_КОД/wp-theme/functions.php` — создан `wp-builder`, содержит плейсхолдер `// [FLUENT_WEBHOOK]`
 - `08_КОД/block-spec.yaml` — блок `form` с полем `form_id`
 - `.env` проекта с переменными `TELEGRAM_BOT_TOKEN`, `TELEGRAM_LEADS_CHAT_ID` и/или `CRM_WEBHOOK_URL`
 
 **Выход:**
-- `08_КОД/wp-theme/functions.php` — дополнен PHP-хуком `lp_send_lead_to_telegram` для отправки лида в Telegram, и опционально — хуком для CRM через `wp_remote_post`
+- `08_КОД/wp-theme/functions.php` — дополнен PHP-хуком на событие `fluentform/submission_inserted`: отправка лида в Telegram и/или CRM через `wp_remote_post`
 
-**Ограничения безопасности:**
-- Токены и URL хранятся только в переменных окружения (`getenv()`), не хардкодятся.
-- Все данные пользователя экранируются через `esc_html()` перед отправкой.
+## Как работает (шаги)
+1. Читает `.env` (или `.env.example`) — определяет, какие интеграции активны.
+2. Генерирует PHP-сниппет для Telegram: форматирует данные лида в сообщение, вызывает Bot API через `wp_remote_post`.
+3. Если задан `CRM_WEBHOOK_URL` — добавляет аналогичный хук с отправкой `form_data` на CRM-эндпоинт.
+4. **HARD GATE:** показывает добавленный код пользователю и ждёт явного утверждения перед сохранением.
 
-**HARD GATE:** агент показывает добавленный код и ждёт явного утверждения пользователя перед записью в файл.
+## Правила безопасности
+- Токены и URL вебхуков — **только через `getenv()`**, никогда не хардкодятся в код.
+- Все пользовательские данные экранируются через `esc_html()` перед отправкой.
 
 ## Связанные концепты
-- [[wp-builder]] — создаёт `functions.php` и wp-тему, которую дополняет этот агент
-- [[analytics-engineer]] — следующий агент в цепочке этапа 08
-- [[landing-build]] — скилл-оркестратор этапа 08, в контексте которого запускается агент
+- [[wp-builder]] — создаёт `functions.php`, который этот агент дополняет
+- [[landing-orchestrator]] — вызывает агента как часть pipeline stage 08
+- [[stage-execution-protocol]] — обязательный протокол: проверка `.landing-state.yaml`, Mermaid-карта, gate-check перед любым изменением файлов
 
 ## Источник
 - `agents/integrations-engineer.md`

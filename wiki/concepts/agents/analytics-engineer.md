@@ -2,49 +2,43 @@
 type: agent
 name: analytics-engineer
 sources: ["agents/analytics-engineer.md"]
-updated: 2026-05-20
+updated: 2026-05-25
 triggers: []
-stage: "11"
-uses: ["integrations-engineer", "wp-builder", "stage-execution-protocol", "seo-optimizer"]
-tags: ["analytics", "yandex-metrika", "wordpress", "stage-11"]
+stage: "11_analytics"
+uses: ["landing-orchestrator", "integrations-engineer", "stage-execution-protocol"]
+tags: ["аналитика", "яндекс-метрика", "utm", "stage-11"]
 ---
 
-# analytics-engineer (Инженер аналитики)
+# Analytics Engineer (Инженер аналитики)
 
 ## Что делает
 
-Подключает Яндекс.Метрику к лендингу: вставляет счётчик в WordPress-тему и формирует конфигурационные файлы с целями и UTM-шаблонами для рекламных кампаний.
+Подключает Яндекс.Метрику к готовому лендингу, определяет цели отслеживания (клики по CTA, отправки форм) и формирует UTM-шаблоны для рекламных кампаний в Яндекс.Директ.
 
 ## Когда вызывать / в каком этапе
 
-Запускается на **этапе 11 (11_АНАЛИТИКА)**, строго после [[integrations-engineer]]. Требует, чтобы в `.landing-state.yaml` было `current_stage == 11_analytics`. Если предшественник не завершён — агент останавливается и сообщает об этом.
-
-Перед любыми изменениями файлов агент обязан:
-1. Прочитать `.landing-state.yaml` и убедиться в правильном текущем этапе.
-2. Отрисовать Mermaid-карту pipeline через `render-pipeline-map.sh`.
-3. Сформировать TodoWrite-список оставшихся этапов.
-4. Пройти gate-check (`gate-check.sh --stage 11_analytics`).
+Запускается на этапе **11\_analytics** — после `integrations-engineer` (этап 08), когда `functions.php` уже существует. Агент сначала проверяет `.landing-state.yaml`: `current_stage` должен быть `11_analytics`, иначе останавливается. Перед любыми изменениями запускает `gate-check.sh` и отображает Mermaid-карту пайплайна.
 
 ## Что на вход / на выход
 
 **Вход:**
-- `08_КОД/wp-theme/functions.php` — тема WordPress, созданная [[wp-builder]]
-- `.env` с переменной `YM_COUNTER_ID` (8-значный идентификатор счётчика)
+- `08_КОД/wp-theme/functions.php` с маркером `// [YM_COUNTER]`
+- `.env` или `.env.example` с переменной `YM_COUNTER_ID` (8-значное число)
 
 **Выход:**
-- `08_КОД/wp-theme/functions.php` — дополнен PHP-функцией `lp_yandex_metrika()`, подключённой через хук `wp_head`
-- `11_АНАЛИТИКА/metrika-config.md` — ID счётчика и список настроенных целей
-- `11_АНАЛИТИКА/goals-and-events.json` — цели для импорта в Яндекс.Метрику
-- `11_АНАЛИТИКА/utm-templates.md` — UTM-шаблоны для Яндекс.Директ
+- `08_КОД/wp-theme/functions.php` — дополнен PHP-функцией `lp_yandex_metrika()`, подключённой через `add_action('wp_head', ...)`
+- `11_АНАЛИТИКА/metrika-config.md` — ID счётчика и список целей в читаемом виде
+- `11_АНАЛИТИКА/goals-and-events.json` — цели для импорта в интерфейс Метрики
+- `11_АНАЛИТИКА/utm-templates.md` — готовые UTM-шаблоны для Яндекс.Директ
 
-**HARD GATE:** агент показывает `metrika-config.md` пользователю и ждёт явного подтверждения перед финальной отметкой этапа как `approved`.
+Перед финализацией агент показывает `metrika-config.md` и ждёт явного утверждения пользователя (**HARD GATE**). После approve — вызывает `gate-state.sh approve`.
 
 ## Связанные концепты
 
-- [[integrations-engineer]] — обязательный предшественник; настраивает Fluent Forms, Telegram и CRM-вебхуки до запуска аналитики
-- [[wp-builder]] — создаёт `functions.php`, в который analytics-engineer вставляет код Метрики
-- [[stage-execution-protocol]] — общий протокол выполнения этапа: gate-check, TodoWrite, approve-flow
-- [[seo-optimizer]] — следующий этап (12_SEO), запускается после закрытия 11_analytics
+- [[landing-orchestrator]] — вызывает агента как часть основного pipeline
+- [[integrations-engineer]] — предшественник: должен быть завершён до старта аналитики
+- [[stage-execution-protocol]] — обязательный протокол проверки gate-check перед любым Write/Edit
+- [[landing-deploy]] — следующий этап после закрытия gate 11\_analytics
 
 ## Источник
 

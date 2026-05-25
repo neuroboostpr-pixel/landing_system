@@ -2,47 +2,45 @@
 type: skill
 name: design-tokens-generation
 sources: ["skills/design-tokens-generation/SKILL.md"]
-updated: 2026-05-15
+updated: 2026-05-25
 triggers: []
 stage: "05"
-uses: ["brand-kit-build", "design-system-generator", "brand-architect"]
-tags: ["design", "tokens", "stage-05", "DESIGN.md"]
+uses: ["design-system-generator", "brand-kit-build", "landing-design"]
+tags: ["design-system", "tokens", "brand", "stage-05"]
 ---
 
-# Design Tokens Generation — Генерация дизайн-системы
+# Design Tokens Generation — Генерация дизайн-системы из бренд-кита
 
 ## Что делает
 
-Читает готовый бренд-кит проекта и автоматически собирает полную дизайн-систему: файл `DESIGN.md` с описанием всех визуальных правил и машиночитаемый `tokens.json` с цветами, шрифтами и отступами. Дополнительно рендерит HTML-превью дизайн-системы для визуальной проверки.
+Берёт бренд-кит (`brand-kit.md`) и автоматически строит полную дизайн-систему проекта: файл `DESIGN.md` с 9 секциями (цвета, типографика, отступы, сетка, компоненты, анимации, голос бренда, атмосфера, антипаттерны) и машино-читаемый `tokens.json`. После утверждения этапа — экспортирует палитру в общую библиотеку пресетов.
 
 ## Когда вызывать / в каком этапе
 
-Этап **05 (Дизайн-система)**. Запускается агентом `design-system-generator` после того, как `brand-architect` завершил этап 04 и файл `04_БРЕНД/brand-kit.md` утверждён. Скилл не вызывается вручную — его запускает агент.
-
-После утверждения этапа 05 автоматически срабатывает post-approve хук: скрипт `export-palettes-to-library.py` добавляет новую палитру в глобальную библиотеку `presets/palettes.yaml`. **Важно:** запускать этот хук до утверждения нельзя — черновые палитры не должны попадать в библиотеку.
+Запускается агентом `design-system-generator` на **этапе 05 (Дизайн-система)**, сразу после того как этап 04 (Бренд) завершён и `brand-kit.md` утверждён пользователем. Вызов до утверждения бренд-кита запрещён — черновые палитры не должны попадать в общую библиотеку.
 
 ## Что на вход / на выход
 
 **Вход:**
-- `04_БРЕНД/brand-kit.md` — YAML-frontmatter с цветами, шрифтами, иконками из бренд-кита
+- `04_БРЕНД/brand-kit.md` — YAML frontmatter с параметрами бренда (цвета, шрифты, тон)
 
 **Выход:**
-- `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` — 9 секций: Color, Typography, Spacing, Layout, Components, Motion, Voice, Brand, Anti-patterns
-- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — машиночитаемые токены для сборки темы
-- `05_ДИЗАЙН-СИСТЕМА/design-preview.html` — визуальный превью дизайн-системы в браузере
+- `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` — 9-секционный документ дизайн-системы (цвета/роли/контраст, типографика, spacing, layout 12-колонок, компоненты, motion, voice, brand, anti-patterns)
+- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — токены в машино-читаемом формате для последующих этапов
+- `05_ДИЗАЙН-СИСТЕМА/design-preview.html` — визуальный HTML-превью дизайн-системы
+- `presets/palettes.yaml` — пополняется новой палитрой **после** approve (идемпотентно, существующие id не перезаписываются)
 
 **Скрипты:**
-- `scripts/build-tokens.py <project-dir>` — генерирует DESIGN.md + tokens.json
-- `scripts/render-preview.py <project-dir>` — генерирует design-preview.html
-- `scripts/export-palettes-to-library.py` — post-approve хук экспорта палитры
-
-**Структура DESIGN.md** включает 9 обязательных секций: палитра с контрастными парами, типографика (display/body/mono, h1–h6), модульная сетка отступов, 12-колоночный лэйаут с breakpoints, стили компонентов (кнопки, инпуты, карточки), motion-токены (duration + easing), тон голоса бренда, атмосфера бренда, явный список анти-паттернов.
+- `scripts/build-tokens.py <project-dir>` — основной генератор
+- `scripts/render-preview.py <project-dir>` — генератор превью
+- `scripts/export-palettes-to-library.py` — постапрув-хук экспорта палитры
 
 ## Связанные концепты
 
-- [[brand-kit-build]] — предыдущий этап, создаёт `brand-kit.md`, который является входом для этого скилла
-- [[design-system-generator]] — агент-исполнитель, который вызывает этот скилл на этапе 05
-- [[brand-architect]] — агент этапа 04, чей артефакт (`brand-kit.md`) служит источником данных
+- [[design-system-generator]] — агент, который вызывает этот скилл на этапе 05
+- [[brand-kit-build]] — предыдущий этап; его выход (`brand-kit.md`) является входом этого скилла
+- [[landing-design]] — slash-команда `/landing-design`, запускающая этап 05 целиком
+- [[landing-compose]] — этап 07b потребляет `tokens.json` для инжекции CSS-переменных в `composed.html`
 
 ## Источник
 

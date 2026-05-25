@@ -2,47 +2,48 @@
 type: agent
 name: photo-preview-board
 sources: ["agents/photo-preview-board.md"]
-updated: 2026-05-20
+updated: 2026-05-25
 triggers: []
 stage: "07c"
-uses: ["photo-curator", "photo-stylist", "selections-validator", "identity-safe"]
-tags: ["photos", "preview", "processing", "identity-safe"]
+uses: ["photo-curator", "photo-curation", "photo-styling", "identity-safe"]
+tags: ["photos", "preview", "image-processing", "stage-07c"]
 ---
 
-# photo-preview-board — рендер превью фотографий
+# Photo Preview Board — рендер превью фотографий
 
 ## Что делает
-
-Берёт утверждённый пользователем файл `selections.yaml` и обрабатывает каждый фото-слот: кадрирует клиентские снимки, генерирует изображения через codex или ставит SVG-заглушку. После обработки рендерит `photo-preview.html` для финального визуального контроля.
+Обрабатывает каждый слот из утверждённого `selections.yaml`: кроппит/ресайзит клиентские фото, генерирует изображения через Codex или создаёт SVG-плейсхолдеры. Результат — файлы `desktop.jpg`/`mobile.jpg` и финальная страница `photo-preview.html` для проверки заказчиком.
 
 ## Когда вызывать / в каком этапе
-
-Агент работает на этапе **07c (Photos)** и вызывается **только через `photo-curator`** — прямой вызов не предусмотрен. `photo-curator` диспатчит его после того, как пользователь утвердил расстановку фото в `photo-board.html` и положил `selections.yaml` в `07c_PHOTOS/`.
+Вызывается **только автоматически** агентом `photo-curator` после того, как пользователь подтвердил `selections.yaml`. Не предназначен для прямого вызова. Относится к этапу **07c (Photos)**.
 
 ## Что на вход / на выход
 
 **Вход:**
-- `<project>/07c_PHOTOS/selections.yaml` — канонический файл с выбором пользователя (стратегия per-слот: `bring-your-own`, `generate` или `placeholder`)
+- `<project>/07c_PHOTOS/selections.yaml` — канонический файл с выбором пользователя (должен пройти валидацию)
 
 **Выход:**
-- `<project>/07c_PHOTOS/processed/<slot_id>/desktop.jpg` — обрезанный/ресайзнутый снимок под десктоп
-- `<project>/07c_PHOTOS/processed/<slot_id>/mobile.jpg` — мобильная версия (если у блока задан `mobile_ratio`)
-- `<project>/07c_PHOTOS/photo-preview.html` — HTML-превью для финального approve
+- `<project>/07c_PHOTOS/processed/<slot_id>/desktop.jpg` — обработанное изображение для десктопа
+- `<project>/07c_PHOTOS/processed/<slot_id>/mobile.jpg` — версия для мобильных (если блок задаёт `mobile_ratio`)
+- `<project>/07c_PHOTOS/photo-preview.html` — интерактивный HTML-превью для финального одобрения
 
-**Логика стратегий:**
-- `bring-your-own` — берёт клиентское фото из `intake/`, обрезает под нужный ratio через `style.py`
-- `generate` — генерирует через `codex-generate-fallback.sh`; но если слот identity-safe (`testimonial`, `expert`, `team-member`, `avatar`) и `ai_approved_by_user == false` — автоматически деградирует до `placeholder` без уведомления
-- `placeholder` — рисует SVG-заглушку с брендовым цветом и хинтом слота
+## Ключевые правила обработки
 
-**Identity-safe gate** — ключевое правило: AI-генерация людей (лица, команда, отзывы) запрещена без явного разрешения пользователя. Это единственная точка принудительного применения правила в pipeline.
+Каждый слот обрабатывается согласно стратегии из `selections.yaml`:
+
+| Стратегия | Действие |
+|---|---|
+| `bring-your-own` | Кроп/ресайз через `photo-styling/scripts/style.py` с целевым ratio |
+| `generate` | Генерация через Codex (`codex-generate-fallback.sh`), если прошла identity-safe проверка |
+| `placeholder` | SVG-плейсхолдер через `svg-placeholder.py` с брендовым цветом |
+
+**Identity-safe gate:** если слот типа `testimonial`, `expert`, `team-member` или `avatar` имеет стратегию `generate` при `ai_approved_by_user: false` — стратегия автоматически понижается до `placeholder` без уведомления. Это главная точка принудительного соблюдения политики безопасности идентичности.
 
 ## Связанные концепты
-
-- [[photo-curator]] — родительский агент-оркестратор, единственный кто вызывает photo-preview-board
-- [[photo-stylist]] — используется для обрезки/ресайза клиентских фото (`style.py`)
-- [[photo-matcher]] — формирует черновик `selections.yaml`, который пользователь затем утверждает
-- [[photo-classifier]] — классифицирует фото на этапе intake до того, как попасть в selections
+- [[photo-curator]] — родительский агент, который диспатчит этого хелпера
+- [[photo-curation]] — скилл с валидатором `selections-validator.py` и Codex-скриптами
+- [[photo-styling]] — скилл с `style.py` для ресайза/кропа
+- [[identity-safe]] — политика запрета AI-генерации лиц без явного разрешения
 
 ## Источник
-
 - `agents/photo-preview-board.md`

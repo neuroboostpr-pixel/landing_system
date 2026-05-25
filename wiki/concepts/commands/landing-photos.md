@@ -2,74 +2,72 @@
 type: command
 name: landing-photos
 sources: ["commands/landing-photos.md"]
-updated: 2026-05-20
+updated: 2026-05-25
 triggers:
   - "обработать фотки клиента"
-  - "добавить фото на лендинг"
-  - "photo pipeline"
+  - "запустить фото-пайплайн"
   - "расставить фото по слотам"
-  - "stage 07c"
+  - "сгенерировать фото для лендинга"
 stage: "07c"
 uses:
   - photo-curator
   - photo-classifier
   - photo-matcher
-  - photo-preview-board
-  - landing-go
-  - landing-compose
   - landing-wireframe
-tags: [photos, stage-07c, pr-b, ai-classify, generative-fallback]
+  - landing-compose
+  - landing-go
+tags:
+  - photos
+  - stage-07c
+  - pr-b
+  - media
 ---
 
-# /landing-photos — конвейер клиентских фотографий
+# /landing-photos — Фото-пайплайн (Stage 07c)
 
 ## Что делает
 
-Запускает полный цикл обработки фото клиента: сортирует снимки из папки `inbox/`, классифицирует их через AI, подбирает лучший кадр к каждому слоту макета, позволяет расставить фото через визуальный drag-drop интерфейс и наконец встраивает итоговые фото в `composed.html`, убирая плейсхолдеры.
+Принимает клиентские фотографии, автоматически классифицирует их через AI, подбирает нужное фото под каждый слот лендинга и подготавливает финальный `composed.html` с реальными изображениями вместо плейсхолдеров. Если фоток нет — генерирует fallback через codex.
 
 ## Когда вызывать / в каком этапе
 
-**Stage 07c** — между `07b_COMPOSED` и финальным production-рендером.
+Stage **07c** — запускается после того как утверждены:
+- этап **05** (design-system, `tokens.json` существует),
+- этап **07a** (wireframe, `selections.yaml` от пользователя готов).
 
-Обязательные гейты перед запуском:
-1. Этап 05 (дизайн-система) утверждён — `status == approved` в `.landing-state.yaml`. Без `tokens.json` AI не знает стиль.
-2. Файл `07a_WIREFRAME/selections.yaml` существует и содержит выбранные варианты блоков — без него неизвестно, какие photo-слоты войдут в лендинг.
-
-Рекомендуется запускать через `/landing-go` (оркестратор сам отследит гейты). Допустим ручной вызов этой командой напрямую.
+Вызывается вручную командой `/landing-photos` или автоматически через `/landing-go`. При пустой папке `inbox/` агент спросит: положить фотки вручную или использовать флаг `--all-ai`.
 
 **Флаги:**
 - `--project <slug>` — указать папку проекта явно
-- `--force-stage <intake|classify|match|preview>` — пересброс конкретного этапа
-- `--all-ai` — пропустить inbox, все слоты генерируются через codex fallback (требует подтверждения)
-- `--interactive` — агент спрашивает по очереди что положить в каждый слот
+- `--force-stage <intake|classify|match|preview>` — сбросить конкретный этап
+- `--all-ai` — generative fallback на все слоты (требует подтверждения)
+- `--interactive` — агент спрашивает по каждому слоту что подложить
 
 ## Что на вход / на выход
 
 **Вход:**
-- Фотографии клиента в `07c_PHOTOS/inbox/` (7 подпапок по типу: портреты, процесс, объекты и т.д.)
-- Дополнительный путь: `02_МАТЕРИАЛЫ_КЛИЕНТА/photos/original/` (старые проекты)
-- `07a_WIREFRAME/selections.yaml` — список photo-слотов
-- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — цвета и стиль для промптов codex
+- `07c_PHOTOS/inbox/` — 7 подпапок с фотками клиента (портреты, процесс, офис и т.д.)
+- `02_МАТЕРИАЛЫ_КЛИЕНТА/photos/original/` — совместимость со старыми проектами
+- `07a_WIREFRAME/selections.yaml` — список photo-слотов из выбранных блоков
+- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — цвета бренда для промптов codex
 
-**Выход (в `07c_PHOTOS/`):**
-- `catalog.yaml` — каталог всех фото с AI-тегами
-- `selections.draft.yaml` — черновик расстановки от AI
-- `selections.yaml` — финальная расстановка (утверждает пользователь)
-- `processed/` — готовые к вёрстке файлы (crop + resize)
-- `photo-board.html` — UI для drag-drop расстановки
-- `photo-preview.html` — предпросмотр «фото в макете»
-- `STATE.yaml` — статусы внутренних этапов
-- Обновлённый `07b_COMPOSED/composed.html` — плейсхолдеры `[photo slot: ...]` заменены на `<img>` / `<picture>`
+**Выход:**
+- `07c_PHOTOS/catalog.yaml` — каталог фоток с тегами (авто)
+- `07c_PHOTOS/selections.draft.yaml` — AI-черновик расстановки (авто)
+- `07c_PHOTOS/selections.yaml` — финальная расстановка (подтверждается пользователем)
+- `07c_PHOTOS/processed/` — обрезанные финальные фото
+- `07c_PHOTOS/photo-board.html` — интерактивный drag-drop UI
+- `07c_PHOTOS/photo-preview.html` — превью «фото в местах макета»
+- `07b_COMPOSED/composed.html` — перерендерится с реальными `<img>` вместо плейсхолдеров
 
 ## Связанные концепты
 
-- [[photo-curator]] — главный агент-оркестратор всего stage 07c
-- [[photo-classifier]] — тегирует фотки через codex CLI (1 фото = 1 вызов)
-- [[photo-matcher]] — ранжирует кандидатов на каждый слот, выдаёт top-3
-- [[photo-preview-board]] — финальная нарезка и generative fallback для пустых слотов
-- [[landing-go]] — рекомендуемый способ вызова через оркестратор
-- [[landing-compose]] — предшествующий этап, создаёт composed.html с плейсхолдерами
-- [[landing-wireframe]] — этап 07a, должен быть завершён до старта
+- [[photo-curator]] — агент-оркестратор всего фото-пайплайна, вызывается командой
+- [[photo-classifier]] — тегирует фотки из `_свалка/` через codex
+- [[photo-matcher]] — ранжирует кандидатов по слотам
+- [[landing-wireframe]] — формирует `selections.yaml` с перечнем photo-слотов
+- [[landing-compose]] — создаёт `composed.html`, который перерендерится после фото
+- [[landing-go]] — главный оркестратор, запускает этот этап автоматически
 
 ## Источник
 

@@ -2,61 +2,48 @@
 type: agent
 name: wp-deployer
 sources: ["agents/wp-deployer.md"]
-updated: 2026-05-20
-triggers: ["задеплоить лендинг", "залить на сервер", "деплой на Бегет", "опубликовать сайт", "загрузить тему на хостинг"]
-stage: "09"
-uses: ["stage-execution-protocol", "landing-build", "qa-auditor", "landing-deploy"]
-tags: ["deploy", "beget", "ssh", "rsync", "ssl", "wordpress"]
+updated: 2026-05-25
+triggers: []
+stage: "09_deploy"
+uses: ["landing-build", "landing-orchestrator", "stage-execution-protocol"]
+tags: ["deploy", "beget", "ssh", "wordpress", "ssl"]
 ---
 
-# wp-deployer — Деплой-инженер
+# wp-deployer (Деплой-инженер)
 
 ## Что делает
-
-Загружает готовую WordPress-тему на хостинг Бегет по SSH, активирует её, импортирует ACF-поля и проверяет, что сайт открывается по HTTPS. Это финальный шаг перед QA-аудитом.
+Загружает готовую WordPress-тему на хостинг Бегет по SSH, активирует её, проверяет доступность сайта и корректность SSL/редиректов.
 
 ## Когда вызывать / в каком этапе
-
-Этап **09_deploy**. Активируется командой `/landing-deploy` после того, как этап 08 (сборка темы) получил статус `approved`. Если `.landing-state.yaml` показывает `current_stage != 09_deploy` — агент останавливается и сообщает об ошибке.
+Запускается на **этапе 09 (deploy)** после того, как `/landing-build` утверждён пользователем. Вызывается командой `/landing-deploy` или через `landing-orchestrator`. Агент не стартует, если `.landing-state.yaml` показывает `current_stage != 09_deploy` — в этом случае он останавливается и сообщает об ошибке.
 
 ## Что на вход / на выход
 
 **Вход:**
-- `.landing-state.yaml` с подтверждённым этапом 08
-- `.env` с переменными `BEGET_USER`, `BEGET_HOST`, `BEGET_PATH`
-- Собранная WordPress-тема в директории проекта
+- Собранная WordPress-тема в директории проекта (выход этапа 08).
+- Файл `.env` с переменными `BEGET_USER`, `BEGET_HOST`, `BEGET_PATH`.
+- `.landing-state.yaml` с подтверждённым статусом предыдущих этапов.
 
 **Выход:**
-- Развёрнутый сайт на Бегет (тема загружена и активирована)
-- Проверенный HTTPS (`certbot --nginx` при необходимости)
-- Настроенные редиректы HTTP→HTTPS и www→без www
-- Статус этапа `approved` в `.landing-state.yaml`
+- Работающий сайт на Бегете по HTTPS-адресу.
+- Активированная тема и импортированные ACF/Lazy Blocks поля.
+- Настроенные редиректы HTTP→HTTPS и www→без www.
+- Обновлённый `.landing-state.yaml` с отметкой `09_deploy: approved`.
 
-## Порядок работы
-
-1. Читает `.landing-state.yaml` и выводит Mermaid-карту pipeline через `scripts/render-pipeline-map.sh`.
-2. Создаёт TodoWrite-список оставшихся этапов (09 → 12).
-3. Запускает `scripts/gate-check.sh --stage 09_deploy` — при exit ≠ 0 останавливается.
-4. Проверяет `.env` на наличие трёх обязательных переменных.
-5. Запускает `scripts/deploy.sh <project-dir>` — rsync + wp-cli активация.
-6. Проверяет доступность сайта: `curl -sI https://<domain> | head -5`.
-7. При отсутствии SSL — выдаёт команду certbot.
-8. Показывает пользователю URL — ждёт явного утверждения **(HARD GATE)**.
-9. Закрывает этап через `scripts/gate-state.sh approve`.
-
-## Важные ограничения
-
-- **Никогда** не деплоит без preflight (`gate-check.sh` exit 0).
-- Хук `scripts/hooks/enforce_stage_gate.py` физически блокирует запись в файлы этапа, если предшественники не закрыты — обходить его запрещено.
-- Всегда сообщает точный URL для проверки после деплоя.
+**Ход работы:**
+1. Читает `.landing-state.yaml`, показывает Mermaid-карту pipeline.
+2. Создаёт TodoWrite-список оставшихся этапов.
+3. Запускает `scripts/gate-check.sh --stage 09_deploy`.
+4. Выполняет `scripts/deploy.sh <project-dir>` (rsync + wp-cli).
+5. Проверяет сайт: `curl -sI https://<domain>`.
+6. При необходимости выдаёт инструкцию по certbot для SSL.
+7. **HARD GATE**: показывает URL и ждёт явного утверждения пользователя.
 
 ## Связанные концепты
-
-- [[stage-execution-protocol]] — обязательный протокол перед любым действием на этапе
-- [[landing-build]] — этап 08, предшественник; тема должна быть собрана
-- [[landing-deploy]] — команда-триггер для этого агента
-- [[qa-auditor]] — следующий этап 10, проверяет живой сайт
+- [[landing-build]] — предшествующий этап 08, без его approve деплой не запустится
+- [[landing-orchestrator]] — вызывает wp-deployer как часть общего pipeline
+- [[stage-execution-protocol]] — обязательный протокол preflight перед любым действием
+- [[landing-deploy]] — slash-команда, которая активирует этого агента
 
 ## Источник
-
 - `agents/wp-deployer.md`

@@ -2,57 +2,83 @@
 type: agent
 name: landing-orchestrator
 sources: ["agents/landing-orchestrator.md"]
-updated: 2026-05-20
-triggers: ["запустить лендинг", "следующий этап", "landing-go", "продолжить проект"]
+updated: 2026-05-25
+triggers: []
 stage: ""
-uses: ["niche-analyst", "client-assets-collector", "photo-stylist", "references-curator", "moodboard-composer", "style-extractor", "brand-architect", "design-system-generator", "scene-director", "stack-planner", "content-writer", "wp-builder", "integrations-engineer", "analytics-engineer", "seo-optimizer", "wp-deployer", "qa-auditor", "lifecycle-keeper", "block-composer", "photo-curator", "visual-curator", "prototype-importer"]
-tags: ["orchestrator", "pipeline", "workflow", "hard-gate"]
+uses:
+  - landing-go
+  - landing-prototype
+  - landing-wireframe
+  - landing-compose
+  - landing-photos
+  - landing-visuals
+  - landing-build
+  - landing-deploy
+  - landing-qa
+  - niche-analyst
+  - brand-architect
+  - design-system-generator
+  - content-writer
+  - wp-builder
+  - wp-deployer
+  - qa-auditor
+  - references-curator
+  - moodboard-composer
+  - style-extractor
+  - stack-planner
+tags: [orchestrator, pipeline, workflow, core]
 ---
 
 # landing-orchestrator (Главный дирижёр)
 
 ## Что делает
 
-Ведёт проект-лендинг через 12 этапов: от брифа до деплоя и SEO. На каждом этапе диспатчит нужного специализированного агента, ждёт HTML-превью, получает явное «утверждаю» от пользователя и только потом переходит дальше. Пропустить этап или перепрыгнуть вперёд — невозможно.
+Управляет полным производственным циклом лендинга — от брифа до деплоя. Читает состояние проекта, диспатчит специализированных агентов на каждый этап, принудительно контролирует HARD GATE между шагами и не даёт пропустить ни один этап без явного утверждения пользователем.
 
 ## Когда вызывать / в каком этапе
 
-Активируется командой `/landing-go` (PR-D) — единственная точка входа после инициализации проекта. В режиме prototype-first стартует с этапа `07a_prototype` (этапы 00–02 помечены `n/a`). В полном flow — с этапа 00 (Бриф).
+Запускается командой `/landing-go` (основной режим, prototype-first) или исторически — `/landing-new`. Активируется сразу после инициализации проекта и ведёт через все 12+ этапов (00→12 для full flow, 03→12 для prototype-first). В prototype-first режиме этапы 00–02 помечены `n/a`, стартовая точка — `07a_prototype`.
 
 ## Что на вход / на выход
 
 **Вход:**
-- `.landing-state.yaml` текущего проекта (читается перед каждым действием)
-- `config/stage-gates.yaml` — список зависимостей между этапами
-- Для prototype-first: `07_ПРОТОТИП/source/prototype.pdf`
+- `.landing-state.yaml` проекта — текущее состояние этапов
+- `config/stage-gates.yaml` — список hard/soft проверок для каждого этапа
+- Пользовательские материалы: `prototype.pdf`, клиентские фото, логотип
 
-**Выход (по этапам):**
-- `00_БРИФ/brief.md` — зафиксированный бриф
-- HTML-превью от каждого агента (`moodboard.html`, `brand-kit.html`, `design-preview.html`, `build-preview.html` и т.д.)
-- Финально — задеплоенный сайт, QA-отчёт, SEO-конфиги
+**Выход:**
+- Последовательно — артефакты каждого этапа: `brief.md`, `moodboard.html`, `brand-kit.md`, `DESIGN.md`, `composed.html`, WordPress-тема, задеплоенный сайт
+- Обновлённый `.landing-state.yaml` после каждого `--approve`
 
-**Обязательный ритуал перед каждым действием (Stage Execution Protocol):**
-1. Прочитать `.landing-state.yaml`, запустить `render-pipeline-map.sh --write-wiki` — показать Mermaid-карту
+## Обязательный протокол перед каждым действием (Stage Execution Protocol)
+
+1. Прочитать `.landing-state.yaml`, запустить `render-pipeline-map.sh` — показать Mermaid-карту пользователю
 2. Создать TodoWrite со всеми оставшимися этапами
-3. Запустить `gate-check.sh` для текущего этапа; при hard-fail — показать fix_hint
-4. Verify → approve → переход к следующему этапу
+3. Запустить `gate-check.sh --stage <id>`, прочитать чек-лист `stage-<id>-checklist.md` если есть
+4. После verify → `gate-check.sh --approve` → переход к следующему этапу
 
-**Параллельная диспетчеризация:** когда этап `07c_composed` одобрен — одновременно запускает `photo-curator` (07d) и `visual-curator` (07e) через `superpowers:dispatching-parallel-agents`.
+## Параллельная диспетчеризация (этапы 07d + 07e)
 
-**Premium gate 07b:** не закрывает этап `07c_composed`, пока `verify-composed-premium.sh` не вернёт exit 0 (13 обязательных фич).
+Когда `07c_composed` одобрен, оркестратор запускает **одновременно** `photo-curator` и `visual-curator` через `superpowers:dispatching-parallel-agents`. Переход к `07f` только после завершения обоих агентов и прохождения обоих гейтов.
+
+## Контроль качества 07b
+
+HARD GATE `composed_premium_standard` — скрипт `verify-composed-premium.sh` проверяет 13 обязательных премиум-фич. Если падает — оркестратор возвращает задачу `block-composer`, цикл до `exit 0`. «И так сойдёт» — недопустимо.
 
 ## Связанные концепты
 
-- [[landing-go]] — команда-триггер единой точки входа (PR-D)
-- [[niche-analyst]] — диспатчится на этапе 01a
-- [[brand-architect]] — диспатчится на этапе 04
-- [[design-system-generator]] — диспатчится на этапе 05
-- [[wp-builder]] — диспатчится на этапе 08
-- [[photo-curator]] — параллельный субагент этапа 07d
-- [[visual-curator]] — параллельный субагент этапа 07e
-- [[qa-auditor]] — диспатчится на этапе 10
-- [[lifecycle-keeper]] — rollback и clone (этапы 09+)
-- [[block-composer]] — получает задачу доработки если premium gate 07b не пройден
+- [[landing-go]] — главная точка входа, вызывает оркестратор
+- [[landing-prototype]] — этап 07a, парсинг PDF-прототипа
+- [[landing-wireframe]] — этап 07b, выбор вариантов блоков
+- [[landing-compose]] — этапы 07c и 07f, сборка composed.html
+- [[landing-photos]] — этап 07d, обработка фото клиента
+- [[landing-visuals]] — этап 07e, AI-генерация иконок
+- [[landing-build]] — этап 08, генерация WordPress-темы
+- [[landing-deploy]] — этап 09, деплой на Бегет
+- [[niche-analyst]] — агент этапа 01a, анализ ниши
+- [[brand-architect]] — агент этапа 04, создание бренд-кита
+- [[wp-builder]] — агент этапа 08, сборка блоков
+- [[qa-auditor]] — агент этапа 10, QA-отчёт
 
 ## Источник
 

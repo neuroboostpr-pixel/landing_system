@@ -2,83 +2,71 @@
 type: command
 name: landing-build
 sources: ["commands/landing-build.md"]
-updated: 2026-05-15
+updated: 2026-05-25
 triggers:
-  - "собрать WordPress-тему"
-  - "сгенерировать код лендинга"
-  - "запустить этап 08"
-  - "build после content"
-  - "сгенерировать блоки Gutenberg"
+  - "сгенерировать WordPress-тему"
+  - "собрать код лендинга"
+  - "запустить билд"
+  - "построить wp-тему и блоки"
+  - "этап 08"
 stage: "08"
 uses:
-  - wp-builder
-  - integrations-engineer
-  - analytics-engineer
-  - seo-optimizer
   - landing-content
   - landing-design
   - landing-stack
-tags:
-  - wordpress
-  - build
-  - lazy-blocks
-  - gutenberg
-  - stage-08
+  - landing-deploy
+  - integrations-engineer
+  - analytics-engineer
+  - seo-optimizer
+  - landing-orchestrator
+tags: [build, wordpress, lazy-blocks, gutenberg, stage-08]
 ---
 
-# /landing-build — Сборка WordPress-темы и кода лендинга
+# /landing-build — Генерация WordPress-темы и кода лендинга
 
 ## Что делает
 
-Генерирует полноценную WordPress-тему с Lazy Blocks, подключает формы и CRM-интеграции, настраивает аналитику и SEO. На выходе — готовый к деплою код и статический `build-preview.html` для финального утверждения.
+Автоматически собирает полноценную WordPress-тему: PHP-шаблоны Lazy Blocks, CSS/JS, попапы, аналитику, SEO и интеграции с CRM — всё из утверждённого контента и дизайн-системы. В конце выдаёт статический preview для финального одобрения перед деплоем.
 
 ## Когда вызывать / в каком этапе
 
-Этап **08_build**. Вызывается после того, как `content-writer` создал `07_КОНТЕНТ/final-copy.md` и пользователь его одобрил. Перед запуском система проверяет: пройден onboarding, закрыты гейты предыдущих этапов, присутствует `08_КОД/block-spec.yaml`.
+Этап **08_КОД**. Вызывается после того, как пользователь утвердил контент (`/landing-content`) и дизайн-систему (`/landing-design`). Перед запуском система проверяет:
+
+- пройден onboarding (`setup-flag.sh`);
+- предыдущие этапы закрыты (`gate-check.sh --stage 08_build`);
+- существует `08_КОД/block-spec.yaml` — без него генераторы 2–5 падают с ошибкой.
+
+После утверждения пользователем результата вызывается `gate-check.sh --approve`, закрывающий этап и открывающий путь к [[landing-deploy]].
 
 ## Что на вход / на выход
 
-**Обязательные входные артефакты:**
-- `07_КОНТЕНТ/final-copy.md` — финальные тексты (от `/landing-content`)
-- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — дизайн-токены (от `/landing-design`)
-- `06_СТЕК/design-stack.yaml` — выбранный стек (от `/landing-stack`)
-- `08_КОД/block-spec.yaml` — спецификация блоков (заполняется из шаблона)
+**Вход:**
+- `07_КОНТЕНТ/final-copy.md` — финальные тексты от [[landing-content]]
+- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — токены от [[landing-design]]
+- `06_СТЕК/design-stack.yaml` — стек от [[landing-stack]]
+- `08_КОД/block-spec.yaml` — спецификация блоков (заполняется из примера)
 
-**Выходные артефакты:**
-- `08_КОД/wp-theme/` — полная WP-тема (PHP, CSS, JS, ресурсы)
-- `08_КОД/wp-theme/blocks/lazyblock-<slug>/block.php` — PHP-шаблон на каждый блок
-- `08_КОД/wp-theme/functions.php` — с регистрацией блоков и аналитикой
-- `08_КОД/wp-theme/assets/css/main.css` — CSS с патчами InnerBlocks
-- `08_КОД/wp-theme/assets/js/main.js`, `sliders.js`, `animations.js`, `counters.js` — JS-инициализация
-- `08_КОД/wp-theme/assets/js/popup.js` — встроенный попап
-- `08_КОД/page-content.html` — Gutenberg-разметка для seed страницы
-- `08_КОД/build-preview.html` — статический превью для утверждения
-- `11_АНАЛИТИКА/` — конфиги Яндекс.Метрики, цели, UTM-шаблоны
-- `12_SEO/` — meta-tags, Schema.org JSON-LD, robots.txt, ключевые слова
-
-**Pipeline (11 шагов):**
-1. `generate-wp-blocks.py` — scaffold темы и Lazy Blocks
-2. Агент `integrations-engineer` — Fluent Forms + Telegram/CRM webhook
-3. Агент `analytics-engineer` — Яндекс.Метрика в functions.php
-4. Агент `seo-optimizer` — SEO-мета и Schema.org
-5. `bundle-assets.py` — шрифты, иконки, фото
-6. `render-build-preview.py` — статический превью
-7. `generate-popup.py` — попап-система
-8. `generate-js-init.py` — JS-файлы
-9. `generate-analytics.py` — YM + GTM
-10. `generate-integrations.py` — CRM-интеграции
-11. **HARD GATE** — показ превью и ожидание одобрения перед этапом 09
+**Выход:**
+- `08_КОД/wp-theme/` — полная WP-тема (PHP + CSS + JS + ассеты)
+- `08_КОД/wp-theme/blocks/lazyblock-<slug>/block.php` — шаблоны блоков Lazy Blocks
+- `08_КОД/wp-theme/functions.php` — с регистрацией блоков и хуками
+- `08_КОД/wp-theme/assets/css/main.css` — патчи InnerBlocks
+- `08_КОД/wp-theme/assets/js/` — `main.js`, `sliders.js`, `animations.js`, `counters.js`, `popup.js`
+- `08_КОД/page-content.html` — Gutenberg-разметка для seed-страницы
+- `08_КОД/build-preview.html` — статический превью для HARD GATE
+- `11_АНАЛИТИКА/` — конфиги Метрики, UTM-шаблоны, цели
+- `12_SEO/` — мета-теги, structured-data, robots.txt
 
 ## Связанные концепты
 
-- [[landing-content]] — предшествующий этап, поставляет `final-copy.md`
-- [[landing-design]] — поставляет `tokens.json`
-- [[landing-stack]] — поставляет `design-stack.yaml`
-- [[wp-builder]] — агент, генерирующий PHP-шаблоны блоков
-- [[integrations-engineer]] — агент форм и CRM-вебхуков
-- [[analytics-engineer]] — агент аналитики Яндекс.Метрика
-- [[seo-optimizer]] — агент SEO-разметки и Schema.org
-- [[landing-deploy]] — следующий этап после одобрения превью
+- [[landing-content]] — поставляет `final-copy.md`, обязателен перед билдом
+- [[landing-design]] — поставляет `tokens.json` и дизайн-систему
+- [[landing-stack]] — поставляет `design-stack.yaml` с выбором стека
+- [[landing-deploy]] — следующий этап после одобрения build-preview
+- [[integrations-engineer]] — AI-агент, добавляет webhooks форм (Telegram/CRM)
+- [[analytics-engineer]] — AI-агент, подключает Яндекс Метрику и GTM
+- [[seo-optimizer]] — AI-агент, прописывает meta-теги и Schema.org
+- [[landing-orchestrator]] — запускает landing-build в рамках полного pipeline
 
 ## Источник
 

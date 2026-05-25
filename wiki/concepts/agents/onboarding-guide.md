@@ -2,71 +2,63 @@
 type: agent
 name: onboarding-guide
 sources: ["agents/onboarding-guide.md"]
-updated: 2026-05-20
+updated: 2026-05-25
 triggers:
-  - "пользователь запустил /landing-onboarding"
-  - "любая /landing-* команда не нашла ~/.landing-system/setup_complete"
-  - "первый запуск системы"
+  - "/landing-onboarding"
+  - "любая /landing-* команда при отсутствии ~/.landing-system/setup_complete"
 stage: ""
 uses:
-  - landing-onboarding
+  - landing-orchestrator
   - landing-new
-  - system-setup
-tags: [onboarding, setup, wizard, api-keys, validation]
+tags: ["onboarding", "setup", "wizard", "first-run"]
 ---
 
-# onboarding-guide — Проводник по первичной настройке
+# onboarding-guide (Проводник по онбордингу)
 
 ## Что делает
 
-Проводит пользователя через первичную настройку landing-system: объясняет что это за система, запускает интерактивный wizard, проверяет все нужные API-ключи и зависимости, и только после этого выдаёт разрешение на работу (`setup_complete`). Без прохождения онбординга ни одна `/landing-*` команда не запустит проект.
+Проводит пользователя через первичную настройку landing-system: объясняет систему, проверяет зависимости, помогает заполнить `.env` с API-ключами и валидирует каждый ключ сразу после ввода. После успешного прохождения помечает установку завершённой и направляет к созданию первого проекта.
 
 ## Когда вызывать / в каком этапе
 
-Агент **не привязан к этапам pipeline**. Активируется в двух случаях:
-- Пользователь явно запустил `/landing-onboarding`.
-- Любая другая команда (`/landing-new`, `/landing-go` и т.д.) обнаружила, что файл `~/.landing-system/setup_complete` отсутствует, и перенаправила сюда.
+Агент не принадлежит ни одному pipeline-этапу — это системный pre-project агент. Запускается в двух случаях:
 
-Онбординг нужно пройти **один раз** — до создания первого проекта.
+1. Пользователь явно вызвал `/landing-onboarding`.
+2. Любая `/landing-*` команда не обнаружила файл `~/.landing-system/setup_complete` и автоматически перенаправила сюда.
+
+Stage Execution Protocol (TodoWrite + Mermaid-карта) к этому агенту **не применяется**.
 
 ## Что на вход / на выход
 
 **Вход:**
-- `docs/SETUP.md` — главная инструкция, агент читает её целиком и пересказывает пользователю.
-- `.env.example` — шаблон переменных окружения.
-- `scripts/wizard.sh` — интерактивный скрипт настройки.
-- `scripts/validate-all.sh` — валидатор API-ключей.
-- `scripts/setup-flag.sh` — скрипт проставления `setup_complete`.
+- Пустое окружение (первый запуск на новой машине)
+- `docs/SETUP.md` — читается агентом целиком
+- `.env.example` — шаблон для создания `.env`
+- `scripts/wizard.sh` — интерактивный wizard
+- `scripts/validate-all.sh` — валидатор API-ключей
+- `scripts/setup-flag.sh` — утилита выставления флага завершения
 
 **Выход:**
-- `~/.landing-system/setup_complete` — файл-флаг с timestamp; без него система заблокирована.
-- `.env` в корне репозитория — заполненный файл с ключами.
-- Консольный отчёт: «X из Y сервисов подключено, fallback: …».
+- `~/.landing-system/setup_complete` — файл с timestamp (признак успешного онбординга)
+- `.env` в корне репо — заполненный файл с ключами
+- Консольная сводка: сколько сервисов подключено, какие работают в режиме fallback
 
-**Обязательные ключи** (без них `setup_complete` не выставляется):
-`FIRECRAWL_API_KEY`, хотя бы один фото-сток, `YM_COUNTER_ID`, `TG_BOT_TOKEN`+`TG_CHAT_ID`, хотя бы одна CRM, рабочий SSH на Beget.
+**Обязательные ключи** (без них `setup_complete` не создаётся):
+- `FIRECRAWL_API_KEY`
+- Хотя бы один сток-фото: `PEXELS_API_KEY` / `UNSPLASH_ACCESS_KEY` / `PIXABAY_API_KEY`
+- `YM_COUNTER_ID`
+- `TG_BOT_TOKEN` + `TG_CHAT_ID`
+- Хотя бы одна CRM: `AMOCRM_API_KEY+SUBDOMAIN` / `BITRIX24_WEBHOOK_URL`
+- `BEGET_USER` + `BEGET_HOST` + работающий SSH-доступ
 
 **Опциональные ключи** (предупреждение, не блокируют):
-HuggingFace, WhatTheFont, Yandex OAuth, GTM, Cloudflare, Reg.ru.
-
-## Порядок работы
-
-1. Читает `docs/SETUP.md`, объясняет пользователю ключевые разделы.
-2. Запускает `wizard.sh` в интерактивном режиме.
-3. Если нет `.env` — копирует из `.env.example`, открывает каждую секцию, объясняет назначение сервиса, даёт ссылку на регистрацию.
-4. После каждого введённого ключа — немедленно запускает `validate-all.sh --service <name>`. Если упало — объясняет ошибку, просит исправить.
-5. После успешной валидации всех обязательных ключей — запускает `setup-flag.sh mark_complete`.
-6. Сообщает пользователю, что можно запускать `/landing-new <slug>`.
-
-**Правило:** `setup_complete` не ставится, пока хотя бы один обязательный валидатор красный.
+- `HUGGINGFACE_TOKEN`, `WHATTHEFONT_API_KEY`, `YANDEX_OAUTH_TOKEN`, `YANDEX_METRIKA_OAUTH`, `GTM_CONTAINER_ID`, `BEGET_API_LOGIN/PASSWORD`, `CLOUDFLARE_API_TOKEN`, `REGRU_API_USERNAME/PASSWORD`
 
 ## Связанные концепты
 
-- [[landing-onboarding]] — слеш-команда, которая активирует этого агента
-- [[landing-new]] — следующий шаг после онбординга: создание проекта
-- [[landing-start]] — альтернативная точка входа с wizard'ом для нового проекта
-- [[system-setup]] — агент финальной инициализации системы
-- [[landing-go]] — основная команда, которая перенаправляет сюда при отсутствии `setup_complete`
+- [[landing-new]] — следующий шаг после успешного онбординга: создание первого проекта
+- [[landing-orchestrator]] — основной pipeline-агент, запускается только если `setup_complete` уже выставлен
+- [[landing-start]] — wizard для нового проекта, вызывается после онбординга
 
 ## Источник
 
