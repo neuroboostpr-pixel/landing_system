@@ -2,12 +2,25 @@
 
 > Авто-сгенерированный индекс. Обновляется при `python -m scripts.wiki.compile --source-mode=system`.
 
-**Концептов всего:** 79
-**Категории:** agent, command, skill
+**Концептов всего:** 99
+**Категории:** agent, command, skill, stage
 
 **Известные ограничения:**
 - Блоки из `block-library/` ещё не в wiki — отдельная задача.
 - Часть `[[wikilinks]]` ссылается на скрипты/конфиги вне wiki — это норма.
+
+## 📋 Этапы pipeline
+
+- [[00-brif]] — 00 — Бриф проекта
+- [[01-kontekst]] — 01 — Контекст проекта
+- [[01a-analiz-nishi]] — 01a. Анализ ниши
+- [[02-materialy-klienta]] — Сбор материалов клиента (02)
+- [[03-referensy]] — Этап 03: Референсы
+- [[04-brend]] — 04 — Сборка бренд-кита
+- [[05-dizayn-sistema]] — Этап 05: Генерация дизайн-системы
+- [[06-stek]] — Стек технологий
+- [[07-kontent]] — 07 — Написание контента
+- [[07-prototip]] — 07 Прототип — импорт источника правды
 
 ## 🤖 Агенты
 
@@ -96,3 +109,13 @@
 - [[landing-photos]] — /landing-photos — Конвейер клиентских фото (stage 07c)
 - [[landing-previews]] — /landing-previews — Превью на устройствах
 - [[landing-prototype]] — /landing-prototype — Импорт прототипа
+- [[landing-qa]] — /landing-qa — Визуальный QA лендинга
+- [[landing-references]] — Сбор визуальных референсов
+- [[landing-rollback]] — Откат лендинга к предыдущей версии
+- [[landing-setup]] — Инициализация системы (/landing-setup)
+- [[landing-stack]] — Планирование стека WordPress (этап 06)
+- [[landing-start]] — /landing-start — Онбординг-визард
+- [[landing-status]] — Статус системы и проекта
+- [[landing-style]] — /landing-style — CSS и block.php для этапа 08b
+- [[landing-visuals]] — /landing-visuals — Генерация визуальных ассетов
+- [[landing-wireframe]] — /landing-wireframe — Интерактивный Wireframe
