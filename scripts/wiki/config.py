@@ -18,14 +18,26 @@ WIKI_DIR = REPO_ROOT / "wiki"
 # Три режима компиляции.
 SOURCE_MODES = ("system", "project-graph", "conversations")
 
-# Источники для системного wiki.
+# Источники для системного wiki — разделены на два уровня:
+#
+# CORE_SOURCES   — 6 основных категорий + catalog-entry блок-библиотеки.
+#                  Только они компилируются при --source-mode=system.
+# REFERENCE_SOURCES — всё остальное (спеки, планы, пресеты и т.д.).
+#                  Зарезервированы для будущего use-case, не входят в CORE.
+#
 # Каждая запись: glob-паттерн относительно REPO_ROOT + папка концептов в wiki/.
-SYSTEM_SOURCES = [
+
+CORE_SOURCES = [
     {"path": "agents/*.md", "concept_dir": "agents"},
     {"path": "skills/*/SKILL.md", "concept_dir": "skills"},
     {"path": "commands/*.md", "concept_dir": "commands"},
     {"path": "template/*/README.md", "concept_dir": "stages"},
     {"path": "docs/standards/*.md", "concept_dir": "rules"},
+    # Catalog entry-point для блок-библиотеки (один файл, не полный обход)
+    {"path": "block-library/README.md", "concept_dir": "catalogs"},
+]
+
+REFERENCE_SOURCES = [
     # PR-Q: блоки лежат на 2 уровнях вложенности — <category>/<block-id>/meta.yaml
     {"path": "block-library/*/*/meta.yaml", "concept_dir": "blocks"},
     # PR-S: расширенное покрытие
@@ -53,6 +65,9 @@ SYSTEM_SOURCES = [
     {"path": "scripts/*/*.doc.md", "concept_dir": "scripts"},
     {"path": "scripts/*/*/*.doc.md", "concept_dir": "scripts"},
 ]
+
+# Back-compat alias — старый код, импортирующий SYSTEM_SOURCES, продолжает работать.
+SYSTEM_SOURCES = CORE_SOURCES
 
 # Источники для графа конкретного проекта (~/Lendings/<slug>/).
 # Пути относительно корня проекта.
