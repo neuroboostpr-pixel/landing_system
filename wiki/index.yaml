@@ -1,0 +1,632 @@
+version: 1
+generated_at: '2026-05-26T12:47:47+00:00'
+counts:
+  total: 20
+  by_type:
+    agent: 20
+concepts:
+- slug: analytics-engineer
+  type: agent
+  name: Инженер аналитики
+  card: concepts/agents/analytics-engineer.md
+  source: agents/analytics-engineer.md
+  stage: '11'
+  tags:
+  - analytics
+  - yandex-metrika
+  - utm
+  - stage-11
+  - wordpress
+  inputs:
+  - .env
+  - 08_КОД/wp-theme/functions.php
+  outputs:
+  - 08_КОД/wp-theme/functions.php
+  - 11_АНАЛИТИКА/metrika-config.md
+  - 11_АНАЛИТИКА/goals-and-events.json
+  - 11_АНАЛИТИКА/utm-templates.md
+  gates:
+  - metrika_config_approved
+  pre_reqs:
+  - integrations-engineer
+  related:
+  - stage-execution-protocol
+  - landing-build
+  - landing-deploy
+  confidence:
+    triggers: low
+    gates: low
+- slug: block-composer
+  type: agent
+  name: Block Composer (Сборка composed.html)
+  card: concepts/agents/block-composer.md
+  source: agents/block-composer.md
+  stage: 07b
+  tags:
+  - compose
+  - html
+  - design-tokens
+  - prototype
+  - wireframe
+  - premium
+  triggers:
+  - landing-compose
+  inputs:
+  - 07_ПРОТОТИП/prototype.yaml
+  - 07a_WIREFRAME/selections.yaml
+  - 05_ДИЗАЙН-СИСТЕМА/tokens.json
+  - block-library/
+  outputs:
+  - 07b_COMPOSED/composed.html
+  - 07b_COMPOSED/composed-mobile.html
+  - 07b_COMPOSED/composed-explained.md
+  gates:
+  - verify-composed-premium
+  - content-preserved
+  pre_reqs:
+  - landing-wireframe
+  - landing-design
+  related:
+  - landing-compose
+  - landing-prototype
+  - landing-photos
+  - landing-visuals
+  - landing-build
+  confidence:
+    triggers: low
+- slug: brand-architect
+  type: agent
+  name: Brand Architect
+  card: concepts/agents/brand-architect.md
+  source: agents/brand-architect.md
+  stage: '04'
+  tags:
+  - brand-kit
+  - style
+  - provenance
+  - legal
+  - 152-fz
+  - palette
+  - fonts
+  - icons
+  triggers:
+  - landing-brand
+  inputs:
+  - 04_БРЕНД/extracted/palette.yaml
+  - 04_БРЕНД/extracted/fonts.yaml
+  - 04_БРЕНД/extracted/icons.yaml
+  - 04_БРЕНД/extracted/grid.md
+  - 04_БРЕНД/extracted/motion.md
+  - 03_РЕФЕРЕНСЫ/index.yaml
+  - 01a_АНАЛИЗ_НИШИ/positioning.md
+  - 01a_АНАЛИЗ_НИШИ/market-profile.md
+  - 01a_АНАЛИЗ_НИШИ/landing-structure.md
+  outputs:
+  - 04_БРЕНД/brand-kit.md
+  - 04_БРЕНД/brand-kit.html
+  - 04_БРЕНД/extracted/legal.yaml
+  gates:
+  - brand-kit-approved
+  pre_reqs:
+  - style-extractor
+  related:
+  - landing-brand
+  - landing-design
+  - landing-niche
+  confidence:
+    triggers: low
+- slug: client-assets-collector
+  type: agent
+  name: Сборщик клиентских материалов
+  card: concepts/agents/client-assets-collector.md
+  source: agents/client-assets-collector.md
+  stage: '02'
+  tags:
+  - stage-02
+  - assets
+  - photos
+  - videos
+  - reviews
+  - scraping
+  - testimonials
+  - trafilatura
+  - playwright
+  triggers:
+  - landing-go
+  inputs:
+  - 00_БРИФ/brief.md
+  - 01a_АНАЛИЗ_НИШИ/visual-requirements.md
+  outputs:
+  - 02_МАТЕРИАЛЫ_КЛИЕНТА/photos/original/
+  - 02_МАТЕРИАЛЫ_КЛИЕНТА/videos/
+  - 02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/
+  - 02_МАТЕРИАЛЫ_КЛИЕНТА/assets-manifest.yaml
+  - 02_МАТЕРИАЛЫ_КЛИЕНТА/assets-gallery.html
+  related:
+  - landing-niche
+  - landing-references
+  - landing-go
+  confidence:
+    triggers: low
+    pre_reqs: low
+- slug: content-writer
+  type: agent
+  name: Контент-райтер
+  card: concepts/agents/content-writer.md
+  source: agents/content-writer.md
+  stage: '07'
+  tags:
+  - copywriting
+  - content
+  - seo
+  - stage-07
+  triggers:
+  - landing-content
+  inputs:
+  - 01a_АНАЛИЗ_НИШИ/positioning.md
+  - 01a_АНАЛИЗ_НИШИ/landing-structure.md
+  - 01a_АНАЛИЗ_НИШИ/market-profile.md
+  - 07_ПРОТОТИП/prototype.md
+  - 05_ДИЗАЙН-СИСТЕМА/DESIGN.md
+  - 06_СТЕК/design-stack.yaml
+  - 02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/
+  - 02_МАТЕРИАЛЫ_КЛИЕНТА/assets-manifest.yaml
+  outputs:
+  - 07_КОНТЕНТ/final-copy.md
+  - 07_КОНТЕНТ/seo-copy.md
+  gates:
+  - user-approve-final-copy
+  pre_reqs:
+  - landing-niche
+  - landing-prototype
+  - landing-design
+  - landing-stack
+  related:
+  - landing-content
+  - landing-orchestrator
+  - landing-wireframe
+  - landing-compose
+  confidence:
+    triggers: low
+    pre_reqs: low
+- slug: design-system-generator
+  type: agent
+  name: Генератор дизайн-системы
+  card: concepts/agents/design-system-generator.md
+  source: agents/design-system-generator.md
+  stage: '05'
+  tags:
+  - design
+  - tokens
+  - css
+  - brand
+  - preview
+  triggers:
+  - landing-design
+  inputs:
+  - 04_БРЕНД/brand-kit.md
+  outputs:
+  - 05_ДИЗАЙН-СИСТЕМА/DESIGN.md
+  - 05_ДИЗАЙН-СИСТЕМА/tokens.json
+  - 05_ДИЗАЙН-СИСТЕМА/design-preview.html
+  gates:
+  - design_approved
+  pre_reqs:
+  - brand-architect
+  related:
+  - design-tokens-generation
+  - brand-architect
+  - landing-orchestrator
+  confidence:
+    triggers: low
+- slug: frontend-builder
+  type: agent
+  name: Frontend Builder — CSS и PHP шаблоны блоков
+  card: concepts/agents/frontend-builder.md
+  source: agents/frontend-builder.md
+  stage: 08b
+  tags:
+  - css
+  - lazy-blocks
+  - block-php
+  - design-system
+  - wordpress
+  - stage-08
+  triggers:
+  - landing-style
+  inputs:
+  - 05_ДИЗАЙН-СИСТЕМА/DESIGN.md
+  - 04_БРЕНД/brand-kit.md
+  - 01a_АНАЛИЗ_НИШИ/landing-structure.md
+  - 08_КОД/block-spec.yaml
+  - 08_КОД/wp-theme/blocks/lazyblock-*/block.php
+  outputs:
+  - 05_ДИЗАЙН-СИСТЕМА/DESIGN.md
+  - 08_КОД/wp-theme/blocks/lazyblock-*/block.php
+  pre_reqs:
+  - landing-build
+  related:
+  - landing-style
+  - landing-build
+  - landing-design
+  confidence:
+    gates: low
+- slug: icon-generator
+  type: agent
+  name: Генератор иконок
+  card: concepts/agents/icon-generator.md
+  source: agents/icon-generator.md
+  stage: 07d
+  tags:
+  - icons
+  - codex
+  - image-gen
+  - visuals
+  - cache
+  - helper
+  inputs:
+  - project_dir
+  - slot_name
+  - hint
+  outputs:
+  - 07d_VISUALS/icons/<slot_name>.png
+  related:
+  - visual-curator
+  - landing-visuals
+  confidence:
+    triggers: low
+    pre_reqs: low
+- slug: infographic-builder
+  type: agent
+  name: Infographic Builder
+  card: concepts/agents/infographic-builder.md
+  source: agents/infographic-builder.md
+  stage: 07d
+  tags:
+  - visuals
+  - infographic
+  - codex
+  - image-gen
+  - cache
+  - helper-agent
+  inputs:
+  - 07d_VISUALS
+  - brand-kit
+  - market-profile
+  outputs:
+  - 07d_VISUALS/infographics
+  pre_reqs:
+  - landing-visuals
+  related:
+  - landing-visuals
+  confidence:
+    triggers: low
+    pre_reqs: low
+- slug: integrations-engineer
+  type: agent
+  name: integrations-engineer
+  card: concepts/agents/integrations-engineer.md
+  source: agents/integrations-engineer.md
+  stage: 08
+  tags:
+  - integrations
+  - telegram
+  - crm
+  - fluent-forms
+  - webhooks
+  - stage-08
+  - php
+  triggers:
+  - landing-build
+  inputs:
+  - 08_КОД/wp-theme/functions.php
+  - 08_КОД/block-spec.yaml
+  - .env
+  outputs:
+  - 08_КОД/wp-theme/functions.php
+  gates:
+  - integrations-approved
+  pre_reqs:
+  - wp-builder
+  related:
+  - landing-build
+  - landing-deploy
+  confidence:
+    triggers: low
+    pre_reqs: low
+- slug: landing-onboarding-wizard
+  type: agent
+  name: Онбординг-визард нового проекта
+  card: concepts/agents/landing-onboarding-wizard.md
+  source: agents/landing-onboarding-wizard.md
+  stage: '00'
+  tags:
+  - onboarding
+  - wizard
+  - bootstrap
+  - project-init
+  triggers:
+  - landing-start
+  outputs:
+  - ~/Lendings/<slug>/
+  - 07_ПРОТОТИП/source/
+  - 07c_PHOTOS/inbox/
+  - 04_БРЕНД/logos/
+  - 03_РЕФЕРЕНСЫ/
+  related:
+  - landing-project-init
+  - landing-go
+  - prototype-importer
+  - landing-orchestrator
+  confidence:
+    stage: low
+    pre_reqs: low
+- slug: landing-orchestrator
+  type: agent
+  name: Landing Orchestrator — Главный дирижёр
+  card: concepts/agents/landing-orchestrator.md
+  source: agents/landing-orchestrator.md
+  tags:
+  - orchestrator
+  - pipeline
+  - workflow
+  - stages
+  - dispatch
+  triggers:
+  - landing-go
+  - landing-build
+  - landing-deploy
+  - landing-qa
+  - landing-rollback
+  - landing-clone
+  inputs:
+  - .landing-state.yaml
+  - config/stage-gates.yaml
+  outputs:
+  - .landing-state.yaml
+  - 00_БРИФ/brief.md
+  - wiki/pipeline-map.md
+  pre_reqs:
+  - landing-start
+  - landing-new
+  related:
+  - landing-go
+  - landing-build
+  - landing-deploy
+  - landing-prototype
+  - landing-wireframe
+  - landing-compose
+  - landing-photos
+  - landing-visuals
+  - landing-qa
+  - landing-status
+- slug: lifecycle-keeper
+  type: agent
+  name: Lifecycle Keeper — Хранитель версий
+  card: concepts/agents/lifecycle-keeper.md
+  source: agents/lifecycle-keeper.md
+  tags:
+  - versioning
+  - rollback
+  - clone
+  - ab-test
+  - ops
+  - lifecycle
+  triggers:
+  - landing-rollback
+  - landing-clone
+  related:
+  - landing-deploy
+  - landing-segment
+  confidence:
+    inputs: low
+    outputs: low
+- slug: moodboard-composer
+  type: agent
+  name: Moodboard Composer
+  card: concepts/agents/moodboard-composer.md
+  source: agents/moodboard-composer.md
+  stage: '03'
+  tags:
+  - moodboard
+  - references
+  - visual-direction
+  - stage-03
+  triggers:
+  - landing-references
+  inputs:
+  - 03_РЕФЕРЕНСЫ/index.yaml
+  - 01a_АНАЛИЗ_НИШИ/niche-analysis.md
+  - 01a_АНАЛИЗ_НИШИ/visual-requirements.md
+  outputs:
+  - 03_РЕФЕРЕНСЫ/moodboard.md
+  - 03_РЕФЕРЕНСЫ/moodboard.html
+  gates:
+  - moodboard-approved
+  pre_reqs:
+  - landing-references
+  - landing-niche
+  related:
+  - landing-brand
+  - landing-design
+  - landing-moodboard
+  confidence:
+    triggers: low
+- slug: niche-analyst
+  type: agent
+  name: Аналитик ниши (Stage 01a)
+  card: concepts/agents/niche-analyst.md
+  source: agents/niche-analyst.md
+  stage: 01a
+  tags:
+  - niche
+  - analysis
+  - competitors
+  - positioning
+  - market-profile
+  - zero-touch
+  triggers:
+  - landing-orchestrator
+  inputs:
+  - 00_БРИФ/brief.md
+  - 01_КОНТЕКСТ/context.md
+  outputs:
+  - 01a_АНАЛИЗ_НИШИ/niche-analysis.md
+  - 01a_АНАЛИЗ_НИШИ/competitors.yaml
+  - 01a_АНАЛИЗ_НИШИ/market-profile.md
+  - 01a_АНАЛИЗ_НИШИ/positioning.md
+  - 01a_АНАЛИЗ_НИШИ/landing-structure.md
+  - 01a_АНАЛИЗ_НИШИ/visual-requirements.md
+  gates:
+  - gate-check-01a-niche-analysis
+  related:
+  - landing-orchestrator
+  - brand-architect
+  - content-writer
+  - wp-builder
+  confidence:
+    triggers: low
+    pre_reqs: low
+- slug: onboarding-guide
+  type: agent
+  name: Проводник по онбордингу
+  card: concepts/agents/onboarding-guide.md
+  source: agents/onboarding-guide.md
+  tags:
+  - onboarding
+  - setup
+  - wizard
+  - api-keys
+  - env
+  - first-run
+  triggers:
+  - landing-onboarding
+  - landing-start
+  inputs:
+  - docs/SETUP.md
+  - scripts/wizard.sh
+  - .env.example
+  outputs:
+  - ~/.landing-system/setup_complete
+  - .env
+  related:
+  - landing-new
+  - landing-start
+  - landing-go
+  confidence:
+    stage: low
+- slug: photo-classifier
+  type: agent
+  name: Классификатор фото
+  card: concepts/agents/photo-classifier.md
+  source: agents/photo-classifier.md
+  stage: 07c
+  tags:
+  - photo
+  - classifier
+  - codex
+  - ai
+  - metadata
+  - identity-safe
+  inputs:
+  - 07c_PHOTOS/intake
+  outputs:
+  - 07c_PHOTOS/catalog.yaml
+  pre_reqs:
+  - photo-curator
+  related:
+  - photo-curator
+  confidence:
+    pre_reqs: low
+- slug: photo-curator
+  type: agent
+  name: Куратор фотографий — оркестратор этапа 07c
+  card: concepts/agents/photo-curator.md
+  source: agents/photo-curator.md
+  stage: 07c
+  tags:
+  - photos
+  - pipeline
+  - orchestrator
+  - pr-b
+  - identity-safe
+  - codex
+  triggers:
+  - landing-photos
+  inputs:
+  - .landing-state.yaml
+  - 07c_PHOTOS/inbox/
+  - 07_ПРОТОТИП/prototype.yaml
+  - 07a_WIREFRAME/selections.yaml
+  - 02_МАТЕРИАЛЫ_КЛИЕНТА/photos/original/
+  outputs:
+  - 07c_PHOTOS/STATE.yaml
+  - 07c_PHOTOS/catalog.yaml
+  - 07c_PHOTOS/selections.draft.yaml
+  - 07c_PHOTOS/photo-board.html
+  - 07c_PHOTOS/photo-preview.html
+  - 07b_COMPOSED/composed.html
+  gates:
+  - photo-board-user-approve
+  - photo-preview-user-approve
+  pre_reqs:
+  - landing-design
+  - landing-wireframe
+  related:
+  - photo-classifier
+  - photo-matcher
+  - photo-preview-board
+  - landing-photos
+  - landing-compose
+  confidence:
+    stage: low
+- slug: photo-matcher
+  type: agent
+  name: Агент сопоставления фото со слотами
+  card: concepts/agents/photo-matcher.md
+  source: agents/photo-matcher.md
+  stage: 07c
+  tags:
+  - photos
+  - matching
+  - codex
+  - identity-safe
+  - helper-agent
+  inputs:
+  - 07c_PHOTOS/catalog.yaml
+  - 07_ПРОТОТИП/prototype.yaml
+  - 07a_WIREFRAME/selections.yaml
+  outputs:
+  - 07c_PHOTOS/selections.draft.yaml
+  pre_reqs:
+  - photo-curator
+  related:
+  - photo-curator
+  confidence:
+    triggers: low
+    pre_reqs: low
+- slug: photo-preview-board
+  type: agent
+  name: Photo Preview Board — обработка слотов и рендер превью
+  card: concepts/agents/photo-preview-board.md
+  source: agents/photo-preview-board.md
+  stage: 07c
+  tags:
+  - photos
+  - preview
+  - identity-safe
+  - codex
+  - image-processing
+  inputs:
+  - 07c_PHOTOS/selections.yaml
+  outputs:
+  - 07c_PHOTOS/processed/<slot_id>/desktop.jpg
+  - 07c_PHOTOS/processed/<slot_id>/mobile.jpg
+  - 07c_PHOTOS/photo-preview.html
+  pre_reqs:
+  - photo-curator
+  related:
+  - landing-photos
+  confidence:
+    triggers: low
+    pre_reqs: low

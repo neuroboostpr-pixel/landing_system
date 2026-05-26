@@ -1,0 +1,22 @@
+{
+  "agents/analytics-engineer.md": "a515855a319a1888a2da6781dacfd6c7797f515ce874878a24a42c2adfd72d2d",
+  "agents/block-composer.md": "18f302e47fea46f34b339743e1738828d8a0726e2e5cd16539d11b11c0ccc259",
+  "agents/brand-architect.md": "4e2a61824c131ebf0c3f2b038756b70fa1e5758cbfaf651ca321f86b259e1ad3",
+  "agents/client-assets-collector.md": "2bd9d7d068f666241200bbb967f98e7fadbd3ddd38890acbfb1ef404df96b28d",
+  "agents/content-writer.md": "5992cad908899178f43230f2ff85d6db50a6cd03a25d23c64951625084efaa36",
+  "agents/design-system-generator.md": "5346201189e34ec7043ecb42e8202d9de47cbd9e1cc59bcb6fc67ac78c2db8b4",
+  "agents/frontend-builder.md": "74e9b0f3c3c7289d6b082b9749d11ece8bd9e8c2e6cddf934e37c379ddf614c0",
+  "agents/icon-generator.md": "6873546cb0bc0024bfcceeadd5ace45c979b382fee151e731cfc088a9b6d61cc",
+  "agents/infographic-builder.md": "5ee21e267eb60f89faff0a2899149d076c95a652a42044e8b2cd03ad4713e22b",
+  "agents/integrations-engineer.md": "fe8a7ba257e37bde3fad67db0d97faf4cdc7a479c83fe88a0ce2ab28e6f456e8",
+  "agents/landing-onboarding-wizard.md": "e9f2e81e098ef0356e78be7f26277ebc0ed381f279c77f1d17bd6ee90f2cc2b8",
+  "agents/landing-orchestrator.md": "426f1931702ed6006c513bb93588d13db27803a3ecaf9797eccf35d94d564817",
+  "agents/lifecycle-keeper.md": "7adfed72a067299d3fde12a621db981f31009ac2df0fef84d13871184a8c687a",
+  "agents/moodboard-composer.md": "7903bef73fe934585e7f53ceeffafb368f07556777525eeb934bf2bd7d88657b",
+  "agents/niche-analyst.md": "6bac75f2e247df7a806ee87e3694fa428db6e0802db5bf0f56ade360cedf09a7",
+  "agents/onboarding-guide.md": "4a925acb89852f6113aed87acfec1794d34e2b4ee5d36480e0a674b645af2ab5",
+  "agents/photo-classifier.md": "d934f5e4d60c0e2b81c5460e7fddb8c45a8e2df8db424cc19187edffcfc8d183",
+  "agents/photo-curator.md": "84a2a5ff054bd8e1dce61bc15042fbed80f3a107fccf93be984b37e578531f91",
+  "agents/photo-matcher.md": "9c6e40981a9592b37e0ba9b6c942956dee9e65d3319def427436909dbe4ebcb0",
+  "agents/photo-preview-board.md": "3c367367cb6f6c935a60a2b8c39e15ad42f9815a05c19d47d175f555068168a8"
+}
