@@ -9,6 +9,7 @@
 """
 from __future__ import annotations
 
+import os
 from datetime import date
 from pathlib import Path
 from typing import Any
@@ -16,6 +17,8 @@ from typing import Any
 from scripts.wiki import hash_cache, sdk_client, utils
 
 PROMPTS_DIR = Path(__file__).parent / "prompts"
+
+DEFAULT_MAX_SDK_CALLS = 20
 
 
 def _load_prompt(name: str) -> str:
@@ -150,6 +153,18 @@ def compile_system(
     compiled: list[str] = []
     skipped: list[str] = []
     errors: list[str] = []
+    deferred: list[str] = []
+
+    # Throttle: ограничивает число SDK-вызовов за один прогон, чтобы первый
+    # bootstrap на свежем кэше не выжигал всю квоту подписки за раз
+    # (каждый вызов claude-agent-sdk = отдельная сессия в истории).
+    # Изменённые источники сверх лимита возвращаются как `deferred` и
+    # подхватятся в следующий прогон (их hash в кэш не пишется).
+    try:
+        max_calls = int(os.environ.get("WIKI_MAX_SDK_CALLS", DEFAULT_MAX_SDK_CALLS))
+    except ValueError:
+        max_calls = DEFAULT_MAX_SDK_CALLS
+    sdk_calls_used = 0
 
     # Count total upfront so progress lines can show [N/total].
     all_sources = [
@@ -186,10 +201,20 @@ def compile_system(
                     )
                 continue
 
+            if sdk_calls_used >= max_calls:
+                deferred.append(rel_key)
+                print(
+                    f"[{idx}/{total_sources}] deferred {rel_key} "
+                    f"(WIKI_MAX_SDK_CALLS={max_calls} reached)",
+                    flush=True,
+                )
+                continue
+
             print(
                 f"[{idx}/{total_sources}] compiling {rel_key} ...",
                 flush=True,
             )
+            sdk_calls_used += 1
             try:
                 content = _compile_concept(source_path, repo_root)
             except sdk_client.SDKError as e:
@@ -237,7 +262,20 @@ def compile_system(
             wiki_dir / "log.md",
             entries=[f"compiled {p}" for p in compiled]
             + [f"skipped {p}" for p in skipped]
+            + [f"deferred {p}" for p in deferred]
             + [f"error {e}" for e in errors],
         )
 
-    return {"compiled": compiled, "skipped": skipped, "errors": errors}
+    if deferred:
+        print(
+            f"⚠️  {len(deferred)} source(s) deferred — re-run compile to finish them "
+            f"(WIKI_MAX_SDK_CALLS={max_calls}).",
+            flush=True,
+        )
+
+    return {
+        "compiled": compiled,
+        "skipped": skipped,
+        "deferred": deferred,
+        "errors": errors,
+    }

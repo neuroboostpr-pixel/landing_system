@@ -110,6 +110,41 @@ def test_compile_skips_unchanged(fake_repo, tmp_path, mocker):
     assert generate_mock.call_count == 0
 
 
+def test_throttle_defers_sources_over_limit(fake_repo, tmp_path, mocker, monkeypatch):
+    """WIKI_MAX_SDK_CALLS=1: только первый источник компилится, остальные deferred."""
+    # Добавим ещё 2 агента — итого 3 файла, лимит 1
+    (fake_repo / "agents" / "agent-b.md").write_text(
+        (FIXTURES / "agents" / "sample-agent.md").read_text()
+    )
+    (fake_repo / "agents" / "agent-c.md").write_text(
+        (FIXTURES / "agents" / "sample-agent.md").read_text()
+    )
+
+    wiki = tmp_path / "wiki"
+    generate_mock = mocker.patch(
+        "scripts.wiki.system_compiler.sdk_client.generate",
+        return_value="---\ntype: agent\n---\nbody",
+    )
+    mocker.patch(
+        "scripts.wiki.system_compiler._build_index",
+        return_value="idx",
+    )
+    monkeypatch.setenv("WIKI_MAX_SDK_CALLS", "1")
+    sources = [{"path": "agents/*.md", "concept_dir": "agents"}]
+
+    result = system_compiler.compile_system(
+        repo_root=fake_repo, wiki_dir=wiki, sources=sources
+    )
+
+    assert generate_mock.call_count == 1
+    assert len(result["compiled"]) == 1
+    assert len(result["deferred"]) == 2
+    # hash deferred источников НЕ должен быть в кэше — они подхватятся в следующий прогон
+    import json
+    cache = json.loads((wiki / ".cache.json").read_text())
+    assert len(cache) == 1
+
+
 def test_dry_run_does_not_write(fake_repo, tmp_path, mocker):
     wiki = tmp_path / "wiki"
     mocker.patch(
