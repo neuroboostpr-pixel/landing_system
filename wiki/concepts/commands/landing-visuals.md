@@ -4,15 +4,14 @@ name: landing-visuals
 sources: ["commands/landing-visuals.md"]
 updated: 2026-05-26
 triggers:
-  - "сгенерировать иконки для лендинга"
-  - "создать инфографику для лендинга"
-  - "запустить генерацию визуалов"
-  - "нужны иконки и инфографика для composed.html"
+  - "сгенерируй иконки для лендинга"
+  - "создай инфографику"
+  - "нужны визуалы для composed.html"
+  - "запусти генерацию иконок"
+  - "stage 07d"
 stage: "07d"
 uses:
   - visual-curator
-  - icon-generator
-  - infographic-builder
   - landing-compose
   - landing-design
   - landing-go
@@ -21,54 +20,51 @@ tags:
   - icons
   - infographics
   - codex
-  - stage-07d
   - pr-c
 ---
 
-# /landing-visuals — Генерация иконок и инфографики (Stage 07d)
+# landing-visuals — генерация иконок и инфографики
 
 ## Что делает
 
-Автоматически создаёт иконки и инфографику для всех визуальных слотов в `composed.html` с помощью AI-генерации через codex. Генерируемые изображения подбираются под стиль бренда проекта — цвета и нишу — и вставляются прямо в страницу.
+Автоматически создаёт иконки и инфографику для всех визуальных слотов в `composed.html` — средствами AI-генерации через codex image_gen. Стиль подбирается под бренд проекта: цвета из `tokens.json`, ниша из `market-profile.md`.
 
 ## Когда вызывать / в каком этапе
 
-Этап **07d** — после того как утверждены дизайн-система (этап 05) и собран `composed.html` (этап 07b). Запускается вручную командой `/landing-visuals` или автоматически через `/landing-go`. Без approved этапа 05 и готового `composed.html` команда не запустится.
+Этап **07d** (PR-C). Вызывается после того, как:
+1. Утверждена дизайн-система (`05_ДИЗАЙН-СИСТЕМА/DESIGN.md`, статус `approved`).
+2. Существует `07b_COMPOSED/composed.html` (этап PR-A выполнен через `/landing-compose`).
 
-**Гейты перед запуском:**
-- `.landing-state.yaml:stages.05_design.status == approved`
-- `07b_COMPOSED/composed.html` существует в папке проекта
+Запускается автоматически через `/landing-go` (рекомендуется) или вручную командой `/landing-visuals`.
 
-**Флаги:**
-- `--type icons` / `--type infographics` — частичный прогон только одного типа
-- `--force` — принудительная перегенерация, игнорируя кэш
-- `--slot <name>` — обработка одного конкретного слота
+**Флаги для частичного запуска:**
+- `--type icons` / `--type infographics` — только один тип визуалов.
+- `--slot <name>` — один конкретный слот.
+- `--force` — игнорировать кэш и перегенерить всё.
 
 ## Что на вход / на выход
 
 **Вход:**
-- `07b_COMPOSED/composed.html` — с placeholder-слотами `[SLOT: ...]` и `[INFOGRAPHIC: ...]`
-- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — цвета и стиль бренда
-- `01_БРИФ/market-profile.md` — ниша проекта (влияет на стиль генерации)
+- `07b_COMPOSED/composed.html` — файл с плейсхолдерами `[SLOT: ...]` и `[INFOGRAPHIC: ...]`.
+- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — цвета и стили бренда.
+- `.landing-state.yaml` — статус этапов и параметры проекта.
 
-**Выход** (в папке `07d_VISUALS/`):
-- `_slots.yaml` — список найденных слотов
-- `icons/<slot-name>.png` — сгенерированные иконки
-- `infographics/<slot-name>.png` — инфографика
-- `.cache/<hash>.png` — кэш по hash(hint + style + brand_color + niche)
-- `prompts.yaml` — лог промптов для атрибуции
-- `STATE.yaml` — статус каждого слота
+**Выход (в папке `07d_VISUALS/`):**
+- `_slots.yaml` — список найденных слотов.
+- `icons/<slot-name>.png` — сгенерированные иконки.
+- `infographics/<slot-name>.png` — сгенерированная инфографика.
+- `.cache/<hash>.png` — кэш по hash(hint + style + brand_color + niche).
+- `prompts.yaml` — лог промптов с attribution.
+- `STATE.yaml` — статусы этапов.
 
-**Итог:** `07b_COMPOSED/composed.html` перерендерится — все placeholder-слоты заменяются на `<img class="lp-icon">` / `<img class="lp-infographic">`.
+**Результат:** `07b_COMPOSED/composed.html` перерендерится — плейсхолдеры заменятся на реальные теги `<img class="lp-icon">` / `<img class="lp-infographic">`.
 
 ## Связанные концепты
 
-- [[visual-curator]] — агент-оркестратор: сканирует слоты, диспатчит генераторы, обновляет composed.html
-- [[icon-generator]] — субагент для генерации иконок через codex image_gen
-- [[infographic-builder]] — субагент для генерации инфографики
-- [[landing-compose]] — предшествующий этап 07b, создаёт composed.html с placeholder-слотами
-- [[landing-design]] — предшествующий этап 05, создаёт tokens.json с цветами бренда
-- [[landing-go]] — главная команда-оркестратор, включает 07d в общий pipeline
+- [[visual-curator]] — агент, которого диспатчит команда; управляет генерацией и кэшированием
+- [[landing-compose]] — создаёт `composed.html` (обязательный предшественник)
+- [[landing-design]] — создаёт `tokens.json` с цветами бренда (обязательный предшественник)
+- [[landing-go]] — рекомендуемая точка входа; запускает 07d автоматически в нужный момент
 
 ## Источник
 

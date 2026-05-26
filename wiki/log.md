@@ -10243,3 +10243,1101 @@
 - skipped scripts/wiki/parsers/selections_yaml.py.doc.md
 - skipped scripts/wiki/parsers/state_yaml.py.doc.md
 - skipped scripts/wiki/parsers/tokens_json.py.doc.md
+
+## [2026-05-26] compile --source-mode=system
+- compiled agents/analytics-engineer.md
+- compiled agents/block-composer.md
+- compiled agents/brand-architect.md
+- compiled agents/client-assets-collector.md
+- compiled agents/content-writer.md
+- compiled agents/design-system-generator.md
+- compiled agents/frontend-builder.md
+- compiled agents/icon-generator.md
+- compiled agents/infographic-builder.md
+- compiled agents/integrations-engineer.md
+- compiled agents/landing-onboarding-wizard.md
+- compiled agents/landing-orchestrator.md
+- compiled agents/lifecycle-keeper.md
+- compiled agents/moodboard-composer.md
+- compiled agents/niche-analyst.md
+- compiled agents/onboarding-guide.md
+- compiled agents/photo-classifier.md
+- compiled agents/photo-curator.md
+- compiled agents/photo-matcher.md
+- compiled agents/photo-preview-board.md
+- compiled agents/photo-stylist.md
+- compiled agents/prototype-importer.md
+- compiled agents/qa-auditor.md
+- compiled agents/references-curator.md
+- compiled agents/scene-director.md
+- compiled agents/seo-optimizer.md
+- compiled agents/stack-planner.md
+- compiled agents/style-extractor.md
+- compiled agents/system-setup.md
+- compiled agents/ux-composer.md
+- compiled agents/visual-curator.md
+- compiled agents/wp-builder.md
+- compiled agents/wp-deployer.md
+- compiled skills/block-composition/SKILL.md
+- compiled skills/block-library-management/SKILL.md
+- compiled skills/brand-kit-build/SKILL.md
+- compiled skills/client-assets-collection/SKILL.md
+- compiled skills/design-tokens-generation/SKILL.md
+- compiled skills/gpt5-prompting-engine/SKILL.md
+- compiled skills/landing-from-context/SKILL.md
+- compiled skills/landing-onboarding/SKILL.md
+- compiled skills/landing-project-init/SKILL.md
+- compiled skills/landing-versioning-and-cloning/SKILL.md
+- compiled skills/moodboard-creation/SKILL.md
+- compiled skills/photo-curation/SKILL.md
+- compiled skills/photo-styling/SKILL.md
+- compiled skills/prototype-import/SKILL.md
+- compiled skills/references-collection/SKILL.md
+- compiled skills/style-decomposition/SKILL.md
+- compiled skills/visual-generation/SKILL.md
+- compiled skills/visual-qa/SKILL.md
+- compiled skills/wireframe-rendering/SKILL.md
+- compiled skills/wp-cli-deployer/SKILL.md
+- compiled skills/wp-gutenberg-block-builder/SKILL.md
+- compiled skills/wp-theme-assembler/SKILL.md
+- compiled commands/landing-brand.md
+- compiled commands/landing-build.md
+- compiled commands/landing-clone.md
+- compiled commands/landing-compose.md
+- compiled commands/landing-content.md
+- compiled commands/landing-deploy.md
+- compiled commands/landing-design.md
+- compiled commands/landing-final-check.md
+- compiled commands/landing-from-context.md
+- compiled commands/landing-go.md
+- compiled commands/landing-help.md
+- compiled commands/landing-import-blocks.md
+- compiled commands/landing-moodboard.md
+- compiled commands/landing-new.md
+- compiled commands/landing-onboarding.md
+- compiled commands/landing-photos.md
+- compiled commands/landing-previews.md
+- compiled commands/landing-prototype.md
+- compiled commands/landing-qa.md
+- compiled commands/landing-references.md
+- compiled commands/landing-rollback.md
+- compiled commands/landing-setup.md
+- compiled commands/landing-stack.md
+- compiled commands/landing-start.md
+- compiled commands/landing-status.md
+- compiled commands/landing-style.md
+- compiled commands/landing-visuals.md
+- compiled commands/landing-wireframe.md
+- compiled template/00_БРИФ/README.md
+- compiled template/01_КОНТЕКСТ/README.md
+- compiled template/02_МАТЕРИАЛЫ_КЛИЕНТА/README.md
+- compiled template/03_РЕФЕРЕНСЫ/README.md
+- compiled template/04_БРЕНД/README.md
+- compiled template/05_ДИЗАЙН-СИСТЕМА/README.md
+- compiled template/06_СТЕК/README.md
+- compiled template/07_КОНТЕНТ/README.md
+- compiled template/07_ПРОТОТИП/README.md
+- compiled template/07a_WIREFRAME/README.md
+- compiled template/07b_COMPOSED/README.md
+- compiled template/07c_PHOTOS/README.md
+- compiled template/07d_VISUALS/README.md
+- compiled template/08_КОД/README.md
+- compiled template/09_ДЕПЛОЙ/README.md
+- compiled template/10_QA/README.md
+- compiled template/11_АНАЛИТИКА/README.md
+- compiled template/12_SEO/README.md
+- compiled template/memory/README.md
+- compiled template/wiki/README.md
+- compiled docs/standards/premium-07b-checklist.md
+- compiled docs/standards/stage-agent-preamble.md
+- compiled docs/standards/stage-execution-protocol.md
+- skipped skills/niche-analysis/SKILL.md
+- skipped skills/paralaximus-codex/SKILL.md
+- skipped skills/seo-tech-audit/SKILL.md
+- skipped skills/wp-landing-config/SKILL.md
+- skipped skills/wp-multisite/SKILL.md
+- skipped commands/landing-niche.md
+- skipped template/01a_АНАЛИЗ_НИШИ/README.md
+- skipped template/13_СЕГМЕНТЫ_ЦА/README.md
+- skipped docs/standards/stage-08-spec-lint.md
+- skipped docs/standards/wiki-audit-checklist.md
+- skipped block-library/_patterns/animation-00-button-icon-fade-in/meta.yaml
+- skipped block-library/_patterns/animation-01-checkicondraw/meta.yaml
+- skipped block-library/_patterns/animation-02-checkiconopacity/meta.yaml
+- skipped block-library/_patterns/animation-03-checkiconscale/meta.yaml
+- skipped block-library/_patterns/animation-04-fade-in/meta.yaml
+- skipped block-library/_patterns/animation-05-fade-out/meta.yaml
+- skipped block-library/_patterns/animation-06-fadeout/meta.yaml
+- skipped block-library/_patterns/animation-07-iconbackgroundopacity/meta.yaml
+- skipped block-library/_patterns/animation-08-iconbackgroundtransform/meta.yaml
+- skipped block-library/_patterns/animation-09-move-down/meta.yaml
+- skipped block-library/_patterns/glass-00/meta.yaml
+- skipped block-library/_patterns/glass-01/meta.yaml
+- skipped block-library/_patterns/hover-effect-00-item-0/meta.yaml
+- skipped block-library/_patterns/hover-effect-01-item-1/meta.yaml
+- skipped block-library/_patterns/hover-effect-02-item-2/meta.yaml
+- skipped block-library/_patterns/hover-effect-03-item-3/meta.yaml
+- skipped block-library/_patterns/hover-effect-04-item-4/meta.yaml
+- skipped block-library/_patterns/hover-effect-05-item-5/meta.yaml
+- skipped block-library/_patterns/hover-effect-06-item-6/meta.yaml
+- skipped block-library/_patterns/hover-effect-07-item-7/meta.yaml
+- skipped block-library/_patterns/hover-effect-08-item-8/meta.yaml
+- skipped block-library/_patterns/hover-effect-09-item-9/meta.yaml
+- skipped config/niche-visual-rules.yaml
+- skipped config/positioning-modes.yaml
+- skipped docs/superpowers/specs/2026-05-06-niche-analysis-design.md
+- skipped docs/superpowers/specs/2026-05-06-niche-analysis-v2-design.md
+- skipped docs/superpowers/specs/2026-05-06-visual-requirements-design.md
+- skipped docs/superpowers/specs/2026-05-12-preview-panel-and-palette-library-design.md
+- skipped docs/superpowers/specs/2026-05-12-stage-08-acf-gutenberg-design.md
+- skipped docs/superpowers/specs/2026-05-13-frontend-builder-design.md
+- skipped docs/superpowers/specs/2026-05-13-frontend-builder-task-brief.md
+- skipped docs/superpowers/plans/2026-05-06-niche-analysis-implementation-plan.md
+- skipped docs/superpowers/plans/2026-05-06-niche-analysis-v2-implementation-plan.md
+- skipped docs/superpowers/plans/2026-05-06-visual-requirements-implementation-plan.md
+- skipped docs/superpowers/plans/2026-05-12-preview-panel-and-palette-library-plan.md
+- skipped docs/superpowers/plans/2026-05-12-stage-08-acf-gutenberg-plan.md
+- skipped docs/superpowers/plans/2026-05-13-frontend-builder-implementation.md
+- skipped docs/superpowers/plans/2026-05-13-stage08-lazy-blocks-migration.md
+- skipped docs/superpowers/DOKRUTKA-system.md
+- skipped presets/palettes.yaml
+- error block-library/_patterns/animation-00-button-icon-fade-in/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/animation-01-checkicondraw/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/animation-02-checkiconopacity/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/animation-03-checkiconscale/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/animation-04-fade-in/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/animation-05-fade-out/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/animation-06-fadeout/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/animation-07-iconbackgroundopacity/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/animation-08-iconbackgroundtransform/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/animation-09-move-down/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/glass-00/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/glass-01/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/hover-effect-00-item-0/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/hover-effect-01-item-1/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/hover-effect-02-item-2/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/hover-effect-03-item-3/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/hover-effect-04-item-4/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/hover-effect-05-item-5/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/hover-effect-06-item-6/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/hover-effect-07-item-7/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/hover-effect-08-item-8/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/hover-effect-09-item-9/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/contacts/contacts-brutalist-split-antidiler-karpov-ru-7/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/contacts/contacts-corporate-grid-2-opt-ecowash-ru-11/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/contacts/contacts-corporate-split-medregistrant-ru-9/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/contacts/contacts-corporate-split-portfolio-kdm1-ru-16/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-brutalist-split-sskrusgun-ru-3/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-brutalist-split-sskrusgun-ru-9/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-cinematic-split-portfolio-kdm1-ru-3/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-cinematic-split-portfolio-kdm1-ru-9/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-corporate-centered-portfolio-kdm1-ru-7/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-corporate-centered-zilant-group-9/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-corporate-grid-3-medregistrant-ru-5/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-corporate-split-project21993216-tild-13/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-corporate-split-project21993216-tild-6/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-corporate-stacked-romanmelnikov-tilda-13/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-minimal-centered-opt-ecowash-ru-3/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-minimal-split-portfolio-kdm1-ru-8/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-minimal-split-project21993216-tild-8/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-technical-centered-antidiler-karpov-ru-5/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-technical-split-medregistrant-ru-7/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/ru-cta-01-callback-tg-max/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/ru-cta-02-banner-stripe/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/ru-cta-03-urgency-scarcity/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/ru-cta-04-lead-magnet/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/ru-cta-05-login-cta/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/ru-cta-06-editorial-paper/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/ru-cta-07-accent-bg/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/faq/faq-corporate-stacked-portfolio-kdm1-ru-15/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/faq/faq-minimal-stacked-project21993216-tild-11/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/faq/faq-minimal-stacked-sskrusgun-ru-13/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/faq/ru-faq-01-accordion/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/faq/ru-faq-02-why-us/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/faq/ru-faq-03-searchable/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/faq/ru-faq-04-pricing-faq/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-brutalist-grid-3-portfolio-kdm1-ru-3/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-brutalist-split-antidiler-karpov-ru-2/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-cinematic-stacked-portfolio-kdm1-ru-6/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-corporate-grid-2-portfolio-kdm1-ru-3/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-corporate-grid-3-opt-ecowash-ru-8/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-corporate-split-romanmelnikov-tilda-7/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-corporate-split-sskrusgun-ru-8/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-editorial-cards-romanmelnikov-tilda-6/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-editorial-grid-2-romanmelnikov-tilda-9/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-editorial-split-project21993216-tild-7/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-editorial-stacked-romanmelnikov-tilda-2/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-minimal-centered-opt-ecowash-ru-10/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-minimal-grid-2-sskrusgun-ru-10/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-minimal-grid-2-sskrusgun-ru-4/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-minimal-grid-2-zilant-group-6/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-minimal-grid-4-zilant-group-2/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-playful-cards-opt-ecowash-ru-2/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-playful-centered-medregistrant-ru-2/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-technical-centered-medregistrant-ru-4/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-technical-centered-portfolio-kdm1-ru-5/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-technical-grid-2-portfolio-kdm1-ru-8/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-technical-grid-2-romanmelnikov-tilda-3/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-technical-grid-3-portfolio-kdm1-ru-2/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-technical-grid-3-portfolio-kdm1-ru-5/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-technical-grid-3-portfolio-kdm1-ru-6/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-technical-grid-3-zilant-group-4/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-technical-grid-4-project21993216-tild-2/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-technical-split-sskrusgun-ru-6/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/ru-features-01-3col-icons/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/ru-features-02-bento-grid/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/ru-features-03-swiss-cards/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/ru-features-04-numbered-list/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/ru-features-05-method-steps/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/ru-features-06-cards-2x2/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/ru-features-07-2col-split/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/ru-features-08-kpi-metrics/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/footer/footer-corporate-grid-3-sskrusgun-ru-14/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/footer/footer-corporate-grid-4-portfolio-kdm1-ru-8/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/footer/footer-corporate-grid-4-zilant-group-10/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/footer/footer-corporate-split-opt-ecowash-ru-12/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/footer/footer-corporate-split-portfolio-kdm1-ru-9/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/footer/footer-minimal-grid-3-project21993216-tild-14/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/footer/footer-minimal-split-antidiler-karpov-ru-8/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/footer/footer-minimal-split-portfolio-kdm1-ru-17/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/footer/footer-minimal-split-romanmelnikov-tilda-14/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/gallery/gallery-cinematic-cards-zilant-group-3/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/gallery/gallery-cinematic-grid-4-sskrusgun-ru-12/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/gallery/gallery-corporate-cards-portfolio-kdm1-ru-4/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/gallery/gallery-editorial-grid-3-portfolio-kdm1-ru-6/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/gallery/gallery-minimal-grid-3-project21993216-tild-5/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/gallery/gallery-minimal-stacked-portfolio-kdm1-ru-2/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/gallery/gallery-playful-grid-4-project21993216-tild-4/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/header/header-cinematic-split-antidiler-karpov-ru-0/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/header/header-cinematic-split-portfolio-kdm1-ru-0/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/header/header-corporate-split-portfolio-kdm1-ru-0/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/header/header-corporate-split-zilant-group-0/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/header/header-luxury-split-romanmelnikov-tilda-0/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/header/header-minimal-split-medregistrant-ru-0/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/header/header-minimal-split-portfolio-kdm1-ru-0/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/header/header-minimal-split-project21993216-tild-0/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/header/header-playful-split-opt-ecowash-ru-0/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/header/header-technical-split-sskrusgun-ru-0/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/hero-brutalist-split-sskrusgun-ru-1/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/hero-cinematic-centered-portfolio-kdm1-ru-1/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/hero-cinematic-split-antidiler-karpov-ru-1/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/hero-cinematic-split-portfolio-kdm1-ru-2/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/hero-cinematic-split-romanmelnikov-tilda-1/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/hero-corporate-split-project21993216-tild-1/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/hero-corporate-split-zilant-group-1/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/hero-editorial-centered-medregistrant-ru-1/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/hero-minimal-split-portfolio-kdm1-ru-1/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/hero-playful-split-opt-ecowash-ru-1/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/hero-technical-split-portfolio-kdm1-ru-1/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/ru-hero-01-services-calc/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/ru-hero-02-b2c-expert/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/ru-hero-03-local-interior/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/ru-hero-04-split-form/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/ru-hero-05-centered-bold/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/ru-hero-06-swiss-metrics/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/ru-hero-07-editorial-serif/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/ru-hero-08-centered-emailcap/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/ru-hero-09-kami-serif/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/ru-hero-10-deck-cover/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/pricing/pricing-corporate-cards-opt-ecowash-ru-5/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/pricing/pricing-corporate-grid-2-portfolio-kdm1-ru-10/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/pricing/pricing-corporate-grid-3-portfolio-kdm1-ru-7/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/pricing/pricing-corporate-grid-3-sskrusgun-ru-5/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/pricing/pricing-luxury-split-romanmelnikov-tilda-8/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/pricing/pricing-minimal-grid-4-sskrusgun-ru-7/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/pricing/pricing-technical-grid-3-sskrusgun-ru-2/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/pricing/ru-pricing-01-rub-from/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/pricing/ru-pricing-02-comparison-table/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/pricing/ru-pricing-03-3tier-saas/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/pricing/ru-pricing-04-tiers-faq/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/process/process-cinematic-timeline-portfolio-kdm1-ru-5/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/process/process-corporate-stacked-portfolio-kdm1-ru-13/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/process/process-corporate-timeline-project21993216-tild-10/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/process/process-editorial-grid-2-romanmelnikov-tilda-4/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/process/process-minimal-grid-2-opt-ecowash-ru-7/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/process/process-minimal-grid-2-portfolio-kdm1-ru-4/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/process/process-technical-cards-medregistrant-ru-3/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/process/process-technical-stacked-opt-ecowash-ru-6/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/process/process-technical-timeline-romanmelnikov-tilda-10/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/process/ru-process-01-4steps-icons/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/process/ru-process-02-next-steps/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/process/ru-process-03-4steps-numbered/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/quiz/ru-quiz-01-step-card/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/quiz/ru-quiz-02-progress-top/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/quiz/ru-quiz-03-intermediate/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/quiz/ru-quiz-04-lead-form/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/quiz/ru-quiz-05-thankyou/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/quiz/ru-quiz-06-welcome-screen/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/quiz/ru-quiz-07-image-choice/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/quiz/ru-quiz-08-slider-range/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/quiz/ru-quiz-09-multi-select/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/quiz/ru-quiz-10-loader-analyzing/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/quiz/ru-quiz-11-discount-bonus/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/quiz/ru-quiz-12-mini-calculator/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/quiz/ru-quiz-13-comparison-question/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/ru-social-proof-03-client-logos/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/ru-social-proof-04-authority-cases/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/ru-social-proof-05-metrics-editorial/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/ru-social-proof-06-editorial-quote/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/ru-social-proof-07-logo-ticker/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/ru-social-proof-08-stats-deck/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/ru-stats-01-growth-chart/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/ru-testimonials-01-video-circles/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/ru-testimonials-02-text-photo/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/social-proof-cinematic-split-antidiler-karpov-ru-3/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/social-proof-corporate-cards-medregistrant-ru-6/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/social-proof-corporate-grid-3-zilant-group-5/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/social-proof-luxury-cards-romanmelnikov-tilda-12/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/social-proof-minimal-centered-project21993216-tild-3/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/social-proof-minimal-stacked-antidiler-karpov-ru-4/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/social-proof-playful-grid-2-opt-ecowash-ru-9/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/social-proof-technical-grid-4-portfolio-kdm1-ru-14/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/team/team-cinematic-split-portfolio-kdm1-ru-11/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/ru-trust-01-guarantees-docs/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/ru-trust-02-numbers-row/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/ru-trust-03-descriptor-header/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/ru-trust-04-principles-grid/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/ru-trust-05-manifesto-text/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/ru-trust-06-labs-showcase/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/ru-trust-07-partner-logos/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/trust-corporate-grid-2-portfolio-kdm1-ru-7/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/trust-corporate-grid-3-project21993216-tild-12/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/trust-corporate-grid-4-sskrusgun-ru-11/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/trust-editorial-grid-2-romanmelnikov-tilda-11/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/trust-editorial-grid-2-zilant-group-7/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/trust-editorial-grid-3-portfolio-kdm1-ru-4/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/trust-editorial-stacked-medregistrant-ru-8/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/trust-editorial-stacked-portfolio-kdm1-ru-12/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/trust-luxury-centered-romanmelnikov-tilda-5/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/trust-minimal-centered-antidiler-karpov-ru-6/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/trust-minimal-grid-4-zilant-group-8/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/trust-playful-stacked-opt-ecowash-ru-4/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/trust-technical-grid-3-project21993216-tild-9/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error config/stage-gates.yaml: SDK call failed: Claude Code returned an error result: success
+- error docs/SETUP.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-03-landing-system-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-04-stage-gates-onboarding-mcp-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-12-acf-block-rendering-research-NEEDED.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-12-prototype-block-library-ux-composer-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-13-block-spec-format.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-13-photo-pipeline-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-13-pr-d-orchestrator-integration-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-13-visual-generation-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-14-pr-e-onboarding-wizard-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-15-pr-g-stage-lock-auto-wiki-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-15-pr-h-content-preserve-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-15-pr-i-a-photo-pipeline-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-15-s2a-pre-deploy-admin-config-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-15-s2e-seo-tech-audit-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-15-specialist-2-roadmap.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-15-wiki-graph-markup-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-16-pr-i-b-visual-qa-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-16-pr-j-static-prompts-identity-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-18-s2cd-multisite-cloning-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-19-s2a-landing-config-revised.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-19-s2a2-snippets-manager.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-19-s2a3-network-admin-unification-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-20-b19-lead-status-workflow-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-21-b1-cookie-banner-pd-consent-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-21-composed-spec-linter-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-22-b2-cookie-banner-library-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-22-s2e-e4-audit-dashboard-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-03-landing-system-master-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-03-phase-1-skeleton.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-03-phase-2-brainstorming-pipeline.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-04-phase-3-design-pipeline.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-04-phase-4-wp-build-pipeline.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-04-phase-5-deploy-operations.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-04-stage-gates-onboarding-implementation-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-12-prototype-block-library-ux-composer-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-13-photo-pipeline-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-13-pr-d-orchestrator-integration-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-13-visual-generation-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-14-pr-e-onboarding-wizard-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-15-pr-g-stage-lock-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-15-pr-h-content-preserve-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-15-pr-i-a-photo-pipeline-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-15-wiki-graph-pr-f1-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-15-wiki-graph-pr-f2-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-15-wiki-graph-pr-f3-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-15-wiki-graph-pr-f4-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-15-wiki-graph-pr-f5-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-16-pr-i-b-visual-qa-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-16-pr-j-static-prompts-identity-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-18-s2cd-cd1-multisite-foundation.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-19-s2a-landing-config-implementation.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-19-s2a2-snippets-manager.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-19-s2a3-network-admin-unification-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-20-b19-lead-status-workflow-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-20-system-audit-top10-fixes.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-21-b1-cookie-banner-pd-consent-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-21-composed-spec-linter-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-22-b2-cookie-banner-library-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-22-s2e-e1-seo-audit-skill-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-22-s2e-e4-audit-dashboard-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-26-wiki-remediation-parallel-tracker.md: SDK call failed: Claude Code returned an error result: success
+- error docs/ПЛАН-ДОРАБОТОК.md: SDK call failed: Claude Code returned an error result: success
+- error docs/BACKLOG.md: SDK call failed: Claude Code returned an error result: success
+- error docs/photo-selection-guide.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/DOKRUTKA-system.md: SDK call failed: Claude Code returned an error result: success
+- error tests/api_validators/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/deploy/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/e2e/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/gate-check/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/integration/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/onboarding/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/phase-1/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/phase-2/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/phase-3/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/phase-4/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/phase-5/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/phase-niche/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/phase-pra/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/phase-prb/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/phase-prc/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/phase-prd/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/phase-pre/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/phase-preview-panel/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/phase-stage-08/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/poc/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/pr-g/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/pr-h/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/pr-i-a/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/pr-i-b/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/pr-j/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/pr-k/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/pr-l/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/pr-m/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/pr-n/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/pr-o/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/pr-p/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/preflight/README.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/backport-acf-to-legacy.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/block-loader.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/build-zip.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/check-deps.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/check-wiki-sync.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/deploy.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/derive-landing-structure.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/export-palettes-to-library.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/gate-check.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/gate-state.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/generate-axes-filter.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/generate-palette-css.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/generate-previews.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/generate-wp-blocks.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/install-codex.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/install-git-hooks.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/landing-final-check.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/landing-go-next-stage.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/mark-legacy-projects.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/migrate-add-wiki.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/migrate-blocks-to-wireframe-format.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/migrate-niche-to-v2.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/migrate-state-add-01a.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/migrate-state-for-prd.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/migrate-template-readmes.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/migrate-to-preview-panel.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/preflight.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/preview-blocks-library.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/refresh-catalog.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/render-pipeline-map.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/setup-flag.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/snapshot-palettes-to-project.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/test-pipeline.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/validate-all.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/validate-palettes.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/verify-composed-has-visuals.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/verify-composed-premium.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/verify-content-preserved.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/verify-gutenberg-json.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/verify-identity-preserved.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/verify-photo-pipeline.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/verify-php-syntax.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/verify-site-url.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/verify-visual-qa.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/verify_content_preserved.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/verify_photo_pipeline.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/verify_visual_qa.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wizard-check-materials.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wizard.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/extract-effects/build-patterns-library.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/extract-effects/extract-patterns.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/extract-effects/scrape-css.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/import-blocks/codex-analyze-structure.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/import-blocks/generate-blocks.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/import-blocks/import-from-url.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/import-blocks/take-page-screenshot.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/import-blocks/update-catalog.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/lib/check-block-registration.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/lib/content_parser.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/lib/stage_08_helper.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/cleanup_broken_links.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/compile.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/config.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/conversations_compiler.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/flush.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/hash_cache.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/lint.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/preview.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/project_graph_compiler.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/query.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/sdk_client.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/system_compiler.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/utils.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/hooks/pre_compact.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/hooks/session_end.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/hooks/session_start.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/parsers/composed_html.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/parsers/selections_yaml.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/parsers/state_yaml.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/parsers/tokens_json.py.doc.md: SDK call failed: Claude Code returned an error result: success
+
+## [2026-05-26] compile --source-mode=system
+- compiled agents/analytics-engineer.md
+- compiled agents/block-composer.md
+- compiled agents/brand-architect.md
+- compiled agents/client-assets-collector.md
+- compiled agents/content-writer.md
+- compiled agents/design-system-generator.md
+- compiled agents/frontend-builder.md
+- compiled agents/icon-generator.md
+- compiled agents/infographic-builder.md
+- compiled agents/integrations-engineer.md
+- compiled agents/landing-onboarding-wizard.md
+- compiled agents/landing-orchestrator.md
+- compiled agents/lifecycle-keeper.md
+- compiled agents/moodboard-composer.md
+- compiled agents/niche-analyst.md
+- compiled agents/onboarding-guide.md
+- compiled agents/photo-classifier.md
+- compiled agents/photo-curator.md
+- compiled agents/photo-matcher.md
+- compiled agents/photo-preview-board.md
+- compiled agents/photo-stylist.md
+- compiled agents/prototype-importer.md
+- compiled agents/qa-auditor.md
+- compiled agents/references-curator.md
+- compiled agents/scene-director.md
+- compiled agents/seo-optimizer.md
+- compiled agents/stack-planner.md
+- compiled agents/style-extractor.md
+- compiled agents/system-setup.md
+- compiled agents/ux-composer.md
+- compiled agents/visual-curator.md
+- compiled agents/wp-builder.md
+- compiled agents/wp-deployer.md
+- compiled skills/block-composition/SKILL.md
+- compiled skills/block-library-management/SKILL.md
+- compiled skills/brand-kit-build/SKILL.md
+- compiled skills/client-assets-collection/SKILL.md
+- compiled skills/design-tokens-generation/SKILL.md
+- compiled skills/gpt5-prompting-engine/SKILL.md
+- compiled skills/landing-from-context/SKILL.md
+- compiled skills/landing-onboarding/SKILL.md
+- compiled skills/landing-project-init/SKILL.md
+- compiled skills/landing-versioning-and-cloning/SKILL.md
+- compiled skills/moodboard-creation/SKILL.md
+- compiled skills/photo-curation/SKILL.md
+- compiled skills/photo-styling/SKILL.md
+- compiled skills/prototype-import/SKILL.md
+- compiled skills/references-collection/SKILL.md
+- compiled skills/style-decomposition/SKILL.md
+- compiled skills/visual-generation/SKILL.md
+- compiled skills/visual-qa/SKILL.md
+- compiled skills/wireframe-rendering/SKILL.md
+- compiled skills/wp-cli-deployer/SKILL.md
+- compiled skills/wp-gutenberg-block-builder/SKILL.md
+- compiled skills/wp-theme-assembler/SKILL.md
+- compiled commands/landing-brand.md
+- compiled commands/landing-build.md
+- compiled commands/landing-clone.md
+- compiled commands/landing-compose.md
+- compiled commands/landing-content.md
+- compiled commands/landing-deploy.md
+- compiled commands/landing-design.md
+- compiled commands/landing-final-check.md
+- compiled commands/landing-from-context.md
+- compiled commands/landing-go.md
+- compiled commands/landing-help.md
+- compiled commands/landing-import-blocks.md
+- compiled commands/landing-moodboard.md
+- compiled commands/landing-new.md
+- compiled commands/landing-onboarding.md
+- compiled commands/landing-photos.md
+- compiled commands/landing-previews.md
+- compiled commands/landing-prototype.md
+- compiled commands/landing-qa.md
+- compiled commands/landing-references.md
+- compiled commands/landing-rollback.md
+- compiled commands/landing-setup.md
+- compiled commands/landing-stack.md
+- compiled commands/landing-start.md
+- compiled commands/landing-status.md
+- compiled commands/landing-style.md
+- compiled commands/landing-visuals.md
+- compiled commands/landing-wireframe.md
+- compiled template/00_БРИФ/README.md
+- compiled template/01_КОНТЕКСТ/README.md
+- compiled template/02_МАТЕРИАЛЫ_КЛИЕНТА/README.md
+- skipped skills/niche-analysis/SKILL.md
+- skipped skills/paralaximus-codex/SKILL.md
+- skipped skills/seo-tech-audit/SKILL.md
+- skipped skills/wp-landing-config/SKILL.md
+- skipped skills/wp-multisite/SKILL.md
+- skipped commands/landing-niche.md
+- skipped template/01a_АНАЛИЗ_НИШИ/README.md
+- skipped template/13_СЕГМЕНТЫ_ЦА/README.md
+- skipped docs/standards/stage-08-spec-lint.md
+- skipped docs/standards/wiki-audit-checklist.md
+- skipped block-library/_patterns/animation-00-button-icon-fade-in/meta.yaml
+- skipped block-library/_patterns/animation-01-checkicondraw/meta.yaml
+- skipped block-library/_patterns/animation-02-checkiconopacity/meta.yaml
+- skipped block-library/_patterns/animation-03-checkiconscale/meta.yaml
+- skipped block-library/_patterns/animation-04-fade-in/meta.yaml
+- skipped block-library/_patterns/animation-05-fade-out/meta.yaml
+- skipped block-library/_patterns/animation-06-fadeout/meta.yaml
+- skipped block-library/_patterns/animation-07-iconbackgroundopacity/meta.yaml
+- skipped block-library/_patterns/animation-08-iconbackgroundtransform/meta.yaml
+- skipped block-library/_patterns/animation-09-move-down/meta.yaml
+- skipped block-library/_patterns/glass-00/meta.yaml
+- skipped block-library/_patterns/glass-01/meta.yaml
+- skipped block-library/_patterns/hover-effect-00-item-0/meta.yaml
+- skipped block-library/_patterns/hover-effect-01-item-1/meta.yaml
+- skipped block-library/_patterns/hover-effect-02-item-2/meta.yaml
+- skipped block-library/_patterns/hover-effect-03-item-3/meta.yaml
+- skipped block-library/_patterns/hover-effect-04-item-4/meta.yaml
+- skipped block-library/_patterns/hover-effect-05-item-5/meta.yaml
+- skipped block-library/_patterns/hover-effect-06-item-6/meta.yaml
+- skipped block-library/_patterns/hover-effect-07-item-7/meta.yaml
+- skipped block-library/_patterns/hover-effect-08-item-8/meta.yaml
+- skipped block-library/_patterns/hover-effect-09-item-9/meta.yaml
+- skipped config/niche-visual-rules.yaml
+- skipped config/positioning-modes.yaml
+- skipped docs/superpowers/specs/2026-05-06-niche-analysis-design.md
+- skipped docs/superpowers/specs/2026-05-06-niche-analysis-v2-design.md
+- skipped docs/superpowers/specs/2026-05-06-visual-requirements-design.md
+- skipped docs/superpowers/specs/2026-05-12-preview-panel-and-palette-library-design.md
+- skipped docs/superpowers/specs/2026-05-12-stage-08-acf-gutenberg-design.md
+- skipped docs/superpowers/specs/2026-05-13-frontend-builder-design.md
+- skipped docs/superpowers/specs/2026-05-13-frontend-builder-task-brief.md
+- skipped docs/superpowers/plans/2026-05-06-niche-analysis-implementation-plan.md
+- skipped docs/superpowers/plans/2026-05-06-niche-analysis-v2-implementation-plan.md
+- skipped docs/superpowers/plans/2026-05-06-visual-requirements-implementation-plan.md
+- skipped docs/superpowers/plans/2026-05-12-preview-panel-and-palette-library-plan.md
+- skipped docs/superpowers/plans/2026-05-12-stage-08-acf-gutenberg-plan.md
+- skipped docs/superpowers/plans/2026-05-13-frontend-builder-implementation.md
+- skipped docs/superpowers/plans/2026-05-13-stage08-lazy-blocks-migration.md
+- skipped docs/superpowers/DOKRUTKA-system.md
+- skipped presets/palettes.yaml
+- error template/03_РЕФЕРЕНСЫ/README.md: SDK call failed: Claude Code returned an error result: success
+- error template/04_БРЕНД/README.md: SDK call failed: Claude Code returned an error result: success
+- error template/05_ДИЗАЙН-СИСТЕМА/README.md: SDK call failed: Claude Code returned an error result: success
+- error template/06_СТЕК/README.md: SDK call failed: Claude Code returned an error result: success
+- error template/07_КОНТЕНТ/README.md: SDK call failed: Claude Code returned an error result: success
+- error template/07_ПРОТОТИП/README.md: SDK call failed: Claude Code returned an error result: success
+- error template/07a_WIREFRAME/README.md: SDK call failed: Claude Code returned an error result: success
+- error template/07b_COMPOSED/README.md: SDK call failed: Claude Code returned an error result: success
+- error template/07c_PHOTOS/README.md: SDK call failed: Claude Code returned an error result: success
+- error template/07d_VISUALS/README.md: SDK call failed: Claude Code returned an error result: success
+- error template/08_КОД/README.md: SDK call failed: Claude Code returned an error result: success
+- error template/09_ДЕПЛОЙ/README.md: SDK call failed: Claude Code returned an error result: success
+- error template/10_QA/README.md: SDK call failed: Claude Code returned an error result: success
+- error template/11_АНАЛИТИКА/README.md: SDK call failed: Claude Code returned an error result: success
+- error template/12_SEO/README.md: SDK call failed: Claude Code returned an error result: success
+- error template/memory/README.md: SDK call failed: Claude Code returned an error result: success
+- error template/wiki/README.md: SDK call failed: Claude Code returned an error result: success
+- error docs/standards/premium-07b-checklist.md: SDK call failed: Claude Code returned an error result: success
+- error docs/standards/stage-agent-preamble.md: SDK call failed: Claude Code returned an error result: success
+- error docs/standards/stage-execution-protocol.md: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/animation-00-button-icon-fade-in/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/animation-01-checkicondraw/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/animation-02-checkiconopacity/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/animation-03-checkiconscale/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/animation-04-fade-in/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/animation-05-fade-out/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/animation-06-fadeout/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/animation-07-iconbackgroundopacity/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/animation-08-iconbackgroundtransform/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/animation-09-move-down/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/glass-00/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/glass-01/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/hover-effect-00-item-0/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/hover-effect-01-item-1/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/hover-effect-02-item-2/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/hover-effect-03-item-3/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/hover-effect-04-item-4/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/hover-effect-05-item-5/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/hover-effect-06-item-6/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/hover-effect-07-item-7/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/hover-effect-08-item-8/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/_patterns/hover-effect-09-item-9/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/contacts/contacts-brutalist-split-antidiler-karpov-ru-7/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/contacts/contacts-corporate-grid-2-opt-ecowash-ru-11/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/contacts/contacts-corporate-split-medregistrant-ru-9/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/contacts/contacts-corporate-split-portfolio-kdm1-ru-16/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-brutalist-split-sskrusgun-ru-3/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-brutalist-split-sskrusgun-ru-9/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-cinematic-split-portfolio-kdm1-ru-3/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-cinematic-split-portfolio-kdm1-ru-9/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-corporate-centered-portfolio-kdm1-ru-7/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-corporate-centered-zilant-group-9/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-corporate-grid-3-medregistrant-ru-5/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-corporate-split-project21993216-tild-13/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-corporate-split-project21993216-tild-6/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-corporate-stacked-romanmelnikov-tilda-13/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-minimal-centered-opt-ecowash-ru-3/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-minimal-split-portfolio-kdm1-ru-8/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-minimal-split-project21993216-tild-8/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-technical-centered-antidiler-karpov-ru-5/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/cta-technical-split-medregistrant-ru-7/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/ru-cta-01-callback-tg-max/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/ru-cta-02-banner-stripe/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/ru-cta-03-urgency-scarcity/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/ru-cta-04-lead-magnet/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/ru-cta-05-login-cta/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/ru-cta-06-editorial-paper/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/cta/ru-cta-07-accent-bg/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/faq/faq-corporate-stacked-portfolio-kdm1-ru-15/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/faq/faq-minimal-stacked-project21993216-tild-11/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/faq/faq-minimal-stacked-sskrusgun-ru-13/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/faq/ru-faq-01-accordion/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/faq/ru-faq-02-why-us/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/faq/ru-faq-03-searchable/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/faq/ru-faq-04-pricing-faq/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-brutalist-grid-3-portfolio-kdm1-ru-3/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-brutalist-split-antidiler-karpov-ru-2/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-cinematic-stacked-portfolio-kdm1-ru-6/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-corporate-grid-2-portfolio-kdm1-ru-3/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-corporate-grid-3-opt-ecowash-ru-8/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-corporate-split-romanmelnikov-tilda-7/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-corporate-split-sskrusgun-ru-8/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-editorial-cards-romanmelnikov-tilda-6/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-editorial-grid-2-romanmelnikov-tilda-9/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-editorial-split-project21993216-tild-7/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-editorial-stacked-romanmelnikov-tilda-2/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-minimal-centered-opt-ecowash-ru-10/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-minimal-grid-2-sskrusgun-ru-10/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-minimal-grid-2-sskrusgun-ru-4/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-minimal-grid-2-zilant-group-6/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-minimal-grid-4-zilant-group-2/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-playful-cards-opt-ecowash-ru-2/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-playful-centered-medregistrant-ru-2/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-technical-centered-medregistrant-ru-4/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-technical-centered-portfolio-kdm1-ru-5/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-technical-grid-2-portfolio-kdm1-ru-8/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-technical-grid-2-romanmelnikov-tilda-3/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-technical-grid-3-portfolio-kdm1-ru-2/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-technical-grid-3-portfolio-kdm1-ru-5/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-technical-grid-3-portfolio-kdm1-ru-6/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-technical-grid-3-zilant-group-4/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-technical-grid-4-project21993216-tild-2/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/features-technical-split-sskrusgun-ru-6/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/ru-features-01-3col-icons/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/ru-features-02-bento-grid/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/ru-features-03-swiss-cards/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/ru-features-04-numbered-list/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/ru-features-05-method-steps/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/ru-features-06-cards-2x2/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/ru-features-07-2col-split/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/features/ru-features-08-kpi-metrics/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/footer/footer-corporate-grid-3-sskrusgun-ru-14/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/footer/footer-corporate-grid-4-portfolio-kdm1-ru-8/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/footer/footer-corporate-grid-4-zilant-group-10/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/footer/footer-corporate-split-opt-ecowash-ru-12/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/footer/footer-corporate-split-portfolio-kdm1-ru-9/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/footer/footer-minimal-grid-3-project21993216-tild-14/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/footer/footer-minimal-split-antidiler-karpov-ru-8/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/footer/footer-minimal-split-portfolio-kdm1-ru-17/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/footer/footer-minimal-split-romanmelnikov-tilda-14/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/gallery/gallery-cinematic-cards-zilant-group-3/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/gallery/gallery-cinematic-grid-4-sskrusgun-ru-12/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/gallery/gallery-corporate-cards-portfolio-kdm1-ru-4/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/gallery/gallery-editorial-grid-3-portfolio-kdm1-ru-6/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/gallery/gallery-minimal-grid-3-project21993216-tild-5/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/gallery/gallery-minimal-stacked-portfolio-kdm1-ru-2/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/gallery/gallery-playful-grid-4-project21993216-tild-4/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/header/header-cinematic-split-antidiler-karpov-ru-0/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/header/header-cinematic-split-portfolio-kdm1-ru-0/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/header/header-corporate-split-portfolio-kdm1-ru-0/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/header/header-corporate-split-zilant-group-0/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/header/header-luxury-split-romanmelnikov-tilda-0/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/header/header-minimal-split-medregistrant-ru-0/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/header/header-minimal-split-portfolio-kdm1-ru-0/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/header/header-minimal-split-project21993216-tild-0/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/header/header-playful-split-opt-ecowash-ru-0/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/header/header-technical-split-sskrusgun-ru-0/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/hero-brutalist-split-sskrusgun-ru-1/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/hero-cinematic-centered-portfolio-kdm1-ru-1/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/hero-cinematic-split-antidiler-karpov-ru-1/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/hero-cinematic-split-portfolio-kdm1-ru-2/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/hero-cinematic-split-romanmelnikov-tilda-1/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/hero-corporate-split-project21993216-tild-1/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/hero-corporate-split-zilant-group-1/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/hero-editorial-centered-medregistrant-ru-1/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/hero-minimal-split-portfolio-kdm1-ru-1/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/hero-playful-split-opt-ecowash-ru-1/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/hero-technical-split-portfolio-kdm1-ru-1/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/ru-hero-01-services-calc/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/ru-hero-02-b2c-expert/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/ru-hero-03-local-interior/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/ru-hero-04-split-form/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/ru-hero-05-centered-bold/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/ru-hero-06-swiss-metrics/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/ru-hero-07-editorial-serif/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/ru-hero-08-centered-emailcap/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/ru-hero-09-kami-serif/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/hero/ru-hero-10-deck-cover/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/pricing/pricing-corporate-cards-opt-ecowash-ru-5/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/pricing/pricing-corporate-grid-2-portfolio-kdm1-ru-10/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/pricing/pricing-corporate-grid-3-portfolio-kdm1-ru-7/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/pricing/pricing-corporate-grid-3-sskrusgun-ru-5/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/pricing/pricing-luxury-split-romanmelnikov-tilda-8/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/pricing/pricing-minimal-grid-4-sskrusgun-ru-7/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/pricing/pricing-technical-grid-3-sskrusgun-ru-2/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/pricing/ru-pricing-01-rub-from/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/pricing/ru-pricing-02-comparison-table/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/pricing/ru-pricing-03-3tier-saas/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/pricing/ru-pricing-04-tiers-faq/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/process/process-cinematic-timeline-portfolio-kdm1-ru-5/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/process/process-corporate-stacked-portfolio-kdm1-ru-13/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/process/process-corporate-timeline-project21993216-tild-10/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/process/process-editorial-grid-2-romanmelnikov-tilda-4/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/process/process-minimal-grid-2-opt-ecowash-ru-7/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/process/process-minimal-grid-2-portfolio-kdm1-ru-4/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/process/process-technical-cards-medregistrant-ru-3/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/process/process-technical-stacked-opt-ecowash-ru-6/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/process/process-technical-timeline-romanmelnikov-tilda-10/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/process/ru-process-01-4steps-icons/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/process/ru-process-02-next-steps/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/process/ru-process-03-4steps-numbered/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/quiz/ru-quiz-01-step-card/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/quiz/ru-quiz-02-progress-top/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/quiz/ru-quiz-03-intermediate/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/quiz/ru-quiz-04-lead-form/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/quiz/ru-quiz-05-thankyou/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/quiz/ru-quiz-06-welcome-screen/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/quiz/ru-quiz-07-image-choice/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/quiz/ru-quiz-08-slider-range/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/quiz/ru-quiz-09-multi-select/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/quiz/ru-quiz-10-loader-analyzing/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/quiz/ru-quiz-11-discount-bonus/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/quiz/ru-quiz-12-mini-calculator/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/quiz/ru-quiz-13-comparison-question/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/ru-social-proof-03-client-logos/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/ru-social-proof-04-authority-cases/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/ru-social-proof-05-metrics-editorial/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/ru-social-proof-06-editorial-quote/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/ru-social-proof-07-logo-ticker/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/ru-social-proof-08-stats-deck/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/ru-stats-01-growth-chart/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/ru-testimonials-01-video-circles/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/ru-testimonials-02-text-photo/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/social-proof-cinematic-split-antidiler-karpov-ru-3/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/social-proof-corporate-cards-medregistrant-ru-6/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/social-proof-corporate-grid-3-zilant-group-5/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/social-proof-luxury-cards-romanmelnikov-tilda-12/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/social-proof-minimal-centered-project21993216-tild-3/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/social-proof-minimal-stacked-antidiler-karpov-ru-4/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/social-proof-playful-grid-2-opt-ecowash-ru-9/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/social-proof/social-proof-technical-grid-4-portfolio-kdm1-ru-14/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/team/team-cinematic-split-portfolio-kdm1-ru-11/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/ru-trust-01-guarantees-docs/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/ru-trust-02-numbers-row/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/ru-trust-03-descriptor-header/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/ru-trust-04-principles-grid/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/ru-trust-05-manifesto-text/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/ru-trust-06-labs-showcase/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/ru-trust-07-partner-logos/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/trust-corporate-grid-2-portfolio-kdm1-ru-7/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/trust-corporate-grid-3-project21993216-tild-12/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/trust-corporate-grid-4-sskrusgun-ru-11/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/trust-editorial-grid-2-romanmelnikov-tilda-11/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/trust-editorial-grid-2-zilant-group-7/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/trust-editorial-grid-3-portfolio-kdm1-ru-4/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/trust-editorial-stacked-medregistrant-ru-8/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/trust-editorial-stacked-portfolio-kdm1-ru-12/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/trust-luxury-centered-romanmelnikov-tilda-5/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/trust-minimal-centered-antidiler-karpov-ru-6/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/trust-minimal-grid-4-zilant-group-8/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/trust-playful-stacked-opt-ecowash-ru-4/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error block-library/trust/trust-technical-grid-3-project21993216-tild-9/meta.yaml: SDK call failed: Claude Code returned an error result: success
+- error config/stage-gates.yaml: SDK call failed: Claude Code returned an error result: success
+- error docs/SETUP.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-03-landing-system-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-04-stage-gates-onboarding-mcp-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-12-acf-block-rendering-research-NEEDED.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-12-prototype-block-library-ux-composer-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-13-block-spec-format.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-13-photo-pipeline-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-13-pr-d-orchestrator-integration-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-13-visual-generation-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-14-pr-e-onboarding-wizard-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-15-pr-g-stage-lock-auto-wiki-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-15-pr-h-content-preserve-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-15-pr-i-a-photo-pipeline-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-15-s2a-pre-deploy-admin-config-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-15-s2e-seo-tech-audit-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-15-specialist-2-roadmap.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-15-wiki-graph-markup-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-16-pr-i-b-visual-qa-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-16-pr-j-static-prompts-identity-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-18-s2cd-multisite-cloning-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-19-s2a-landing-config-revised.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-19-s2a2-snippets-manager.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-19-s2a3-network-admin-unification-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-20-b19-lead-status-workflow-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-21-b1-cookie-banner-pd-consent-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-21-composed-spec-linter-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-22-b2-cookie-banner-library-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/specs/2026-05-22-s2e-e4-audit-dashboard-design.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-03-landing-system-master-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-03-phase-1-skeleton.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-03-phase-2-brainstorming-pipeline.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-04-phase-3-design-pipeline.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-04-phase-4-wp-build-pipeline.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-04-phase-5-deploy-operations.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-04-stage-gates-onboarding-implementation-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-12-prototype-block-library-ux-composer-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-13-photo-pipeline-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-13-pr-d-orchestrator-integration-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-13-visual-generation-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-14-pr-e-onboarding-wizard-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-15-pr-g-stage-lock-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-15-pr-h-content-preserve-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-15-pr-i-a-photo-pipeline-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-15-wiki-graph-pr-f1-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-15-wiki-graph-pr-f2-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-15-wiki-graph-pr-f3-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-15-wiki-graph-pr-f4-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-15-wiki-graph-pr-f5-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-16-pr-i-b-visual-qa-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-16-pr-j-static-prompts-identity-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-18-s2cd-cd1-multisite-foundation.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-19-s2a-landing-config-implementation.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-19-s2a2-snippets-manager.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-19-s2a3-network-admin-unification-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-20-b19-lead-status-workflow-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-20-system-audit-top10-fixes.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-21-b1-cookie-banner-pd-consent-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-21-composed-spec-linter-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-22-b2-cookie-banner-library-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-22-s2e-e1-seo-audit-skill-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-22-s2e-e4-audit-dashboard-plan.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/plans/2026-05-26-wiki-remediation-parallel-tracker.md: SDK call failed: Claude Code returned an error result: success
+- error docs/ПЛАН-ДОРАБОТОК.md: SDK call failed: Claude Code returned an error result: success
+- error docs/BACKLOG.md: SDK call failed: Claude Code returned an error result: success
+- error docs/photo-selection-guide.md: SDK call failed: Claude Code returned an error result: success
+- error docs/superpowers/DOKRUTKA-system.md: SDK call failed: Claude Code returned an error result: success
+- error tests/api_validators/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/deploy/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/e2e/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/gate-check/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/integration/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/onboarding/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/phase-1/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/phase-2/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/phase-3/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/phase-4/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/phase-5/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/phase-niche/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/phase-pra/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/phase-prb/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/phase-prc/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/phase-prd/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/phase-pre/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/phase-preview-panel/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/phase-stage-08/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/poc/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/pr-g/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/pr-h/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/pr-i-a/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/pr-i-b/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/pr-j/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/pr-k/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/pr-l/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/pr-m/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/pr-n/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/pr-o/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/pr-p/README.md: SDK call failed: Claude Code returned an error result: success
+- error tests/preflight/README.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/backport-acf-to-legacy.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/block-loader.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/build-zip.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/check-deps.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/check-wiki-sync.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/deploy.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/derive-landing-structure.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/export-palettes-to-library.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/gate-check.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/gate-state.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/generate-axes-filter.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/generate-palette-css.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/generate-previews.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/generate-wp-blocks.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/install-codex.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/install-git-hooks.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/landing-final-check.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/landing-go-next-stage.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/mark-legacy-projects.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/migrate-add-wiki.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/migrate-blocks-to-wireframe-format.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/migrate-niche-to-v2.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/migrate-state-add-01a.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/migrate-state-for-prd.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/migrate-template-readmes.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/migrate-to-preview-panel.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/preflight.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/preview-blocks-library.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/refresh-catalog.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/render-pipeline-map.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/setup-flag.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/snapshot-palettes-to-project.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/test-pipeline.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/validate-all.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/validate-palettes.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/verify-composed-has-visuals.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/verify-composed-premium.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/verify-content-preserved.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/verify-gutenberg-json.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/verify-identity-preserved.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/verify-photo-pipeline.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/verify-php-syntax.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/verify-site-url.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/verify-visual-qa.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/verify_content_preserved.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/verify_photo_pipeline.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/verify_visual_qa.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wizard-check-materials.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wizard.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/extract-effects/build-patterns-library.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/extract-effects/extract-patterns.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/extract-effects/scrape-css.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/import-blocks/codex-analyze-structure.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/import-blocks/generate-blocks.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/import-blocks/import-from-url.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/import-blocks/take-page-screenshot.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/import-blocks/update-catalog.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/lib/check-block-registration.sh.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/lib/content_parser.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/lib/stage_08_helper.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/cleanup_broken_links.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/compile.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/config.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/conversations_compiler.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/flush.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/hash_cache.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/lint.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/preview.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/project_graph_compiler.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/query.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/sdk_client.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/system_compiler.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/utils.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/hooks/pre_compact.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/hooks/session_end.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/hooks/session_start.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/parsers/composed_html.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/parsers/selections_yaml.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/parsers/state_yaml.py.doc.md: SDK call failed: Claude Code returned an error result: success
+- error scripts/wiki/parsers/tokens_json.py.doc.md: SDK call failed: Claude Code returned an error result: success
