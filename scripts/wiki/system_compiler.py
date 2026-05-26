@@ -151,10 +151,20 @@ def compile_system(
     skipped: list[str] = []
     errors: list[str] = []
 
+    # Count total upfront so progress lines can show [N/total].
+    all_sources = [
+        (sd, sp)
+        for sd in sources
+        for sp in sorted(repo_root.glob(sd["path"]))
+    ]
+    total_sources = len(all_sources)
+    idx = 0
+
     for source_def in sources:
         pattern = source_def["path"]
         concept_dir = source_def["concept_dir"]
         for source_path in sorted(repo_root.glob(pattern)):
+            idx += 1
             rel_key = source_path.relative_to(repo_root).as_posix()
             slug = _slug_for_source(source_path)
             concept_path = wiki_dir / "concepts" / concept_dir / f"{slug}.md"
@@ -176,9 +186,14 @@ def compile_system(
                     )
                 continue
 
+            print(
+                f"[{idx}/{total_sources}] compiling {rel_key} ...",
+                flush=True,
+            )
             try:
                 content = _compile_concept(source_path, repo_root)
             except sdk_client.SDKError as e:
+                print(f"  ! SDK error: {e}", flush=True)
                 errors.append(f"{rel_key}: {e}")
                 # Кэшируем hash даже при ошибке — иначе post-commit будет
                 # звать SDK на этот файл КАЖДЫЙ раз. Пользователь увидит
