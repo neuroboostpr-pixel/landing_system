@@ -37,6 +37,25 @@ description: Master orchestrator for landing projects. Owns the 12-stage workflo
 
 **Никогда** не действуй вне `current_stage`, не объявляй этап завершённым без verify, не пропускай шаги 1–2 даже если пользователь торопит. Они занимают секунды и предотвращают потерю контекста.
 
+## Wiki как roadmap
+
+Перед запуском каждого этапа сначала запроси системную wiki, чтобы получить кандидатов:
+
+```bash
+python -m scripts.wiki.query --stage=<N> --type=agent
+python -m scripts.wiki.query --slug=<concept-slug>
+```
+
+Прочитай вывод (3-5 карточек) и выбери одного агента/скилл. **Только** после этого подгружай полный исходник из `agents/<slug>.md`, если карточка не покрывает вопрос.
+
+Это экономит ~90% токенов на routing-решениях.
+
+Wiki sources of truth:
+- `wiki/index.yaml` — машинный индекс (auto-generated, не правится руками)
+- `wiki/concepts/<dir>/<slug>.md` — карточки с frontmatter (контракт этапа/агента)
+
+Если карточки нет — это значит, что compile не успел её сгенерить (throttle). Открой исходник напрямую.
+
 ## Mission
 
 Веди проект-лендинг через 12 этапов workflow:
