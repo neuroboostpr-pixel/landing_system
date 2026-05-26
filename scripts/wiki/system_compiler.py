@@ -101,8 +101,8 @@ def _build_index(concepts: list[dict[str, Any]]) -> str:
             continue
         lines.append(title)
         lines.append("")
-        for c in sorted(groups[type_], key=lambda x: x.get("file_stem", "")):
-            stem = c.get("file_stem", "?")
+        for c in sorted(groups[type_], key=lambda x: x.get("slug", x.get("file_stem", ""))):
+            stem = c.get("slug") or c.get("file_stem", "?")
             name = c.get("name") or stem
             lines.append(f"- [[{stem}]] — {name}")
         lines.append("")
@@ -156,6 +156,31 @@ def _build_yaml_index(concepts: list[dict[str, Any]]) -> str:
         "concepts": cleaned,
     }
     return _yaml.safe_dump(doc, allow_unicode=True, sort_keys=False)
+
+
+def _summary_entry_from_meta(
+    slug: str, meta: dict[str, Any], rel_key: str, concept_dir: str
+) -> dict[str, Any]:
+    """Превращает frontmatter карточки в запись для index.yaml."""
+    return {
+        "slug": slug,
+        "type": meta.get("type", "unknown"),
+        "stage": meta.get("stage"),
+        "name": meta.get("name", slug),
+        "tags": meta.get("tags"),
+        "triggers": meta.get("triggers"),
+        "inputs": meta.get("inputs"),
+        "outputs": meta.get("outputs"),
+        "gates": meta.get("gates"),
+        "pre_reqs": meta.get("pre_reqs"),
+        "related": meta.get("related"),
+        "invoked_by": meta.get("invoked_by"),
+        "uses_skills": meta.get("uses_skills"),
+        "confidence": meta.get("confidence"),
+        "incomplete": meta.get("incomplete"),
+        "card": f"concepts/{concept_dir}/{slug}.md",
+        "source": rel_key,
+    }
 
 
 def _append_log(log_path: Path, entries: list[str]) -> None:
@@ -240,12 +265,7 @@ def compile_system(
                         concept_path.read_text(encoding="utf-8")
                     )
                     concepts_summary.append(
-                        {
-                            "file_stem": slug,
-                            "type": meta.get("type", "unknown"),
-                            "name": meta.get("name", slug),
-                            "source": rel_key,
-                        }
+                        _summary_entry_from_meta(slug, meta, rel_key, concept_dir)
                     )
                 continue
 
@@ -277,12 +297,7 @@ def compile_system(
 
             meta, _ = utils.parse_frontmatter(content)
             concepts_summary.append(
-                {
-                    "file_stem": slug,
-                    "type": meta.get("type", "unknown"),
-                    "name": meta.get("name", slug),
-                    "source": rel_key,
-                }
+                _summary_entry_from_meta(slug, meta, rel_key, concept_dir)
             )
             if not dry_run:
                 utils.atomic_write(concept_path, content)
@@ -295,7 +310,12 @@ def compile_system(
     if not dry_run and (compiled or errors):
         hash_cache.save_cache(cache_path, cache)
 
-    # Индекс
+    # YAML index — машинный, всегда детерминирован
+    if not dry_run and concepts_summary:
+        yaml_index_content = _build_yaml_index(concepts_summary)
+        utils.atomic_write(wiki_dir / "index.yaml", yaml_index_content)
+
+    # Markdown index — для людей
     if concepts_summary:
         try:
             index_content = _build_index(concepts_summary)

@@ -226,3 +226,74 @@ def test_failed_sdk_call_still_caches_source_hash(tmp_path: Path) -> None:
         "on every subsequent commit (token leak)."
     )
     assert cache["agents/broken.md"] == hash_cache.compute_hash(src)
+
+
+def test_compile_emits_index_yaml(fake_repo, tmp_path, mocker):
+    """compile_system должен писать wiki/index.yaml с правильной структурой."""
+    import yaml
+
+    wiki = tmp_path / "wiki"
+    mocker.patch(
+        "scripts.wiki.system_compiler.sdk_client.generate",
+        return_value=(
+            "---\n"
+            "slug: sample-agent\n"
+            "type: agent\n"
+            "name: sample-agent\n"
+            "tags: [demo]\n"
+            "triggers: [test-trigger]\n"
+            "---\n"
+            "Body."
+        ),
+    )
+    mocker.patch(
+        "scripts.wiki.system_compiler._build_index",
+        return_value="# Index stub",
+    )
+    sources = [{"path": "agents/*.md", "concept_dir": "agents"}]
+
+    system_compiler.compile_system(
+        repo_root=fake_repo, wiki_dir=wiki, sources=sources
+    )
+
+    index_yaml = wiki / "index.yaml"
+    assert index_yaml.exists()
+    data = yaml.safe_load(index_yaml.read_text(encoding="utf-8"))
+    assert data["version"] == 1
+    assert data["counts"]["total"] == 1
+    concept = data["concepts"][0]
+    assert concept["slug"] == "sample-agent"
+    assert concept["type"] == "agent"
+    assert concept["tags"] == ["demo"]
+    assert concept["triggers"] == ["test-trigger"]
+    assert concept["card"] == "concepts/agents/sample-agent.md"
+
+
+def test_concepts_summary_carries_extended_frontmatter(fake_repo, tmp_path, mocker):
+    """После compile concepts_summary должен содержать tags/triggers/related."""
+    wiki = tmp_path / "wiki"
+    mocker.patch(
+        "scripts.wiki.system_compiler.sdk_client.generate",
+        return_value=(
+            "---\n"
+            "slug: sample-agent\n"
+            "type: agent\n"
+            "name: sample-agent\n"
+            "tags: [a, b]\n"
+            "related: [x, y]\n"
+            "---\n"
+            "body"
+        ),
+    )
+    mocker.patch(
+        "scripts.wiki.system_compiler._build_index",
+        return_value="idx",
+    )
+    sources = [{"path": "agents/*.md", "concept_dir": "agents"}]
+    system_compiler.compile_system(repo_root=fake_repo, wiki_dir=wiki, sources=sources)
+
+    import yaml
+    data = yaml.safe_load((wiki / "index.yaml").read_text(encoding="utf-8"))
+    concept = data["concepts"][0]
+    assert concept["tags"] == ["a", "b"]
+    assert concept["related"] == ["x", "y"]
