@@ -28,7 +28,10 @@ def _load_index(wiki_dir: Path) -> dict[str, Any]:
     index_yaml = wiki_dir / "index.yaml"
     if not index_yaml.exists():
         return {"version": 1, "concepts": []}
-    return yaml.safe_load(index_yaml.read_text(encoding="utf-8")) or {}
+    try:
+        return yaml.safe_load(index_yaml.read_text(encoding="utf-8")) or {}
+    except yaml.YAMLError:
+        return {"version": 1, "concepts": []}
 
 
 def filter_concepts(
