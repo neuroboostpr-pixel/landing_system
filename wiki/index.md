@@ -2,8 +2,8 @@
 
 > Авто-сгенерированный индекс. Обновляется при `python -m scripts.wiki.compile --source-mode=system`.
 
-**Концептов всего:** 59
-**Категории:** agent, skill
+**Концептов всего:** 79
+**Категории:** agent, command, skill
 
 **Известные ограничения:**
 - Блоки из `block-library/` ещё не в wiki — отдельная задача.
@@ -73,3 +73,26 @@
 - [[wp-gutenberg-block-builder]] — WP Gutenberg Block Builder
 - [[wp-landing-config]] — WP Landing Config — mu-plugin для настройки лендинга
 - [[wp-multisite]] — WP Multisite — управление Multisite-сетью на Beget
+- [[wp-theme-assembler]] — Сборщик WordPress-темы
+
+## ⚡ Команды
+
+- [[landing-brand]] — /landing-brand — Построить бренд-кит
+- [[landing-build]] — /landing-build — Сборка WordPress-темы
+- [[landing-clone]] — Клонирование лендинга
+- [[landing-compose]] — /landing-compose — Сборка composed.html
+- [[landing-content]] — Контент-адаптация прототипа (Stage 07)
+- [[landing-deploy]] — Деплой лендинга на Бегет (/landing-deploy)
+- [[landing-design]] — Генерация дизайн-системы (этап 05)
+- [[landing-final-check]] — Финальная проверка лендинга
+- [[landing-from-context]] — Создать лендинг из контекста агентства
+- [[landing-go]] — /landing-go — Главная команда оркестратора
+- [[landing-help]] — Справка по командам системы
+- [[landing-import-blocks]] — Импорт блоков из URL в block-library
+- [[landing-moodboard]] — Команда /landing-moodboard
+- [[landing-new]] — /landing-new — создать новый проект лендинга
+- [[landing-niche]] — Анализ ниши /landing-niche
+- [[landing-onboarding]] — Команда первичной настройки /landing-onboarding
+- [[landing-photos]] — /landing-photos — Конвейер клиентских фото (stage 07c)
+- [[landing-previews]] — /landing-previews — Превью на устройствах
+- [[landing-prototype]] — /landing-prototype — Импорт прототипа
