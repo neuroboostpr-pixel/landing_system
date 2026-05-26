@@ -40,12 +40,22 @@ def _slug_for_source(path: Path) -> str:
 
 
 def _compile_concept(
-    source_path: Path, repo_root: Path
+    source_path: Path,
+    repo_root: Path,
+    known_slugs: list[str] | None = None,
 ) -> str:
     """Зовёт SDK для одного исходника, возвращает markdown концепта."""
     system_prompt = _load_prompt("system_concept.md")
     rel = source_path.relative_to(repo_root).as_posix()
-    user_msg = f"Источник: `{rel}`\n\n---\n\n{source_path.read_text(encoding='utf-8')}"
+    slugs_block = ""
+    if known_slugs:
+        slugs_list = ", ".join(sorted(set(known_slugs)))
+        slugs_block = f"\n\n## Known slugs (для related/pre_reqs)\n{slugs_list}\n"
+    user_msg = (
+        f"Источник: `{rel}`\n\n---\n\n"
+        f"{source_path.read_text(encoding='utf-8')}"
+        f"{slugs_block}"
+    )
     return sdk_client.generate(system=system_prompt, user=user_msg)
 
 
@@ -222,6 +232,11 @@ def compile_system(
                     cache[rel_key] = hash_cache.compute_hash(source_path)
         hash_cache.save_cache(cache_path, cache)
 
+    existing_slugs: list[str] = []
+    concepts_root = wiki_dir / "concepts"
+    if concepts_root.exists():
+        existing_slugs = [p.stem for p in concepts_root.rglob("*.md")]
+
     concepts_summary: list[dict[str, Any]] = []
     compiled: list[str] = []
     skipped: list[str] = []
@@ -284,7 +299,7 @@ def compile_system(
             )
             sdk_calls_used += 1
             try:
-                content = _compile_concept(source_path, repo_root)
+                content = _compile_concept(source_path, repo_root, known_slugs=existing_slugs)
             except sdk_client.SDKError as e:
                 print(f"  ! SDK error: {e}", flush=True)
                 errors.append(f"{rel_key}: {e}")

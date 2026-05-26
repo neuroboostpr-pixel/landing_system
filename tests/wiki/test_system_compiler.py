@@ -269,6 +269,31 @@ def test_compile_emits_index_yaml(fake_repo, tmp_path, mocker):
     assert concept["card"] == "concepts/agents/sample-agent.md"
 
 
+def test_compile_concept_includes_known_slugs_in_user_prompt(fake_repo, tmp_path, mocker):
+    """SDK получает список known slug'ов в user-prompt — модель не выдумывает refs."""
+    wiki = tmp_path / "wiki"
+    # Pre-create a concept so it's a known slug
+    (wiki / "concepts" / "agents").mkdir(parents=True)
+    (wiki / "concepts" / "agents" / "existing-agent.md").write_text(
+        "---\nslug: existing-agent\ntype: agent\nname: existing-agent\n---\nbody",
+        encoding="utf-8",
+    )
+
+    captured = {}
+    def fake_generate(system, user):
+        captured["user"] = user
+        return "---\nslug: sample-agent\ntype: agent\nname: sample-agent\n---\nbody"
+
+    mocker.patch("scripts.wiki.system_compiler.sdk_client.generate", side_effect=fake_generate)
+    mocker.patch("scripts.wiki.system_compiler._build_index", return_value="idx")
+
+    sources = [{"path": "agents/*.md", "concept_dir": "agents"}]
+    system_compiler.compile_system(repo_root=fake_repo, wiki_dir=wiki, sources=sources)
+
+    assert "existing-agent" in captured["user"]
+    assert "known slugs" in captured["user"].lower() or "known_slugs" in captured["user"].lower()
+
+
 def test_concepts_summary_carries_extended_frontmatter(fake_repo, tmp_path, mocker):
     """После compile concepts_summary должен содержать tags/triggers/related."""
     wiki = tmp_path / "wiki"
