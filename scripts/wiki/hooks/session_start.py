@@ -1,23 +1,18 @@
 #!/usr/bin/env python3
-"""SessionStart hook: печатает wiki/index + memory index в stdout.
+"""SessionStart hook: печатает компактный wiki hint (~50 tokens).
 
-Claude Code инжектит вывод как system context.
+Old behavior (deprecated): инжектил полный wiki/index.md (~3K tokens) на каждой
+сессии. New behavior: печатает только пойнтер на wiki/index.yaml + команду
+запроса. Orchestrator решает САМ, когда подгружать карточки.
 
-Логика:
-1. cwd = текущая папка сессии (передаётся через stdin JSON).
-2. Если cwd внутри landing-system/ → читать landing-system/wiki/index.md.
-3. Если cwd похож на ~/Lendings/<slug>/ → читать <slug>/wiki/index.md + последний daily log.
-4. Если оба пути актуальны (например работаем в landing-system над проектом)
-   → инжектить ОБА индекса.
-
-Скрипт быстрый (<1 сек), без сетевых вызовов.
+Сохраняет проектный wiki (~/Lendings/<slug>/wiki/index.md) и recent memory —
+они контекстные и компактные.
 """
 from __future__ import annotations
 
 import json
 import sys
 from pathlib import Path
-
 
 LANDING_SYSTEM = Path(__file__).resolve().parents[3]
 
@@ -34,19 +29,45 @@ def _read_or_empty(p: Path, max_chars: int = 8000) -> str:
         return ""
 
 
-def _detect_project_slug(cwd: Path) -> str | None:
-    """Если cwd внутри LANDINGS_ROOT/<slug>/ — вернуть slug."""
-    from scripts.lib.paths import LANDINGS_ROOT
+def _system_wiki_hint(cwd: Path) -> str:
+    """50-token hint про существование системной wiki + команду запроса.
+
+    Только если CWD находится внутри LANDING_SYSTEM.
+    """
     try:
-        rel = cwd.resolve().relative_to(LANDINGS_ROOT)
+        cwd.resolve().relative_to(LANDING_SYSTEM)
     except ValueError:
+        return ""
+
+    index_yaml = LANDING_SYSTEM / "wiki" / "index.yaml"
+    if not index_yaml.exists():
+        return ""
+    try:
+        import yaml
+        data = yaml.safe_load(index_yaml.read_text(encoding="utf-8")) or {}
+    except Exception:
+        return ""
+    total = (data.get("counts") or {}).get("total", "?")
+    return (
+        "<wiki_runtime>\n"
+        f"Landing-system wiki: {total} concepts indexed at wiki/index.yaml.\n"
+        "Query: python -m scripts.wiki.query --stage=N --type=T --tag=X --slug=Y\n"
+        "Read card: cat wiki/concepts/<dir>/<slug>.md\n"
+        "</wiki_runtime>"
+    )
+
+
+def _detect_project_slug(cwd: Path) -> str | None:
+    try:
+        from scripts.lib.paths import LANDINGS_ROOT
+        rel = cwd.resolve().relative_to(LANDINGS_ROOT)
+        parts = rel.parts
+        return parts[0] if parts else None
+    except (ValueError, ImportError):
         return None
-    parts = rel.parts
-    return parts[0] if parts else None
 
 
 def _latest_daily(memory_dir: Path) -> str:
-    """Читает последний файл из memory/daily/."""
     daily = memory_dir / "daily"
     if not daily.exists():
         return ""
@@ -67,27 +88,29 @@ def main() -> int:
 
     chunks: list[str] = []
 
-    # Системный wiki — если работаем в landing-system или его дочерней папке
-    try:
-        cwd.resolve().relative_to(LANDING_SYSTEM)
-        sys_index = LANDING_SYSTEM / "wiki" / "index.md"
-        text = _read_or_empty(sys_index)
-        if text:
-            chunks.append(f"<system_wiki_index>\n{text}\n</system_wiki_index>")
-    except ValueError:
-        pass
+    # System wiki hint (~50 tokens, only when inside landing-system)
+    hint = _system_wiki_hint(cwd)
+    if hint:
+        chunks.append(hint)
 
-    # Проектный wiki — если работаем в LANDINGS_ROOT/<slug>/
+    # Project wiki — full inject (small per-project file, kept as-is)
     slug = _detect_project_slug(cwd)
     if slug:
-        from scripts.lib.paths import project_dir
-        project = project_dir(slug)
-        proj_index = _read_or_empty(project / "wiki" / "index.md")
-        if proj_index:
-            chunks.append(f"<project_wiki_index project=\"{slug}\">\n{proj_index}\n</project_wiki_index>")
-        memory_recent = _latest_daily(project / "memory")
-        if memory_recent:
-            chunks.append(f"<project_recent_memory project=\"{slug}\">\n{memory_recent}\n</project_recent_memory>")
+        try:
+            from scripts.lib.paths import project_dir
+            project = project_dir(slug)
+            proj_index = _read_or_empty(project / "wiki" / "index.md")
+            if proj_index:
+                chunks.append(
+                    f"<project_wiki_index project=\"{slug}\">\n{proj_index}\n</project_wiki_index>"
+                )
+            memory_recent = _latest_daily(project / "memory")
+            if memory_recent:
+                chunks.append(
+                    f"<project_recent_memory project=\"{slug}\">\n{memory_recent}\n</project_recent_memory>"
+                )
+        except ImportError:
+            pass
 
     if chunks:
         print("\n\n".join(chunks))
