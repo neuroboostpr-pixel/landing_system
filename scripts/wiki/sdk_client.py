@@ -68,9 +68,16 @@ def generate(system: str, user: str) -> str:
     """Вызывает SDK и возвращает очищенный ответ.
 
     Raises:
-        SDKError: если SDK вернул пустую строку.
+        SDKError: если SDK вернул пустую строку или упал с ошибкой
+            (включая ``Claude Code returned an error result: ...`` от
+            claude_agent_sdk при is_error=True + ненулевом exit).
     """
-    response = _sdk_query(system=system, user=user)
+    try:
+        response = _sdk_query(system=system, user=user)
+    except SDKError:
+        raise
+    except Exception as e:
+        raise SDKError(f"SDK call failed: {e}") from e
     content = (response.content or "").strip()
     if not content:
         raise SDKError("SDK вернул пустой content")
