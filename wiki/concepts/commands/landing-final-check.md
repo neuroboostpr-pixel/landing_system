@@ -2,60 +2,64 @@
 type: command
 name: landing-final-check
 sources: ["commands/landing-final-check.md"]
-updated: 2026-05-25
+updated: 2026-05-26
 triggers:
-  - "финальная проверка лендинга перед деплоем"
-  - "запустить все проверки качества проекта"
-  - "проверить лендинг перед публикацией"
-  - "bundle-проверка перед деплоем"
+  - "проверить лендинг перед деплоем"
+  - "финальная проверка проекта"
+  - "запустить все проверки качества"
+  - "убедиться что всё готово к деплою"
 stage: ""
 uses:
   - landing-deploy
   - landing-compose
   - landing-photos
   - landing-visuals
-tags: ["qa", "deploy", "check", "bundle", "final"]
+  - landing-qa
+tags:
+  - quality
+  - pre-deploy
+  - gate
 ---
 
-# Landing Final Check — финальная авто-проверка перед деплоем
+# /landing-final-check — Финальная проверка лендинга
 
 ## Что делает
 
-Запускает все встроенные проверки качества лендинга одной командой и формирует сводный отчёт. Если хоть одна обязательная проверка упала — команда сигнализирует об ошибке и не даёт двигаться на деплой.
+Запускает все обязательные проверки качества проекта одной командой — своеобразный «чек-лист перед взлётом». Если хотя бы одна обязательная проверка не прошла, команда сигнализирует об ошибке и не позволяет двигаться к деплою.
 
 ## Когда вызывать / в каком этапе
 
-Вызывается вручную перед этапом 09 (деплой), когда уже готовы: composed.html (07b), фото (07c), визуалы (07d). Идеальная точка — непосредственно перед `/landing-deploy`, когда все контентные этапы утверждены.
+Вызывается вручную перед этапом 09 (деплой на Бегет). Это финальный барьер качества — после всех этапов pipeline: compose готов, фото обработаны, визуалы сгенерированы, контент утверждён. Обычно предшествует `/landing-deploy`.
 
 ## Что на вход / на выход
 
 **Вход:**
-- `<project>` — slug проекта в `~/Lendings/`
-- Должны существовать артефакты: `07b_COMPOSED/composed.html`, `07c_PHOTOS/processed/`, `07d_VISUALS/`, опционально — `wiki/` и `10_QA/visual-qa/`
+- Имя проекта `<project>` — slug папки в `~/Lendings/`
+- Собранный проект: `07b_COMPOSED/composed.html`, обработанные фото в `07c_PHOTOS/processed/`, визуалы в `07d_VISUALS/`
 
 **Выход:**
-- stdout — краткая сводка по каждой проверке (pass / fail / optional-skip)
-- `<project>/10_QA/final-check-report.md` — детальный отчёт с разбивкой по всем шести проверкам
-- exit 0 — все обязательные проверки прошли
-- exit 1 — хотя бы одна обязательная проверка провалилась
+- Краткая сводка в stdout — быстрый обзор статуса каждой проверки
+- `<project>/10_QA/final-check-report.md` — детальный отчёт с результатом каждой проверки
+- Exit-код: `0` — все обязательные проверки прошли, `1` — есть хотя бы один провал
 
-**Состав bundle-проверок:**
+**Проверки в bundle:**
 
-| Проверка | Обязательная |
+| Проверка | Обязательность |
 |---|---|
-| Wiki sync | опционально |
-| Composed premium (13 фич) | ✅ |
-| Content preserved (текст прототипа) | ✅ |
-| Photo pipeline (processed/, no placeholders, hero no-crop) | ✅ |
-| Identity preserved (manifest без violations) | ✅ |
-| Visual QA | опционально |
+| Wiki sync | Опционально |
+| Composed premium (13 фич) | Обязательно |
+| Content preserved (текст прототипа) | Обязательно |
+| Photo pipeline (фото в processed/, нет placeholder, hero без кадрирования) | Обязательно |
+| Identity preserved (manifest без violations) | Обязательно |
+| Visual QA | Опционально |
 
 ## Связанные концепты
 
-- [[landing-deploy]] — следующий этап; `/landing-final-check` является его мягким prerequisite
-- [[landing-compose]] — формирует `composed.html`, который проверяет composed-premium и content-preserved
-- [[landing-photos]] — формирует `07c_PHOTOS/processed/`, который проверяет photo-pipeline
-- [[landing-visuals]] — формирует `07d_VISUALS/`, входит в состав visual QA
+- [[landing-deploy]] — следующий шаг после успешной финальной проверки
+- [[landing-compose]] — формирует `composed.html`, который проверяет composed-premium
+- [[landing-photos]] — обрабатывает фото, результат проверяется photo-pipeline гейтом
+- [[landing-visuals]] — генерирует иконки/инфографику, проходят visual-qa
+- [[landing-qa]] — связанная QA-команда для частичных проверок
 
 ## Источник
 

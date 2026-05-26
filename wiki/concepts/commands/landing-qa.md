@@ -2,69 +2,56 @@
 type: command
 name: landing-qa
 sources: ["commands/landing-qa.md"]
-updated: 2026-05-25
+updated: 2026-05-26
 triggers:
   - "запустить визуальный QA"
   - "проверить composed.html перед деплоем"
-  - "сделать скриншоты и найти баги вёрстки"
-  - "visual qa перед этапом 09"
-stage: "07c / 07f / 09"
+  - "сделать скриншоты и проанализировать лендинг"
+  - "финальный контроль качества"
+stage: "07c / 07f / перед 09"
 uses:
   - visual-qa
 tags:
   - qa
-  - visual
-  - playwright
+  - screenshot
   - codex
-  - screenshots
+  - playwright
+  - auto-fix
 ---
 
 # /landing-qa — Визуальный QA перед деплоем
 
 ## Что делает
 
-Делает автоматические скриншоты лендинга (desktop + mobile), анализирует их через codex CLI и выдаёт читаемый отчёт со списком визуальных проблем. При желании может сразу попробовать исправить найденные баги.
+Запускает финальную визуальную проверку лендинга: делает скриншоты на desktop и mobile через Playwright, анализирует их с помощью codex CLI и формирует читаемый отчёт со списком найденных проблем.
 
 ## Когда вызывать / в каком этапе
 
-Вызывать вручную в трёх ситуациях:
-- после закрытия этапа **07c** (`composed.html`) или **07f** (`composed_final`);
-- перед деплоем на этапе **09**;
+Вызывается вручную в трёх ситуациях:
+- перед закрытием этапа `07c_composed` или `07f_composed_final`;
+- перед деплоем на Бегет (этап 09);
 - после любых ручных правок в HTML/CSS.
 
-Поддерживает три режима запуска:
-```
-/landing-qa <project>            # диагностика без ошибок
-/landing-qa <project> --strict   # exit с ошибкой при critical issues
-/landing-qa <project> --iterate  # auto-fix цикл, максимум 3 итерации
-```
+Поддерживает три режима:
+- без флагов — диагностический прогон;
+- `--strict` — завершается с ошибкой, если найдены критические issues;
+- `--iterate` — пробует auto-fix и повторяет цикл до 3 раз.
 
 ## Что на вход / на выход
 
 **Вход:**
-- `<project>/07b_COMPOSED/composed.html` (или `07f_COMPOSED_FINAL/`) — HTML-файл лендинга
+- `<project>/07b_COMPOSED/composed.html` или `07f_COMPOSED_FINAL/` — HTML-файл для анализа.
 
 **Выход:**
-- `<project>/10_QA/screenshots/iter-N/desktop.png` — скриншот 1280×800
-- `<project>/10_QA/screenshots/iter-N/mobile.png` — скриншот 375×812
-- `<project>/10_QA/screenshots/iter-N/desktop-review.json` — JSON с issues от codex
-- `<project>/10_QA/screenshots/iter-N/mobile-review.json` — аналогично для mobile
-- `<project>/10_QA/visual-qa-report.md` — финальный читаемый отчёт
+- `10_QA/screenshots/iter-1/desktop.png` + `mobile.png` — скриншоты двух брейкпоинтов (1280×800 и 375×812);
+- `10_QA/screenshots/iter-1/desktop-review.json` + `mobile-review.json` — сырой JSON от codex с полем `issues`;
+- `10_QA/visual-qa-report.md` — итоговый читаемый отчёт для маркетолога/дизайнера.
 
-**Стоимость:** ~$0.10 за один скриншот-ревью; полный прогон (desktop + mobile) — около $0.20–0.40.
-
-## Как работает внутри
-
-1. Открывает HTML через Playwright.
-2. Делает скриншоты desktop и mobile.
-3. Отправляет каждый скриншот в `codex exec -i screenshot.png` с промптом QA-инженера.
-4. Получает JSON-ответ `{"issues": [...], "summary": "..."}`.
-5. Сохраняет артефакты и генерирует `visual-qa-report.md`.
-6. При флаге `--iterate` — запускает `apply-fix.py`, применяет исправления и повторяет цикл (до 3 раз).
+**Стоимость:** ~$0.10 за один скриншот-ревью, итого ~$0.20–$0.40 за полный прогон.
 
 ## Связанные концепты
 
-- [[visual-qa]] — скилл, реализующий логику скриншотов и анализа через codex
+- [[visual-qa]] — скилл, реализующий логику Playwright + codex-анализа, на который опирается команда
 
 ## Источник
 

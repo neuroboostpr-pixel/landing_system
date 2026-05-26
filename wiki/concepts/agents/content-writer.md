@@ -2,46 +2,52 @@
 type: agent
 name: content-writer
 sources: ["agents/content-writer.md"]
-updated: 2026-05-25
+updated: 2026-05-26
 triggers: []
-stage: "07_content"
-uses: ["landing-orchestrator", "niche-analyst", "brand-architect", "design-system-builder"]
+stage: "07"
+uses: ["landing-orchestrator", "niche-analyst", "brand-architect", "design-system-builder", "landing-prototype"]
 tags: ["copywriting", "content", "stage-07", "seo"]
 ---
 
-# content-writer (Контент-райтер)
+# Content Writer — Контент-райтер
 
 ## Что делает
-Превращает сырой прототип текста в готовые тексты для каждого блока лендинга. Адаптирует тон под стратегический режим (rational / emotional / trust), исключает Lorem ipsum, использует только реальные данные клиента.
+Берёт прототип текста лендинга и адаптирует его под конкретные блоки страницы: пишет финальный копирайт и SEO-тексты на основе реальных данных клиента, позиционирования и дизайн-системы. Lorem ipsum запрещён — только живые тексты.
 
 ## Когда вызывать / в каком этапе
-Активируется на **этапе 07_content**. Запускается оркестратором (`landing-orchestrator`) или вручную через `/landing-content`. До запуска требует закрытых этапов 01a (анализ ниши), 05 (дизайн-система) и 06 (стек). `PreToolUse`-хук физически блокирует запись файлов, если предшественники не закрыты.
+Активируется на **этапе 07 (07_content)**. Запускается агентом `landing-orchestrator` или вручную командой `/landing-content`. Перед стартом агент проверяет, что `.landing-state.yaml` содержит `current_stage == 07_content`, иначе останавливается. Все предшествующие этапы (01a, 02, 05, 06, 07_прототип) должны быть закрыты — harness-хук `enforce_stage_gate.py` физически блокирует запись в файлы, если гейты открыты.
 
 ## Что на вход / на выход
 
-**Входные артефакты:**
+**Вход:**
 - `01a_АНАЛИЗ_НИШИ/positioning.md` — режим (Mode) и углы отстройки
 - `01a_АНАЛИЗ_НИШИ/landing-structure.md` — таблица блоков (источник истины по порядку)
-- `01a_АНАЛИЗ_НИШИ/market-profile.md` — тир доступности, культурный контекст
+- `01a_АНАЛИЗ_НИШИ/market-profile.md` — `accessibility_tier` и `cultural_context`
 - `07_ПРОТОТИП/prototype.md` — исходный прототип текста
 - `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` — детали секций
 - `06_СТЕК/design-stack.yaml` — компонентная библиотека
-- `02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/` — реальные отзывы
-- `02_МАТЕРИАЛЫ_КЛИЕНТА/assets-manifest.yaml` — перечень ассетов
+- `02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/` + `assets-manifest.yaml` — реальные отзывы и ассеты
 
-**Выходные артефакты:**
-- `07_КОНТЕНТ/final-copy.md` — финальные тексты, разложенные по блокам лендинга
-- `07_КОНТЕНТ/seo-copy.md` — SEO-заголовки, meta description, варианты h1
+**Выход:**
+- `07_КОНТЕНТ/final-copy.md` — финальный копирайт, разложенный строго по блокам из `landing-structure.md`
+- `07_КОНТЕНТ/seo-copy.md` — SEO-заголовки, meta description и варианты h1
 
-**Hard gate:** показывает `final-copy.md` пользователю и ждёт явного утверждения перед закрытием этапа.
+После записи файлов агент показывает `final-copy.md` пользователю и ждёт явного утверждения (**HARD GATE**).
+
+## Тональность по режиму (Mode)
+Режим берётся из `positioning.md` (строка `**Mode:**`):
+- **rational** — факты, цифры, функциональный benefit; без статусных обещаний
+- **emotional_aspiration** — aspirational, структура StoryBrand; цифры — не в Hero
+- **trust_authority** — каждый claim с доказательством (имя, дата, число)
+- **hybrid:X+Y** — основной тон + 1–2 блока поддержки secondary
+- **legacy_v1** — старые проекты до 2026-05-06, без mode-аугментации
 
 ## Связанные концепты
-- [[landing-orchestrator]] — вызывает агента в рамках pipeline как часть stage-07
-- [[niche-analyst]] — поставляет positioning.md и landing-structure.md (источник истины по блокам)
-- [[brand-architect]] — поставляет brand-kit и тональность, необходимые для адаптации режима
-- [[design-system-builder]] — поставляет DESIGN.md с деталями типографики и секций
-- [[block-composer]] — использует final-copy.md на этапе 07b для наполнения composed.html
-- [[stage-execution-protocol]] — обязательный протокол: gate-check → Mermaid-карта → TodoWrite → verify → approve
+- [[landing-orchestrator]] — диспатчит агента в рамках pipeline
+- [[niche-analyst]] — поставляет positioning.md и landing-structure.md
+- [[landing-prototype]] — поставляет prototype.md как исходник текста
+- [[design-system-builder]] — поставляет DESIGN.md с деталями секций
+- [[landing-content]] — slash-команда для ручного запуска этапа
 
 ## Источник
 - `agents/content-writer.md`

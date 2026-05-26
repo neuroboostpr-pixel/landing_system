@@ -2,60 +2,42 @@
 type: block
 name: cta-technical-centered-antidiler-karpov-ru-5
 sources: ["block-library/cta/cta-technical-centered-antidiler-karpov-ru-5/meta.yaml"]
-updated: 2026-05-16
+updated: 2026-05-25
 triggers: []
-stage: "07a"
-uses:
-  - ux-composer
-  - block-composer
-  - wireframe-rendering
-  - block-composition
-tags:
-  - cta
-  - technical
-  - centered
-  - premium-auto
-  - services
-  - ecommerce
-  - ru-market
-  - form
+stage: ""
+uses: []
+tags: ["cta", "technical", "centered", "ru-market", "premium-auto", "services", "ecommerce", "form", "one-line-form"]
 ---
 
-# CTA: Подбор запчастей — технический центрированный блок
+# Блок подбора запчастей с формой в одну строку и оранжевой кнопкой
 
 ## Что делает
-
-Блок призыва к действию в техническом стиле: крупный заголовок по центру + горизонтальная форма подбора в одну строку + акцентная оранжевая кнопка. Подходит для автосервисов, интернет-магазинов запчастей и технических сервисов на российском рынке.
+CTA-блок с сильным заголовком и компактной формой подбора запчастей в одну строку — пользователь вводит данные и сразу жмёт оранжевую кнопку. Сделан в техническом стиле, ориентирован на российский рынок.
 
 ## Когда вызывать / в каком этапе
-
-Используется на этапе **07a (UX Wireframe)** — `ux-composer` подбирает блок из библиотеки по нише и layout-паттерну. На этапе **07b (Compose)** — `block-composer` инжектирует design-tokens и реальные тексты из `prototype.yaml`. Хорошо встаёт в секцию CTA в середине или в конце лендинга для ниш `premium-auto`, `services`, `ecommerce`.
+Используется на этапе 07b (Compose) и 07a (Wireframe) при выборе варианта CTA-блока для лендингов в нишах авторынка, услуг или e-commerce. Подходит, когда главный конверсионный элемент — форма подбора или заявки, а не звонок или мессенджер.
 
 ## Что на вход / на выход
-
 **Вход:**
-- Слот `heading` (text, обязательный) — сильный заголовок, формулирующий оффер подбора
-- Design-tokens из `tokens.json` (цвет акцента, типографика)
-- Контент из `prototype.yaml` (текст кнопки, placeholder формы)
+- Слот `heading` (текст, обязательный) — сильный заголовок блока, например «Подберём запчасть за 15 минут».
 
 **Выход:**
-- HTML-секция CTA с центрированным layout, инлайн-формой и оранжевой кнопкой
-- Встраивается в `wireframe.html` (07a) и в `composed.html` (07b)
+- Готовый HTML-блок с заголовком, однострочной формой и оранжевой CTA-кнопкой, вставляемый в `composed.html`.
 
-**Особенности:**
-- `has_animation: false` — нет GSAP/CSS-анимаций, блок статичный
-- `ru_market: true` — оптимизирован под российскую аудиторию
-- `layout_pattern: centered` — всё выровнено по центру
-- Импортирован с [antidiler-karpov.ru](https://antidiler-karpov.ru/) методом codex-block-generation
+## Дополнительные характеристики
+| Параметр | Значение |
+|---|---|
+| Категория | cta |
+| Стиль | technical |
+| Лейаут | centered |
+| Анимации | нет |
+| Ниши | premium-auto, services, ecommerce |
+| Рынок | RU |
+| Источник | antidiler-karpov.ru |
+| Импорт | 2026-05-16, codex-block-generation |
 
 ## Связанные концепты
-
-- [[ux-composer]] — подбирает этот блок из библиотеки при сборке wireframe.html
-- [[block-composer]] — инжектирует tokens и тексты на этапе 07b
-- [[wireframe-rendering]] — скилл, в рамках которого блок рендерится с вариантами
-- [[block-composition]] — скилл 07b, финальная сборка composed.html
-- [[block-library-management]] — управление библиотекой, откуда взят блок
+Нет явных обратных ссылок в исходнике.
 
 ## Источник
-
 - `block-library/cta/cta-technical-centered-antidiler-karpov-ru-5/meta.yaml`

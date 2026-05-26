@@ -2,53 +2,52 @@
 type: agent
 name: moodboard-composer
 sources: ["agents/moodboard-composer.md"]
-updated: 2026-05-25
+updated: 2026-05-26
 triggers: []
 stage: "03"
-uses: ["landing-orchestrator", "stage-execution-protocol", "niche-analysis", "landing-references"]
+uses: ["landing-orchestrator", "stage-execution-protocol", "moodboard-creation"]
 tags: ["moodboard", "references", "visual-direction", "stage-03"]
 ---
 
-# Moodboard Composer — сборщик мудборда
+# Moodboard Composer
 
 ## Что делает
-
-Берёт утверждённые референсы проекта и собирает из них две вещи: текстовое описание визуального направления (`moodboard.md`) и красивую HTML-страницу с карточками референсов (`moodboard.html`). Это итог этапа 03 — основа для бренд-кита и дизайн-системы.
+Агент собирает визуальный мудборд проекта: создаёт текстовое описание выбранного визуального направления (`moodboard.md`) и красивую HTML-страницу с карточками референсов (`moodboard.html`).
 
 ## Когда вызывать / в каком этапе
-
-Запускается автоматически агентом `landing-orchestrator` на этапе **03_references**, после того как пользователь утвердил набор референсов в `03_РЕФЕРЕНСЫ/index.yaml`. До запуска обязательно:
-- `.landing-state.yaml` содержит `current_stage == 03_references`
-- `gate-check.sh` для этапа возвращает exit 0
-
-После формирования `moodboard.html` — **HARD GATE**: пользователь открывает файл в браузере и явно подтверждает направление. Только после этого `style-extractor` переходит к следующему этапу.
+Запускается на **этапе 03 (референсы)**, после того как пользователь утвердил список визуальных референсов (статус `approved` в `index.yaml`). Является частью pipeline между анализом ниши и созданием бренд-кита.
 
 ## Что на вход / на выход
 
 **Вход:**
-- `03_РЕФЕРЕНСЫ/index.yaml` — список референсов со статусом `approved`
-- `01a_АНАЛИЗ_НИШИ/niche-analysis.md` — секция 6 «Что брать с собой» задаёт допустимый визуальный язык
-- `01a_АНАЛИЗ_НИШИ/visual-requirements.md` — секции 1–3, 5–6 определяют требования; referesы из red flag — не брать
+- `03_РЕФЕРЕНСЫ/index.yaml` — список одобренных референсов с тегами
+- `01a_АНАЛИЗ_НИШИ/niche-analysis.md` — секция 6 с визуальным языком ниши
+- `01a_АНАЛИЗ_НИШИ/visual-requirements.md` — визуальные требования (секции 1, 2, 3, 5, 6)
+- `.landing-state.yaml` — должен показывать `current_stage == 03_references`
 
 **Выход:**
-- `03_РЕФЕРЕНСЫ/moodboard.md` — текстовый нарратив: палитра, типографика, motion-вайб, что берём / что отвергаем
-- `03_РЕФЕРЕНСЫ/moodboard.html` — визуальная доска с карточками референсов, открывается в браузере
+- `03_РЕФЕРЕНСЫ/moodboard.md` — текстовый нарратив: палитра, типографика, анимация, что берём и отвергаем
+- `03_РЕФЕРЕНСЫ/moodboard.html` — визуальная доска с карточками референсов (генерируется через `render.py`)
 
-## Как работает
+## Процесс работы
 
-1. Читает `index.yaml`, отбирает только `approved`-референсы.
-2. Запрашивает у пользователя теги для каждого референса (например, `split-screen`, `warm-palette`, `premium-typography`).
-3. Пишет `moodboard.md` с описанием выбранного направления.
-4. Вызывает `python3 skills/moodboard-creation/scripts/render.py <refs-dir>` — генерирует `moodboard.html`.
-5. Ждёт явного подтверждения от пользователя, только потом закрывает gate.
+1. Проверяет `.landing-state.yaml` — stage должен быть `03_references`, иначе STOP
+2. Запускает `render-pipeline-map.sh` и показывает Mermaid-карту пользователю
+3. Создаёт TodoWrite со всеми оставшимися этапами
+4. Проходит `gate-check.sh --stage 03_references` — при exit != 0 останавливается
+5. Читает одобренные референсы, уточняет у пользователя теги каждого
+6. Пишет `moodboard.md` с описанием визуального направления
+7. Запускает `python3 skills/moodboard-creation/scripts/render.py` для генерации HTML
+8. **HARD GATE**: ждёт явного одобрения пользователя после просмотра `moodboard.html`
+
+**Важно:** Если референс попадает в red flag из `visual-requirements.md` секции 6 — не сохранять.
 
 ## Связанные концепты
-
-- [[landing-orchestrator]] — вызывает агента в нужный момент pipeline
-- [[stage-execution-protocol]] — обязательный протокол: state.yaml → Mermaid-карта → TodoWrite → gate-check перед любым Write/Edit
-- [[landing-references]] — предыдущий этап, формирует `index.yaml` с утверждёнными референсами
-- [[niche-analysis]] — `visual-requirements.md` определяет допустимые и запрещённые визуальные решения
+- [[stage-execution-protocol]] — обязательный протокол перед любым Write/Edit действием
+- [[moodboard-creation]] — скилл, содержащий `render.py` для генерации HTML-доски
+- [[landing-orchestrator]] — оркестратор, который вызывает этот агент в нужный момент
+- [[landing-references]] — команда сбора референсов (предшествующий этап)
+- [[landing-brand]] — следующий этап после утверждения мудборда
 
 ## Источник
-
 - `agents/moodboard-composer.md`

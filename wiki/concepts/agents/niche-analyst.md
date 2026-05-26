@@ -2,51 +2,47 @@
 type: agent
 name: niche-analyst
 sources: ["agents/niche-analyst.md"]
-updated: 2026-05-25
+updated: 2026-05-26
 triggers: []
 stage: "01a"
-uses:
-  - landing-orchestrator
-  - niche-analysis
-tags: ["niche", "research", "positioning", "competitors", "market-profile"]
+uses: ["landing-orchestrator", "brand-architect", "content-writer", "wp-builder"]
+tags: ["research", "positioning", "competitors", "market-profile", "stage-01a"]
 ---
 
-# Niche Analyst — Автоматический анализ ниши (этап 01a)
+# Niche Analyst — Агент анализа ниши (Stage 01a)
 
 ## Что делает
-
-Агент самостоятельно исследует нишу клиента: изучает конкурентов, определяет тип бренда, строит рыночный профиль и выбирает режим позиционирования. Всё — без единого вопроса пользователю. Там, где данных не хватает, ставит пометку `[ДОПУЩЕНИЕ]`.
+Автоматически исследует рынок, конкурентов и определяет стратегию позиционирования лендинга. Работает без уточняющих вопросов — при нехватке данных помечает допущения меткой `[ДОПУЩЕНИЕ]` и продолжает.
 
 ## Когда вызывать / в каком этапе
-
-Активируется на этапе **01a** — после заполнения брифа (`00_БРИФ/brief.md`) и до перехода на этап `02_МАТЕРИАЛЫ_КЛИЕНТА`. Запускается через `landing-orchestrator`, который сверяется с `.landing-state.yaml` и проверяет, что `current_stage == 01a_niche_analysis`. Если предшествующий этап не закрыт — агент останавливается.
+Запускается на этапе **01a** — между `01_КОНТЕКСТ` и `02_МАТЕРИАЛЫ_КЛИЕНТА`. Активируется автоматически через `landing-orchestrator` после того, как заполнены бриф (`00_БРИФ/brief.md`) и опциональный контекст (`01_КОНТЕКСТ/context.md`). Вручную не вызывается. Требует, чтобы `.landing-state.yaml` показывал `current_stage == 01a_niche_analysis`.
 
 ## Что на вход / на выход
 
 **Вход:**
 - `00_БРИФ/brief.md` — обязательно
 - `01_КОНТЕКСТ/context.md` — если есть
+- `config/niche-visual-rules.yaml` — справочник визуальных правил по категориям
+- `config/positioning-modes.yaml` — матрица режимов позиционирования
 
 **Выход** (6 артефактов в `01a_АНАЛИЗ_НИШИ/`):
-1. `niche-analysis.md` — обзор ниши, тип бренда, выбранный режим, список допущений (400–800 слов)
-2. `competitors.yaml` — 15–25 конкурентов в 7 ролях (manufacturer, direct, local_competitor и др.)
-3. `market-profile.md` — 8 секций: accessibility tier, consideration cycle, decision unit, regulated, emotional load, cultural context, predicted mode, источники
-4. `positioning.md` — один из трёх шаблонов позиционирования: `rational`, `emotional_aspiration`, `trust_authority` или гибрид
-5. `landing-structure.md` — карта блоков лендинга по комбинации Тип бренда × Mode
-6. `visual-requirements.md` — правила визуала: hero, фотостиль, люди в кадре, red flags, preferences
+- `niche-analysis.md` — обзор ниши, тип бренда, режим, ключевые допущения (400–800 слов)
+- `competitors.yaml` — 15–25 конкурентов в 7 ролях с позиционированием и визуальными заметками
+- `market-profile.md` — 8 секций: accessibility tier (с расчётом ratio цена/доход), цикл принятия решения, регулируемость, эмоциональная нагрузка, культурный контекст, predicted mode
+- `positioning.md` — выбранный режим (`rational` / `emotional_aspiration` / `trust_authority` / `hybrid`) с заполненным шаблоном
+- `landing-structure.md` — карта блоков лендинга по комбинации «Тип бренда × Mode»
+- `visual-requirements.md` — требования к фото и визуалу с red flags и preferences
 
-Каждый артефакт проходит Python-валидатор из `skills/niche-analysis/scripts/`. Все 5 валидаторов должны вернуть exit 0.
+Агент классифицирует бренд по типам: **1 — глобальный**, **2 — региональный**, **3 — локальный без бренда**. Для каждой комбинации Тип × Mode генерируется своя карта блоков (например, Тип 3 + trust_authority → Hero, About, Process, Cases, Reviews, Pricing, CTA, FAQ, Footer).
 
-## Алгоритм в двух словах
-
-Агент парсит бриф → классифицирует бренд (Тип 1/2/3 по охвату Wikipedia и упоминаниям) → собирает конкурентов через WebSearch и скрейпит их через Firecrawl → рассчитывает accessibility tier (цена / медианный доход региона) → выбирает режим позиционирования по матрице из `config/positioning-modes.yaml` → применяет override-индикаторы из брифа → генерирует все 6 артефактов → передаёт управление оркестратору.
+После записи всех артефактов запускает 5 Python-валидаторов (`validate-competitors.py`, `validate-market-profile.py`, `validate-positioning.py`, `validate-landing-structure.py`, `validate-visual-requirements.py`) и ждёт exit 0 от каждого. Финальный gate-check через `scripts/gate-check.sh 01a_niche_analysis` — и передаёт управление обратно оркестратору.
 
 ## Связанные концепты
-
-- [[landing-orchestrator]] — запускает агента, проверяет gate-check и запрашивает approval у пользователя для перехода 01a → 02
-- [[niche-analysis]] — скилл со вспомогательными скриптами-валидаторами
-- [[stage-execution-protocol]] — обязательный протокол: чтение state.yaml, Mermaid-карта, TodoWrite, gate-check перед любым Write/Edit
+- [[landing-orchestrator]] — запускает агента и принимает управление после hand-off
+- [[brand-architect]] — downstream-потребитель `positioning.md` и `market-profile.md` на этапе 04
+- [[content-writer]] — использует `landing-structure.md` и `positioning.md` на этапе 07
+- [[wp-builder]] — читает `landing-structure.md` для генерации блоков на этапе 08
+- [[landing-niche]] — slash-команда, связанная с этим этапом
 
 ## Источник
-
 - `agents/niche-analyst.md`

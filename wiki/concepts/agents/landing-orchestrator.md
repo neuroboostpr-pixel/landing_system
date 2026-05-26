@@ -2,19 +2,21 @@
 type: agent
 name: landing-orchestrator
 sources: ["agents/landing-orchestrator.md"]
-updated: 2026-05-25
+updated: 2026-05-26
 triggers: []
 stage: ""
 uses:
   - landing-go
+  - landing-build
+  - landing-deploy
   - landing-prototype
   - landing-wireframe
   - landing-compose
   - landing-photos
   - landing-visuals
-  - landing-build
-  - landing-deploy
-  - landing-qa
+  - stage-execution-protocol
+  - gate-check
+  - render-pipeline-map
   - niche-analyst
   - brand-architect
   - design-system-generator
@@ -22,63 +24,52 @@ uses:
   - wp-builder
   - wp-deployer
   - qa-auditor
-  - references-curator
-  - moodboard-composer
-  - style-extractor
-  - stack-planner
 tags: [orchestrator, pipeline, workflow, core]
 ---
 
-# landing-orchestrator (Главный дирижёр)
+# Landing Orchestrator (Главный дирижёр)
 
 ## Что делает
 
-Управляет полным производственным циклом лендинга — от брифа до деплоя. Читает состояние проекта, диспатчит специализированных агентов на каждый этап, принудительно контролирует HARD GATE между шагами и не даёт пропустить ни один этап без явного утверждения пользователем.
+Ведёт проект-лендинг через все 12 этапов производства — от брифа до SEO — и не даёт перепрыгнуть ни один шаг без явного утверждения пользователя. Диспатчит специализированных агентов на каждый этап и проверяет качество перед переходом дальше.
 
 ## Когда вызывать / в каком этапе
 
-Запускается командой `/landing-go` (основной режим, prototype-first) или исторически — `/landing-new`. Активируется сразу после инициализации проекта и ведёт через все 12+ этапов (00→12 для full flow, 03→12 для prototype-first). В prototype-first режиме этапы 00–02 помечены `n/a`, стартовая точка — `07a_prototype`.
+Активируется через команду `/landing-go` (основной вход) или `/landing-build`, `/landing-deploy` и другие этапные команды. Работает поверх любого проекта с `.landing-state.yaml`. В **prototype-first режиме** (PR-D) вход — файл `prototype.pdf` в `07_ПРОТОТИП/source/`, этапы 00–02 помечаются `n/a`.
 
 ## Что на вход / на выход
 
 **Вход:**
-- `.landing-state.yaml` проекта — текущее состояние этапов
-- `config/stage-gates.yaml` — список hard/soft проверок для каждого этапа
-- Пользовательские материалы: `prototype.pdf`, клиентские фото, логотип
+- `.landing-state.yaml` — текущее состояние проекта
+- `config/stage-gates.yaml` — правила переходов между этапами
+- Пользовательский контент (прототип, фото, бриф)
 
 **Выход:**
-- Последовательно — артефакты каждого этапа: `brief.md`, `moodboard.html`, `brand-kit.md`, `DESIGN.md`, `composed.html`, WordPress-тема, задеплоенный сайт
-- Обновлённый `.landing-state.yaml` после каждого `--approve`
+- Последовательно: `brief.md`, `niche-analysis.md`, `moodboard.html`, `brand-kit.md`, `DESIGN.md`, `final-copy.md`, `composed.html`, WordPress-тема, задеплоенный сайт, `qa-report.md`
+- Обновлённый `.landing-state.yaml` с `approved`-статусами этапов
+- Mermaid-карта пайплайна (`wiki/pipeline-map.md`)
 
-## Обязательный протокол перед каждым действием (Stage Execution Protocol)
-
-1. Прочитать `.landing-state.yaml`, запустить `render-pipeline-map.sh` — показать Mermaid-карту пользователю
+**Обязательный протокол перед каждым действием (4 шага):**
+1. Прочитать state, показать Mermaid-карту через `render-pipeline-map.sh`
 2. Создать TodoWrite со всеми оставшимися этапами
-3. Запустить `gate-check.sh --stage <id>`, прочитать чек-лист `stage-<id>-checklist.md` если есть
-4. После verify → `gate-check.sh --approve` → переход к следующему этапу
+3. Запустить `gate-check.sh` + загрузить чек-лист этапа
+4. Verify-скрипт → approve → переход к следующему
 
-## Параллельная диспетчеризация (этапы 07d + 07e)
+**HARD GATE:** этап N+1 не начинается без явного «утверждаю» / «ok» от пользователя. Не выполняется автоматически даже при просьбе «пропусти».
 
-Когда `07c_composed` одобрен, оркестратор запускает **одновременно** `photo-curator` и `visual-curator` через `superpowers:dispatching-parallel-agents`. Переход к `07f` только после завершения обоих агентов и прохождения обоих гейтов.
-
-## Контроль качества 07b
-
-HARD GATE `composed_premium_standard` — скрипт `verify-composed-premium.sh` проверяет 13 обязательных премиум-фич. Если падает — оркестратор возвращает задачу `block-composer`, цикл до `exit 0`. «И так сойдёт» — недопустимо.
+**Параллельная диспетчеризация:** после approve этапа 07c запускает `photo-curator` и `visual-curator` одновременно; ждёт оба результата перед переходом к 07f.
 
 ## Связанные концепты
 
-- [[landing-go]] — главная точка входа, вызывает оркестратор
-- [[landing-prototype]] — этап 07a, парсинг PDF-прототипа
-- [[landing-wireframe]] — этап 07b, выбор вариантов блоков
-- [[landing-compose]] — этапы 07c и 07f, сборка composed.html
-- [[landing-photos]] — этап 07d, обработка фото клиента
-- [[landing-visuals]] — этап 07e, AI-генерация иконок
-- [[landing-build]] — этап 08, генерация WordPress-темы
-- [[landing-deploy]] — этап 09, деплой на Бегет
-- [[niche-analyst]] — агент этапа 01a, анализ ниши
-- [[brand-architect]] — агент этапа 04, создание бренд-кита
-- [[wp-builder]] — агент этапа 08, сборка блоков
-- [[qa-auditor]] — агент этапа 10, QA-отчёт
+- [[landing-go]] — единственная точка входа в оркестратор (PR-D)
+- [[stage-execution-protocol]] — обязательный протокол 4 шагов для каждого этапа
+- [[gate-check]] — скрипт проверки гейтов и approve этапов
+- [[render-pipeline-map]] — визуализация состояния пайплайна
+- [[landing-wireframe]] — интерактивный этап выбора вариантов блоков (07b)
+- [[landing-compose]] — сборка composed.html (07c / 07f)
+- [[wp-builder]] — агент генерации WordPress-темы (этап 08)
+- [[landing-photos]] — пайплайн фото клиента (07d)
+- [[landing-visuals]] — генерация иконок и инфографики (07e)
 
 ## Источник
 

@@ -2,49 +2,50 @@
 type: skill
 name: wireframe-rendering
 sources: ["skills/wireframe-rendering/SKILL.md"]
-updated: 2026-05-25
+updated: 2026-05-26
 triggers: []
 stage: "07a"
-uses: ["landing-wireframe", "ux-composer", "landing-prototype"]
-tags: ["wireframe", "html", "block-library", "prototype", "07a"]
+uses: ["landing-wireframe", "ux-composer", "landing-prototype", "block-library"]
+tags: ["wireframe", "html", "preview", "block-library", "css-only"]
 ---
 
-# Wireframe Rendering — интерактивный wireframe на этапе 07a
+# Wireframe Rendering — Интерактивный вайрфрейм блоков
 
 ## Что делает
 
-Превращает структуру прототипа в интерактивный HTML-файл, где каждый блок страницы показан в 2–3 визуальных вариантах. Маркетолог или заказчик просто кликает по вариантам и выбирает понравившийся — никакого кода, никакой сборки.
+Генерирует интерактивный HTML-файл, в котором для каждого блока лендинга показано 2–3 варианта компоновки из библиотеки блоков. Маркетолог или дизайнер выбирает понравившийся вариант прямо в браузере — без кода и сборки.
 
 ## Когда вызывать / в каком этапе
 
-Этап **07a** — после того как `landing-prototype` создал `prototype.yaml`. Вызывается командой `/landing-wireframe` или агентом `ux-composer`. Запускается вручную, не через `landing-orchestrator` (до PR-D).
+Этап **07a**. Вызывается командой `/landing-wireframe` или агентом `ux-composer` после того, как этап 07 (прототип) завершён и файл `prototype.yaml` готов. Предшествует этапу 07b (compose).
 
 ## Что на вход / на выход
 
 **Входные артефакты:**
-- `<project>/07_ПРОТОТИП/prototype.yaml` — структурированный прототип лендинга
-- `block-library/catalog.yaml` — каталог всех доступных блоков
-- `block-library/<category>/<block-id>/assets/template.html` — HTML-шаблоны блоков (десктоп)
-- `block-library/<category>/<block-id>/assets/template-mobile.html` — мобильные варианты
+- `<project>/07_ПРОТОТИП/prototype.yaml` — структура блоков прототипа
+- `block-library/catalog.yaml` — каталог всех блоков библиотеки
+- `block-library/<category>/<block-id>/assets/template.html` — desktop-шаблон блока
+- `block-library/<category>/<block-id>/assets/template-mobile.html` — mobile-шаблон блока
 
 **Выходные артефакты:**
-- `<project>/07a_WIREFRAME/wireframe.html` — интерактивный wireframe с CSS-only переключением вариантов (`:checked` selector, без JS-фреймворков)
-- `<project>/07a_WIREFRAME/candidates.yaml` — список подобранных кандидатов для каждого блока
+- `<project>/07a_WIREFRAME/wireframe.html` — интерактивный вайрфрейм с CSS-only переключением вариантов
+- `<project>/07a_WIREFRAME/candidates.yaml` — машинный список выбранных кандидатов
 
-**Скрипты:**
-- `scripts/match-candidates.py` — подбирает 2–3 кандидата из `catalog.yaml` для каждого блока прототипа
-- `scripts/render-wireframe.py` — собирает `wireframe.html` из шаблона оболочки и кандидатов
-- `scripts/serve-preview.sh` — поднимает `python -m http.server` если `file://` ломает iframe sandbox
+**Внутренние скрипты:**
+- `scripts/match-candidates.py` — подбирает кандидатов из каталога под каждый блок прототипа
+- `scripts/render-wireframe.py` — собирает итоговый `wireframe.html` из шаблона и кандидатов
+- `scripts/serve-preview.sh` — запускает `python -m http.server` если `file://` ломает iframe sandbox
 
-**Шаблоны:**
-- `templates/wireframe-shell.html` — HTML-оболочка с radio-кнопками и CSS-логикой переключения
+**Шаблон оболочки:**
+- `templates/wireframe-shell.html` — HTML-оболочка с radio-кнопками и CSS-переключателями (`:checked` selector, без JS-фреймворков)
 
 ## Связанные концепты
 
-- [[landing-wireframe]] — slash-команда, вызывающая этот скилл
-- [[landing-prototype]] — предыдущий этап, создаёт `prototype.yaml` как входной артефакт
-- [[landing-compose]] — следующий этап 07b, использует `selections.yaml` из wireframe
-- [[ux-composer]] — агент, который диспатчит этот скилл в рамках оркестрации
+- [[landing-wireframe]] — slash-команда, которая вызывает этот скилл
+- [[ux-composer]] — агент, использующий скилл в рамках оркестрации
+- [[landing-prototype]] — предыдущий этап, формирует `prototype.yaml` на входе
+- [[landing-compose]] — следующий этап (07b), потребляет `selections.yaml` из вайрфрейма
+- [[block-library]] — источник HTML-шаблонов кандидатов для каждого блока
 
 ## Источник
 

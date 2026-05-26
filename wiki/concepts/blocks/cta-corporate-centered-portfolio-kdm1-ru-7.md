@@ -2,38 +2,38 @@
 type: block
 name: cta-corporate-centered-portfolio-kdm1-ru-7
 sources: ["block-library/cta/cta-corporate-centered-portfolio-kdm1-ru-7/meta.yaml"]
-updated: 2026-05-16
+updated: 2026-05-25
 triggers: []
 stage: "07b"
-uses: ["block-composer", "ux-composer", "block-composition"]
-tags: ["cta", "corporate", "centered", "ru-market", "services", "ecommerce", "b2b-saas"]
+uses: []
+tags: ["cta", "corporate", "centered", "ru-market", "form", "services", "ecommerce", "b2b-saas"]
 ---
 
 # Финальный CTA с центрированным заголовком и формой заявки
 
 ## Что делает
-Завершающий блок лендинга: крупный центрированный заголовок, форма заявки и декоративная линейка персонажей снизу. Создаёт корпоративный финальный призыв к действию с чёткой визуальной точкой.
+Завершающий блок призыва к действию: крупный центрированный заголовок, форма заявки и декоративная линейка персонажей снизу. Создаёт убедительное финальное касание с посетителем перед уходом со страницы.
 
 ## Когда вызывать / в каком этапе
-Используется на этапе **07b (block-composition / Compose)** — когда `block-composer` собирает `composed.html` из одобренных wireframe-вариантов. Подходит для ниш: услуги, ecommerce, b2b-saas. Блок ориентирован на российский рынок (`ru_market: true`). Анимации отсутствуют (`has_animation: false`) — подходит для строгого корпоративного стиля.
+Используется на этапе **07b (Compose)** при сборке `composed.html`. Подходит как финальный CTA-блок для корпоративных лендингов в нишах услуг, e-commerce и B2B-SaaS. Ориентирован на русскоязычный рынок (`ru_market: true`). Анимации не предусмотрены (`has_animation: false`), что делает блок быстрым и стабильным для любых устройств.
 
 ## Что на вход / на выход
 
 **Вход:**
-- Слот `heading` (text, обязательный) — заголовок CTA-секции.
-- Токены дизайна из `tokens.json` (цвета, шрифты, отступы) — инжектируются автоматически при compose.
-- Прототипный текст из `prototype.yaml` — подставляется вместо плейсхолдеров.
+- Слот `heading` (text, обязательный) — заголовок секции CTA.
+- Опционально: данные формы (поля заявки задаются в composed.html).
 
 **Выход:**
-- HTML-фрагмент блока, встраиваемый в `07b_COMPOSED/composed.html`.
-- Декоративная линейка персонажей снизу (статичная, без анимации).
+- Готовый HTML-фрагмент блока с центрированным макетом (`layout_pattern: centered`), стилем `corporate` и декоративным элементом внизу.
+- Вписывается в `composed.html` на место соответствующего прототипного блока.
 
 ## Связанные концепты
-- [[block-composer]] — агент, который выбирает блок и встраивает его в composed.html
-- [[block-composition]] — скилл этапа 07b, управляет сборкой блоков с токенами и текстом
-- [[ux-composer]] — агент этапа 07a, предлагает этот блок как кандидата в wireframe
-- [[block-library-management]] — скилл управления библиотекой, регистрирует блок
-- [[07b-composed]] — этап pipeline, в котором блок активно используется
+Связи явно не указаны в исходнике.
+
+## Метаданные импорта
+- **Источник:** [portfolio.kdm1.ru — Спецодежда Сити (PDF)](https://portfolio.kdm1.ru/upload/iblock/c4c/ejaxky0hmu17f3t0aymzbkm7osq54n8x/Spetsodezhda-Siti.pdf)
+- **Дата импорта:** 2026-05-16
+- **Метод:** `codex-block-generation`
 
 ## Источник
 - `block-library/cta/cta-corporate-centered-portfolio-kdm1-ru-7/meta.yaml`

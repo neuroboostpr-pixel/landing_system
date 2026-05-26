@@ -2,55 +2,70 @@
 type: skill
 name: wp-gutenberg-block-builder
 sources: ["skills/wp-gutenberg-block-builder/SKILL.md"]
-updated: 2026-05-25
+updated: 2026-05-26
 triggers: []
 stage: "08"
-uses: ["landing-build", "landing-compose", "landing-design", "landing-deploy", "block-loader"]
-tags: ["wordpress", "gutenberg", "lazy-blocks", "stage-08", "theme", "php"]
+uses:
+  - landing-build
+  - landing-compose
+  - landing-design
+tags: ["wordpress", "gutenberg", "lazy-blocks", "stage-08", "codegen"]
 ---
 
-# wp-gutenberg-block-builder — Генератор WP-темы и Gutenberg-блоков
+# WP Gutenberg Block Builder — генератор WordPress-темы на Lazy Blocks
 
 ## Что делает
-Автоматически создаёт WordPress-тему с блоками на базе **Lazy Blocks (free)** для лендинга: генерирует PHP-шаблоны блоков, регистрирует их в `functions.php`, подключает стили и визуальные паттерны, и собирает финальный `page-content.html` с Gutenberg-разметкой, готовый к деплою.
+
+Автоматически собирает полноценную WordPress-тему для лендинга: регистрирует Gutenberg-блоки через плагин Lazy Blocks (бесплатный), генерирует PHP-шаблоны каждого блока, CSS-стили и финальный Gutenberg-разметку страницы. Результат — готовый к деплою WP-тема со всеми блоками по утверждённому дизайну.
 
 ## Когда вызывать / в каком этапе
-Запускается на **этапе 08** через команду `/landing-build` или оркестратор (`generate-wp-blocks.py`). Требует, чтобы были завершены этапы 05 (tokens.json), 06 (design-stack.yaml), 07 (final-copy.md) и заполнен файл `08_КОД/block-spec.yaml`. Без этих файлов генераторы прерываются с понятным сообщением.
+
+Этап **08 (Код)**. Запускается автоматически через `/landing-build` или вручную:
+
+```bash
+python scripts/generate-wp-blocks.py --project <project-dir>
+```
+
+**Обязательные условия:**
+- Этап 05 завершён — `05_ДИЗАЙН-СИСТЕМА/tokens.json` существует
+- Этап 06 завершён — `06_СТЕК/design-stack.yaml` существует
+- Этап 07 завершён — `07_КОНТЕНТ/final-copy.md` проверен
+- `08_КОД/block-spec.yaml` заполнен
 
 ## Что на вход / на выход
 
 **Вход:**
-- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — цветовые токены, `style_mood`, `animation_mode`
-- `06_СТЕК/design-stack.yaml` — конфигурация стека
-- `07_КОНТЕНТ/final-copy.md` — утверждённые тексты
-- `08_КОД/block-spec.yaml` — спецификация блоков лендинга
+- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — цвета, шрифты, `style_mood`, `animation_mode`
+- `06_СТЕК/design-stack.yaml` — технический стек проекта
+- `07_КОНТЕНТ/final-copy.md` — финальные тексты
+- `08_КОД/block-spec.yaml` — спецификация блоков (slug, атрибуты, тип)
 
-**Выход:**
-- `08_КОД/wp-theme/style.css` — стилевой манифест темы
-- `08_КОД/wp-theme/functions.php` — регистрация блоков через `add_block()`
+**Выход (5 генераторов в цепочке):**
+- `08_КОД/wp-theme/style.css` — точка входа темы
+- `08_КОД/wp-theme/functions.php` — регистрация блоков через `lazyblocks()->add_block()`
 - `08_КОД/wp-theme/assets/css/main.css` — CSS-патчи для InnerBlocks
-- `08_КОД/wp-theme/blocks/lazyblock-<slug>/block.php` — по одному файлу на каждый блок
-- `08_КОД/page-content.html` — Gutenberg-разметка страницы с плейсхолдерами изображений
+- `08_КОД/wp-theme/blocks/lazyblock-<slug>/block.php` — по одному на каждый блок
+- `08_КОД/page-content.html` — Gutenberg-разметка для seed страницы при деплое
 
-## Ключевые детали
+**Что НЕ генерируется:** `acf-fields.json`, `block.json`, `front-page.php`, `template-parts/`.
 
-**5 генераторов** запускаются по порядку: theme → lzb-templates → lzb-registration → css-patches → page-content.
+## Дополнительные возможности
 
-**Визуальные паттерны** (scroll-reveal, paper-texture, ambient-mesh-bg и др.) подключаются автоматически по значению `animation_mode` или `style_mood` из `tokens.json`. Например, `cinematic` включает scroll-reveal + ambient-mesh-bg + paper-texture.
+**Visual Patterns:** в зависимости от `animation_mode` (none / smooth / cinematic / editorial) скилл автоматически подключает CSS/JS-сниппеты из `block-library/_patterns/` (scroll-reveal, ambient-mesh-bg, paper-texture и др.).
 
-**6 style moods** (brutalist, editorial-warm, swiss-modernist и др.) — каждый задаёт набор CSS-файлов и паттернов. Переопределяют `animation_mode`.
+**Style Moods:** при наличии `style_mood` в `tokens.json` подключаются готовые CSS-наборы из `block-library/_styles/` (palette + typography + motion) — переопределяют animation_mode.
 
-**Block Library Loader** (`scripts/block-loader.py`) используется для чтения блоков из `block-library/` — поддерживает оба формата (старый ru-* и новый imported).
+**Anti-AI-Slop:** запрещено использовать indigo-акценты, blob-фоны, emoji-иконки и выдуманные метрики.
 
-**Что НЕ генерируется:** `acf-fields.json`, `block.json`, `front-page.php`, `template-parts/`. Формы, аналитика и SEO — отдельные генераторы в `/landing-build`.
-
-**Существующий `block.php` не перезаписывается** — ручные правки блоков безопасны при повторном запуске.
+**Защита ручных правок:** повторный запуск НЕ перезаписывает существующие `block.php`.
 
 ## Связанные концепты
-- [[landing-build]] — главная команда этапа 08, запускает этот скилл
-- [[landing-deploy]] — следующий этап; использует `page-content.html` из этого скилла
-- [[landing-design]] — этап 05, поставляет `tokens.json` на вход
-- [[landing-compose]] — этап 07b, поставляет финальный HTML как основу для spec
+
+- [[landing-build]] — вызывает этот скилл как часть полного цикла этапа 08
+- [[landing-design]] — этап 05, создаёт `tokens.json` который читает этот скилл
+- [[landing-compose]] — этап 07b, `composed.html` служит визуальным ориентиром для блоков
+- [[landing-deploy]] — следующий этап, заменяет image-плейсхолдеры из `page-content.html` реальными ID
 
 ## Источник
+
 - `skills/wp-gutenberg-block-builder/SKILL.md`

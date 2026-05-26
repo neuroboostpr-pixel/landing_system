@@ -2,48 +2,45 @@
 type: agent
 name: photo-preview-board
 sources: ["agents/photo-preview-board.md"]
-updated: 2026-05-25
+updated: 2026-05-26
 triggers: []
 stage: "07c"
-uses: ["photo-curator", "photo-curation", "photo-styling", "identity-safe"]
-tags: ["photos", "preview", "image-processing", "stage-07c"]
+uses: ["photo-curator", "photo-curation", "photo-styling", "selections-validator"]
+tags: ["photos", "preview", "identity-safe", "stage-07c"]
 ---
 
-# Photo Preview Board — рендер превью фотографий
+# Photo Preview Board — обработка фото и рендер превью
 
 ## Что делает
-Обрабатывает каждый слот из утверждённого `selections.yaml`: кроппит/ресайзит клиентские фото, генерирует изображения через Codex или создаёт SVG-плейсхолдеры. Результат — файлы `desktop.jpg`/`mobile.jpg` и финальная страница `photo-preview.html` для проверки заказчиком.
+Принимает утверждённый файл `selections.yaml`, обрабатывает каждый фото-слот (кроп, ресайз, AI-генерация или SVG-заглушка) и собирает `photo-preview.html` для финального утверждения маркетологом. Строго соблюдает правило identity-safe: не генерирует лица людей без явного разрешения клиента.
 
 ## Когда вызывать / в каком этапе
-Вызывается **только автоматически** агентом `photo-curator` после того, как пользователь подтвердил `selections.yaml`. Не предназначен для прямого вызова. Относится к этапу **07c (Photos)**.
+Этап **07c** (обработка фото). Вызывается **только как helper-агент** из `photo-curator` — не диспатчится напрямую. Запускается после того, как пользователь утвердил расстановку фото в drag-drop интерфейсе и положил `selections.yaml` в `07c_PHOTOS/`.
 
 ## Что на вход / на выход
 
 **Вход:**
-- `<project>/07c_PHOTOS/selections.yaml` — канонический файл с выбором пользователя (должен пройти валидацию)
+- `<project>/07c_PHOTOS/selections.yaml` — утверждённый пользователем файл с маппингом слотов на фото и стратегиями.
+- Клиентские фото в `07c_PHOTOS/intake/`.
 
 **Выход:**
-- `<project>/07c_PHOTOS/processed/<slot_id>/desktop.jpg` — обработанное изображение для десктопа
-- `<project>/07c_PHOTOS/processed/<slot_id>/mobile.jpg` — версия для мобильных (если блок задаёт `mobile_ratio`)
-- `<project>/07c_PHOTOS/photo-preview.html` — интерактивный HTML-превью для финального одобрения
+- `<project>/07c_PHOTOS/processed/<slot_id>/desktop.jpg` — обработанная версия для десктопа.
+- `<project>/07c_PHOTOS/processed/<slot_id>/mobile.jpg` — мобильная версия (если у блока задан `mobile_ratio`).
+- `<project>/07c_PHOTOS/photo-preview.html` — финальный HTML-превью для проверки перед деплоем.
 
-## Ключевые правила обработки
-
-Каждый слот обрабатывается согласно стратегии из `selections.yaml`:
-
-| Стратегия | Действие |
+**Три стратегии обработки слота:**
+| Стратегия | Что происходит |
 |---|---|
-| `bring-your-own` | Кроп/ресайз через `photo-styling/scripts/style.py` с целевым ratio |
-| `generate` | Генерация через Codex (`codex-generate-fallback.sh`), если прошла identity-safe проверка |
-| `placeholder` | SVG-плейсхолдер через `svg-placeholder.py` с брендовым цветом |
+| `bring-your-own` | Кроп и ресайз клиентского фото через `style.py` |
+| `generate` | Генерация через codex-fallback (с identity-safe фильтром) |
+| `placeholder` | SVG-заглушка с брендовым цветом и подсказкой |
 
-**Identity-safe gate:** если слот типа `testimonial`, `expert`, `team-member` или `avatar` имеет стратегию `generate` при `ai_approved_by_user: false` — стратегия автоматически понижается до `placeholder` без уведомления. Это главная точка принудительного соблюдения политики безопасности идентичности.
+**Identity-safe правило:** если слот типа `testimonial`, `expert`, `team-member` или `avatar` помечен стратегией `generate`, но `ai_approved_by_user == false` — стратегия **молча** понижается до `placeholder`. Лица людей никогда не генерируются без явного разрешения.
 
 ## Связанные концепты
-- [[photo-curator]] — родительский агент, который диспатчит этого хелпера
-- [[photo-curation]] — скилл с валидатором `selections-validator.py` и Codex-скриптами
-- [[photo-styling]] — скилл с `style.py` для ресайза/кропа
-- [[identity-safe]] — политика запрета AI-генерации лиц без явного разрешения
+- [[photo-curator]] — родительский агент, диспатчит photo-preview-board; владеет этапом 07c целиком
+- [[photo-curation]] — скилл с `selections-validator.py`, `codex-generate-fallback.sh`, `svg-placeholder.py`, `preview-render.py`
+- [[photo-styling]] — скилл с `style.py` для кропа и ресайза
 
 ## Источник
 - `agents/photo-preview-board.md`

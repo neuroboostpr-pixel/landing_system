@@ -2,64 +2,51 @@
 type: skill
 name: photo-curation
 sources: ["skills/photo-curation/SKILL.md"]
-updated: 2026-05-25
-triggers: []
+updated: 2026-05-26
+triggers: ["обработать фотки клиента", "запустить фото-пайплайн", "подобрать фото под слоты", "сгенерировать фото-заглушки"]
 stage: "07c"
-uses:
-  - landing-photos
-  - landing-compose
-  - landing-orchestrator
-  - landing-prototype
-  - landing-wireframe
-tags: ["photos", "pipeline", "codex", "stage-07c", "pr-b"]
+uses: ["landing-photos", "landing-wireframe", "landing-compose", "landing-design", "photo-curator"]
+tags: ["photos", "codex", "ai-classify", "stage-07c", "pr-b"]
 ---
 
-# Photo Curation — конвейер клиентских фото (этап 07c)
+# Photo Curation — конвейер клиентских фотографий
 
 ## Что делает
 
-Обрабатывает клиентские фотографии: классифицирует их через AI, подбирает под слоты макета, нарезает в нужные пропорции и подставляет в `composed.html` вместо визуальных заглушек. Для слотов без подходящих фото генерирует AI-замену.
+Принимает папку с клиентскими фотографиями, классифицирует их через AI, автоматически подбирает каждое фото к нужному слоту в макете лендинга, обрабатывает под параметры дизайна и генерирует заглушки там, где клиентских фото не хватает.
 
 ## Когда вызывать / в каком этапе
 
-Запускается командой `/landing-photos` вручную на этапе **07c**. Обязательные предусловия:
+Этап **07c**. Запускается командой `/landing-photos` после того, как утверждены:
+- этап 05 (`design-system`) — нужны brand-токены для обработки,
+- этап 07a (`wireframe`) — нужны `selections.yaml` с описанием photo-слотов.
 
-- этап **05** (design-system) — утверждён,
-- этап **07a** (wireframe) — утверждён и скачан `selections.yaml`.
-
-Клиентские фотки кладутся в `07c_PHOTOS/inbox/` (7 подпапок по типу) до запуска команды.
+Фотки клиента должны лежать в `07c_PHOTOS/inbox/` (7 подпапок по типу: портреты, процесс работы и т.д.).
 
 ## Что на вход / на выход
 
 **Вход:**
-- Фотографии клиента в `07c_PHOTOS/inbox/` (JPEG/HEIC/PNG, по подпапкам).
-- `prototype.yaml` — список photo-слотов с описаниями и пропорциями.
-- `07a_WIREFRAME/selections.yaml` — выбранные варианты блоков.
-- `05_ДИЗАЙН/tokens.json` — brand-цвета и параметры стиля.
+- Клиентские фото в `07c_PHOTOS/inbox/<категория>/`
+- `prototype.yaml` — описание слотов
+- `07a_WIREFRAME/selections.yaml` — выбранные варианты блоков
+- `05_design-system/tokens.json` — brand-цвета и параметры
 
 **Выход:**
-- `07c_PHOTOS/photo-board.html` — интерактивная доска для ручного подбора фото (drag-drop).
-- `07c_PHOTOS/selections.yaml` — финальный маппинг фото по слотам (после approve пользователем).
-- `07c_PHOTOS/photo-preview.html` — превью как фото лягут в макет.
-- Обновлённый `07b_COMPOSED/composed.html` — заглушки `[SLOT: ...]` заменены на `<img>`/`<picture>` с mobile-вариантом.
-- `07c_PHOTOS/.cache/` — кэш обработанных через codex фото (по hash параметров).
+- `07c_PHOTOS/photo-board.html` — интерактивная доска для ручной правки назначений (drag-drop)
+- `07c_PHOTOS/selections.yaml` — финальные назначения фото по слотам (после approve)
+- `07c_PHOTOS/photo-preview.html` — превью как фото лягут в макет
+- Обновлённый `07b_COMPOSED/composed.html` — placeholders заменены на реальные `<img>`/`<picture>`
+- `07c_PHOTOS/manifest.json` + кэш в `07c_PHOTOS/.cache/`
 
-## Ключевые правила
-
-**Identity-safe:** клиентские фото **никогда** не репеинтятся AI. Генерация лиц (testimonial / expert / team слоты) требует явного флага `ai_approved_by_user: true` в конфиге слота.
-
-**Перезапуск:** `07c_PHOTOS/STATE.yaml` фиксирует прогресс. Повторный `/landing-photos` продолжает с прерванного этапа. Сброс: `--force-stage <name>`.
-
-**Кэш codex:** повторный прогон с теми же параметрами (hint + style + brand_color + niche) не вызывает codex API.
+**Промежуточный шаг пользователя:** открыть `photo-board.html`, расставить фото drag-drop, нажать «Подтвердить и скачать selections.yaml», положить файл обратно в `07c_PHOTOS/`.
 
 ## Связанные концепты
 
-- [[landing-photos]] — slash-команда, запускающая этот конвейер
+- [[landing-photos]] — slash-команда, запускающая этот скилл
+- [[photo-curator]] — агент-владелец пайплайна
 - [[landing-wireframe]] — поставляет `selections.yaml` со слотами для matching
-- [[landing-compose]] — PR-A; `inject-content.py` из compose-скилла выполняет финальный re-render `composed.html`
-- [[landing-prototype]] — поставляет `prototype.yaml` с описаниями photo-слотов
-- [[landing-orchestrator]] — в PR-D интегрирует 07c как автоматический этап pipeline
-- [[landing-visuals]] — параллельный этап 07d (иконки и инфографика), запускается одновременно с 07c
+- [[landing-design]] — поставляет `tokens.json` для обработки фото под бренд
+- [[landing-compose]] — `inject-content.py` читает `07c_PHOTOS/selections.yaml` и перерендеривает `composed.html`
 
 ## Источник
 

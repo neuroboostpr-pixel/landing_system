@@ -2,53 +2,59 @@
 type: skill
 name: visual-generation
 sources: ["skills/visual-generation/SKILL.md"]
-updated: 2026-05-25
-triggers: ["/landing-visuals"]
+updated: 2026-05-26
+triggers: ["/landing-visuals", "сгенерировать иконки", "сгенерировать инфографику", "визуалы для лендинга"]
 stage: "07d"
 uses: ["landing-visuals", "landing-compose", "landing-design", "landing-orchestrator"]
-tags: ["visuals", "icons", "infographics", "codex", "image-gen", "pr-c"]
+tags: ["icons", "infographics", "codex", "image-gen", "stage-07d", "PR-C"]
 ---
 
-# Visual Generation — Генерация иконок и инфографики (этап 07d)
+# visual-generation — Генерация иконок и инфографики
 
 ## Что делает
-Автоматически генерирует иконки и инфографику для лендинга через codex image_gen, подбирая стиль под бренд-токены и нишу. Подставляет готовые PNG прямо в `composed.html` вместо placeholders.
+Автоматически создаёт иконки и инфографику для всех визуальных слотов лендинга: сканирует `composed.html`, генерирует PNG через codex image_gen с учётом бренда и ниши, подставляет результат обратно в HTML вместо плейсхолдеров.
 
 ## Когда вызывать / в каком этапе
-Запускается командой `/landing-visuals` на этапе **07d** (PR-C). Обязательные условия: утверждённый этап **05** (design-system) и существующий файл `07b_COMPOSED/composed.html`. Вызывается вручную, не через оркестратор (интеграция — задача PR-D).
+Этап **07d** (PR-C). Запускается командой `/landing-visuals` после:
+- утверждённого этапа 05 (`design-system` с `tokens.json`),
+- существующего `07b_COMPOSED/composed.html` (PR-A).
 
-Опциональные флаги:
-- `--type icons` или `--type infographics` — частичный прогон
-- `--force` / `FORCE=1` — игнорировать кэш
-- `--slot <name>` — один конкретный слот
+Можно запустить частично через флаги:
+- `--type icons` или `--type infographics` — только один вид визуалов,
+- `--force` — игнорировать кэш,
+- `--slot <name>` — обработать один конкретный слот.
 
 ## Что на вход / на выход
 
 **Вход:**
-- `07b_COMPOSED/composed.html` — с placeholders вида `[SLOT: feature-1-icon]`
-- `tokens.json` — цвета и стиль бренда
-- `market-profile.md` — ниша проекта
+- `07b_COMPOSED/composed.html` — собранный HTML с плейсхолдерами `[SLOT: feature-1-icon]` и аналогичными,
+- `tokens.json` — цвета и дизайн-токены бренда,
+- `market-profile.md` — ниша проекта (влияет на стиль генерации).
 
 **Выход:**
-- `07d_VISUALS/_slots.yaml` — список обнаруженных слотов (icon/infographic)
-- `07d_VISUALS/.cache/<hash>.png` — кэш сгенерированных PNG по hash(hint + style + brand_color + niche)
-- `07d_VISUALS/STATE.yaml` — прогресс прогона (scan / generate / inject)
-- `07b_COMPOSED/composed.html` — обновлённый: `[SLOT: ...]` заменены на `<img class="lp-icon">`
+- `07d_VISUALS/_slots.yaml` — список всех найденных слотов (результат сканирования),
+- `07d_VISUALS/<slot-name>.png` — сгенерированные PNG-файлы,
+- `07d_VISUALS/.cache/<hash>.png` — кэш по hash(hint + style + brand_color + niche),
+- `07d_VISUALS/STATE.yaml` — статус прогона (scan / generate / inject),
+- обновлённый `composed.html` — плейсхолдеры заменены на `<img class="lp-icon">`.
 
 **Три шага конвейера:**
-1. **scan** — `scripts/slot-scanner.py` парсит `composed.html`, выдаёт `_slots.yaml`
-2. **generate** — `scripts/codex-generate-icon.sh` / `-infographic.sh` с кэш-lookup перед вызовом codex
-3. **inject** — `inject-content.py` подставляет PNG в composed.html
+1. `slot-scanner.py` — парсинг слотов из HTML,
+2. `codex-generate-icon.sh` / `codex-generate-infographic.sh` — генерация с кэш-проверкой,
+3. `inject-content.py` — подстановка PNG в HTML.
 
-**Prompt-picker waterfall:**
-- Иконки: keyword-матч по `icons.csv` → generic template
-- Инфографика: tag/category-матч по OpenDesign 90 JSON → generic template
+**Prompt waterfall:**
+- Иконки: совпадение по `icons.csv` → generic template,
+- Инфографика: совпадение по тегам/категориям OpenDesign JSON → generic template.
+
+**Identity-safe не применяется** — в иконках и чартах нет людей, ограничения на лица не действуют.
 
 ## Связанные концепты
 - [[landing-visuals]] — slash-команда, которая вызывает этот скилл
-- [[landing-compose]] — этап 07b, создаёт `composed.html` с placeholders, который этот скилл заполняет
-- [[landing-design]] — этап 05, design-system должен быть approved перед запуском
-- [[landing-orchestrator]] — оркестратор, который в будущем (PR-D) будет диспатчить этот скилл автоматически
+- [[landing-compose]] — поставляет `composed.html` со слотами на вход
+- [[landing-design]] — поставляет `tokens.json` с брендовыми цветами
+- [[landing-orchestrator]] — диспатчит этап 07d в pipeline PR-D
+- [[landing-photos]] — параллельный этап 07c (фото), выполняется одновременно с 07d
 
 ## Источник
 - `skills/visual-generation/SKILL.md`

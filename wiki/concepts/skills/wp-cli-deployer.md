@@ -2,56 +2,59 @@
 type: skill
 name: wp-cli-deployer
 sources: ["skills/wp-cli-deployer/SKILL.md"]
-updated: 2026-05-25
+updated: 2026-05-26
 triggers: []
 stage: "09"
-uses: ["landing-deploy", "landing-orchestrator", "landing-build"]
-tags: ["deploy", "wordpress", "beget", "rsync", "wp-cli", "theme", "media"]
+uses: ["landing-deploy", "lp-preview-panel"]
+tags: ["deploy", "wordpress", "beget", "wp-cli", "rsync", "media", "gutenberg"]
 ---
 
-# wp-cli-deployer — деплой WordPress-лендинга на Бегет
+# wp-cli-deployer — Деплой WordPress-лендинга на Бегет
 
 ## Что делает
 
-Автоматически разворачивает готовый лендинг на хостинг Бегет: синхронизирует тему, активирует плагины, импортирует изображения в Media Library, подставляет их ID в page-content и создаёт главную страницу как Gutenberg-страницу.
+Автоматически публикует готовый WordPress-лендинг на хостинг Бегет: синхронизирует тему, устанавливает плагины, импортирует изображения в медиатеку, подставляет их ID в контент и создаёт главную страницу как Gutenberg-страницу.
 
 ## Когда вызывать / в каком этапе
 
-Вызывается командой `/landing-deploy` на этапе **09 — деплой**. Запускается после того, как этап 08 (сборка темы) утверждён пользователем. `landing-orchestrator` передаёт управление этому скиллу автоматически.
+Используется командой `/landing-deploy` на **этапе 09** — после того как код собран (`/landing-build`) и одобрен пользователем. Требует заполненных переменных окружения `BEGET_USER`, `BEGET_HOST`, `BEGET_PATH` в файле `.env` проекта.
 
 ## Что на вход / на выход
 
-**На вход:**
-- `08_КОД/wp-theme/` — собранная WordPress-тема
-- `08_КОД/page-content.html` — Gutenberg page-content с placeholders `__IMAGE_ATTACHMENT_ID__<file>__`
-- `.env` — переменные `BEGET_USER`, `BEGET_HOST`, `BEGET_PATH`
+**Вход:**
+- `08_КОД/wp-theme/` — готовая тема WordPress
+- `08_КОД/page-content.html` — Gutenberg-контент с плейсхолдерами `__IMAGE_ATTACHMENT_ID__<file>__`
+- `theme/assets/img/*` — изображения лендинга
+- `.env` с реквизитами SSH-доступа к Бегету
 
-**На выход:**
-- Активная тема на сервере Бегет
-- Плагины установлены и активированы (`lazy-blocks`, `lp-preview-panel`)
-- Изображения импортированы в WP Media Library (идемпотентно)
-- Главная страница создана/обновлена как Gutenberg-страница с реальными attachment ID вместо placeholders
-- Кэш сброшен
+**Выход:**
+- Работающий сайт на Бегете с активированной темой
+- Изображения в медиатеке WordPress (attachment ID зафиксированы)
+- Главная страница создана/обновлена как Gutenberg-страница
+- Кэш WordPress сброшен
+- Плагин `lp-preview-panel` активирован (по умолчанию видим только администратору)
 
-## Ключевые шаги скрипта
+## Шаги скрипта
 
-1. **rsync** — синхронизация темы на сервер по SSH
-2. **`wp theme activate`** — активация темы
-3. **Plugins** — установка `lazy-blocks`; ACF Free остаётся как no-op (без `wp acf import`)
-4. **Media import** — `wp media import` для каждого файла в `assets/img/*`, идемпотентно (пропускает уже загруженные по slug)
-5. **Page-content substitution** — замена placeholders на integer attachment ID
-6. **Front page seed** — создание или обновление главной страницы, установка как front page через `wp option update`
-7. **`wp cache flush`** — сброс кэша
+Скрипт `scripts/deploy-wordpress.sh <project-dir>` выполняет последовательно:
 
-## Плагин lp-preview-panel
+1. **rsync** — синхронизирует тему на сервер
+2. **wp theme activate** — активирует тему
+3. **Плагины** — устанавливает `lazy-blocks`; ACF Free остаётся как no-op (import не вызывается)
+4. **Media import** — идемпотентно импортирует каждый файл из `assets/img/*`, пропускает уже загруженные по slug
+5. **Подстановка ID** — заменяет плейсхолдеры в `page-content.html` на числовые attachment ID
+6. **Создание главной страницы** — `wp post create/update` + настройка `show_on_front`
+7. **wp cache flush** — сброс кэша
+8. **lp-preview-panel activate** — активация панели превью (анонимный доступ отключён по умолчанию)
 
-После активации плагин по умолчанию показывает превью-панель только администратору. Для клиентского доступа — вручную включить в admin → Settings → Превью-панель. Перед анонсом деплоя: проверить поведение панели в incognito-окне.
+## Важные детали
+
+Перед объявлением деплоя клиенту — открыть сайт в режиме инкогнито и убедиться, что панель превью отображается именно так, как задумано (включена или скрыта для анонимов). Включить для клиента: WP admin → Settings → Превью-панель.
 
 ## Связанные концепты
 
-- [[landing-deploy]] — slash-команда, которая запускает этот скрипт
-- [[landing-orchestrator]] — оркестратор, вызывающий деплой на этапе 09
-- [[landing-build]] — предшествующий этап 08, результат которого деплоится
+- [[landing-deploy]] — slash-команда, которая вызывает этот скилл на этапе 09
+- [[lp-preview-panel]] — плагин превью-панели, активируемый в конце деплоя
 
 ## Источник
 

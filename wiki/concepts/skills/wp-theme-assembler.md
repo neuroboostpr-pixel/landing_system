@@ -2,60 +2,67 @@
 type: skill
 name: wp-theme-assembler
 sources: ["skills/wp-theme-assembler/SKILL.md"]
-updated: 2026-05-25
+updated: 2026-05-26
 triggers: []
 stage: "08"
 uses: ["wp-builder", "integrations-engineer", "analytics-engineer", "seo-optimizer", "lp-preview-panel", "landing-build"]
-tags: ["theme", "assets", "preview", "fonts", "icons", "images", "stage-08"]
+tags: ["assets", "preview", "theme", "fonts", "icons", "images", "stage-08"]
 ---
 
-# wp-theme-assembler — Финальная сборка WordPress-темы
+# wp-theme-assembler — финальная сборка темы WordPress
 
 ## Что делает
-Собирает все ресурсы темы воедино: загружает шрифты, скачивает SVG-иконки, копирует обработанные фото клиента — и генерирует статичный `build-preview.html`, который показывает пользователю цвета, типографику, стек и список готовых блоков перед деплоем.
+Собирает все ресурсы темы (шрифты, иконки, изображения) в папку `assets/` и генерирует HTML-превью готовой темы с цветовыми токенами, типографикой и списком Lazy Blocks. Это последний шаг перед показом результата пользователю на этапе 08.
 
 ## Когда вызывать / в каком этапе
-Вызывается на этапе **08 (Сборка темы)** — после того как `wp-builder` создал Lazy Blocks, `integrations-engineer` добавил формы, `analytics-engineer` добавил Метрику, а `seo-optimizer` прописал мета-теги. Это финальный шаг перед HARD GATE — показом preview пользователю.
+Запускается на этапе **08 (Сборка темы)** после того, как все остальные агенты этапа завершили свою работу:
+1. `wp-builder` создал Lazy Blocks и CSS/JS
+2. `integrations-engineer` добавил формы в `functions.php`
+3. `analytics-engineer` встроил код Яндекс.Метрики
+4. `seo-optimizer` прописал мета-теги
+
+После этого последовательно запускаются два скрипта, завершающиеся **HARD GATE**: пользователь должен одобрить `build-preview.html` перед переходом к этапу 09.
 
 ## Что на вход / на выход
 
 **Вход:**
-- `<project>/tokens.json` — дизайн-токены (цвета, шрифты)
-- `<project>/design-stack.yaml` — стек технологий
-- `<project>/block-spec.yaml` — спецификация блоков
-- `<project>/08_КОД/wp-theme/blocks/lazyblock-*/` — собранные Lazy Blocks
-- `<project>/02_МАТЕРИАЛЫ_КЛИЕНТА/photos/processed/` — обработанные фото клиента
-- Font Name + CDN-адреса шрифтов
-- Список иконок для Iconify API
+- `tokens.json` — дизайн-токены проекта
+- `design-stack.yaml` — стек технологий
+- `block-spec.yaml` — спецификация блоков
+- `08_КОД/wp-theme/blocks/lazyblock-*/` — собранные Lazy Blocks
+- `02_МАТЕРИАЛЫ_КЛИЕНТА/photos/processed/` — обработанные фото клиента
 
 **Выход:**
-- `assets/fonts/` — CDN-заглушки шрифтов
-- `assets/icons/` — скачанные SVG-иконки
+- `assets/fonts/` — CDN-заглушки для шрифтов
+- `assets/icons/` — SVG-иконки с Iconify API
 - `assets/images/` — скопированные фото клиента
-- `08_КОД/build-preview.html` — статичный preview темы
-- `08_КОД/wp-theme/assets/css/palettes.css` — палитра CSS (через `generate-palette-css.py`)
-- `08_КОД/wp-theme/inc/lp-preview-panel-axes.php` — фильтр осей preview-панели
+- `08_КОД/build-preview.html` — визуальное превью темы
+- `08_КОД/wp-theme/assets/css/palettes.css` — CSS-палитра (если подключён lp-preview-panel)
+- `08_КОД/wp-theme/inc/lp-preview-panel-axes.php` — PHP-фильтр осей превью
 
 ## Ключевые скрипты
 
-| Скрипт | Что делает |
-|---|---|
-| `bundle-assets.py <project>` | Загружает шрифты/иконки/фото; возвращает JSON с итогами |
-| `render-build-preview.py <project>` | Рендерит `build-preview.html` через Jinja2 |
-| `generate-palette-css.py --project` | Генерирует CSS с цветовыми палитрами |
-| `generate-axes-filter.py --project` | Генерирует PHP-фильтр для lp-preview-panel |
+**`bundle-assets.py`** — загружает ресурсы:
+```bash
+python3 skills/wp-theme-assembler/scripts/bundle-assets.py <project-dir>
+# stdout: JSON {"fonts": [...], "icons": [...], "images_copied": N}
+```
 
-## lp-preview-panel
+**`render-build-preview.py`** — генерирует превью через Jinja2:
+```bash
+python3 skills/wp-theme-assembler/scripts/render-build-preview.py <project-dir>
+# stdout: путь к build-preview.html
+```
 
-Скилл интегрирует плагин `lp-preview-panel` — интерактивную панель переключения вариантов темы (палитра, тип hero). Блоки с hero-зависимостью рендерят оба варианта в DOM, видимость управляется через `body.hero--<id>` CSS-селекторы; неактивные ресурсы используют `loading="lazy"`.
+**lp-preview-panel** — опциональный плагин с переключателем палитр и вариантов hero. Активируется копированием плагина + генерацией CSS/PHP через `generate-palette-css.py` и `generate-axes-filter.py`.
 
 ## Связанные концепты
-- [[wp-builder]] — создаёт Lazy Blocks до запуска сборки
-- [[integrations-engineer]] — добавляет формы в functions.php перед сборкой
-- [[analytics-engineer]] — добавляет код Метрики перед сборкой
-- [[seo-optimizer]] — прописывает мета-теги перед сборкой
-- [[lp-preview-panel]] — плагин интерактивного preview, подключается во время сборки
-- [[landing-build]] — команда, запускающая этап 08 целиком
+- [[wp-builder]] — создаёт Lazy Blocks и тему, после которых запускается сборка
+- [[integrations-engineer]] — добавляет формы в `functions.php` перед сборкой
+- [[analytics-engineer]] — добавляет Метрику перед сборкой
+- [[seo-optimizer]] — добавляет мета-теги перед сборкой
+- [[landing-build]] — родительская команда этапа 08, вызывающая этот скилл
+- [[lp-preview-panel]] — плагин переключения палитр, интегрируемый при сборке
 
 ## Источник
 - `skills/wp-theme-assembler/SKILL.md`

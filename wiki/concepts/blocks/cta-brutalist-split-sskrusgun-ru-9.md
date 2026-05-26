@@ -2,40 +2,42 @@
 type: block
 name: cta-brutalist-split-sskrusgun-ru-9
 sources: ["block-library/cta/cta-brutalist-split-sskrusgun-ru-9/meta.yaml"]
-updated: 2026-05-16
+updated: 2026-05-25
 triggers: []
-stage: "07b"
-uses: ["block-composition", "ux-composer", "block-composer", "block-library-management"]
-tags: ["cta", "brutalist", "split", "ru-market", "services", "education", "b2b-saas", "lead-magnet"]
+stage: ""
+uses: []
+tags: ["cta", "brutalist", "split", "ru-market", "services", "education", "b2b-saas"]
 ---
 
-# Яркий красный CTA — лид-магнит с фото и формой (brutalist split)
+# Яркий красный лид-магнит с фото людей и короткой формой
 
 ## Что делает
-Блок призыва к действию в брутальном стиле: красный фон, фото людей слева, короткая форма захвата справа, контрастная чёрная кнопка. Подходит для быстрого сбора лидов на русскоязычном рынке.
+Блок призыва к действию в брутальном стиле: яркий красный фон, фотографии людей, короткая лид-форма и контрастная чёрная кнопка. Привлекает внимание и мотивирует оставить заявку.
 
 ## Когда вызывать / в каком этапе
-Используется на этапе **07b (Compose)** — когда `ux-composer` подбирает блок CTA из библиотеки под wireframe, и `block-composer` вставляет его в `composed.html` с токенами дизайна и текстом из прототипа.
-
-Подходящие ниши: **услуги (services), образование (education), B2B SaaS**. Ориентирован на ру-рынок (`ru_market: true`). Анимация отсутствует — подходит для проектов без GSAP.
+Используется на этапе **07b (Compose)** и **08 (Build)** при сборке лендинга. Подходит для блоков CTA в нишах услуг, образования и B2B-SaaS, когда нужен агрессивный визуальный акцент без анимации.
 
 ## Что на вход / на выход
 
 **Вход:**
-- Обязательный слот `heading` (тип `text`) — заголовок лид-магнита
-- Токены дизайна из `tokens.json` (цвета, шрифты) — применяются при compose
-- Фото людей — подставляется в фото-слот через pipeline PR-B (`07c_PHOTOS`)
+- Слот `heading` (text, обязательный) — заголовок лид-магнита.
 
 **Выход:**
-- HTML-фрагмент блока внутри `07b_COMPOSED/composed.html`
-- Красный split-layout: фото-панель + форма с чёрной CTA-кнопкой
+- Готовый HTML/PHP-блок Lazy Blocks с красным фоном, разделённой компоновкой (split-layout), фотографией людей слева/справа и короткой формой с чёрной кнопкой.
+
+**Параметры блока:**
+- `style_mood`: brutalist — жёсткий контрастный дизайн.
+- `layout_pattern`: split — двухколоночная структура (текст + форма).
+- `has_animation`: false — без анимаций.
+- `ru_market`: true — адаптирован под российский рынок.
+
+## Детали импорта
+Блок сгенерирован через codex-block-generation по образцу сайта [sskrusgun.ru](https://sskrusgun.ru/) и импортирован 2026-05-16.
 
 ## Связанные концепты
-- [[block-composition]] — скилл этапа 07b, который инжектирует токены и тексты в блок
-- [[ux-composer]] — агент, выбирающий этот блок из библиотеки для wireframe
-- [[block-composer]] — агент, рендерящий итоговый composed.html с блоком
-- [[block-library-management]] — скилл управления каталогом блоков, куда входит этот блок
-- [[photo-curator]] — обрабатывает фото людей для фото-слота блока (этап 07c)
+- [[landing-compose]] — этап, на котором блок вставляется в composed.html
+- [[landing-wireframe]] — wireframe-этап, где выбирается вариант CTA-блока из библиотеки
+- [[landing-build]] — финальная сборка WordPress-темы с подключением Lazy Blocks блоков
 
 ## Источник
 - `block-library/cta/cta-brutalist-split-sskrusgun-ru-9/meta.yaml`

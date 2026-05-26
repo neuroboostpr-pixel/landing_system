@@ -2,50 +2,47 @@
 type: agent
 name: references-curator
 sources: ["agents/references-curator.md"]
-updated: 2026-05-25
+updated: 2026-05-26
 triggers: []
 stage: "03"
-uses: ["landing-orchestrator", "moodboard-composer", "niche-analyst"]
-tags: ["stage-03", "references", "visual", "curator"]
+uses: ["landing-orchestrator", "moodboard-composer", "stage-execution-protocol"]
+tags: ["stage-03", "references", "visual", "index"]
 ---
 
-# References Curator — Агент сбора визуальных референсов
+# References Curator — агент сбора визуальных референсов
 
 ## Что делает
-
-Собирает визуальные референсы для лендинга (ссылки на сайты, Behance, скриншоты), присваивает каждому статус (candidate / approved / rejected) и ведёт файл `03_РЕФЕРЕНСЫ/index.yaml`. Когда набирается минимум 3 одобренных референса — передаёт управление агенту moodboard-composer.
+Собирает визуальные примеры сайтов от клиента (ссылки, скриншоты, Behance-файлы), присваивает каждому статус и ведёт индекс `03_РЕФЕРЕНСЫ/index.yaml`. Как только накоплены минимум 3 одобренных референса — передаёт управление агенту moodboard-composer.
 
 ## Когда вызывать / в каком этапе
-
-Запускается в **этапе 03 (03_references)** pipeline. Активируется автоматически через `landing-orchestrator` или вручную. Перед стартом проверяет `.landing-state.yaml` — должен быть `current_stage == 03_references`, иначе останавливается и сообщает об ошибке.
+Активируется на **этапе 03 (сбор референсов)** pipeline-а. Условие запуска — `.landing-state.yaml` показывает `current_stage == 03_references`. Агент не начинает запись файлов, пока `gate-check.sh` не вернёт exit 0. Предшественник — этап `01a_АНАЛИЗ_НИШИ` с готовыми `competitors.yaml` и `visual-requirements.md`.
 
 ## Что на вход / на выход
 
-**Входящие артефакты:**
-- `01a_АНАЛИЗ_НИШИ/competitors.yaml` — визуальные заметки по конкурентам (поле `visual_notes`); агент читает их, чтобы не клонировать визуал лидеров
-- `01a_АНАЛИЗ_НИШИ/visual-requirements.md` — раздел 6 (red flags); каждый референс проверяется на запрещённые паттерны
+**Вход:**
+- Ссылки на сайты, Behance / Dribbble, скриншоты от пользователя в `03_РЕФЕРЕНСЫ/refs/`
+- `01a_АНАЛИЗ_НИШИ/competitors.yaml` — поле `visual_notes` конкурентов (обязательно к прочтению перед поиском)
+- `01a_АНАЛИЗ_НИШИ/visual-requirements.md` — секция 6 «red flags» (обязательна: любой референс проверяется против запретов)
 
-**Исходящие артефакты:**
-- `03_РЕФЕРЕНСЫ/index.yaml` — индекс всех референсов с указанием URL, пути к файлу и статуса
-- `03_РЕФЕРЕНСЫ/refs/` — папка со скриншотами и файлами
+**Выход:**
+- `03_РЕФЕРЕНСЫ/index.yaml` — индекс всех референсов с полями `status: candidate | approved | rejected`
+- HARD GATE: минимум 3 референса со статусом `approved` для передачи управления
 
-**Жёсткий гейт (HARD GATE):** минимум 3 референса со статусом `approved` — только тогда этап закрывается.
-
-## Процесс
-
-1. Просит пользователя предоставить референсы: URL, файлы Behance/Dribbble, перетаскиваемые скриншоты в `03_РЕФЕРЕНСЫ/refs/`
-2. Для каждого URL пытается сохранить скриншот (в текущей фазе — только URL, без headless-браузера)
-3. Спрашивает пользователя статус каждого референса: candidate / approved / rejected
-4. Управляет `index.yaml` через `python3 skills/references-collection/scripts/index.py add|update|list`
-5. Проверяет каждый референс по red-flags из `visual-requirements.md`; нарушающие запреты — отклоняет со ссылкой на конкретный пункт
-6. По достижении 3 approved — закрывает этап через `gate-state.sh approve`
+## Алгоритм работы
+1. Читает `.landing-state.yaml`, убеждается в правильном этапе.
+2. Запускает `render-pipeline-map.sh` и показывает Mermaid-карту пользователю.
+3. Создаёт TodoWrite-список всех оставшихся этапов.
+4. Запускает `gate-check.sh --stage 03_references`.
+5. Просит у пользователя референсы; для URL-ов сохраняет ссылку (скриншот — в Phase 5).
+6. Для каждого референса уточняет статус у пользователя.
+7. Обновляет индекс через `python3 skills/references-collection/scripts/index.py add|update|list`.
+8. Проверяет каждый референс против red flags из `visual-requirements.md`; отвергает нарушителей с указанием конкретного пункта.
+9. По достижении ≥3 approved — запускает `verify-03_references.sh` и закрывает этап через `gate-state.sh approve`.
 
 ## Связанные концепты
-
-- [[landing-orchestrator]] — вызывает этого агента в рамках общего pipeline
-- [[moodboard-composer]] — принимает управление после закрытия этапа 03
-- [[niche-analyst]] — поставляет `competitors.yaml` и `visual-requirements.md`, которые агент обязан прочесть перед работой
+- [[landing-orchestrator]] — вызывает агента на этапе 03 и получает управление обратно после approve
+- [[moodboard-composer]] — следующий агент в цепочке, принимает одобренный набор референсов
+- [[stage-execution-protocol]] — обязательный протокол предусловий перед любой записью файлов
 
 ## Источник
-
 - `agents/references-curator.md`

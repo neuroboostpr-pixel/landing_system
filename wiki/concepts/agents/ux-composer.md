@@ -2,45 +2,57 @@
 type: agent
 name: ux-composer
 sources: ["agents/ux-composer.md"]
-updated: 2026-05-25
+updated: 2026-05-26
 triggers: []
 stage: "07a"
-uses: ["landing-wireframe", "landing-compose", "landing-orchestrator", "prototype-import", "wireframe-rendering", "block-library-management", "ui-ux-pro-max"]
-tags: ["wireframe", "ux", "stage-07a", "block-library", "pre-flight"]
+uses: ["landing-wireframe", "prototype-import", "wireframe-rendering", "block-library-management", "landing-orchestrator", "ui-ux-pro-max"]
+tags: ["wireframe", "ux", "stage-07a", "block-library", "prototype"]
 ---
 
-# UX Composer — Агент сборки интерактивного вайрфрейма
+# UX Composer — интерактивный wireframe из прототипа
 
 ## Что делает
-Берёт структуру прототипа и библиотеку блоков, генерирует интерактивный HTML-файл с 2–3 вариантами дизайна на каждую секцию лендинга. Пользователь выбирает понравившиеся варианты, и результат сохраняется для дальнейшей сборки страницы. Никогда не придумывает блоки из головы — работает строго с утверждённой библиотекой.
+Берёт утверждённый прототип лендинга и собирает интерактивную HTML-страницу с 2–3 вариантами вёрстки на каждый блок. Пользователь кликает radio-кнопками, выбирает лучший вариант и скачивает файл с выбором.
 
 ## Когда вызывать / в каком этапе
-Вызывается на **этапе 07a** (UX Wireframe) после того, как утверждён прототип (`07_ПРОТОТИП/prototype.yaml`). Запускается командой `/landing-wireframe` или через `landing-orchestrator`, когда `current_stage == 07b_wireframe` в `.landing-state.yaml`. До закрытия этого этапа (появления `selections.yaml`) этапы 07b и далее недоступны — стоит **HARD GATE**.
+Этап **07a (UX Wireframe)**. Агент активируется командой `/landing-wireframe` после того, как в `07_ПРОТОТИП/source/` появился и прошёл валидацию файл `prototype.yaml`. Текущий статус проекта в `.landing-state.yaml` должен быть `07b_wireframe` — иначе агент останавливается.
 
 ## Что на вход / на выход
 
 **Вход:**
 - `<project>/07_ПРОТОТИП/prototype.yaml` — структура блоков прототипа
-- `<project>/05_ДИЗАЙН-СИСТЕМА/tokens.json` — токены дизайна
-- `<project>/04_БРЕНД/brand-kit.md` — бренд-кит проекта
+- `<project>/05_ДИЗАЙН-СИСТЕМА/tokens.json` — дизайн-токены
+- `<project>/04_БРЕНД/brand-kit.md` — бренд-кит
 - `block-library/catalog.yaml` — каталог доступных блоков
-- CSV-файлы из `ui-ux-pro-max` (UX-паттерны, гайдлайны, стили, палитры, типографика) — **обязательная зависимость**
+- 6 CSV-файлов из скилла `ui-ux-pro-max` (UX-паттерны, правила, палитры, шрифты, стили, web-interface)
 
 **Выход:**
-- `07a_WIREFRAME/wireframe.html` — интерактивный вайрфрейм с radio-кнопками для выбора вариантов
-- `07a_WIREFRAME/candidates.yaml` — кандидаты из библиотеки на каждый блок прототипа
-- `07a_WIREFRAME/selections.yaml` — скачивается пользователем после выбора вариантов (вручную кладётся в папку)
+- `07a_WIREFRAME/wireframe.html` — интерактивная страница с вариантами блоков
+- `07a_WIREFRAME/candidates.yaml` — список блоков-кандидатов от библиотеки
+- `07a_WIREFRAME/selections.yaml` — файл выбора пользователя (создаётся пользователем после просмотра)
 
-**Если блок не найден:** агент возвращает `needs_new_block: true` с пояснением, пользователь добавляет новый блок через `scaffold-block.py`.
+## Ключевые ограничения
+- **Агент НИКОГДА не придумывает блоки самостоятельно.** Все варианты — исключительно из `block-library`. Если подходящего блока нет → флаг `needs_new_block: true` и предложение запустить `scaffold-block.py`.
+- **HARD GATE:** пока `selections.yaml` не создан — этапы 07b и далее недоступны.
+- Если скилл `ui-ux-pro-max` не установлен — агент останавливается с инструкцией по установке.
+
+## Порядок работы
+1. Проверить `.landing-state.yaml`, показать Mermaid-карту pipeline.
+2. Создать TodoWrite со всеми оставшимися этапами.
+3. Запустить `gate-check.sh` — при ошибке остановиться.
+4. Провалидировать `prototype.yaml` скриптом.
+5. Запустить `render-wireframe.py` — получить `wireframe.html`.
+6. Проверить `candidates.yaml` на пустые блоки — сообщить если есть.
+7. Попросить пользователя открыть HTML, выбрать варианты и положить `selections.yaml`.
 
 ## Связанные концепты
-- [[landing-wireframe]] — slash-команда, запускающая этого агента
-- [[landing-compose]] — следующий этап (07b), потребляет `selections.yaml`
-- [[landing-orchestrator]] — диспатчит агента в общем pipeline
-- [[prototype-import]] — скилл импорта и валидации прототипа (предшественник)
-- [[wireframe-rendering]] — скилл рендера `wireframe.html` через `render-wireframe.py`
-- [[block-library-management]] — скилл добавления новых блоков если candidates пустые
-- [[ui-ux-pro-max]] — внешний плагин с CSV UX-данными; без него агент не запустится
+- [[landing-wireframe]] — slash-команда, которая вызывает этого агента
+- [[landing-compose]] — следующий этап (07b), использует результат selections.yaml
+- [[prototype-import]] — предшествующий этап, создаёт prototype.yaml
+- [[wireframe-rendering]] — скилл с render-wireframe.py и шаблоном
+- [[block-library-management]] — скилл для создания новых блоков через scaffold-block.py
+- [[landing-orchestrator]] — оркестратор, который диспатчит этот этап в рамках /landing-go
+- [[ui-ux-pro-max]] — внешний скилл с CSV-данными по UX-паттернам и стилям (обязательная зависимость)
 
 ## Источник
 - `agents/ux-composer.md`

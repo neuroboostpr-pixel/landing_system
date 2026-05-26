@@ -2,45 +2,44 @@
 type: block
 name: contacts-corporate-split-portfolio-kdm1-ru-16
 sources: ["block-library/contacts/contacts-corporate-split-portfolio-kdm1-ru-16/meta.yaml"]
-updated: 2026-05-16
+updated: 2026-05-25
 triggers: []
-stage: "07a"
-uses: ["ux-composer", "block-composition", "wireframe-rendering"]
-tags: ["contacts", "corporate", "split", "ru-market", "b2b", "services", "education"]
+stage: ""
+uses: []
+tags: ["contacts", "corporate", "split", "ru-market", "services", "education", "b2b-saas"]
 ---
 
-# Финальный контактный экран — корпоративный split-макет
+# Финальный контактный экран с формой выбора времени
 
 ## Что делает
-Финальный экран лендинга для захвата лидов: крупный заголовок, форма выбора удобного времени и яркая CTA-кнопка. Макет разделён на две колонки (split-паттерн) в строгом корпоративном стиле.
+Завершающий блок лендинга: крупный заголовок, форма выбора удобного времени для звонка и яркая CTA-кнопка. Подходит для корпоративного стиля с чётким разделением на две колонки (split-раскладка).
 
 ## Когда вызывать / в каком этапе
-Используется на этапе **07a (Wireframe)** при сборке секции контактов / финального призыва к действию. Агент [[ux-composer]] выбирает блок из библиотеки согласно `prototype.yaml`, если прототип предполагает форму записи или обратной связи. Подходит для ниш **услуги, онлайн-образование, b2b-saas** на русскоязычном рынке.
+Используется на этапе **07b Compose** при сборке `composed.html` как финальный контактный экран. Подходит для ниш: услуги (services), образование (education), B2B SaaS. Ориентирован на русскоязычный рынок (`ru_market: true`). Выбирается в wireframe-раскладке, когда нужен корпоративный (corporate) стиль и split-компоновка без анимаций.
 
 ## Что на вход / на выход
 
 **Вход:**
-- `prototype.yaml` — описание секции contacts с заголовком и типом формы
-- `tokens.json` — дизайн-токены проекта (цвета, шрифты) для подстановки
-- Слот `heading` (обязательный, тип text) — крупный заголовок экрана
+- Слот `heading` (text, обязательный) — крупный заголовок секции контактов.
 
 **Выход:**
-- HTML-фрагмент блока, встроенный в `07a_WIREFRAME/wireframe.html` или `07b_COMPOSED/composed.html`
-- Placeholder для формы выбора времени (заполняется на этапе 08 через [[integrations-engineer]] / Fluent Forms)
-- Placeholder для CTA-кнопки с брендовым акцентным цветом из токенов
+- Готовый HTML-блок контактного экрана с заголовком, формой выбора времени и кнопкой, вписанный в `composed.html`.
 
-## Особенности
-- **Анимация:** отсутствует (`has_animation: false`) — подходит для проектов без GSAP
-- **Рынок:** адаптирован для RU-рынка (`ru_market: true`)
-- **Паттерн:** split (двухколоночный) в `corporate` настроении — строгий, без лишних декораций
-- **Источник:** импортирован из портфолио kdm1.ru методом `codex-block-generation` (2026-05-16)
+## Дополнительные характеристики
+| Параметр | Значение |
+|---|---|
+| Категория | contacts |
+| Раскладка | split |
+| Стиль | corporate |
+| Анимация | нет |
+| Ru-рынок | да |
+| Метод импорта | codex-block-generation |
+| Источник | portfolio.kdm1.ru (онлайн-школа Дм. Выходцева, 2026-05-16) |
 
 ## Связанные концепты
-- [[ux-composer]] — выбирает этот блок из библиотеки при сборке wireframe
-- [[block-composition]] — подставляет токены и тексты из prototype.yaml в этапе 07b
-- [[wireframe-rendering]] — рендерит блок в интерактивный wireframe.html
-- [[integrations-engineer]] — подключает реальную форму Fluent Forms вместо placeholder на этапе 08
-- [[block-library-management]] — управляет каталогом, в котором хранится этот блок
+- [[landing-wireframe]] — блок выбирается пользователем через интерактивный wireframe.html на этапе 07a
+- [[landing-compose]] — блок встраивается в composed.html на этапе 07b
+- [[landing-design]] — стиль corporate согласуется с design-system проекта (этап 05)
 
 ## Источник
 - `block-library/contacts/contacts-corporate-split-portfolio-kdm1-ru-16/meta.yaml`

@@ -2,59 +2,51 @@
 type: agent
 name: block-composer
 sources: ["agents/block-composer.md"]
-updated: 2026-05-25
+updated: 2026-05-26
 triggers: []
 stage: "07b"
-uses: ["landing-wireframe", "landing-design", "landing-prototype", "premium-07b-checklist", "stage-execution-protocol", "landing-photos", "landing-visuals"]
-tags: ["compose", "html", "design-tokens", "07b", "stage"]
+uses: ["stage-execution-protocol", "premium-07b-checklist", "landing-wireframe", "landing-compose", "landing-photos", "landing-visuals"]
+tags: ["compose", "07b", "html", "design-tokens", "premium"]
 ---
 
-# block-composer — Сборка composed.html (этап 07b)
+# Block Composer — Агент сборки composed.html
 
 ## Что делает
-
-Собирает финальный HTML-макет лендинга (`composed.html`) из утверждённых пользователем вариантов блоков, подставляет реальные тексты из прототипа и применяет дизайн-токены (цвета, шрифты, тени). Визуальные материалы — фото, иконки, инфографика — остаются видимыми placeholder-метками: их заполнят этапы PR-B и PR-C.
+Собирает финальный цветной макет лендинга (`composed.html`) из утверждённых вариантов блоков, вставляет реальные тексты из прототипа и дизайн-токены из бренд-кита. Визуальные элементы (фото, иконки, инфографика) оставляет как именованные плейсхолдеры — их заполнят следующие этапы PR-B и PR-C.
 
 ## Когда вызывать / в каком этапе
-
-Вызывается на этапе **07b** (Block Compose) командой `/landing-compose`. Предшественники должны быть закрыты:
-- `07a_WIREFRAME/selections.yaml` — пользователь выбрал варианты блоков в wireframe.html
-- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — дизайн-система утверждена
-- `07_ПРОТОТИП/prototype.yaml` — прототип разобран и зафиксирован
-
-Агент читает `.landing-state.yaml` и проверяет `current_stage == 07c_composed`. Если предшественник не закрыт — harness-хук `enforce_stage_gate.py` физически блокирует запись файлов.
+Этап **07b (Block Compose)**. Вызывается командой `/landing-compose` после того, как пользователь выбрал варианты блоков в `wireframe.html` и положил `selections.yaml` в папку `07a_WIREFRAME/`. Перед запуском агент проверяет, что `.landing-state.yaml` показывает `current_stage == 07c_composed`, прогоняет `gate-check.sh` и рисует Mermaid-карту pipeline.
 
 ## Что на вход / на выход
 
-**Вход:**
-- `<project>/07_ПРОТОТИП/prototype.yaml` — тексты, заголовки, CTA (неприкосновенны, переносятся дословно)
-- `<project>/07a_WIREFRAME/selections.yaml` — выбранные варианты блоков
-- `<project>/05_ДИЗАЙН-СИСТЕМА/tokens.json` — CSS-переменные бренда
-- `block-library/` — общая библиотека wireframe-блоков
-- `docs/standards/premium-07b-checklist.md` — обязательный стандарт качества (13 фич)
+**Входные артефакты:**
+- `<project>/07_ПРОТОТИП/prototype.yaml` — финальные тексты и CTA (неприкосновенны)
+- `<project>/07a_WIREFRAME/selections.yaml` — выбор вариантов блоков пользователем
+- `<project>/05_ДИЗАЙН-СИСТЕМА/tokens.json` — цвета, шрифты, тени
+- `block-library/` — общая библиотека блоков
+- `docs/standards/premium-07b-checklist.md` — 13 обязательных премиум-фич
 
-**Выход:**
-- `<project>/07b_COMPOSED/composed.html` — итоговый макет с токенами и текстами
-- `<project>/07b_COMPOSED/composed-mobile.html` — мобильная версия
-- `<project>/07b_COMPOSED/composed-mobile-preview.html` — iframe-превью iPhone/iPad
-- `<project>/07b_COMPOSED/composed-explained.md` — RU-документация по сборке
+**Выходные артефакты:**
+- `07b_COMPOSED/composed.html` — полный макет с токенами и текстами
+- `07b_COMPOSED/composed-mobile.html` — мобильная версия
+- `07b_COMPOSED/composed-mobile-preview.html` — iframe-превью для iPhone/iPad
+- `07b_COMPOSED/composed-explained.md` — описание сборки на русском
 
-## Ключевые ограничения
+## Ключевые правила
 
-**Контент прототипа неприкосновенен (PR-H):** заголовки, CTA и тексты из `prototype.yaml` переносятся дословно. Любое изменение — только после явного разрешения пользователя с обновлением `prototype.yaml`.
+**Тексты прототипа неприкосновенны (PR-H):** заголовки, CTA и абзацы переносятся дословно. Любое изменение — только с явного разрешения пользователя, и сначала обновляется `prototype.yaml`.
 
-**HARD GATE 07b:** этап не закрывается, пока `verify-composed-premium.sh` не вернёт exit 0. Обязательные 13 премиум-фич: CSS-переменные, `clamp()`-типографика, glassmorphism-навигация, parallax-фон, анимации через `IntersectionObserver`, градиентный текст, hover-lift на карточках, слайдер, lightbox, count-up, smooth scroll, pulse-dot.
+**HARD GATE:** этап не закрывается, пока `scripts/verify-composed-premium.sh` не вернёт exit 0. Обязательны все 13 премиум-фич: CSS-переменные, `clamp()` типографика, glassmorphism nav, parallax hero, IntersectionObserver, gradient text, hover-lift, слайдер, lightbox, count-up, smooth scroll, pulse-dot.
+
+**Блокирующий хук:** `scripts/hooks/enforce_stage_gate.py` физически запрещает Write/Edit к файлам этапа, если предшественники не закрыты — обходить нельзя.
 
 ## Связанные концепты
-
-- [[landing-wireframe]] — поставляет `selections.yaml` с выбором блоков на входе
-- [[landing-prototype]] — поставляет `prototype.yaml` с финальными текстами
-- [[landing-design]] — поставляет `tokens.json` с дизайн-токенами
-- [[premium-07b-checklist]] — definition of done: 13 обязательных фич
-- [[stage-execution-protocol]] — обязательный протокол перед каждым Write/Edit
-- [[landing-photos]] — этап PR-B, заполняет photo-placeholders после compose
-- [[landing-visuals]] — этап PR-C, заполняет icon/infographic-placeholders после compose
+- [[stage-execution-protocol]] — обязательный протокол перед любым действием агента
+- [[premium-07b-checklist]] — definition of done для 13 премиум-фич
+- [[landing-wireframe]] — предшествующий этап 07a, источник selections.yaml
+- [[landing-compose]] — slash-команда, запускающая этого агента
+- [[landing-photos]] — PR-B: заполняет фото-плейсхолдеры после 07b
+- [[landing-visuals]] — PR-C: заполняет иконки/инфографику после 07b
 
 ## Источник
-
 - `agents/block-composer.md`
