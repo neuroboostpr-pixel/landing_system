@@ -2,8 +2,8 @@
 
 > Авто-сгенерированный индекс. Обновляется при `python -m scripts.wiki.compile --source-mode=system`.
 
-**Концептов всего:** 99
-**Категории:** agent, command, skill, stage
+**Концептов всего:** 117
+**Категории:** agent, catalog, command, rule, skill, stage
 
 **Известные ограничения:**
 - Блоки из `block-library/` ещё не в wiki — отдельная задача.
@@ -21,6 +21,16 @@
 - [[06-stek]] — Стек технологий
 - [[07-kontent]] — 07 — Написание контента
 - [[07-prototip]] — 07 Прототип — импорт источника правды
+- [[07a-wireframe]] — 07a Wireframe — Интерактивный выбор композиций блоков
+- [[07b-composed]] — 07b — Composed HTML
+- [[07c-photos]] — 07c — Фото клиента и Photo Pipeline
+- [[07d-visuals]] — 07d — Иконки и инфографика
+- [[08-kod]] — 08_КОД — WordPress-код лендинга
+- [[09-deploy]] — 09 Деплой
+- [[10-qa]] — QA-аудит
+- [[11-analitika]] — 11 — Аналитика
+- [[12-seo]] — 12_SEO — SEO-финализация
+- [[13-segmenty-tsa]] — 13_СЕГМЕНТЫ_ЦА — Сегменты целевой аудитории
 
 ## 🤖 Агенты
 
@@ -119,3 +129,11 @@
 - [[landing-style]] — /landing-style — CSS и block.php для этапа 08b
 - [[landing-visuals]] — /landing-visuals — Генерация визуальных ассетов
 - [[landing-wireframe]] — /landing-wireframe — Интерактивный Wireframe
+
+## 📐 Правила (стандарты качества)
+
+- [[premium-07b-checklist]] — PREMIUM 07b — Чек-лист сборки composed.html
+- [[stage-08-spec-lint]] — Stage-08 Composed ↔ block-spec Lint
+- [[stage-agent-preamble]] — Stage Agent Preamble (канонический блок)
+- [[stage-execution-protocol]] — Протокол выполнения этапов (обязательный)
+- [[wiki-audit-checklist]] — Wiki Audit Checklist

@@ -1,12 +1,14 @@
 version: 1
-generated_at: '2026-05-26T13:32:02+00:00'
+generated_at: '2026-05-26T13:43:05+00:00'
 counts:
-  total: 99
+  total: 117
   by_type:
-    stage: 10
+    stage: 20
     agent: 33
     skill: 27
+    catalog: 3
     command: 29
+    rule: 5
 concepts:
 - slug: 00-brif
   type: stage
@@ -297,6 +299,343 @@ concepts:
   confidence:
     gates: low
     pre_reqs: low
+- slug: 07a-wireframe
+  type: stage
+  name: 07a Wireframe — Интерактивный выбор композиций блоков
+  card: concepts/stages/07a-wireframe.md
+  source: template/07a_WIREFRAME/README.md
+  stage: 07a
+  tags:
+  - wireframe
+  - ux
+  - preview
+  - block-composition
+  - interactive
+  inputs:
+  - 07-prototip
+  - candidates.yaml
+  outputs:
+  - wireframe.html
+  - candidates.yaml
+  - selections.yaml
+  gates:
+  - selections_confirmed
+  pre_reqs:
+  - 07-prototip
+  - 05-dizayn-sistema
+  related:
+  - ux-composer
+  - block-composer
+  - block-composition
+  - landing-wireframe
+  - landing-compose
+  - wireframe-rendering
+  confidence:
+    gates: low
+    triggers: low
+- slug: 07b-composed
+  type: stage
+  name: 07b — Composed HTML
+  card: concepts/stages/07b-composed.md
+  source: template/07b_COMPOSED/README.md
+  stage: 07b
+  tags:
+  - compose
+  - html
+  - design-tokens
+  - premium
+  - placeholder
+  - wireframe
+  inputs:
+  - 05-dizayn-sistema
+  - 07-prototip
+  - landing-wireframe
+  outputs:
+  - 07b_COMPOSED/composed.html
+  - 07b_COMPOSED/composed-mobile-preview.html
+  - 07b_COMPOSED/composed-explained.md
+  - 07b_COMPOSED/block-injection-log.md
+  gates:
+  - verify-composed-premium
+  pre_reqs:
+  - 05-dizayn-sistema
+  - 07-prototip
+  - landing-wireframe
+  related:
+  - landing-compose
+  - block-composer
+  - landing-photos
+  - landing-visuals
+  - landing-build
+- slug: 07c-photos
+  type: stage
+  name: 07c — Фото клиента и Photo Pipeline
+  card: concepts/stages/07c-photos.md
+  source: template/07c_PHOTOS/README.md
+  stage: 07c
+  tags:
+  - photo-pipeline
+  - pr-b
+  - client-assets
+  - stage
+  triggers:
+  - landing-photos
+  - landing-go
+  inputs:
+  - 05-dizayn-sistema
+  - 07-prototip
+  - 02-materialy-klienta
+  outputs:
+  - catalog.yaml
+  - selections.yaml
+  - photo-board.html
+  - photo-preview.html
+  - processed/
+  gates:
+  - photo-board-approved
+  pre_reqs:
+  - 05-dizayn-sistema
+  - 07-prototip
+  related:
+  - landing-photos
+  - photo-classifier
+  - photo-curation
+  - photo-curator
+  - photo-matcher
+  - photo-preview-board
+  - photo-styling
+  - photo-stylist
+  confidence:
+    gates: low
+- slug: 07d-visuals
+  type: stage
+  name: 07d — Иконки и инфографика
+  card: concepts/stages/07d-visuals.md
+  source: template/07d_VISUALS/README.md
+  stage: 07d
+  tags:
+  - visuals
+  - icons
+  - infographics
+  - ai-generation
+  - codex
+  - image-gen
+  triggers:
+  - landing-visuals
+  inputs:
+  - landing-compose
+  - 05-dizayn-sistema
+  outputs:
+  - 07d-visuals
+  gates:
+  - visuals_slots_filled
+  pre_reqs:
+  - 05-dizayn-sistema
+  - landing-compose
+  related:
+  - landing-visuals
+  - visual-generation
+  - icon-generator
+  - infographic-builder
+  - landing-compose
+  - gpt5-prompting-engine
+  confidence:
+    gates: low
+- slug: 08-kod
+  type: stage
+  name: 08_КОД — WordPress-код лендинга
+  card: concepts/stages/08-kod.md
+  source: template/08_КОД/README.md
+  stage: 08
+  tags:
+  - build
+  - wordpress
+  - theme
+  - gutenberg
+  - acf
+  - auto
+  triggers:
+  - landing-build
+  inputs:
+  - 07-kontent
+  - 05-dizayn-sistema
+  - 06-stek
+  outputs:
+  - 08-kod
+  gates:
+  - theme_files_present
+  - blocks_registered
+  pre_reqs:
+  - 07-kontent
+  - 05-dizayn-sistema
+  - 06-stek
+  related:
+  - landing-build
+  - wp-builder
+  - wp-gutenberg-block-builder
+  - frontend-builder
+  - landing-style
+  - landing-deploy
+  confidence:
+    gates: low
+    inputs: low
+- slug: 09-deploy
+  type: stage
+  name: 09 Деплой
+  card: concepts/stages/09-deploy.md
+  source: template/09_ДЕПЛОЙ/README.md
+  stage: 09
+  tags:
+  - deploy
+  - beget
+  - ssh
+  - wp-cli
+  - wordpress
+  triggers:
+  - landing-deploy
+  inputs:
+  - 08-kod
+  - beget-config.yaml
+  outputs:
+  - deploy-log.md
+  - beget-config.yaml
+  gates:
+  - deploy_success
+  pre_reqs:
+  - landing-build
+  - wp-cli-deployer
+  related:
+  - landing-deploy
+  - wp-deployer
+  - wp-cli-deployer
+  - landing-rollback
+  - 06-stek
+  confidence:
+    gates: low
+    inputs: low
+- slug: 10-qa
+  type: stage
+  name: QA-аудит
+  card: concepts/stages/10-qa.md
+  source: template/10_QA/README.md
+  stage: '10'
+  tags:
+  - qa
+  - audit
+  - lighthouse
+  - seo
+  - accessibility
+  - pagespeed
+  triggers:
+  - landing-deploy
+  inputs:
+  - 09-deploy
+  outputs:
+  - 10_QA/qa-report.md
+  - 10_QA/lighthouse.json
+  gates:
+  - qa_report_present
+  - lighthouse_score_pass
+  pre_reqs:
+  - landing-deploy
+  related:
+  - qa-auditor
+  - landing-qa
+  - seo-tech-audit
+  - landing-final-check
+  - landing-deploy
+  confidence:
+    gates: low
+    triggers: low
+- slug: 11-analitika
+  type: stage
+  name: 11 — Аналитика
+  card: concepts/stages/11-analitika.md
+  source: template/11_АНАЛИТИКА/README.md
+  stage: '11'
+  tags:
+  - analytics
+  - yandex-metrika
+  - google-analytics
+  - events
+  - auto
+  outputs:
+  - 11_АНАЛИТИКА/analytics-config.md
+  - 11_АНАЛИТИКА/events.yaml
+  pre_reqs:
+  - landing-deploy
+  related:
+  - analytics-engineer
+  - landing-qa
+  - landing-final-check
+  confidence:
+    inputs: low
+    gates: low
+    pre_reqs: low
+- slug: 12-seo
+  type: stage
+  name: 12_SEO — SEO-финализация
+  card: concepts/stages/12-seo.md
+  source: template/12_SEO/README.md
+  stage: '12'
+  tags:
+  - seo
+  - auto
+  - final
+  - pipeline
+  outputs:
+  - 12_SEO/seo-meta.md
+  - 12_SEO/sitemap.xml
+  - 12_SEO/robots.txt
+  gates:
+  - seo_meta_complete
+  - sitemap_valid
+  - robots_txt_present
+  pre_reqs:
+  - landing-qa
+  related:
+  - seo-optimizer
+  - seo-tech-audit
+  - landing-final-check
+  - landing-deploy
+  confidence:
+    gates: low
+    inputs: low
+- slug: 13-segmenty-tsa
+  type: stage
+  name: 13_СЕГМЕНТЫ_ЦА — Сегменты целевой аудитории
+  card: concepts/stages/13-segmenty-tsa.md
+  source: template/13_СЕГМЕНТЫ_ЦА/README.md
+  stage: '13'
+  tags:
+  - multisite
+  - audience-segments
+  - subdomain
+  - wordpress
+  triggers:
+  - landing-segment
+  inputs:
+  - .landing-state.yaml
+  - 04-brend
+  - 05-dizayn-sistema
+  outputs:
+  - 13_СЕГМЕНТЫ_ЦА/<slug>/subbrief.yaml
+  - 13_СЕГМЕНТЫ_ЦА/<slug>/.subsite-meta.yaml
+  gates:
+  - segment_subsite_created
+  - subdomain_live
+  pre_reqs:
+  - landing-setup
+  - wp-multisite
+  related:
+  - landing-clone
+  - landing-segment
+  - wp-multisite
+  - landing-go
+  - landing-deploy
+  confidence:
+    gates: low
+    inputs: low
 - slug: analytics-engineer
   type: agent
   name: Инженер аналитики
@@ -398,6 +737,31 @@ concepts:
   confidence:
     triggers: low
     pre_reqs: low
+- slug: block-library
+  type: catalog
+  name: Библиотека wireframe-блоков
+  card: concepts/catalogs/block-library.md
+  source: block-library/README.md
+  tags:
+  - block-library
+  - wireframe
+  - catalog
+  - scaffolding
+  triggers:
+  - landing-wireframe
+  - landing-compose
+  - landing-import-blocks
+  outputs:
+  - block-library/catalog.yaml
+  related:
+  - landing-wireframe
+  - landing-compose
+  - landing-import-blocks
+  - block-composition
+  - block-composer
+  - wp-gutenberg-block-builder
+  confidence:
+    triggers: low
 - slug: block-library-management
   type: skill
   name: Управление библиотекой блоков
@@ -1836,6 +2200,23 @@ concepts:
   confidence:
     inputs: low
     outputs: low
+- slug: memory
+  type: catalog
+  name: Папка памяти сессий проекта
+  card: concepts/stages/memory.md
+  source: template/memory/README.md
+  tags:
+  - memory
+  - sessions
+  - project
+  - template
+  - knowledge-base
+  related:
+  - lifecycle-keeper
+  - landing-orchestrator
+  - landing-go
+  confidence:
+    related: low
 - slug: moodboard-composer
   type: agent
   name: Moodboard Composer
@@ -2226,6 +2607,52 @@ concepts:
   - photo-matcher
   confidence:
     triggers: low
+- slug: premium-07b-checklist
+  type: rule
+  name: PREMIUM 07b — Чек-лист сборки composed.html
+  card: concepts/rules/premium-07b-checklist.md
+  source: docs/standards/premium-07b-checklist.md
+  stage: 07b
+  tags:
+  - composed
+  - premium
+  - checklist
+  - frontend
+  - css
+  - javascript
+  - accessibility
+  - mobile
+  triggers:
+  - landing-compose
+  inputs:
+  - 00-brif
+  - 04-brend
+  - 05-dizayn-sistema
+  - 07-kontent
+  - 07-prototip
+  outputs:
+  - block-composition
+  gates:
+  - all_inputs_present
+  - file_size_60_150kb
+  - lighthouse_performance_85
+  - lighthouse_accessibility_90
+  - composed_mobile_preview_exists
+  - composed_explained_md_exists
+  - photo_mapping_yaml_exists
+  pre_reqs:
+  - 04-brend
+  - 05-dizayn-sistema
+  - 07-kontent
+  - 07-prototip
+  - landing-wireframe
+  related:
+  - landing-compose
+  - block-composer
+  - block-composition
+  - ux-composer
+  - landing-design
+  - landing-wireframe
 - slug: prototype-import
   type: skill
   name: Импорт прототипа
@@ -2497,6 +2924,95 @@ concepts:
   confidence:
     triggers: low
     gates: low
+- slug: stage-08-spec-lint
+  type: rule
+  name: Stage-08 Composed ↔ block-spec Lint
+  card: concepts/rules/stage-08-spec-lint.md
+  source: docs/standards/stage-08-spec-lint.md
+  stage: 08
+  tags:
+  - lint
+  - stage-08
+  - block-spec
+  - gate
+  - quality
+  - composed
+  triggers:
+  - landing-build
+  inputs:
+  - 07b_COMPOSED/composed.html
+  - 08_КОД/block-spec.yaml
+  outputs:
+  - lint-report-json
+  - exit-code
+  gates:
+  - stage-08-spec-lint
+  pre_reqs:
+  - landing-compose
+  - landing-build
+  related:
+  - landing-build
+  - landing-style
+  - landing-compose
+  - wp-gutenberg-block-builder
+  confidence:
+    triggers: low
+- slug: stage-agent-preamble
+  type: rule
+  name: Stage Agent Preamble (канонический блок)
+  card: concepts/rules/stage-agent-preamble.md
+  source: docs/standards/stage-agent-preamble.md
+  tags:
+  - standards
+  - protocol
+  - gate-check
+  - stage-execution
+  - preamble
+  related:
+  - landing-orchestrator
+  confidence:
+    triggers: low
+- slug: stage-execution-protocol
+  type: rule
+  name: Протокол выполнения этапов (обязательный)
+  card: concepts/rules/stage-execution-protocol.md
+  source: docs/standards/stage-execution-protocol.md
+  stage: all
+  tags:
+  - protocol
+  - orchestrator
+  - pipeline
+  - gates
+  - todo
+  triggers:
+  - landing-go
+  - landing-build
+  - landing-deploy
+  - landing-compose
+  - landing-wireframe
+  - landing-prototype
+  - landing-photos
+  - landing-visuals
+  inputs:
+  - .landing-state.yaml
+  - config/stage-gates.yaml
+  - docs/standards/stage-<id>-checklist.md
+  outputs:
+  - wiki/pipeline-map.md
+  - TodoWrite tasks
+  gates:
+  - hard_checks
+  - gate-check-approve
+  related:
+  - landing-go
+  - landing-orchestrator
+  - landing-build
+  - landing-compose
+  - landing-wireframe
+  - landing-prototype
+  - landing-photos
+  - landing-visuals
+  - landing-deploy
 - slug: style-decomposition
   type: skill
   name: Декомпозиция стиля (Style Decomposition)
@@ -2723,6 +3239,53 @@ concepts:
   confidence:
     stage: low
     pre_reqs: low
+- slug: wiki
+  type: catalog
+  name: Wiki графа проекта
+  card: concepts/stages/wiki.md
+  source: template/wiki/README.md
+  tags:
+  - wiki
+  - project-graph
+  - auto-generated
+  - catalog
+  - pipeline
+  inputs:
+  - template/wiki/README.md
+  outputs:
+  - wiki/index.md
+  - wiki/log.md
+  - wiki/concepts/stage-current.md
+  - wiki/concepts/blocks.md
+  - wiki/concepts/brand.md
+  - wiki/concepts/photos.md
+  related:
+  - landing-go
+  - landing-orchestrator
+  - landing-prototype
+  - landing-brand
+  - landing-design
+  - landing-photos
+  - landing-wireframe
+  - landing-compose
+  confidence:
+    slug: low
+    triggers: low
+- slug: wiki-audit-checklist
+  type: rule
+  name: Wiki Audit Checklist
+  card: concepts/rules/wiki-audit-checklist.md
+  source: docs/standards/wiki-audit-checklist.md
+  tags:
+  - wiki
+  - audit
+  - quality
+  - knowledge-management
+  - code-review
+  related:
+  - landing-orchestrator
+  - landing-go
+  - seo-tech-audit
 - slug: wireframe-rendering
   type: skill
   name: Рендеринг интерактивного Wireframe (07a)
