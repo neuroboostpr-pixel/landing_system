@@ -110,6 +110,54 @@ def _build_index(concepts: list[dict[str, Any]]) -> str:
     return "\n".join(lines)
 
 
+INDEX_SCHEMA_VERSION = 1
+
+_YAML_OPTIONAL_FIELDS = (
+    "stage", "tags", "triggers", "inputs", "outputs",
+    "gates", "pre_reqs", "related", "invoked_by", "uses_skills",
+    "confidence", "incomplete",
+)
+
+_YAML_REQUIRED_FIELDS = ("slug", "type", "name", "card", "source")
+
+
+def _build_yaml_index(concepts: list[dict[str, Any]]) -> str:
+    """Детерминированно строит YAML-индекс для orchestrator routing.
+
+    Без SDK. Сортирует концепты по slug. Опциональные поля с None/пустыми
+    значениями пропускаются, чтобы YAML был компактным.
+    """
+    from datetime import datetime, timezone
+    import yaml as _yaml
+
+    by_type: dict[str, int] = {}
+    cleaned: list[dict[str, Any]] = []
+    for c in sorted(concepts, key=lambda x: x.get("slug", "")):
+        entry: dict[str, Any] = {}
+        for field in _YAML_REQUIRED_FIELDS:
+            value = c.get(field)
+            if value is not None:
+                entry[field] = value
+        for field in _YAML_OPTIONAL_FIELDS:
+            value = c.get(field)
+            if value is None:
+                continue
+            if isinstance(value, (list, dict)) and len(value) == 0:
+                continue
+            entry[field] = value
+        cleaned.append(entry)
+        type_ = c.get("type", "unknown")
+        by_type[type_] = by_type.get(type_, 0) + 1
+
+    doc = {
+        "version": INDEX_SCHEMA_VERSION,
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "counts": {"total": len(cleaned), "by_type": by_type},
+        "concepts": cleaned,
+    }
+    return _yaml.safe_dump(doc, allow_unicode=True, sort_keys=False)
+
+
 def _append_log(log_path: Path, entries: list[str]) -> None:
     """Аппендит запись в wiki/log.md."""
     today = date.today().isoformat()
