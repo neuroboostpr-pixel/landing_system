@@ -2,7 +2,7 @@
 
 > Авто-сгенерированный индекс. Обновляется при `python -m scripts.wiki.compile --source-mode=system`.
 
-**Концептов всего:** 39
+**Концептов всего:** 59
 **Категории:** agent, skill
 
 **Известные ограничения:**
@@ -53,3 +53,23 @@
 - [[client-assets-collection]] — Сбор материалов клиента
 - [[design-tokens-generation]] — Генерация дизайн-токенов
 - [[gpt5-prompting-engine]] — GPT-5 Prompting Engine
+- [[landing-from-context]] — Создание лендинга из контекста агентства
+- [[landing-onboarding]] — Онбординг landing-system
+- [[landing-project-init]] — Инициализация нового проекта лендинга
+- [[landing-versioning-and-cloning]] — Версионирование и клонирование лендингов (legacy)
+- [[moodboard-creation]] — Рендер мудборда
+- [[niche-analysis]] — Анализ ниши и конкурентов
+- [[paralaximus-codex]] — Параллакс-герой Paralaximus Codex
+- [[photo-curation]] — Конвейер обработки клиентских фото (Photo Curation)
+- [[photo-styling]] — Стилизация фото
+- [[prototype-import]] — Импорт прототипа
+- [[references-collection]] — Управление индексом референсов
+- [[seo-tech-audit]] — SEO Tech Audit
+- [[style-decomposition]] — Декомпозиция стиля (Style Decomposition)
+- [[visual-generation]] — Генерация визуалов (иконки и инфографика)
+- [[visual-qa]] — Visual QA — автоматический визуальный контроль
+- [[wireframe-rendering]] — Рендеринг интерактивного Wireframe (07a)
+- [[wp-cli-deployer]] — WP-CLI Deployer
+- [[wp-gutenberg-block-builder]] — WP Gutenberg Block Builder
+- [[wp-landing-config]] — WP Landing Config — mu-plugin для настройки лендинга
+- [[wp-multisite]] — WP Multisite — управление Multisite-сетью на Beget
