@@ -1,50 +1,64 @@
 ---
 slug: landing-orchestrator
 type: agent
-name: "Landing Orchestrator — Главный дирижёр"
-tags: [orchestrator, pipeline, workflow, stages, dispatch]
-triggers: [landing-go, landing-build, landing-deploy, landing-qa, landing-rollback, landing-clone]
-inputs: [.landing-state.yaml, config/stage-gates.yaml]
-outputs: [.landing-state.yaml, 00_БРИФ/brief.md, wiki/pipeline-map.md]
-pre_reqs: [landing-start, landing-new]
-related: [landing-go, landing-build, landing-deploy, landing-prototype, landing-wireframe, landing-compose, landing-photos, landing-visuals, landing-qa, landing-status]
+name: "Главный дирижёр (Landing Orchestrator)"
+tags: [orchestrator, workflow, pipeline, stages, hard-gate]
+triggers: [landing-go, landing-new, landing-build, landing-deploy]
+inputs: [.landing-state.yaml, 07_ПРОТОТИП/source/prototype.pdf, config/stage-gates.yaml]
+outputs: [wiki/pipeline-map.md, 00_БРИФ/brief.md, артефакты каждого этапа]
+pre_reqs: [landing-onboarding-wizard]
+related:
+  - niche-analyst
+  - brand-architect
+  - content-writer
+  - design-system-generator
+  - moodboard-composer
+  - client-assets-collector
+  - photo-curator
+  - block-composer
+  - integrations-engineer
+  - analytics-engineer
+  - lifecycle-keeper
 sources: ["agents/landing-orchestrator.md"]
 updated: 2026-05-26
+confidence:
+  triggers: low
 ---
 
-# Landing Orchestrator — Главный дирижёр
+# Главный дирижёр (Landing Orchestrator)
 
 ## Что делает
 
-Ведёт проект-лендинг через полный цикл из 12 этапов: от брифа до SEO-оптимизации. Читает `.landing-state.yaml`, определяет текущий этап, диспатчит нужного специализированного агента (brand-architect, wp-builder, wp-deployer и др.) и принудительно блокирует переход к следующему этапу без явного утверждения пользователя. В prototype-first режиме (PR-D) работает через команду `/landing-go` как единую точку входа с auto-resume по state-файлу.
+Ведёт проект-лендинг через 12 этапов — от брифа до SEO — и обеспечивает соблюдение качества на каждом из них. Перед любым действием читает `.landing-state.yaml`, рисует Mermaid-карту pipeline, формирует TodoWrite со всеми оставшимися этапами и запускает `gate-check.sh`. На каждом этапе диспатчит специализированного агента, ждёт HTML-превью, затем требует явного утверждения пользователя (HARD GATE) перед переходом к следующему шагу. В prototype-first режиме (PR-D) запускается через `/landing-go` и самостоятельно распределяет параллельные этапы 07d (фото) и 07e (визуалы).
 
 ## Когда вызывается
 
-Основной триггер — `/landing-go` (prototype-first flow). Также активируется через `/landing-build`, `/landing-deploy`, `/landing-qa`, `/landing-rollback`, `/landing-clone`. Запускается после того, как проект инициализирован через `/landing-start` или `/landing-new` и в папке `07_ПРОТОТИП/source/` лежит `prototype.pdf`.
+Запускается командой `/landing-go` после инициализации проекта (онбординг завершён, папка проекта создана). Также задействуется внутри команд `/landing-new`, `/landing-build`, `/landing-deploy` — всякий раз, когда нужен контроль workflow. Не запускается в обход — пользователь не может попросить «перейти сразу к деплою».
 
 ## Вход → выход
 
-**Вход:** инициализированная папка проекта, `.landing-state.yaml` с текущим статусом этапов, `config/stage-gates.yaml` с определениями гейтов, артефакты предыдущих этапов (прототип, бренд-кит, tokens.json и т.д.).
+**Вход:** инициализированный проект с `.landing-state.yaml`, файл `config/stage-gates.yaml` со списком зависимостей между этапами; в prototype-first режиме — `prototype.pdf` в `07_ПРОТОТИП/source/`.
 
-**Выход:** последовательно закрытые этапы 00–12 в `.landing-state.yaml`, HTML-превью каждого этапа для утверждения пользователем, задиспатченные агенты с их артефактами, итоговый задеплоенный WordPress-сайт.
+**Выход:** обновлённый `.landing-state.yaml` с отметками `approved` для каждого пройденного этапа; `wiki/pipeline-map.md` с актуальной Mermaid-картой; все промежуточные артефакты этапов (brief.md, brand-kit.html, composed.html, build-preview.html и т.д.).
 
 ## Failure modes
 
-- **Прыжок через этап** — оркестратор отказывает, если `require_approved` в stage-gates.yaml содержит незакрытый этап; пользователь получает явное сообщение с инструкцией.
-- **Падение hard_check** — оркестратор не переходит дальше; парсит `fix_hint`, предлагает авто-фикс (один раз на check_id для защиты от циклов).
-- **Premium 07b не прошёл** — `verify-composed-premium.sh` вернул exit ≠ 0; оркестратор возвращает задачу `block-composer` и не принимает approve.
-- **Параллельные субагенты (07d+07e)** — если один из двух завис или упал, оркестратор ждёт оба и не переходит к 07f, пока не пройдут оба гейта.
-- **Отсутствует `.landing-state.yaml`** — оркестратор не стартует; нужен `/landing-new` или `/landing-start`.
+- Пользователь просит пропустить этап — оркестратор отказывает жёстко, ссылаясь на `require_approved` из `stage-gates.yaml`.
+- Hard-check на гейте падает, но `fix_hint` не прописан в `stage-gates.yaml` — авто-фикс невозможен, оркестратор сообщает об ошибке и зависает.
+- Verify-скрипт (например `verify-composed-premium.sh`) возвращает ненулевой exit-код — оркестратор НЕ объявляет этап завершённым и гоняет `block-composer` в цикле.
+- Параллельные субагенты 07d/07e вернули ошибку в одном из потоков — оркестратор не переходит к 07f до тех пор, пока оба гейта не закрыты.
+- `.landing-state.yaml` отсутствует или повреждён — весь pipeline недоступен; нужен `migrate-state-for-prd.sh`.
 
 ## Related
 
-- [[landing-go]] — команда-точка входа, которая запускает оркестратор
-- [[landing-build]] — команда этапа 08, диспатчится оркестратором для сборки WordPress-темы
-- [[landing-deploy]] — команда этапа 09, деплой на Бегет через wp-deployer
-- [[landing-prototype]] — парсинг prototype.pdf, первый авто-этап в PR-D потоке
-- [[landing-wireframe]] — интерактивный выбор вариантов блоков (этап 07b)
-- [[landing-compose]] — сборка composed.html (этапы 07c и 07f)
-- [[landing-photos]] — обработка клиентских фото (этап 07d, параллельно с 07e)
-- [[landing-visuals]] — AI-генерация иконок и инфографики (этап 07e)
-- [[landing-qa]] — аудит задеплоенного сайта (этапы 10–12)
-- [[landing-status]] — просмотр текущего состояния pipeline без запуска действий
+- [[niche-analyst]] — диспатчится на этапе 01a
+- [[brand-architect]] — диспатчится на этапе 04
+- [[design-system-generator]] — диспатчится на этапе 05
+- [[moodboard-composer]] — диспатчится на этапе 03
+- [[content-writer]] — диспатчится на этапе 07
+- [[block-composer]] — переделывает composed.html если 07b-гейт упал
+- [[photo-curator]] — параллельный субагент этапа 07d
+- [[integrations-engineer]] — диспатчится на этапе 08
+- [[analytics-engineer]] — диспатчится на этапах 08 и 11
+- [[lifecycle-keeper]] — диспатчится на rollback и clone
+- [[landing-onboarding-wizard]] — должен завершиться до первого запуска оркестратора

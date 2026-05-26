@@ -2,8 +2,8 @@
 
 > Авто-сгенерированный индекс. Обновляется при `python -m scripts.wiki.compile --source-mode=system`.
 
-**Концептов всего:** 20
-**Категории:** agent
+**Концептов всего:** 39
+**Категории:** agent, skill
 
 **Известные ограничения:**
 - Блоки из `block-library/` ещё не в wiki — отдельная задача.
@@ -22,7 +22,7 @@
 - [[infographic-builder]] — Infographic Builder
 - [[integrations-engineer]] — integrations-engineer
 - [[landing-onboarding-wizard]] — Онбординг-визард нового проекта
-- [[landing-orchestrator]] — Landing Orchestrator — Главный дирижёр
+- [[landing-orchestrator]] — Главный дирижёр (Landing Orchestrator)
 - [[lifecycle-keeper]] — Lifecycle Keeper — Хранитель версий
 - [[moodboard-composer]] — Moodboard Composer
 - [[niche-analyst]] — Аналитик ниши (Stage 01a)
@@ -31,3 +31,25 @@
 - [[photo-curator]] — Куратор фотографий — оркестратор этапа 07c
 - [[photo-matcher]] — Агент сопоставления фото со слотами
 - [[photo-preview-board]] — Photo Preview Board — обработка слотов и рендер превью
+- [[photo-stylist]] — Photo Stylist
+- [[prototype-importer]] — Импортёр прототипа
+- [[qa-auditor]] — QA-аудитор
+- [[references-curator]] — Куратор референсов
+- [[scene-director]] — Режиссёр сцен (Cinematic Premium)
+- [[seo-optimizer]] — SEO-оптимизатор
+- [[stack-planner]] — Планировщик стека (Stack Planner)
+- [[style-extractor]] — Style Extractor
+- [[system-setup]] — Настройщик системы
+- [[ux-composer]] — UX Composer — интерактивный wireframe-генератор
+- [[visual-curator]] — Куратор визуалов
+- [[wp-builder]] — WP-сборщик (Lazy Blocks)
+- [[wp-deployer]] — WP Deployer — Деплой-инженер
+
+## 🛠 Скиллы
+
+- [[block-composition]] — Block Composition — сборка composed.html
+- [[block-library-management]] — Управление библиотекой блоков
+- [[brand-kit-build]] — Построение бренд-кита
+- [[client-assets-collection]] — Сбор материалов клиента
+- [[design-tokens-generation]] — Генерация дизайн-токенов
+- [[gpt5-prompting-engine]] — GPT-5 Prompting Engine
