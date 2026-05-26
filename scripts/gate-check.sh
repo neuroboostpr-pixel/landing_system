@@ -5,6 +5,11 @@
 set -uo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+
+# Cross-platform python detection (sets PYTHON_CMD).
+__SCRIPT_DIR__="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=lib/python-cmd.sh
+. "$__SCRIPT_DIR__/lib/python-cmd.sh"
 GATES_YAML="${GATES_YAML:-$REPO_ROOT/config/stage-gates.yaml}"
 GATE_STATE="$REPO_ROOT/scripts/gate-state.sh"
 
@@ -309,7 +314,7 @@ fi
 # === PR-G: Auto-update project-graph wiki after successful gate-check ===
 if [ "${fail:-1}" = "0" ] && [ -d "$project/wiki" ]; then
     project_slug="$(basename "$project")"
-    cd "$REPO_ROOT" && python3 -m scripts.wiki.compile \
+    cd "$REPO_ROOT" && $PYTHON_CMD -m scripts.wiki.compile \
         --source-mode=project-graph --project="$project_slug" \
         >/dev/null 2>&1 || true
 fi

@@ -6,6 +6,11 @@
 #   import-from-url.sh <url> [niche]
 set -euo pipefail
 
+
+# Cross-platform python detection (sets PYTHON_CMD).
+__SCRIPT_DIR__="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=../lib/python-cmd.sh
+. "$__SCRIPT_DIR__/../lib/python-cmd.sh"
 URL="${1:?ERROR: URL required}"
 NICHE="${2:-generic}"
 
@@ -27,7 +32,7 @@ if [[ "$URL" == *.pdf ]]; then
         exit 5
     fi
 else
-    python3 "$(dirname "$0")/take-page-screenshot.py" "$URL" --out "$WORK_DIR/screenshots/"
+    $PYTHON_CMD "$(dirname "$0")/take-page-screenshot.py" "$URL" --out "$WORK_DIR/screenshots/"
 fi
 
 echo "Скриншоты в $WORK_DIR/screenshots/"
@@ -45,16 +50,16 @@ bash "$(dirname "$0")/codex-analyze-structure.sh" "$MAIN_SCREENSHOT" \
     exit 3
 }
 
-python3 -c "import json; json.load(open('$WORK_DIR/structure.json'))" 2>/dev/null || {
+$PYTHON_CMD -c "import json; json.load(open('$WORK_DIR/structure.json'))" 2>/dev/null || {
     echo "ERROR: codex вернул не-JSON. См. $WORK_DIR/structure.json" >&2
     exit 4
 }
 
-BLOCK_COUNT=$(python3 -c "import json; print(len(json.load(open('$WORK_DIR/structure.json')).get('blocks', [])))")
+BLOCK_COUNT=$($PYTHON_CMD -c "import json; print(len(json.load(open('$WORK_DIR/structure.json')).get('blocks', [])))")
 echo "   Найдено блоков: $BLOCK_COUNT"
 
 echo "[3/5] Генерирую универсальные HTML+CSS для блоков..."
-python3 "$(dirname "$0")/generate-blocks.py" \
+$PYTHON_CMD "$(dirname "$0")/generate-blocks.py" \
     --structure "$WORK_DIR/structure.json" \
     --screenshot "$MAIN_SCREENSHOT" \
     --niche "$NICHE" \
@@ -63,11 +68,11 @@ python3 "$(dirname "$0")/generate-blocks.py" \
     --work-dir "$WORK_DIR/"
 
 echo "[4/5] Обновляю catalog.yaml..."
-python3 "$(dirname "$0")/update-catalog.py" \
+$PYTHON_CMD "$(dirname "$0")/update-catalog.py" \
     --library "$REPO_ROOT/block-library/" \
     --added-from "$WORK_DIR/added-blocks.json"
 
 echo "[5/5] Done. Импортировано блоков из $URL"
-python3 -m json.tool "$WORK_DIR/added-blocks.json" 2>/dev/null | head -30 || cat "$WORK_DIR/added-blocks.json"
+$PYTHON_CMD -m json.tool "$WORK_DIR/added-blocks.json" 2>/dev/null | head -30 || cat "$WORK_DIR/added-blocks.json"
 echo ""
 echo "Работа сохранена в: $WORK_DIR"

@@ -7,6 +7,11 @@
 
 set -euo pipefail
 
+
+# Cross-platform python detection (sets PYTHON_CMD).
+__SCRIPT_DIR__="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=../../../scripts/lib/python-cmd.sh
+. "$__SCRIPT_DIR__/../../../scripts/lib/python-cmd.sh"
 PROJECT_DIR="${1:?ERROR: project_dir required}"
 SLOT_NAME="${2:?ERROR: slot_name required}"
 HINT="${3:-}"
@@ -26,7 +31,7 @@ fi
 
 # Render prompt by extracting body from template + substituting placeholders
 PROMPT_FILE="$(mktemp)"
-python3 - "$TEMPLATE" "$PROJECT_DIR" "$HINT" "$SLOT_NAME" "$PROMPT_FILE" <<'PYEOF'
+$PYTHON_CMD - "$TEMPLATE" "$PROJECT_DIR" "$HINT" "$SLOT_NAME" "$PROMPT_FILE" <<'PYEOF'
 import sys, re, json
 from pathlib import Path
 

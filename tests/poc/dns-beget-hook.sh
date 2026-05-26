@@ -20,6 +20,11 @@
 # Installation: copy this file to ~/.acme.sh/dnsapi/dns_beget.sh on Beget,
 # then `chmod +x ~/.acme.sh/dnsapi/dns_beget.sh`.
 
+
+# Cross-platform python detection (sets PYTHON_CMD).
+__SCRIPT_DIR__="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=../../scripts/lib/python-cmd.sh
+. "$__SCRIPT_DIR__/../../scripts/lib/python-cmd.sh"
 dns_beget_info='Beget Hosting (Russia)
 Site: https://beget.com/
 Docs: https://beget.com/en/kb/api/dns-administration-functions
@@ -61,7 +66,7 @@ dns_beget_add() {
     sub_id=$(curl -s -X POST "$BEGET_API/domain/getSubdomainList" \
         --data-urlencode "login=$BEGET_Login" --data-urlencode "passwd=$BEGET_Password" \
         --data-urlencode "input_format=json" --data-urlencode "output_format=json" \
-        | python3 -c "import sys,json; d=json.load(sys.stdin); [print(x['id']) for x in d['answer']['result'] if x['fqdn']=='$fulldomain']" | head -1)
+        | $PYTHON_CMD -c "import sys,json; d=json.load(sys.stdin); [print(x['id']) for x in d['answer']['result'] if x['fqdn']=='$fulldomain']" | head -1)
 
     if [ -z "$sub_id" ]; then
         _info "Beget: creating subdomain $sub under $root (root_id=$root_id)"
@@ -81,7 +86,7 @@ dns_beget_add() {
         --data-urlencode "input_format=json" --data-urlencode "output_format=json" \
         --data-urlencode "input_data={\"fqdn\":\"$fulldomain\"}")
 
-    cur_txts=$(echo "$cur_resp" | python3 -c "
+    cur_txts=$(echo "$cur_resp" | $PYTHON_CMD -c "
 import sys, json
 try:
     d = json.load(sys.stdin)
@@ -95,7 +100,7 @@ except Exception:
 ")
 
     # Append new TXT and PUT back via dns/changeRecords (full replace)
-    new_records=$(python3 -c "
+    new_records=$($PYTHON_CMD -c "
 import json
 existing = json.loads('''$cur_txts''')
 existing.append({'priority': 10, 'value': '$txtvalue'})
@@ -129,7 +134,7 @@ dns_beget_rm() {
         --data-urlencode "input_format=json" --data-urlencode "output_format=json" \
         --data-urlencode "input_data={\"fqdn\":\"$fulldomain\"}")
 
-    remaining=$(echo "$cur_resp" | python3 -c "
+    remaining=$(echo "$cur_resp" | $PYTHON_CMD -c "
 import sys, json
 try:
     d = json.load(sys.stdin)

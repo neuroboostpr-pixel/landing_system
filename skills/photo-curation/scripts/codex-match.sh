@@ -6,6 +6,11 @@
 
 set -euo pipefail
 
+
+# Cross-platform python detection (sets PYTHON_CMD).
+__SCRIPT_DIR__="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=../../../scripts/lib/python-cmd.sh
+. "$__SCRIPT_DIR__/../../../scripts/lib/python-cmd.sh"
 PROJECT_DIR="${1:?ERROR: project_dir required}"
 CATALOG="${2:?ERROR: catalog.yaml path required}"
 SLOTS="${3:?ERROR: slots.yaml path required}"
@@ -15,7 +20,7 @@ TEMPLATE="$SCRIPT_DIR/../templates/match-prompt.md"
 
 # Extract prompt body and inline CATALOG_YAML + SLOTS_YAML, then render placeholders
 RAW_FILE="$(mktemp)"
-python3 - "$TEMPLATE" "$CATALOG" "$SLOTS" "$RAW_FILE" <<'PYEOF'
+$PYTHON_CMD - "$TEMPLATE" "$CATALOG" "$SLOTS" "$RAW_FILE" <<'PYEOF'
 import re, sys
 template, catalog_path, slots_path, raw_out = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
 text = open(template).read()
@@ -34,7 +39,7 @@ with open(raw_out, "w") as f:
 PYEOF
 
 PROMPT_FILE="$(mktemp)"
-python3 "$SCRIPT_DIR/render-prompt.py" "$RAW_FILE" "$PROJECT_DIR" > "$PROMPT_FILE"
+$PYTHON_CMD "$SCRIPT_DIR/render-prompt.py" "$RAW_FILE" "$PROJECT_DIR" > "$PROMPT_FILE"
 rm -f "$RAW_FILE"
 
 # Call codex (text-only, no image input); capture response to temp file
@@ -43,7 +48,7 @@ bash "$SCRIPT_DIR/call-codex.sh" "$PROJECT_DIR" "match" "$PROMPT_FILE" > "$RESPO
 rm -f "$PROMPT_FILE"
 
 DRAFT="$PROJECT_DIR/07c_PHOTOS/selections.draft.yaml"
-python3 - "$RESPONSE_FILE" "$DRAFT" <<'PYEOF'
+$PYTHON_CMD - "$RESPONSE_FILE" "$DRAFT" <<'PYEOF'
 import sys, yaml
 response_path, draft_path = sys.argv[1], sys.argv[2]
 try:

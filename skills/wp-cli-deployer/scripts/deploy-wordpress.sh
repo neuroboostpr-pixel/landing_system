@@ -5,6 +5,11 @@
 # Usage: deploy-wordpress.sh <project-dir>
 set -euo pipefail
 
+
+# Cross-platform python detection (sets PYTHON_CMD).
+__SCRIPT_DIR__="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=../../../scripts/lib/python-cmd.sh
+. "$__SCRIPT_DIR__/../../../scripts/lib/python-cmd.sh"
 PROJECT="$(realpath "$1")"
 PROJECT_SLUG="$(basename "$PROJECT")"
 THEME_DIR="$PROJECT/08_КОД/wp-theme"
@@ -82,8 +87,8 @@ if [ -f "$PAGE_HTML" ]; then
     # 2. "assets/photos/X.jpg" string paths → IDs (для card sub-blocks)
     # 3. URL-encode image attribute objects {"id":N,"url":""} в JSON string
     #    (Lazy Blocks image-control ожидает rawurlencode(json_encode(...)))
-    if command -v python3 >/dev/null 2>&1 && python3 -c '' >/dev/null 2>&1; then
-        PY=python3
+    if command -v $PYTHON_CMD >/dev/null 2>&1 && $PYTHON_CMD -c '' >/dev/null 2>&1; then
+        PY=$PYTHON_CMD
     else
         PY=python
     fi

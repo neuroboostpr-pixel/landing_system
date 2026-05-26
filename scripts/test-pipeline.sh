@@ -19,6 +19,11 @@
 
 set -euo pipefail
 
+
+# Cross-platform python detection (sets PYTHON_CMD).
+__SCRIPT_DIR__="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=lib/python-cmd.sh
+. "$__SCRIPT_DIR__/lib/python-cmd.sh"
 SLUG="${1:-}"
 PROTOTYPE="${2:-}"
 
@@ -94,7 +99,7 @@ echo "▸ Step 3/6: Parse prototype into machine-readable YAML"
 
 if [ "$PROTO_KIND" = "pdf" ]; then
   echo "   Trying PDF text extraction..."
-  if python3 "$LS_ROOT/skills/prototype-import/scripts/extract-pdf-text.py" \
+  if $PYTHON_CMD "$LS_ROOT/skills/prototype-import/scripts/extract-pdf-text.py" \
        "$PROJECT/07_ПРОТОТИП/source/prototype.pdf" \
        > "$PROJECT/07_ПРОТОТИП/source/extracted-text.txt" 2>/dev/null; then
     echo "   ✓ Extracted text to source/extracted-text.txt"
@@ -119,7 +124,7 @@ if [ "$PROTO_KIND" = "pdf" ]; then
 else
   # Markdown — convert directly
   cp "$PROJECT/07_ПРОТОТИП/source/prototype.md" "$PROJECT/07_ПРОТОТИП/source/prototype.md.orig" 2>/dev/null || true
-  python3 "$LS_ROOT/skills/prototype-import/scripts/md-to-yaml.py" \
+  $PYTHON_CMD "$LS_ROOT/skills/prototype-import/scripts/md-to-yaml.py" \
     "$PROJECT/07_ПРОТОТИП/source/prototype.md" \
     "$PROJECT/07_ПРОТОТИП/prototype.yaml"
   cp "$PROJECT/07_ПРОТОТИП/source/prototype.md" "$PROJECT/07_ПРОТОТИП/prototype.md"
@@ -136,7 +141,7 @@ fi
 # --- Step 3b: Enrich quiz funnel ---
 echo ""
 echo "▸ Step 3b: Quiz-funnel enrichment (Marquiz/Tilda/Skillbox best-practices)"
-python3 "$LS_ROOT/skills/wireframe-rendering/scripts/enrich-quiz-funnel.py" \
+$PYTHON_CMD "$LS_ROOT/skills/wireframe-rendering/scripts/enrich-quiz-funnel.py" \
   --input "$PROJECT/07_ПРОТОТИП/prototype.yaml" \
   --output "$PROJECT/07_ПРОТОТИП/prototype.yaml" \
   --log "$PROJECT/07_ПРОТОТИП/enrichment-log.md"
@@ -145,13 +150,13 @@ echo "   ✓ Enrichment done (see enrichment-log.md for details)"
 # Validate
 echo ""
 echo "▸ Validating prototype schema..."
-python3 "$LS_ROOT/skills/prototype-import/scripts/validate-prototype.py" \
+$PYTHON_CMD "$LS_ROOT/skills/prototype-import/scripts/validate-prototype.py" \
   "$PROJECT/07_ПРОТОТИП/prototype.yaml"
 
 # --- Step 4: Render wireframe ---
 echo ""
 echo "▸ Step 4/6: Render interactive wireframe (with ui-ux-pro-max integration)"
-python3 "$LS_ROOT/skills/wireframe-rendering/scripts/render-wireframe.py" \
+$PYTHON_CMD "$LS_ROOT/skills/wireframe-rendering/scripts/render-wireframe.py" \
   --project "$PROJECT" \
   --library "$LS_ROOT/block-library" \
   --template "$LS_ROOT/skills/wireframe-rendering/templates/wireframe-shell.html"
@@ -185,7 +190,7 @@ fi
 # Auto-select first variant for each block (user normally does this in browser)
 echo ""
 echo "▸ Auto-selecting first variant per block (replace with real selections later)"
-python3 - <<PY
+$PYTHON_CMD - <<PY
 import yaml
 from datetime import datetime, timezone
 
@@ -205,9 +210,9 @@ PY
 # --- Step 6: Compose final ---
 echo ""
 echo "▸ Step 6/6: Compose final macros (composed.html + composed-mobile.html)"
-python3 "$LS_ROOT/skills/block-composition/scripts/validate-selections.py" \
+$PYTHON_CMD "$LS_ROOT/skills/block-composition/scripts/validate-selections.py" \
   "$PROJECT/07a_WIREFRAME/selections.yaml"
-python3 "$LS_ROOT/skills/block-composition/scripts/compose-blocks.py" \
+$PYTHON_CMD "$LS_ROOT/skills/block-composition/scripts/compose-blocks.py" \
   --project "$PROJECT" \
   --library "$LS_ROOT/block-library"
 
@@ -248,7 +253,7 @@ if [ -d "$PHOTO_SAMPLES" ] && [ "$(ls -A "$PHOTO_SAMPLES" 2>/dev/null)" ]; then
   cp "$PHOTO_SAMPLES"/*.jpg "$PROJECT/07c_PHOTOS/inbox/_свалка/" 2>/dev/null || true
 
   # Stage 1: intake
-  python3 "$LS_ROOT/skills/photo-curation/scripts/intake.py" \
+  $PYTHON_CMD "$LS_ROOT/skills/photo-curation/scripts/intake.py" \
     --inbox "$PROJECT/07c_PHOTOS/inbox" \
     --intake "$PROJECT/07c_PHOTOS/intake"
   echo "  ✓ intake done"
@@ -288,13 +293,13 @@ DRAFT_EOF
   echo "  ✓ match stub written"
 
   # Stage 4: render gallery
-  python3 "$LS_ROOT/skills/photo-curation/scripts/gallery-render.py" \
+  $PYTHON_CMD "$LS_ROOT/skills/photo-curation/scripts/gallery-render.py" \
     --catalog "$PROJECT/07c_PHOTOS/catalog.yaml" \
     --draft "$PROJECT/07c_PHOTOS/selections.draft.yaml" \
     --out "$PROJECT/07c_PHOTOS/photo-board.html" || {
     # Fallback: write empty catalog and retry
     printf 'photos: []\n' > "$PROJECT/07c_PHOTOS/catalog.yaml"
-    python3 "$LS_ROOT/skills/photo-curation/scripts/gallery-render.py" \
+    $PYTHON_CMD "$LS_ROOT/skills/photo-curation/scripts/gallery-render.py" \
       --catalog "$PROJECT/07c_PHOTOS/catalog.yaml" \
       --draft "$PROJECT/07c_PHOTOS/selections.draft.yaml" \
       --out "$PROJECT/07c_PHOTOS/photo-board.html"
@@ -318,7 +323,7 @@ if [ -f "$PROJECT/07b_COMPOSED/composed.html" ]; then
     fi
 
     # Stage 1: scan composed.html for visual slots
-    python3 "$LS_ROOT/skills/visual-generation/scripts/slot-scanner.py" \
+    $PYTHON_CMD "$LS_ROOT/skills/visual-generation/scripts/slot-scanner.py" \
         --html "$PROJECT/07b_COMPOSED/composed.html" \
         --out "$PROJECT/07d_VISUALS/_slots.yaml"
     echo "  ✓ visual scan done"
@@ -329,7 +334,7 @@ if [ -f "$PROJECT/07b_COMPOSED/composed.html" ]; then
     fi
 
     if command -v codex >/dev/null 2>&1 || [ -n "${USE_CODEX_MOCK:-}" ]; then
-        python3 -c "
+        $PYTHON_CMD -c "
 import yaml, subprocess
 from pathlib import Path
 slots_path = Path('$PROJECT/07d_VISUALS/_slots.yaml')
@@ -348,7 +353,7 @@ if slots_path.exists():
     fi
 
     # Stage 3: re-render composed.html with visuals
-    python3 "$LS_ROOT/skills/block-composition/scripts/compose-blocks.py" --project "$PROJECT" 2>/dev/null || true
+    $PYTHON_CMD "$LS_ROOT/skills/block-composition/scripts/compose-blocks.py" --project "$PROJECT" 2>/dev/null || true
 
     echo "  PR-C visual stage smoke test PASSED"
 fi

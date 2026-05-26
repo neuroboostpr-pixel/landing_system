@@ -4,6 +4,11 @@
 # Usage: bash test-smoke-rest.sh <project-dir>
 
 set -euo pipefail
+
+# Cross-platform python detection (sets PYTHON_CMD).
+__SCRIPT_DIR__="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=../../../scripts/lib/python-cmd.sh
+. "$__SCRIPT_DIR__/../../../scripts/lib/python-cmd.sh"
 PROJECT="${1:?Usage: test-smoke-rest.sh <project-dir>}"
 PROJECT="$(cd "$PROJECT" && pwd)"
 
@@ -13,7 +18,7 @@ PROJECT="$(cd "$PROJECT" && pwd)"
 set -a; source "$PROJECT/.env"; set +a
 : "${ROOT_DOMAIN:?}"
 
-PY=python; command -v python3 >/dev/null 2>&1 && python3 -c '' >/dev/null 2>&1 && PY=python3
+PY=python; command -v $PYTHON_CMD >/dev/null 2>&1 && $PYTHON_CMD -c '' >/dev/null 2>&1 && PY=$PYTHON_CMD
 
 URLS=$("$PY" -c "
 import yaml

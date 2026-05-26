@@ -2,6 +2,11 @@
 # scripts/wizard.sh — interactive onboarding for landing-system
 set -uo pipefail
 
+
+# Cross-platform python detection (sets PYTHON_CMD).
+__SCRIPT_DIR__="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=lib/python-cmd.sh
+. "$__SCRIPT_DIR__/lib/python-cmd.sh"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 NONINTERACTIVE="${WIZARD_NONINTERACTIVE:-0}"
@@ -30,7 +35,7 @@ prompt "Готов начать?"
 echo ""
 echo "▶ Локальные зависимости"
 deps_ok=1
-for cmd in wp ssh rsync bats python3 jq; do
+for cmd in wp ssh rsync bats $PYTHON_CMD jq; do
     if command -v "$cmd" >/dev/null 2>&1; then
         echo "  ✅ $cmd"
     else
@@ -42,7 +47,7 @@ done
 
 echo ""
 echo "▶ Python пакеты"
-python3 -c 'import yaml, jinja2, requests, PIL, pytest, responses' 2>/dev/null \
+$PYTHON_CMD -c 'import yaml, jinja2, requests, PIL, pytest, responses' 2>/dev/null \
     && echo "  ✅ pyyaml, jinja2, requests, pillow, pytest, responses" \
     || { echo "  ❌ pip install -r requirements.txt"; deps_ok=0; }
 

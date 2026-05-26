@@ -16,6 +16,11 @@
 
 set -euo pipefail
 
+
+# Cross-platform python detection (sets PYTHON_CMD).
+__SCRIPT_DIR__="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=../../../scripts/lib/python-cmd.sh
+. "$__SCRIPT_DIR__/../../../scripts/lib/python-cmd.sh"
 PROJECT="${1:-}"
 if [ -z "$PROJECT" ]; then
     echo "Usage: $0 <project-dir>" >&2
@@ -34,7 +39,7 @@ set -a; source "$PROJECT/.env"; set +a
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 SYSTEM_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
-PYTHON="${PYTHON:-python3}"
+PYTHON="${PYTHON:-$PYTHON_CMD}"
 
 # Generate HTML through render.py
 TMP_DIR="$(mktemp -d)"

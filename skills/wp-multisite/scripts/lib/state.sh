@@ -6,14 +6,19 @@
 # are passed to Python via os.environ, never interpolated into Python source code.
 
 # Python helper invocation — handle Windows/Linux python binary name.
+
+# Cross-platform python detection (sets PYTHON_CMD).
+__SCRIPT_DIR__="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=../../../../scripts/lib/python-cmd.sh
+. "$__SCRIPT_DIR__/../../../../scripts/lib/python-cmd.sh"
 _state_py() {
-    # Prefer python3 only if it actually runs (Windows Store stub returns exit 49)
-    if python3 -c "import sys" >/dev/null 2>&1; then
-        echo python3
+    # Prefer $PYTHON_CMD only if it actually runs (Windows Store stub returns exit 49)
+    if $PYTHON_CMD -c "import sys" >/dev/null 2>&1; then
+        echo $PYTHON_CMD
     elif python -c "import sys" >/dev/null 2>&1; then
         echo python
     else
-        echo python3  # fallback, will produce a useful error
+        echo $PYTHON_CMD  # fallback, will produce a useful error
     fi
 }
 
