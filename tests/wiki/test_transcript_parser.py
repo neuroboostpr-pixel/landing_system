@@ -188,3 +188,16 @@ def test_extracts_speed_and_entrypoint(tmp_path):
     assert tcs[0].speed == "fast"
     assert tcs[0].entrypoint == "claude-cli"
     assert tcs[0].is_sidechain is True
+
+
+def test_source_read_uses_config_patterns(monkeypatch):
+    """При изменении SOURCE_READ_PATTERNS — is_source_read отражает новый конфиг."""
+    from scripts.wiki import config as wiki_config
+    from scripts.wiki.transcript_parser import ToolCall, is_source_read
+
+    monkeypatch.setattr(wiki_config, "SOURCE_READ_PATTERNS", ["custom/*.md"])
+    tc_custom = ToolCall(ts="", tool_name="Read", input_params={"file_path": "/root/custom/foo.md"})
+    tc_agent = ToolCall(ts="", tool_name="Read", input_params={"file_path": "/root/agents/bar.md"})
+
+    assert is_source_read(tc_custom) is True
+    assert is_source_read(tc_agent) is False
