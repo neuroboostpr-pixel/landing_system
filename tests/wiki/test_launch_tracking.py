@@ -116,3 +116,47 @@ def test_was_wiki_queried_empty_stage_returns_false(tmp_log):
     """Пустой stage аргумент всегда возвращает False."""
     _write_query(tmp_log, "sess1", "")
     assert routing_log.was_wiki_queried("sess1", "") is False
+
+
+import subprocess
+import sys
+
+
+def test_cli_log_agent_call(tmp_path):
+    """CLI вызов пишет agent_call в лог."""
+    log_file = tmp_path / "wiki-usage.jsonl"
+    result = subprocess.run(
+        [sys.executable, "-m", "scripts.wiki.log",
+         "--type", "agent_call",
+         "--agent", "test-agent",
+         "--stage", "04",
+         "--session-id", "test-sess"],
+        capture_output=True, text=True,
+        cwd="d:/AI_TEAMS/landing_system",
+        env={**__import__("os").environ, "WIKI_LOG_PATH": str(log_file)},
+    )
+    assert result.returncode == 0
+
+
+def test_cli_log_stage_start(tmp_path):
+    """CLI вызов stage_start возвращает 0."""
+    result = subprocess.run(
+        [sys.executable, "-m", "scripts.wiki.log",
+         "--type", "stage_start",
+         "--stage", "04_brand",
+         "--project", "test-project",
+         "--session-id", "test-sess"],
+        capture_output=True, text=True,
+        cwd="d:/AI_TEAMS/landing_system",
+    )
+    assert result.returncode == 0
+
+
+def test_cli_missing_required_arg():
+    """CLI без --type возвращает ненулевой код."""
+    result = subprocess.run(
+        [sys.executable, "-m", "scripts.wiki.log", "--agent", "x"],
+        capture_output=True, text=True,
+        cwd="d:/AI_TEAMS/landing_system",
+    )
+    assert result.returncode != 0
