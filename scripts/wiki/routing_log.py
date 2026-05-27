@@ -48,12 +48,14 @@ def log_query(
     speed: str = "",
     entrypoint: str = "",
     is_sidechain: bool = False,
+    agent: str = "",
 ) -> None:
     _write({
         "ts": datetime.now().isoformat(timespec="seconds"),
         "type": "wiki_query",
         "session_id": session_id,
         "model": model,
+        "agent": agent,
         "thinking_tokens": thinking_tokens,
         "speed": speed,
         "entrypoint": entrypoint,
@@ -148,6 +150,74 @@ def estimate_tokens_file(path: Path) -> int:
             return path.stat().st_size // 4
         except OSError:
             return 0
+
+
+def was_wiki_queried(session_id: str, stage: str) -> bool:
+    """True если в логе есть wiki_query с тем же session_id и совместимым stage."""
+    if not LOG_PATH.exists():
+        return False
+    stage_prefix = stage.split("_")[0] if "_" in stage else stage
+    try:
+        for line in LOG_PATH.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                record = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if record.get("type") != "wiki_query":
+                continue
+            if record.get("session_id") != session_id:
+                continue
+            f = record.get("filters") or {}
+            rec_stage = str(f.get("stage") or "")
+            rec_prefix = rec_stage.split("_")[0] if "_" in rec_stage else rec_stage
+            if rec_prefix == stage_prefix or rec_stage == stage:
+                return True
+    except OSError:
+        pass
+    return False
+
+
+def log_stage_start(session_id: str, stage: str, project: str) -> None:
+    """Пишет stage_start с автоматической корреляцией via_wiki."""
+    stage_prefix = stage.split("_")[0] if "_" in stage else stage
+    via_wiki = was_wiki_queried(session_id, stage_prefix)
+    _write({
+        "ts": datetime.now().isoformat(timespec="seconds"),
+        "type": "stage_start",
+        "session_id": session_id,
+        "stage": stage,
+        "project": project,
+        "via_wiki": via_wiki,
+    })
+
+
+def log_agent_call(session_id: str, agent: str, stage: str) -> None:
+    """Пишет agent_call с автоматической корреляцией via_wiki."""
+    via_wiki = was_wiki_queried(session_id, stage)
+    _write({
+        "ts": datetime.now().isoformat(timespec="seconds"),
+        "type": "agent_call",
+        "session_id": session_id,
+        "agent": agent,
+        "stage": stage,
+        "via_wiki": via_wiki,
+    })
+
+
+def log_skill_call(session_id: str, skill: str, stage: str) -> None:
+    """Пишет skill_call с автоматической корреляцией via_wiki."""
+    via_wiki = was_wiki_queried(session_id, stage)
+    _write({
+        "ts": datetime.now().isoformat(timespec="seconds"),
+        "type": "skill_call",
+        "session_id": session_id,
+        "skill": skill,
+        "stage": stage,
+        "via_wiki": via_wiki,
+    })
 
 
 def estimate_tokens_saved(wiki_dir: Path, hits: list[dict[str, Any]]) -> int:
