@@ -15,6 +15,11 @@ LANDINGS_ROOT="${LANDINGS_ROOT:-$(python -c "import sys; sys.path.insert(0,'$REP
 OLD_DIR="$LANDINGS_ROOT/$OLD_SLUG"
 NEW_DIR="$LANDINGS_ROOT/$NEW_SLUG"
 
+if ! echo "$OLD_SLUG" | grep -qE '^[a-z0-9-]+$'; then
+    echo "❌ Slug должен быть kebab-case (только строчные буквы, цифры, дефис)"
+    exit 1
+fi
+
 # Validate old slug
 if [ ! -d "$OLD_DIR" ]; then
     echo "❌ Проект '$OLD_SLUG' не найден в $LANDINGS_ROOT"
@@ -41,25 +46,32 @@ mv "$OLD_DIR" "$NEW_DIR"
 # Update .landing-state.yaml
 yq e ".project = \"$NEW_SLUG\"" -i "$NEW_DIR/.landing-state.yaml"
 
+# GNU sed (Git Bash on Windows) supports -i without suffix; BSD sed needs -i ''
+UPDATED=0
+
 # Update README.md
 if [ -f "$NEW_DIR/README.md" ]; then
-    sed -i "s/$OLD_SLUG/$NEW_SLUG/g" "$NEW_DIR/README.md"
+    if grep -q "$OLD_SLUG" "$NEW_DIR/README.md"; then
+        sed -i "s/$OLD_SLUG/$NEW_SLUG/g" "$NEW_DIR/README.md"
+        UPDATED=$((UPDATED + 1))
+    fi
 fi
 
 # Update brief.md
 if [ -f "$NEW_DIR/00_БРИФ/brief.md" ]; then
-    sed -i "s/$OLD_SLUG/$NEW_SLUG/g" "$NEW_DIR/00_БРИФ/brief.md"
+    if grep -q "$OLD_SLUG" "$NEW_DIR/00_БРИФ/brief.md"; then
+        sed -i "s/$OLD_SLUG/$NEW_SLUG/g" "$NEW_DIR/00_БРИФ/brief.md"
+        UPDATED=$((UPDATED + 1))
+    fi
 fi
 
 # Update wiki/pipeline-map.md
 if [ -f "$NEW_DIR/wiki/pipeline-map.md" ]; then
-    sed -i "s/$OLD_SLUG/$NEW_SLUG/g" "$NEW_DIR/wiki/pipeline-map.md"
+    if grep -q "$OLD_SLUG" "$NEW_DIR/wiki/pipeline-map.md"; then
+        sed -i "s/$OLD_SLUG/$NEW_SLUG/g" "$NEW_DIR/wiki/pipeline-map.md"
+        UPDATED=$((UPDATED + 1))
+    fi
 fi
-
-UPDATED=0
-[ -f "$NEW_DIR/README.md" ] && UPDATED=$((UPDATED + 1))
-[ -f "$NEW_DIR/00_БРИФ/brief.md" ] && UPDATED=$((UPDATED + 1))
-[ -f "$NEW_DIR/wiki/pipeline-map.md" ] && UPDATED=$((UPDATED + 1))
 
 echo ""
 echo "✅ Проект переименован: $OLD_SLUG → $NEW_SLUG"
