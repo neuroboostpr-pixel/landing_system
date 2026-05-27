@@ -387,3 +387,66 @@ wiki/routing-report.md
 - UI в wp-admin
 - Хранение транскриптов (flush.py уже получает путь от Claude Code)
 - Точный подсчёт токенов через tiktoken (приближение /4 достаточно для сравнения)
+
+---
+
+## 7. Задача: Скилл `wiki-routing-observability` для переиспользования
+
+После реализации основного функционала — выделить универсальные компоненты в переносимый скилл.
+
+### Что универсально (выносится в скилл)
+
+- `routing_log.py` — чистая логика записи/чтения JSONL, не зависит от структуры проекта
+- `stats.py` — агрегация и отчёт, не зависит от структуры проекта
+- `transcript_parser.py` — формат транскрипта одинаков для любого Claude Code проекта; паттерны `is_source_read()` параметризуются через конфиг
+
+### Что остаётся специфичным для landing-system
+
+- Паттерны `is_source_read()` — пути `agents/*.md`, `skills/*/SKILL.md`, `commands/*.md`
+- Интеграция с `session_start.py` и `wiki/index.yaml`
+- `query.py` вызов
+
+### Механизм параметризации
+
+Добавить в `scripts/wiki/config.py` (уже существует):
+
+```python
+# Паттерны путей которые считаются "source reads" (bypass wiki)
+SOURCE_READ_PATTERNS: list[str] = [
+    "agents/*.md",
+    "skills/*/SKILL.md",
+    "commands/*.md",
+    "docs/standards/*.md",
+]
+```
+
+`transcript_parser.is_source_read()` читает `SOURCE_READ_PATTERNS` из конфига вместо хардкода.
+
+### Структура скилла
+
+```
+skills/wiki-routing-observability/
+  SKILL.md                  # описание скилла
+  scripts/
+    routing_log.py          # копия (без изменений)
+    stats.py                # копия (без изменений)
+    transcript_parser.py    # копия с SOURCE_READ_PATTERNS из конфига
+    preflight.py            # копия (без изменений)
+  config.example.yaml       # пример конфига для нового проекта
+  README.md                 # инструкция по развёртыванию
+```
+
+### Развёртывание на новом проекте
+
+1. Скопировать `skills/wiki-routing-observability/` в новый проект
+2. В `config.yaml` задать `source_read_patterns` под структуру нового проекта
+3. Подключить `session_start.py` интеграцию (3 строки)
+4. Готово — логирование работает
+
+### Файлы для этой задачи
+
+- Создать: `skills/wiki-routing-observability/SKILL.md`
+- Создать: `skills/wiki-routing-observability/config.example.yaml`
+- Изменить: `scripts/wiki/config.py` — добавить `SOURCE_READ_PATTERNS`
+- Изменить: `scripts/wiki/transcript_parser.py` — читать паттерны из конфига
+- Тест: `test_transcript_parser.py` — добавить `test_source_read_uses_config_patterns`
