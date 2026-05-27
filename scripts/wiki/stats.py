@@ -210,39 +210,40 @@ def generate_report(stats: StatsResult, since_days: int = 7) -> str:
                 f"| {bp}% | {m['avg_thinking_tokens']} |"
             )
 
-    # Token Budget по категориям
-    CLAUDE_MD_TOKENS = 10_231  # fixed overhead: 35809 bytes / 3.5
-    lines += [
-        "",
-        "## Token Budget по категориям (7д)",
-        "",
-        "| Категория | Событий | ~Токенов | Можно на вики? |",
-        "|-----------|---------|----------|----------------|",
-        f"| wiki_query | {stats.queries} | -{stats.est_tokens_saved:,} | -- |".replace(",", " "),
-    ]
+    has_budget_data = stats.queries > 0 or stats.direct_reads > 0 or bool(stats.context_injects)
+    if has_budget_data:
+        CLAUDE_MD_TOKENS = 10_231  # fixed overhead: 35809 bytes / 3.5
+        lines += [
+            "",
+            "## Token Budget по категориям (7д)",
+            "",
+            "| Категория | Событий | ~Токенов | Можно на вики? |",
+            "|-----------|---------|----------|----------------|",
+            f"| wiki_query | {stats.queries} | -{stats.est_tokens_saved:,} | -- |".replace(",", " "),
+        ]
 
-    category_order = ["direct_read", "session_start", "framework_load", "bash_stdout"]
-    can_be_wiki_labels = {
-        "direct_read": "⚠️ да",
-        "session_start": "нет",
-        "framework_load": "нет",
-        "bash_stdout": "нет",
-    }
+        category_order = ["direct_read", "session_start", "framework_load", "bash_stdout"]
+        can_be_wiki_labels = {
+            "direct_read": "⚠️ да",
+            "session_start": "нет",
+            "framework_load": "нет",
+            "bash_stdout": "нет",
+        }
 
-    if stats.direct_reads > 0:
-        lines.append(
-            f"| direct_read (legacy) | {stats.direct_reads} "
-            f"| +{stats.est_tokens_spent_bypass:,} | ⚠️ да |".replace(",", " ")
-        )
+        if stats.direct_reads > 0:
+            lines.append(
+                f"| direct_read (legacy) | {stats.direct_reads} "
+                f"| +{stats.est_tokens_spent_bypass:,} | ⚠️ да |".replace(",", " ")
+            )
 
-    for cat in category_order:
-        tokens = stats.context_injects.get(cat, 0)
-        if tokens == 0:
-            continue
-        can_wiki = can_be_wiki_labels.get(cat, "нет")
-        lines.append(f"| {cat} | -- | +{tokens:,} | {can_wiki} |".replace(",", " "))
+        for cat in category_order:
+            tokens = stats.context_injects.get(cat, 0)
+            if tokens == 0:
+                continue
+            can_wiki = can_be_wiki_labels.get(cat, "нет")
+            lines.append(f"| {cat} | -- | +{tokens:,} | {can_wiki} |".replace(",", " "))
 
-    lines.append(f"| CLAUDE.md | -- | ~{CLAUDE_MD_TOKENS:,} | нет (fixed) |".replace(",", " "))
+        lines.append(f"| CLAUDE.md | -- | ~{CLAUDE_MD_TOKENS:,} | нет (fixed) |".replace(",", " "))
 
     if stats.leaks:
         lines += [
