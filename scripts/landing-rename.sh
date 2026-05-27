@@ -40,6 +40,12 @@ if ! echo "$NEW_SLUG" | grep -qE '^[a-z0-9-]+$'; then
     exit 1
 fi
 
+# Check yq is available before any destructive action
+if ! command -v yq &>/dev/null; then
+    echo "❌ yq не найден. Установи: brew install yq (или scoop install yq)"
+    exit 1
+fi
+
 # Move folder
 # On Windows, git object files are ReadOnly which causes POSIX `mv` to fail.
 # Detect Windows and use PowerShell + robocopy (handles read-only files), otherwise mv.
