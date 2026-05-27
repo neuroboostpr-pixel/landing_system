@@ -45,6 +45,41 @@ Streaming chunks в транскрипте **отсутствуют** — тол
 - В отчёте явная пометка: `~est` (приближение ±30%)
 - `stats.py --exact-tokens` вызывает Anthropic count_tokens API (опционально, требует `ANTHROPIC_API_KEY`)
 
+**#5 — Модель и thinking (добавлено 2026-05-27):**
+
+Реальный транскрипт содержит:
+- `message.model` — строка типа `"claude-opus-4-7"` или `"claude-sonnet-4-6"` в каждой записи
+- `content` блоки с `"type": "thinking"` — текст размышлений модели перед tool call
+
+Оба поля добавляются в логирование:
+
+```json
+{"type": "wiki_query", "model": "claude-opus-4-7", "thinking_tokens": 420, ...}
+{"type": "direct_read", "model": "claude-sonnet-4-6", "thinking_tokens": 0, ...}
+```
+
+`thinking_tokens` считается как `len(thinking_text) / 3.5` для всех thinking блоков перед tool call в одном сообщении.
+
+`stats.py` добавляет разбивку в отчёт:
+
+```
+## По моделям
+| Модель              | Queries | Direct reads | Bypass rate | Avg thinking tokens |
+|---------------------|---------|--------------|-------------|---------------------|
+| claude-opus-4-7     |      15 |            6 |         29% |                 380 |
+| claude-sonnet-4-6   |       8 |            2 |         20% |                   0 |
+```
+
+Это позволяет увидеть: использует ли Opus wiki routing чаще чем Sonnet, и коррелирует ли extended thinking с bypass rate.
+
+**Изменения в коде:**
+- `ToolCall` dataclass: добавить `model: str = ""` и `thinking_tokens: int = 0`
+- `extract_tool_calls()`: читать `obj["message"]["model"]`, суммировать `len(b["thinking"]) / 3.5` для thinking блоков в том же сообщении
+- `routing_log.log_query()` и `log_direct_read()`: принять и записать `model`, `thinking_tokens`
+- `compute_stats()`: добавить `by_model: list[dict]` в `StatsResult`
+- `generate_report()`: добавить секцию `## По моделям`
+- Новые тесты: `test_extracts_model_from_message`, `test_extracts_thinking_tokens`
+
 ---
 
 ## Файловая карта
@@ -225,11 +260,15 @@ def log_query(
     filters: dict[str, str | None],
     hits: list[str],
     est_tokens_saved: int,
+    model: str = "",
+    thinking_tokens: int = 0,
 ) -> None:
     _write({
         "ts": datetime.now().isoformat(timespec="seconds"),
         "type": "wiki_query",
         "session_id": session_id,
+        "model": model,
+        "thinking_tokens": thinking_tokens,
         "filters": filters,
         "hits": hits,
         "hits_count": len(hits),
@@ -242,11 +281,15 @@ def log_direct_read(
     path: str,
     est_tokens: int,
     had_prior_query: bool,
+    model: str = "",
+    thinking_tokens: int = 0,
 ) -> None:
     _write({
         "ts": datetime.now().isoformat(timespec="seconds"),
         "type": "direct_read",
         "session_id": session_id,
+        "model": model,
+        "thinking_tokens": thinking_tokens,
         "path": path,
         "est_tokens": est_tokens,
         "had_prior_query": had_prior_query,
@@ -494,6 +537,41 @@ def test_extract_query_stage():
         input_params={"command": "python -m scripts.wiki.query --slug=wp-builder"}
     )
     assert extract_query_stage(tc_no_stage) is None
+
+
+def test_extracts_model_from_message():
+    from scripts.wiki.transcript_parser import extract_tool_calls
+    tcs = extract_tool_calls(FIXTURES / "normal.jsonl")
+    # Все tool calls из normal.jsonl имеют sessionId и должны иметь model если он есть
+    # normal.jsonl не содержит model в message — проверяем что model="" и нет краша
+    assert all(isinstance(tc.model, str) for tc in tcs)
+
+
+def test_extracts_thinking_tokens(tmp_path):
+    from scripts.wiki.transcript_parser import extract_tool_calls
+    transcript = tmp_path / "thinking.jsonl"
+    import json
+    # Запись с thinking блоком перед tool_use
+    record = {
+        "parentUuid": None,
+        "sessionId": "test-thinking",
+        "message": {
+            "model": "claude-opus-4-7",
+            "role": "assistant",
+            "content": [
+                {"type": "thinking", "thinking": "x" * 350},  # 350 chars → ~100 tokens
+                {"type": "tool_use", "name": "Read", "input": {"file_path": "/path/agents/wp-builder.md"}},
+            ]
+        },
+        "type": "assistant",
+        "uuid": "uuid-t1",
+        "timestamp": "2026-05-27T10:00:01.000Z"
+    }
+    transcript.write_text(json.dumps(record) + "\n", encoding="utf-8")
+    tcs = extract_tool_calls(transcript)
+    assert len(tcs) == 1
+    assert tcs[0].model == "claude-opus-4-7"
+    assert tcs[0].thinking_tokens == int(350 / 3.5)  # 100
 ```
 
 - [ ] **Step 3: Запустить тесты, убедиться что падают**
@@ -530,6 +608,8 @@ class ToolCall:
     tool_name: str
     input_params: dict = field(default_factory=dict)
     session_id: str = ""
+    model: str = ""
+    thinking_tokens: int = 0
 
 
 def extract_tool_calls(transcript_path: Path) -> list[ToolCall]:
@@ -567,6 +647,14 @@ def extract_tool_calls(transcript_path: Path) -> list[ToolCall]:
 
         ts = obj.get("timestamp", "")
         session_id = obj.get("sessionId", "")
+        model = msg.get("model", "")
+
+        # Суммируем thinking токены из всех thinking блоков сообщения
+        thinking_tokens = 0
+        for block in content:
+            if isinstance(block, dict) and block.get("type") == "thinking":
+                thinking_tokens += int(len(block.get("thinking", "")) / 3.5)
+
         for block in content:
             if not isinstance(block, dict):
                 continue
@@ -578,8 +666,10 @@ def extract_tool_calls(transcript_path: Path) -> list[ToolCall]:
             input_params = block.get("input")
             if not isinstance(input_params, dict):
                 input_params = {}
-            result.append(ToolCall(ts=ts, tool_name=name, input_params=input_params,
-                                   session_id=session_id))
+            result.append(ToolCall(
+                ts=ts, tool_name=name, input_params=input_params,
+                session_id=session_id, model=model, thinking_tokens=thinking_tokens,
+            ))
 
     return result
 
@@ -821,6 +911,8 @@ class StatsResult:
     bypass_rate: float = 0.0
     top_bypass: list[dict] = field(default_factory=list)
     by_date: list[dict] = field(default_factory=list)
+    by_model: list[dict] = field(default_factory=list)
+    # [{model, queries, direct_reads, bypass_rate, avg_thinking_tokens}]
 
 
 def compute_stats(events: list[dict[str, Any]], since_days: int = 7) -> StatsResult:
@@ -835,6 +927,9 @@ def compute_stats(events: list[dict[str, Any]], since_days: int = 7) -> StatsRes
     by_date_map: dict[str, dict] = defaultdict(
         lambda: {"queries": 0, "direct_reads": 0, "est_saved": 0}
     )
+    by_model_map: dict[str, dict] = defaultdict(
+        lambda: {"queries": 0, "direct_reads": 0, "thinking_tokens_total": 0}
+    )
 
     for e in events:
         ts_str = e.get("ts", "")
@@ -843,11 +938,16 @@ def compute_stats(events: list[dict[str, Any]], since_days: int = 7) -> StatsRes
         except (TypeError, IndexError):
             date_key = "unknown"
 
+        model = e.get("model") or "unknown"
+        thinking = e.get("thinking_tokens", 0)
+
         if e.get("type") == "wiki_query":
             queries += 1
             est_saved += e.get("est_tokens_saved", 0)
             by_date_map[date_key]["queries"] += 1
             by_date_map[date_key]["est_saved"] += e.get("est_tokens_saved", 0)
+            by_model_map[model]["queries"] += 1
+            by_model_map[model]["thinking_tokens_total"] += thinking
 
         elif e.get("type") == "direct_read":
             direct_reads += 1
@@ -857,6 +957,8 @@ def compute_stats(events: list[dict[str, Any]], since_days: int = 7) -> StatsRes
             if e.get("had_prior_query"):
                 bypass_map[path]["had_prior_query_count"] += 1
             by_date_map[date_key]["direct_reads"] += 1
+            by_model_map[model]["direct_reads"] += 1
+            by_model_map[model]["thinking_tokens_total"] += thinking
 
     total = queries + direct_reads
     bypass_rate = direct_reads / total if total > 0 else 0.0
@@ -873,6 +975,21 @@ def compute_stats(events: list[dict[str, Any]], since_days: int = 7) -> StatsRes
         reverse=True,
     )
 
+    by_model = []
+    for m, v in by_model_map.items():
+        m_total = v["queries"] + v["direct_reads"]
+        m_bypass = v["direct_reads"] / m_total if m_total > 0 else 0.0
+        m_events = v["queries"] + v["direct_reads"]
+        avg_thinking = v["thinking_tokens_total"] // m_events if m_events > 0 else 0
+        by_model.append({
+            "model": m,
+            "queries": v["queries"],
+            "direct_reads": v["direct_reads"],
+            "bypass_rate": m_bypass,
+            "avg_thinking_tokens": avg_thinking,
+        })
+    by_model.sort(key=lambda x: x["queries"] + x["direct_reads"], reverse=True)
+
     return StatsResult(
         queries=queries,
         direct_reads=direct_reads,
@@ -881,6 +998,7 @@ def compute_stats(events: list[dict[str, Any]], since_days: int = 7) -> StatsRes
         bypass_rate=bypass_rate,
         top_bypass=top_bypass,
         by_date=by_date,
+        by_model=by_model,
     )
 
 
@@ -928,6 +1046,22 @@ def generate_report(stats: StatsResult, since_days: int = 7) -> str:
         prior = b["had_prior_query_count"]
         not_prior = b["count"] - prior
         lines.append(f"| {b['path']} | {b['count']} | {prior} | {not_prior} |")
+
+    if stats.by_model:
+        lines += [
+            "",
+            "## По моделям",
+            "",
+            "| Модель | Queries | Direct reads | Bypass rate | Avg thinking tokens |",
+            "|--------|---------|--------------|-------------|---------------------|",
+        ]
+        for m in stats.by_model:
+            bp = int(m["bypass_rate"] * 100)
+            lines.append(
+                f"| {m['model']} | {m['queries']} | {m['direct_reads']} "
+                f"| {bp}% | {m['avg_thinking_tokens']} |"
+            )
+
     return "\n".join(lines) + "\n"
 
 
