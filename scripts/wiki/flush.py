@@ -104,7 +104,12 @@ def flush_transcript(transcript_path: Path, memory_dir: Path = None, cwd: Path =
                 slug = _Path(path).stem
                 had_prior = slug in queried_slugs or bool(queried_stages)
                 est = routing_log.estimate_tokens_file(_Path(path))
-                routing_log.log_direct_read(session_id, path, est, had_prior)
+                routing_log.log_direct_read(
+                    session_id, path, est, had_prior,
+                    model=tc.model, thinking_tokens=tc.thinking_tokens,
+                    speed=tc.speed, entrypoint=tc.entrypoint,
+                    is_sidechain=tc.is_sidechain,
+                )
     except Exception:
         pass  # silent — мы в фоне
 
