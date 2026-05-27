@@ -41,7 +41,28 @@ if ! echo "$NEW_SLUG" | grep -qE '^[a-z0-9-]+$'; then
 fi
 
 # Move folder
-mv "$OLD_DIR" "$NEW_DIR"
+# On Windows, git object files are ReadOnly which causes POSIX `mv` to fail.
+# Detect Windows and use PowerShell + robocopy (handles read-only files), otherwise mv.
+_os="$(uname -s 2>/dev/null || true)"
+if [[ "$_os" == MINGW* || "$_os" == CYGWIN* || "$_os" == MSYS* ]] && command -v powershell.exe &>/dev/null; then
+    # Convert POSIX paths to Windows paths for PowerShell
+    OLD_WIN="$(cygpath -w "$OLD_DIR" 2>/dev/null || echo "$OLD_DIR" | sed 's|/|\\|g')"
+    NEW_WIN="$(cygpath -w "$NEW_DIR" 2>/dev/null || echo "$NEW_DIR" | sed 's|/|\\|g')"
+    # Use PowerShell to invoke robocopy — avoids MinGW slash-as-path mangling
+    ROBO_EXIT="$(powershell.exe -NoProfile -Command "
+        robocopy '$OLD_WIN' '$NEW_WIN' /E /MOVE /NFL /NDL /NJH /NJS /NP | Out-Null
+        exit \$LASTEXITCODE
+    " 2>/dev/null; echo $?)"
+    # robocopy exit codes: 0=no files, 1=files copied, 2=extra files, 3=both — all ok; >=8 = error
+    if [ "${ROBO_EXIT:-0}" -ge 8 ]; then
+        echo "❌ Не удалось переименовать папку (robocopy exit $ROBO_EXIT)"
+        exit 1
+    fi
+    # Remove source dir if robocopy left empty shell (edge case)
+    [ -d "$OLD_DIR" ] && rm -rf "$OLD_DIR"
+else
+    mv "$OLD_DIR" "$NEW_DIR"
+fi
 
 # Update .landing-state.yaml
 yq e ".project = \"$NEW_SLUG\"" -i "$NEW_DIR/.landing-state.yaml"
