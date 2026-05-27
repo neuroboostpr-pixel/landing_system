@@ -149,6 +149,24 @@ def main() -> int:
         slug=args.slug,
         grep=args.grep,
     )
+    # Логируем wiki query (silent если routing_log недоступен)
+    try:
+        import os
+        from scripts.wiki import routing_log
+        session_id = os.environ.get("CLAUDE_SESSION_ID", "unknown")
+        filters_dict = {
+            "stage": args.stage,
+            "type": args.type_,
+            "tag": args.tag,
+            "trigger": args.trigger,
+            "slug": args.slug,
+            "grep": args.grep,
+        }
+        est_saved = routing_log.estimate_tokens_saved(wiki_dir, concepts)
+        routing_log.log_query(session_id, filters_dict, [c["slug"] for c in concepts], est_saved)
+    except Exception as e:
+        print(f"[wiki routing_log] failed to log: {e}", file=sys.stderr)
+
     sys.stdout.write(format_output(wiki_dir, concepts, fmt=args.fmt))
     return 0
 
