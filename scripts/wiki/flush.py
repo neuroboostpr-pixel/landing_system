@@ -82,26 +82,7 @@ def flush_transcript(transcript_path: Path, memory_dir: Path = None, cwd: Path =
     if len(msgs) > 30:
         text = format_transcript(msgs[-30:])
 
-    prompt = (PROMPTS_DIR / "flush.md").read_text(encoding="utf-8")
-    try:
-        lessons = sdk_client.generate(system=prompt, user=text)
-    except sdk_client.SDKError:
-        return  # silent — мы в фоне, не пугаем юзера
-
-    if lessons.strip() in ("_(пусто)_", "_пусто_", ""):
-        return
-
-    daily = memory_dir / "daily"
-    daily.mkdir(parents=True, exist_ok=True)
-    today_file = daily / f"{date.today().isoformat()}.md"
-
-    header = f"\n## flush @ {date.today().isoformat()}\n\n"
-    with today_file.open("a", encoding="utf-8") as f:
-        f.write(header)
-        f.write(lessons)
-        f.write("\n")
-
-    # Анализ routing: детектим direct reads (bypass wiki)
+    # Анализ routing: детектим direct reads (bypass wiki) — независимо от SDK
     try:
         from pathlib import Path as _Path
         from scripts.wiki import transcript_parser, routing_log
@@ -126,6 +107,25 @@ def flush_transcript(transcript_path: Path, memory_dir: Path = None, cwd: Path =
                 routing_log.log_direct_read(session_id, path, est, had_prior)
     except Exception:
         pass  # silent — мы в фоне
+
+    prompt = (PROMPTS_DIR / "flush.md").read_text(encoding="utf-8")
+    try:
+        lessons = sdk_client.generate(system=prompt, user=text)
+    except sdk_client.SDKError:
+        return  # silent — мы в фоне, не пугаем юзера
+
+    if lessons.strip() in ("_(пусто)_", "_пусто_", ""):
+        return
+
+    daily = memory_dir / "daily"
+    daily.mkdir(parents=True, exist_ok=True)
+    today_file = daily / f"{date.today().isoformat()}.md"
+
+    header = f"\n## flush @ {date.today().isoformat()}\n\n"
+    with today_file.open("a", encoding="utf-8") as f:
+        f.write(header)
+        f.write(lessons)
+        f.write("\n")
 
 
 def main() -> int:
