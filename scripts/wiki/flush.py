@@ -26,6 +26,15 @@ PROMPTS_DIR = Path(__file__).parent / "prompts"
 LANDING_SYSTEM = Path(__file__).resolve().parents[1]
 
 
+def _extract_script_label(command: str) -> str:
+    """Извлекает имя скрипта из команды bash (напр. 'landing-rename.sh')."""
+    import re
+    m = re.search(r'([\w\-]+\.sh)', command)
+    if m:
+        return m.group(1)
+    return command[:40].strip()
+
+
 def read_transcript(path: Path) -> list[dict]:
     """JSONL → list[dict]. Игнорирует битые строки."""
     msgs = []
@@ -110,6 +119,55 @@ def flush_transcript(transcript_path: Path, memory_dir: Path = None, cwd: Path =
                     speed=tc.speed, entrypoint=tc.entrypoint,
                     is_sidechain=tc.is_sidechain,
                 )
+
+        # Block A: framework_load — Skill и Command tool invocations
+        SKILL_TOOL_NAMES = {"Skill", "skill", "mcp__claude_ai__skill"}
+        COMMAND_TOOL_NAMES = {"mcp__claude_ai__slash_command"}
+        for tc in tool_calls:
+            if tc.tool_name in SKILL_TOOL_NAMES:
+                skill_name = tc.input_params.get("skill", "")
+                if not skill_name:
+                    continue
+                skill_file = _Path(LANDING_SYSTEM) / "skills" / skill_name / "SKILL.md"
+                if skill_file.exists():
+                    routing_log.log_context_inject(
+                        session_id, "framework_load", f"skill:{skill_name}",
+                        est_tokens=routing_log.estimate_tokens_file(skill_file),
+                        can_be_wiki=False,
+                        path=str(skill_file),
+                        model=tc.model,
+                    )
+            elif tc.tool_name in COMMAND_TOOL_NAMES:
+                cmd_name = tc.input_params.get("command", "").lstrip("/")
+                if not cmd_name:
+                    continue
+                cmd_file = _Path(LANDING_SYSTEM) / ".claude" / "commands" / f"{cmd_name}.md"
+                if cmd_file.exists():
+                    routing_log.log_context_inject(
+                        session_id, "framework_load", f"command:{cmd_name}",
+                        est_tokens=routing_log.estimate_tokens_file(cmd_file),
+                        can_be_wiki=False,
+                        path=str(cmd_file),
+                        model=tc.model,
+                    )
+
+        # Block B: bash_stdout — stdout из Bash tool calls с большим выводом
+        TOKEN_THRESHOLD = 100
+        for tc in tool_calls:
+            if tc.tool_name != "Bash":
+                continue
+            output = tc.output or ""
+            est = int(len(output) / 3.5)
+            if est <= TOKEN_THRESHOLD:
+                continue
+            cmd = tc.input_params.get("command", "")
+            label = _extract_script_label(cmd)
+            routing_log.log_context_inject(
+                session_id, "bash_stdout", label,
+                est_tokens=est,
+                can_be_wiki=False,
+                model=tc.model,
+            )
     except Exception:
         pass  # silent — мы в фоне
 
@@ -120,6 +178,7 @@ def flush_transcript(transcript_path: Path, memory_dir: Path = None, cwd: Path =
         return  # silent — мы в фоне, не пугаем юзера
 
     if lessons.strip() in ("_(пусто)_", "_пусто_", ""):
+        _refresh_routing_report()
         return
 
     daily = memory_dir / "daily"
@@ -131,6 +190,21 @@ def flush_transcript(transcript_path: Path, memory_dir: Path = None, cwd: Path =
         f.write(header)
         f.write(lessons)
         f.write("\n")
+
+    _refresh_routing_report()
+
+
+def _refresh_routing_report() -> None:
+    """Пересобирает wiki/routing-report.md из текущего лога. Silent."""
+    try:
+        from scripts.wiki import routing_log, stats as wiki_stats
+        events = routing_log.read_events(since_days=7)
+        result = wiki_stats.compute_stats(events)
+        md = wiki_stats.generate_report(result, since_days=7)
+        report_path = LANDING_SYSTEM / "wiki" / "routing-report.md"
+        report_path.write_text(md, encoding="utf-8")
+    except Exception:
+        pass  # silent — мы в фоне
 
 
 def main() -> int:
