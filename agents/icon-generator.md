@@ -15,7 +15,7 @@ description: Generates ONE icon PNG via codex image_gen for a given slot. Uses p
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=icon-generator
+python -m scripts.wiki.query --slug=icon-generator
 ```
 
 ## Mission

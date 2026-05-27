@@ -12,7 +12,7 @@ allowed-tools: Bash, Read, Write
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=content-writer
+python -m scripts.wiki.query --slug=content-writer
 ```
 
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)

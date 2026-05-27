@@ -12,7 +12,7 @@ allowed-tools: Bash, Read
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=wp-deployer
+python -m scripts.wiki.query --slug=wp-deployer
 ```
 
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)

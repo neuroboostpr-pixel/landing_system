@@ -15,7 +15,7 @@ description: Generates ONE infographic PNG via codex image_gen. Uses prompt-pick
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=infographic-builder
+python -m scripts.wiki.query --slug=infographic-builder
 ```
 
 ## Mission

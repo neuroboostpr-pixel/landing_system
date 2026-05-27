@@ -154,7 +154,7 @@ def main() -> int:
         import os
         from scripts.wiki import routing_log
         session_id = os.environ.get("CLAUDE_SESSION_ID", "unknown")
-        model = os.environ.get("CLAUDE_MODEL", "")
+        model = os.environ.get("CLAUDE_MODEL", "") or config.DEFAULT_MODEL
         filters_dict = {
             "stage": args.stage,
             "type": args.type_,

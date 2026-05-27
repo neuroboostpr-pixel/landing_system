@@ -15,7 +15,7 @@ allowed-tools: Bash, Read
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=lifecycle-keeper
+python -m scripts.wiki.query --slug=lifecycle-keeper
 ```
 
 ## Mission

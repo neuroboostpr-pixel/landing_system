@@ -15,7 +15,7 @@ allowed-tools: Bash, Read, Write, Edit
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=onboarding-guide
+python -m scripts.wiki.query --slug=onboarding-guide
 ```
 
 ## Mission

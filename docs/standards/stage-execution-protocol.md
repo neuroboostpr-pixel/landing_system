@@ -68,11 +68,11 @@
 Перед диспатчем любого агента — запрашивать wiki с явной передачей модели:
 
 ```bash
-CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --stage=<N> --type=agent
-CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=<concept-slug>
+python -m scripts.wiki.query --stage=<N> --type=agent
+python -m scripts.wiki.query --slug=<concept-slug>
 ```
 
-`CLAUDE_MODEL` — переменная окружения, которую Claude Code автоматически устанавливает в текущей сессии. Без неё модель в логах wiki будет `unknown`.
+Модель берётся автоматически из `config.DEFAULT_MODEL` — менять только в [scripts/wiki/config.py](../../scripts/wiki/config.py).
 
 ---
 

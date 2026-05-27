@@ -28,7 +28,7 @@ description: Interactive wizard для новых проектов. Объясн
 
 1. Wiki-запрос для маршрутизации (обязательно первым):
    ```bash
-   CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=landing-onboarding-wizard
+   python -m scripts.wiki.query --slug=landing-onboarding-wizard
    ```
 2. `bash scripts/install-codex.sh --check`. Если нет — запустить `bash scripts/install-codex.sh`.
 3. Проверить что мы в landing-system repo (наличие `template/`).

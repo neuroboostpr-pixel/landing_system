@@ -15,7 +15,7 @@ allowed-tools: Bash, Read, Write, Edit
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=system-setup
+python -m scripts.wiki.query --slug=system-setup
 ```
 
 ## Mission

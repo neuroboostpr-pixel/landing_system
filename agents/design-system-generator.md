@@ -12,7 +12,7 @@ allowed-tools: Bash, Read, Write
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=design-system-generator
+python -m scripts.wiki.query --slug=design-system-generator
 ```
 
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)

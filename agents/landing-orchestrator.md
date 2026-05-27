@@ -42,8 +42,8 @@ description: Master orchestrator for landing projects. Owns the 12-stage workflo
 Перед запуском каждого этапа сначала запроси системную wiki, чтобы получить кандидатов:
 
 ```bash
-CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --stage=<N> --type=agent
-CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=<concept-slug>
+python -m scripts.wiki.query --stage=<N> --type=agent
+python -m scripts.wiki.query --slug=<concept-slug>
 ```
 
 Прочитай вывод (3-5 карточек) и выбери одного агента/скилл. **Только** после этого подгружай полный исходник из `agents/<slug>.md`, если карточка не покрывает вопрос.

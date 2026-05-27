@@ -81,6 +81,10 @@ PROJECT_SOURCES = [
     {"path": "04_БРЕНД/brand-kit.md", "concept": "brand.md"},
 ]
 
+# Модель по умолчанию — используется как fallback если CLAUDE_MODEL не задана в env.
+# Обновлять при смене модели сессии.
+DEFAULT_MODEL = "claude-sonnet-4-6"
+
 # Паттерны путей которые считаются "source reads" (bypass wiki).
 # transcript_parser.is_source_read() использует эти паттерны.
 # При развёртывании на новом проекте — переопределить под свою структуру.

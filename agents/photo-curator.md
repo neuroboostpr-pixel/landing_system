@@ -11,7 +11,7 @@ description: Stage 07c orchestrator (PR-B). Runs intake, dispatches photo-classi
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=photo-curator
+python -m scripts.wiki.query --slug=photo-curator
 ```
 
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)

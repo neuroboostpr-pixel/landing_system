@@ -11,7 +11,7 @@ description: Use during stage 07 (Прототип) to import a user-provided pr
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=prototype-importer
+python -m scripts.wiki.query --slug=prototype-importer
 ```
 
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)

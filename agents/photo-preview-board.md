@@ -15,7 +15,7 @@ description: After user approves selections.yaml, process each slot — crop/res
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=photo-preview-board
+python -m scripts.wiki.query --slug=photo-preview-board
 ```
 
 ## Mission

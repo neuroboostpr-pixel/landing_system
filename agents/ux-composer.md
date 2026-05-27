@@ -11,7 +11,7 @@ description: Use during stage 07a (UX Wireframe) to compose an interactive wiref
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=ux-composer
+python -m scripts.wiki.query --slug=ux-composer
 ```
 
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)

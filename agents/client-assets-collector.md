@@ -11,7 +11,7 @@ description: Use during stage 02 to collect client photos, videos, and reviews f
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=client-assets-collector
+python -m scripts.wiki.query --slug=client-assets-collector
 ```
 
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)

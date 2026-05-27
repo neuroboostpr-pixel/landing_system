@@ -11,7 +11,7 @@ description: Translate DESIGN.md §5 wireframes into real per-block CSS and rewr
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=frontend-builder
+python -m scripts.wiki.query --slug=frontend-builder
 ```
 
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)

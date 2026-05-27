@@ -15,7 +15,7 @@ description: Tags one photo via codex CLI image input. Outputs YAML entry that p
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=photo-classifier
+python -m scripts.wiki.query --slug=photo-classifier
 ```
 
 ## Mission

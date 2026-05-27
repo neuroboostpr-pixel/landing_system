@@ -11,7 +11,7 @@ description: Use during stage 03 to collect visual references (URLs, Behance fil
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=references-curator
+python -m scripts.wiki.query --slug=references-curator
 ```
 
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)
