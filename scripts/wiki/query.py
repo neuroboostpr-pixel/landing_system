@@ -189,8 +189,26 @@ def main() -> int:
             "slug": args.slug,
             "grep": args.grep,
         }
-        est_saved = routing_log.estimate_tokens_saved(wiki_dir, concepts)
-        routing_log.log_query(session_id, filters_dict, [c["slug"] for c in concepts], est_saved, model=model)
+        # Обогащаем фильтры из первого хита если они не заданы явно
+        if concepts:
+            first = concepts[0]
+            if not filters_dict["type"]:
+                filters_dict["type"] = first.get("type", "")
+            if not filters_dict["stage"]:
+                filters_dict["stage"] = first.get("stage", "")
+        # Дедупликация: не пишем если точно такой же slug уже залогирован в этой сессии
+        existing = routing_log.read_events(since_days=1)
+        hit_slugs = [c["slug"] for c in concepts]
+        already_logged = any(
+            e.get("session_id") == session_id
+            and e.get("type") == "wiki_query"
+            and e.get("hits") == hit_slugs
+            and e.get("filters", {}).get("slug") == args.slug
+            for e in existing
+        )
+        if not already_logged:
+            est_saved = routing_log.estimate_tokens_saved(wiki_dir, concepts)
+            routing_log.log_query(session_id, filters_dict, hit_slugs, est_saved, model=model)
     except Exception as e:
         print(f"[wiki routing_log] failed to log: {e}", file=sys.stderr)
 
