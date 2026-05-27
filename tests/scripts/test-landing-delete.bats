@@ -61,4 +61,5 @@ EOF
     run bash "$SCRIPT" myproject <<< "wrong"
     [[ "$output" == *"myproject"* ]]
     [[ "$output" == *"03_references"* ]]
+    [[ "$output" == *"(locked)"* ]]
 }
