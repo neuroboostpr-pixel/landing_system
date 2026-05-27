@@ -45,6 +45,15 @@ fi
 
 echo "═══ Gate check: stage=$stage project=$(basename "$project") ═══"
 
+# Log stage_start for wiki routing observability
+SESSION_ID="${CLAUDE_SESSION_ID:-unknown}"
+$PYTHON_CMD -m scripts.wiki.log \
+    --type stage_start \
+    --stage "$stage" \
+    --project "$(basename "$project")" \
+    --session-id "$SESSION_ID" \
+    >/dev/null 2>&1 || true
+
 # 0. Legacy bypass — strict: stage must be in config/stage-gates.yaml legacy_allowed
 # list AND state-file must provide non-empty legacy_reason. Every bypass logged.
 # Evaluated BEFORE require_approved (legacy projects skip prior-stage approval too).
@@ -306,6 +315,8 @@ fi
 if [ "$approve" = "1" ]; then
     bash "$GATE_STATE" approve "$project" "$stage"
     echo "✅ Stage $stage approved"
+    # Auto-update routing-report after every approve
+    cd "$REPO_ROOT" && $PYTHON_CMD -m scripts.wiki.stats --report >/dev/null 2>&1 || true
 else
     bash "$GATE_STATE" set "$project" "$stage" "in_progress"
     echo "✅ Gate passed for $stage (status: in_progress)"
