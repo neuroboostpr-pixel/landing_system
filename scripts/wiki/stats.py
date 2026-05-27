@@ -124,9 +124,9 @@ def one_line_summary(stats: StatsResult, days: int = 7) -> str:
     saved = f"{stats.est_tokens_saved:,}".replace(",", " ")
     spent = f"{stats.est_tokens_spent_bypass:,}".replace(",", " ")
     return (
-        f"Wiki routing ({days}d): {stats.queries} queries · "
-        f"{stats.direct_reads} direct reads · "
-        f"~{saved} saved · ~{spent} spent on bypass · bypass rate {bypass_pct}%"
+        f"Вики-граф ({days}д): {stats.queries} запросов к вики · "
+        f"{stats.direct_reads} обходов вики · "
+        f"~{saved} токенов сэкономлено · ~{spent} токенов потрачено в обход · доля обходов {bypass_pct}%"
     )
 
 
@@ -135,31 +135,31 @@ def generate_report(stats: StatsResult, since_days: int = 7) -> str:
     end = date.today()
     start = end - timedelta(days=since_days - 1)
     lines = [
-        f"# Wiki Routing Report ({start} — {end})",
+        f"# Отчёт по использованию вики-графа ({start} — {end})",
         "",
-        "| Дата | Queries | Direct reads | Est. saved | Bypass rate |",
-        "|------|---------|--------------|------------|-------------|",
+        "| Дата | Запросов к вики | Обходов вики | Сэкономлено ~токенов | Доля обходов |",
+        "|------|-----------------|--------------|----------------------|--------------|",
     ]
     for row in stats.by_date:
         total = row["queries"] + row["direct_reads"]
         bp = int(row["direct_reads"] / total * 100) if total > 0 else 0
         lines.append(
             f"| {row['date']} | {row['queries']} | {row['direct_reads']} "
-            f"| {row['est_saved']:,} t | {bp}% |"
+            f"| {row['est_saved']:,} т | {bp}% |"
         )
     saved = f"{stats.est_tokens_saved:,}".replace(",", " ")
     spent = f"{stats.est_tokens_spent_bypass:,}".replace(",", " ")
     bypass_pct = int(stats.bypass_rate * 100)
     lines += [
         "",
-        f"**Итого за {since_days} дней:** {stats.queries} queries · "
-        f"{stats.direct_reads} direct reads · ~{saved} tokens saved · ~{spent} tokens spent on bypass",
-        f"**Bypass rate:** {bypass_pct}%",
+        f"**Итого за {since_days} дней:** {stats.queries} запросов к вики · "
+        f"{stats.direct_reads} обходов · ~{saved} токенов сэкономлено · ~{spent} токенов потрачено в обход",
+        f"**Доля обходов:** {bypass_pct}%",
         "",
-        "## Топ bypass файлов",
+        "## Топ файлов читаемых в обход",
         "",
-        "| Файл | Всего | had_prior_query=true | had_prior_query=false |",
-        "|------|-------|----------------------|-----------------------|",
+        "| Файл | Всего обходов | Агент знал про вики | Агент не обращался к вики |",
+        "|------|---------------|---------------------|---------------------------|",
     ]
     for b in stats.top_bypass:
         prior = b["had_prior_query_count"]
@@ -171,8 +171,8 @@ def generate_report(stats: StatsResult, since_days: int = 7) -> str:
             "",
             "## По моделям",
             "",
-            "| Модель | Queries | Direct reads | Bypass rate | Avg thinking tokens |",
-            "|--------|---------|--------------|-------------|---------------------|",
+            "| Модель | Запросов к вики | Обходов вики | Доля обходов | Среднее токенов размышления |",
+            "|--------|-----------------|--------------|--------------|------------------------------|",
         ]
         for m in stats.by_model:
             bp = int(m["bypass_rate"] * 100)
