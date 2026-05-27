@@ -30,10 +30,11 @@ def _read_or_empty(p: Path, max_chars: int = 8000) -> str:
 
 
 def _system_wiki_hint(cwd: Path) -> str:
-    """50-token hint про существование системной wiki + команду запроса.
+    """Preflight + 50-token hint + stats строка.
 
     Только если CWD находится внутри LANDING_SYSTEM.
     """
+    import os
     try:
         cwd.resolve().relative_to(LANDING_SYSTEM)
     except ValueError:
@@ -42,17 +43,47 @@ def _system_wiki_hint(cwd: Path) -> str:
     index_yaml = LANDING_SYSTEM / "wiki" / "index.yaml"
     if not index_yaml.exists():
         return ""
+
+    # Preflight checks
+    if not os.environ.get("WIKI_PREFLIGHT_SKIP"):
+        try:
+            sys.path.insert(0, str(LANDING_SYSTEM))
+            from scripts.wiki.preflight import run_preflight
+            failures = [r for r in run_preflight() if not r.ok]
+            if failures:
+                lines = ["⚠️  Wiki preflight failed:"]
+                for f in failures:
+                    lines.append(f"  - {f.message}")
+                    lines.append(f"    Fix: {f.fix_hint}")
+                lines.append("Set WIKI_PREFLIGHT_SKIP=1 to bypass and continue without logging.")
+                return "<wiki_runtime>\n" + "\n".join(lines) + "\n</wiki_runtime>"
+        except Exception:
+            pass  # если preflight сам упал — не блокируем
+
     try:
         import yaml
         data = yaml.safe_load(index_yaml.read_text(encoding="utf-8")) or {}
     except Exception:
         return ""
     total = (data.get("counts") or {}).get("total", "?")
+
+    # Stats строка
+    stats_line = "Wiki routing (7d): no data yet"
+    try:
+        from scripts.wiki import routing_log, stats as wiki_stats
+        events = routing_log.read_events(since_days=7)
+        if events:
+            s = wiki_stats.compute_stats(events)
+            stats_line = wiki_stats.one_line_summary(s)
+    except Exception:
+        pass
+
     return (
         "<wiki_runtime>\n"
         f"Landing-system wiki: {total} concepts indexed at wiki/index.yaml.\n"
         "Query: python -m scripts.wiki.query --stage=N --type=T --tag=X --slug=Y\n"
         "Read card: cat wiki/concepts/<dir>/<slug>.md\n"
+        f"{stats_line}\n"
         "</wiki_runtime>"
     )
 
