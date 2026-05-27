@@ -218,6 +218,26 @@ Master plan: [`docs/superpowers/plans/2026-05-03-landing-system-master-plan.md`]
 
 Подробнее: [`docs/SETUP.md`](docs/SETUP.md), [`docs/superpowers/specs/2026-05-04-stage-gates-onboarding-mcp-design.md`](docs/superpowers/specs/2026-05-04-stage-gates-onboarding-mcp-design.md)
 
+## Wiki Routing Observability (правило)
+
+Каждый агент (`agents/*.md`) и скил (`skills/*/SKILL.md`) **обязан** содержать в pre-flight блоке строку логирования:
+
+```bash
+# Агент:
+python -m scripts.wiki.log --type agent_call --agent <slug> --stage <N>
+
+# Скил:
+python -m scripts.wiki.log --type skill_call --skill <slug> --stage <N>
+```
+
+**Правила:**
+1. **При создании** нового агента/скила — строка логирования обязательна. Шаблон: `docs/standards/stage-agent-preamble.md` (шаг 6).
+2. **При переименовании** агента/скила (`mv agents/old.md agents/new.md`) — обновить `--agent old` → `--agent new` в той же строке внутри файла.
+3. **`<slug>`** = имя файла без `.md` (для агентов) или имя папки (для скилов).
+4. **`<N>`** = числовой номер этапа к которому привязан агент/скил (например `04`). Если не привязан к конкретному — передать `""`.
+
+Нарушение этих правил приводит к появлению ложных ⚠️ утечек в `wiki/routing-report.md`.
+
 ## Wiki Auto-Sync (правило)
 
 С 2026-05-15 системная wiki (`landing-system/wiki/`) **обязана быть синхронной с исходниками** в каждом коммите.

@@ -24,8 +24,13 @@ When copying into a new agent — substitute `<STAGE>` with the agent's actual s
 3. Создай TodoWrite-список со всеми оставшимися этапами от `<STAGE>` до конца pipeline.
 4. Запусти `bash scripts/gate-check.sh --stage <STAGE> --project <project>`. Если exit != 0 — STOP, реши проблемы и повтори.
 5. Если есть `docs/standards/stage-<STAGE>-checklist.md` — прочитай и создай sub-todos.
-6. Только после exit 0 от gate-check переходи к выполнению этапа.
-7. По завершении этапа: запусти `bash scripts/verify-<STAGE>.sh` (если есть) → если PASS, отметь `approved` через `bash scripts/gate-state.sh approve <project> <STAGE>`.
+6. Залогируй запуск агента для wiki routing observability:
+   ```bash
+   python -m scripts.wiki.log --type agent_call --agent <AGENT_SLUG> --stage <STAGE_NUM>
+   ```
+   Где `<AGENT_SLUG>` — имя файла агента без `.md`, `<STAGE_NUM>` — числовой номер этапа (например `04`).
+7. Только после exit 0 от gate-check переходи к выполнению этапа.
+8. По завершении этапа: запусти `bash scripts/verify-<STAGE>.sh` (если есть) → если PASS, отметь `approved` через `bash scripts/gate-state.sh approve <project> <STAGE>`.
 
 **ВАЖНО:** harness `PreToolUse` hook (`scripts/hooks/enforce_stage_gate.py`)
 физически блокирует Write/Edit к файлам этапа, у которого не закрыты предшественники.
