@@ -80,3 +80,13 @@ PROJECT_SOURCES = [
     {"path": "04_БРЕНД/tokens.json", "concept": "brand.md"},
     {"path": "04_БРЕНД/brand-kit.md", "concept": "brand.md"},
 ]
+
+# Паттерны путей которые считаются "source reads" (bypass wiki).
+# transcript_parser.is_source_read() использует эти паттерны.
+# При развёртывании на новом проекте — переопределить под свою структуру.
+SOURCE_READ_PATTERNS: list[str] = [
+    "agents/*.md",
+    "skills/*/SKILL.md",
+    "commands/*.md",
+    "docs/standards/*.md",
+]
