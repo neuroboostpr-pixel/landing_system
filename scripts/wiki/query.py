@@ -24,6 +24,32 @@ import yaml
 from scripts.wiki import config
 
 
+def _detect_model_from_session(session_id: str) -> str:
+    """Читает модель из последней записи session jsonl в ~/.claude/projects/."""
+    import os
+    if session_id == "unknown":
+        return ""
+    home = Path(os.path.expanduser("~"))
+    # Ищем файл сессии во всех project-папках
+    for project_dir in (home / ".claude" / "projects").iterdir():
+        candidate = project_dir / f"{session_id}.jsonl"
+        if candidate.exists():
+            # Читаем с конца — ищем первую запись с "model"
+            try:
+                lines = candidate.read_text(encoding="utf-8").splitlines()
+                for line in reversed(lines):
+                    if '"model"' not in line:
+                        continue
+                    obj = json.loads(line)
+                    msg = obj.get("message", {})
+                    model = msg.get("model", "")
+                    if model:
+                        return model
+            except (OSError, json.JSONDecodeError):
+                pass
+    return ""
+
+
 def _load_index(wiki_dir: Path) -> dict[str, Any]:
     index_yaml = wiki_dir / "index.yaml"
     if not index_yaml.exists():
@@ -153,8 +179,8 @@ def main() -> int:
     try:
         import os
         from scripts.wiki import routing_log
-        session_id = os.environ.get("CLAUDE_SESSION_ID", "unknown")
-        model = os.environ.get("CLAUDE_MODEL", "") or config.DEFAULT_MODEL
+        session_id = os.environ.get("CLAUDE_CODE_SESSION_ID", "unknown")
+        model = _detect_model_from_session(session_id)
         filters_dict = {
             "stage": args.stage,
             "type": args.type_,
