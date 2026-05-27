@@ -89,4 +89,10 @@ SOURCE_READ_PATTERNS: list[str] = [
     "skills/*/SKILL.md",
     "commands/*.md",
     "docs/standards/*.md",
+    "docs/**/*.md",
+    "template/**/*.md",
+    "CLAUDE.md",
+    "wiki/**/*.md",
+    "memory/**/*.md",
+    "skills/*/*.md",
 ]
