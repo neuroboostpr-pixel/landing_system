@@ -45,7 +45,7 @@ Streaming chunks в транскрипте **отсутствуют** — тол
 - В отчёте явная пометка: `~est` (приближение ±30%)
 - `stats.py --exact-tokens` вызывает Anthropic count_tokens API (опционально, требует `ANTHROPIC_API_KEY`)
 
-**#5 — Модель и thinking (добавлено 2026-05-27):**
+**#5 — Модель, thinking и настройки запуска (добавлено 2026-05-27):**
 
 Реальный транскрипт содержит:
 - `message.model` — строка типа `"claude-opus-4-7"` или `"claude-sonnet-4-6"` в каждой записи
@@ -53,9 +53,17 @@ Streaming chunks в транскрипте **отсутствуют** — тол
 
 Оба поля добавляются в логирование:
 
+Дополнительно в каждой записи транскрипта доступны настройки запуска:
+- `message.usage.speed` — `"standard"` или `"fast"` (Fast mode — Opus с ускоренным выводом)
+- `entrypoint` — `"claude-vscode"`, `"claude-cli"` и т.д.
+- `isSidechain` — `true` если это субагент (dispatched), `false` если основная сессия
+
+Все поля добавляются в лог:
 ```json
-{"type": "wiki_query", "model": "claude-opus-4-7", "thinking_tokens": 420, ...}
-{"type": "direct_read", "model": "claude-sonnet-4-6", "thinking_tokens": 0, ...}
+{"type": "wiki_query", "model": "claude-opus-4-7", "thinking_tokens": 420,
+ "speed": "fast", "entrypoint": "claude-vscode", "is_sidechain": false, ...}
+{"type": "direct_read", "model": "claude-sonnet-4-6", "thinking_tokens": 0,
+ "speed": "standard", "entrypoint": "claude-vscode", "is_sidechain": true, ...}
 ```
 
 `thinking_tokens` считается как `len(thinking_text) / 3.5` для всех thinking блоков перед tool call в одном сообщении.
@@ -73,12 +81,12 @@ Streaming chunks в транскрипте **отсутствуют** — тол
 Это позволяет увидеть: использует ли Opus wiki routing чаще чем Sonnet, и коррелирует ли extended thinking с bypass rate.
 
 **Изменения в коде:**
-- `ToolCall` dataclass: добавить `model: str = ""` и `thinking_tokens: int = 0`
-- `extract_tool_calls()`: читать `obj["message"]["model"]`, суммировать `len(b["thinking"]) / 3.5` для thinking блоков в том же сообщении
-- `routing_log.log_query()` и `log_direct_read()`: принять и записать `model`, `thinking_tokens`
-- `compute_stats()`: добавить `by_model: list[dict]` в `StatsResult`
-- `generate_report()`: добавить секцию `## По моделям`
-- Новые тесты: `test_extracts_model_from_message`, `test_extracts_thinking_tokens`
+- `ToolCall` dataclass: добавить `model`, `thinking_tokens`, `speed`, `entrypoint`, `is_sidechain`
+- `extract_tool_calls()`: читать `obj["message"]["model"]`, `obj["message"]["usage"]["speed"]`, `obj["entrypoint"]`, `obj["isSidechain"]`; суммировать `len(b["thinking"]) / 3.5` для thinking блоков
+- `routing_log.log_query()` и `log_direct_read()`: принять и записать все 5 полей
+- `compute_stats()`: добавить `by_model: list[dict]` в `StatsResult` (включая speed/sidechain разбивку)
+- `generate_report()`: секция `## По моделям` + колонка is_sidechain
+- Новые тесты: `test_extracts_model_from_message`, `test_extracts_thinking_tokens`, `test_extracts_speed_and_entrypoint`
 
 ---
 
@@ -262,6 +270,9 @@ def log_query(
     est_tokens_saved: int,
     model: str = "",
     thinking_tokens: int = 0,
+    speed: str = "",
+    entrypoint: str = "",
+    is_sidechain: bool = False,
 ) -> None:
     _write({
         "ts": datetime.now().isoformat(timespec="seconds"),
@@ -269,6 +280,9 @@ def log_query(
         "session_id": session_id,
         "model": model,
         "thinking_tokens": thinking_tokens,
+        "speed": speed,
+        "entrypoint": entrypoint,
+        "is_sidechain": is_sidechain,
         "filters": filters,
         "hits": hits,
         "hits_count": len(hits),
@@ -283,6 +297,9 @@ def log_direct_read(
     had_prior_query: bool,
     model: str = "",
     thinking_tokens: int = 0,
+    speed: str = "",
+    entrypoint: str = "",
+    is_sidechain: bool = False,
 ) -> None:
     _write({
         "ts": datetime.now().isoformat(timespec="seconds"),
@@ -290,6 +307,9 @@ def log_direct_read(
         "session_id": session_id,
         "model": model,
         "thinking_tokens": thinking_tokens,
+        "speed": speed,
+        "entrypoint": entrypoint,
+        "is_sidechain": is_sidechain,
         "path": path,
         "est_tokens": est_tokens,
         "had_prior_query": had_prior_query,
@@ -572,6 +592,36 @@ def test_extracts_thinking_tokens(tmp_path):
     assert len(tcs) == 1
     assert tcs[0].model == "claude-opus-4-7"
     assert tcs[0].thinking_tokens == int(350 / 3.5)  # 100
+
+
+def test_extracts_speed_and_entrypoint(tmp_path):
+    from scripts.wiki.transcript_parser import extract_tool_calls
+    transcript = tmp_path / "speed.jsonl"
+    import json
+    record = {
+        "parentUuid": None,
+        "sessionId": "test-speed",
+        "isSidechain": True,
+        "entrypoint": "claude-cli",
+        "message": {
+            "model": "claude-opus-4-7",
+            "role": "assistant",
+            "usage": {"speed": "fast", "input_tokens": 100, "output_tokens": 50},
+            "content": [
+                {"type": "tool_use", "name": "Bash",
+                 "input": {"command": "python -m scripts.wiki.query --stage=08"}}
+            ]
+        },
+        "type": "assistant",
+        "uuid": "uuid-sp1",
+        "timestamp": "2026-05-27T10:00:01.000Z"
+    }
+    transcript.write_text(json.dumps(record) + "\n", encoding="utf-8")
+    tcs = extract_tool_calls(transcript)
+    assert len(tcs) == 1
+    assert tcs[0].speed == "fast"
+    assert tcs[0].entrypoint == "claude-cli"
+    assert tcs[0].is_sidechain is True
 ```
 
 - [ ] **Step 3: Запустить тесты, убедиться что падают**
@@ -610,6 +660,9 @@ class ToolCall:
     session_id: str = ""
     model: str = ""
     thinking_tokens: int = 0
+    speed: str = ""           # "standard" | "fast" (Fast mode)
+    entrypoint: str = ""      # "claude-vscode" | "claude-cli" | ...
+    is_sidechain: bool = False  # True = субагент (dispatched), False = основная сессия
 
 
 def extract_tool_calls(transcript_path: Path) -> list[ToolCall]:
@@ -648,6 +701,9 @@ def extract_tool_calls(transcript_path: Path) -> list[ToolCall]:
         ts = obj.get("timestamp", "")
         session_id = obj.get("sessionId", "")
         model = msg.get("model", "")
+        speed = (msg.get("usage") or {}).get("speed", "")
+        entrypoint = obj.get("entrypoint", "")
+        is_sidechain = bool(obj.get("isSidechain", False))
 
         # Суммируем thinking токены из всех thinking блоков сообщения
         thinking_tokens = 0
@@ -669,6 +725,7 @@ def extract_tool_calls(transcript_path: Path) -> list[ToolCall]:
             result.append(ToolCall(
                 ts=ts, tool_name=name, input_params=input_params,
                 session_id=session_id, model=model, thinking_tokens=thinking_tokens,
+                speed=speed, entrypoint=entrypoint, is_sidechain=is_sidechain,
             ))
 
     return result
