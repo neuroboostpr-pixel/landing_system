@@ -163,6 +163,7 @@ def main() -> int:
         "--format", dest="fmt", default="compact",
         choices=("compact", "cards", "slugs", "json"),
     )
+    parser.add_argument("--agent", default="", help="Agent/skill name making this query (for logging)")
     args = parser.parse_args()
     wiki_dir = Path(args.wiki).resolve()
 
@@ -208,7 +209,7 @@ def main() -> int:
         )
         if not already_logged:
             est_saved = routing_log.estimate_tokens_saved(wiki_dir, concepts)
-            routing_log.log_query(session_id, filters_dict, hit_slugs, est_saved, model=model)
+            routing_log.log_query(session_id, filters_dict, hit_slugs, est_saved, model=model, agent=args.agent)
     except Exception as e:
         print(f"[wiki routing_log] failed to log: {e}", file=sys.stderr)
 
