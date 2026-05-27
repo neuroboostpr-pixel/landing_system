@@ -128,18 +128,52 @@ def main() -> int:
     slug = _detect_project_slug(cwd)
     if slug:
         try:
+            import os
             from scripts.lib.paths import project_dir
+            from scripts.wiki import routing_log
+
+            session_id = os.environ.get("CLAUDE_CODE_SESSION_ID", "")
+            model = os.environ.get("CLAUDE_CODE_MODEL", "")
+
             project = project_dir(slug)
-            proj_index = _read_or_empty(project / "wiki" / "index.md")
+            proj_index_path = project / "wiki" / "index.md"
+            proj_index = _read_or_empty(proj_index_path)
             if proj_index:
                 chunks.append(
                     f"<project_wiki_index project=\"{slug}\">\n{proj_index}\n</project_wiki_index>"
                 )
-            memory_recent = _latest_daily(project / "memory")
+                try:
+                    routing_log.log_context_inject(
+                        session_id=session_id,
+                        source_category="session_start",
+                        source_label="project_wiki",
+                        est_tokens=int(len(proj_index) / 3.5),
+                        can_be_wiki=False,
+                        path=str(proj_index_path),
+                        model=model,
+                    )
+                except Exception:
+                    pass
+
+            memory_path = project / "memory"
+            memory_recent = _latest_daily(memory_path)
             if memory_recent:
                 chunks.append(
                     f"<project_recent_memory project=\"{slug}\">\n{memory_recent}\n</project_recent_memory>"
                 )
+                try:
+                    latest_file = sorted((memory_path / "daily").glob("*.md"))[-1]
+                    routing_log.log_context_inject(
+                        session_id=session_id,
+                        source_category="session_start",
+                        source_label="project_memory",
+                        est_tokens=int(len(memory_recent) / 3.5),
+                        can_be_wiki=False,
+                        path=str(latest_file),
+                        model=model,
+                    )
+                except Exception:
+                    pass
         except ImportError:
             pass
 
