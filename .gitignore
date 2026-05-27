@@ -33,6 +33,8 @@ build/
 # Logs
 *.log
 wiki/.obsidian/
+logs/wiki-usage.jsonl
+wiki/routing-report.md
 
 # PR-O block-import work cache
 .import-blocks-work/
