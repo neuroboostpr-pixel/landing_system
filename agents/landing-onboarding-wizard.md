@@ -61,7 +61,8 @@ description: Interactive wizard для новых проектов. Объясн
 ### Phase 3: Create project
 
 ```bash
-bash skills/landing-project-init/scripts/init.sh <slug>
+LANDINGS_ROOT=$(python -c "from scripts.lib.paths import LANDINGS_ROOT; print(LANDINGS_ROOT)")
+bash skills/landing-project-init/scripts/init.sh "$LANDINGS_ROOT/<slug>"
 ```
 
 После:
