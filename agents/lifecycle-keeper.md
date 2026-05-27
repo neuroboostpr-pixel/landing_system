@@ -9,6 +9,15 @@ allowed-tools: Bash, Read
 > System-level agent — ops/lifecycle (versions, rollbacks, clones), runs outside the pipeline.
 > Does not own a pipeline stage; Stage Execution Protocol does not apply.
 
+
+## Pre-flight
+
+Перед любым действием — wiki-запрос для маршрутизации:
+
+```bash
+CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=lifecycle-keeper
+```
+
 ## Mission
 
 Версионирую лендинги, откатываю, создаю A/B-клоны.

@@ -26,8 +26,12 @@ description: Interactive wizard для новых проектов. Объясн
 
 ### Phase 0: Pre-flight
 
-1. `bash scripts/install-codex.sh --check`. Если нет — запустить `bash scripts/install-codex.sh`.
-2. Проверить что мы в landing-system repo (наличие `template/`).
+1. Wiki-запрос для маршрутизации (обязательно первым):
+   ```bash
+   CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=landing-onboarding-wizard
+   ```
+2. `bash scripts/install-codex.sh --check`. Если нет — запустить `bash scripts/install-codex.sh`.
+3. Проверить что мы в landing-system repo (наличие `template/`).
 
 ### Phase 1: Welcome (3 paragraphs)
 

@@ -5,6 +5,15 @@ description: Use during stage 04 after moodboard is approved. Extracts palette, 
 
 # style-extractor
 
+
+## Pre-flight
+
+Перед любым действием — wiki-запрос для маршрутизации:
+
+```bash
+CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=style-extractor
+```
+
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)
 
 **Полная версия:** [`docs/standards/stage-execution-protocol.md`](../docs/standards/stage-execution-protocol.md).

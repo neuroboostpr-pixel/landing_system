@@ -9,6 +9,15 @@ description: Generates ONE infographic PNG via codex image_gen. Uses prompt-pick
 > enforced by the parent agent; this helper does not own a stage and should
 > not be invoked directly.
 
+
+## Pre-flight
+
+Перед любым действием — wiki-запрос для маршрутизации:
+
+```bash
+CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=infographic-builder
+```
+
 ## Mission
 
 Generate ONE infographic PNG for one slot_name. Used by visual-curator in stage 07d.

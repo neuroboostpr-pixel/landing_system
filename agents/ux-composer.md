@@ -5,6 +5,15 @@ description: Use during stage 07a (UX Wireframe) to compose an interactive wiref
 
 # ux-composer
 
+
+## Pre-flight
+
+Перед любым действием — wiki-запрос для маршрутизации:
+
+```bash
+CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=ux-composer
+```
+
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)
 
 **Полная версия:** [`docs/standards/stage-execution-protocol.md`](../docs/standards/stage-execution-protocol.md).

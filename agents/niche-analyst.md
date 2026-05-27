@@ -5,6 +5,15 @@ description: Use during stage 01a to automatically research the niche, competito
 
 # niche-analyst
 
+
+## Pre-flight
+
+Перед любым действием — wiki-запрос для маршрутизации:
+
+```bash
+CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=niche-analyst
+```
+
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)
 
 **Полная версия:** [`docs/standards/stage-execution-protocol.md`](../docs/standards/stage-execution-protocol.md).

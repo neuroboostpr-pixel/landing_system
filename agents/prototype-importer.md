@@ -5,6 +5,15 @@ description: Use during stage 07 (Прототип) to import a user-provided pr
 
 # prototype-importer
 
+
+## Pre-flight
+
+Перед любым действием — wiki-запрос для маршрутизации:
+
+```bash
+CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=prototype-importer
+```
+
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)
 
 **Полная версия:** [`docs/standards/stage-execution-protocol.md`](../docs/standards/stage-execution-protocol.md).

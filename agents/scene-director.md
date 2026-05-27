@@ -6,6 +6,15 @@ allowed-tools: Bash, Read, Write
 
 # scene-director (Режиссёр сцен — Cinematic Premium)
 
+
+## Pre-flight
+
+Перед любым действием — wiki-запрос для маршрутизации:
+
+```bash
+CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=scene-director
+```
+
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)
 
 **Полная версия:** [`docs/standards/stage-execution-protocol.md`](../docs/standards/stage-execution-protocol.md).

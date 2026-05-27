@@ -9,6 +9,15 @@ allowed-tools: Bash, Read, Write, Edit
 > System-level agent — first-time onboarding wizard, runs before any project.
 > Does not own a pipeline stage; Stage Execution Protocol does not apply.
 
+
+## Pre-flight
+
+Перед любым действием — wiki-запрос для маршрутизации:
+
+```bash
+CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=onboarding-guide
+```
+
 ## Mission
 
 Провожу пользователя через первичную настройку landing-system. Объясняю что такое система, проверяю зависимости и API.

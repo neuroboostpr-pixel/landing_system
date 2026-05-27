@@ -9,6 +9,15 @@ description: After user approves selections.yaml, process each slot — crop/res
 > enforced by the parent agent; this helper does not own a stage and should
 > not be invoked directly.
 
+
+## Pre-flight
+
+Перед любым действием — wiki-запрос для маршрутизации:
+
+```bash
+CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=photo-preview-board
+```
+
 ## Mission
 
 Turn `selections.yaml` (canonical, user-approved) into `processed/<slot_id>/{desktop,mobile}.jpg` files and render `photo-preview.html` for final review.

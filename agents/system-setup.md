@@ -9,6 +9,15 @@ allowed-tools: Bash, Read, Write, Edit
 > System-level agent — one-time setup, not part of the pipeline.
 > Does not own a pipeline stage; Stage Execution Protocol does not apply.
 
+
+## Pre-flight
+
+Перед любым действием — wiki-запрос для маршрутизации:
+
+```bash
+CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=system-setup
+```
+
 ## Mission
 
 Настраиваю систему один раз. После меня можно делать лендинги.
