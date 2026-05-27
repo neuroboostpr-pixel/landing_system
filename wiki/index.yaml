@@ -1,11 +1,11 @@
 version: 1
-generated_at: '2026-05-26T13:43:05+00:00'
+generated_at: '2026-05-27T07:31:54+00:00'
 counts:
-  total: 117
+  total: 118
   by_type:
     stage: 20
     agent: 33
-    skill: 27
+    skill: 28
     catalog: 3
     command: 29
     rule: 5
@@ -3286,6 +3286,30 @@ concepts:
   - landing-orchestrator
   - landing-go
   - seo-tech-audit
+- slug: wiki-routing-observability
+  type: skill
+  name: Wiki Routing Observability
+  card: concepts/skills/wiki-routing-observability.md
+  source: skills/wiki-routing-observability/SKILL.md
+  tags:
+  - wiki
+  - observability
+  - logging
+  - analytics
+  - routing
+  inputs:
+  - wiki/index.yaml
+  - logs/wiki-usage.jsonl
+  outputs:
+  - logs/wiki-usage.jsonl
+  - wiki/routing-report.md
+  pre_reqs:
+  - wiki
+  related:
+  - wiki
+  - wiki-audit-checklist
+  confidence:
+    triggers: low
 - slug: wireframe-rendering
   type: skill
   name: Рендеринг интерактивного Wireframe (07a)

@@ -2,7 +2,7 @@
 
 > Авто-сгенерированный индекс. Обновляется при `python -m scripts.wiki.compile --source-mode=system`.
 
-**Концептов всего:** 117
+**Концептов всего:** 118
 **Категории:** agent, catalog, command, rule, skill, stage
 
 **Известные ограничения:**
@@ -91,6 +91,7 @@
 - [[style-decomposition]] — Декомпозиция стиля (Style Decomposition)
 - [[visual-generation]] — Генерация визуалов (иконки и инфографика)
 - [[visual-qa]] — Visual QA — автоматический визуальный контроль
+- [[wiki-routing-observability]] — Wiki Routing Observability
 - [[wireframe-rendering]] — Рендеринг интерактивного Wireframe (07a)
 - [[wp-cli-deployer]] — WP-CLI Deployer
 - [[wp-gutenberg-block-builder]] — WP Gutenberg Block Builder
