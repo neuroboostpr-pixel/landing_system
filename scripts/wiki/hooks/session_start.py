@@ -17,6 +17,16 @@ from pathlib import Path
 LANDING_SYSTEM = Path(__file__).resolve().parents[3]
 
 
+def _read_model_from_settings() -> str:
+    """Читает модель из ~/.claude/settings.json — fallback когда CLAUDE_CODE_MODEL не задан."""
+    try:
+        settings_path = Path.home() / ".claude" / "settings.json"
+        data = json.loads(settings_path.read_text(encoding="utf-8"))
+        return data.get("model", "")
+    except Exception:
+        return ""
+
+
 def _read_or_empty(p: Path, max_chars: int = 8000) -> str:
     if not p.exists():
         return ""
@@ -133,7 +143,7 @@ def main() -> int:
             from scripts.wiki import routing_log
 
             session_id = os.environ.get("CLAUDE_CODE_SESSION_ID", "")
-            model = os.environ.get("CLAUDE_CODE_MODEL", "")
+            model = os.environ.get("CLAUDE_CODE_MODEL", "") or _read_model_from_settings()
 
             project = project_dir(slug)
             proj_index_path = project / "wiki" / "index.md"
