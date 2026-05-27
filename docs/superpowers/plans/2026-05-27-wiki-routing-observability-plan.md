@@ -10,6 +10,43 @@
 
 ---
 
+## Правки по результатам code review (перед реализацией)
+
+**#2 — Реальный формат транскрипта (исследован 2026-05-27):**
+
+Каждая строка транскрипта — полный JSON объект с wrapper'ом:
+```json
+{
+  "parentUuid": "...",
+  "sessionId": "9a5378e7-...",
+  "message": {
+    "role": "assistant",
+    "content": [{"type": "tool_use", "name": "Read", "input": {"file_path": "..."}}]
+  },
+  "type": "assistant",
+  "uuid": "...",
+  "timestamp": "2026-05-26T10:22:47.796Z"
+}
+```
+Это **НЕ** `{"role": ..., "content": [...]}`. Парсер должен читать `obj["message"]["content"]`.
+`sessionId` доступен прямо в каждой записи — `get_session_id()` читает его оттуда, не из имени файла.
+Streaming chunks в транскрипте **отсутствуют** — только complete messages. Критика code reviewer была неверной.
+
+**#6 — Race condition при параллельных агентах:**
+
+`routing_log._write()` использует file lock через `fcntl.flock` (POSIX) / `msvcrt.locking` (Windows).
+На Windows — открываем файл в `'a'` режиме (atomic append на NTFS для малых записей), дополнительно оборачиваем в try/except.
+
+**#4 — Токены для кириллицы:**
+
+`size/4` занижает токены для UTF-8 кириллицы (~1.5x погрешность). Формула исправлена:
+- `len(text_chars) / 3.5` для текстовых файлов (читаем как текст, считаем символы)
+- Fallback `file_size_bytes / 4` если файл нечитаем как UTF-8
+- В отчёте явная пометка: `~est` (приближение ±30%)
+- `stats.py --exact-tokens` вызывает Anthropic count_tokens API (опционально, требует `ANTHROPIC_API_KEY`)
+
+---
+
 ## Файловая карта
 
 | Файл | Статус | Назначение |
@@ -166,7 +203,18 @@ def _open_log(mode: str = "a") -> IO[str]:
 
 def _write(record: dict[str, Any]) -> None:
     try:
-        with _open_log("a") as f:
+        LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+        with LOG_PATH.open("a", encoding="utf-8") as f:
+            # File lock для защиты от race condition при параллельных агентах
+            try:
+                import msvcrt
+                msvcrt.locking(f.fileno(), msvcrt.LK_NBLCK, 1)
+            except (ImportError, OSError):
+                try:
+                    import fcntl
+                    fcntl.flock(f.fileno(), fcntl.LOCK_EX)
+                except (ImportError, OSError):
+                    pass  # best-effort на платформах без lock
             f.write(json.dumps(record, ensure_ascii=False) + "\n")
     except OSError as e:
         print(f"[wiki routing_log] failed to write: {e}", file=sys.stderr)
@@ -229,10 +277,17 @@ def read_events(since_days: int = 7) -> list[dict[str, Any]]:
 
 
 def estimate_tokens_file(path: Path) -> int:
+    """Оценка токенов. Читает текст как UTF-8, считает символы / 3.5.
+    Fallback: size / 4. Погрешность ~30% — достаточно для сравнения wiki vs source.
+    """
     try:
-        return path.stat().st_size // 4
-    except OSError:
-        return 0
+        text = path.read_text(encoding="utf-8")
+        return int(len(text) / 3.5)
+    except (OSError, UnicodeDecodeError):
+        try:
+            return path.stat().st_size // 4
+        except OSError:
+            return 0
 
 
 def estimate_tokens_saved(wiki_dir: Path, hits: list[dict[str, Any]]) -> int:
@@ -280,27 +335,27 @@ git commit -m "feat(wiki): add routing_log module for wiki-usage.jsonl"
 Создать `tests/wiki/fixtures/transcripts/normal.jsonl`:
 
 ```jsonl
-{"role": "assistant", "content": [{"type": "tool_use", "name": "Read", "input": {"file_path": "/d/AI_TEAMS/landing_system/agents/wp-builder.md"}}]}
-{"role": "assistant", "content": [{"type": "tool_use", "name": "Bash", "input": {"command": "python -m scripts.wiki.query --stage=08 --type=agent"}}]}
-{"role": "assistant", "content": [{"type": "tool_use", "name": "Read", "input": {"file_path": "/d/AI_TEAMS/landing_system/skills/wp-gutenberg-block-builder/SKILL.md"}}]}
-{"role": "assistant", "content": [{"type": "tool_use", "name": "Bash", "input": {"command": "python -m scripts.wiki.query --slug=block-composer --format=cards"}}]}
-{"role": "assistant", "content": [{"type": "tool_use", "name": "Read", "input": {"file_path": "/d/AI_TEAMS/landing_system/wiki/concepts/agents/wp-builder.md"}}]}
+{"parentUuid": null, "sessionId": "test-session-001", "message": {"role": "assistant", "content": [{"type": "tool_use", "name": "Read", "input": {"file_path": "/d/AI_TEAMS/landing_system/agents/wp-builder.md"}}]}, "type": "assistant", "uuid": "uuid-1", "timestamp": "2026-05-27T10:00:01.000Z"}
+{"parentUuid": "uuid-1", "sessionId": "test-session-001", "message": {"role": "assistant", "content": [{"type": "tool_use", "name": "Bash", "input": {"command": "python -m scripts.wiki.query --stage=08 --type=agent"}}]}, "type": "assistant", "uuid": "uuid-2", "timestamp": "2026-05-27T10:00:02.000Z"}
+{"parentUuid": "uuid-2", "sessionId": "test-session-001", "message": {"role": "assistant", "content": [{"type": "tool_use", "name": "Read", "input": {"file_path": "/d/AI_TEAMS/landing_system/skills/wp-gutenberg-block-builder/SKILL.md"}}]}, "type": "assistant", "uuid": "uuid-3", "timestamp": "2026-05-27T10:00:03.000Z"}
+{"parentUuid": "uuid-3", "sessionId": "test-session-001", "message": {"role": "assistant", "content": [{"type": "tool_use", "name": "Bash", "input": {"command": "python -m scripts.wiki.query --slug=block-composer --format=cards"}}]}, "type": "assistant", "uuid": "uuid-4", "timestamp": "2026-05-27T10:00:04.000Z"}
+{"parentUuid": "uuid-4", "sessionId": "test-session-001", "message": {"role": "assistant", "content": [{"type": "tool_use", "name": "Read", "input": {"file_path": "/d/AI_TEAMS/landing_system/wiki/concepts/agents/wp-builder.md"}}]}, "type": "assistant", "uuid": "uuid-5", "timestamp": "2026-05-27T10:00:05.000Z"}
 ```
 
 Создать `tests/wiki/fixtures/transcripts/broken.jsonl`:
 
 ```jsonl
-{"role": "assistant", "content": [{"type": "tool_use", "name": "Read", "input": {"file_path": "/path/agents/ok.md"}}]}
+{"parentUuid": null, "sessionId": "test-broken", "message": {"role": "assistant", "content": [{"type": "tool_use", "name": "Read", "input": {"file_path": "/path/agents/ok.md"}}]}, "type": "assistant", "uuid": "uuid-b1", "timestamp": "2026-05-27T10:00:01.000Z"}
 NOT VALID JSON {{{
-{"role": "assistant", "content": [{"type": "tool_use", "name": "Bash"}]}
-{"role": "assistant", "content": [{"type": "tool_use", "input": {"file_path": "/path/agents/no-name.md"}}]}
+{"parentUuid": "uuid-b1", "sessionId": "test-broken", "message": {"role": "assistant", "content": [{"type": "tool_use", "name": "Bash"}]}, "type": "assistant", "uuid": "uuid-b2", "timestamp": "2026-05-27T10:00:02.000Z"}
+{"parentUuid": "uuid-b2", "sessionId": "test-broken", "message": {"role": "assistant", "content": [{"type": "tool_use", "input": {"file_path": "/path/agents/no-name.md"}}]}, "type": "assistant", "uuid": "uuid-b3", "timestamp": "2026-05-27T10:00:03.000Z"}
 ```
 
 Создать `tests/wiki/fixtures/transcripts/string_content.jsonl`:
 
 ```jsonl
-{"role": "assistant", "content": "plain string content, not a list"}
-{"role": "user", "content": "user message"}
+{"parentUuid": null, "sessionId": "test-string", "message": {"role": "assistant", "content": "plain string content, not a list"}, "type": "assistant", "uuid": "uuid-s1", "timestamp": "2026-05-27T10:00:01.000Z"}
+{"parentUuid": "uuid-s1", "sessionId": "test-string", "message": {"role": "user", "content": "user message"}, "type": "user", "uuid": "uuid-s2", "timestamp": "2026-05-27T10:00:02.000Z"}
 ```
 
 - [ ] **Step 2: Написать failing тесты**
@@ -474,10 +529,16 @@ class ToolCall:
     ts: str
     tool_name: str
     input_params: dict = field(default_factory=dict)
+    session_id: str = ""
 
 
 def extract_tool_calls(transcript_path: Path) -> list[ToolCall]:
-    """Читает JSONL транскрипт, возвращает все tool calls.
+    """Читает JSONL транскрипт Claude Code, возвращает все tool calls.
+
+    Реальный формат (исследован 2026-05-27):
+      {"parentUuid": "...", "sessionId": "...", "message": {"role": "assistant",
+       "content": [{"type": "tool_use", "name": "Read", "input": {...}}]},
+       "timestamp": "...", "uuid": "..."}
 
     При битой строке или неизвестном формате — пропускает, не бросает.
     """
@@ -492,15 +553,20 @@ def extract_tool_calls(transcript_path: Path) -> list[ToolCall]:
         if not line:
             continue
         try:
-            msg = json.loads(line)
+            obj = json.loads(line)
         except json.JSONDecodeError:
             continue
 
+        # Формат: wrapper с "message" ключом
+        msg = obj.get("message")
+        if not isinstance(msg, dict):
+            continue
         content = msg.get("content")
         if not isinstance(content, list):
             continue
 
-        ts = msg.get("ts", "")
+        ts = obj.get("timestamp", "")
+        session_id = obj.get("sessionId", "")
         for block in content:
             if not isinstance(block, dict):
                 continue
@@ -512,7 +578,8 @@ def extract_tool_calls(transcript_path: Path) -> list[ToolCall]:
             input_params = block.get("input")
             if not isinstance(input_params, dict):
                 input_params = {}
-            result.append(ToolCall(ts=ts, tool_name=name, input_params=input_params))
+            result.append(ToolCall(ts=ts, tool_name=name, input_params=input_params,
+                                   session_id=session_id))
 
     return result
 
@@ -548,7 +615,20 @@ def is_wiki_query(tc: ToolCall) -> bool:
 
 
 def get_session_id(transcript_path: Path) -> str:
-    """Имя файла транскрипта без расширения."""
+    """Читает sessionId из первой записи транскрипта.
+    Fallback: имя файла без расширения.
+    """
+    try:
+        for line in transcript_path.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            obj = json.loads(line)
+            sid = obj.get("sessionId")
+            if sid:
+                return sid
+    except (OSError, json.JSONDecodeError):
+        pass
     return transcript_path.stem
 
 
@@ -714,9 +794,10 @@ python -m pytest tests/wiki/test_stats.py -v 2>&1 | head -20
 """Агрегация wiki routing событий и генерация отчёта.
 
 CLI:
-    python -m scripts.wiki.stats              # summary в терминал
-    python -m scripts.wiki.stats --report     # пишет wiki/routing-report.md
-    python -m scripts.wiki.stats --days=30    # за месяц
+    python -m scripts.wiki.stats                       # summary в терминал
+    python -m scripts.wiki.stats --report              # пишет wiki/routing-report.md
+    python -m scripts.wiki.stats --days=30             # за месяц
+    python -m scripts.wiki.stats --exact-tokens        # точный подсчёт через Anthropic API (требует ANTHROPIC_API_KEY)
 """
 from __future__ import annotations
 
@@ -854,21 +935,80 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Wiki routing stats")
     parser.add_argument("--report", action="store_true", help="Write wiki/routing-report.md")
     parser.add_argument("--days", type=int, default=7)
+    parser.add_argument("--exact-tokens", action="store_true",
+                        help="Use Anthropic count_tokens API for exact token counts (requires ANTHROPIC_API_KEY)")
     args = parser.parse_args()
 
     from scripts.wiki import routing_log
     events = routing_log.read_events(since_days=args.days)
-    result = compute_stats(events, since_days=args.days)
 
-    print(one_line_summary(result, days=args.days))
+    if args.exact_tokens:
+        import os
+        api_key = os.environ.get("ANTHROPIC_API_KEY")
+        if not api_key:
+            print("ERROR: ANTHROPIC_API_KEY not set. Use size-based estimate instead.", file=sys.stderr)
+            return 1
+        events = _enrich_with_exact_tokens(events, api_key)
+
+    result = compute_stats(events, since_days=args.days)
+    suffix = " (exact)" if args.exact_tokens else " (~est ±30%)"
+    print(one_line_summary(result, days=args.days) + suffix)
 
     if args.report:
-        md = generate_report(result, since_days=args.days)
+        md = generate_report(result, since_days=args.days, exact=args.exact_tokens)
         report_path = config.WIKI_DIR / "routing-report.md"
         report_path.write_text(md, encoding="utf-8")
         print(f"Report written to {report_path}")
 
     return 0
+
+
+def _enrich_with_exact_tokens(events: list[dict], api_key: str) -> list[dict]:
+    """Заменяет est_tokens/est_tokens_saved точными значениями через Anthropic API.
+    Кэширует результаты в logs/token-cache.json по hash файла.
+    """
+    import hashlib
+    cache_path = config.REPO_ROOT / "logs" / "token-cache.json"
+    cache: dict[str, int] = {}
+    if cache_path.exists():
+        try:
+            cache = json.loads(cache_path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    def count_file_tokens(file_path: str) -> int:
+        p = config.REPO_ROOT / file_path if not file_path.startswith("/") else Path(file_path)
+        try:
+            content = p.read_text(encoding="utf-8")
+        except (OSError, UnicodeDecodeError):
+            return 0
+        key = hashlib.md5(content.encode()).hexdigest()
+        if key in cache:
+            return cache[key]
+        import urllib.request
+        body = json.dumps({"model": "claude-haiku-4-5-20251001",
+                           "messages": [{"role": "user", "content": content}]}).encode()
+        req = urllib.request.Request(
+            "https://api.anthropic.com/v1/messages/count_tokens",
+            data=body,
+            headers={"x-api-key": api_key, "anthropic-version": "2023-06-01",
+                     "content-type": "application/json"},
+        )
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            result = json.loads(resp.read())
+        tokens = result.get("input_tokens", 0)
+        cache[key] = tokens
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        cache_path.write_text(json.dumps(cache), encoding="utf-8")
+        return tokens
+
+    enriched = []
+    for e in events:
+        e = dict(e)
+        if e.get("type") == "direct_read" and e.get("path"):
+            e["est_tokens"] = count_file_tokens(e["path"])
+        enriched.append(e)
+    return enriched
 
 
 if __name__ == "__main__":
