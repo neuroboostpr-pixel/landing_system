@@ -154,6 +154,7 @@ def main() -> int:
         import os
         from scripts.wiki import routing_log
         session_id = os.environ.get("CLAUDE_SESSION_ID", "unknown")
+        model = os.environ.get("CLAUDE_MODEL", "")
         filters_dict = {
             "stage": args.stage,
             "type": args.type_,
@@ -163,7 +164,7 @@ def main() -> int:
             "grep": args.grep,
         }
         est_saved = routing_log.estimate_tokens_saved(wiki_dir, concepts)
-        routing_log.log_query(session_id, filters_dict, [c["slug"] for c in concepts], est_saved)
+        routing_log.log_query(session_id, filters_dict, [c["slug"] for c in concepts], est_saved, model=model)
     except Exception as e:
         print(f"[wiki routing_log] failed to log: {e}", file=sys.stderr)
 

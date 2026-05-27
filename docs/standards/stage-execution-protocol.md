@@ -63,6 +63,19 @@
 
 ---
 
+## Wiki-запросы (обязательный формат)
+
+Перед диспатчем любого агента — запрашивать wiki с явной передачей модели:
+
+```bash
+CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --stage=<N> --type=agent
+CLAUDE_MODEL=$CLAUDE_MODEL python -m scripts.wiki.query --slug=<concept-slug>
+```
+
+`CLAUDE_MODEL` — переменная окружения, которую Claude Code автоматически устанавливает в текущей сессии. Без неё модель в логах wiki будет `unknown`.
+
+---
+
 ## Что запрещено
 
 - ❌ Начинать делать что-либо до Шага 1 (даже «по-быстрому проверить файл»)

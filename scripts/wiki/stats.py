@@ -145,7 +145,7 @@ def generate_report(stats: StatsResult, since_days: int = 7) -> str:
         bp = int(row["direct_reads"] / total * 100) if total > 0 else 0
         lines.append(
             f"| {row['date']} | {row['queries']} | {row['direct_reads']} "
-            f"| {row['est_saved']:,} т | {bp}% |"
+            f"| {row['est_saved']:,} | {bp}% |"
         )
     saved = f"{stats.est_tokens_saved:,}".replace(",", " ")
     spent = f"{stats.est_tokens_spent_bypass:,}".replace(",", " ")
