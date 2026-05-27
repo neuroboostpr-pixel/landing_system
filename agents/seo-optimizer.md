@@ -12,7 +12,8 @@ allowed-tools: Bash, Read, Write, Edit
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-python -m scripts.wiki.query --slug=seo-optimizer
+python -m scripts.wiki.query --slug=seo-optimizer --agent=seo-optimizer
+python -m scripts.wiki.log --type agent_call --agent seo-optimizer --stage 11
 ```
 
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)

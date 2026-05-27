@@ -11,7 +11,8 @@ description: Translate DESIGN.md §5 wireframes into real per-block CSS and rewr
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-python -m scripts.wiki.query --slug=frontend-builder
+python -m scripts.wiki.query --slug=frontend-builder --agent=frontend-builder
+python -m scripts.wiki.log --type agent_call --agent frontend-builder --stage 08
 ```
 
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)

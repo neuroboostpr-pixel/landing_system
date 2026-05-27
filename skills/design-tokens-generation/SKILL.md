@@ -6,6 +6,12 @@ allowed-tools: Bash, Read, Write
 
 # design-tokens-generation
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill design-tokens-generation --stage 05
+```
+
 Reads `04_БРЕНД/brand-kit.md` YAML frontmatter and builds a complete design token set.
 
 ## Scripts

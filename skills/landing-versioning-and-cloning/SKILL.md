@@ -5,6 +5,12 @@ description: Create version snapshots, rollback to previous versions, and create
 
 # landing-versioning-and-cloning
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill landing-versioning-and-cloning --stage ""
+```
+
 > ⚠️ **DEPRECATED для модели multisite.** Этот скилл клонирует проект целиком
 > как **отдельный WP-инстанс** (filesystem copy + новый .env). Для новой
 > модели «один клиентский домен = WP Multisite сеть с сегментами целевой аудитории»

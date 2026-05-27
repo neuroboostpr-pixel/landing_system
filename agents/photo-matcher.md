@@ -15,7 +15,8 @@ description: Ranks photos as candidates for each photo-slot in the wireframe. Ou
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-python -m scripts.wiki.query --slug=photo-matcher
+python -m scripts.wiki.query --slug=photo-matcher --agent=photo-matcher
+python -m scripts.wiki.log --type agent_call --agent photo-matcher --stage 07c
 ```
 
 ## Mission

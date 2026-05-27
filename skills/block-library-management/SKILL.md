@@ -5,6 +5,12 @@ description: Manage the shared block-library — scaffold new blocks, validate c
 
 # block-library-management
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill block-library-management --stage ""
+```
+
 Утилиты для управления `block-library/`:
 
 - `scripts/validate-catalog.py <path>` — валидировать `catalog.yaml`

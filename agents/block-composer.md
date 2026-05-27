@@ -11,7 +11,8 @@ description: Use during stage 07b (Block Compose) to render composed.html — fi
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-python -m scripts.wiki.query --slug=block-composer
+python -m scripts.wiki.query --slug=block-composer --agent=block-composer
+python -m scripts.wiki.log --type agent_call --agent block-composer --stage 07b
 ```
 
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)

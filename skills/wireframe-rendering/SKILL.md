@@ -5,6 +5,12 @@ description: Stage 07a — render interactive wireframe.html (desktop+mobile per
 
 # wireframe-rendering
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill wireframe-rendering --stage 07a
+```
+
 ## Что делает
 
 Рендерит `<project>/07a_WIREFRAME/wireframe.html` — интерактивный preview, где для каждого блока прототипа показано 2-3 варианта композиции из `block-library/`. Переключение между вариантами — CSS-only (`:checked` selector), без сборки/JS-фреймворков.

@@ -28,7 +28,8 @@ description: Interactive wizard для новых проектов. Объясн
 
 1. Wiki-запрос для маршрутизации (обязательно первым):
    ```bash
-   python -m scripts.wiki.query --slug=landing-onboarding-wizard
+   python -m scripts.wiki.query --slug=landing-onboarding-wizard --agent=landing-onboarding-wizard
+   python -m scripts.wiki.log --type agent_call --agent landing-onboarding-wizard --stage ""
    ```
 2. `bash scripts/install-codex.sh --check`. Если нет — запустить `bash scripts/install-codex.sh`.
 3. Проверить что мы в landing-system repo (наличие `template/`).
@@ -63,6 +64,11 @@ description: Interactive wizard для новых проектов. Объясн
 ```bash
 LANDINGS_ROOT=$(python -c "from scripts.lib.paths import LANDINGS_ROOT; print(LANDINGS_ROOT)")
 bash skills/landing-project-init/scripts/init.sh "$LANDINGS_ROOT/<slug>"
+```
+
+После init — сформировать вики-граф проекта:
+```bash
+python -m scripts.wiki.compile --source-mode=project-graph --project=<slug>
 ```
 
 После:
@@ -122,7 +128,7 @@ python3 scripts/wizard-check-materials.py --project ~/Lendings/<slug> --step <st
 07c_PHOTOS/inbox/
 
 Внутри 7 подпапок — открой и посмотри.
-Если фоток нет — напиши "пропустить" (я сгенерю через AI).
+Если фоток нет — напиши "пропустить" (AI подберёт на этапе 07e через /landing-visuals).
 ```
 
 ### ШАГ 3: Logos (рекомендую)
@@ -144,6 +150,11 @@ URL в index.yaml или скриншоты в screenshots/.
 ```
 
 ### Phase 5: Final summary
+
+Обновить routing-report:
+```bash
+python -m scripts.wiki.stats --report
+```
 
 ```
 ИТОГ

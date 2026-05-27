@@ -5,6 +5,12 @@ description: Hybrid logging for wiki routing systems — tracks wiki queries vs 
 
 # wiki-routing-observability
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill wiki-routing-observability --stage ""
+```
+
 Переиспользуемый скилл для измерения эффективности wiki routing.
 
 ## Что делает

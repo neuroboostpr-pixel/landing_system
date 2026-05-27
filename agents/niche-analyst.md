@@ -11,7 +11,8 @@ description: Use during stage 01a to automatically research the niche, competito
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-python -m scripts.wiki.query --slug=niche-analyst
+python -m scripts.wiki.query --slug=niche-analyst --agent=niche-analyst
+python -m scripts.wiki.log --type agent_call --agent niche-analyst --stage 01a
 ```
 
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)

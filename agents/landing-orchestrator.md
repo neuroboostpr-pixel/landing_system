@@ -42,8 +42,9 @@ description: Master orchestrator for landing projects. Owns the 12-stage workflo
 Перед запуском каждого этапа сначала запроси системную wiki, чтобы получить кандидатов:
 
 ```bash
-python -m scripts.wiki.query --stage=<N> --type=agent
-python -m scripts.wiki.query --slug=<concept-slug>
+python -m scripts.wiki.query --stage=<N> --type=agent --agent=landing-orchestrator
+python -m scripts.wiki.query --slug=<concept-slug> --agent=landing-orchestrator
+python -m scripts.wiki.log --type agent_call --agent landing-orchestrator --stage ""
 ```
 
 Прочитай вывод (3-5 карточек) и выбери одного агента/скилл. **Только** после этого подгружай полный исходник из `agents/<slug>.md`, если карточка не покрывает вопрос.

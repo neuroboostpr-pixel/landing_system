@@ -11,7 +11,8 @@ description: Stage 07d orchestrator (PR-C). Scans composed.html for icon/infogra
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-python -m scripts.wiki.query --slug=visual-curator
+python -m scripts.wiki.query --slug=visual-curator --agent=visual-curator
+python -m scripts.wiki.log --type agent_call --agent visual-curator --stage 07e
 ```
 
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)

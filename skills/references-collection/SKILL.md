@@ -5,6 +5,12 @@ description: Maintains 03_РЕФЕРЕНСЫ/index.yaml — tracks reference URL
 
 # references-collection
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill references-collection --stage 03
+```
+
 ## What I do
 
 CRUD on a YAML index of references with statuses. Subcommands:

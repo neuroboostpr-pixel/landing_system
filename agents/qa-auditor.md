@@ -12,7 +12,8 @@ allowed-tools: Bash, Read, Write
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-python -m scripts.wiki.query --slug=qa-auditor
+python -m scripts.wiki.query --slug=qa-auditor --agent=qa-auditor
+python -m scripts.wiki.log --type agent_call --agent qa-auditor --stage 10
 ```
 
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)

@@ -15,7 +15,8 @@ allowed-tools: Bash, Read, Write, Edit
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-python -m scripts.wiki.query --slug=onboarding-guide
+python -m scripts.wiki.query --slug=onboarding-guide --agent=onboarding-guide
+python -m scripts.wiki.log --type agent_call --agent onboarding-guide --stage ""
 ```
 
 ## Mission

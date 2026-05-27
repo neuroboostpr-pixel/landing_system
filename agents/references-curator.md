@@ -11,7 +11,8 @@ description: Use during stage 03 to collect visual references (URLs, Behance fil
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-python -m scripts.wiki.query --slug=references-curator
+python -m scripts.wiki.query --slug=references-curator --agent=references-curator
+python -m scripts.wiki.log --type agent_call --agent references-curator --stage 03
 ```
 
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)

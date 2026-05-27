@@ -5,6 +5,12 @@ description: Use during stage 04 to synthesize brand-kit.md from extracted style
 
 # brand-kit-build
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill brand-kit-build --stage 04
+```
+
 ## What I do
 
 - Read all `04_БРЕНД/extracted/*.yaml` files.

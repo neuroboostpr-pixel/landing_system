@@ -5,6 +5,12 @@ description: Stage 07d (PR-C) — generate icons + infographics via codex image_
 
 # visual-generation
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill visual-generation --stage 07e
+```
+
 Конвейер генерации визуалов (иконки, инфографика) для лендинга. Запускается командой `/landing-visuals` после approved `05_design` + существующего `07b_COMPOSED/composed.html`.
 
 ## Этапы

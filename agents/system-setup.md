@@ -15,7 +15,8 @@ allowed-tools: Bash, Read, Write, Edit
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-python -m scripts.wiki.query --slug=system-setup
+python -m scripts.wiki.query --slug=system-setup --agent=system-setup
+python -m scripts.wiki.log --type agent_call --agent system-setup --stage ""
 ```
 
 ## Mission

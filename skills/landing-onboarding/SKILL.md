@@ -5,6 +5,12 @@ description: First-time setup of landing-system on a new machine. Validates loca
 
 # landing-onboarding
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill landing-onboarding --stage ""
+```
+
 ## Mission
 
 Настроить landing-system на новой машине: зависимости, плагины, MCP, API.

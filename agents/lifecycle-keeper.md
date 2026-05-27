@@ -15,7 +15,8 @@ allowed-tools: Bash, Read
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-python -m scripts.wiki.query --slug=lifecycle-keeper
+python -m scripts.wiki.query --slug=lifecycle-keeper --agent=lifecycle-keeper
+python -m scripts.wiki.log --type agent_call --agent lifecycle-keeper --stage ""
 ```
 
 ## Mission

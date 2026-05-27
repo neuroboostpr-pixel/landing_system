@@ -5,6 +5,12 @@ description: Stage 01a — automatic niche and competitor research. Invoked by /
 
 # niche-analysis skill
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill niche-analysis --stage 01a
+```
+
 Обёртка вокруг агента `niche-analyst` для запуска через slash-команду `/landing-niche`.
 
 ## Что делает skill

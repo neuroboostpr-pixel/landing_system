@@ -5,6 +5,12 @@ description: Deploy WordPress theme to Beget via SSH+rsync+wp-cli. Used by /land
 
 # wp-cli-deployer
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill wp-cli-deployer --stage 09
+```
+
 ## Mission
 
 Деплою лендинг на Бегет: синхронизирую тему, ставлю плагины, импортирую

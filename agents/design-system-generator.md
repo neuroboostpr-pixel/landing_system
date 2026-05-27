@@ -12,7 +12,8 @@ allowed-tools: Bash, Read, Write
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-python -m scripts.wiki.query --slug=design-system-generator
+python -m scripts.wiki.query --slug=design-system-generator --agent=design-system-generator
+python -m scripts.wiki.log --type agent_call --agent design-system-generator --stage 05
 ```
 
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)

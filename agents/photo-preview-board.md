@@ -15,7 +15,8 @@ description: After user approves selections.yaml, process each slot — crop/res
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-python -m scripts.wiki.query --slug=photo-preview-board
+python -m scripts.wiki.query --slug=photo-preview-board --agent=photo-preview-board
+python -m scripts.wiki.log --type agent_call --agent photo-preview-board --stage 07c
 ```
 
 ## Mission

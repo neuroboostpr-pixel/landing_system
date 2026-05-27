@@ -5,6 +5,12 @@ description: Use when starting a new landing project inside an existing parent a
 
 # landing-from-context
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill landing-from-context --stage ""
+```
+
 ## Когда использовать
 
 - Пользователь сказал «новый лендинг по этому курсу/проекту», `/landing-from-context <slug>`.

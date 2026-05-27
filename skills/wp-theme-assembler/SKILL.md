@@ -5,6 +5,12 @@ description: Bundle fonts/icons/images into wp-theme assets; render static build
 
 # wp-theme-assembler
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill wp-theme-assembler --stage 08
+```
+
 Финальная сборка темы: загрузка ресурсов + генерация preview.
 
 ## Scripts

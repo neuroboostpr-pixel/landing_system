@@ -5,6 +5,12 @@ description: Use during stage 02 to apply identity-safe photo transformations (c
 
 # photo-styling
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill photo-styling --stage 02
+```
+
 ## Allowed modes
 
 - `cutout` — remove background (rembg if available, else Pillow alpha-mask heuristic)

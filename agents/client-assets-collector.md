@@ -11,7 +11,8 @@ description: Use during stage 02 to collect client photos, videos, and reviews f
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-python -m scripts.wiki.query --slug=client-assets-collector
+python -m scripts.wiki.query --slug=client-assets-collector --agent=client-assets-collector
+python -m scripts.wiki.log --type agent_call --agent client-assets-collector --stage 02
 ```
 
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)

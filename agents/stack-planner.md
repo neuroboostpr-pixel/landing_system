@@ -12,7 +12,8 @@ allowed-tools: Bash, Read, Write
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-python -m scripts.wiki.query --slug=stack-planner
+python -m scripts.wiki.query --slug=stack-planner --agent=stack-planner
+python -m scripts.wiki.log --type agent_call --agent stack-planner --stage 06
 ```
 
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)

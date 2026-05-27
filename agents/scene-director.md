@@ -12,7 +12,8 @@ allowed-tools: Bash, Read, Write
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-python -m scripts.wiki.query --slug=scene-director
+python -m scripts.wiki.query --slug=scene-director --agent=scene-director
+python -m scripts.wiki.log --type agent_call --agent scene-director --stage 07c
 ```
 
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)

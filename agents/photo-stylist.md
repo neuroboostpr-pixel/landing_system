@@ -15,7 +15,8 @@ description: Use during stage 02 to process client photos identity-safe (cutout,
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-python -m scripts.wiki.query --slug=photo-stylist
+python -m scripts.wiki.query --slug=photo-stylist --agent=photo-stylist
+python -m scripts.wiki.log --type agent_call --agent photo-stylist --stage 07c
 ```
 
 ## Mission

@@ -5,6 +5,12 @@ description: Stage 07b — compose chosen blocks with design-tokens injected and
 
 # block-composition
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill block-composition --stage 07b
+```
+
 Сборка composed.html из утверждённых блоков и tokens.json.
 
 ## Scripts

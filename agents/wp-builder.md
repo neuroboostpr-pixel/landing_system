@@ -12,7 +12,8 @@ allowed-tools: Bash, Read, Write, Edit
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-python -m scripts.wiki.query --slug=wp-builder
+python -m scripts.wiki.query --slug=wp-builder --agent=wp-builder
+python -m scripts.wiki.log --type agent_call --agent wp-builder --stage 08
 ```
 
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)

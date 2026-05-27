@@ -11,7 +11,8 @@ description: Use during stage 04 after moodboard is approved. Extracts palette, 
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-python -m scripts.wiki.query --slug=style-extractor
+python -m scripts.wiki.query --slug=style-extractor --agent=style-extractor
+python -m scripts.wiki.log --type agent_call --agent style-extractor --stage 04
 ```
 
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)

@@ -5,6 +5,12 @@ description: Manage WordPress Multisite networks on Beget shared hosting — mig
 
 # wp-multisite
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill wp-multisite --stage ""
+```
+
 Скилл управляет WordPress Multisite-сетями на Beget shared hosting:
 миграция single-site → multisite, создание сегментов ЦА (поддоменов),
 клонирование контента между сегментами.

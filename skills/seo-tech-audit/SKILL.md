@@ -5,6 +5,12 @@ description: Аудит задеплоенного лендинга — 43 HTTP-
 
 # seo-tech-audit
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill seo-tech-audit --stage 11
+```
+
 Скилл для автоматического аудита задеплоенного лендинга. Запускается через slash-команду `/landing-audit` или напрямую `python scripts/run-audit.py`.
 
 **Что проверяет (E1, 43 check'а):**

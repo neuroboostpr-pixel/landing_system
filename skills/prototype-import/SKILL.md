@@ -5,6 +5,12 @@ description: Import user-provided prototype (PDF or MD) at stage 07 — parse, n
 
 # prototype-import
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill prototype-import --stage 07a
+```
+
 Импорт пользовательского прототипа.
 
 ## Сценарий

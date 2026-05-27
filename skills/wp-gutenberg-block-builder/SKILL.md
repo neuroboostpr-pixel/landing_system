@@ -5,6 +5,12 @@ description: Generate Lazy-Blocks-based Gutenberg blocks + theme scaffold + page
 
 # wp-gutenberg-block-builder
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill wp-gutenberg-block-builder --stage 08
+```
+
 Generates stage-08 WordPress artifacts using **Lazy Blocks (free)** — blocks live
 under the `lazyblock/` namespace and are registered at runtime via
 `lazyblocks()->add_block()`. This is **NOT** ACF Pro Blocks (`acf/` namespace) —

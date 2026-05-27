@@ -11,7 +11,8 @@ description: Use during stage 04 after style-extractor has run. Synthesizes bran
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-python -m scripts.wiki.query --slug=brand-architect
+python -m scripts.wiki.query --slug=brand-architect --agent=brand-architect
+python -m scripts.wiki.log --type agent_call --agent brand-architect --stage 04
 ```
 
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)

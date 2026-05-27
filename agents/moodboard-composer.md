@@ -11,7 +11,8 @@ description: Use during stage 03 after references are approved. Synthesizes a mo
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-python -m scripts.wiki.query --slug=moodboard-composer
+python -m scripts.wiki.query --slug=moodboard-composer --agent=moodboard-composer
+python -m scripts.wiki.log --type agent_call --agent moodboard-composer --stage 03
 ```
 
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)

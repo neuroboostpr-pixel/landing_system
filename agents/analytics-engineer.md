@@ -12,7 +12,8 @@ allowed-tools: Bash, Read, Write, Edit
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-python -m scripts.wiki.query --slug=analytics-engineer
+python -m scripts.wiki.query --slug=analytics-engineer --agent=analytics-engineer
+python -m scripts.wiki.log --type agent_call --agent analytics-engineer --stage 08
 ```
 
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)

@@ -11,7 +11,8 @@ description: Use during stage 07 (Прототип) to import a user-provided pr
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-python -m scripts.wiki.query --slug=prototype-importer
+python -m scripts.wiki.query --slug=prototype-importer --agent=prototype-importer
+python -m scripts.wiki.log --type agent_call --agent prototype-importer --stage 07a
 ```
 
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)

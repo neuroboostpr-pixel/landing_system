@@ -11,7 +11,8 @@ description: Use during stage 07a (UX Wireframe) to compose an interactive wiref
 Перед любым действием — wiki-запрос для маршрутизации:
 
 ```bash
-python -m scripts.wiki.query --slug=ux-composer
+python -m scripts.wiki.query --slug=ux-composer --agent=ux-composer
+python -m scripts.wiki.log --type agent_call --agent ux-composer --stage 07b
 ```
 
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)

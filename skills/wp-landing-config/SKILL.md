@@ -5,6 +5,12 @@ description: Pre-built mu-plugin landing-config for WordPress Multisite — admi
 
 # wp-landing-config
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill wp-landing-config --stage ""
+```
+
 mu-plugin `landing-config/` даёт маркетологу/клиенту настраивать:
 - Интеграции (AmoCRM, Bitrix24, HubSpot, Telegram, WhatsApp, Email)
 - Заявки (просмотр БД + экспорт CSV)
