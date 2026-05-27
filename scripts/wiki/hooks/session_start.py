@@ -129,21 +129,33 @@ def main() -> int:
 
     chunks: list[str] = []
 
+    import os
+    session_id = os.environ.get("CLAUDE_CODE_SESSION_ID", "")
+    model = os.environ.get("CLAUDE_CODE_MODEL", "") or _read_model_from_settings()
+
     # System wiki hint (~50 tokens, only when inside landing-system)
     hint = _system_wiki_hint(cwd)
     if hint:
         chunks.append(hint)
+        try:
+            from scripts.wiki import routing_log
+            routing_log.log_context_inject(
+                session_id=session_id,
+                source_category="session_start",
+                source_label="system_wiki_hint",
+                est_tokens=int(len(hint) / 3.5),
+                can_be_wiki=False,
+                model=model,
+            )
+        except Exception:
+            pass
 
     # Project wiki — full inject (small per-project file, kept as-is)
     slug = _detect_project_slug(cwd)
     if slug:
         try:
-            import os
             from scripts.lib.paths import project_dir
             from scripts.wiki import routing_log
-
-            session_id = os.environ.get("CLAUDE_CODE_SESSION_ID", "")
-            model = os.environ.get("CLAUDE_CODE_MODEL", "") or _read_model_from_settings()
 
             project = project_dir(slug)
             proj_index_path = project / "wiki" / "index.md"
