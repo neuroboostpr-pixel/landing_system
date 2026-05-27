@@ -101,6 +101,32 @@ def flush_transcript(transcript_path: Path, memory_dir: Path = None, cwd: Path =
         f.write(lessons)
         f.write("\n")
 
+    # Анализ routing: детектим direct reads (bypass wiki)
+    try:
+        from pathlib import Path as _Path
+        from scripts.wiki import transcript_parser, routing_log
+        tool_calls = transcript_parser.extract_tool_calls(transcript_path)
+        session_id = transcript_parser.get_session_id(transcript_path)
+
+        queried_slugs: set[str] = set()
+        queried_stages: set[str] = set()
+        for tc in tool_calls:
+            if transcript_parser.is_wiki_query(tc):
+                queried_slugs.update(transcript_parser.extract_query_slugs(tc))
+                stage = transcript_parser.extract_query_stage(tc)
+                if stage:
+                    queried_stages.add(stage)
+
+        for tc in tool_calls:
+            if transcript_parser.is_source_read(tc):
+                path = tc.input_params.get("file_path", "")
+                slug = _Path(path).stem
+                had_prior = slug in queried_slugs or bool(queried_stages)
+                est = routing_log.estimate_tokens_file(_Path(path))
+                routing_log.log_direct_read(session_id, path, est, had_prior)
+    except Exception:
+        pass  # silent — мы в фоне
+
 
 def main() -> int:
     parser = argparse.ArgumentParser()
