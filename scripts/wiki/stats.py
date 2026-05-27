@@ -122,10 +122,11 @@ def compute_stats(events: list[dict[str, Any]], since_days: int = 7) -> StatsRes
 def one_line_summary(stats: StatsResult, days: int = 7) -> str:
     bypass_pct = int(stats.bypass_rate * 100)
     saved = f"{stats.est_tokens_saved:,}".replace(",", " ")
+    spent = f"{stats.est_tokens_spent_bypass:,}".replace(",", " ")
     return (
         f"Wiki routing ({days}d): {stats.queries} queries · "
         f"{stats.direct_reads} direct reads · "
-        f"~{saved} tokens saved · bypass rate {bypass_pct}%"
+        f"~{saved} saved · ~{spent} spent on bypass · bypass rate {bypass_pct}%"
     )
 
 
@@ -147,11 +148,12 @@ def generate_report(stats: StatsResult, since_days: int = 7) -> str:
             f"| {row['est_saved']:,} t | {bp}% |"
         )
     saved = f"{stats.est_tokens_saved:,}".replace(",", " ")
+    spent = f"{stats.est_tokens_spent_bypass:,}".replace(",", " ")
     bypass_pct = int(stats.bypass_rate * 100)
     lines += [
         "",
         f"**Итого за {since_days} дней:** {stats.queries} queries · "
-        f"{stats.direct_reads} direct reads · ~{saved} tokens saved",
+        f"{stats.direct_reads} direct reads · ~{saved} tokens saved · ~{spent} tokens spent on bypass",
         f"**Bypass rate:** {bypass_pct}%",
         "",
         "## Топ bypass файлов",
