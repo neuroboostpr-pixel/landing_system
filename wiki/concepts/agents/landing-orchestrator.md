@@ -49,6 +49,27 @@ confidence:
 - Параллельные субагенты 07d/07e вернули ошибку в одном из потоков — оркестратор не переходит к 07f до тех пор, пока оба гейта не закрыты.
 - `.landing-state.yaml` отсутствует или повреждён — весь pipeline недоступен; нужен `migrate-state-for-prd.sh`.
 
+## Ключевые команды (Stage Execution Protocol)
+
+Перед каждым действием — обязательно 4 шага:
+
+```bash
+# Шаг 1 — состояние + Mermaid-карта
+bash scripts/render-pipeline-map.sh <project>/.landing-state.yaml --write-wiki
+
+# Шаг 3 — gate-check текущего этапа
+bash scripts/gate-check.sh --stage <id> --project <project>
+
+# Шаг 4 — approve после verify
+bash scripts/gate-check.sh --stage <id> --project <project> --approve
+
+# Wiki-запрос перед диспатчем агента
+python -m scripts.wiki.query --stage=<N> --type=agent
+python -m scripts.wiki.query --slug=<concept-slug>
+```
+
+Полный протокол: `docs/standards/stage-execution-protocol.md`
+
 ## Related
 
 - [[niche-analyst]] — диспатчится на этапе 01a
