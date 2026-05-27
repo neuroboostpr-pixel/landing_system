@@ -30,6 +30,8 @@ class StatsResult:
     top_bypass: list[dict] = field(default_factory=list)
     by_date: list[dict] = field(default_factory=list)
     by_model: list[dict] = field(default_factory=list)
+    context_injects: dict[str, int] = field(default_factory=dict)  # category → tokens
+    leaks: list[dict] = field(default_factory=list)                 # can_be_wiki=True items
 
 
 def compute_stats(events: list[dict[str, Any]], since_days: int = 7) -> StatsResult:
@@ -47,6 +49,8 @@ def compute_stats(events: list[dict[str, Any]], since_days: int = 7) -> StatsRes
     by_model_map: dict[str, dict] = defaultdict(
         lambda: {"queries": 0, "direct_reads": 0, "thinking_tokens_total": 0}
     )
+    inject_map: dict[str, int] = defaultdict(int)
+    leaks: list[dict] = []
 
     for e in events:
         ts_str = e.get("ts", "")
@@ -76,6 +80,23 @@ def compute_stats(events: list[dict[str, Any]], since_days: int = 7) -> StatsRes
             by_date_map[date_key]["direct_reads"] += 1
             by_model_map[model]["direct_reads"] += 1
             by_model_map[model]["thinking_tokens_total"] += thinking
+            # direct_read — всегда утечка
+            leaks.append({
+                "source_label": path,
+                "est_tokens": e.get("est_tokens", 0),
+                "had_prior_query": e.get("had_prior_query", False),
+            })
+
+        elif e.get("type") == "context_inject":
+            category = e.get("source_category", "unknown")
+            tokens = e.get("est_tokens", 0)
+            inject_map[category] += tokens
+            if e.get("can_be_wiki"):
+                leaks.append({
+                    "source_label": e.get("source_label", ""),
+                    "est_tokens": tokens,
+                    "had_prior_query": False,
+                })
 
     total = queries + direct_reads
     bypass_rate = direct_reads / total if total > 0 else 0.0
@@ -116,6 +137,8 @@ def compute_stats(events: list[dict[str, Any]], since_days: int = 7) -> StatsRes
         top_bypass=top_bypass,
         by_date=by_date,
         by_model=by_model,
+        context_injects=dict(inject_map),
+        leaks=leaks,
     )
 
 
@@ -123,10 +146,15 @@ def one_line_summary(stats: StatsResult, days: int = 7) -> str:
     bypass_pct = int(stats.bypass_rate * 100)
     saved = f"{stats.est_tokens_saved:,}".replace(",", " ")
     spent = f"{stats.est_tokens_spent_bypass:,}".replace(",", " ")
+
+    leak_tokens = sum(l["est_tokens"] for l in stats.leaks)
+    leak_str = f" · ⚠️ {leak_tokens:,} токенов в обход".replace(",", " ") if leak_tokens > 0 else ""
+
     return (
         f"Вики-граф ({days}д): {stats.queries} запросов к вики · "
         f"{stats.direct_reads} обходов вики · "
-        f"~{saved} токенов сэкономлено · ~{spent} токенов потрачено в обход · доля обходов {bypass_pct}%"
+        f"~{saved} токенов сэкономлено · ~{spent} токенов потрачено в обход · "
+        f"доля обходов {bypass_pct}%{leak_str}"
     )
 
 
@@ -181,6 +209,52 @@ def generate_report(stats: StatsResult, since_days: int = 7) -> str:
                 f"| {m['model']} | {m['queries']} | {m['direct_reads']} "
                 f"| {bp}% | {m['avg_thinking_tokens']} |"
             )
+
+    # Token Budget по категориям
+    CLAUDE_MD_TOKENS = 10_231  # fixed overhead: 35809 bytes / 3.5
+    lines += [
+        "",
+        "## Token Budget по категориям (7д)",
+        "",
+        "| Категория | Событий | ~Токенов | Можно на вики? |",
+        "|-----------|---------|----------|----------------|",
+        f"| wiki_query | {stats.queries} | -{stats.est_tokens_saved:,} | -- |".replace(",", " "),
+    ]
+
+    category_order = ["direct_read", "session_start", "framework_load", "bash_stdout"]
+    can_be_wiki_labels = {
+        "direct_read": "⚠️ да",
+        "session_start": "нет",
+        "framework_load": "нет",
+        "bash_stdout": "нет",
+    }
+
+    if stats.direct_reads > 0:
+        lines.append(
+            f"| direct_read (legacy) | {stats.direct_reads} "
+            f"| +{stats.est_tokens_spent_bypass:,} | ⚠️ да |".replace(",", " ")
+        )
+
+    for cat in category_order:
+        tokens = stats.context_injects.get(cat, 0)
+        if tokens == 0:
+            continue
+        can_wiki = can_be_wiki_labels.get(cat, "нет")
+        lines.append(f"| {cat} | -- | +{tokens:,} | {can_wiki} |".replace(",", " "))
+
+    lines.append(f"| CLAUDE.md | -- | ~{CLAUDE_MD_TOKENS:,} | нет (fixed) |".replace(",", " "))
+
+    if stats.leaks:
+        lines += [
+            "",
+            "## Утечки -- читается напрямую вместо вики",
+            "",
+            "| Файл | ~Токенов | Агент знал про вики |",
+            "|------|----------|---------------------|",
+        ]
+        for leak in stats.leaks:
+            knew = "да ⚠️" if leak.get("had_prior_query") else "нет"
+            lines.append(f"| {leak['source_label']} | {leak['est_tokens']} | {knew} |")
 
     return "\n".join(lines) + "\n"
 

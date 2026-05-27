@@ -68,10 +68,10 @@ def test_one_line_summary_format():
     events = _make_events(n_queries=23, n_reads=8)
     result = compute_stats(events)
     line = one_line_summary(result)
-    assert "queries" in line
-    assert "direct reads" in line
-    assert "tokens saved" in line
-    assert "bypass rate" in line
+    assert "запросов к вики" in line
+    assert "обходов вики" in line
+    assert "токенов сэкономлено" in line
+    assert "доля обходов" in line
 
 
 def test_generate_report_markdown():
@@ -79,6 +79,6 @@ def test_generate_report_markdown():
     events = _make_events(n_queries=5, n_reads=2)
     result = compute_stats(events)
     md = generate_report(result)
-    assert "# Wiki Routing Report" in md
-    assert "Топ bypass" in md
-    assert "had_prior_query" in md
+    assert "# Отчёт по использованию вики-графа" in md
+    assert "Топ файлов читаемых в обход" in md
+    assert "had_prior_query_count" not in md  # stored in StatsResult, not rendered raw
