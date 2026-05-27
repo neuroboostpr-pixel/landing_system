@@ -152,11 +152,18 @@ def estimate_tokens_file(path: Path) -> int:
             return 0
 
 
+def _stage_prefix(stage: str) -> str:
+    """Нормализует stage до числового префикса: '04_brand' → '04', '04' → '04'."""
+    return stage.split("_")[0] if "_" in stage else stage
+
+
 def was_wiki_queried(session_id: str, stage: str) -> bool:
     """True если в логе есть wiki_query с тем же session_id и совместимым stage."""
+    if not stage:
+        return False
     if not LOG_PATH.exists():
         return False
-    stage_prefix = stage.split("_")[0] if "_" in stage else stage
+    stage_prefix = _stage_prefix(stage)
     try:
         for line in LOG_PATH.read_text(encoding="utf-8").splitlines():
             line = line.strip()
@@ -172,7 +179,7 @@ def was_wiki_queried(session_id: str, stage: str) -> bool:
                 continue
             f = record.get("filters") or {}
             rec_stage = str(f.get("stage") or "")
-            rec_prefix = rec_stage.split("_")[0] if "_" in rec_stage else rec_stage
+            rec_prefix = _stage_prefix(rec_stage)
             if rec_prefix == stage_prefix or rec_stage == stage:
                 return True
     except OSError:
@@ -182,8 +189,7 @@ def was_wiki_queried(session_id: str, stage: str) -> bool:
 
 def log_stage_start(session_id: str, stage: str, project: str) -> None:
     """Пишет stage_start с автоматической корреляцией via_wiki."""
-    stage_prefix = stage.split("_")[0] if "_" in stage else stage
-    via_wiki = was_wiki_queried(session_id, stage_prefix)
+    via_wiki = was_wiki_queried(session_id, stage)  # was_wiki_queried сам нормализует
     _write({
         "ts": datetime.now().isoformat(timespec="seconds"),
         "type": "stage_start",

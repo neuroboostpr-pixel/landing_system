@@ -89,3 +89,30 @@ def test_log_skill_call_writes_record(tmp_log):
     assert len(skill_events) == 1
     assert skill_events[0]["skill"] == "landing-brand"
     assert skill_events[0]["via_wiki"] is False
+
+
+def test_was_wiki_queried_missing_filters_field(tmp_log):
+    """wiki_query без поля filters не крашит и не даёт false-positive."""
+    record = {
+        "ts": "2026-05-27T10:00:00",
+        "type": "wiki_query",
+        "session_id": "sess1",
+        "hits": [],
+    }
+    with tmp_log.open("a", encoding="utf-8") as f:
+        f.write(json.dumps(record) + "\n")
+    assert routing_log.was_wiki_queried("sess1", "04") is False
+
+
+def test_was_wiki_queried_invalid_json_in_log(tmp_log):
+    """Битые строки в логе пропускаются."""
+    with tmp_log.open("a", encoding="utf-8") as f:
+        f.write("not-json\n")
+    _write_query(tmp_log, "sess1", "04")
+    assert routing_log.was_wiki_queried("sess1", "04") is True
+
+
+def test_was_wiki_queried_empty_stage_returns_false(tmp_log):
+    """Пустой stage аргумент всегда возвращает False."""
+    _write_query(tmp_log, "sess1", "")
+    assert routing_log.was_wiki_queried("sess1", "") is False
