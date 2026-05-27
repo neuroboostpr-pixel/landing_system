@@ -160,3 +160,47 @@ def test_cli_missing_required_arg():
         cwd="d:/AI_TEAMS/landing_system",
     )
     assert result.returncode != 0
+
+
+from scripts.wiki import stats as wiki_stats
+
+
+def test_stats_launches_section_in_report(tmp_log):
+    """generate_report содержит секцию Запуски vs вики с данными агента."""
+    _write_query(tmp_log, "sess1", "04")
+    routing_log.log_agent_call("sess1", "some-agent", "04")
+    routing_log.log_skill_call("sess1", "some-skill", "04")
+
+    events = [json.loads(l) for l in tmp_log.read_text().splitlines() if l.strip()]
+    result = wiki_stats.compute_stats(events)
+    report = wiki_stats.generate_report(result)
+
+    assert "Запуски vs вики" in report
+    assert "some-agent" in report
+    assert "some-skill" in report
+
+
+def test_stats_leak_marker_for_no_wiki(tmp_log):
+    """via_wiki=False показывает ⚠️ в отчёте."""
+    routing_log.log_skill_call("sess1", "some-skill", "04")
+
+    events = [json.loads(l) for l in tmp_log.read_text().splitlines() if l.strip()]
+    result = wiki_stats.compute_stats(events)
+    report = wiki_stats.generate_report(result)
+
+    assert "⚠️" in report
+
+
+def test_stats_no_leak_marker_when_via_wiki(tmp_log):
+    """via_wiki=True не показывает ⚠️."""
+    _write_query(tmp_log, "sess1", "04")
+    routing_log.log_agent_call("sess1", "some-agent", "04")
+
+    events = [json.loads(l) for l in tmp_log.read_text().splitlines() if l.strip()]
+    result = wiki_stats.compute_stats(events)
+    report = wiki_stats.generate_report(result)
+
+    assert "some-agent" in report
+    # via_wiki=True → нет утечки
+    lines = [l for l in report.splitlines() if "some-agent" in l]
+    assert lines and "⚠️" not in lines[0]

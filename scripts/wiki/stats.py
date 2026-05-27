@@ -32,6 +32,8 @@ class StatsResult:
     by_model: list[dict] = field(default_factory=list)
     context_injects: dict[str, int] = field(default_factory=dict)  # category → tokens
     leaks: list[dict] = field(default_factory=list)                 # can_be_wiki=True items
+    query_details: list[dict] = field(default_factory=list)         # per wiki_query: ts/stage/type/slug/hits/tokens
+    launches: list[dict] = field(default_factory=list)              # stage_start/agent_call/skill_call events
 
 
 def compute_stats(events: list[dict[str, Any]], since_days: int = 7) -> StatsResult:
@@ -51,6 +53,8 @@ def compute_stats(events: list[dict[str, Any]], since_days: int = 7) -> StatsRes
     )
     inject_map: dict[str, int] = defaultdict(int)
     leaks: list[dict] = []
+    query_details: list[dict] = []
+    result_launches: list[dict] = []
 
     for e in events:
         ts_str = e.get("ts", "")
@@ -69,6 +73,16 @@ def compute_stats(events: list[dict[str, Any]], since_days: int = 7) -> StatsRes
             by_date_map[date_key]["est_saved"] += e.get("est_tokens_saved", 0)
             by_model_map[model]["queries"] += 1
             by_model_map[model]["thinking_tokens_total"] += thinking
+            f = e.get("filters") or {}
+            query_details.append({
+                "ts": ts_str,
+                "agent": e.get("agent") or "",
+                "stage": f.get("stage") or "",
+                "type": f.get("type") or "",
+                "slug": f.get("slug") or "",
+                "hits": ", ".join(e.get("hits") or []),
+                "est_tokens_saved": e.get("est_tokens_saved", 0),
+            })
 
         elif e.get("type") == "direct_read":
             direct_reads += 1
@@ -86,6 +100,9 @@ def compute_stats(events: list[dict[str, Any]], since_days: int = 7) -> StatsRes
                 "est_tokens": e.get("est_tokens", 0),
                 "had_prior_query": e.get("had_prior_query", False),
             })
+
+        elif e.get("type") in ("stage_start", "agent_call", "skill_call"):
+            result_launches.append(e)
 
         elif e.get("type") == "context_inject":
             category = e.get("source_category", "unknown")
@@ -139,6 +156,8 @@ def compute_stats(events: list[dict[str, Any]], since_days: int = 7) -> StatsRes
         by_model=by_model,
         context_injects=dict(inject_map),
         leaks=leaks,
+        query_details=query_details,
+        launches=result_launches,
     )
 
 
@@ -193,7 +212,10 @@ def generate_report(stats: StatsResult, since_days: int = 7) -> str:
     for b in stats.top_bypass:
         prior = b["had_prior_query_count"]
         not_prior = b["count"] - prior
-        lines.append(f"| {b['path']} | {b['count']} | {prior} | {not_prior} |")
+        p = b["path"]
+        name = Path(p).name if p else p
+        link = f"[{name}](../{p})" if p else name
+        lines.append(f"| {link} | {b['count']} | {prior} | {not_prior} |")
 
     if stats.by_model:
         lines += [
@@ -243,7 +265,44 @@ def generate_report(stats: StatsResult, since_days: int = 7) -> str:
             can_wiki = can_be_wiki_labels.get(cat, "нет")
             lines.append(f"| {cat} | -- | +{tokens:,} | {can_wiki} |".replace(",", " "))
 
-        lines.append(f"| CLAUDE.md | -- | ~{CLAUDE_MD_TOKENS:,} | нет (fixed) |".replace(",", " "))
+        lines.append(f"| [CLAUDE.md](../CLAUDE.md) | -- | ~{CLAUDE_MD_TOKENS:,} | нет (fixed) |".replace(",", " "))
+
+        if stats.query_details:
+            lines += [
+                "",
+                "### Детали wiki_query",
+                "",
+                "| Время | Агент | Stage | Type | Slug | Hits | ~Токенов сэкономлено |",
+                "|-------|-------|-------|------|------|------|----------------------|",
+            ]
+            for q in stats.query_details:
+                lines.append(
+                    f"| {q['ts'][11:16]} | {q['agent'] or '—'} | {q['stage'] or '—'} "
+                    f"| {q['type'] or '—'} | {q['slug'] or '—'} | {q['hits'] or '—'} "
+                    f"| -{q['est_tokens_saved']} |"
+                )
+
+    if stats.launches:
+        lines.append("\n## Запуски vs вики (7д)\n")
+        lines.append("| Время | Тип | Имя | Stage | via_wiki | Утечка? |")
+        lines.append("|-------|-----|-----|-------|----------|---------|")
+        for e in stats.launches:
+            ts_str = e.get("ts", "")
+            ts = ts_str[11:16] if len(ts_str) >= 16 else ts_str  # HH:MM
+            etype = e.get("type", "")
+            if etype == "stage_start":
+                name = e.get("stage", "")
+                tname = "stage"
+            elif etype == "agent_call":
+                name = e.get("agent", "")
+                tname = "agent"
+            else:
+                name = e.get("skill", "")
+                tname = "skill"
+            stage = e.get("stage", "")
+            via = "✅" if e.get("via_wiki") else "❌"
+            leak = "⚠️" if not e.get("via_wiki") else ""
+            lines.append(f"| {ts} | {tname} | {name} | {stage} | {via} | {leak} |")
 
     if stats.leaks:
         lines += [
@@ -255,7 +314,10 @@ def generate_report(stats: StatsResult, since_days: int = 7) -> str:
         ]
         for leak in stats.leaks:
             knew = "да ⚠️" if leak.get("had_prior_query") else "нет"
-            lines.append(f"| {leak['source_label']} | {leak['est_tokens']} | {knew} |")
+            label = leak["source_label"]
+            name = Path(label).name if label else label
+            link = f"[{name}](../{label})" if label else name
+            lines.append(f"| {link} | {leak['est_tokens']} | {knew} |")
 
     return "\n".join(lines) + "\n"
 
