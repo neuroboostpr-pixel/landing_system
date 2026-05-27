@@ -91,6 +91,28 @@ def log_direct_read(
     })
 
 
+def log_context_inject(
+    session_id: str,
+    source_category: str,
+    source_label: str,
+    est_tokens: int,
+    can_be_wiki: bool = False,
+    path: str = "",
+    model: str = "",
+) -> None:
+    _write({
+        "ts": datetime.now().isoformat(timespec="seconds"),
+        "type": "context_inject",
+        "session_id": session_id,
+        "model": model,
+        "source_category": source_category,
+        "source_label": source_label,
+        "path": path,
+        "est_tokens": est_tokens,
+        "can_be_wiki": can_be_wiki,
+    })
+
+
 def read_events(since_days: int = 7) -> list[dict[str, Any]]:
     if not LOG_PATH.exists():
         return []
