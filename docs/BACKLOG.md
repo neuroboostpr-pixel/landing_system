@@ -26,17 +26,13 @@
 
 ## Приоритет 1 — функциональные дыры (блокирует прод-запуск)
 
-### B1. Cookie-баннер + 152-ФЗ блок согласия на обработку ПД
-- **Зачем:** обязательно для запуска в РФ. Без этого сайт нарушает закон.
-- **Что добавить:**
-  - `template/08_КОД/template-parts/legal-block.php` — компонент под формами
-  - `template/08_КОД/template-parts/cookie-banner.php` + JS (без плагина)
-  - `template/08_КОД/legal-pages/policy.html` + `consent.html` — страницы политики и согласия
-  - Расширить `agents/wp-builder.md` — вставлять legal-block во все формы
-  - Soft-check `legal_blocks_present` в `config/stage-gates.yaml` уже есть — связать с реальной проверкой
-- **Размер:** ~200 SLOC. 1–2 дня.
+### B1. Cookie-баннер + 152-ФЗ блок согласия на обработку ПД ✅ [spec](superpowers/specs/2026-05-21-b1-cookie-banner-pd-consent-design.md) [plan](superpowers/plans/2026-05-21-b1-cookie-banner-pd-consent-plan.md)
+- **Реализовано:** legal-block.php, REST pd_consent validation, юр-страницы policy/consent.html.template + install_legal_pages.sh, Google Consent Mode v2 (через B2 mu-plugin), stage-gate soft-check `legal_blocks_present`.
 
-### B2. GTM-вставка в `analytics-engineer`
+### B2. Cookie-banner Library (5 layouts + admin) ✅ [spec](superpowers/specs/2026-05-22-b2-cookie-banner-library-design.md) [plan](superpowers/plans/2026-05-22-b2-cookie-banner-library-plan.md)
+- **Реализовано:** 5 layouts в mu-plugin, Network admin с сегмент-селектором, token-driven CSS vars, Google Consent Mode v2, migration marker. wp-builder.md обновлён (устаревшие B1-инструкции убраны).
+
+### B2b. GTM-вставка в `analytics-engineer`
 - **Зачем:** `GTM_CONTAINER_ID` уже в `.env.example`, но никто его не использует.
 - **Что добавить:** в `agents/analytics-engineer.md` — PHP-сниппет вставки GTM в `functions.php` рядом с Метрикой (читать `getenv('GTM_CONTAINER_ID')`, без `<noscript>` если cookie-баннер не дал согласия).
 - **Размер:** ~30 SLOC. 2–3 часа.
@@ -365,7 +361,9 @@ Brand-kit.html показывает палитру свотчами и шриф�
 ## Прогресс
 
 - ✅ MVP (stage-gates + onboarding) — реализован
-- ⏳ B1–B4 — рекомендую брать в первую очередь
+- ✅ B1 — реализован (legal-block, consent REST, юр-страницы, Consent Mode v2 через B2)
+- ✅ B2 — реализован (cookie-banner library 5 layouts, mu-plugin, admin UI)
+- ⏳ B2b (GTM), B3 (db backup), B4 (sitemap) — следующие в очереди
 - ✅ B21–B22 — реализованы (`/landing-delete`, `/landing-rename`)
 - ✅ B23–B24 — реализованы (validate-url.py, extract-palette.py, refs-palette.html, visual-strategist агент, generate-concept.py, stage 03b_visual_concept)
 - ✅ B25 — закрывается через B23+B24 (visual-strategist решает проблему на уровне 03b)
