@@ -34,6 +34,7 @@ class StatsResult:
     leaks: list[dict] = field(default_factory=list)                 # can_be_wiki=True items
     query_details: list[dict] = field(default_factory=list)         # per wiki_query: ts/stage/type/slug/hits/tokens
     launches: list[dict] = field(default_factory=list)              # stage_start/agent_call/skill_call events
+    run_summaries: list[dict] = field(default_factory=list)         # per run_id: run_id/date/total/via_wiki/leaks
 
 
 def compute_stats(events: list[dict[str, Any]], since_days: int = 7) -> StatsResult:
@@ -145,6 +146,27 @@ def compute_stats(events: list[dict[str, Any]], since_days: int = 7) -> StatsRes
         })
     by_model.sort(key=lambda x: x["queries"] + x["direct_reads"], reverse=True)
 
+    # Группировка запусков по run_id
+    run_map: dict[str, dict] = {}
+    for e in events:
+        if e.get("type") not in ("stage_start", "agent_call", "skill_call"):
+            continue
+        rid = e.get("session_id") or "unknown"
+        if rid not in run_map:
+            run_map[rid] = {
+                "run_id": rid,
+                "date": e.get("ts", "")[:16].replace("T", " "),
+                "total": 0,
+                "via_wiki": 0,
+                "leaks": 0,
+            }
+        run_map[rid]["total"] += 1
+        if e.get("via_wiki"):
+            run_map[rid]["via_wiki"] += 1
+        else:
+            run_map[rid]["leaks"] += 1
+    run_summaries = sorted(run_map.values(), key=lambda x: x["date"], reverse=True)
+
     return StatsResult(
         queries=queries,
         direct_reads=direct_reads,
@@ -158,6 +180,7 @@ def compute_stats(events: list[dict[str, Any]], since_days: int = 7) -> StatsRes
         leaks=leaks,
         query_details=query_details,
         launches=result_launches,
+        run_summaries=run_summaries,
     )
 
 
@@ -282,13 +305,23 @@ def generate_report(stats: StatsResult, since_days: int = 7) -> str:
                     f"| -{q['est_tokens_saved']} |"
                 )
 
+    if stats.run_summaries:
+        lines.append("\n## Запуски (сводка)\n")
+        lines.append("| run_id | Дата | Агентов/этапов | Через вики | Утечки |")
+        lines.append("|--------|------|----------------|------------|--------|")
+        for s in stats.run_summaries:
+            lines.append(
+                f"| {s['run_id']} | {s['date']} | {s['total']} "
+                f"| {s['via_wiki']} | {s['leaks']} |"
+            )
+
     if stats.launches:
         lines.append("\n## Запуски vs вики (7д)\n")
-        lines.append("| Время | Тип | Имя | Stage | via_wiki | Утечка? |")
-        lines.append("|-------|-----|-----|-------|----------|---------|")
+        lines.append("| Время | run_id | Тип | Имя | Stage | via_wiki | Утечка? |")
+        lines.append("|-------|--------|-----|-----|-------|----------|---------|")
         for e in stats.launches:
             ts_str = e.get("ts", "")
-            ts = ts_str[11:16] if len(ts_str) >= 16 else ts_str  # HH:MM
+            ts = ts_str[11:16] if len(ts_str) >= 16 else ts_str
             etype = e.get("type", "")
             if etype == "stage_start":
                 name = e.get("stage", "")
@@ -302,7 +335,9 @@ def generate_report(stats: StatsResult, since_days: int = 7) -> str:
             stage = e.get("stage", "")
             via = "✅" if e.get("via_wiki") else "❌"
             leak = "⚠️" if not e.get("via_wiki") else ""
-            lines.append(f"| {ts} | {tname} | {name} | {stage} | {via} | {leak} |")
+            rid = e.get("session_id", "")
+            rid_short = rid.replace("landing-", "") if rid.startswith("landing-") else rid
+            lines.append(f"| {ts} | {rid_short} | {tname} | {name} | {stage} | {via} | {leak} |")
 
     if stats.leaks:
         lines += [
@@ -320,6 +355,10 @@ def generate_report(stats: StatsResult, since_days: int = 7) -> str:
             lines.append(f"| {link} | {leak['est_tokens']} | {knew} |")
 
     return "\n".join(lines) + "\n"
+
+
+# Alias for backwards compatibility and test usage
+render_report = generate_report
 
 
 def main() -> int:

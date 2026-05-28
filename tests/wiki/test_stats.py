@@ -82,3 +82,77 @@ def test_generate_report_markdown():
     assert "# Отчёт по использованию вики-графа" in md
     assert "Топ файлов читаемых в обход" in md
     assert "had_prior_query_count" not in md  # stored in StatsResult, not rendered raw
+
+
+def test_compute_stats_groups_by_run_id():
+    from scripts.wiki.stats import compute_stats
+    events = [
+        {
+            "ts": "2026-05-28T17:21:00",
+            "type": "wiki_query",
+            "session_id": "landing-20260528-1721",
+            "filters": {"stage": "04"},
+            "hits": ["brand-architect"],
+            "hits_count": 1,
+            "est_tokens_saved": 1000,
+        },
+        {
+            "ts": "2026-05-28T17:22:00",
+            "type": "agent_call",
+            "session_id": "landing-20260528-1721",
+            "agent": "brand-architect",
+            "stage": "04",
+            "via_wiki": True,
+        },
+        {
+            "ts": "2026-05-28T17:51:00",
+            "type": "agent_call",
+            "session_id": "landing-20260528-1721",
+            "agent": "design-system-generator",
+            "stage": "05",
+            "via_wiki": False,
+        },
+    ]
+    result = compute_stats(events)
+    assert len(result.run_summaries) == 1
+    summary = result.run_summaries[0]
+    assert summary["run_id"] == "landing-20260528-1721"
+    assert summary["total"] == 2
+    assert summary["via_wiki"] == 1
+    assert summary["leaks"] == 1
+
+
+def test_render_report_includes_run_summary():
+    from scripts.wiki.stats import compute_stats, render_report
+    events = [
+        {
+            "ts": "2026-05-28T17:22:00",
+            "type": "agent_call",
+            "session_id": "landing-20260528-1721",
+            "agent": "brand-architect",
+            "stage": "04",
+            "via_wiki": True,
+        },
+    ]
+    result = compute_stats(events)
+    report = render_report(result, since_days=7)
+    assert "Запуски (сводка)" in report
+    assert "landing-20260528-1721" in report
+
+
+def test_render_report_launches_table_has_run_id_column():
+    from scripts.wiki.stats import compute_stats, render_report
+    events = [
+        {
+            "ts": "2026-05-28T17:22:00",
+            "type": "agent_call",
+            "session_id": "landing-20260528-1721",
+            "agent": "brand-architect",
+            "stage": "04",
+            "via_wiki": True,
+        },
+    ]
+    result = compute_stats(events)
+    report = render_report(result, since_days=7)
+    assert "run_id" in report
+    assert "20260528-1721" in report
