@@ -37,15 +37,17 @@
 - **Что добавить:** в `agents/analytics-engineer.md` — PHP-сниппет вставки GTM в `functions.php` рядом с Метрикой (читать `getenv('GTM_CONTAINER_ID')`, без `<noscript>` если cookie-баннер не дал согласия).
 - **Размер:** ~30 SLOC. 2–3 часа.
 
-### B3. Бэкап `wp db export` до деплоя в prod
+### ✅ B3. Бэкап `wp db export` до деплоя в prod
 - **Зачем:** сейчас деплой rsync'ит без отката.
 - **Что добавить:** в `skills/wp-cli-deployer/scripts/deploy-wordpress.sh` — перед `rsync` запустить `ssh ... "wp db export /tmp/backup-<ts>.sql"`, скачать локально в `09_ДЕПЛОЙ/backups/`.
 - **Размер:** ~20 SLOC. 1 час.
+- **Реализовано:** `skills/wp-cli-deployer/scripts/deploy-wordpress.sh` + 5 bats-тестов. Commit: `feat(deploy): add wp db backup before rsync (B3)`.
 
-### B4. Sitemap.xml в `seo-optimizer`
+### ✅ B4. Sitemap.xml в `seo-optimizer`
 - **Зачем:** без sitemap.xml поисковики хуже индексируют.
 - **Что добавить:** в `agents/seo-optimizer.md` — генерация статичного `sitemap.xml` (главная + legal-страницы), либо подключение Rank Math плагина.
 - **Размер:** ~40 SLOC. 2 часа.
+- **Реализовано:** `skills/seo-optimizer/scripts/generate-sitemap.py` (51 строка) + 5 pytest-тестов + шаг 8 в `agents/seo-optimizer.md`.
 
 ---
 
@@ -363,7 +365,8 @@ Brand-kit.html показывает палитру свотчами и шриф�
 - ✅ MVP (stage-gates + onboarding) — реализован
 - ✅ B1 — реализован (legal-block, consent REST, юр-страницы, Consent Mode v2 через B2)
 - ✅ B2 — реализован (cookie-banner library 5 layouts, mu-plugin, admin UI)
-- ⏳ B2b (GTM), B3 (db backup), B4 (sitemap) — следующие в очереди
+- ✅ B3 (db backup), B4 (sitemap) — выполнено
+- ⏳ B2b (GTM) — следующий в очереди
 - ✅ B21–B22 — реализованы (`/landing-delete`, `/landing-rename`)
 - ✅ B23–B24 — реализованы (validate-url.py, extract-palette.py, refs-palette.html, visual-strategist агент, generate-concept.py, stage 03b_visual_concept)
 - ✅ B25 — закрывается через B23+B24 (visual-strategist решает проблему на уровне 03b)

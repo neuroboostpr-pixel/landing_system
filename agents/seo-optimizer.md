@@ -86,7 +86,19 @@ add_action('wp_head', 'lp_schema_org');
 5. Пишу `12_SEO/structured-data.json` — Schema.org объект.
 6. Пишу `12_SEO/robots.txt` — запрет служебных страниц WP, Allow: /.
 7. Пишу `12_SEO/keywords.md` — ключевые слова из брифа.
-8. **HARD GATE**: показываю meta-tags.yaml + structured-data.json, жду утверждения.
+8. Генерирую `12_SEO/sitemap.xml` — главная страница + /policy + /consent:
+   ```bash
+   python skills/seo-optimizer/scripts/generate-sitemap.py \
+     <site_url> \
+     <project>/12_SEO/sitemap.xml \
+     --legal /policy /consent
+   ```
+   После деплоя sitemap.xml деплоится через `scp` в корень сайта:
+   ```bash
+   scp <project>/12_SEO/sitemap.xml ${BEGET_USER}@${BEGET_HOST}:${BEGET_PATH}/sitemap.xml
+   ```
+   Проверяю что `12_SEO/robots.txt` содержит строку `Sitemap: <site_url>/sitemap.xml`.
+9. **HARD GATE**: показываю meta-tags.yaml + structured-data.json, жду утверждения.
 
 ## SEO Rules
 
@@ -100,8 +112,9 @@ add_action('wp_head', 'lp_schema_org');
 - `08_КОД/wp-theme/functions.php` (дополнен SEO-функциями)
 - `12_SEO/meta-tags.yaml`
 - `12_SEO/structured-data.json`
-- `12_SEO/robots.txt`
+- `12_SEO/robots.txt` (содержит `Sitemap:` директиву)
 - `12_SEO/keywords.md`
+- `12_SEO/sitemap.xml` (главная + /policy + /consent)
 
 ## Inputs from earlier stages
 
