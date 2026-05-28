@@ -54,6 +54,8 @@ Stage 04 of the landing workflow. Synthesize all extracted style data into a coh
 
 ## Process
 
+0. **ОБЯЗАТЕЛЬНО:** прочитай `03b_КОНЦЕПТ/visual-concept.yaml`. Если файл отсутствует — STOP, сообщи: "Сначала нужно завершить этап 03b: запусти `/landing-visual-concept` для выбора визуальной концепции." Не генерируй brand-kit без этого файла.
+
 1. Run `python3 skills/brand-kit-build/scripts/build.py <project-dir>` — produces `04_БРЕНД/brand-kit.md`
 2. Run `python3 skills/brand-kit-build/scripts/render-html.py <project-dir>` — produces `04_БРЕНД/brand-kit.html`
 3. Open `04_БРЕНД/brand-kit.html` for user review.

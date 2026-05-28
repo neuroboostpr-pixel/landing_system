@@ -45,6 +45,20 @@ python -m scripts.wiki.log --type agent_call --agent design-system-generator --s
 
 ## What I do
 
+0. **ОБЯЗАТЕЛЬНАЯ ФАЗА MOCKUP (до генерации дизайн-системы):**
+   a. Прочитай `03b_КОНЦЕПТ/visual-concept.yaml`. Если отсутствует — STOP.
+   b. Запусти:
+      ```bash
+      python skills/design-system-generator/scripts/generate-mockup.py \
+        --concept <project>/03b_КОНЦЕПТ/visual-concept.yaml \
+        --prototype <project>/07_ПРОТОТИП/prototype.yaml \
+        --output <project>/05_ДИЗАЙН-СИСТЕМА/mockup-preview.html
+      ```
+   c. Сообщи менеджеру: "Открой `05_ДИЗАЙН-СИСТЕМА/mockup-preview.html` — там два варианта дизайна с реальным контентом. Выбери вариант или опиши правки."
+   d. **ЖДЁТ ответа менеджера.** Не генерируй DESIGN.md пока нет явного "ок" или выбора варианта.
+   e. Если правки — обнови `visual-concept.yaml` и сгенерируй новый `mockup-preview.html`. Повторяй до "ок".
+   f. После "ок" — переходи к шагу 1 (генерация полной дизайн-системы).
+
 1. Читаю `04_БРЕНД/brand-kit.md` — извлекаю цвета, шрифты, иконки, motion, grid.
 2. Запускаю `skills/design-tokens-generation/scripts/build-tokens.py <project-dir>`.
 3. Проверяю что `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` и `tokens.json` созданы.
