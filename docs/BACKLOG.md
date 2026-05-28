@@ -337,7 +337,7 @@ Brand-kit.html показывает палитру свотчами и шриф�
 
 **Зависит от:** B23+B24 (нужен `visual-concept.yaml`). Реализуется обновлением `agents/brand-architect.md`.
 
-### B29. Wiki-корреляция всегда ложная при запуске через субагентов
+### B29. Wiki-корреляция всегда ложная при запуске через субагентов ✏️ [spec](superpowers/specs/2026-05-28-b29-wiki-run-id-correlation-design.md) [plan](superpowers/plans/2026-05-28-b29-wiki-run-id-correlation-plan.md)
 
 **Что происходит сейчас:**
 В отчёте "Запуски vs вики" (`wiki/routing-report.md`) все записи с `via_wiki = ✗` (утечка) — даже те агенты, которые содержат pre-flight строку `python -m scripts.wiki.query`. Это происходит при запуске через субагентов (subagent-driven-development, executing-plans).
@@ -368,6 +368,7 @@ Brand-kit.html показывает палитру свотчами и шриф�
 - ⏳ B1–B4 — рекомендую брать в первую очередь
 - ✅ B21–B22 — реализованы (`/landing-delete`, `/landing-rename`)
 - ✅ B27–B28 — реализованы (routing правок в brand-architect, decisions log)
-- 🔮 B5–B20, B29 — по мере роста системы
+- ✅ B29 — реализован (wiki run_id корреляция для субагентов)
+- 🔮 B5–B20 — по мере роста системы
 
 Если вопросы по конкретной задаче — спроси через `/brainstorming <id>` (например `/brainstorming B6`).
