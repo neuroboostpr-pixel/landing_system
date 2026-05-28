@@ -60,6 +60,7 @@ def add_ref(refs_dir: str, ref: str, ref_type: str = "url", status: str = "candi
         "type": ref_type,
         "status": status,
         "added_at": datetime.now(timezone.utc).isoformat(),
+        "palette_extracted": False,
     }
     data["references"].append(entry)
     _save(refs, data)
