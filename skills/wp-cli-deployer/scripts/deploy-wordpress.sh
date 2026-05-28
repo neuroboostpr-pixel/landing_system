@@ -2,7 +2,9 @@
 # skills/wp-cli-deployer/scripts/deploy-wordpress.sh
 # Deploy wp-theme to Beget via rsync + wp-cli, install Lazy Blocks,
 # seed front page from page-content.html.
-# Usage: deploy-wordpress.sh <project-dir>
+# Usage: deploy-wordpress.sh <project-dir> [--env staging|prod] [--confirm]
+#   --env      Target environment (default: staging)
+#   --confirm  Required when --env prod; safety gate for production deploys
 set -euo pipefail
 
 
@@ -11,21 +13,56 @@ __SCRIPT_DIR__="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=../../../scripts/lib/python-cmd.sh
 . "$__SCRIPT_DIR__/../../../scripts/lib/python-cmd.sh"
 PROJECT="$(realpath "$1")"
+shift
 PROJECT_SLUG="$(basename "$PROJECT")"
 THEME_DIR="$PROJECT/08_КОД/wp-theme"
 PAGE_HTML="$PROJECT/08_КОД/page-content.html"
 SPEC="$PROJECT/08_КОД/block-spec.yaml"
 
+# Parse optional flags
+DEPLOY_ENV="staging"
+CONFIRMED=0
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --env)      DEPLOY_ENV="$2"; shift 2 ;;
+        --confirm)  CONFIRMED=1; shift ;;
+        *)          echo "Unknown flag: $1" >&2; exit 1 ;;
+    esac
+done
+
+# Prod safety gate
+if [[ "$DEPLOY_ENV" == "prod" && "$CONFIRMED" -eq 0 ]]; then
+    echo "ERROR: deploying to prod requires --confirm flag." >&2
+    echo "  Re-run: $0 <project-dir> --env prod --confirm" >&2
+    exit 1
+fi
+
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# Load deploy-targets.yaml if present (overrides .env for host/user/path)
+TARGETS_YAML="$PROJECT/09_ДЕПЛОЙ/deploy-targets.yaml"
+if [ -f "$TARGETS_YAML" ]; then
+    if command -v "$PYTHON_CMD" >/dev/null 2>&1; then
+        _PY_CMD="$PYTHON_CMD"
+    else
+        _PY_CMD="python"
+    fi
+    while IFS= read -r line; do
+        export "${line?}"
+    done < <("$_PY_CMD" "$SCRIPT_DIR/get-deploy-target.py" "$TARGETS_YAML" "$DEPLOY_ENV")
+fi
+
 ENV_FILE="$SCRIPT_DIR/../../../.env"
 [ -f "$ENV_FILE" ] && source "$ENV_FILE"
 # Per-project .env overrides system-level .env (e.g. BEGET_PATH per landing).
 PROJECT_ENV="$PROJECT/.env"
 [ -f "$PROJECT_ENV" ] && source "$PROJECT_ENV"
 
-: "${BEGET_USER:?BEGET_USER not set in .env}"
-: "${BEGET_HOST:?BEGET_HOST not set in .env}"
-: "${BEGET_PATH:?BEGET_PATH not set in .env}"
+: "${BEGET_USER:?BEGET_USER not set in .env or deploy-targets.yaml}"
+: "${BEGET_HOST:?BEGET_HOST not set in .env or deploy-targets.yaml}"
+: "${BEGET_PATH:?BEGET_PATH not set in .env or deploy-targets.yaml}"
+
+echo "▶ Deploying to: ${DEPLOY_ENV} (${BEGET_HOST})"
 
 REMOTE_THEME="${BEGET_PATH}/wp-content/themes/lp-${PROJECT_SLUG}"
 WP="wp --path=${BEGET_PATH} --allow-root"

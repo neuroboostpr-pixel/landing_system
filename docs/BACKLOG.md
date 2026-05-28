@@ -93,13 +93,14 @@
   - Переключатель языка в шапке темы
 - **Размер:** ~300 SLOC. 3–4 дня.
 
-### B10. Staging-окружение
+### ✅ B10. Staging-окружение
 - **Зачем:** деплой сразу в prod рискованно.
 - **Что добавить:**
   - `scripts/deploy.sh --env staging|prod` (флаг с дефолтом `staging`)
   - `template/09_ДЕПЛОЙ/deploy-targets.yaml` — параметры staging-домена и prod-домена
   - Для prod: обязательное подтверждение `--confirm` + бэкап БД
 - **Размер:** ~100 SLOC. 1 день.
+- **Реализовано:** `deploy-wordpress.sh` получил `--env staging|prod` (дефолт staging) + `--confirm` guard для prod + загрузку параметров из `09_ДЕПЛОЙ/deploy-targets.yaml`. Новый скрипт `get-deploy-target.py`. Шаблон `template/09_ДЕПЛОЙ/deploy-targets.yaml`. 5 pytest + 7 bats тестов.
 
 ### B11. WP-CLI MCP-сервер
 - **Зачем:** удалённое управление WP без ручного `ssh+wp` в каждой команде. Облегчает работу другим агентам.
