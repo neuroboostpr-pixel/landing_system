@@ -44,6 +44,7 @@ Stage 04 of the landing workflow. Synthesize all extracted style data into a coh
 
 ## Inputs
 
+- `03b_КОНЦЕПТ/visual-concept.yaml` — **ОБЯЗАТЕЛЬНЫЙ**: утверждённый концепт (палитра, mood, типографическое направление). Агент реализует этот концепт, не выбирает палитру самостоятельно. Если файл отсутствует — STOP: "Сначала заверши этап 03b: `/landing-visual-concept`."
 - `04_БРЕНД/extracted/palette.yaml` — extracted colors (from extract-palette.py)
 - `04_БРЕНД/extracted/fonts.yaml` — identified fonts (from identify-fonts.py)
 - `04_БРЕНД/extracted/icons.yaml` — matched icons (from match-icons.py)
@@ -56,6 +57,54 @@ Stage 04 of the landing workflow. Synthesize all extracted style data into a coh
 1. Run `python3 skills/brand-kit-build/scripts/build.py <project-dir>` — produces `04_БРЕНД/brand-kit.md`
 2. Run `python3 skills/brand-kit-build/scripts/render-html.py <project-dir>` — produces `04_БРЕНД/brand-kit.html`
 3. Open `04_БРЕНД/brand-kit.html` for user review.
+
+## Routing правок от менеджера
+
+При получении любой правки после показа `brand-kit.html` — определи тип:
+
+**Концептуальные правки** (цвет, mood, стиль, "хочу светлее/темнее/другое направление"):
+Ключевые слова: фон, background, цвет, colour, color, темнее, светлее, настроение, mood, стиль, style, характер, акцент, другой концепт.
+
+→ STOP. Ответь:
+```
+⚠️ Это концептуальная правка — она затрагивает visual-concept.yaml.
+
+Чтобы изменить [цвет / mood / палитру]:
+1. Открой `03b_КОНЦЕПТ/visual-concept.yaml`
+2. Внеси правку
+3. Запусти `/landing-brand` снова — я перегенерирую brand-kit
+
+Если хочешь — помогу сформулировать правку для visual-concept.yaml прямо сейчас.
+```
+
+**Локальные правки** (типографика, иконки, мелкие токены):
+Ключевые слова: шрифт, font, типографика, иконки, icons, отступы, радиус, размер.
+
+→ Принять правку прямо в 04, перегенерировать `brand-kit.md` + `brand-kit.html`, записать отклонение (см. ниже).
+
+**Неоднозначно** → спроси: "Это правка по цвету/стилю или по шрифту/иконкам?"
+
+## Протокол отклонений (B28)
+
+По завершении этапа — перед approve — сформируй список решений принятых самостоятельно (не заданных в `visual-concept.yaml`):
+
+Типичные отклонения на этапе 04:
+- Конкретный шрифт (концепт задаёт направление, не название)
+- Icon set (если не упомянут в концепте)
+- Дополнительные токены (радиусы, motion, grid)
+
+Если отклонения есть — напиши в чат:
+```
+✏️ Самостоятельные решения на этапе 04:
+- [решение]: [обоснование]
+```
+
+И запиши в файл `<project>/.stage-decisions/04_brand.md`:
+```
+- [решение]: [обоснование]
+```
+
+Если отклонений нет — ничего не пишешь.
 
 ## Сбор legal-реквизитов (для 152-ФЗ compliance)
 
