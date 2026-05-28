@@ -244,7 +244,7 @@
 
 ## Приоритет 1 — UX флоу: референсы и визуальные решения
 
-### B23. Этап 03: агент не сообщает о недоступных референсах ✏️ [spec](superpowers/specs/2026-05-28-b23-b24-reference-validation-visual-strategist-design.md)
+### B23. Этап 03: агент не сообщает о недоступных референсах ✅ [spec](superpowers/specs/2026-05-28-b23-b24-reference-validation-visual-strategist-design.md) [plan](superpowers/plans/2026-05-28-b23-b24-b26-reference-validation-visual-strategist-mockup-plan.md)
 
 **Что сейчас происходит:**
 `references-curator` получает URL от пользователя, пытается (или не пытается) его открыть, и молча продолжает работу. Если URL недоступен (Behance, Tilda, Instagram — все требуют браузер или авторизацию), агент либо игнорирует референс, либо записывает его в `index.yaml` с `status: approved` без реального чтения визуала. При этом агент пишет notes — описание стиля — на основе догадок или названия проекта, а не реального содержимого.
@@ -259,7 +259,7 @@
 
 ---
 
-### B24. Этап 03: агент самостоятельно добавляет референсы без согласования ✏️ [spec](superpowers/specs/2026-05-28-b23-b24-reference-validation-visual-strategist-design.md)
+### B24. Этап 03: агент самостоятельно добавляет референсы без согласования ✅ [spec](superpowers/specs/2026-05-28-b23-b24-reference-validation-visual-strategist-design.md) [plan](superpowers/plans/2026-05-28-b23-b24-b26-reference-validation-visual-strategist-mockup-plan.md)
 
 **Что сейчас происходит:**
 `references-curator` добавляет в `03_РЕФЕРЕНСЫ/index.yaml` референсы из собственных источников (конкуренты из `01a_АНАЛИЗ_НИШИ/competitors.yaml`, "эталонные" сайты ниши) без явного подтверждения пользователем. Для lixiang-dubai3 были добавлены BMW UAE, Mercedes-Benz UAE, Tesla UAE, Genesis UAE — пользователь давал только OFFtrail.
@@ -285,7 +285,7 @@
 
 ---
 
-### B26. Этап 04→05: нет точки проверки "это то, что вы имели в виду?" ✏️ [spec](superpowers/specs/2026-05-28-b26-quick-mockup-stage05-design.md)
+### B26. Этап 04→05: нет точки проверки "это то, что вы имели в виду?" ✅ [spec](superpowers/specs/2026-05-28-b26-quick-mockup-stage05-design.md) [plan](superpowers/plans/2026-05-28-b23-b24-b26-reference-validation-visual-strategist-mockup-plan.md)
 
 **Что сейчас происходит:**
 После утверждения brand-kit.html пользователь нажимает `+` и агент сразу генерирует полную дизайн-систему (DESIGN.md + tokens.json + design-preview.html). К моменту когда пользователь видит composed.html — несколько этапов уже зафиксировано, переделка стоит дорого.
@@ -367,6 +367,9 @@ Brand-kit.html показывает палитру свотчами и шриф�
 - ✅ MVP (stage-gates + onboarding) — реализован
 - ⏳ B1–B4 — рекомендую брать в первую очередь
 - ✅ B21–B22 — реализованы (`/landing-delete`, `/landing-rename`)
+- ✅ B23–B24 — реализованы (validate-url.py, extract-palette.py, refs-palette.html, visual-strategist агент, generate-concept.py, stage 03b_visual_concept)
+- ✅ B25 — закрывается через B23+B24 (visual-strategist решает проблему на уровне 03b)
+- ✅ B26 — реализован (generate-mockup.py, side-by-side A/B mockup в начале этапа 05)
 - ✅ B27–B28 — реализованы (routing правок в brand-architect, decisions log)
 - ✅ B29 — реализован (wiki run_id корреляция для субагентов)
 - 🔮 B5–B20 — по мере роста системы
