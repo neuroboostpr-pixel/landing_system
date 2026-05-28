@@ -32,6 +32,15 @@ WP="wp --path=${BEGET_PATH} --allow-root"
 
 ssh_run() { ssh "${BEGET_USER}@${BEGET_HOST}" "$@"; }
 
+echo "▶ Backup DB → $PROJECT/09_ДЕПЛОЙ/backups/"
+BACKUP_DIR="$PROJECT/09_ДЕПЛОЙ/backups"
+mkdir -p "$BACKUP_DIR"
+BACKUP_TS=$(date +%Y%m%d-%H%M%S)
+ssh_run "$WP db export /tmp/backup-${BACKUP_TS}.sql"
+scp "${BEGET_USER}@${BEGET_HOST}:/tmp/backup-${BACKUP_TS}.sql" "${BACKUP_DIR}/"
+ssh_run "rm -f /tmp/backup-${BACKUP_TS}.sql"
+echo "  ✓ Saved to $BACKUP_DIR/backup-${BACKUP_TS}.sql"
+
 echo "▶ Sync theme → $BEGET_HOST:$REMOTE_THEME"
 ssh_run "mkdir -p ${REMOTE_THEME}"
 if command -v rsync >/dev/null 2>&1; then
