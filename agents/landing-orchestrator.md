@@ -33,7 +33,15 @@ description: Master orchestrator for landing projects. Owns the 12-stage workflo
 ### Шаг 4 — Verify → approve → следующий
 1. Если для этапа есть verify-скрипт (например `verify-composed-premium.sh` для 07b) — exit ≠ 0 = доработать, НЕ сообщать пользователю об успехе.
 2. После всех проверок: `gate-check.sh --stage <id> --project <project> --approve`.
-3. Только после approve — повторить шаги 1–4 для следующего этапа.
+3. После approve — запустить:
+   ```bash
+   python scripts/log-decisions.py \
+     --project <project> \
+     --stage <stage> \
+     --decisions-file <project>/.stage-decisions/<stage>.md
+   ```
+   Это дописывает отклонения агента в `decisions.log.md` (или запись "нет отклонений" если файла нет).
+4. Только после approve — повторить шаги 1–4 для следующего этапа.
 
 **Никогда** не действуй вне `current_stage`, не объявляй этап завершённым без verify, не пропускай шаги 1–2 даже если пользователь торопит. Они занимают секунды и предотвращают потерю контекста.
 
