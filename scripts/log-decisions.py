@@ -18,18 +18,20 @@ HEADER = "# Decisions Log\n\nЖурнал самостоятельных реш�
 
 def append_decisions(project: str, stage: str, decisions_file: str | None) -> None:
     project_path = Path(project)
+    if not project_path.is_dir():
+        raise FileNotFoundError(f"Project directory does not exist: {project}")
     log_path = project_path / LOG_FILENAME
 
     # Create log with header if missing
     if not log_path.exists():
         log_path.write_text(HEADER, encoding="utf-8")
 
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     if decisions_file and Path(decisions_file).exists():
         content = Path(decisions_file).read_text(encoding="utf-8").strip()
         entry = f"\n## {stage} — {timestamp}\n\n{content}\n"
-        Path(decisions_file).unlink()
+        Path(decisions_file).unlink(missing_ok=True)
     else:
         entry = f"\n## {stage} — {timestamp}\n\n_(нет отклонений)_\n"
 
