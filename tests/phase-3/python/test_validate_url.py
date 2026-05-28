@@ -11,9 +11,30 @@ def _load():
     return mod
 
 def test_accessible_url_returns_true():
-    mod = _load()
-    result = mod.check_url_accessible("https://httpbin.org/get")
-    assert result is True
+    """Test that a locally served response is detected as accessible."""
+    import threading, http.server, time
+
+    class _Handler(http.server.BaseHTTPRequestHandler):
+        def do_GET(self):
+            body = b"x" * 1024
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+        def log_message(self, *a):
+            pass
+
+    server = http.server.HTTPServer(("127.0.0.1", 0), _Handler)
+    port = server.server_address[1]
+    t = threading.Thread(target=server.serve_forever, daemon=True)
+    t.start()
+    try:
+        mod = _load()
+        result = mod.check_url_accessible(f"http://127.0.0.1:{port}/test")
+        assert result is True
+    finally:
+        server.shutdown()
 
 def test_inaccessible_url_returns_false():
     mod = _load()
