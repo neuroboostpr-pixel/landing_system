@@ -5,7 +5,7 @@
     python -m scripts.wiki.log --type agent_call --agent <slug> --stage 04
     python -m scripts.wiki.log --type skill_call --skill <slug> --stage 04
 
---session-id необязателен: берётся из $CLAUDE_SESSION_ID, иначе "unknown".
+--session-id необязателен: берётся из $CLAUDE_SESSION_ID, иначе .wiki-run-id, иначе "unknown".
 """
 from __future__ import annotations
 
@@ -15,6 +15,7 @@ import sys
 from pathlib import Path
 
 from scripts.wiki import routing_log
+from scripts.wiki import run_id as _run_id
 
 
 def main(argv: list[str]) -> int:
@@ -28,7 +29,11 @@ def main(argv: list[str]) -> int:
     p.add_argument("--session-id", default="")
     args = p.parse_args(argv[1:])
 
-    session_id = args.session_id or os.environ.get("CLAUDE_SESSION_ID", "unknown")
+    session_id = (
+        args.session_id
+        or _run_id.get()
+        or os.environ.get("CLAUDE_SESSION_ID", "unknown")
+    )
 
     # Support WIKI_LOG_PATH env override (used in tests)
     wiki_log_path = os.environ.get("WIKI_LOG_PATH")
