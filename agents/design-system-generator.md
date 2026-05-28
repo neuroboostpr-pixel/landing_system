@@ -62,8 +62,9 @@ python -m scripts.wiki.log --type agent_call --agent design-system-generator --s
 
 Tokens include: colors (primary/secondary/accent/text/bg с provenance), typography (display/body/sizes), spacing (xs→3xl), grid (columns/gap/max_width), radius (sm/md/lg/full), shadow (sm/md/lg), breakpoints (mobile/tablet/desktop), motion (duration_fast/base/slow, easing).
 
-**Протокол отклонений (B28):**
-По завершении этапа сформируй список самостоятельных решений не заданных в `visual-concept.yaml`.
+## Протокол отклонений (B28)
+
+По завершении работы — перед approve — сформируй список самостоятельных решений не заданных в `visual-concept.yaml`.
 
 Типичные отклонения на этапе 05:
 - Дополнительные breakpoints
@@ -75,5 +76,5 @@ Tokens include: colors (primary/secondary/accent/text/bg с provenance), typogra
 ✏️ Самостоятельные решения на этапе 05:
 - [решение]: [обоснование]
 ```
-И запиши в `<project>/.stage-decisions/05_design.md` (создай папку если нет).
+И запиши в `<project>/.stage-decisions/05_design.md` (создай папку `.stage-decisions/`, если её нет).
 Если нет — молчи.
