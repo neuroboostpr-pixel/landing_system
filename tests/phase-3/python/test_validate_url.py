@@ -44,7 +44,7 @@ def test_inaccessible_url_returns_false():
 def test_known_blocked_platform_returns_false():
     mod = _load()
     result = mod.check_url_accessible("https://www.behance.net/gallery/246960855/test")
-    assert isinstance(result, bool)
+    assert result is False
 
 def test_known_blocked_platforms_list():
     mod = _load()

@@ -37,7 +37,7 @@ def check_url_accessible(url: str, timeout: int = 10) -> bool:
                 return False
             content = resp.read(MIN_CONTENT_LENGTH * 2)
             return len(content) >= MIN_CONTENT_LENGTH
-    except Exception:
+    except (urllib.error.URLError, OSError, TimeoutError):
         return False
 
 
