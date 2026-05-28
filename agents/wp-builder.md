@@ -160,37 +160,14 @@ $bg_url     = $bg_image ? esc_url($bg_image['url']) : '';
 
 После генерации темы и блоков — обязательная юр-инфраструктура для прод-деплоя в РФ:
 
-### 1. Cookie-banner в footer
+### 1. Cookie-banner и Google Consent Mode v2
 
-В `wp-theme/footer.php` перед `<?php wp_footer(); ?>`:
+Cookie-banner и Consent Mode v2 рендерит **mu-plugin `landing-config`** автоматически — никаких файлов в тему копировать не нужно. Убедись что mu-plugin установлен (задача `/landing-admin-install`).
 
-```php
-<?php get_template_part('template-parts/cookie-banner'); ?>
-```
-
-В `wp-theme/header.php` в `<head>`, **ДО** любых analytics-скриптов (gtag/Yandex.Metrica/GTM):
-
-```php
-<?php get_template_part('template-parts/consent-init'); ?>
-```
-
-### 2. Подключить CSS и JS cookie-banner
-
-В `wp-theme/functions.php` в `wp_enqueue_scripts` callback:
-
-```php
-wp_enqueue_style('lp-cookie-banner', get_template_directory_uri() . '/template-parts/cookie-banner.css', [], '1.0');
-wp_enqueue_script('lp-cookie-banner', get_template_directory_uri() . '/template-parts/cookie-banner.js', [], '1.0', true);
-```
-
-Скопировать файлы:
-- `template/08_КОД/template-parts/cookie-banner.php` → `wp-theme/template-parts/cookie-banner.php`
-- `template/08_КОД/template-parts/cookie-banner.js` → `wp-theme/template-parts/cookie-banner.js`
-- `template/08_КОД/template-parts/cookie-banner.css` → `wp-theme/template-parts/cookie-banner.css`
-- `template/08_КОД/template-parts/consent-init.php` → `wp-theme/template-parts/consent-init.php`
+Скопировать в тему только:
 - `template/08_КОД/template-parts/legal-block.php` → `wp-theme/template-parts/legal-block.php`
 
-### 3. Legal-block в каждую форму заявки
+### 2. Legal-block в каждую форму заявки
 
 В каждой Gutenberg-блок-шаблоне с формой (Hero, Contact, Footer-CTA) ПЕРЕД `<button type="submit">`:
 
@@ -200,7 +177,7 @@ wp_enqueue_script('lp-cookie-banner', get_template_directory_uri() . '/template-
 
 Это checkbox с required-валидацией согласия на ПД (152-ФЗ ст.9).
 
-### 4. Генерация юр-страниц /policy и /consent
+### 3. Генерация юр-страниц /policy и /consent
 
 После деплоя темы запусти:
 
@@ -214,7 +191,7 @@ bash skills/wp-builder/scripts/install_legal_pages.sh <project-dir>
 3. Подставляет реквизиты в `template/08_КОД/legal-pages/{policy,consent}.html.template`
 4. Через wp-cli создаёт WordPress Pages (или обновляет существующие по meta `_lp_legal_page`)
 
-### 5. Проверки
+### 4. Проверки
 
 Перед закрытием этапа 08:
 - `/policy` отдаёт 200 (curl https://<domain>/policy)
