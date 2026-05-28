@@ -79,3 +79,24 @@ def test_log_py_uses_run_id_when_no_session_id(tmp_path, monkeypatch):
     import json
     record = json.loads(log_path.read_text(encoding="utf-8").strip())
     assert record["session_id"] == "landing-20260528-1721"
+
+
+def test_log_py_creates_run_id_when_no_file(tmp_path, monkeypatch):
+    """log.py auto-creates run_id if .wiki-run-id doesn't exist."""
+    import scripts.wiki.run_id as rid
+    import scripts.wiki.routing_log as rl
+
+    run_id_file = tmp_path / ".wiki-run-id"
+    monkeypatch.setattr(rid, "RUN_ID_PATH", run_id_file)
+
+    log_path = tmp_path / "logs" / "wiki-usage.jsonl"
+    monkeypatch.setattr(rl, "LOG_PATH", log_path)
+    monkeypatch.delenv("CLAUDE_SESSION_ID", raising=False)
+
+    import scripts.wiki.log as log_mod
+    log_mod.main(["log.py", "--type", "agent_call", "--agent", "brand-architect", "--stage", "04"])
+
+    import json
+    record = json.loads(log_path.read_text(encoding="utf-8").strip())
+    assert record["session_id"].startswith("landing-")
+    assert run_id_file.exists()

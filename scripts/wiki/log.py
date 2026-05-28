@@ -31,7 +31,7 @@ def main(argv: list[str]) -> int:
 
     session_id = (
         args.session_id
-        or _run_id.get()
+        or _run_id.get_or_create()
         or os.environ.get("CLAUDE_SESSION_ID", "unknown")
     )
 
