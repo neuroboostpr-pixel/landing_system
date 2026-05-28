@@ -66,10 +66,11 @@
 - **Размер:** ~80 SLOC. 1 день.
 - **Реализовано:** `skills/photo-styling/scripts/generate-photo-prompts.py` (шаблоны по типу фото: portrait/team/product/process/default, цвета из brand-kit.md) + step 0 в `photo-stylist.md` с fallback-веткой. 5 pytest-тестов.
 
-### B7. Soft-check фото-стиля в `client-assets-collector`
+### ✅ B7. Soft-check фото-стиля в `client-assets-collector`
 - **Зачем:** soft_check `photo_style_consistency` в gate-check.yaml уже есть как prompt, но агент пока спрашивает «вручную». Добавить автоматическую оценку.
 - **Что добавить:** в `agents/client-assets-collector.md` — анализ фото из `02_МАТЕРИАЛЫ_КЛИЕНТА/` через Pillow (палитра, контраст, ориентация), вывод в `02_МАТЕРИАЛЫ_КЛИЕНТА/style-report.md` с рекомендацией «однородный / нужна обработка / каких не хватает».
 - **Размер:** ~120 SLOC. 1 день.
+- **Реализовано:** `skills/client-assets-collection/scripts/analyze-photo-style.py` (orientation, dominant_color, RMS contrast, verdict) + шаг 6 в `client-assets-collector.md`. 5 pytest-тестов.
 
 ### B8. migration-engineer (301-редиректы при переносе сайта)
 - **Зачем:** при переносе со старого сайта нужны 301 со старых URL.

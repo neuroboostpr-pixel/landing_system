@@ -57,7 +57,18 @@ Stage 02 of the landing workflow. Collect every piece of client-supplied content
    - Run `python3 skills/client-assets-collection/scripts/parse-reviews.py <url> <target-folder>`
    - Output goes into `02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/<source>/`
 5. Generate `02_МАТЕРИАЛЫ_КЛИЕНТА/assets-manifest.yaml` listing every collected file with its planned use (hero / about / proof).
-6. Render `02_МАТЕРИАЛЫ_КЛИЕНТА/assets-gallery.html` so user can review the haul.
+6. **Photo style check** — запусти автоматический анализ всех фото:
+   ```bash
+   python3 skills/client-assets-collection/scripts/analyze-photo-style.py \
+     <project>/02_МАТЕРИАЛЫ_КЛИЕНТА/photos/original/ \
+     <project>/02_МАТЕРИАЛЫ_КЛИЕНТА/style-report.md
+   ```
+   Скрипт анализирует ориентацию, доминирующий цвет и контраст каждого фото через Pillow.
+   Покажи пользователю вердикт из `style-report.md`:
+   - **однородный** → можно передавать в photo-stylist
+   - **нужна обработка** → предупреди пользователя; при желании можно продолжить
+   - **не хватает** → запроси у клиента дополнительные фото (минимум 3–5)
+7. Render `02_МАТЕРИАЛЫ_КЛИЕНТА/assets-gallery.html` so user can review the haul.
 
 ## HARD GATE
 
@@ -70,6 +81,7 @@ Stage 02 of the landing workflow. Collect every piece of client-supplied content
 - `02_МАТЕРИАЛЫ_КЛИЕНТА/videos/*.{mp4,mov}`
 - `02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/<source>/*.json` (parsed reviews)
 - `02_МАТЕРИАЛЫ_КЛИЕНТА/assets-manifest.yaml`
+- `02_МАТЕРИАЛЫ_КЛИЕНТА/style-report.md` (auto photo style analysis: palette / contrast / orientation)
 - `02_МАТЕРИАЛЫ_КЛИЕНТА/assets-gallery.html`
 
 ## Tools
