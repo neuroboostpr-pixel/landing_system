@@ -120,15 +120,36 @@ stages:
         path: "{project}/03_РЕФЕРЕНСЫ/index.yaml"
         required: true
         fix_hint: "references-curator agent creates this"
+      - id: refs_no_unresolved
+        type: file_exists
+        path: "{project}/03_РЕФЕРЕНСЫ/refs-palette.html"
+        required: true
+        fix_hint: "auto_fix: run extract-palette script; or: provide screenshot/description for each blocked URL"
     soft_checks:
-      - id: min_5_approved_refs
-        prompt: "В 03_РЕФЕРЕНСЫ/index.yaml минимум 5 референсов со статусом approved? (yes / no)"
+      - id: min_3_approved_refs
+        prompt: "В 03_РЕФЕРЕНСЫ/index.yaml минимум 3 референса со статусом approved? (yes / no)"
+
+  "03b_visual_concept":
+    name: "Visual concept"
+    lock: hard
+    require_approved: ["03_references"]
+    hard_checks:
+      - id: visual_concept_exists
+        type: file_exists
+        path: "{project}/03b_КОНЦЕПТ/visual-concept.yaml"
+        required: true
+        fix_hint: "visual-strategist agent creates this after manager approves a concept"
 
   "04_brand":
     name: "Brand kit"
     lock: soft
-    require_approved: []
+    require_approved: ["03b_visual_concept"]
     hard_checks:
+      - id: visual_concept_approved
+        type: file_exists
+        path: "{project}/03b_КОНЦЕПТ/visual-concept.yaml"
+        required: true
+        fix_hint: "Run stage 03b: /landing-visual-concept to generate and approve visual concept"
       - id: brand_kit_exists
         type: file_exists
         path: "{project}/04_БРЕНД/brand-kit.md"
@@ -140,6 +161,11 @@ stages:
     lock: soft
     require_approved: []
     hard_checks:
+      - id: mockup_approved
+        type: file_exists
+        path: "{project}/05_ДИЗАЙН-СИСТЕМА/mockup-preview.html"
+        required: true
+        fix_hint: "design-system-generator creates mockup-preview.html at start of stage 05"
       - id: design_md
         type: file_exists
         path: "{project}/05_ДИЗАЙН-СИСТЕМА/DESIGN.md"
