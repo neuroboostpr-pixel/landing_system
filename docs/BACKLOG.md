@@ -60,10 +60,11 @@
 - **Размер:** ~50 SLOC. 3 часа.
 - **Реализовано:** `skills/wp-cli-deployer/scripts/get-plugin-list.py` (merge stack+defaults, no dupes) + bash-блок в `deploy-wordpress.sh`. 5 pytest + 6 bats тестов.
 
-### B6. fallback photo-stylist (промпты для ChatGPT)
+### ✅ B6. fallback photo-stylist (промпты для ChatGPT)
 - **Зачем:** если у пользователя нет `HUGGINGFACE_TOKEN`, photo-stylist должен выдавать готовые промпты для ручной обработки клиентских фото в ChatGPT/Шедеврум.
 - **Что добавить:** в `agents/photo-stylist.md` — если HF API не настроен, генерировать `02_МАТЕРИАЛЫ_КЛИЕНТА/photo-prompts.md` с одним промптом на каждую нужную картинку (привязка к brand-style из `04_БРЕНД/brand-kit.md`).
 - **Размер:** ~80 SLOC. 1 день.
+- **Реализовано:** `skills/photo-styling/scripts/generate-photo-prompts.py` (шаблоны по типу фото: portrait/team/product/process/default, цвета из brand-kit.md) + step 0 в `photo-stylist.md` с fallback-веткой. 5 pytest-тестов.
 
 ### B7. Soft-check фото-стиля в `client-assets-collector`
 - **Зачем:** soft_check `photo_style_consistency` в gate-check.yaml уже есть как prompt, но агент пока спрашивает «вручную». Добавить автоматическую оценку.
