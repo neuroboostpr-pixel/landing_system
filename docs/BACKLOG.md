@@ -72,12 +72,13 @@
 - **Размер:** ~120 SLOC. 1 день.
 - **Реализовано:** `skills/client-assets-collection/scripts/analyze-photo-style.py` (orientation, dominant_color, RMS contrast, verdict) + шаг 6 в `client-assets-collector.md`. 5 pytest-тестов.
 
-### B8. migration-engineer (301-редиректы при переносе сайта)
+### ✅ B8. migration-engineer (301-редиректы при переносе сайта)
 - **Зачем:** при переносе со старого сайта нужны 301 со старых URL.
 - **Что добавить:**
   - `agents/migration-engineer.md` — собирает старые URL у пользователя, генерирует `09_ДЕПЛОЙ/redirects.csv`
   - Активация плагина Redirection при деплое + импорт CSV через wp-cli
 - **Размер:** ~150 SLOC. 1–2 дня.
+- **Реализовано:** `agents/migration-engineer.md` (5 шагов: сбор → CSV → валидация → импорт → curl-check) + `skills/wp-cli-deployer/scripts/import-redirects.py` (parse/validate/generate_wp_commands). 6 pytest + 6 bats тестов.
 
 ---
 
