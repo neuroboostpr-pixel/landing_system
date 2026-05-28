@@ -32,10 +32,11 @@
 ### B2. Cookie-banner Library (5 layouts + admin) ✅ [spec](superpowers/specs/2026-05-22-b2-cookie-banner-library-design.md) [plan](superpowers/plans/2026-05-22-b2-cookie-banner-library-plan.md)
 - **Реализовано:** 5 layouts в mu-plugin, Network admin с сегмент-селектором, token-driven CSS vars, Google Consent Mode v2, migration marker. wp-builder.md обновлён (устаревшие B1-инструкции убраны).
 
-### B2b. GTM-вставка в `analytics-engineer`
+### ✅ B2b. GTM-вставка в `analytics-engineer`
 - **Зачем:** `GTM_CONTAINER_ID` уже в `.env.example`, но никто его не использует.
 - **Что добавить:** в `agents/analytics-engineer.md` — PHP-сниппет вставки GTM в `functions.php` рядом с Метрикой (читать `getenv('GTM_CONTAINER_ID')`, без `<noscript>` если cookie-баннер не дал согласия).
 - **Размер:** ~30 SLOC. 2–3 часа.
+- **Реализовано:** `lp_gtm_head` (wp_head, priority 2) + `lp_gtm_body` (wp_body_open, noscript только при analytics consent). 6 bats-тестов.
 
 ### ✅ B3. Бэкап `wp db export` до деплоя в prod
 - **Зачем:** сейчас деплой rsync'ит без отката.
@@ -365,8 +366,7 @@ Brand-kit.html показывает палитру свотчами и шриф�
 - ✅ MVP (stage-gates + onboarding) — реализован
 - ✅ B1 — реализован (legal-block, consent REST, юр-страницы, Consent Mode v2 через B2)
 - ✅ B2 — реализован (cookie-banner library 5 layouts, mu-plugin, admin UI)
-- ✅ B3 (db backup), B4 (sitemap) — выполнено
-- ⏳ B2b (GTM) — следующий в очереди
+- ✅ B2b (GTM), B3 (db backup), B4 (sitemap) — выполнено
 - ✅ B21–B22 — реализованы (`/landing-delete`, `/landing-rename`)
 - ✅ B23–B24 — реализованы (validate-url.py, extract-palette.py, refs-palette.html, visual-strategist агент, generate-concept.py, stage 03b_visual_concept)
 - ✅ B25 — закрывается через B23+B24 (visual-strategist решает проблему на уровне 03b)
