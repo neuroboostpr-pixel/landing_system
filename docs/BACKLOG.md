@@ -54,10 +54,11 @@
 
 ## Приоритет 2 — расширение и удобство
 
-### B5. Автоустановка WP-плагинов при деплое
+### ✅ B5. Автоустановка WP-плагинов при деплое
 - **Зачем:** сейчас плагины ставятся вручную.
 - **Что добавить:** в `deploy-wordpress.sh` — после rsync читать `06_СТЕК/design-stack.yaml`, выполнить `wp plugin install <list> --activate`. Дефолтный список: WP Rocket / LiteSpeed Cache, ShortPixel, Wordfence, UpdraftPlus, Limit Login Attempts, Redirection, Really Simple SSL.
 - **Размер:** ~50 SLOC. 3 часа.
+- **Реализовано:** `skills/wp-cli-deployer/scripts/get-plugin-list.py` (merge stack+defaults, no dupes) + bash-блок в `deploy-wordpress.sh`. 5 pytest + 6 bats тестов.
 
 ### B6. fallback photo-stylist (промпты для ChatGPT)
 - **Зачем:** если у пользователя нет `HUGGINGFACE_TOKEN`, photo-stylist должен выдавать готовые промпты для ручной обработки клиентских фото в ChatGPT/Шедеврум.

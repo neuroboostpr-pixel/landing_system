@@ -53,6 +53,26 @@ fi
 echo "▶ Activate theme"
 ssh_run "$WP theme activate lp-${PROJECT_SLUG}"
 
+echo "▶ Install plugins from design-stack.yaml + defaults"
+STACK_YAML="$PROJECT/06_СТЕК/design-stack.yaml"
+if command -v $PYTHON_CMD >/dev/null 2>&1; then
+    PLUGIN_SLUGS=$("$PYTHON_CMD" "$SCRIPT_DIR/get-plugin-list.py" "$STACK_YAML" 2>/dev/null)
+else
+    PLUGIN_SLUGS=$("python" "$SCRIPT_DIR/get-plugin-list.py" "$STACK_YAML" 2>/dev/null)
+fi
+if [ -n "$PLUGIN_SLUGS" ]; then
+    while IFS= read -r slug; do
+        [ -z "$slug" ] && continue
+        echo "  → $slug"
+        ssh_run "$WP plugin is-installed ${slug} 2>/dev/null \
+            || $WP plugin install ${slug} --activate 2>/dev/null \
+            || true"
+        ssh_run "$WP plugin is-active ${slug} 2>/dev/null \
+            || $WP plugin activate ${slug} 2>/dev/null \
+            || true"
+    done <<< "$PLUGIN_SLUGS"
+fi
+
 echo "▶ Ensure lazy-blocks plugin"
 ssh_run "$WP plugin is-installed lazy-blocks 2>/dev/null || $WP plugin install lazy-blocks --activate"
 ssh_run "$WP plugin is-active lazy-blocks || $WP plugin activate lazy-blocks"
