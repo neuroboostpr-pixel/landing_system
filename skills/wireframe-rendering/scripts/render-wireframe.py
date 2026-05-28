@@ -335,7 +335,7 @@ def main() -> None:
     proto_path = project_dir / "07_ПРОТОТИП" / "prototype.yaml"
     if not proto_path.exists():
         fail(f"no prototype.yaml at {proto_path}")
-    proto = yaml.safe_load(proto_path.read_text())
+    proto = yaml.safe_load(proto_path.read_text(encoding="utf-8"))
     niche = (proto.get("project") or {}).get("niche") or "generic"
     slug = proto["project"]["slug"]
 
@@ -350,7 +350,7 @@ def main() -> None:
     # Read prototype.md for top-of-page preview (fall back to YAML dump if missing)
     proto_md_path = project_dir / "07_ПРОТОТИП" / "prototype.md"
     if proto_md_path.exists():
-        prototype_source_text = proto_md_path.read_text()
+        prototype_source_text = proto_md_path.read_text(encoding="utf-8")
     else:
         prototype_source_text = (
             "(prototype.md not found — showing parsed YAML instead)\n\n"
@@ -394,7 +394,10 @@ def main() -> None:
     enrichment_log_path = project_dir / "07_ПРОТОТИП" / "enrichment-log.md"
     enrichment_log_content = ""
     if enrichment_log_path.exists():
-        enrichment_log_content = enrichment_log_path.read_text()
+        try:
+            enrichment_log_content = enrichment_log_path.read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            enrichment_log_content = enrichment_log_path.read_text(encoding="cp1251")
 
     total_blocks = len(proto.get("blocks", []))
 
@@ -491,15 +494,15 @@ def main() -> None:
                             f"{e.stderr.strip()}",
                             file=sys.stderr,
                         )
-                        out_path.write_text(src_html.read_text())
-                tmpl_d = injected_d.read_text()
-                tmpl_m = injected_m.read_text()
+                        out_path.write_text(src_html.read_text(encoding="utf-8"))
+                tmpl_d = injected_d.read_text(encoding="utf-8")
+                tmpl_m = injected_m.read_text(encoding="utf-8")
 
             rid = f"b{position}-v{i}"
             checked = "checked" if i == 0 else ""
             # Load Russian display name and layout summary from meta.yaml
             meta_path = block_dir / "meta.yaml"
-            meta = yaml.safe_load(meta_path.read_text()) if meta_path.exists() else {}
+            meta = yaml.safe_load(meta_path.read_text(encoding="utf-8")) if meta_path.exists() else {}
             # display_name_ru — короткое человеко-понятное имя; layout_summary_ru — что в макете
             display_name_full = meta.get("display_name_ru") or cid
             # Trim until first dot/newline for a short headline; keep full as tooltip
@@ -547,7 +550,7 @@ def main() -> None:
             last_block_dir = Path(args.library) / _category_for(args.library, candidate_ids[0]) / candidate_ids[0]
             last_meta_path = last_block_dir / "meta.yaml"
             if last_meta_path.exists():
-                last_meta = yaml.safe_load(last_meta_path.read_text()) or {}
+                last_meta = yaml.safe_load(last_meta_path.read_text(encoding="utf-8")) or {}
         style_hint = get_style_hint_for_block(last_meta, all_styles)
         hint_parts = []
         if hint:
@@ -661,7 +664,7 @@ def main() -> None:
     else:
         enrichment_panel_html = ""
 
-    shell = Path(args.template).read_text()
+    shell = Path(args.template).read_text(encoding="utf-8")
     out = (
         shell.replace("{{project_slug}}", slug)
         .replace("{{niche}}", niche)
@@ -677,17 +680,18 @@ def main() -> None:
     )
     out_html = project_dir / "07a_WIREFRAME" / "wireframe.html"
     out_html.parent.mkdir(parents=True, exist_ok=True)
-    out_html.write_text(out)
+    out_html.write_text(out, encoding="utf-8")
 
     (project_dir / "07a_WIREFRAME" / "candidates.yaml").write_text(
-        yaml.dump(candidates_log, sort_keys=False, allow_unicode=True)
+        yaml.dump(candidates_log, sort_keys=False, allow_unicode=True),
+        encoding="utf-8",
     )
 
     print(f"OK: rendered {out_html}")
 
 
 def _category_for(library: str, block_id: str) -> str:
-    cat = yaml.safe_load((Path(library) / "catalog.yaml").read_text())
+    cat = yaml.safe_load((Path(library) / "catalog.yaml").read_text(encoding="utf-8"))
     for b in cat.get("blocks", []):
         if b["id"] == block_id:
             return b["category"]

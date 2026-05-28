@@ -110,7 +110,7 @@ def main() -> None:
     if not cat_path.exists():
         print(f"ERROR: no catalog.yaml in {args.library}", file=sys.stderr)
         sys.exit(1)
-    catalog = yaml.safe_load(cat_path.read_text())
+    catalog = yaml.safe_load(cat_path.read_text(encoding="utf-8"))
     known_ids = _ids_in_catalog(catalog)
 
     niche = args.niche or "generic"

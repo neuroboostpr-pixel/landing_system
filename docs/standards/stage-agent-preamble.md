@@ -30,7 +30,11 @@ When copying into a new agent — substitute `<STAGE>` with the agent's actual s
    ```
    Где `<AGENT_SLUG>` — имя файла агента без `.md`, `<STAGE_NUM>` — числовой номер этапа (например `04`).
 7. Только после exit 0 от gate-check переходи к выполнению этапа.
-8. По завершении этапа: запусти `bash scripts/verify-<STAGE>.sh` (если есть) → если PASS, отметь `approved` через `bash scripts/gate-state.sh approve <project> <STAGE>`.
+8. **Если этап работает с референсами (ссылки, файлы из `03_РЕФЕРЕНСЫ/`):**
+   - Попытайся открыть/прочитать каждый референс.
+   - Если ссылка недоступна (Behance, Instagram, внешний URL) или файл не читается — **STOP, явно сообщи пользователю** что именно недоступно и запроси альтернативу (скриншот, текстовое описание стиля). Не продолжай этап с неполными референсами.
+   - Отметь в block-injection-log или аналогичном артефакте: какие референсы были прочитаны, какие — нет.
+9. По завершении этапа: запусти `bash scripts/verify-<STAGE>.sh` (если есть) → если PASS, отметь `approved` через `bash scripts/gate-state.sh approve <project> <STAGE>`.
 
 **ВАЖНО:** harness `PreToolUse` hook (`scripts/hooks/enforce_stage_gate.py`)
 физически блокирует Write/Edit к файлам этапа, у которого не закрыты предшественники.

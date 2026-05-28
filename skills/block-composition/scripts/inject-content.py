@@ -395,7 +395,7 @@ def main() -> None:
     )
     args = p.parse_args()
 
-    proto = yaml.safe_load(Path(args.prototype).read_text())
+    proto = yaml.safe_load(Path(args.prototype).read_text(encoding="utf-8"))
     block = next(
         (b for b in proto["blocks"] if b["position"] == args.position),
         None,
@@ -407,14 +407,14 @@ def main() -> None:
     if args.selections:
         sel_path = Path(args.selections)
         if sel_path.exists():
-            photo_selections = yaml.safe_load(sel_path.read_text())
+            photo_selections = yaml.safe_load(sel_path.read_text(encoding="utf-8"))
 
     visuals_dir = Path(args.visuals_dir) if args.visuals_dir else None
 
-    html_str = Path(args.template).read_text()
+    html_str = Path(args.template).read_text(encoding="utf-8")
     result = inject_block(html_str, block, {}, photo_selections=photo_selections, visuals_dir=visuals_dir)
 
-    Path(args.output).write_text(result)
+    Path(args.output).write_text(result, encoding="utf-8")
     print(f"OK: wrote {args.output}")
 
 
