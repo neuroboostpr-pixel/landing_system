@@ -21,13 +21,14 @@ def main() -> None:
     p.add_argument("--output", required=True, help="Output HTML path (e.g. block-library/gallery.html)")
     args = p.parse_args()
 
-    lib = Path(args.library)
+    lib = Path(args.library).resolve()
+    output_dir = Path(args.output).resolve().parent
     catalog_path = lib / "catalog.yaml"
     if not catalog_path.exists():
         print(f"ERROR: catalog.yaml not found at {catalog_path}")
         return
 
-    catalog = yaml.safe_load(catalog_path.read_text())
+    catalog = yaml.safe_load(catalog_path.read_text(encoding="utf-8"))
     blocks = catalog.get("blocks", [])
 
     # Gather unique categories
@@ -95,18 +96,85 @@ def main() -> None:
 
         meta: dict = {}
         if meta_path.exists():
-            meta = yaml.safe_load(meta_path.read_text()) or {}
+            meta = yaml.safe_load(meta_path.read_text(encoding="utf-8")) or {}
 
         display_name = html.escape(meta.get("display_name_ru", block_id))
         layout_summary = html.escape(meta.get("layout_summary_ru", ""))
+        layout_pattern = html.escape(meta.get("layout_pattern", b.get("layout_pattern", "")))
         use_cases = meta.get("use_cases", b.get("use_cases", []))
         source = meta.get("source", b.get("source", "manual"))
         recommended_styles = meta.get("recommended_styles_ru", [])
 
+        # Lo-fi wireframe CSS reset — injected AFTER block styles
+        LOFI_CSS = """
+<style>
+/* === LO-FI WIREFRAME RESET === */
+*, *::before, *::after {
+  color: #333 !important;
+  font-family: system-ui, sans-serif !important;
+  text-shadow: none !important;
+  -webkit-text-fill-color: unset !important;
+}
+/* Backgrounds: all sections/wrappers → light grey */
+html, body, section, header, footer, main, article, aside, nav,
+div, figure, blockquote, form, fieldset {
+  background-color: #f5f5f5 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+/* Cards, badges, feature boxes, step circles → slightly darker grey */
+.card, .badge, .tier, .col, .feature, .step,
+[class*="card"], [class*="badge"], [class*="tier"],
+[class*="feature"], [class*="step"], [class*="item"],
+[class*="block__col"], [class*="__card"], [class*="__item"] {
+  background-color: #e8e8e8 !important;
+  background-image: none !important;
+}
+/* Images and photo slots → grey placeholder */
+img {
+  background: #d0d0d0 !important;
+  opacity: 0.6 !important;
+  filter: grayscale(100%) !important;
+}
+/* SVG icons → grey */
+svg, svg * {
+  fill: #aaa !important;
+  stroke: #aaa !important;
+  color: #aaa !important;
+}
+/* Buttons and CTAs */
+a, button, .btn, .cta,
+[class*="btn"], [class*="cta"], [class*="button"], [class*="__link"] {
+  background-color: #999 !important;
+  background-image: none !important;
+  color: #fff !important;
+  border-color: #999 !important;
+}
+/* Borders → subtle grey */
+* {
+  border-color: #d0d0d0 !important;
+  outline-color: #d0d0d0 !important;
+}
+/* Gradients and pseudo-elements */
+*::before, *::after {
+  background-image: none !important;
+  background-color: transparent !important;
+}
+</style>
+"""
+
         # Read template content for srcdoc
         tmpl_content = ""
         if template_path.exists():
-            tmpl_content = template_path.read_text()
+            raw = template_path.read_text(encoding="utf-8")
+            # Inject lo-fi reset after the last </style> or at end of <head>
+            # Strategy: append before </body> or at end if no </body>
+            if "</body>" in raw:
+                tmpl_content = raw.replace("</body>", LOFI_CSS + "</body>", 1)
+            elif "</html>" in raw:
+                tmpl_content = raw.replace("</html>", LOFI_CSS + "</html>", 1)
+            else:
+                tmpl_content = raw + LOFI_CSS
         else:
             tmpl_content = f"<html><body style='display:flex;align-items:center;justify-content:center;height:100%;color:#999;font-size:12px;font-family:sans-serif;'>template.html not found</body></html>"
 
@@ -144,7 +212,18 @@ def main() -> None:
         styles_div = (
             f'<div class="card-styles">{style_tags}</div>' if style_tags else ''
         )
-        open_href = html.escape(str(template_path.relative_to(lib.parent)), quote=True)
+        # Ссылка относительно папки, где лежит сам gallery.html, с forward-slash
+        # (Windows backslash в href не работает).
+        try:
+            rel = template_path.resolve().relative_to(output_dir)
+        except ValueError:
+            import os as _os
+            rel = Path(_os.path.relpath(template_path.resolve(), output_dir))
+        open_href = html.escape(rel.as_posix(), quote=True)
+        layout_pattern_html = (
+            f'<span class="card-layout-pattern">layout: {layout_pattern}</span>'
+            if layout_pattern else ''
+        )
         card = (
             f'<article class="gallery-card" data-cat="{html.escape(cat)}" data-id="{html.escape(block_id)}">'
             f'{iframe_html}'
@@ -153,6 +232,7 @@ def main() -> None:
             f'<div class="card-meta">'
             f'<span class="card-cat">{html.escape(cat_labels_ru.get(cat, cat))}</span>'
             f'{source_badge}'
+            f'{layout_pattern_html}'
             f'</div>'
             f'<div class="card-uc">{uc_badges}</div>'
             f'{styles_div}'
@@ -233,6 +313,7 @@ def main() -> None:
   .card-styles {{ display: flex; gap: 4px; flex-wrap: wrap; }}
   .style-tag {{ font-size: 10px; padding: 2px 6px; border-radius: 6px; background: #fff7ed; color: #c2410c; }}
   .card-id {{ font-size: 10px; color: #999; font-family: monospace; margin-top: 2px; }}
+  .card-layout-pattern {{ font-size: 10px; color: #777; font-family: monospace; background: #f0f0f0; padding: 1px 6px; border-radius: 6px; }}
   .card-open-btn {{ display: block; text-align: center; padding: 10px; background: #f5f5f5; color: #333; text-decoration: none; font-size: 13px; font-weight: 500; border-top: 1px solid #eee; transition: background .15s; }}
   .card-open-btn:hover {{ background: #111; color: #fff; }}
 </style>
@@ -259,7 +340,7 @@ def main() -> None:
 
     out_path = Path(args.output)
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(html_out)
+    out_path.write_text(html_out, encoding="utf-8")
     print(f"OK: gallery rendered at {out_path} ({len(blocks)} blocks)")
 
 
