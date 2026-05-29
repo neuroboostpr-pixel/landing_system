@@ -40,7 +40,11 @@ def main() -> int:
         blocks.append({
             "id": b["slug"],
             "path": rel_path,
-            "category": b["category"],
+            "category": b.get("category", ""),
+            "type": b.get("type", b.get("category", "")),
+            "layout_pattern": b.get("layout_pattern", ""),
+            "signature": b.get("signature", ""),
+            "display_name_ru": b.get("display_name_ru", b.get("slug", "")),
         })
         new += 1
 
