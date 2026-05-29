@@ -1890,25 +1890,3 @@ blocks:
   layout_pattern: grid-3
   display_name_ru: Блок гарантий и поддержки в виде сетки карточек с иконками и короткими
     пояснения
-- id: header-001
-  path: header\header-001/
-  category: navigation
-  type: header
-  layout_pattern: split
-  signature: header|split|[login-link,logo,menu-items]|bg:false
-  display_name_ru: 'Хедер: логотип + пункты меню + ссылка входа'
-- id: hero-001
-  path: hero\hero-001/
-  category: hero
-  type: hero
-  layout_pattern: split
-  signature: hero|split|[description,headline,image-panels,primary-cta,product-image,secondary-cta]|bg:false
-  display_name_ru: 'Хиро: заголовок + описание + primary-cta + secondary-cta + image-panels
-    + produc'
-- id: gallery-001
-  path: gallery\gallery-001/
-  category: gallery
-  type: gallery
-  layout_pattern: grid-2
-  signature: gallery|grid-2|[preview-card-1,preview-card-2,slider-indicator]|bg:false
-  display_name_ru: 'Галерея: preview-card-1 + preview-card-2 + slider-indicator'
