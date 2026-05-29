@@ -1,39 +1,43 @@
 ---
-description: Импорт блоков с любого URL (сайт или PDF) в block-library через codex CLI vision.
+description: Импорт новых блоков в block-library из URL или скриншота. Проверяет уникальность по layout-сигнатуре, добавляет только структурно уникальные блоки с нейтральным template.html без стилей. Перегенерирует gallery.html.
+allowed-tools: Bash, Read
 ---
 
 # /landing-import-blocks
 
-Берёт URL, делает скриншот, анализирует структуру через codex, генерирует универсальные HTML+CSS шаблоны блоков и добавляет в `block-library/`.
+Импорт новых блоков в `block-library/` из URL или скриншота.
 
 ## Использование
 
 ```
-/landing-import-blocks <url> [niche]
-/landing-import-blocks https://example.com premium-auto
-/landing-import-blocks https://example.com/portfolio.pdf
+/landing-import-blocks [--url <URL>] [--screenshot <path>] [--from-chat] [--yes-to-all]
 ```
+
+- `--url <URL>` — скриншот страницы по URL
+- `--screenshot <path>` — локальный файл скриншота
+- `--from-chat` — взять скриншот, присланный в чат
+- `--yes-to-all` — добавить все блоки без подтверждения дублей
+
+## Steps
+
+1. Run:
+   ```bash
+   python "skills/landing-import-blocks/scripts/import_blocks.py" {{args}}
+   ```
+2. При появлении вопроса о дубле — ответь yes/no.
+3. По завершении открой `block-library/gallery.html` для просмотра новых блоков.
 
 ## Что делает
 
-1. Скачивает страницу (HTML через playwright или PDF через curl).
-2. Делает full-page скриншот desktop+mobile (или конвертит PDF в PNG через pdftoppm / pdfimages).
-3. Codex CLI vision анализирует скриншот → JSON со списком блоков (type, style_mood, layout, niches).
-4. Для каждого блока codex (text-mode) генерирует **универсальный** HTML+CSS — наш стиль, наши CSS vars, `{{slot:*}}` placeholders вместо чужого контента. Чужие фото/тексты/логотипы не копируются.
-5. Сохраняет в `block-library/<type>/<unique-id>/{index.html, styles.css, meta.yaml, reference.png}`.
-6. Обновляет `block-library/catalog.yaml`.
+1. Получает изображение (URL / скриншот из чата / файл).
+2. Codex vision анализирует блоки — тип, layout-паттерн, слоты, фоновое фото.
+3. Вычисляет сигнатуру каждого блока и проверяет дубли в `catalog.yaml`.
+4. При дубле — показывает сравнение и спрашивает yes/no.
+5. Генерирует нейтральный `template.html` без стилей (серые тона, system-ui, `data-slot`).
+6. Присваивает id вида `hero-004`, обновляет `catalog.yaml` и `gallery.html`.
 
 ## Под капотом
 
-- Pipeline: `scripts/import-blocks/import-from-url.sh <url> [niche]`
-- Промпты: `scripts/import-blocks/templates/structure-analysis-prompt.md` и `block-generation-prompt.md` (оба прошли gpt5-prompting-engine, score 10/10).
-- Рабочая папка `.import-blocks-work/<sha>/` (в .gitignore).
-
-## Цена
-
-~$0.20–0.40 codex на URL (1 vision-call + N text-generation calls по блокам).
-
-## Когда использовать
-
-- Расширение `block-library/` новыми паттернами оформления.
-- Нашёл крутой сайт → хочешь забрать структурный паттерн в свою библиотеку (без копирования контента).
+Скил `landing-import-blocks`. Таксономия — `block-library/taxonomy.yaml` (10 категорий, 27 типов).
+См. [spec](../docs/superpowers/specs/2026-05-29-landing-import-blocks-design.md),
+[plan](../docs/superpowers/plans/2026-05-29-landing-import-blocks-plan.md).
