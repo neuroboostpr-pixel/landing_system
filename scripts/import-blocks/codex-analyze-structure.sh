@@ -5,7 +5,10 @@ SCREENSHOT="${1:?ERROR: screenshot required}"
 
 [ -f "$SCREENSHOT" ] || { echo "ERROR: screenshot not found: $SCREENSHOT" >&2; exit 2; }
 
-PROMPT_TEMPLATE="$(dirname "$0")/templates/structure-analysis-prompt.md"
+NEW_PROMPT="$(dirname "$0")/../../skills/landing-import-blocks/prompts/structure-analysis.md"
+LEGACY_PROMPT="$(dirname "$0")/templates/structure-analysis-prompt.md"
+PROMPT_TEMPLATE="$NEW_PROMPT"
+[ -f "$PROMPT_TEMPLATE" ] || PROMPT_TEMPLATE="$LEGACY_PROMPT"
 [ -f "$PROMPT_TEMPLATE" ] || { echo "ERROR: template not found: $PROMPT_TEMPLATE" >&2; exit 3; }
 
 if [ -z "${CODEX_BIN:-}" ]; then

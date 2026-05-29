@@ -11,7 +11,17 @@ from datetime import date
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-PROMPT_TEMPLATE = SCRIPT_DIR / "templates" / "block-generation-prompt.md"
+
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+try:
+    from skills.landing_import_blocks.scripts.check_duplicates import compute_signature as _compute_sig
+    _HAS_SIG = True
+except ImportError:
+    _HAS_SIG = False
+
+_NEW_GEN = Path(__file__).parents[2] / "skills" / "landing-import-blocks" / "prompts" / "block-generation.md"
+PROMPT_TEMPLATE = _NEW_GEN if _NEW_GEN.exists() else SCRIPT_DIR / "templates" / "block-generation-prompt.md"
 
 
 def slugify(s: str) -> str:
@@ -121,13 +131,18 @@ def main() -> int:
         niches_lines = "\n".join(
             "  - " + n for n in (block.get("niches_suitable") or ["generic"])
         )
+        sig = _compute_sig(block) if _HAS_SIG else ""
+        display_name_ru = block.get("display_name_ru", "") or (desc or btype)[:80]
         meta = (
             f"id: {slug}\n"
-            f"category: {btype}\n"
-            f"display_name_ru: \"{(desc or btype)[:80]}\"\n"
+            f"type: {block.get('type', block.get('category', 'unknown'))}\n"
+            f"category: {block.get('category', btype)}\n"
+            f"display_name_ru: \"{display_name_ru[:80]}\"\n"
             f"description: \"{desc}\"\n"
-            f"style_mood: {mood}\n"
             f"layout_pattern: {layout}\n"
+            f"has_bg_image: {str(block.get('has_bg_image', False)).lower()}\n"
+            f"signature: \"{sig}\"\n"
+            f"style_mood: {mood}\n"
             f"ru_market: true\n"
             f"has_animation: {str(block.get('has_animation', False)).lower()}\n"
             f"niches_suitable:\n{niches_lines}\n"
