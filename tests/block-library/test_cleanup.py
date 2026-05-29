@@ -72,3 +72,40 @@ def test_build_new_structure_needs_manual_untouched():
     keep_list = {"removed": [], "kept": ["a"]}
     actions = build_new_structure(blocks, keep_list)
     assert actions == []
+
+
+import importlib.util as _ilu2
+_spec2 = _ilu2.spec_from_file_location(
+    "cleanup_blocks",
+    Path(__file__).parents[2] / "skills" / "block-library-management" / "scripts" / "cleanup_blocks.py"
+)
+cleanup_blocks = _ilu2.module_from_spec(_spec2)
+_spec2.loader.exec_module(cleanup_blocks)
+
+
+def test_parse_codex_json_valid():
+    raw = '{"type":"hero","category":"Hero","layout_pattern":"split","has_bg_image":false,"slots":[{"name":"headline","type":"text"}],"display_name_ru":"Hero: заголовок","clean_html":"<section>x</section>"}'
+    result = cleanup_blocks.parse_codex_json(raw)
+    assert result["type"] == "hero"
+    assert result["display_name_ru"] == "Hero: заголовок"
+
+def test_parse_codex_json_with_fence():
+    raw = 'noise\n```json\n{"type":"faq","category":"FAQ","layout_pattern":"stacked","has_bg_image":false,"slots":[],"display_name_ru":"FAQ","clean_html":"<section></section>"}\n```\nmore'
+    result = cleanup_blocks.parse_codex_json(raw)
+    assert result["type"] == "faq"
+
+def test_parse_codex_json_invalid_returns_none():
+    assert cleanup_blocks.parse_codex_json("not json at all") is None
+
+def test_staging_record_shape(tmp_path):
+    codex_out = {
+        "type": "hero", "category": "Hero", "layout_pattern": "split",
+        "has_bg_image": False, "slots": [{"name": "h", "type": "text"}],
+        "display_name_ru": "Hero: h", "clean_html": "<section></section>",
+    }
+    rec = cleanup_blocks.build_staging_record("hero/old-x", "old-x", codex_out)
+    assert rec["old_id"] == "old-x"
+    assert rec["type"] == "hero"
+    assert rec["status"] == "ok"
+    assert "signature" in rec
+    assert rec["signature"].startswith("hero|split|")
