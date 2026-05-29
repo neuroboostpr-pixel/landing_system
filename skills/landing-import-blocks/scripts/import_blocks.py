@@ -19,10 +19,49 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 BLOCK_LIB = REPO_ROOT / "block-library"
 CATALOG = BLOCK_LIB / "catalog.yaml"
 
-sys.path.insert(0, str(REPO_ROOT))
-from skills.landing_import_blocks.scripts.check_duplicates import (
-    compute_signature, find_duplicate,
-)
+# check_duplicates лежит рядом, но папка содержит дефис — грузим по пути,
+# чтобы работало и как `python import_blocks.py`, и как `-m ...`.
+import importlib.util as _ilu
+
+_cd_path = Path(__file__).resolve().parent / "check_duplicates.py"
+_spec = _ilu.spec_from_file_location("import_blocks_check_duplicates", _cd_path)
+_cd = _ilu.module_from_spec(_spec)
+_spec.loader.exec_module(_cd)
+compute_signature = _cd.compute_signature
+find_duplicate = _cd.find_duplicate
+
+
+def _find_bash() -> str:
+    """Locate a Git-Bash / MSYS bash, NOT the WSL one.
+
+    On Windows the bare `bash` often resolves to WSL's bash, which only sees
+    drives via /mnt/<d>/ — but our POSIX-style paths use /<d>/ (Git Bash style).
+    Prefer the Git Bash bundled with Git for Windows.
+    """
+    import shutil
+    candidates = [
+        r"C:\Program Files\Git\bin\bash.exe",
+        r"C:\Program Files\Git\usr\bin\bash.exe",
+        r"C:\Program Files (x86)\Git\bin\bash.exe",
+    ]
+    for c in candidates:
+        if Path(c).exists():
+            return c
+    return shutil.which("bash") or "bash"
+
+
+def _bash_path(p) -> str:
+    """Convert a Windows path to a Git-Bash POSIX path (D:\\x → /d/x).
+
+    Git Bash eats backslashes, so we must pass forward-slash paths.
+    On POSIX this is a no-op.
+    """
+    s = str(Path(p))
+    if len(s) > 1 and s[1] == ":":  # drive-letter path like D:\...
+        drive = s[0].lower()
+        rest = s[2:].replace("\\", "/")
+        return f"/{drive}{rest}"
+    return s.replace("\\", "/")
 
 
 def next_block_id(block_type: str, existing_blocks: list[dict]) -> str:
@@ -140,7 +179,7 @@ def main(argv: list[str] | None = None) -> int:
     structure_path = work_dir / "structure.json"
     analyze_sh = REPO_ROOT / "scripts" / "import-blocks" / "codex-analyze-structure.sh"
     result = subprocess.run(
-        ["bash", str(analyze_sh), str(screenshot)],
+        [_find_bash(), _bash_path(analyze_sh), _bash_path(screenshot)],
         capture_output=True, text=True, encoding="utf-8",
     )
     if result.returncode != 0:
