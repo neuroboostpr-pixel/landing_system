@@ -1,0 +1,30 @@
+id: hero-001
+type: hero
+category: hero
+display_name_ru: 'Хиро: заголовок + описание + primary-cta + secondary-cta + image-panels
+  + produc'
+description: ''
+layout_pattern: split
+has_bg_image: false
+signature: hero|split|[description,headline,image-panels,primary-cta,product-image,secondary-cta]|bg:false
+style_mood: minimal
+ru_market: true
+has_animation: false
+niches_suitable:
+- generic
+slots:
+- type: text
+  name: headline
+- type: text
+  name: description
+- type: cta
+  name: primary-cta
+- type: cta
+  name: secondary-cta
+- type: image
+  name: image-panels
+- type: image
+  name: product-image
+source: import
+source_url: import-from-chat
+created: '2026-05-29'

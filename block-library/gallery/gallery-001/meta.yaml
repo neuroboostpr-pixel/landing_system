@@ -1,0 +1,23 @@
+id: gallery-001
+type: gallery
+category: gallery
+display_name_ru: 'Галерея: preview-card-1 + preview-card-2 + slider-indicator'
+description: ''
+layout_pattern: grid-2
+has_bg_image: false
+signature: gallery|grid-2|[preview-card-1,preview-card-2,slider-indicator]|bg:false
+style_mood: minimal
+ru_market: true
+has_animation: false
+niches_suitable:
+- generic
+slots:
+- type: image
+  name: preview-card-1
+- type: image
+  name: preview-card-2
+- type: image
+  name: slider-indicator
+source: import
+source_url: import-from-chat
+created: '2026-05-29'

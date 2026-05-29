@@ -1,0 +1,167 @@
+<style>
+  .block-hero-001 {
+    font-family: system-ui, sans-serif;
+    background: #f5f5f5;
+    color: #333;
+    padding: 48px 24px;
+  }
+
+  .block-hero-001 * {
+    box-sizing: border-box;
+  }
+
+  .block-hero-001__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 32px;
+    align-items: center;
+  }
+
+  .block-hero-001__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .block-hero-001__headline {
+    margin: 0;
+    font-size: clamp(2.25rem, 4vw, 4.25rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: #333;
+  }
+
+  .block-hero-001__description {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #999;
+    max-width: 560px;
+  }
+
+  .block-hero-001__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 4px;
+  }
+
+  .block-hero-001__cta {
+    text-decoration: none;
+    background: #999;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    font-size: 0.95rem;
+    line-height: 1.2;
+  }
+
+  .block-hero-001__cta--secondary {
+    background: #e8e8e8;
+    color: #333;
+  }
+
+  .block-hero-001__visual {
+    display: grid;
+    grid-template-columns: 0.78fr 1.22fr;
+    gap: 16px;
+    min-height: 460px;
+  }
+
+  .block-hero-001__panel-stack {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .block-hero-001__card,
+  .block-hero-001__main-image {
+    background: #e8e8e8;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+
+  .block-hero-001__image,
+  .block-hero-001__main-image-inner {
+    width: 100%;
+    height: 100%;
+    background: #d0d0d0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    font-size: 0.95rem;
+    text-align: center;
+    padding: 16px;
+  }
+
+  @media (max-width: 900px) {
+    .block-hero-001__inner {
+      grid-template-columns: 1fr;
+    }
+
+    .block-hero-001__visual {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+
+    .block-hero-001__panel-stack {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: none;
+    }
+
+    .block-hero-001__main-image {
+      min-height: 320px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .block-hero-001 {
+      padding: 36px 16px;
+    }
+
+    .block-hero-001__panel-stack {
+      grid-template-columns: 1fr;
+    }
+
+    .block-hero-001__actions {
+      width: 100%;
+      flex-direction: column;
+    }
+
+    .block-hero-001__cta {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>
+<section class="block-hero-001" data-block-type="hero">
+  <div class="block-hero-001__inner">
+    <div class="block-hero-001__content">
+      <h1 class="block-hero-001__headline" data-slot="headline">Simple, clear headline for your product</h1>
+      <p class="block-hero-001__description" data-slot="description">Use this area to explain the core value in one or two calm, direct sentences that support the main message.</p>
+      <div class="block-hero-001__actions">
+        <a href="#" class="block-hero-001__cta" data-slot="primary-cta">[CTA]</a>
+        <a href="#" class="block-hero-001__cta block-hero-001__cta--secondary" data-slot="secondary-cta">[CTA]</a>
+      </div>
+    </div>
+    <div class="block-hero-001__visual">
+      <div class="block-hero-001__panel-stack" data-slot="image-panels">
+        <div class="block-hero-001__card">
+          <div class="block-hero-001__image">[IMAGE]</div>
+        </div>
+        <div class="block-hero-001__card">
+          <div class="block-hero-001__image">[IMAGE]</div>
+        </div>
+      </div>
+      <div class="block-hero-001__main-image">
+        <div class="block-hero-001__main-image-inner" data-slot="product-image">[IMAGE]</div>
+      </div>
+    </div>
+  </div>
+</section>
