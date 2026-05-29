@@ -43,3 +43,5 @@ wiki/routing-report.md
 .import-blocks-work/
 audit/
 .claude/worktrees/
+
+.cleanup-staging/
