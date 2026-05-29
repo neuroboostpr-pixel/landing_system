@@ -1,0 +1,55 @@
+version: 1
+
+categories:
+  - {id: Navigation, label_ru: "Навигация"}
+  - {id: Hero, label_ru: "Первый экран"}
+  - {id: Content, label_ru: "Контент"}
+  - {id: "Social Proof", label_ru: "Социальное доказательство"}
+  - {id: Trust, label_ru: "Доверие"}
+  - {id: Conversion, label_ru: "Конверсия"}
+  - {id: Pricing, label_ru: "Цены"}
+  - {id: FAQ, label_ru: "FAQ"}
+  - {id: Gallery, label_ru: "Галерея"}
+  - {id: Footer, label_ru: "Подвал"}
+
+types:
+  - {id: header,           category: Navigation,    label_ru: "Шапка / навигация"}
+  - {id: menu,             category: Navigation,    label_ru: "Меню (мобильное/sidebar)"}
+  - {id: hero,             category: Hero,          label_ru: "Первый экран"}
+  - {id: features,         category: Content,       label_ru: "Преимущества"}
+  - {id: characteristics,  category: Content,       label_ru: "Характеристики продукта"}
+  - {id: about,            category: Content,       label_ru: "О продукте / компании"}
+  - {id: problem-solution, category: Content,       label_ru: "Проблема → решение"}
+  - {id: process,          category: Content,       label_ru: "Как это работает"}
+  - {id: demo,             category: Content,       label_ru: "Демо / showcase"}
+  - {id: testimonials,     category: "Social Proof", label_ru: "Отзывы"}
+  - {id: logos,            category: "Social Proof", label_ru: "Логотипы клиентов"}
+  - {id: stats,            category: "Social Proof", label_ru: "Цифры и метрики"}
+  - {id: case-study,       category: "Social Proof", label_ru: "Кейсы / результаты"}
+  - {id: media-mentions,   category: "Social Proof", label_ru: "Упоминания в СМИ"}
+  - {id: guarantees,       category: Trust,         label_ru: "Гарантии / сертификаты"}
+  - {id: comparison,       category: Trust,         label_ru: "Мы vs альтернативы"}
+  - {id: integrations,     category: Trust,         label_ru: "Интеграции"}
+  - {id: cta,              category: Conversion,    label_ru: "Призыв к действию"}
+  - {id: banner,           category: Conversion,    label_ru: "Баннер / промо-полоса"}
+  - {id: urgency,          category: Conversion,    label_ru: "Срочность / дефицит"}
+  - {id: lead-form,        category: Conversion,    label_ru: "Форма захвата / квиз"}
+  - {id: pricing,          category: Pricing,       label_ru: "Тарифы / цены"}
+  - {id: faq,              category: FAQ,           label_ru: "Вопросы и ответы"}
+  - {id: gallery,          category: Gallery,       label_ru: "Фотогалерея"}
+  - {id: team,             category: Gallery,       label_ru: "Команда"}
+  - {id: footer,           category: Footer,        label_ru: "Подвал"}
+  - {id: contacts,         category: Footer,        label_ru: "Контакты"}
+
+layout_patterns:
+  - split
+  - centered
+  - grid-2
+  - grid-3
+  - grid-4
+  - stacked
+  - bento
+  - sidebar
+  - cards
+  - timeline
+  - multi-step
