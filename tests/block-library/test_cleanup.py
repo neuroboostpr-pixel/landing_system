@@ -141,3 +141,23 @@ def test_render_report_empty_groups(tmp_path):
     dedup_report.render_report({}, out)
     assert out.exists()
     assert "дубл" in out.read_text(encoding="utf-8").lower()
+
+
+def test_rebuild_catalog_from_dirs(tmp_path):
+    lib = tmp_path / "block-library"
+    block = lib / "Hero" / "hero-001"
+    (block / "assets").mkdir(parents=True)
+    (block / "assets" / "template.html").write_text("<section></section>", encoding="utf-8")
+    import yaml as _y
+    (block / "meta.yaml").write_text(_y.safe_dump({
+        "id": "hero-001", "type": "hero", "category": "Hero",
+        "layout_pattern": "split", "display_name_ru": "Hero: x",
+        "slots": [], "signature": "hero|split|[]|bg:false",
+    }, allow_unicode=True), encoding="utf-8")
+
+    cleanup_blocks.rebuild_catalog(lib)
+    catalog = _y.safe_load((lib / "catalog.yaml").read_text(encoding="utf-8"))
+    assert catalog["version"] == 3
+    assert len(catalog["blocks"]) == 1
+    assert catalog["blocks"][0]["id"] == "hero-001"
+    assert catalog["blocks"][0]["path"] == "Hero/hero-001/"

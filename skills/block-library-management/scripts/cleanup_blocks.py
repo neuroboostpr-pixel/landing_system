@@ -201,7 +201,30 @@ def phase3(library: Path, keep_list_path: Path) -> int:
     )
     print(f"Фаза 3: перенесено {len(actions)} блоков. migration-map.yaml записан.")
     print("Теперь: пересобери catalog.yaml и gallery.html.")
+    rebuild_catalog(library)
     return 0
+
+
+def rebuild_catalog(library: Path) -> None:
+    """Пересобрать catalog.yaml (v3) сканированием всех meta.yaml."""
+    blocks = []
+    for meta_file in sorted(library.glob("*/*/meta.yaml")):
+        meta = yaml.safe_load(meta_file.read_text(encoding="utf-8")) or {}
+        rel = meta_file.parent.relative_to(library).as_posix()
+        blocks.append({
+            "id": meta.get("id", ""),
+            "path": rel + "/",
+            "category": meta.get("category", ""),
+            "type": meta.get("type", ""),
+            "layout_pattern": meta.get("layout_pattern", ""),
+            "signature": meta.get("signature", ""),
+            "display_name_ru": meta.get("display_name_ru", ""),
+        })
+    catalog = {"version": 3, "updated": str(date.today()), "blocks": blocks}
+    (library / "catalog.yaml").write_text(
+        yaml.safe_dump(catalog, allow_unicode=True, sort_keys=False), encoding="utf-8"
+    )
+    print(f"catalog.yaml пересобран: {len(blocks)} блоков")
 
 
 def main(argv=None) -> int:
