@@ -109,3 +109,35 @@ def test_staging_record_shape(tmp_path):
     assert rec["status"] == "ok"
     assert "signature" in rec
     assert rec["signature"].startswith("hero|split|")
+
+
+import importlib.util as _ilu3
+_spec3 = _ilu3.spec_from_file_location(
+    "dedup_report",
+    Path(__file__).parents[2] / "skills" / "block-library-management" / "scripts" / "dedup_report.py"
+)
+dedup_report = _ilu3.module_from_spec(_spec3)
+_spec3.loader.exec_module(dedup_report)
+
+
+def test_render_report_creates_file(tmp_path):
+    groups = {
+        "hero|split|[cta,headline]|bg:false": [
+            {"old_id": "ru-hero-01", "display_name_ru": "Hero: A", "clean_html": "<section>A</section>"},
+            {"old_id": "hero-corp-2", "display_name_ru": "Hero: B", "clean_html": "<section>B</section>"},
+        ]
+    }
+    out = tmp_path / "dedup-report.html"
+    dedup_report.render_report(groups, out)
+    assert out.exists()
+    content = out.read_text(encoding="utf-8")
+    assert "ru-hero-01" in content
+    assert "hero-corp-2" in content
+    assert "keep-list" in content.lower()
+    assert "checkbox" in content.lower()
+
+def test_render_report_empty_groups(tmp_path):
+    out = tmp_path / "dedup-report.html"
+    dedup_report.render_report({}, out)
+    assert out.exists()
+    assert "дубл" in out.read_text(encoding="utf-8").lower()
