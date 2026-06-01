@@ -1,0 +1,12 @@
+id: pricing-004
+type: pricing
+category: pricing
+layout_pattern: minimal
+display_name_ru: 'pricing: minimal'
+slots:
+- name: content
+  type: text
+has_bg_image: false
+signature: pricing|minimal|[content]|bg:false
+source: cleaned
+created: '2026-06-01'

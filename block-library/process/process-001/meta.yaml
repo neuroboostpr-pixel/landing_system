@@ -1,0 +1,12 @@
+id: process-001
+type: process
+category: process
+layout_pattern: cinematic
+display_name_ru: 'process: cinematic'
+slots:
+- name: content
+  type: text
+has_bg_image: false
+signature: process|cinematic|[content]|bg:false
+source: cleaned
+created: '2026-06-01'

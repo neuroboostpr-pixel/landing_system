@@ -1,0 +1,30 @@
+id: cta-001
+type: cta
+category: CTA
+layout_pattern: split
+display_name_ru: 'CTA: сплит с фоном'
+slots:
+- name: badge
+  type: text
+- name: heading
+  type: text
+- name: subhead
+  type: text
+- name: primary-cta-label
+  type: text
+- name: primary-cta-link
+  type: url
+- name: secondary-cta-label
+  type: text
+- name: secondary-cta-link
+  type: url
+- name: background-image
+  type: image
+- name: background-image-mobile
+  type: image
+- name: background-image-alt
+  type: text
+has_bg_image: true
+signature: cta|split|[badge,heading,subhead,primary-cta-label,primary-cta-link,secondary-cta-label,secondary-cta-link,background-image,background-image-mobile,background-image-alt]|bg:true
+source: cleaned
+created: '2026-06-01'

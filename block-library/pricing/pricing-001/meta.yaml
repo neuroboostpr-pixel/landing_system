@@ -1,0 +1,12 @@
+id: pricing-001
+type: pricing
+category: pricing
+layout_pattern: default
+display_name_ru: 'pricing: default'
+slots:
+- name: content
+  type: text
+has_bg_image: false
+signature: pricing|default|[content]|bg:false
+source: cleaned
+created: '2026-06-01'

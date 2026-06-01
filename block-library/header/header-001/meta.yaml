@@ -1,0 +1,12 @@
+id: header-001
+type: header
+category: header
+layout_pattern: cinematic
+display_name_ru: 'header: cinematic'
+slots:
+- name: content
+  type: text
+has_bg_image: false
+signature: header|cinematic|[content]|bg:false
+source: cleaned
+created: '2026-06-01'

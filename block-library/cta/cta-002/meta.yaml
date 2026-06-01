@@ -1,0 +1,12 @@
+id: cta-002
+type: cta
+category: cta
+layout_pattern: brutalist
+display_name_ru: 'cta: brutalist'
+slots:
+- name: content
+  type: text
+has_bg_image: false
+signature: cta|brutalist|[content]|bg:false
+source: cleaned
+created: '2026-06-01'

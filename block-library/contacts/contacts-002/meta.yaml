@@ -1,0 +1,12 @@
+id: contacts-002
+type: contacts
+category: contacts
+layout_pattern: grid
+display_name_ru: 'contacts: grid'
+slots:
+- name: content
+  type: text
+has_bg_image: false
+signature: contacts|grid|[content]|bg:false
+source: cleaned
+created: '2026-06-01'

@@ -1,0 +1,12 @@
+id: contacts-003
+type: contacts
+category: contacts
+layout_pattern: split
+display_name_ru: 'contacts: split'
+slots:
+- name: content
+  type: text
+has_bg_image: false
+signature: contacts|split|[content]|bg:false
+source: cleaned
+created: '2026-06-01'
