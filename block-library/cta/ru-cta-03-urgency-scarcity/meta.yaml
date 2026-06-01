@@ -1,20 +1,40 @@
+category: Conversion
+conversion_notes: 'Дефицит по количеству или дате — один из сильнейших триггеров (книга,
+  стр. 29). Важно: не обманывать — если указана дата, держать слово.'
+created: '2026-05-13'
+description: 'Акцентная полоса дефицита: ''Осталось X мест / До конца акции''. Оранжевый
+  фон, текст счётчика и CTA ''Успеть получить''. Без таймера на JS.'
+display_name_ru: ⏰ Полоса срочности — осталось X мест
 id: ru-cta-03-urgency-scarcity
-category: cta
+layout_pattern: split
+layout_summary_ru: Оранжевая полоса с крупным числом 'Осталось X мест' или датой окончания,
+  подзаголовком и одной кнопкой. Дефицит без JS-таймера — только текст.
 ru_market: true
+slots:
+- max_chars: 60
+  name: urgency-label
+  required: true
+  type: text
+- max_chars: 5
+  name: seats-count
+  required: false
+  type: text
+- max_chars: 30
+  name: deadline-date
+  required: false
+  type: text
+- max_chars: 120
+  name: subhead
+  required: false
+  type: text
+- default_text: Успеть получить
+  name: primary-cta
+  required: true
+  type: cta
+source: manual
+source_attribution: PDF Как создать сайт-шедевр, страница 29
+type: cta
 use_cases:
 - services
 - b2c
 - local
-description: "Акцентная полоса дефицита: 'Осталось X мест / До конца акции'. Оранжевый фон, текст счётчика и CTA 'Успеть получить'. Без таймера на JS."
-display_name_ru: "⏰ Полоса срочности — осталось X мест"
-layout_summary_ru: "Оранжевая полоса с крупным числом 'Осталось X мест' или датой окончания, подзаголовком и одной кнопкой. Дефицит без JS-таймера — только текст."
-slots:
-  - {type: text, name: urgency-label, max_chars: 60, required: true}
-  - {type: text, name: seats-count, max_chars: 5, required: false}
-  - {type: text, name: deadline-date, max_chars: 30, required: false}
-  - {type: text, name: subhead, max_chars: 120, required: false}
-  - {type: cta, name: primary-cta, default_text: "Успеть получить", required: true}
-conversion_notes: "Дефицит по количеству или дате — один из сильнейших триггеров (книга, стр. 29). Важно: не обманывать — если указана дата, держать слово."
-source: manual
-source_attribution: "PDF Как создать сайт-шедевр, страница 29"
-created: '2026-05-13'

@@ -1,20 +1,23 @@
-id: cta-minimal-split-portfolio-kdm1-ru-8
-category: cta
-display_name_ru: "Контактная форма в светлой карточке рядом с lifestyle-фото и заметной кнопкой от"
-description: "Контактная форма в светлой карточке рядом с lifestyle-фото и заметной кнопкой отправки."
-style_mood: minimal
-layout_pattern: split
-ru_market: true
+category: Conversion
+description: Контактная форма в светлой карточке рядом с lifestyle-фото и заметной
+  кнопкой отправки.
+display_name_ru: Контактная форма в светлой карточке рядом с lifestyle-фото и заметной
+  кнопкой от
 has_animation: false
-niches_suitable:
-  - ecommerce
-  - services
-  - education
-slots:
-  - type: text
-    name: heading
-    required: true
+id: cta-minimal-split-portfolio-kdm1-ru-8
 imported:
-  source_url: "https://portfolio.kdm1.ru/upload/iblock/f94/slk0g7ub4mnpodwty9jl8iyrq4zk33uv/LCase.pdf"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://portfolio.kdm1.ru/upload/iblock/f94/slk0g7ub4mnpodwty9jl8iyrq4zk33uv/LCase.pdf
+layout_pattern: split
+niches_suitable:
+- ecommerce
+- services
+- education
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: minimal
+type: cta

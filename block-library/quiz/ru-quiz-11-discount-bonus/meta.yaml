@@ -1,19 +1,49 @@
-id: ru-quiz-11-discount-bonus
-category: quiz
-ru_market: true
-use_cases: [services, b2c, local]
-description: "Экран с подарком за прохождение квиза: скидка, бесплатный замер или консультация как лид-магнит."
-display_name_ru: "🎁 Квиз — экран подарка за прохождение"
-layout_summary_ru: "Большой бейдж скидки, описание подарка, таймер ограничения (CSS-анимация). Переход к лид-форме. Без JS. Всегда перед формой контактов — мощный мотиватор."
-slots:
-  - {type: text, name: headline, max_chars: 80, required: true}
-  - {type: text, name: discount-value, max_chars: 20, required: true}
-  - {type: text, name: discount-description, max_chars: 150, required: true}
-  - {type: text, name: bonus-item-1, max_chars: 80, required: false}
-  - {type: text, name: bonus-item-2, max_chars: 80, required: false}
-  - {type: text, name: cta-button, max_chars: 50, required: true}
-  - {type: text, name: urgency-note, max_chars: 80, required: false}
-conversion_notes: "Скидка-подарок за прохождение — главный лид-магнит по всем источникам. Показывать ПЕРЕД формой контактов. Источники: Skillbox, Tilda, Marquiz."
-source: manual
-source_attribution: "skillbox.ru/media/marketing/chto-takoe-kvizy; tilda.education; marquiz.ru/blog"
+category: Conversion
+conversion_notes: 'Скидка-подарок за прохождение — главный лид-магнит по всем источникам.
+  Показывать ПЕРЕД формой контактов. Источники: Skillbox, Tilda, Marquiz.'
 created: '2026-05-13'
+description: 'Экран с подарком за прохождение квиза: скидка, бесплатный замер или
+  консультация как лид-магнит.'
+display_name_ru: 🎁 Квиз — экран подарка за прохождение
+id: ru-quiz-11-discount-bonus
+layout_pattern: centered
+layout_summary_ru: Большой бейдж скидки, описание подарка, таймер ограничения (CSS-анимация).
+  Переход к лид-форме. Без JS. Всегда перед формой контактов — мощный мотиватор.
+ru_market: true
+slots:
+- max_chars: 80
+  name: headline
+  required: true
+  type: text
+- max_chars: 20
+  name: discount-value
+  required: true
+  type: text
+- max_chars: 150
+  name: discount-description
+  required: true
+  type: text
+- max_chars: 80
+  name: bonus-item-1
+  required: false
+  type: text
+- max_chars: 80
+  name: bonus-item-2
+  required: false
+  type: text
+- max_chars: 50
+  name: cta-button
+  required: true
+  type: text
+- max_chars: 80
+  name: urgency-note
+  required: false
+  type: text
+source: manual
+source_attribution: skillbox.ru/media/marketing/chto-takoe-kvizy; tilda.education;
+  marquiz.ru/blog
+type: lead-form
+use_cases:
+- services
+- b2c
+- local

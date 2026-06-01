@@ -1,21 +1,24 @@
-id: trust-technical-grid-3-project21993216-tild-9
-category: trust
-display_name_ru: "Блок гарантий и поддержки в виде сетки карточек с иконками и короткими пояснения"
-description: "Блок гарантий и поддержки в виде сетки карточек с иконками и короткими пояснениями."
-style_mood: technical
-layout_pattern: grid-3
-ru_market: true
+category: Trust
+description: Блок гарантий и поддержки в виде сетки карточек с иконками и короткими
+  пояснениями.
+display_name_ru: Блок гарантий и поддержки в виде сетки карточек с иконками и короткими
+  пояснения
 has_animation: false
-niches_suitable:
-  - tech
-  - b2b-saas
-  - services
-  - ecommerce
-slots:
-  - type: text
-    name: heading
-    required: true
+id: trust-technical-grid-3-project21993216-tild-9
 imported:
-  source_url: "https://project21993216.tilda.ws/"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://project21993216.tilda.ws/
+layout_pattern: grid-3
+niches_suitable:
+- tech
+- b2b-saas
+- services
+- ecommerce
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: technical
+type: guarantees

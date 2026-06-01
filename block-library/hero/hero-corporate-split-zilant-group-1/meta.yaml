@@ -1,21 +1,24 @@
-id: hero-corporate-split-zilant-group-1
-category: hero
-display_name_ru: "Большой светло-бирюзовый первый экран с крупным заголовком, CTA и деловой фотоко"
-description: "Большой светло-бирюзовый первый экран с крупным заголовком, CTA и деловой фотокомпозицией справа."
-style_mood: corporate
-layout_pattern: split
-ru_market: true
+category: Hero
+description: Большой светло-бирюзовый первый экран с крупным заголовком, CTA и деловой
+  фотокомпозицией справа.
+display_name_ru: Большой светло-бирюзовый первый экран с крупным заголовком, CTA и
+  деловой фотоко
 has_animation: false
-niches_suitable:
-  - services
-  - premium-auto
-  - luxury
-  - education
-slots:
-  - type: text
-    name: heading
-    required: true
+id: hero-corporate-split-zilant-group-1
 imported:
-  source_url: "https://zilant.group/"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://zilant.group/
+layout_pattern: split
+niches_suitable:
+- services
+- premium-auto
+- luxury
+- education
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: corporate
+type: hero

@@ -1,20 +1,23 @@
-id: cta-cinematic-split-portfolio-kdm1-ru-9
-category: cta
-display_name_ru: "Темный эмоциональный блок с крупной иллюстрацией действия и сильным текстовым ак"
-description: "Темный эмоциональный блок с крупной иллюстрацией действия и сильным текстовым акцентом."
-style_mood: cinematic
-layout_pattern: split
-ru_market: true
+category: Conversion
+description: Темный эмоциональный блок с крупной иллюстрацией действия и сильным текстовым
+  акцентом.
+display_name_ru: Темный эмоциональный блок с крупной иллюстрацией действия и сильным
+  текстовым ак
 has_animation: false
-niches_suitable:
-  - education
-  - services
-  - b2b-saas
-slots:
-  - type: text
-    name: heading
-    required: true
+id: cta-cinematic-split-portfolio-kdm1-ru-9
 imported:
-  source_url: "https://portfolio.kdm1.ru/upload/iblock/b31/i0qylig13hzo7ow4qcpia0qhtn3i87pk/Onlai_n_shkola-Dmitriya-Vykhodtseva.pdf"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://portfolio.kdm1.ru/upload/iblock/b31/i0qylig13hzo7ow4qcpia0qhtn3i87pk/Onlai_n_shkola-Dmitriya-Vykhodtseva.pdf
+layout_pattern: split
+niches_suitable:
+- education
+- services
+- b2b-saas
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: cinematic
+type: cta

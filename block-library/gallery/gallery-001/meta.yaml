@@ -1,12 +1,12 @@
-id: gallery-001
-type: gallery
-category: gallery
-layout_pattern: cinematic
+category: Gallery
+created: '2026-06-01'
 display_name_ru: 'gallery: cinematic'
+has_bg_image: false
+id: gallery-001
+layout_pattern: cinematic
+signature: gallery|cinematic|[content]|bg:false
 slots:
 - name: content
   type: text
-has_bg_image: false
-signature: gallery|cinematic|[content]|bg:false
 source: cleaned
-created: '2026-06-01'
+type: gallery

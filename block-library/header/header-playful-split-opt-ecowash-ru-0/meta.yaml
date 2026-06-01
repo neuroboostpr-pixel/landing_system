@@ -1,20 +1,23 @@
-id: header-playful-split-opt-ecowash-ru-0
-category: header
-display_name_ru: "Компактная верхняя навигация на ярком фоне с логотипом, пунктами меню и контактн"
-description: "Компактная верхняя навигация на ярком фоне с логотипом, пунктами меню и контактным действием."
-style_mood: playful
-layout_pattern: split
-ru_market: true
+category: Navigation
+description: Компактная верхняя навигация на ярком фоне с логотипом, пунктами меню
+  и контактным действием.
+display_name_ru: Компактная верхняя навигация на ярком фоне с логотипом, пунктами
+  меню и контактн
 has_animation: false
-niches_suitable:
-  - ecommerce
-  - services
-  - b2b-saas
-slots:
-  - type: text
-    name: heading
-    required: true
+id: header-playful-split-opt-ecowash-ru-0
 imported:
-  source_url: "https://opt.ecowash.ru/"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://opt.ecowash.ru/
+layout_pattern: split
+niches_suitable:
+- ecommerce
+- services
+- b2b-saas
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: playful
+type: header

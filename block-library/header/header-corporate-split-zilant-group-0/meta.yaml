@@ -1,20 +1,23 @@
-id: header-corporate-split-zilant-group-0
-category: header
-display_name_ru: "Компактная верхняя навигация с логотипом по центру зоны меню и мягкой кнопкой де"
-description: "Компактная верхняя навигация с логотипом по центру зоны меню и мягкой кнопкой действия справа."
-style_mood: corporate
-layout_pattern: split
-ru_market: true
+category: Navigation
+description: Компактная верхняя навигация с логотипом по центру зоны меню и мягкой
+  кнопкой действия справа.
+display_name_ru: Компактная верхняя навигация с логотипом по центру зоны меню и мягкой
+  кнопкой де
 has_animation: false
-niches_suitable:
-  - services
-  - b2b-saas
-  - education
-slots:
-  - type: text
-    name: heading
-    required: true
+id: header-corporate-split-zilant-group-0
 imported:
-  source_url: "https://zilant.group/"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://zilant.group/
+layout_pattern: split
+niches_suitable:
+- services
+- b2b-saas
+- education
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: corporate
+type: header

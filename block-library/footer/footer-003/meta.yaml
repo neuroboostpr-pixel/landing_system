@@ -1,12 +1,12 @@
-id: footer-003
-type: footer
-category: footer
-layout_pattern: minimal
+category: Footer
+created: '2026-06-01'
 display_name_ru: 'footer: minimal'
+has_bg_image: false
+id: footer-003
+layout_pattern: minimal
+signature: footer|minimal|[content]|bg:false
 slots:
 - name: content
   type: text
-has_bg_image: false
-signature: footer|minimal|[content]|bg:false
 source: cleaned
-created: '2026-06-01'
+type: footer

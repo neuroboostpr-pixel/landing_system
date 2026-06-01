@@ -1,21 +1,22 @@
-id: faq-minimal-stacked-project21993216-tild-11
-category: faq
-display_name_ru: "Аккордеон частых вопросов в белых строках с иконками раскрытия справа."
-description: "Аккордеон частых вопросов в белых строках с иконками раскрытия справа."
-style_mood: minimal
-layout_pattern: stacked
-ru_market: true
+category: FAQ
+description: Аккордеон частых вопросов в белых строках с иконками раскрытия справа.
+display_name_ru: Аккордеон частых вопросов в белых строках с иконками раскрытия справа.
 has_animation: false
-niches_suitable:
-  - services
-  - ecommerce
-  - education
-  - medical
-slots:
-  - type: text
-    name: heading
-    required: true
+id: faq-minimal-stacked-project21993216-tild-11
 imported:
-  source_url: "https://project21993216.tilda.ws/"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://project21993216.tilda.ws/
+layout_pattern: stacked
+niches_suitable:
+- services
+- ecommerce
+- education
+- medical
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: minimal
+type: faq

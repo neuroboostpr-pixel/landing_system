@@ -1,20 +1,23 @@
-id: features-editorial-stacked-romanmelnikov-tilda-2
-category: features
-display_name_ru: "Плотный вводный блок с широкой плашкой, крупным тезисом и короткими текстовыми к"
-description: "Плотный вводный блок с широкой плашкой, крупным тезисом и короткими текстовыми колонками."
-style_mood: editorial
-layout_pattern: stacked
-ru_market: true
+category: Content
+description: Плотный вводный блок с широкой плашкой, крупным тезисом и короткими текстовыми
+  колонками.
+display_name_ru: Плотный вводный блок с широкой плашкой, крупным тезисом и короткими
+  текстовыми к
 has_animation: false
-niches_suitable:
-  - services
-  - education
-  - b2b-saas
-slots:
-  - type: text
-    name: heading
-    required: true
+id: features-editorial-stacked-romanmelnikov-tilda-2
 imported:
-  source_url: "https://romanmelnikov.tilda.ws/"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://romanmelnikov.tilda.ws/
+layout_pattern: stacked
+niches_suitable:
+- services
+- education
+- b2b-saas
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: editorial
+type: features

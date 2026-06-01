@@ -1,41 +1,43 @@
+category: Conversion
+conversion_notes: 3 варианта связи повышают конверсию. WhatsApp убран. Max обязателен
+  для РФ-аудитории.
+created: 2026-05-12
+description: 'CTA-блок: заголовок + 3 кнопки Telegram / Max / Перезвоните. БЕЗ WhatsApp
+  (запрещён в РФ).'
+display_name_ru: '📞 CTA: Telegram / Max / Перезвоните'
 id: ru-cta-01-callback-tg-max
-category: cta
+layout_pattern: split
+layout_summary_ru: 'Заголовок + подзаголовок + три кнопки связи: Telegram, Max и ''Перезвоните
+  мне''. WhatsApp отсутствует — только разрешённые в РФ каналы.'
+recommended_styles_ru:
+- Flat Design 2.0
+- Minimalism & Swiss Style
 ru_market: true
+slots:
+- max_chars: 80
+  name: headline
+  required: true
+  type: text
+- max_chars: 140
+  name: subhead
+  required: false
+  type: text
+- default_text: Написать в Telegram
+  name: tg-cta
+  required: true
+  type: cta
+- default_text: Написать в Max
+  name: max-cta
+  required: true
+  type: cta
+- default_text: Перезвоните мне
+  name: callback-cta
+  required: true
+  type: cta
+source: manual
+source_attribution: ''
+type: cta
 use_cases:
 - services
 - b2c
 - local
-description: 'CTA-блок: заголовок + 3 кнопки Telegram / Max / Перезвоните. БЕЗ WhatsApp
-  (запрещён в РФ).'
-display_name_ru: '📞 CTA: Telegram / Max / Перезвоните'
-layout_summary_ru: 'Заголовок + подзаголовок + три кнопки связи: Telegram, Max и ''Перезвоните
-  мне''. WhatsApp отсутствует — только разрешённые в РФ каналы.'
-slots:
-- type: text
-  name: headline
-  max_chars: 80
-  required: true
-- type: text
-  name: subhead
-  max_chars: 140
-  required: false
-- type: cta
-  name: tg-cta
-  default_text: Написать в Telegram
-  required: true
-- type: cta
-  name: max-cta
-  default_text: Написать в Max
-  required: true
-- type: cta
-  name: callback-cta
-  default_text: Перезвоните мне
-  required: true
-conversion_notes: 3 варианта связи повышают конверсию. WhatsApp убран. Max обязателен
-  для РФ-аудитории.
-source: manual
-source_attribution: ''
-created: 2026-05-12
-recommended_styles_ru:
-- Flat Design 2.0
-- Minimalism & Swiss Style

@@ -1,20 +1,23 @@
-id: social-proof-luxury-cards-romanmelnikov-tilda-12
-category: social-proof
-display_name_ru: "Отзывы показаны в темных контурных карточках с круглыми аватарами и золотыми дет"
-description: "Отзывы показаны в темных контурных карточках с круглыми аватарами и золотыми деталями."
-style_mood: luxury
-layout_pattern: cards
-ru_market: true
+category: Social Proof
+description: Отзывы показаны в темных контурных карточках с круглыми аватарами и золотыми
+  деталями.
+display_name_ru: Отзывы показаны в темных контурных карточках с круглыми аватарами
+  и золотыми дет
 has_animation: false
-niches_suitable:
-  - services
-  - luxury
-  - education
-slots:
-  - type: text
-    name: heading
-    required: true
+id: social-proof-luxury-cards-romanmelnikov-tilda-12
 imported:
-  source_url: "https://romanmelnikov.tilda.ws/"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://romanmelnikov.tilda.ws/
+layout_pattern: cards
+niches_suitable:
+- services
+- luxury
+- education
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: luxury
+type: logos

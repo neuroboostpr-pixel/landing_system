@@ -1,20 +1,23 @@
-id: cta-technical-split-medregistrant-ru-7
-category: cta
-display_name_ru: "Узкий CTA-блок с сильным заголовком слева и размытым тематическим изображением с"
-description: "Узкий CTA-блок с сильным заголовком слева и размытым тематическим изображением справа."
-style_mood: technical
-layout_pattern: split
-ru_market: true
+category: Conversion
+description: Узкий CTA-блок с сильным заголовком слева и размытым тематическим изображением
+  справа.
+display_name_ru: Узкий CTA-блок с сильным заголовком слева и размытым тематическим
+  изображением с
 has_animation: false
-niches_suitable:
-  - services
-  - medical
-  - tech
-slots:
-  - type: text
-    name: heading
-    required: true
+id: cta-technical-split-medregistrant-ru-7
 imported:
-  source_url: "https://medregistrant.ru/"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://medregistrant.ru/
+layout_pattern: split
+niches_suitable:
+- services
+- medical
+- tech
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: technical
+type: cta

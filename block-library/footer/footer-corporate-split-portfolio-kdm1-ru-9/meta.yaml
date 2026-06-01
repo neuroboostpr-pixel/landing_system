@@ -1,20 +1,21 @@
-id: footer-corporate-split-portfolio-kdm1-ru-9
-category: footer
-display_name_ru: "Темный подвал с навигацией, социальными иконками и контактными строками."
-description: "Темный подвал с навигацией, социальными иконками и контактными строками."
-style_mood: corporate
-layout_pattern: split
-ru_market: true
+category: Footer
+description: Темный подвал с навигацией, социальными иконками и контактными строками.
+display_name_ru: Темный подвал с навигацией, социальными иконками и контактными строками.
 has_animation: false
-niches_suitable:
-  - ecommerce
-  - services
-  - b2b-saas
-slots:
-  - type: text
-    name: heading
-    required: true
+id: footer-corporate-split-portfolio-kdm1-ru-9
 imported:
-  source_url: "https://portfolio.kdm1.ru/upload/iblock/f94/slk0g7ub4mnpodwty9jl8iyrq4zk33uv/LCase.pdf"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://portfolio.kdm1.ru/upload/iblock/f94/slk0g7ub4mnpodwty9jl8iyrq4zk33uv/LCase.pdf
+layout_pattern: split
+niches_suitable:
+- ecommerce
+- services
+- b2b-saas
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: corporate
+type: footer

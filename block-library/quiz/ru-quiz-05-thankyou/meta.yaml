@@ -1,16 +1,35 @@
-id: ru-quiz-05-thankyou
-category: quiz
-ru_market: true
-use_cases: [services, b2c, local]
-description: "Финальный экран квиза: галочка ✓ + 'Спасибо!' + 'Свяжемся в TG/Max через 5 минут' + CTA 'На главную'."
-display_name_ru: "✅ Квиз — страница «Спасибо»"
-layout_summary_ru: "Финальный экран квиза: галочка ✓ + 'Спасибо!' + конкретный срок ответа 'Свяжемся через 5 минут в TG/Max' + кнопка 'На главную'."
-slots:
-  - {type: text, name: success-icon, required: true}
-  - {type: text, name: success-headline, max_chars: 80, required: true}
-  - {type: text, name: success-subhead, max_chars: 140, required: true}
-  - {type: cta, name: back-cta, default_text: "На главную", required: true}
-conversion_notes: "Конкретный срок ('5 минут') снижает тревожность. Упоминание канала управляет ожиданиями."
-source: manual
-source_attribution: ""
+category: Conversion
+conversion_notes: Конкретный срок ('5 минут') снижает тревожность. Упоминание канала
+  управляет ожиданиями.
 created: 2026-05-12
+description: 'Финальный экран квиза: галочка ✓ + ''Спасибо!'' + ''Свяжемся в TG/Max
+  через 5 минут'' + CTA ''На главную''.'
+display_name_ru: ✅ Квиз — страница «Спасибо»
+id: ru-quiz-05-thankyou
+layout_pattern: centered
+layout_summary_ru: 'Финальный экран квиза: галочка ✓ + ''Спасибо!'' + конкретный срок
+  ответа ''Свяжемся через 5 минут в TG/Max'' + кнопка ''На главную''.'
+ru_market: true
+slots:
+- name: success-icon
+  required: true
+  type: text
+- max_chars: 80
+  name: success-headline
+  required: true
+  type: text
+- max_chars: 140
+  name: success-subhead
+  required: true
+  type: text
+- default_text: На главную
+  name: back-cta
+  required: true
+  type: cta
+source: manual
+source_attribution: ''
+type: lead-form
+use_cases:
+- services
+- b2c
+- local

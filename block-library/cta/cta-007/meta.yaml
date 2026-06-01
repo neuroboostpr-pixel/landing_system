@@ -1,12 +1,12 @@
-id: cta-007
-type: cta
-category: cta
-layout_pattern: minimal
+category: Conversion
+created: '2026-06-01'
 display_name_ru: 'cta: minimal'
+has_bg_image: false
+id: cta-007
+layout_pattern: minimal
+signature: cta|minimal|[content]|bg:false
 slots:
 - name: content
   type: text
-has_bg_image: false
-signature: cta|minimal|[content]|bg:false
 source: cleaned
-created: '2026-06-01'
+type: cta

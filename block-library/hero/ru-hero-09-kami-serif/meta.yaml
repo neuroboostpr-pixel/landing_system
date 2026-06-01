@@ -1,71 +1,73 @@
-id: ru-hero-09-kami-serif
-category: hero
-ru_market: true
-use_cases:
-- services
-- b2c
-description: 'Hero в стиле kami (紙): тёплый пергамент, крупный засечный шрифт,
-  синий акцент, карточки-метрики справа. Адаптирован из kami-landing (Apache-2.0).'
-display_name_ru: 'Ками-герой — пергамент, засечный шрифт, метрики'
-layout_summary_ru: 'Двухколоночный: заголовок и CTA слева, карточки-метрики справа.
-  Засечный шрифт, синий акцент, пергаментный фон. Mobile — стек, карточки перед CTA.'
-slots:
-- type: text
-  name: eyebrow-left
-  max_chars: 40
-  required: false
-- type: text
-  name: eyebrow-right
-  max_chars: 40
-  required: false
-- type: text
-  name: headline
-  max_chars: 80
-  required: true
-- type: text
-  name: subhead
-  max_chars: 220
-  required: false
-- type: text
-  name: metric-1-value
-  max_chars: 10
-  required: false
-- type: text
-  name: metric-1-label
-  max_chars: 25
-  required: false
-- type: text
-  name: metric-2-value
-  max_chars: 10
-  required: false
-- type: text
-  name: metric-2-label
-  max_chars: 25
-  required: false
-- type: text
-  name: metric-3-value
-  max_chars: 10
-  required: false
-- type: text
-  name: metric-3-label
-  max_chars: 25
-  required: false
-- type: cta
-  name: primary-cta
-  default_text: Начать сейчас
-  required: true
-- type: cta
-  name: secondary-cta
-  default_text: О нас
-  required: false
+category: Hero
 conversion_notes: Засечный шрифт создаёт ощущение основательности и доверия — хорошо
   для финансов, права, архитектуры, образования. Карточки-метрики справа не требуют
-  отдельного блока trust. Синий акцент #1B365D нейтрален и профессионален.
-source: opendesign
-source_attribution: 'github.com/nexu-io/open-design: design-templates/kami-landing
-  (Apache-2.0)'
+  отдельного блока trust. Синий акцент
 created: '2026-05-13'
+description: 'Hero в стиле kami (紙): тёплый пергамент, крупный засечный шрифт, синий
+  акцент, карточки-метрики справа. Адаптирован из kami-landing (Apache-2.0).'
+display_name_ru: Ками-герой — пергамент, засечный шрифт, метрики
+id: ru-hero-09-kami-serif
+layout_pattern: centered
+layout_summary_ru: 'Двухколоночный: заголовок и CTA слева, карточки-метрики справа.
+  Засечный шрифт, синий акцент, пергаментный фон. Mobile — стек, карточки перед CTA.'
 recommended_styles_ru:
 - Minimalism & Swiss Style
 - Editorial & Magazine Style
 - Corporate Clean
+ru_market: true
+slots:
+- max_chars: 40
+  name: eyebrow-left
+  required: false
+  type: text
+- max_chars: 40
+  name: eyebrow-right
+  required: false
+  type: text
+- max_chars: 80
+  name: headline
+  required: true
+  type: text
+- max_chars: 220
+  name: subhead
+  required: false
+  type: text
+- max_chars: 10
+  name: metric-1-value
+  required: false
+  type: text
+- max_chars: 25
+  name: metric-1-label
+  required: false
+  type: text
+- max_chars: 10
+  name: metric-2-value
+  required: false
+  type: text
+- max_chars: 25
+  name: metric-2-label
+  required: false
+  type: text
+- max_chars: 10
+  name: metric-3-value
+  required: false
+  type: text
+- max_chars: 25
+  name: metric-3-label
+  required: false
+  type: text
+- default_text: Начать сейчас
+  name: primary-cta
+  required: true
+  type: cta
+- default_text: О нас
+  name: secondary-cta
+  required: false
+  type: cta
+source: opendesign
+source_attribution: 'github.com/nexu-io/open-design: design-templates/kami-landing
+  (Apache-2.0)'
+type: hero
+use_cases:
+- services
+- b2c

@@ -1,20 +1,23 @@
-id: cta-technical-centered-antidiler-karpov-ru-5
-category: cta
-display_name_ru: "Блок подбора запчастей с сильным заголовком, формой в одну строку и оранжевой кн"
-description: "Блок подбора запчастей с сильным заголовком, формой в одну строку и оранжевой кнопкой."
-style_mood: technical
-layout_pattern: centered
-ru_market: true
+category: Conversion
+description: Блок подбора запчастей с сильным заголовком, формой в одну строку и оранжевой
+  кнопкой.
+display_name_ru: Блок подбора запчастей с сильным заголовком, формой в одну строку
+  и оранжевой кн
 has_animation: false
-niches_suitable:
-  - premium-auto
-  - services
-  - ecommerce
-slots:
-  - type: text
-    name: heading
-    required: true
+id: cta-technical-centered-antidiler-karpov-ru-5
 imported:
-  source_url: "https://antidiler-karpov.ru/"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://antidiler-karpov.ru/
+layout_pattern: centered
+niches_suitable:
+- premium-auto
+- services
+- ecommerce
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: technical
+type: cta

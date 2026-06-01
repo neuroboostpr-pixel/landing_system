@@ -1,20 +1,23 @@
-id: header-minimal-split-portfolio-kdm1-ru-0
-category: header
-display_name_ru: "Тонкая верхняя панель с логотипом, навигацией, контактами и компактными иконками"
-description: "Тонкая верхняя панель с логотипом, навигацией, контактами и компактными иконками действий."
-style_mood: minimal
-layout_pattern: split
-ru_market: true
+category: Navigation
+description: Тонкая верхняя панель с логотипом, навигацией, контактами и компактными
+  иконками действий.
+display_name_ru: Тонкая верхняя панель с логотипом, навигацией, контактами и компактными
+  иконками
 has_animation: false
-niches_suitable:
-  - ecommerce
-  - services
-  - b2b-saas
-slots:
-  - type: text
-    name: heading
-    required: true
+id: header-minimal-split-portfolio-kdm1-ru-0
 imported:
-  source_url: "https://portfolio.kdm1.ru/upload/iblock/f94/slk0g7ub4mnpodwty9jl8iyrq4zk33uv/LCase.pdf"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://portfolio.kdm1.ru/upload/iblock/f94/slk0g7ub4mnpodwty9jl8iyrq4zk33uv/LCase.pdf
+layout_pattern: split
+niches_suitable:
+- ecommerce
+- services
+- b2b-saas
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: minimal
+type: header

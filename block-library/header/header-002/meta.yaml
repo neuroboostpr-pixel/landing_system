@@ -1,12 +1,12 @@
-id: header-002
-type: header
-category: header
-layout_pattern: split
+category: Navigation
+created: '2026-06-01'
 display_name_ru: 'header: split'
+has_bg_image: false
+id: header-002
+layout_pattern: split
+signature: header|split|[content]|bg:false
 slots:
 - name: content
   type: text
-has_bg_image: false
-signature: header|split|[content]|bg:false
 source: cleaned
-created: '2026-06-01'
+type: header

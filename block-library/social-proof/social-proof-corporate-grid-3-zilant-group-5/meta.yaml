@@ -1,21 +1,24 @@
-id: social-proof-corporate-grid-3-zilant-group-5
-category: social-proof
-display_name_ru: "Статистический блок с крупными красными числами, краткими подписями и широким ви"
-description: "Статистический блок с крупными красными числами, краткими подписями и широким видеопревью ниже."
-style_mood: corporate
-layout_pattern: grid-3
-ru_market: true
+category: Social Proof
+description: Статистический блок с крупными красными числами, краткими подписями и
+  широким видеопревью ниже.
+display_name_ru: Статистический блок с крупными красными числами, краткими подписями
+  и широким ви
 has_animation: false
-niches_suitable:
-  - services
-  - b2b-saas
-  - premium-auto
-  - tech
-slots:
-  - type: text
-    name: heading
-    required: true
+id: social-proof-corporate-grid-3-zilant-group-5
 imported:
-  source_url: "https://zilant.group/"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://zilant.group/
+layout_pattern: grid-3
+niches_suitable:
+- services
+- b2b-saas
+- premium-auto
+- tech
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: corporate
+type: logos

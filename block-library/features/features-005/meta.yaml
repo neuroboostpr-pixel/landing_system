@@ -1,12 +1,12 @@
-id: features-005
-type: features
-category: features
-layout_pattern: default
+category: Content
+created: '2026-06-01'
 display_name_ru: 'features: default'
+has_bg_image: false
+id: features-005
+layout_pattern: default
+signature: features|default|[content]|bg:false
 slots:
 - name: content
   type: text
-has_bg_image: false
-signature: features|default|[content]|bg:false
 source: cleaned
-created: '2026-06-01'
+type: features

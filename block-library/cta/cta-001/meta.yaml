@@ -1,8 +1,10 @@
-id: cta-001
-type: cta
-category: CTA
-layout_pattern: split
+category: Conversion
+created: '2026-06-01'
 display_name_ru: 'CTA: сплит с фоном'
+has_bg_image: true
+id: cta-001
+layout_pattern: split
+signature: cta|split|[badge,heading,subhead,primary-cta-label,primary-cta-link,secondary-cta-label,secondary-cta-link,background-image,background-image-mobile,background-image-alt]|bg:true
 slots:
 - name: badge
   type: text
@@ -24,7 +26,5 @@ slots:
   type: image
 - name: background-image-alt
   type: text
-has_bg_image: true
-signature: cta|split|[badge,heading,subhead,primary-cta-label,primary-cta-link,secondary-cta-label,secondary-cta-link,background-image,background-image-mobile,background-image-alt]|bg:true
 source: cleaned
-created: '2026-06-01'
+type: cta

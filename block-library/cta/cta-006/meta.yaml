@@ -1,12 +1,12 @@
-id: cta-006
-type: cta
-category: cta
-layout_pattern: split
+category: Conversion
+created: '2026-06-01'
 display_name_ru: 'cta: split'
+has_bg_image: false
+id: cta-006
+layout_pattern: split
+signature: cta|split|[content]|bg:false
 slots:
 - name: content
   type: text
-has_bg_image: false
-signature: cta|split|[content]|bg:false
 source: cleaned
-created: '2026-06-01'
+type: cta

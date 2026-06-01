@@ -1,20 +1,23 @@
-id: social-proof-minimal-stacked-antidiler-karpov-ru-4
-category: social-proof
-display_name_ru: "Серия темных кейсов без крупных фото: имя, модель, услуга, отзыв и акцентная кно"
-description: "Серия темных кейсов без крупных фото: имя, модель, услуга, отзыв и акцентная кнопка."
-style_mood: minimal
-layout_pattern: stacked
-ru_market: true
+category: Social Proof
+description: 'Серия темных кейсов без крупных фото: имя, модель, услуга, отзыв и акцентная
+  кнопка.'
+display_name_ru: 'Серия темных кейсов без крупных фото: имя, модель, услуга, отзыв
+  и акцентная кно'
 has_animation: false
-niches_suitable:
-  - premium-auto
-  - services
-  - luxury
-slots:
-  - type: text
-    name: heading
-    required: true
+id: social-proof-minimal-stacked-antidiler-karpov-ru-4
 imported:
-  source_url: "https://antidiler-karpov.ru/"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://antidiler-karpov.ru/
+layout_pattern: stacked
+niches_suitable:
+- premium-auto
+- services
+- luxury
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: minimal
+type: logos

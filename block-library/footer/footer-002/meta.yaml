@@ -1,12 +1,12 @@
-id: footer-002
-type: footer
-category: footer
-layout_pattern: split
+category: Footer
+created: '2026-06-01'
 display_name_ru: 'footer: split'
+has_bg_image: false
+id: footer-002
+layout_pattern: split
+signature: footer|split|[content]|bg:false
 slots:
 - name: content
   type: text
-has_bg_image: false
-signature: footer|split|[content]|bg:false
 source: cleaned
-created: '2026-06-01'
+type: footer

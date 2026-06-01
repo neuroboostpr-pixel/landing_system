@@ -1,28 +1,49 @@
-id: ru-trust-07-partner-logos
-category: trust
-ru_market: true
-use_cases:
-- services
-- b2c
-- local
-description: 'Компактная полоса логотипов клиентов/партнёров с лейблом. Минималистичный
-  стиль proof-section от saas-landing (Apache-2.0). Текстовые лого с opacity.'
-display_name_ru: Полоса логотипов — компании-клиенты в ряд
-layout_summary_ru: Центрированная полоса с лейблом и 5 текстовыми логотипами в ряд.
-  Opacity 55% создаёт ненавязчивый эффект. Mobile — wrap в несколько строк.
-slots:
-- {type: text, name: section-label, max_chars: 60, required: false}
-- {type: text, name: logo-1, max_chars: 40, required: true}
-- {type: text, name: logo-2, max_chars: 40, required: false}
-- {type: text, name: logo-3, max_chars: 40, required: false}
-- {type: text, name: logo-4, max_chars: 40, required: false}
-- {type: text, name: logo-5, max_chars: 40, required: false}
+category: Trust
 conversion_notes: Текстовые лого (не SVG) проще адаптировать. Opacity 55% создаёт
   ощущение "нейтральности" — не реклама, а факт. Размещать между hero и features.
-source: opendesign
-source_attribution: 'github.com/nexu-io/open-design: design-templates/saas-landing (Apache-2.0)'
 created: '2026-05-13'
+description: Компактная полоса логотипов клиентов/партнёров с лейблом. Минималистичный
+  стиль proof-section от saas-landing (Apache-2.0). Текстовые лого с opacity.
+display_name_ru: Полоса логотипов — компании-клиенты в ряд
+id: ru-trust-07-partner-logos
+layout_pattern: centered
+layout_summary_ru: Центрированная полоса с лейблом и 5 текстовыми логотипами в ряд.
+  Opacity 55% создаёт ненавязчивый эффект. Mobile — wrap в несколько строк.
 recommended_styles_ru:
 - Minimalism & Swiss Style
 - Corporate Clean
 - Flat Design 2.0
+ru_market: true
+slots:
+- max_chars: 60
+  name: section-label
+  required: false
+  type: text
+- max_chars: 40
+  name: logo-1
+  required: true
+  type: text
+- max_chars: 40
+  name: logo-2
+  required: false
+  type: text
+- max_chars: 40
+  name: logo-3
+  required: false
+  type: text
+- max_chars: 40
+  name: logo-4
+  required: false
+  type: text
+- max_chars: 40
+  name: logo-5
+  required: false
+  type: text
+source: opendesign
+source_attribution: 'github.com/nexu-io/open-design: design-templates/saas-landing
+  (Apache-2.0)'
+type: guarantees
+use_cases:
+- services
+- b2c
+- local

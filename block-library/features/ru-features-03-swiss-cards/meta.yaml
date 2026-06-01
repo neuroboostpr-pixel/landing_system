@@ -1,22 +1,59 @@
-id: ru-features-03-swiss-cards
-category: features
-ru_market: true
-use_cases: [services, b2c, local]
-description: "Этапы/преимущества в 2×2 карточках с цветным акцентом в швейцарском брутальном стиле. Нумерованные, разноцветные."
-display_name_ru: "🎨 Фичи — 4 карточки швейцарский стиль"
-layout_summary_ru: "4 карточки 2×2, каждая с номером, заголовком и текстом. Акцентные цвета: белый, розовый, жёлтый, зелёный. Строгая рамка, box-shadow."
-recommended_styles_ru: ["Brutalism", "Swiss Design"]
-slots:
-  - {type: text, name: headline, max_chars: 60, required: true}
-  - {type: text, name: card-1-title, max_chars: 40, required: true}
-  - {type: text, name: card-1-text, max_chars: 160, required: true}
-  - {type: text, name: card-2-title, max_chars: 40, required: true}
-  - {type: text, name: card-2-text, max_chars: 160, required: true}
-  - {type: text, name: card-3-title, max_chars: 40, required: true}
-  - {type: text, name: card-3-text, max_chars: 160, required: true}
-  - {type: text, name: card-4-title, max_chars: 40, required: true}
-  - {type: text, name: card-4-text, max_chars: 160, required: true}
-conversion_notes: "Нумерация создаёт ощущение системности и процесса. Цвета помогают запомнить этапы. Швейцарский стиль = доверие через порядок."
-source: opendesign
-source_attribution: "/tmp/open-design/skills/swiss-creative-mode-template/example.html"
+category: Content
+conversion_notes: Нумерация создаёт ощущение системности и процесса. Цвета помогают
+  запомнить этапы. Швейцарский стиль = доверие через порядок.
 created: 2026-05-13
+description: Этапы/преимущества в 2×2 карточках с цветным акцентом в швейцарском брутальном
+  стиле. Нумерованные, разноцветные.
+display_name_ru: 🎨 Фичи — 4 карточки швейцарский стиль
+id: ru-features-03-swiss-cards
+layout_pattern: grid-3
+layout_summary_ru: '4 карточки 2×2, каждая с номером, заголовком и текстом. Акцентные
+  цвета: белый, розовый, жёлтый, зелёный. Строгая рамка, box-shadow.'
+recommended_styles_ru:
+- Brutalism
+- Swiss Design
+ru_market: true
+slots:
+- max_chars: 60
+  name: headline
+  required: true
+  type: text
+- max_chars: 40
+  name: card-1-title
+  required: true
+  type: text
+- max_chars: 160
+  name: card-1-text
+  required: true
+  type: text
+- max_chars: 40
+  name: card-2-title
+  required: true
+  type: text
+- max_chars: 160
+  name: card-2-text
+  required: true
+  type: text
+- max_chars: 40
+  name: card-3-title
+  required: true
+  type: text
+- max_chars: 160
+  name: card-3-text
+  required: true
+  type: text
+- max_chars: 40
+  name: card-4-title
+  required: true
+  type: text
+- max_chars: 160
+  name: card-4-text
+  required: true
+  type: text
+source: opendesign
+source_attribution: /tmp/open-design/skills/swiss-creative-mode-template/example.html
+type: features
+use_cases:
+- services
+- b2c
+- local

@@ -1,20 +1,23 @@
-id: header-minimal-split-project21993216-tild-0
-category: header
-display_name_ru: "Компактная верхняя навигация с логотипом, пунктами меню, контактами и яркой кноп"
-description: "Компактная верхняя навигация с логотипом, пунктами меню, контактами и яркой кнопкой действия."
-style_mood: minimal
-layout_pattern: split
-ru_market: true
+category: Navigation
+description: Компактная верхняя навигация с логотипом, пунктами меню, контактами и
+  яркой кнопкой действия.
+display_name_ru: Компактная верхняя навигация с логотипом, пунктами меню, контактами
+  и яркой кноп
 has_animation: false
-niches_suitable:
-  - services
-  - ecommerce
-  - b2b-saas
-slots:
-  - type: text
-    name: heading
-    required: true
+id: header-minimal-split-project21993216-tild-0
 imported:
-  source_url: "https://project21993216.tilda.ws/"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://project21993216.tilda.ws/
+layout_pattern: split
+niches_suitable:
+- services
+- ecommerce
+- b2b-saas
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: minimal
+type: header

@@ -1,12 +1,12 @@
-id: team-001
-type: team
-category: team
-layout_pattern: cinematic
+category: Gallery
+created: '2026-06-01'
 display_name_ru: 'team: cinematic'
+has_bg_image: false
+id: team-001
+layout_pattern: cinematic
+signature: team|cinematic|[content]|bg:false
 slots:
 - name: content
   type: text
-has_bg_image: false
-signature: team|cinematic|[content]|bg:false
 source: cleaned
-created: '2026-06-01'
+type: team

@@ -1,20 +1,23 @@
-id: trust-minimal-grid-4-zilant-group-8
-category: trust
-display_name_ru: "Горизонтальная полоса небольших логотипов на большом белом поле усиливает довери"
-description: "Горизонтальная полоса небольших логотипов на большом белом поле усиливает доверие к услуге."
-style_mood: minimal
-layout_pattern: grid-4
-ru_market: true
+category: Trust
+description: Горизонтальная полоса небольших логотипов на большом белом поле усиливает
+  доверие к услуге.
+display_name_ru: Горизонтальная полоса небольших логотипов на большом белом поле усиливает
+  довери
 has_animation: false
-niches_suitable:
-  - services
-  - b2b-saas
-  - education
-slots:
-  - type: text
-    name: heading
-    required: true
+id: trust-minimal-grid-4-zilant-group-8
 imported:
-  source_url: "https://zilant.group/"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://zilant.group/
+layout_pattern: grid-4
+niches_suitable:
+- services
+- b2b-saas
+- education
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: minimal
+type: guarantees

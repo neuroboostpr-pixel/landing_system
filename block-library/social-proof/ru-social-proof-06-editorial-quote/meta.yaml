@@ -1,38 +1,91 @@
+category: Social Proof
+conversion_notes: Засечный шрифт цитаты создаёт доверие и редакционную атмосферу.
+  Список партнёров добавляет B2B-авторитетность. Использовать реальные цитаты с конкретными
+  результатами.
+created: '2026-05-13'
+description: Редакционная цитата в засечном шрифте с фото автора, инициалами-аватаром
+  и блоком логотипов партнёров. Стиль testimonial-section от open-design-landing.
+display_name_ru: Редакционная цитата — засечный шрифт + партнёры
 id: ru-social-proof-06-editorial-quote
-category: social-proof
+layout_pattern: grid-4
+layout_summary_ru: Двухколоночный layout (цитата + автор + партнёры слева, фото справа).
+  Нумерация раздела в стиле roman-цифр. Курсивный засечный шрифт для цитаты. Mobile
+  — стек.
+recommended_styles_ru:
+- Editorial & Magazine Style
+- Minimalism & Swiss Style
 ru_market: true
+slots:
+- max_chars: 10
+  name: section-num
+  required: false
+  type: text
+- max_chars: 40
+  name: section-label
+  required: false
+  type: text
+- max_chars: 6
+  name: section-index
+  required: false
+  type: text
+- max_chars: 50
+  name: kicker
+  required: false
+  type: text
+- max_chars: 280
+  name: quote
+  required: true
+  type: text
+- max_chars: 3
+  name: author-initial
+  required: false
+  type: text
+- max_chars: 60
+  name: author-name
+  required: true
+  type: text
+- max_chars: 80
+  name: author-role
+  required: true
+  type: text
+- max_chars: 50
+  name: partners-label
+  required: false
+  type: text
+- max_chars: 40
+  name: partner-1
+  required: false
+  type: text
+- max_chars: 30
+  name: partner-1-role
+  required: false
+  type: text
+- max_chars: 40
+  name: partner-2
+  required: false
+  type: text
+- max_chars: 30
+  name: partner-2-role
+  required: false
+  type: text
+- max_chars: 40
+  name: partner-3
+  required: false
+  type: text
+- max_chars: 30
+  name: partner-3-role
+  required: false
+  type: text
+- mobile_ratio: skip
+  name: testimonial-image
+  ratio: '4:5'
+  required: false
+  type: photo
+source: opendesign
+source_attribution: 'github.com/nexu-io/open-design: design-templates/open-design-landing
+  (Apache-2.0)'
+type: logos
 use_cases:
 - services
 - b2c
 - local
-description: 'Редакционная цитата в засечном шрифте с фото автора, инициалами-аватаром
-  и блоком логотипов партнёров. Стиль testimonial-section от open-design-landing.'
-display_name_ru: Редакционная цитата — засечный шрифт + партнёры
-layout_summary_ru: Двухколоночный layout (цитата + автор + партнёры слева, фото справа).
-  Нумерация раздела в стиле roman-цифр. Курсивный засечный шрифт для цитаты. Mobile — стек.
-slots:
-- {type: text, name: section-num, max_chars: 10, required: false}
-- {type: text, name: section-label, max_chars: 40, required: false}
-- {type: text, name: section-index, max_chars: 6, required: false}
-- {type: text, name: kicker, max_chars: 50, required: false}
-- {type: text, name: quote, max_chars: 280, required: true}
-- {type: text, name: author-initial, max_chars: 3, required: false}
-- {type: text, name: author-name, max_chars: 60, required: true}
-- {type: text, name: author-role, max_chars: 80, required: true}
-- {type: text, name: partners-label, max_chars: 50, required: false}
-- {type: text, name: partner-1, max_chars: 40, required: false}
-- {type: text, name: partner-1-role, max_chars: 30, required: false}
-- {type: text, name: partner-2, max_chars: 40, required: false}
-- {type: text, name: partner-2-role, max_chars: 30, required: false}
-- {type: text, name: partner-3, max_chars: 40, required: false}
-- {type: text, name: partner-3-role, max_chars: 30, required: false}
-- {type: photo, name: testimonial-image, ratio: '4:5', mobile_ratio: 'skip', required: false}
-conversion_notes: Засечный шрифт цитаты создаёт доверие и редакционную атмосферу.
-  Список партнёров добавляет B2B-авторитетность. Использовать реальные цитаты с конкретными
-  результатами.
-source: opendesign
-source_attribution: 'github.com/nexu-io/open-design: design-templates/open-design-landing (Apache-2.0)'
-created: '2026-05-13'
-recommended_styles_ru:
-- Editorial & Magazine Style
-- Minimalism & Swiss Style

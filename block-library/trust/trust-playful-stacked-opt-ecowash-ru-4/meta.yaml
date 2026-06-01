@@ -1,19 +1,22 @@
-id: trust-playful-stacked-opt-ecowash-ru-4
-category: trust
-display_name_ru: "Яркий блок доверия с большим заголовком, несколькими метриками и крупной декорат"
-description: "Яркий блок доверия с большим заголовком, несколькими метриками и крупной декоративной графикой."
-style_mood: playful
-layout_pattern: stacked
-ru_market: true
+category: Trust
+description: Яркий блок доверия с большим заголовком, несколькими метриками и крупной
+  декоративной графикой.
+display_name_ru: Яркий блок доверия с большим заголовком, несколькими метриками и
+  крупной декорат
 has_animation: false
-niches_suitable:
-  - ecommerce
-  - services
-slots:
-  - type: text
-    name: heading
-    required: true
+id: trust-playful-stacked-opt-ecowash-ru-4
 imported:
-  source_url: "https://opt.ecowash.ru/"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://opt.ecowash.ru/
+layout_pattern: stacked
+niches_suitable:
+- ecommerce
+- services
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: playful
+type: guarantees

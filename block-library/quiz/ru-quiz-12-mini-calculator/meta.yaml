@@ -1,21 +1,58 @@
-id: ru-quiz-12-mini-calculator
-category: quiz
-ru_market: true
-use_cases: [services, b2c, local]
-description: "Мини-калькулятор стоимости внутри квиза: пользователь видит ориентировочную цену до отправки контактов."
-display_name_ru: "🧮 Квиз — мини-калькулятор стоимости"
-layout_summary_ru: "Несколько нативных radio/range без JS. Под вопросами — поле «Ваша стоимость: от X ₽». Статичное значение (диапазон по выбору). Калькуляция через CSS :checked."
-slots:
-  - {type: text, name: headline, max_chars: 100, required: true}
-  - {type: text, name: param-1-label, max_chars: 60, required: true}
-  - {type: text, name: param-1-opt-1, max_chars: 50, required: true}
-  - {type: text, name: param-1-opt-2, max_chars: 50, required: true}
-  - {type: text, name: param-2-label, max_chars: 60, required: false}
-  - {type: text, name: param-2-opt-1, max_chars: 50, required: false}
-  - {type: text, name: param-2-opt-2, max_chars: 50, required: false}
-  - {type: text, name: result-prefix, max_chars: 40, required: true}
-  - {type: text, name: cta-button, max_chars: 50, required: true}
-conversion_notes: "Показ ориентировочной цены мотивирует оставить контакт — человек хочет уточнить точную цифру. Источники: Marquiz (калькулятор), Skillbox (calculator quiz)."
-source: manual
-source_attribution: "marquiz.ru/blog/kak-otstroitsya-ot-konkurentov; skillbox.ru/media/marketing/chto-takoe-kvizy"
+category: Conversion
+conversion_notes: 'Показ ориентировочной цены мотивирует оставить контакт — человек
+  хочет уточнить точную цифру. Источники: Marquiz (калькулятор), Skillbox (calculator
+  quiz).'
 created: '2026-05-13'
+description: 'Мини-калькулятор стоимости внутри квиза: пользователь видит ориентировочную
+  цену до отправки контактов.'
+display_name_ru: 🧮 Квиз — мини-калькулятор стоимости
+id: ru-quiz-12-mini-calculator
+layout_pattern: centered
+layout_summary_ru: 'Несколько нативных radio/range без JS. Под вопросами — поле «Ваша
+  стоимость: от X ₽». Статичное значение (диапазон по выбору). Калькуляция через CSS
+  :checked.'
+ru_market: true
+slots:
+- max_chars: 100
+  name: headline
+  required: true
+  type: text
+- max_chars: 60
+  name: param-1-label
+  required: true
+  type: text
+- max_chars: 50
+  name: param-1-opt-1
+  required: true
+  type: text
+- max_chars: 50
+  name: param-1-opt-2
+  required: true
+  type: text
+- max_chars: 60
+  name: param-2-label
+  required: false
+  type: text
+- max_chars: 50
+  name: param-2-opt-1
+  required: false
+  type: text
+- max_chars: 50
+  name: param-2-opt-2
+  required: false
+  type: text
+- max_chars: 40
+  name: result-prefix
+  required: true
+  type: text
+- max_chars: 50
+  name: cta-button
+  required: true
+  type: text
+source: manual
+source_attribution: marquiz.ru/blog/kak-otstroitsya-ot-konkurentov; skillbox.ru/media/marketing/chto-takoe-kvizy
+type: lead-form
+use_cases:
+- services
+- b2c
+- local

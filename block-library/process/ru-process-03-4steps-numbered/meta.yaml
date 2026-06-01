@@ -1,33 +1,69 @@
+category: Content
+conversion_notes: Ячейки с бордером создают ощущение таблицы/структуры — надёжно для
+  B2B. Иллюстрации (placeholder) делают блок визуальнее. Четыре шага = оптимум.
+created: '2026-05-13'
+description: Четыре шага в сетке с бордерами между ячейками, иллюстрациями и акцентными
+  числами 01–04. Стиль method-grid от open-design-landing (Apache-2.0).
+display_name_ru: Процесс — 4 шага в сетке с бордерами и иллюстрациями
 id: ru-process-03-4steps-numbered
-category: process
+layout_pattern: centered
+layout_summary_ru: Двухчастный header (заголовок слева, подзаголовок справа), затем
+  сетка 4×1 ячеек с бордером между ними. Иллюстрация + акцентное число + заголовок
+  + описание. Mobile — сетка 2×2.
+recommended_styles_ru:
+- Editorial & Magazine Style
+- Minimalism & Swiss Style
 ru_market: true
+slots:
+- max_chars: 50
+  name: kicker
+  required: false
+  type: text
+- max_chars: 70
+  name: headline
+  required: true
+  type: text
+- max_chars: 220
+  name: subhead
+  required: false
+  type: text
+- max_chars: 40
+  name: step-1-title
+  required: true
+  type: text
+- max_chars: 160
+  name: step-1-desc
+  required: true
+  type: text
+- max_chars: 40
+  name: step-2-title
+  required: true
+  type: text
+- max_chars: 160
+  name: step-2-desc
+  required: true
+  type: text
+- max_chars: 40
+  name: step-3-title
+  required: true
+  type: text
+- max_chars: 160
+  name: step-3-desc
+  required: true
+  type: text
+- max_chars: 40
+  name: step-4-title
+  required: true
+  type: text
+- max_chars: 160
+  name: step-4-desc
+  required: true
+  type: text
+source: opendesign
+source_attribution: 'github.com/nexu-io/open-design: design-templates/open-design-landing
+  (Apache-2.0)'
+type: process
 use_cases:
 - services
 - b2c
 - local
-description: 'Четыре шага в сетке с бордерами между ячейками, иллюстрациями и акцентными
-  числами 01–04. Стиль method-grid от open-design-landing (Apache-2.0).'
-display_name_ru: Процесс — 4 шага в сетке с бордерами и иллюстрациями
-layout_summary_ru: Двухчастный header (заголовок слева, подзаголовок справа), затем
-  сетка 4×1 ячеек с бордером между ними. Иллюстрация + акцентное число + заголовок + описание.
-  Mobile — сетка 2×2.
-slots:
-- {type: text, name: kicker, max_chars: 50, required: false}
-- {type: text, name: headline, max_chars: 70, required: true}
-- {type: text, name: subhead, max_chars: 220, required: false}
-- {type: text, name: step-1-title, max_chars: 40, required: true}
-- {type: text, name: step-1-desc, max_chars: 160, required: true}
-- {type: text, name: step-2-title, max_chars: 40, required: true}
-- {type: text, name: step-2-desc, max_chars: 160, required: true}
-- {type: text, name: step-3-title, max_chars: 40, required: true}
-- {type: text, name: step-3-desc, max_chars: 160, required: true}
-- {type: text, name: step-4-title, max_chars: 40, required: true}
-- {type: text, name: step-4-desc, max_chars: 160, required: true}
-conversion_notes: Ячейки с бордером создают ощущение таблицы/структуры — надёжно
-  для B2B. Иллюстрации (placeholder) делают блок визуальнее. Четыре шага = оптимум.
-source: opendesign
-source_attribution: 'github.com/nexu-io/open-design: design-templates/open-design-landing (Apache-2.0)'
-created: '2026-05-13'
-recommended_styles_ru:
-- Editorial & Magazine Style
-- Minimalism & Swiss Style

@@ -1,20 +1,40 @@
+category: Conversion
+conversion_notes: 'Бесплатный шаг снижает барьер входа. Примеры: бесплатное занятие,
+  каталог, чек-лист, квиз, бонус (книга, стр. 10–13). CTA не ''Купить'', а ''Получить''.'
+created: '2026-05-13'
+description: 'CTA лид-магнита: крупный заголовок ''Получите бесплатно'', описание
+  PDF/чек-листа/консультации, поле телефона и кнопка. Легкий первый шаг.'
+display_name_ru: 🎁 Лид-магнит — получите бесплатно
 id: ru-cta-04-lead-magnet
-category: cta
+layout_pattern: split
+layout_summary_ru: 'Светлый блок: крупный заголовок + описание бесплатного материала
+  слева, поле телефона + кнопка ''Получить'' справа. На mobile — вертикальный stack.'
 ru_market: true
+slots:
+- max_chars: 60
+  name: freebie-title
+  required: true
+  type: text
+- max_chars: 200
+  name: freebie-description
+  required: true
+  type: text
+- max_chars: 20
+  name: phone-input
+  required: true
+  type: text
+- default_text: Получить бесплатно
+  name: primary-cta
+  required: true
+  type: cta
+- max_chars: 200
+  name: agreement-text
+  required: false
+  type: text
+source: manual
+source_attribution: PDF Как создать сайт-шедевр, страницы 10–13
+type: cta
 use_cases:
 - services
 - b2c
 - local
-description: "CTA лид-магнита: крупный заголовок 'Получите бесплатно', описание PDF/чек-листа/консультации, поле телефона и кнопка. Легкий первый шаг."
-display_name_ru: "🎁 Лид-магнит — получите бесплатно"
-layout_summary_ru: "Светлый блок: крупный заголовок + описание бесплатного материала слева, поле телефона + кнопка 'Получить' справа. На mobile — вертикальный stack."
-slots:
-  - {type: text, name: freebie-title, max_chars: 60, required: true}
-  - {type: text, name: freebie-description, max_chars: 200, required: true}
-  - {type: text, name: phone-input, max_chars: 20, required: true}
-  - {type: cta, name: primary-cta, default_text: "Получить бесплатно", required: true}
-  - {type: text, name: agreement-text, max_chars: 200, required: false}
-conversion_notes: "Бесплатный шаг снижает барьер входа. Примеры: бесплатное занятие, каталог, чек-лист, квиз, бонус (книга, стр. 10–13). CTA не 'Купить', а 'Получить'."
-source: manual
-source_attribution: "PDF Как создать сайт-шедевр, страницы 10–13"
-created: '2026-05-13'

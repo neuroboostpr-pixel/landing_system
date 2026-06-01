@@ -1,19 +1,22 @@
-id: features-technical-split-sskrusgun-ru-6
-category: features
-display_name_ru: "Комбинация промо-карточки, списка направлений и ссылок на разные форматы услуги."
-description: "Комбинация промо-карточки, списка направлений и ссылок на разные форматы услуги."
-style_mood: technical
-layout_pattern: split
-ru_market: true
+category: Content
+description: Комбинация промо-карточки, списка направлений и ссылок на разные форматы
+  услуги.
+display_name_ru: Комбинация промо-карточки, списка направлений и ссылок на разные
+  форматы услуги.
 has_animation: false
-niches_suitable:
-  - services
-  - education
-slots:
-  - type: text
-    name: heading
-    required: true
+id: features-technical-split-sskrusgun-ru-6
 imported:
-  source_url: "https://sskrusgun.ru/"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://sskrusgun.ru/
+layout_pattern: split
+niches_suitable:
+- services
+- education
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: technical
+type: features

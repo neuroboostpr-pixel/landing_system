@@ -1,26 +1,64 @@
+category: FAQ
+conversion_notes: Ответ на вопрос 'Почему вы, а не конкуренты?' — снимает последний
+  барьер. Конкретные цифры в ответах убедительнее общих слов (книга, стр. 35).
+created: '2026-05-13'
+description: FAQ в стиле 'Почему именно мы?' — 5 возражений о цене, качестве, сроках
+  с конкретными ответами. Закрывает финальные сомнения перед заявкой.
+display_name_ru: ❓ FAQ — Почему именно мы?
 id: ru-faq-02-why-us
-category: faq
+layout_pattern: stacked
+layout_summary_ru: '5 вопросов-возражений в аккордеоне: цена, качество, сроки, гарантии,
+  отличия от конкурентов. Ответы с конкретными цифрами и фактами, без воды.'
 ru_market: true
+slots:
+- max_chars: 60
+  name: headline
+  required: true
+  type: text
+- max_chars: 100
+  name: faq-1-q
+  required: true
+  type: text
+- max_chars: 400
+  name: faq-1-a
+  required: true
+  type: text
+- max_chars: 100
+  name: faq-2-q
+  required: true
+  type: text
+- max_chars: 400
+  name: faq-2-a
+  required: true
+  type: text
+- max_chars: 100
+  name: faq-3-q
+  required: true
+  type: text
+- max_chars: 400
+  name: faq-3-a
+  required: true
+  type: text
+- max_chars: 100
+  name: faq-4-q
+  required: false
+  type: text
+- max_chars: 400
+  name: faq-4-a
+  required: false
+  type: text
+- max_chars: 100
+  name: faq-5-q
+  required: false
+  type: text
+- max_chars: 400
+  name: faq-5-a
+  required: false
+  type: text
+source: manual
+source_attribution: PDF Как создать сайт-шедевр, страница 35
+type: faq
 use_cases:
 - services
 - b2c
 - local
-description: "FAQ в стиле 'Почему именно мы?' — 5 возражений о цене, качестве, сроках с конкретными ответами. Закрывает финальные сомнения перед заявкой."
-display_name_ru: "❓ FAQ — Почему именно мы?"
-layout_summary_ru: "5 вопросов-возражений в аккордеоне: цена, качество, сроки, гарантии, отличия от конкурентов. Ответы с конкретными цифрами и фактами, без воды."
-slots:
-  - {type: text, name: headline, max_chars: 60, required: true}
-  - {type: text, name: faq-1-q, max_chars: 100, required: true}
-  - {type: text, name: faq-1-a, max_chars: 400, required: true}
-  - {type: text, name: faq-2-q, max_chars: 100, required: true}
-  - {type: text, name: faq-2-a, max_chars: 400, required: true}
-  - {type: text, name: faq-3-q, max_chars: 100, required: true}
-  - {type: text, name: faq-3-a, max_chars: 400, required: true}
-  - {type: text, name: faq-4-q, max_chars: 100, required: false}
-  - {type: text, name: faq-4-a, max_chars: 400, required: false}
-  - {type: text, name: faq-5-q, max_chars: 100, required: false}
-  - {type: text, name: faq-5-a, max_chars: 400, required: false}
-conversion_notes: "Ответ на вопрос 'Почему вы, а не конкуренты?' — снимает последний барьер. Конкретные цифры в ответах убедительнее общих слов (книга, стр. 35)."
-source: manual
-source_attribution: "PDF Как создать сайт-шедевр, страница 35"
-created: '2026-05-13'

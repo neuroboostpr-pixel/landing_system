@@ -1,20 +1,23 @@
-id: hero-cinematic-split-romanmelnikov-tilda-1
-category: hero
-display_name_ru: "Крупный первый экран с контрастным заголовком, правым текстовым блоком и монохро"
-description: "Крупный первый экран с контрастным заголовком, правым текстовым блоком и монохромной сценой внизу."
-style_mood: cinematic
-layout_pattern: split
-ru_market: true
+category: Hero
+description: Крупный первый экран с контрастным заголовком, правым текстовым блоком
+  и монохромной сценой внизу.
+display_name_ru: Крупный первый экран с контрастным заголовком, правым текстовым блоком
+  и монохро
 has_animation: false
-niches_suitable:
-  - services
-  - luxury
-  - education
-slots:
-  - type: text
-    name: heading
-    required: true
+id: hero-cinematic-split-romanmelnikov-tilda-1
 imported:
-  source_url: "https://romanmelnikov.tilda.ws/"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://romanmelnikov.tilda.ws/
+layout_pattern: split
+niches_suitable:
+- services
+- luxury
+- education
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: cinematic
+type: hero

@@ -1,12 +1,12 @@
-id: contacts-001
-type: contacts
-category: contacts
-layout_pattern: brutalist
+category: Footer
+created: '2026-06-01'
 display_name_ru: 'contacts: brutalist'
+has_bg_image: false
+id: contacts-001
+layout_pattern: brutalist
+signature: contacts|brutalist|[content]|bg:false
 slots:
 - name: content
   type: text
-has_bg_image: false
-signature: contacts|brutalist|[content]|bg:false
 source: cleaned
-created: '2026-06-01'
+type: contacts

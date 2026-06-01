@@ -1,20 +1,23 @@
-id: trust-editorial-stacked-portfolio-kdm1-ru-12
-category: trust
-display_name_ru: "Контрастный доверительный блок с большим заголовком, светлой вставкой и коротким"
-description: "Контрастный доверительный блок с большим заголовком, светлой вставкой и короткими аргументами."
-style_mood: editorial
-layout_pattern: stacked
-ru_market: true
+category: Trust
+description: Контрастный доверительный блок с большим заголовком, светлой вставкой
+  и короткими аргументами.
+display_name_ru: Контрастный доверительный блок с большим заголовком, светлой вставкой
+  и коротким
 has_animation: false
-niches_suitable:
-  - services
-  - education
-  - b2b-saas
-slots:
-  - type: text
-    name: heading
-    required: true
+id: trust-editorial-stacked-portfolio-kdm1-ru-12
 imported:
-  source_url: "https://portfolio.kdm1.ru/upload/iblock/b31/i0qylig13hzo7ow4qcpia0qhtn3i87pk/Onlai_n_shkola-Dmitriya-Vykhodtseva.pdf"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://portfolio.kdm1.ru/upload/iblock/b31/i0qylig13hzo7ow4qcpia0qhtn3i87pk/Onlai_n_shkola-Dmitriya-Vykhodtseva.pdf
+layout_pattern: stacked
+niches_suitable:
+- services
+- education
+- b2b-saas
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: editorial
+type: guarantees

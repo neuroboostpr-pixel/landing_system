@@ -1,20 +1,23 @@
-id: social-proof-corporate-cards-medregistrant-ru-6
-category: social-proof
-display_name_ru: "Карусель карточек клиентов с логотипами, краткими описаниями и кнопками действия"
-description: "Карусель карточек клиентов с логотипами, краткими описаниями и кнопками действия."
-style_mood: corporate
-layout_pattern: cards
-ru_market: true
+category: Social Proof
+description: Карусель карточек клиентов с логотипами, краткими описаниями и кнопками
+  действия.
+display_name_ru: Карусель карточек клиентов с логотипами, краткими описаниями и кнопками
+  действия
 has_animation: true
-niches_suitable:
-  - services
-  - medical
-  - b2b-saas
-slots:
-  - type: text
-    name: heading
-    required: true
+id: social-proof-corporate-cards-medregistrant-ru-6
 imported:
-  source_url: "https://medregistrant.ru/"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://medregistrant.ru/
+layout_pattern: cards
+niches_suitable:
+- services
+- medical
+- b2b-saas
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: corporate
+type: logos

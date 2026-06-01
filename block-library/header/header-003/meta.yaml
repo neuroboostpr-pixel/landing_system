@@ -1,12 +1,12 @@
-id: header-003
-type: header
-category: header
-layout_pattern: minimal
+category: Navigation
+created: '2026-06-01'
 display_name_ru: 'header: minimal'
+has_bg_image: false
+id: header-003
+layout_pattern: minimal
+signature: header|minimal|[content]|bg:false
 slots:
 - name: content
   type: text
-has_bg_image: false
-signature: header|minimal|[content]|bg:false
 source: cleaned
-created: '2026-06-01'
+type: header

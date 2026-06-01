@@ -1,20 +1,22 @@
-id: gallery-playful-grid-4-project21993216-tild-4
-category: gallery
-display_name_ru: "Витрина вкусов или вариантов с круглыми предметными изображениями и подписями."
-description: "Витрина вкусов или вариантов с круглыми предметными изображениями и подписями."
-style_mood: playful
-layout_pattern: grid-4
-ru_market: true
+category: Gallery
+description: Витрина вкусов или вариантов с круглыми предметными изображениями и подписями.
+display_name_ru: Витрина вкусов или вариантов с круглыми предметными изображениями
+  и подписями.
 has_animation: false
-niches_suitable:
-  - ecommerce
-  - services
-  - luxury
-slots:
-  - type: text
-    name: heading
-    required: true
+id: gallery-playful-grid-4-project21993216-tild-4
 imported:
-  source_url: "https://project21993216.tilda.ws/"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://project21993216.tilda.ws/
+layout_pattern: grid-4
+niches_suitable:
+- ecommerce
+- services
+- luxury
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: playful
+type: gallery

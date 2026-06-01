@@ -1,17 +1,40 @@
-id: ru-quiz-10-loader-analyzing
-category: quiz
-ru_market: true
-use_cases: [services, b2c, local]
-description: "Экран «анализируем ваши ответы...» — визуальная пауза перед лид-формой, повышает доверие и конверсию."
-display_name_ru: "⏳ Квиз — экран анализа ответов (лоадер)"
-layout_summary_ru: "Анимированный прогресс-бар CSS + текст «Подбираем варианты для вас». Без JS. Показывается 2-3 секунды перед лид-формой. Мощный конверсионный паттерн."
-slots:
-  - {type: text, name: headline, max_chars: 80, required: true}
-  - {type: text, name: subheadline, max_chars: 150, required: false}
-  - {type: text, name: step-1-text, max_chars: 60, required: false}
-  - {type: text, name: step-2-text, max_chars: 60, required: false}
-  - {type: text, name: step-3-text, max_chars: 60, required: false}
-conversion_notes: "Лоадер создаёт ощущение персонального анализа и повышает ценность результата. Конверсия к лид-форме выше на 15-30%. Источник: практика Marquiz, Tilda."
-source: manual
-source_attribution: "marquiz.ru/blog/kak-otstroitsya-ot-konkurentov; tilda.education"
+category: Conversion
+conversion_notes: 'Лоадер создаёт ощущение персонального анализа и повышает ценность
+  результата. Конверсия к лид-форме выше на 15-30%. Источник: практика Marquiz, Tilda.'
 created: '2026-05-13'
+description: Экран «анализируем ваши ответы...» — визуальная пауза перед лид-формой,
+  повышает доверие и конверсию.
+display_name_ru: ⏳ Квиз — экран анализа ответов (лоадер)
+id: ru-quiz-10-loader-analyzing
+layout_pattern: centered
+layout_summary_ru: Анимированный прогресс-бар CSS + текст «Подбираем варианты для
+  вас». Без JS. Показывается 2-3 секунды перед лид-формой. Мощный конверсионный паттерн.
+ru_market: true
+slots:
+- max_chars: 80
+  name: headline
+  required: true
+  type: text
+- max_chars: 150
+  name: subheadline
+  required: false
+  type: text
+- max_chars: 60
+  name: step-1-text
+  required: false
+  type: text
+- max_chars: 60
+  name: step-2-text
+  required: false
+  type: text
+- max_chars: 60
+  name: step-3-text
+  required: false
+  type: text
+source: manual
+source_attribution: marquiz.ru/blog/kak-otstroitsya-ot-konkurentov; tilda.education
+type: lead-form
+use_cases:
+- services
+- b2c
+- local

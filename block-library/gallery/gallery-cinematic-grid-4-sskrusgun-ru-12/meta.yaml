@@ -1,19 +1,22 @@
-id: gallery-cinematic-grid-4-sskrusgun-ru-12
-category: gallery
-display_name_ru: "Фотоколлаж в плотной сетке показывает атмосферу процесса через реальные динамичн"
-description: "Фотоколлаж в плотной сетке показывает атмосферу процесса через реальные динамичные кадры."
-style_mood: cinematic
-layout_pattern: grid-4
-ru_market: true
+category: Gallery
+description: Фотоколлаж в плотной сетке показывает атмосферу процесса через реальные
+  динамичные кадры.
+display_name_ru: Фотоколлаж в плотной сетке показывает атмосферу процесса через реальные
+  динамичн
 has_animation: false
-niches_suitable:
-  - services
-  - education
-slots:
-  - type: text
-    name: heading
-    required: true
+id: gallery-cinematic-grid-4-sskrusgun-ru-12
 imported:
-  source_url: "https://sskrusgun.ru/"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://sskrusgun.ru/
+layout_pattern: grid-4
+niches_suitable:
+- services
+- education
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: cinematic
+type: gallery

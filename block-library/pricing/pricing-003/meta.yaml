@@ -1,12 +1,12 @@
-id: pricing-003
-type: pricing
-category: pricing
-layout_pattern: split
+category: Pricing
+created: '2026-06-01'
 display_name_ru: 'pricing: split'
+has_bg_image: false
+id: pricing-003
+layout_pattern: split
+signature: pricing|split|[content]|bg:false
 slots:
 - name: content
   type: text
-has_bg_image: false
-signature: pricing|split|[content]|bg:false
 source: cleaned
-created: '2026-06-01'
+type: pricing

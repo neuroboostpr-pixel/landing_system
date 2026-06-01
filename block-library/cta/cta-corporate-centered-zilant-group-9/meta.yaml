@@ -1,21 +1,24 @@
-id: cta-corporate-centered-zilant-group-9
-category: cta
-display_name_ru: "Финальный призыв с крупным заголовком, коротким текстом, красной кнопкой и размы"
-description: "Финальный призыв с крупным заголовком, коротким текстом, красной кнопкой и размытым фоновым образом."
-style_mood: corporate
-layout_pattern: centered
-ru_market: true
+category: Conversion
+description: Финальный призыв с крупным заголовком, коротким текстом, красной кнопкой
+  и размытым фоновым образом.
+display_name_ru: Финальный призыв с крупным заголовком, коротким текстом, красной
+  кнопкой и размы
 has_animation: false
-niches_suitable:
-  - services
-  - premium-auto
-  - luxury
-  - education
-slots:
-  - type: text
-    name: heading
-    required: true
+id: cta-corporate-centered-zilant-group-9
 imported:
-  source_url: "https://zilant.group/"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://zilant.group/
+layout_pattern: centered
+niches_suitable:
+- services
+- premium-auto
+- luxury
+- education
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: corporate
+type: cta

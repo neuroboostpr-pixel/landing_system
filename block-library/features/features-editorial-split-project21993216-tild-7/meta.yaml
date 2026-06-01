@@ -1,20 +1,23 @@
-id: features-editorial-split-project21993216-tild-7
-category: features
-display_name_ru: "Раздел с сильным заголовком, текстовым списком слева и крупным предметным фото с"
-description: "Раздел с сильным заголовком, текстовым списком слева и крупным предметным фото справа."
-style_mood: editorial
-layout_pattern: split
-ru_market: true
+category: Content
+description: Раздел с сильным заголовком, текстовым списком слева и крупным предметным
+  фото справа.
+display_name_ru: Раздел с сильным заголовком, текстовым списком слева и крупным предметным
+  фото с
 has_animation: false
-niches_suitable:
-  - ecommerce
-  - tech
-  - services
-slots:
-  - type: text
-    name: heading
-    required: true
+id: features-editorial-split-project21993216-tild-7
 imported:
-  source_url: "https://project21993216.tilda.ws/"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://project21993216.tilda.ws/
+layout_pattern: split
+niches_suitable:
+- ecommerce
+- tech
+- services
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: editorial
+type: features

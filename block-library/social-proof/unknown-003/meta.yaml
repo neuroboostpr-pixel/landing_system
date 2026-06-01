@@ -1,12 +1,12 @@
-id: unknown-003
-type: unknown
-category: social-proof
-layout_pattern: cinematic
+category: Content
+created: '2026-06-01'
 display_name_ru: 'social-proof: cinematic'
+has_bg_image: false
+id: unknown-003
+layout_pattern: cinematic
+signature: unknown|cinematic|[content]|bg:false
 slots:
 - name: content
   type: text
-has_bg_image: false
-signature: unknown|cinematic|[content]|bg:false
 source: cleaned
-created: '2026-06-01'
+type: demo

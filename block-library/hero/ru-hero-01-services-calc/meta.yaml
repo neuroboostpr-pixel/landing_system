@@ -1,40 +1,42 @@
-id: ru-hero-01-services-calc
-category: hero
-ru_market: true
-use_cases:
-- services
+category: Hero
+conversion_notes: CTA контраст 7:1. Плашка 'от X ₽' в углу desktop, под subhead на
+  mobile. Sticky CTA после скролла за hero.
+created: 2026-05-12
 description: 'RU hero для услуг: фоновое фото объекта, оффер слева, кнопка ''Рассчитать
   стоимость'', плашка ''от X ₽'''
 display_name_ru: 🏗️ Услуги — фото фона + расчёт стоимости
+id: ru-hero-01-services-calc
+layout_pattern: centered
 layout_summary_ru: Полноэкранное фото объекта на фоне, оффер с подзаголовком слева,
   плашка 'от X ₽' и кнопка 'Рассчитать стоимость'. На mobile — вертикальный stack.
-slots:
-- type: photo
-  name: hero-bg
-  ratio: '16:9'
-  mobile_ratio: '9:16'
-  required: true
-- type: text
-  name: headline
-  max_chars: 60
-  required: true
-- type: text
-  name: subhead
-  max_chars: 120
-  required: false
-- type: text
-  name: price-tag
-  max_chars: 12
-  required: false
-- type: cta
-  name: primary-cta
-  default_text: Рассчитать стоимость
-  required: true
-conversion_notes: CTA контраст 7:1. Плашка 'от X ₽' в углу desktop, под subhead на
-  mobile. Sticky CTA после скролла за hero.
-source: manual
-source_attribution: ''
-created: 2026-05-12
 recommended_styles_ru:
 - Minimalism & Swiss Style
 - Flat Design 2.0
+ru_market: true
+slots:
+- mobile_ratio: '9:16'
+  name: hero-bg
+  ratio: '16:9'
+  required: true
+  type: photo
+- max_chars: 60
+  name: headline
+  required: true
+  type: text
+- max_chars: 120
+  name: subhead
+  required: false
+  type: text
+- max_chars: 12
+  name: price-tag
+  required: false
+  type: text
+- default_text: Рассчитать стоимость
+  name: primary-cta
+  required: true
+  type: cta
+source: manual
+source_attribution: ''
+type: hero
+use_cases:
+- services

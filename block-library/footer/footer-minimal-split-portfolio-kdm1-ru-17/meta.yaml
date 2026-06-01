@@ -1,20 +1,22 @@
-id: footer-minimal-split-portfolio-kdm1-ru-17
-category: footer
-display_name_ru: "Нижняя темная полоса с мелкими реквизитами, контактами и служебными ссылками."
-description: "Нижняя темная полоса с мелкими реквизитами, контактами и служебными ссылками."
-style_mood: minimal
-layout_pattern: split
-ru_market: true
+category: Footer
+description: Нижняя темная полоса с мелкими реквизитами, контактами и служебными ссылками.
+display_name_ru: Нижняя темная полоса с мелкими реквизитами, контактами и служебными
+  ссылками.
 has_animation: false
-niches_suitable:
-  - services
-  - education
-  - b2b-saas
-slots:
-  - type: text
-    name: heading
-    required: true
+id: footer-minimal-split-portfolio-kdm1-ru-17
 imported:
-  source_url: "https://portfolio.kdm1.ru/upload/iblock/b31/i0qylig13hzo7ow4qcpia0qhtn3i87pk/Onlai_n_shkola-Dmitriya-Vykhodtseva.pdf"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://portfolio.kdm1.ru/upload/iblock/b31/i0qylig13hzo7ow4qcpia0qhtn3i87pk/Onlai_n_shkola-Dmitriya-Vykhodtseva.pdf
+layout_pattern: split
+niches_suitable:
+- services
+- education
+- b2b-saas
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: minimal
+type: footer

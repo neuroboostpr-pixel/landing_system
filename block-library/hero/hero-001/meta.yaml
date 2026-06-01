@@ -1,12 +1,12 @@
-id: hero-001
-type: hero
-category: hero
-layout_pattern: brutalist
+category: Hero
+created: '2026-06-01'
 display_name_ru: 'hero: brutalist'
+has_bg_image: false
+id: hero-001
+layout_pattern: brutalist
+signature: hero|brutalist|[content]|bg:false
 slots:
 - name: content
   type: text
-has_bg_image: false
-signature: hero|brutalist|[content]|bg:false
 source: cleaned
-created: '2026-06-01'
+type: hero

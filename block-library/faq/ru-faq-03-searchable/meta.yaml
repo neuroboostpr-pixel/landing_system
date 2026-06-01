@@ -1,25 +1,71 @@
-id: ru-faq-03-searchable
-category: faq
-ru_market: true
-use_cases: [services, b2c, local]
-description: "FAQ с категорией-фильтрами и поиском по тексту. До 12 вопросов с сортировкой по разделам. Без JS-фреймворков."
-display_name_ru: "❓ FAQ с поиском и категориями"
-layout_summary_ru: "Поле поиска + кнопки-категории сверху, аккордеон-список снизу. Пользователь ищет сразу или фильтрует по разделу. Footer-CTA под списком."
-recommended_styles_ru: ["Minimalism & Swiss Style", "Flat Design 2.0"]
-slots:
-  - {type: text, name: headline, max_chars: 60, required: true}
-  - {type: text, name: subhead, max_chars: 120, required: false}
-  - {type: text, name: faq-cat-1, max_chars: 30, required: true}
-  - {type: text, name: faq-cat-2, max_chars: 30, required: false}
-  - {type: text, name: faq-cat-3, max_chars: 30, required: false}
-  - {type: text, name: faq-1-q, max_chars: 120, required: true}
-  - {type: text, name: faq-1-a, max_chars: 500, required: true}
-  - {type: text, name: faq-2-q, max_chars: 120, required: true}
-  - {type: text, name: faq-2-a, max_chars: 500, required: true}
-  - {type: text, name: faq-3-q, max_chars: 120, required: true}
-  - {type: text, name: faq-3-a, max_chars: 500, required: true}
-  - {type: cta, name: footer-cta, default_text: "Задать вопрос", required: false}
-conversion_notes: "Поиск снижает отказы у сомневающихся. Категории ускоряют навигацию. Footer-CTA ловит тех, кто не нашёл ответ."
-source: opendesign
-source_attribution: "/tmp/open-design/skills/faq-page/example.html"
+category: FAQ
+conversion_notes: Поиск снижает отказы у сомневающихся. Категории ускоряют навигацию.
+  Footer-CTA ловит тех, кто не нашёл ответ.
 created: 2026-05-13
+description: FAQ с категорией-фильтрами и поиском по тексту. До 12 вопросов с сортировкой
+  по разделам. Без JS-фреймворков.
+display_name_ru: ❓ FAQ с поиском и категориями
+id: ru-faq-03-searchable
+layout_pattern: stacked
+layout_summary_ru: Поле поиска + кнопки-категории сверху, аккордеон-список снизу.
+  Пользователь ищет сразу или фильтрует по разделу. Footer-CTA под списком.
+recommended_styles_ru:
+- Minimalism & Swiss Style
+- Flat Design 2.0
+ru_market: true
+slots:
+- max_chars: 60
+  name: headline
+  required: true
+  type: text
+- max_chars: 120
+  name: subhead
+  required: false
+  type: text
+- max_chars: 30
+  name: faq-cat-1
+  required: true
+  type: text
+- max_chars: 30
+  name: faq-cat-2
+  required: false
+  type: text
+- max_chars: 30
+  name: faq-cat-3
+  required: false
+  type: text
+- max_chars: 120
+  name: faq-1-q
+  required: true
+  type: text
+- max_chars: 500
+  name: faq-1-a
+  required: true
+  type: text
+- max_chars: 120
+  name: faq-2-q
+  required: true
+  type: text
+- max_chars: 500
+  name: faq-2-a
+  required: true
+  type: text
+- max_chars: 120
+  name: faq-3-q
+  required: true
+  type: text
+- max_chars: 500
+  name: faq-3-a
+  required: true
+  type: text
+- default_text: Задать вопрос
+  name: footer-cta
+  required: false
+  type: cta
+source: opendesign
+source_attribution: /tmp/open-design/skills/faq-page/example.html
+type: faq
+use_cases:
+- services
+- b2c
+- local

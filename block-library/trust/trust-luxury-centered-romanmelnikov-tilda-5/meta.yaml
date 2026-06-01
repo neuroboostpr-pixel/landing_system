@@ -1,20 +1,23 @@
-id: trust-luxury-centered-romanmelnikov-tilda-5
-category: trust
-display_name_ru: "Имиджевый блок с большим словом-заголовком, декоративной подписью и спокойной те"
-description: "Имиджевый блок с большим словом-заголовком, декоративной подписью и спокойной темной композицией."
-style_mood: luxury
-layout_pattern: centered
-ru_market: true
+category: Trust
+description: Имиджевый блок с большим словом-заголовком, декоративной подписью и спокойной
+  темной композицией.
+display_name_ru: Имиджевый блок с большим словом-заголовком, декоративной подписью
+  и спокойной те
 has_animation: false
-niches_suitable:
-  - luxury
-  - services
-  - education
-slots:
-  - type: text
-    name: heading
-    required: true
+id: trust-luxury-centered-romanmelnikov-tilda-5
 imported:
-  source_url: "https://romanmelnikov.tilda.ws/"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://romanmelnikov.tilda.ws/
+layout_pattern: centered
+niches_suitable:
+- luxury
+- services
+- education
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: luxury
+type: guarantees

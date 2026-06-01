@@ -1,20 +1,23 @@
-id: features-corporate-grid-3-opt-ecowash-ru-8
-category: features
-display_name_ru: "Блок преимуществ с шестью пронумерованными карточками и нижней полосой с призыво"
-description: "Блок преимуществ с шестью пронумерованными карточками и нижней полосой с призывом к действию."
-style_mood: corporate
-layout_pattern: grid-3
-ru_market: true
+category: Content
+description: Блок преимуществ с шестью пронумерованными карточками и нижней полосой
+  с призывом к действию.
+display_name_ru: Блок преимуществ с шестью пронумерованными карточками и нижней полосой
+  с призыво
 has_animation: false
-niches_suitable:
-  - services
-  - ecommerce
-  - b2b-saas
-slots:
-  - type: text
-    name: heading
-    required: true
+id: features-corporate-grid-3-opt-ecowash-ru-8
 imported:
-  source_url: "https://opt.ecowash.ru/"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://opt.ecowash.ru/
+layout_pattern: grid-3
+niches_suitable:
+- services
+- ecommerce
+- b2b-saas
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: corporate
+type: features

@@ -1,12 +1,12 @@
-id: features-001
-type: features
-category: features
-layout_pattern: brutalist
+category: Content
+created: '2026-06-01'
 display_name_ru: 'features: brutalist'
+has_bg_image: false
+id: features-001
+layout_pattern: brutalist
+signature: features|brutalist|[content]|bg:false
 slots:
 - name: content
   type: text
-has_bg_image: false
-signature: features|brutalist|[content]|bg:false
 source: cleaned
-created: '2026-06-01'
+type: features

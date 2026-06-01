@@ -1,26 +1,38 @@
+category: Trust
+conversion_notes: Засечный шрифт с bordered текстом создаёт ощущение ценностей и философии.
+  Идеально для "разрыва шаблона" между техническими блоками. Хорошо работает между
+  hero и features.
+created: '2026-05-13'
+description: 'Манифест-блок с засечным текстом, синей левой полосой и подписью: двухколоночный,
+  метка слева, цитата справа. Стиль kami-landing (Apache-2.0).'
+display_name_ru: Манифест — засечная цитата с левой полосой и подписью
 id: ru-trust-05-manifesto-text
-category: trust
+layout_pattern: centered
+layout_summary_ru: Двухколоночный layout (метка слева, текст справа). Засечный шрифт
+  Source Serif 4, синяя левая полоса, подпись с тире. Бежевый пергаментный фон. Mobile
+  — метка сверху, текст ниже.
+recommended_styles_ru:
+- Editorial & Magazine Style
+- Minimalism & Swiss Style
 ru_market: true
+slots:
+- max_chars: 50
+  name: section-label
+  required: false
+  type: text
+- max_chars: 500
+  name: manifesto-text
+  required: true
+  type: text
+- max_chars: 60
+  name: sig-text
+  required: false
+  type: text
+source: opendesign
+source_attribution: 'github.com/nexu-io/open-design: design-templates/kami-landing
+  (Apache-2.0)'
+type: guarantees
 use_cases:
 - services
 - b2c
 - local
-description: 'Манифест-блок с засечным текстом, синей левой полосой и подписью:
-  двухколоночный, метка слева, цитата справа. Стиль kami-landing (Apache-2.0).'
-display_name_ru: Манифест — засечная цитата с левой полосой и подписью
-layout_summary_ru: Двухколоночный layout (метка слева, текст справа). Засечный шрифт
-  Source Serif 4, синяя левая полоса, подпись с тире. Бежевый пергаментный фон.
-  Mobile — метка сверху, текст ниже.
-slots:
-- {type: text, name: section-label, max_chars: 50, required: false}
-- {type: text, name: manifesto-text, max_chars: 500, required: true}
-- {type: text, name: sig-text, max_chars: 60, required: false}
-conversion_notes: Засечный шрифт с bordered текстом создаёт ощущение ценностей и
-  философии. Идеально для "разрыва шаблона" между техническими блоками. Хорошо
-  работает между hero и features.
-source: opendesign
-source_attribution: 'github.com/nexu-io/open-design: design-templates/kami-landing (Apache-2.0)'
-created: '2026-05-13'
-recommended_styles_ru:
-- Editorial & Magazine Style
-- Minimalism & Swiss Style

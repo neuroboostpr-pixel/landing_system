@@ -1,20 +1,23 @@
-id: footer-corporate-grid-4-portfolio-kdm1-ru-8
-category: footer
-display_name_ru: "Синий футер с логотипом, контактными колонками, ссылками и компактной служебной "
-description: "Синий футер с логотипом, контактными колонками, ссылками и компактной служебной информацией."
-style_mood: corporate
-layout_pattern: grid-4
-ru_market: true
+category: Footer
+description: Синий футер с логотипом, контактными колонками, ссылками и компактной
+  служебной информацией.
+display_name_ru: 'Синий футер с логотипом, контактными колонками, ссылками и компактной
+  служебной '
 has_animation: false
-niches_suitable:
-  - services
-  - ecommerce
-  - tech
-slots:
-  - type: text
-    name: heading
-    required: true
+id: footer-corporate-grid-4-portfolio-kdm1-ru-8
 imported:
-  source_url: "https://portfolio.kdm1.ru/upload/iblock/c4c/ejaxky0hmu17f3t0aymzbkm7osq54n8x/Spetsodezhda-Siti.pdf"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://portfolio.kdm1.ru/upload/iblock/c4c/ejaxky0hmu17f3t0aymzbkm7osq54n8x/Spetsodezhda-Siti.pdf
+layout_pattern: grid-4
+niches_suitable:
+- services
+- ecommerce
+- tech
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: corporate
+type: footer

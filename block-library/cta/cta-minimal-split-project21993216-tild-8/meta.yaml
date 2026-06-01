@@ -1,20 +1,22 @@
-id: cta-minimal-split-project21993216-tild-8
-category: cta
-display_name_ru: "Короткий подтверждающий баннер с спокойным фоном и одной кнопкой действия."
-description: "Короткий подтверждающий баннер с спокойным фоном и одной кнопкой действия."
-style_mood: minimal
-layout_pattern: split
-ru_market: true
+category: Conversion
+description: Короткий подтверждающий баннер с спокойным фоном и одной кнопкой действия.
+display_name_ru: Короткий подтверждающий баннер с спокойным фоном и одной кнопкой
+  действия.
 has_animation: false
-niches_suitable:
-  - services
-  - b2b-saas
-  - education
-slots:
-  - type: text
-    name: heading
-    required: true
+id: cta-minimal-split-project21993216-tild-8
 imported:
-  source_url: "https://project21993216.tilda.ws/"
-  imported_at: "2026-05-16"
   import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://project21993216.tilda.ws/
+layout_pattern: split
+niches_suitable:
+- services
+- b2b-saas
+- education
+ru_market: true
+slots:
+- name: heading
+  required: true
+  type: text
+style_mood: minimal
+type: cta

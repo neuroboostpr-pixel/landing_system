@@ -1,12 +1,12 @@
-id: hero-003
-type: hero
-category: hero
-layout_pattern: split
+category: Hero
+created: '2026-06-01'
 display_name_ru: 'hero: split'
+has_bg_image: false
+id: hero-003
+layout_pattern: split
+signature: hero|split|[content]|bg:false
 slots:
 - name: content
   type: text
-has_bg_image: false
-signature: hero|split|[content]|bg:false
 source: cleaned
-created: '2026-06-01'
+type: hero
