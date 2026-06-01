@@ -489,6 +489,38 @@ SVG-схемы — чистая геометрия               Те же бл�
 
 ---
 
+### BUG-003. render-wireframe.py сломана на Windows — Python синтаксис 3.9+ ⚠️ БЛОКИРУЕТ B31/B32
+
+**Статус:** 🟡 IN BACKLOG (2026-06-01)  
+**Приоритет:** HIGH — блокирует правильную генерацию wireframe.html для PR-A stage 07b  
+**Блокирует:** B31 (lo-fi + styled wireframe режимы), B32 (UI для выбора типов блоков)
+
+**Проблема:**
+- `skills/wireframe-rendering/scripts/render-wireframe.py` использует `dict[str, str]` синтаксис (Python 3.9+)
+- На Windows с PowerShell/WSL Python не работает (exit 49 без вывода)
+- Как результат: wireframe.html генерируется вручную с ТОЛЬКО 2 вариантами на блок вместо всех из catalog
+- Пример: Header имеет 3 реальных блока в block-library, но показываются 2 hardcoded варианта
+
+**Что нужно исправить:**
+1. Заменить `dict[str, str]` на `Dict[str, str]` (typing module для Python 3.8 совместимости)
+2. Проверить Python version check в pre-flight
+3. Создать fallback-версию `render-wireframe-compat.py` или добавить version-check в основной скрипт
+4. Тестирование на Python 3.8+
+
+**Что даст:**
+- ✅ wireframe.html автоматически читает catalog.yaml
+- ✅ Показывает ВСЕ подходящие блоки для каждого типа (header: 3, hero: 5, features: 6, cta: 7, pricing: 4, footer: 3 вместо hardcoded 2)
+- ✅ Маркетолог выбирает из ПОЛНОГО списка, не из сокращённого
+
+**Как взять:**
+```
+/brainstorming Зафиксить render-wireframe.py для Windows — Python 3.8+ совместимость
+```
+
+**Оценка:** 2–3 часа (syntax fix + testing).
+
+---
+
 ### B32. Wireframe: нет UI для выбора типа блока и отключения лишних
 
 **Что происходит сейчас:**
@@ -505,7 +537,7 @@ SVG-схемы — чистая геометрия               Те же бл�
 - Фильтрация кандидатов по нише из `prototype.yaml::niche` — quiz-блоки не показываются для b2c-автомобилей если в нише нет quiz
 - Блоки отсутствующие в `prototype.yaml` не предлагаются
 
-**Зависит от:** `skills/wireframe-rendering/scripts/render-wireframe.py` + `block-library/` meta.yaml структура.
+**Зависит от:** BUG-003 (render-wireframe.py должна работать) + `block-library/` meta.yaml структура.
 
 ---
 
