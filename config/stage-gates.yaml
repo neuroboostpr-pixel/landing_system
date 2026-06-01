@@ -204,12 +204,44 @@ stages:
   "07_content":
     name: "Content"
     lock: soft
-    require_approved: []
+    require_approved: ["07a_prototype"]
     hard_checks:
-      - id: final_copy
+      - id: content_md_exists
         type: file_exists
-        path: "{project}/07_КОНТЕНТ/final-copy.md"
+        path: "{project}/07_КОНТЕНТ/content.md"
         required: true
+        fix_hint: "auto_fix: /landing-content"
+
+      - id: content_no_lorem
+        type: script
+        script: "skills/landing-system/scripts/validate-content-extraction.py"
+        args: ["{project}/07_КОНТЕНТ/content.md", "--check-no-lorem"]
+        required: true
+        fix_hint: "content.md содержит шаблонный текст (Lorem, template phrases). Запусти /landing-content с флагом --regenerate"
+
+      - id: content_sections_match
+        type: script
+        script: "skills/landing-system/scripts/validate-content-extraction.py"
+        args: ["{project}/07_КОНТЕНТ/content.md", "{project}/07_ПРОТОТИП/prototype.yaml", "--check-sections-match"]
+        required: true
+        fix_hint: "Кол-во секций в prototype.yaml не совпадает с content.md. Проверь extraction-log.md"
+
+      - id: extraction_log_exists
+        type: file_exists
+        path: "{project}/07_КОНТЕНТ/extraction-log.md"
+        required: true
+        fix_hint: "auto_fix: /landing-content"
+
+      - id: extraction_log_passed
+        type: script
+        script: "skills/landing-system/scripts/validate-content-extraction.py"
+        args: ["{project}/07_КОНТЕНТ/extraction-log.md", "--check-log-passed"]
+        required: true
+        fix_hint: "extraction-log.md показывает failures. Проверь логи и запусти /landing-content --debug"
+
+    soft_checks:
+      - id: content_sections_count
+        prompt: "Количество текстовых блоков в content.md адекватно (не менее 10)? (yes / no)"
 
   "07a_prototype":
     name: "Прототип (parse)"

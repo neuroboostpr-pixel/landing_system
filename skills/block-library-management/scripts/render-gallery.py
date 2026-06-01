@@ -40,18 +40,18 @@ def main() -> None:
             seen.add(cat)
             categories.append(cat)
 
-    # Category RU labels
+    # Category English labels (from taxonomy.yaml)
     cat_labels_ru = {
+        "navigation": "Navigation",
         "hero": "Hero",
-        "features": "Фичи",
-        "social-proof": "Отзывы",
-        "process": "Процесс",
-        "pricing": "Цены",
-        "trust": "Доверие",
-        "cta": "CTA",
+        "content": "Content",
+        "social proof": "Social Proof",
+        "trust": "Trust",
+        "conversion": "Conversion",
+        "pricing": "Pricing",
         "faq": "FAQ",
-        "quiz": "Квиз",
-        "references": "Референсы",
+        "gallery": "Gallery",
+        "footer": "Footer",
     }
 
     # Category stats

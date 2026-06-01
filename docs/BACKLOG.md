@@ -24,6 +24,58 @@
 
 ---
 
+## 🟢 RESOLVED — Content Extraction from Prototype (2026-06-01)
+
+### BUG-001: Agent 07_content не парсит реальный прототип ✅ FIXED
+**Статус:** ✅ RESOLVED (2026-06-01)  
+**Дата открытия:** 2026-06-01  
+**Дата закрытия:** 2026-06-01  
+
+**Проблема (была):**
+Этап 07_content заполнял content.md шаблонными текстами вместо того, чтобы извлечь реальные тексты из 07_ПРОТОТИП/source/prototype.{docx,pdf,md}.
+
+**Решение:**
+- ✅ **Spec:** [`specs/2026-06-01-content-extraction-spec.md`](superpowers/specs/2026-06-01-content-extraction-spec.md)
+- ✅ **Plan:** текстовый план выше (фазы 1–6)
+- ✅ **Implementation:**
+  - Обновлен агент `agents/content-writer.md` — новый Algorithm для extraction из prototype.yaml
+  - Добавлены hard-checks в `config/stage-gates.yaml::07_content`:
+    - `content_md_exists` — проверка что content.md создан
+    - `content_no_lorem` — валидация что нет Lorem ipsum
+    - `content_sections_match` — кол-во секций совпадает
+    - `extraction_log_exists` и `extraction_log_passed` — лог с статусом
+  - Создан валидационный скрипт `skills/landing-system/scripts/validate-content-extraction.py` (72 SLOC)
+  - Создан extraction-движок `scripts/extract-content-from-prototype.py` (220 SLOC) с поддержкой fallback на markdown
+  - Написаны unit-тесты в `tests/phase-stage-07/test-content-extraction.bats` (9 тестов)
+  - Обновлен `CLAUDE.md` с новым workflow `/landing-content`
+
+**Что изменилось:**
+```
+07_ПРОТОТИП/source/prototype.docx (исходный клиентский файл)
+  ↓ prototype-importer (парсинг)
+07_ПРОТОТИП/prototype.yaml + prototype.md (структура) ✅
+  ↓ content-writer (NOW: EXTRACTION из YAML!)
+07_КОНТЕНТ/content.md (заполнено РЕАЛЬНЫМИ текстами) ✅
+07_КОНТЕНТ/extraction-log.md (лог с ✅ SUCCESS маркером) ✅
+  ↓ wireframe selector
+07a_WIREFRAME/wireframe.html (показывает реальный контент, не template) ✅
+```
+
+**Проверка на neurokreator:**
+- Запустить: `python3 scripts/extract-content-from-prototype.py d:\AI_TEAMS\Lendings\neurokreator\07_ПРОТОТИП\prototype.yaml --output d:\AI_TEAMS\Lendings\neurokreator\07_КОНТЕНТ\content.md --log-output d:\AI_TEAMS\Lendings\neurokreator\07_КОНТЕНТ\extraction-log.md`
+- Проверить: `cat 07_КОНТЕНТ/content.md` должен содержать реальные тексты (курсы, цены, описания)
+- Проверить: `grep -i lorem 07_КОНТЕНТ/content.md` должен возвращать nothing
+- Проверить: `grep "✅ SUCCESS" 07_КОНТЕНТ/extraction-log.md` должен вернуть match
+- Проверить: `bash scripts/gate-check.sh --stage 07_content --project neurokreator` должен вернуть exit 0
+
+**На что это влияет:**
+- ✅ wireframe.html теперь показывает РЕАЛЬНЫЙ контент из прототипа
+- ✅ Маркетолог выбирает макет на основе реальных текстов, не template
+- ✅ Дальнейшие этапы (07c_composed, 07d_photos, 07e_visuals) работают с корректным контентом
+- ✅ neurokreator проект может успешно пройти stage 07 → 07a → 07b и дальше
+
+---
+
 ## Приоритет 1 — функциональные дыры (блокирует прод-запуск)
 
 ### B1. Cookie-баннер + 152-ФЗ блок согласия на обработку ПД ✅ [spec](superpowers/specs/2026-05-21-b1-cookie-banner-pd-consent-design.md) [plan](superpowers/plans/2026-05-21-b1-cookie-banner-pd-consent-plan.md)

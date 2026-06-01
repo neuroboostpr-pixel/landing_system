@@ -45,26 +45,87 @@ python -m scripts.wiki.log --type agent_call --agent content-writer --stage 07
 
 ## What I do
 
-1. Читаю `01a_АНАЛИЗ_НИШИ/positioning.md` — извлекаю заголовок `**Mode:** <режим>`. От него зависит регистр и структура копирайта.
-2. Читаю `01a_АНАЛИЗ_НИШИ/landing-structure.md` — секцию «Блоки лендинга» (таблица). Это **источник истины** по списку и порядку блоков. Не угадывать блоки из DESIGN.md, использовать готовую карту.
-3. Читаю `01a_АНАЛИЗ_НИШИ/market-profile.md` — `accessibility_tier` и `cultural_context` для адаптации тона.
-4. Читаю `07_ПРОТОТИП/prototype.md` — исходный прототип текста.
-5. Читаю `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` — детали секций (типографика, контейнеры).
-6. Читаю `06_СТЕК/design-stack.yaml` — компонентная библиотека.
-7. Читаю `02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/` и `assets-manifest.yaml` — реальные отзывы и ассеты.
-8. Раскладываю текст **строго по блокам из landing-structure.md** в `07_КОНТЕНТ/final-copy.md`. Каждый блок копирайта помечен заголовком, идентичным таблице landing-structure.
-9. Пишу `07_КОНТЕНТ/seo-copy.md` с SEO-заголовками, description и h1-вариантами.
-10. **HARD GATE**: показываю пользователю final-copy.md, жду утверждения.
+**NEW FLOW (2026-06-01):** Вместо generic template — извлекаю РЕАЛЬНЫЕ тексты из прототипа клиента.
 
-## Mode-aware tone
+1. **Проверяю предусловия:**
+   - Прочитай `07_ПРОТОТИП/prototype.yaml` (PRIMARY source)
+   - Прочитай `07_ПРОТОТИП/prototype.md` (fallback)
+   - Если оба не существуют → EXIT с ошибкой "Run /landing-prototype first"
 
-Для каждого Mode — обязательная адаптация регистра и структуры:
+2. **Извлекаю контент по секциям** (Algorithm: Extraction from prototype.yaml):
+   - Для каждой секции в `sections[]`:
+     - Если блок имеет `type: "heading"` → extract `text` в заголовок
+     - Если блок имеет `type: "button"` → extract `text` для кнопки
+     - Если блок имеет `type: "paragraph"` → extract `text` для тела
+     - Если блок имеет `type: "feature_card"` → extract `label` + `description`
+     - Если блок имеет `type: "course_card"` → extract `title`, `price`, `level`
+     - Если блок имеет `type: "form"` → extract `fields[].label`
+     - Если текст не найден в YAML → fallback на `prototype.md` (markdown grep)
+     - Если всё ещё не найден → WARN в extraction-log.md
 
-- **`rational`**: factual, конкретные цифры, без аспирации. Hero — функциональный benefit + ключевая метрика. Запрещены статусные обещания.
-- **`emotional_aspiration`**: aspirational, sensory, identity-led. Hero — emotional hook (статус, принадлежность, мечта). Цифры/spec — глубже на странице, не в Hero. Использовать структуру StoryBrand: Character → Problem → Guide → Plan → CTA → Success → Failure.
-- **`trust_authority`**: confident, transparent, evidence-based. Hero — главный trust-signal (опыт, лицензия, число успешных кейсов). Каждый claim сопровождается доказательством (имя, число, дата).
-- **`hybrid:X+Y`**: основной тон по primary, secondary встроен 1–2 блоками поддержки.
-- **`legacy_v1`** (старые проекты до 2026-05-06): использовать positioning как есть, без mode-аугментации.
+3. **Структурирую `07_КОНТЕНТ/content.md` по секциям прототипа** (не по generic template):
+   - H2 = имя секции из prototype.yaml (Header, Hero, Features, Courses, Form, Footer)
+   - H3 = каждый блок в секции (Логотип, CTA Кнопка, Описание, и т.д.)
+   - Тело = РЕАЛЬНЫЙ текст из прототипа (никакого Lorem ipsum)
+
+4. **Валидирую extraction локально:**
+   - ❌ FAIL если найден Lorem ipsum, "description goes here", "add your text"
+   - ❌ FAIL если кол-во секций в prototype.yaml != content.md
+   - Если валидация падает → не писать файл, вернуть ошибку
+
+5. **Пишу `07_КОНТЕНТ/extraction-log.md`** с:
+   - Timestamp extraction
+   - Количество блоков извлечено
+   - Любые warnings (missing text, fallback)
+   - Статус валидации (✅ PASSED или ❌ FAILED)
+   - Таблица по секциям: сколько блоков извлечено, примеры текстов
+
+6. **HARD GATE**: показываю пользователю content.md и extraction-log.md, жду утверждения.
+
+## Algorithm: Extraction from prototype.yaml
+
+### Step 1: Parse prototype.yaml structure
+Прочитай `07_ПРОТОТИП/prototype.yaml` и идентифицируй все секции из `sections[].id` и `sections[].name`.
+
+### Step 2: Extract content by section
+Для каждой секции итерируй через `sections[].blocks[]` и:
+- Если блок `type == "heading"` | `"button"` | `"paragraph"` → extract `text` поле
+- Если блок `type == "feature_card"` → extract `label` + `description`
+- Если блок `type == "course_cards"` → extract `card_examples[]` список
+- Если блок `type == "form"` → extract `fields[].label`
+- Если блок `type == "footer_column"` → extract `title` + `links[]`
+- Если текст не найден в YAML → fallback на `07_ПРОТОТИП/prototype.md` (markdown search)
+- Если всё ещё не найден → WARN в extraction-log
+
+### Step 3: Structure content.md by sections
+Output format:
+```markdown
+# Текстовый контент — <project-name>
+
+## 1. <section-name>
+
+### <block-label>
+<extracted-text>
+```
+
+**Правило:** каждая секция = H2, каждый блок в секции = H3. Это позволяет `landing-wireframe` и `landing-compose` автоматически индексировать по структуре.
+
+### Step 4: Validation (local)
+Before writing to file:
+- Check that NO sections contain "Lorem ipsum", "description goes here", "add your text" (case-insensitive grep)
+- Count sections in prototype.yaml vs content.md (must match)
+- If validation fails → raise error, don't write
+
+### Step 5: Generate extraction-log.md
+Create `07_КОНТЕНТ/extraction-log.md` with:
+- Timestamp
+- Total blocks extracted
+- Any warnings (missing text, fallback to markdown)
+- Validation status (✅ PASSED or ❌ FAILED)
+
+## Mode-aware tone (DEPRECATED)
+
+Перед 2026-06-01 content-writer использовал positioning.md для адаптации тона. Это всё ещё может быть полезно, но **НЕ является главным source**. Главный source теперь — prototype.yaml extraction.
 
 ## Rules
 
@@ -74,10 +135,15 @@ python -m scripts.wiki.log --type agent_call --agent content-writer --stage 07
 
 ## Output
 
-- `07_КОНТЕНТ/final-copy.md`
-- `07_КОНТЕНТ/seo-copy.md`
+- `07_КОНТЕНТ/content.md` — структурирован по секциям прототипа, содержит РЕАЛЬНЫЕ тексты из prototype.yaml (NOT generic template)
+- `07_КОНТЕНТ/extraction-log.md` — лог extraction с validation status
 
-## Inputs from earlier stages
+## Inputs (NEW ORDER)
 
-- `01a_АНАЛИЗ_НИШИ/positioning.md` — обязательный input. Использовать сообщения углов отстройки в текстах блоков.
-- `01a_АНАЛИЗ_НИШИ/competitors.yaml` — поле `key_messages` каждой записи. Не повторять сообщения, которые говорят все конкуренты (см. секцию «Чего избегать» в positioning.md).
+PRIMARY (обязательные):
+- `07_ПРОТОТИП/prototype.yaml` — структура секций и блоков с текстовыми полями
+- `07_ПРОТОТИП/prototype.md` — fallback если YAML не содержит текст
+
+SECONDARY (для контекста, опционально):
+- `01a_АНАЛИЗ_НИШИ/positioning.md` — Mode и tone guidance (если ещё нужна адаптация)
+- `01a_АНАЛИЗ_НИШИ/competitors.yaml` — сообщения для избегания конкурентной чаши

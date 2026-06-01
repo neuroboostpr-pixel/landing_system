@@ -15,17 +15,25 @@
 - `/landing-status` — статус системы и текущих проектов
 - `/landing-help` — справка по всем командам
 
-## Новые команды PR-A (Прототип + Wireframe + Compose)
+## Новые команды PR-A (Прототип + Content + Wireframe + Compose)
 
 - `/landing-prototype` — импорт пользовательского прототипа (PDF/MD) → prototype.{md,yaml}
+- `/landing-content` — **NEW (2026-06-01)** — извлечение РЕАЛЬНЫХ текстов из prototype.yaml → content.md (БЕЗ Lorem ipsum)
 - `/landing-wireframe` — интерактивный wireframe.html с 2-3 вариантами на блок
 - `/landing-compose` — composed.html с tokens + текстами, placeholders для визуала
 
 **Workflow PR-A:**
 1. Положи `prototype.pdf` или `.md` в `<project>/07_ПРОТОТИП/source/`
-2. Запусти `/landing-prototype` → проверь `prototype.md`, поправь если нужно
-3. Запусти `/landing-wireframe` → открой `07a_WIREFRAME/wireframe.html`, выбери варианты, нажми «Confirm» — скачается `selections.yaml`, положи его в `07a_WIREFRAME/`
-4. Запусти `/landing-compose` → `07b_COMPOSED/composed.html` готов
+2. Запусти `/landing-prototype` → генерирует `prototype.yaml` и `prototype.md`
+3. **Запусти `/landing-content`** → читает `prototype.yaml`, извлекает реальные тексты, пишет `content.md` + `extraction-log.md`
+   - ✅ content.md заполнен РЕАЛЬНЫМИ текстами из прототипа (не Lorem ipsum)
+   - ✅ extraction-log.md показывает что было извлечено
+   - ✅ gate-check 07_content проходит validation (нет шаблонных текстов)
+4. Запусти `/landing-wireframe` → открой `07a_WIREFRAME/wireframe.html`, выбери варианты, нажми «Confirm» — скачается `selections.yaml`, положи его в `07a_WIREFRAME/`
+   - **Теперь wireframe покажет РЕАЛЬНЫЙ контент из content.md, не template!**
+5. Запусти `/landing-compose` → `07b_COMPOSED/composed.html` готов
+
+**Что исправилось:** Перед 2026-06-01 этап 07_content генерировал generic template (Lorem ipsum) вместо извлечения из прототипа. Теперь `/landing-content` читает prototype.yaml и пишет настоящие тексты клиента в content.md. Это фиксит [BUG-001](docs/BACKLOG.md).
 
 **NOTE:** PR-A команды вызываются ВРУЧНУЮ, не через `landing-orchestrator`. Интеграция в оркестратор — задача PR-D.
 
