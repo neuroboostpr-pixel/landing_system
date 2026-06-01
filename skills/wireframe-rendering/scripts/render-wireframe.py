@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """Render <project>/07a_WIREFRAME/wireframe.html from prototype.yaml + block-library."""
+from __future__ import annotations
+
 import argparse
 import csv
 import html
@@ -69,6 +71,31 @@ BLOCK_PURPOSE_RU: dict[str, str] = {
     "quiz": "Квалификация и сбор контакта через игру",
 }
 
+# Маппинг section.id → catalog block type (для sections-based prototype.yaml)
+SECTION_TO_CATALOG_TYPE: dict[str, str] = {
+    "header": "header",
+    "hero": "hero",
+    "tagline": "features",
+    "why_ai_visual": "features",
+    "why_neurokreator": "features",
+    "for_whom": "features",
+    "curriculum": "process",
+    "ai_tools": "features",
+    "tariffs": "pricing",
+    "footer": "footer",
+    # Fallback для других типов:
+    "features": "features",
+    "process": "process",
+    "pricing": "pricing",
+    "faq": "faq",
+    "social-proof": "features",
+    "trust": "features",
+    "gallery": "gallery",
+    "team": "gallery",
+    "contacts": "footer",
+    "cta": "conversion",
+}
+
 
 UX_NOT_AVAILABLE_BANNER = (
     '<div style="margin:24px; padding:16px 24px; background:#fffbe6; border:1px solid #ffe58f; '
@@ -83,6 +110,50 @@ UX_NOT_AVAILABLE_BANNER = (
 def fail(m: str) -> None:
     print(f"ERROR: {m}", file=sys.stderr)
     sys.exit(1)
+
+
+def _flatten_sections_to_blocks(proto: dict) -> list[dict]:
+    """Flatten prototype into canonical blocks list compatible with wireframe logic.
+
+    Supports:
+    - Legacy format: proto["blocks"] — return as-is (backward compat)
+    - Sections format: proto["sections"][].blocks[] — each section = one wireframe position
+    """
+    # Legacy: top-level blocks[]
+    if "blocks" in proto and isinstance(proto.get("blocks"), list) and proto["blocks"]:
+        # Ensure each has a position
+        for i, b in enumerate(proto["blocks"]):
+            if "position" not in b:
+                b["position"] = i + 1
+        return proto["blocks"]
+
+    # Sections: flatten
+    sections = proto.get("sections", [])
+    result = []
+    position = 1
+    for section in sections:
+        section_id = section.get("id", "")
+        btype = SECTION_TO_CATALOG_TYPE.get(section_id, "features")
+
+        # Merge all sub-block fields into one dict for slot injection
+        merged: dict = {"id": section_id, "type": btype, "position": position}
+
+        # Merge sub-blocks
+        for sub in section.get("blocks", []):
+            if isinstance(sub, dict):
+                for k, v in sub.items():
+                    if k not in merged:
+                        merged[k] = v
+
+        # Copy section-level fields
+        for k in ("name", "layout", "width", "height", "bg_color"):
+            if k in section and k not in merged:
+                merged[k] = section[k]
+
+        result.append(merged)
+        position += 1
+
+    return result
 
 
 def load_ux_patterns(rules_dir: Path, niche: str) -> list[dict]:
@@ -336,8 +407,15 @@ def main() -> None:
     if not proto_path.exists():
         fail(f"no prototype.yaml at {proto_path}")
     proto = yaml.safe_load(proto_path.read_text(encoding="utf-8"))
-    niche = (proto.get("project") or {}).get("niche") or "generic"
-    slug = proto["project"]["slug"]
+    niche = (proto.get("project") or {}).get("niche") or proto.get("niche") or "generic"
+    slug = (
+        (proto.get("project") or {}).get("slug")
+        or proto.get("slug")
+        or proto.get("name", "project")
+    )
+
+    # Flatten sections-based proto into canonical blocks list
+    proto_blocks = _flatten_sections_to_blocks(proto)
 
     matcher_script = Path(__file__).parent / "match-candidates.py"
     inject_content_script = (
@@ -360,7 +438,7 @@ def main() -> None:
     # --- Load ui-ux-pro-max data ---
     rules_dir = Path(args.ux_rules).expanduser()
     patterns = load_ux_patterns(rules_dir, niche)
-    block_types = [b["type"] for b in proto.get("blocks", [])]
+    block_types = [b["type"] for b in proto_blocks]
     rules = load_ux_rules(rules_dir, block_types)
     palettes = load_colors(rules_dir, niche)
     typo_pairs = load_typography(rules_dir, niche)
@@ -399,7 +477,7 @@ def main() -> None:
         except UnicodeDecodeError:
             enrichment_log_content = enrichment_log_path.read_text(encoding="cp1251")
 
-    total_blocks = len(proto.get("blocks", []))
+    total_blocks = len(proto_blocks)
 
     # Count how many blocks live under each category folder in the library —
     # so the footer of each section can show "shown N of M available <cat> blocks".
@@ -411,7 +489,7 @@ def main() -> None:
                 continue
             n = sum(1 for d in cat_dir.iterdir() if d.is_dir() and not d.name.startswith("."))
             category_counts[cat_dir.name] = n
-    for block in proto["blocks"]:
+    for block in proto_blocks:
         position = block["position"]
         btype = block["type"]
         quiz_role = block.get("quiz_role", "")
@@ -627,9 +705,7 @@ def main() -> None:
             f'<p>Показано {shown_n} из <strong>{cat_total}</strong> доступных '
             f'<code>{html.escape(first_cat)}</code> блоков. Все блоки →&nbsp;'
             f'<a href="{html.escape(cat_dir_url, quote=True)}" target="_blank">'
-            f'открыть папку библиотеки</a> или&nbsp;'
-            f'<a href="file:///tmp/block-library-gallery.html" target="_blank">'
-            f'посмотреть полную галерею</a>.</p>'
+            f'открыть папку библиотеки</a>.</p>'
             f'</footer>'
         )
 

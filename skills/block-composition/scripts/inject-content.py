@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 """Inject prototype.yaml content into a template.html via data-slot attributes
 AND/OR ``{{slot:NAME}}`` text placeholders (new block format).
 
@@ -396,8 +398,26 @@ def main() -> None:
     args = p.parse_args()
 
     proto = yaml.safe_load(Path(args.prototype).read_text(encoding="utf-8"))
+
+    # Support both legacy proto["blocks"] and sections-based formats
+    if "blocks" in proto and isinstance(proto.get("blocks"), list):
+        flat_blocks = proto["blocks"]
+    else:
+        # Sections format — build flat list with positions
+        flat_blocks = []
+        pos = 1
+        for section in proto.get("sections", []):
+            merged = {"position": pos, "id": section.get("id", ""), "type": section.get("id", "")}
+            for sub in section.get("blocks", []):
+                if isinstance(sub, dict):
+                    for k, v in sub.items():
+                        if k not in merged:
+                            merged[k] = v
+            flat_blocks.append(merged)
+            pos += 1
+
     block = next(
-        (b for b in proto["blocks"] if b["position"] == args.position),
+        (b for b in flat_blocks if b["position"] == args.position),
         None,
     )
     if block is None:
