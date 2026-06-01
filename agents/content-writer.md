@@ -45,42 +45,134 @@ python -m scripts.wiki.log --type agent_call --agent content-writer --stage 07
 
 ## What I do
 
-**NEW FLOW (2026-06-01):** Вместо generic template — извлекаю РЕАЛЬНЫЕ тексты из прототипа клиента.
+**CRITICAL (2026-06-01):** I MUST READ FILES, NOT INVENT CONTENT!
 
-1. **Проверяю предусловия:**
-   - Прочитай `07_ПРОТОТИП/prototype.yaml` (PRIMARY source)
-   - Прочитай `07_ПРОТОТИП/prototype.md` (fallback)
-   - Если оба не существуют → EXIT с ошибкой "Run /landing-prototype first"
+See: [`docs/standards/stage-07-content-correct-flow.md`](../standards/stage-07-content-correct-flow.md)
 
-2. **Извлекаю контент по секциям** (Algorithm: Extraction from prototype.yaml):
-   - Для каждой секции в `sections[]`:
-     - Если блок имеет `type: "heading"` → extract `text` в заголовок
-     - Если блок имеет `type: "button"` → extract `text` для кнопки
-     - Если блок имеет `type: "paragraph"` → extract `text` для тела
-     - Если блок имеет `type: "feature_card"` → extract `label` + `description`
-     - Если блок имеет `type: "course_card"` → extract `title`, `price`, `level`
-     - Если блок имеет `type: "form"` → extract `fields[].label`
-     - Если текст не найден в YAML → fallback на `prototype.md` (markdown grep)
-     - Если всё ещё не найден → WARN в extraction-log.md
+### Step 1: CHECK PREREQUISITES (MUST READ FILES)
 
-3. **Структурирую `07_КОНТЕНТ/content.md` по секциям прототипа** (не по generic template):
-   - H2 = имя секции из prototype.yaml (Header, Hero, Features, Courses, Form, Footer)
-   - H3 = каждый блок в секции (Логотип, CTA Кнопка, Описание, и т.д.)
-   - Тело = РЕАЛЬНЫЙ текст из прототипа (никакого Lorem ipsum)
+```python
+import yaml
+import os
 
-4. **Валидирую extraction локально:**
-   - ❌ FAIL если найден Lorem ipsum, "description goes here", "add your text"
-   - ❌ FAIL если кол-во секций в prototype.yaml != content.md
-   - Если валидация падает → не писать файл, вернуть ошибку
+# ✅ ACTUALLY OPEN AND READ THE FILE:
+prototype_yaml_path = f"{project}/07_ПРОТОТИП/prototype.yaml"
+if not os.path.exists(prototype_yaml_path):
+    FAIL("prototype.yaml not found. Run /landing-prototype first")
 
-5. **Пишу `07_КОНТЕНТ/extraction-log.md`** с:
-   - Timestamp extraction
-   - Количество блоков извлечено
-   - Любые warnings (missing text, fallback)
-   - Статус валидации (✅ PASSED или ❌ FAILED)
-   - Таблица по секциям: сколько блоков извлечено, примеры текстов
+with open(prototype_yaml_path) as f:
+    prototype = yaml.safe_load(f)  # ← ACTUALLY READ & PARSE
 
-6. **HARD GATE**: показываю пользователю content.md и extraction-log.md, жду утверждения.
+prototype_md_path = f"{project}/07_ПРОТОТИП/prototype.md"
+prototype_md_content = ""
+if os.path.exists(prototype_md_path):
+    with open(prototype_md_path) as f:
+        prototype_md_content = f.read()  # ← FALLBACK SOURCE
+```
+
+### Step 2: EXTRACT CONTENT (FROM ACTUAL FILES)
+
+**❌ WRONG:** "The Skills You Need" (invented)  
+**✅ CORRECT:** Extract ONLY from `prototype['sections'][...]['blocks'][...]['text']`
+
+```python
+extracted_sections = []
+
+for section in prototype['sections']:
+    section_name = section['name']  # ← FROM YAML
+    section_blocks = []
+    
+    for block in section['blocks']:
+        block_label = block.get('label', block.get('type', 'Unknown'))
+        
+        # TRY TO EXTRACT TEXT IN THIS ORDER:
+        block_text = None
+        
+        if 'text' in block:
+            block_text = block['text']  # ← PRIMARY
+        elif 'title' in block:
+            block_text = block['title']
+        elif 'description' in block:
+            block_text = block['description']
+        elif 'label' in block:
+            block_text = block['label']
+        
+        # FALLBACK: If no text in YAML, search prototype.md
+        if not block_text and prototype_md_content:
+            # GREP for this block in markdown:
+            import re
+            pattern = rf"### {re.escape(block_label)}.*?(?=###|##|$)"
+            match = re.search(pattern, prototype_md_content, re.DOTALL)
+            if match:
+                block_text = match.group(0)
+        
+        # If STILL no text found, WARN (don't invent):
+        if not block_text:
+            warnings.append(f"No text found for block '{block_label}' in section '{section_name}'")
+            block_text = f"[TEXT NOT FOUND IN PROTOTYPE]"  # ← MARK AS MISSING, DON'T INVENT
+        
+        section_blocks.append({
+            'label': block_label,
+            'text': block_text
+        })
+    
+    extracted_sections.append({
+        'name': section_name,
+        'blocks': section_blocks
+    })
+```
+
+### Step 3: WRITE content.md (ONLY REAL TEXT)
+
+**Structure:**
+```markdown
+## Section Name (from prototype['sections'][i]['name'])
+
+### Block Label (from block['label'])
+Block text (from block['text'] or block['description'] or block['title'])
+← MUST BE FROM YAML, NOT INVENTED
+```
+
+### Step 4: VALIDATE (NO INVENTION ALLOWED)
+
+```python
+def validate_extraction(content_md_path):
+    with open(content_md_path) as f:
+        content = f.read().lower()
+    
+    # ❌ FAIL if contains template patterns:
+    bad_patterns = [
+        "lorem ipsum",
+        "description goes here",
+        "add your text",
+        "your text here",
+        "sample text",
+        "[placeholder]"
+    ]
+    
+    for pattern in bad_patterns:
+        if pattern in content:
+            return FAIL(f"Found template pattern: '{pattern}' - content was INVENTED, not extracted!")
+    
+    # ✅ PASS:
+    return PASS("All content extracted from REAL prototype")
+```
+
+### Step 5: CREATE extraction-log.md
+
+Document EXACTLY what was extracted:
+- Sections extracted (count)
+- Blocks extracted (count)
+- Any warnings (missing text, fallbacks)
+- Validation result
+
+### Step 6: HARD GATE
+
+Don't approve stage 07 until gate-check passes ALL hard-checks:
+- ✅ content_md_exists
+- ✅ content_no_lorem (no template patterns)
+- ✅ content_sections_match
+- ✅ extraction_log_passed
 
 ## Algorithm: Extraction from prototype.yaml
 
