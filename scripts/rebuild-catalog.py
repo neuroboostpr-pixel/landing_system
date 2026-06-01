@@ -40,6 +40,10 @@ def scan_blocks(library_path: str) -> List[Dict[str, Any]]:
         block_dir = rel_path.parent
         category_dir = block_dir.parent
 
+        # Skip _patterns and _styles
+        if category_dir.name.startswith('_'):
+            continue
+
         # Read metadata
         meta = extract_block_metadata(str(meta_file))
 
@@ -109,8 +113,11 @@ def rebuild_catalog(library_path: str, output_path: str):
         print(f"  {cat}: {categories[cat]}")
 
 if __name__ == '__main__':
-    library_path = 'D:\\AI_TEAMS\\landing_system\\block-library'
-    output_path = 'D:\\AI_TEAMS\\landing_system\\block-library\\catalog.yaml'
+    # Use relative paths from script location
+    script_dir = Path(__file__).resolve().parent
+    project_root = script_dir.parent
+    library_path = str(project_root / 'block-library')
+    output_path = str(project_root / 'block-library' / 'catalog.yaml')
 
     if not os.path.isdir(library_path):
         print(f"Error: Library path not found: {library_path}", file=sys.stderr)

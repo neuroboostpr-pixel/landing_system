@@ -167,16 +167,53 @@ a, button, .btn, .cta,
         tmpl_content = ""
         if template_path.exists():
             raw = template_path.read_text(encoding="utf-8")
-            # Inject lo-fi reset after the last </style> or at end of <head>
-            # Strategy: append before </body> or at end if no </body>
-            if "</body>" in raw:
-                tmpl_content = raw.replace("</body>", LOFI_CSS + "</body>", 1)
-            elif "</html>" in raw:
-                tmpl_content = raw.replace("</html>", LOFI_CSS + "</html>", 1)
+            # If it's just a comment or minimal text, wrap it in full HTML
+            raw_stripped = raw.strip()
+            if raw_stripped.startswith("<!--") and raw_stripped.endswith("-->"):
+                # It's just a comment, wrap it
+                tmpl_content = (
+                    f"<!DOCTYPE html>"
+                    f"<html lang='ru'><head><meta charset='UTF-8'>"
+                    f"<meta name='viewport' content='width=device-width,initial-scale=1'>"
+                    f"<title>{html.escape(block_id)}</title>"
+                    f"<style>body{{margin:0;padding:20px;font-family:system-ui,sans-serif;background:#f5f5f5}}</style>"
+                    f"</head><body>"
+                    f"<section style='background:#e8e8e8;padding:40px;border-radius:8px;text-align:center;'>"
+                    f"<p style='color:#666;font-size:14px;'>{html.escape(raw_stripped[4:-3])}</p>"
+                    f"</section>"
+                    f"{LOFI_CSS}"
+                    f"</body></html>"
+                )
+            elif not raw_stripped.startswith("<!") and not raw_stripped.startswith("<html"):
+                # It's a fragment (just template markup), wrap it
+                tmpl_content = (
+                    f"<!DOCTYPE html>"
+                    f"<html lang='ru'><head><meta charset='UTF-8'>"
+                    f"<meta name='viewport' content='width=device-width,initial-scale=1'>"
+                    f"<title>{html.escape(block_id)}</title>"
+                    f"<style>body{{margin:0;padding:20px;font-family:system-ui,sans-serif;background:#f5f5f5}}"
+                    f".lp-{{margin:0}}</style>"
+                    f"</head><body>"
+                    f"{raw}"
+                    f"{LOFI_CSS}"
+                    f"</body></html>"
+                )
             else:
-                tmpl_content = raw + LOFI_CSS
+                # It's already a full HTML document
+                # Inject lo-fi reset before </body> or at end if no </body>
+                if "</body>" in raw:
+                    tmpl_content = raw.replace("</body>", LOFI_CSS + "</body>", 1)
+                elif "</html>" in raw:
+                    tmpl_content = raw.replace("</html>", LOFI_CSS + "</html>", 1)
+                else:
+                    tmpl_content = raw + LOFI_CSS
         else:
-            tmpl_content = f"<html><body style='display:flex;align-items:center;justify-content:center;height:100%;color:#999;font-size:12px;font-family:sans-serif;'>template.html not found</body></html>"
+            tmpl_content = (
+                f"<!DOCTYPE html><html><head><meta charset='UTF-8'><title>{html.escape(block_id)}</title>"
+                f"<style>body{{display:flex;align-items:center;justify-content:center;height:100%;color:#999;"
+                f"font-size:12px;font-family:sans-serif;}}</style></head>"
+                f"<body>template.html not found at {html.escape(str(template_path))}</body></html>"
+            )
 
         # Build use_case badges
         uc_badges = " ".join(
@@ -212,14 +249,12 @@ a, button, .btn, .cta,
         styles_div = (
             f'<div class="card-styles">{style_tags}</div>' if style_tags else ''
         )
-        # Ссылка относительно папки, где лежит сам gallery.html, с forward-slash
-        # (Windows backslash в href не работает).
-        try:
-            rel = template_path.resolve().relative_to(output_dir)
-        except ValueError:
-            import os as _os
-            rel = Path(_os.path.relpath(template_path.resolve(), output_dir))
-        open_href = html.escape(rel.as_posix(), quote=True)
+        # Link using file:// URL for local file access
+        # This works when opening gallery.html with file:// protocol
+        abs_template_path = template_path.resolve()
+        # Convert Windows path to file:// URL (file:///C:/path/to/file)
+        file_url = abs_template_path.as_uri()
+        open_href = html.escape(file_url, quote=True)
         layout_pattern_html = (
             f'<span class="card-layout-pattern">layout: {layout_pattern}</span>'
             if layout_pattern else ''
