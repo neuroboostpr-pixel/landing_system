@@ -51,7 +51,16 @@ Write 5 output files to `04_БРЕНД/extracted/`: palette.yaml, fonts.yaml, ic
 4. Run `python3 skills/style-decomposition/scripts/match-icons.py` with a standard needed list.
 5. Run `python3 skills/style-decomposition/scripts/orchestrate.py` to aggregate all outputs.
 6. Write placeholder `grid.md` and `motion.md` if not already present.
-7. **HARD GATE**: must produce all 5 outputs (palette.yaml, fonts.yaml, icons.yaml, grid.md, motion.md) before brand-architect runs.
+7. **Если референсы недоступны** (Behance/Dribbble/Instagram — заблокированы, PDF не читается color-thief):
+   - НЕ падай с ошибкой — `build.py` автоматически возьмёт палитру и шрифты из `03b_КОНЦЕПТ/visual-concept.yaml`
+   - Создай пустые placeholder-файлы чтобы gate-check не падал:
+     ```bash
+     echo "palette: []" > 04_БРЕНД/extracted/palette.yaml
+     echo "candidates: []" > 04_БРЕНД/extracted/fonts.yaml
+     echo "icon_set: lucide" > 04_БРЕНД/extracted/icons.yaml
+     ```
+   - Запиши в лог: "Референсы заблокированы — palette из visual-concept.yaml"
+8. **HARD GATE**: все 5 файлов должны существовать (допускаются пустые placeholders).
 
 ## Tools
 

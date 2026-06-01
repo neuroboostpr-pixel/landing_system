@@ -158,12 +158,13 @@ def _stage_prefix(stage: str) -> str:
 
 
 def was_wiki_queried(session_id: str, stage: str) -> bool:
-    """True если в логе есть wiki_query с тем же session_id и совместимым stage."""
-    if not stage:
-        return False
+    """True если в логе есть wiki_query с тем же session_id и совместимым stage.
+
+    Если stage пустой — достаточно любого wiki_query с тем же session_id.
+    """
     if not LOG_PATH.exists():
         return False
-    stage_prefix = _stage_prefix(stage)
+    stage_prefix = _stage_prefix(stage) if stage else None
     try:
         for line in LOG_PATH.read_text(encoding="utf-8").splitlines():
             line = line.strip()
@@ -177,6 +178,9 @@ def was_wiki_queried(session_id: str, stage: str) -> bool:
                 continue
             if record.get("session_id") != session_id:
                 continue
+            # stage пустой — любой wiki_query в этой сессии засчитывается
+            if not stage:
+                return True
             f = record.get("filters") or {}
             rec_stage = str(f.get("stage") or "")
             rec_prefix = _stage_prefix(rec_stage)

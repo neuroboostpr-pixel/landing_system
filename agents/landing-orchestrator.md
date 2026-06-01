@@ -328,7 +328,7 @@ clamp typography, CSS-переменные в `:root`).
 4. После доработки re-run `gate-check.sh --stage 07c_composed`.
 5. Цикл повторяется до exit 0. **«И так сойдёт» — недопустимо.**
 
-Эталон-референс: `~/Lendings/dubai-avto-liza/07b_COMPOSED/composed.html` (13/13).
+Эталон качества: `docs/standards/premium-07b-checklist.md` — 18 обязательных фич. Верификация: `scripts/verify-composed-premium.sh`.
 
 ### Step-by-step UX
 

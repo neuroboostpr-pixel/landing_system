@@ -180,8 +180,9 @@ def main() -> int:
     try:
         import os
         from scripts.wiki import routing_log
-        session_id = os.environ.get("CLAUDE_CODE_SESSION_ID", "unknown")
-        model = _detect_model_from_session(session_id)
+        from scripts.wiki import run_id as _run_id
+        session_id = _run_id.get_or_create()
+        model = _detect_model_from_session(os.environ.get("CLAUDE_CODE_SESSION_ID", "unknown"))
         filters_dict = {
             "stage": args.stage,
             "type": args.type_,

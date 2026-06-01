@@ -30,16 +30,16 @@ Spec: [docs/superpowers/specs/2026-05-15-s2e-seo-tech-audit-design.md](../../doc
 
 ```bash
 # Все поддомены проекта (auto-discover из .landing-state.yaml)
-python skills/seo-tech-audit/scripts/run-audit.py --project ~/Lendings/dubai-avto-liza
+python skills/seo-tech-audit/scripts/run-audit.py --project ~/Lendings/<slug>
 
 # Конкретный URL (ad-hoc)
-python skills/seo-tech-audit/scripts/run-audit.py --url https://dubai-avto-liza.ailexi.ru
+python skills/seo-tech-audit/scripts/run-audit.py --url https://<your-domain>
 
 # JSON output для CI/orchestrator
-python skills/seo-tech-audit/scripts/run-audit.py --project <p> --json
+python skills/seo-tech-audit/scripts/run-audit.py --project <slug> --json
 ```
 
-Или slash-команда `/landing-audit dubai-avto-liza` из Claude Code.
+Или slash-команда `/landing-audit <slug>` из Claude Code.
 
 ## Output
 

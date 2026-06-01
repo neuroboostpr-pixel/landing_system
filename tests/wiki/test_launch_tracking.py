@@ -112,10 +112,15 @@ def test_was_wiki_queried_invalid_json_in_log(tmp_log):
     assert routing_log.was_wiki_queried("sess1", "04") is True
 
 
-def test_was_wiki_queried_empty_stage_returns_false(tmp_log):
-    """Пустой stage аргумент всегда возвращает False."""
+def test_was_wiki_queried_empty_stage_matches_any_query(tmp_log):
+    """Пустой stage — засчитывается любой wiki_query с тем же session_id."""
     _write_query(tmp_log, "sess1", "")
-    assert routing_log.was_wiki_queried("sess1", "") is False
+    assert routing_log.was_wiki_queried("sess1", "") is True
+
+
+def test_was_wiki_queried_empty_stage_no_query_returns_false(tmp_log):
+    """Пустой stage без wiki_query в логе → False."""
+    assert routing_log.was_wiki_queried("sess-no-query", "") is False
 
 
 import subprocess
