@@ -1,1 +1,193 @@
-<!-- process grid block -->
+<style>.lp-process-editorial-grid-2 {
+  background: var(--lp-bg);
+  color: var(--lp-text);
+  font-family: var(--lp-font-body);
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md);
+}
+
+.lp-process-editorial-grid-2__inner {
+  display: grid;
+  gap: var(--lp-spacing-xl);
+  margin: 0 auto;
+  max-width: 1280px;
+}
+
+.lp-process-editorial-grid-2__content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--lp-spacing-md);
+}
+
+.lp-process-editorial-grid-2__eyebrow {
+  color: var(--lp-accent);
+  font-family: var(--lp-font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.lp-process-editorial-grid-2__title {
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: clamp(2.25rem, 10vw, 4.75rem);
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 0.98;
+  margin: 0;
+  max-width: 10em;
+}
+
+.lp-process-editorial-grid-2__text {
+  color: var(--lp-text-muted);
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  font-size: 1rem;
+  line-height: 1.7;
+  max-width: 42rem;
+}
+
+.lp-process-editorial-grid-2__text p {
+  margin: 0;
+}
+
+.lp-process-editorial-grid-2__button {
+  align-items: center;
+  border: 1px solid var(--lp-accent);
+  border-radius: var(--lp-radius);
+  color: var(--lp-text);
+  display: inline-flex;
+  font-size: 0.95rem;
+  font-weight: 600;
+  justify-content: center;
+  line-height: 1.2;
+  min-height: 3rem;
+  padding: var(--lp-spacing-sm) var(--lp-spacing-lg);
+  text-decoration: none;
+}
+
+.lp-process-editorial-grid-2__button:focus-visible {
+  outline: 2px solid var(--lp-accent);
+  outline-offset: 4px;
+}
+
+.lp-process-editorial-grid-2__steps {
+  counter-reset: process-step;
+  display: grid;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.lp-process-editorial-grid-2__step {
+  border-top: 1px solid var(--lp-border);
+  display: grid;
+  gap: var(--lp-spacing-md);
+  grid-template-columns: minmax(3rem, 0.18fr) 1fr;
+  padding: var(--lp-spacing-lg) 0;
+}
+
+.lp-process-editorial-grid-2__step:last-child {
+  border-bottom: 1px solid var(--lp-border);
+}
+
+.lp-process-editorial-grid-2__step-number {
+  color: var(--lp-accent);
+  font-family: var(--lp-font-display);
+  font-size: clamp(1.5rem, 6vw, 2.75rem);
+  line-height: 1;
+}
+
+.lp-process-editorial-grid-2__step-body {
+  display: grid;
+  gap: var(--lp-spacing-xs);
+}
+
+.lp-process-editorial-grid-2__step-title {
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: clamp(1.25rem, 5vw, 2rem);
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.lp-process-editorial-grid-2__step-text {
+  color: var(--lp-text-muted);
+  font-size: 0.98rem;
+  line-height: 1.65;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .lp-process-editorial-grid-2 {
+    padding: var(--lp-spacing-xl) var(--lp-spacing-lg);
+  }
+
+  .lp-process-editorial-grid-2__inner {
+    align-items: start;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .lp-process-editorial-grid-2__content {
+    position: sticky;
+    top: var(--lp-spacing-lg);
+  }
+
+  .lp-process-editorial-grid-2__step {
+    grid-template-columns: minmax(4.5rem, 0.22fr) 1fr;
+    padding: var(--lp-spacing-xl) 0;
+  }
+}
+</style>
+<section class="lp-process-editorial-grid-2" aria-labelledby="lp-process-editorial-grid-2-title">
+  <div class="lp-process-editorial-grid-2__inner">
+    <div class="lp-process-editorial-grid-2__content">
+      <span class="lp-process-editorial-grid-2__eyebrow">{{slot:process-eyebrow}}</span>
+      <h2 class="lp-process-editorial-grid-2__title" id="lp-process-editorial-grid-2-title">{{slot:process-title}}</h2>
+      <div class="lp-process-editorial-grid-2__text">
+        <p>{{slot:process-paragraph-1}}</p>
+        <p>{{slot:process-paragraph-2}}</p>
+        <p>{{slot:process-paragraph-3}}</p>
+      </div>
+      <a class="lp-process-editorial-grid-2__button" href="{{slot:process-cta-link}}">
+        {{slot:process-cta-label}}
+      </a>
+    </div>
+
+    <ol class="lp-process-editorial-grid-2__steps">
+      <li class="lp-process-editorial-grid-2__step">
+        <span class="lp-process-editorial-grid-2__step-number">{{slot:process-step-1-number}}</span>
+        <div class="lp-process-editorial-grid-2__step-body">
+          <h3 class="lp-process-editorial-grid-2__step-title">{{slot:process-step-1-title}}</h3>
+          <p class="lp-process-editorial-grid-2__step-text">{{slot:process-step-1-text}}</p>
+        </div>
+      </li>
+      <li class="lp-process-editorial-grid-2__step">
+        <span class="lp-process-editorial-grid-2__step-number">{{slot:process-step-2-number}}</span>
+        <div class="lp-process-editorial-grid-2__step-body">
+          <h3 class="lp-process-editorial-grid-2__step-title">{{slot:process-step-2-title}}</h3>
+          <p class="lp-process-editorial-grid-2__step-text">{{slot:process-step-2-text}}</p>
+        </div>
+      </li>
+      <li class="lp-process-editorial-grid-2__step">
+        <span class="lp-process-editorial-grid-2__step-number">{{slot:process-step-3-number}}</span>
+        <div class="lp-process-editorial-grid-2__step-body">
+          <h3 class="lp-process-editorial-grid-2__step-title">{{slot:process-step-3-title}}</h3>
+          <p class="lp-process-editorial-grid-2__step-text">{{slot:process-step-3-text}}</p>
+        </div>
+      </li>
+      <li class="lp-process-editorial-grid-2__step">
+        <span class="lp-process-editorial-grid-2__step-number">{{slot:process-step-4-number}}</span>
+        <div class="lp-process-editorial-grid-2__step-body">
+          <h3 class="lp-process-editorial-grid-2__step-title">{{slot:process-step-4-title}}</h3>
+          <p class="lp-process-editorial-grid-2__step-text">{{slot:process-step-4-text}}</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>

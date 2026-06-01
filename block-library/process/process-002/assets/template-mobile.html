@@ -1,0 +1,253 @@
+<style>.lp-process-corporate-stacked {
+  background: var(--lp-bg);
+  color: var(--lp-text);
+  font-family: var(--lp-font-body);
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md);
+}
+
+.lp-process-corporate-stacked__inner {
+  display: grid;
+  gap: var(--lp-spacing-lg);
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.lp-process-corporate-stacked__intro {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+}
+
+.lp-process-corporate-stacked__eyebrow {
+  margin: 0;
+  color: var(--lp-accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.lp-process-corporate-stacked__title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: clamp(2rem, 6vw, 4.5rem);
+  line-height: 0.95;
+  letter-spacing: 0;
+  max-width: 10em;
+}
+
+.lp-process-corporate-stacked__lead {
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 1rem;
+  line-height: 1.65;
+  max-width: 54rem;
+}
+
+.lp-process-corporate-stacked__expert {
+  display: grid;
+  gap: var(--lp-spacing-md);
+  background: var(--lp-bg-alt);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+  padding: var(--lp-spacing-md);
+}
+
+.lp-process-corporate-stacked__expert-media,
+.lp-process-corporate-stacked__team-figure {
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--lp-radius);
+  background: var(--lp-border);
+}
+
+.lp-process-corporate-stacked__expert-media img,
+.lp-process-corporate-stacked__team-figure img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lp-process-corporate-stacked__expert-media {
+  aspect-ratio: 4 / 3;
+}
+
+.lp-process-corporate-stacked__expert-body {
+  display: grid;
+  align-content: center;
+  gap: var(--lp-spacing-xs);
+}
+
+.lp-process-corporate-stacked__expert-label {
+  margin: 0;
+  color: var(--lp-accent);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.lp-process-corporate-stacked__expert-name {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 1.45rem;
+  line-height: 1.15;
+}
+
+.lp-process-corporate-stacked__expert-text {
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+
+.lp-process-corporate-stacked__steps {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lp-process-corporate-stacked__step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--lp-spacing-sm);
+  align-items: start;
+  padding: var(--lp-spacing-md);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+  background: var(--lp-bg-alt);
+}
+
+.lp-process-corporate-stacked__step-number {
+  display: grid;
+  place-items: center;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  border-radius: var(--lp-radius);
+  background: var(--lp-primary);
+  color: white;
+  font-family: var(--lp-font-display);
+  font-weight: 700;
+}
+
+.lp-process-corporate-stacked__step-content {
+  display: grid;
+  gap: var(--lp-spacing-xs);
+}
+
+.lp-process-corporate-stacked__step-title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 1.15rem;
+  line-height: 1.2;
+}
+
+.lp-process-corporate-stacked__step-text {
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 0.96rem;
+  line-height: 1.6;
+}
+
+.lp-process-corporate-stacked__team {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+}
+
+.lp-process-corporate-stacked__team-figure {
+  aspect-ratio: 16 / 10;
+}
+
+@media (min-width: 768px) {
+  .lp-process-corporate-stacked {
+    padding: var(--lp-spacing-xl) var(--lp-spacing-lg);
+  }
+
+  .lp-process-corporate-stacked__inner {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.75fr);
+    align-items: start;
+  }
+
+  .lp-process-corporate-stacked__intro,
+  .lp-process-corporate-stacked__steps {
+    grid-column: 1;
+  }
+
+  .lp-process-corporate-stacked__expert {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    position: sticky;
+    top: var(--lp-spacing-lg);
+  }
+
+  .lp-process-corporate-stacked__team {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lp-process-corporate-stacked__expert-media {
+    aspect-ratio: 1 / 1;
+  }
+}
+
+/* Forced mobile viewport for preview */
+@media (min-width: 0) {
+  body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
+}
+</style>
+<section class="lp-process-corporate-stacked" aria-labelledby="process-corporate-stacked-title">
+  <div class="lp-process-corporate-stacked__inner">
+    <div class="lp-process-corporate-stacked__intro">
+      <p class="lp-process-corporate-stacked__eyebrow">{{slot:process-eyebrow}}</p>
+      <h2 class="lp-process-corporate-stacked__title" id="process-corporate-stacked-title">{{slot:process-heading}}</h2>
+      <p class="lp-process-corporate-stacked__lead">{{slot:process-subhead}}</p>
+    </div>
+
+    <div class="lp-process-corporate-stacked__expert">
+      <figure class="lp-process-corporate-stacked__expert-media">
+        <img src="{{slot:expert-image}}" alt="{{slot:expert-image-alt}}" loading="lazy">
+      </figure>
+      <div class="lp-process-corporate-stacked__expert-body">
+        <p class="lp-process-corporate-stacked__expert-label">{{slot:expert-label}}</p>
+        <h3 class="lp-process-corporate-stacked__expert-name">{{slot:expert-name}}</h3>
+        <p class="lp-process-corporate-stacked__expert-text">{{slot:expert-text}}</p>
+      </div>
+    </div>
+
+    <ol class="lp-process-corporate-stacked__steps">
+      <li class="lp-process-corporate-stacked__step">
+        <span class="lp-process-corporate-stacked__step-number">{{slot:step-1-number}}</span>
+        <div class="lp-process-corporate-stacked__step-content">
+          <h3 class="lp-process-corporate-stacked__step-title">{{slot:step-1-title}}</h3>
+          <p class="lp-process-corporate-stacked__step-text">{{slot:step-1-text}}</p>
+        </div>
+      </li>
+      <li class="lp-process-corporate-stacked__step">
+        <span class="lp-process-corporate-stacked__step-number">{{slot:step-2-number}}</span>
+        <div class="lp-process-corporate-stacked__step-content">
+          <h3 class="lp-process-corporate-stacked__step-title">{{slot:step-2-title}}</h3>
+          <p class="lp-process-corporate-stacked__step-text">{{slot:step-2-text}}</p>
+        </div>
+      </li>
+      <li class="lp-process-corporate-stacked__step">
+        <span class="lp-process-corporate-stacked__step-number">{{slot:step-3-number}}</span>
+        <div class="lp-process-corporate-stacked__step-content">
+          <h3 class="lp-process-corporate-stacked__step-title">{{slot:step-3-title}}</h3>
+          <p class="lp-process-corporate-stacked__step-text">{{slot:step-3-text}}</p>
+        </div>
+      </li>
+    </ol>
+
+    <div class="lp-process-corporate-stacked__team" aria-label="{{slot:team-gallery-label}}">
+      <figure class="lp-process-corporate-stacked__team-figure">
+        <img src="{{slot:team-image-1}}" alt="{{slot:team-image-1-alt}}" loading="lazy">
+      </figure>
+      <figure class="lp-process-corporate-stacked__team-figure">
+        <img src="{{slot:team-image-2}}" alt="{{slot:team-image-2-alt}}" loading="lazy">
+      </figure>
+    </div>
+  </div>
+</section>

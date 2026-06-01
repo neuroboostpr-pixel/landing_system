@@ -1,1 +1,222 @@
-<!-- gallery default block -->
+<style>.lp-gallery-corporate-cards {
+  background: var(--lp-bg);
+  color: var(--lp-text);
+  font-family: var(--lp-font-body);
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md);
+}
+
+.lp-gallery-corporate-cards__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.lp-gallery-corporate-cards__header {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  max-width: 760px;
+  margin-bottom: var(--lp-spacing-lg);
+}
+
+.lp-gallery-corporate-cards__eyebrow {
+  margin: 0;
+  color: var(--lp-accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.lp-gallery-corporate-cards__title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: clamp(2rem, 8vw, 4.5rem);
+  line-height: 0.95;
+  letter-spacing: 0;
+}
+
+.lp-gallery-corporate-cards__subhead {
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.lp-gallery-corporate-cards__grid {
+  display: grid;
+  gap: var(--lp-spacing-md);
+}
+
+.lp-gallery-corporate-cards__item {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  overflow: hidden;
+  background: var(--lp-bg-alt);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+}
+
+.lp-gallery-corporate-cards__media {
+  aspect-ratio: 4 / 3;
+  background: var(--lp-border);
+  overflow: hidden;
+}
+
+.lp-gallery-corporate-cards__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lp-gallery-corporate-cards__content {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  padding: var(--lp-spacing-md);
+}
+
+.lp-gallery-corporate-cards__badge {
+  width: fit-content;
+  color: var(--lp-accent);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+  padding: var(--lp-spacing-xs) var(--lp-spacing-sm);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.lp-gallery-corporate-cards__name {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 1.35rem;
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+
+.lp-gallery-corporate-cards__text {
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.lp-gallery-corporate-cards__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lp-spacing-sm);
+  padding-top: var(--lp-spacing-sm);
+  border-top: 1px solid var(--lp-border);
+}
+
+.lp-gallery-corporate-cards__price {
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.lp-gallery-corporate-cards__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  color: var(--lp-bg);
+  background: var(--lp-primary);
+  border: 1px solid var(--lp-primary);
+  border-radius: var(--lp-radius);
+  padding: var(--lp-spacing-sm) var(--lp-spacing-md);
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.lp-gallery-corporate-cards__link:focus-visible {
+  outline: 2px solid var(--lp-accent);
+  outline-offset: 3px;
+}
+
+@media (min-width: 768px) {
+  .lp-gallery-corporate-cards {
+    padding: var(--lp-spacing-xl) var(--lp-spacing-lg);
+  }
+
+  .lp-gallery-corporate-cards__header {
+    margin-bottom: var(--lp-spacing-xl);
+  }
+
+  .lp-gallery-corporate-cards__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: stretch;
+  }
+
+  .lp-gallery-corporate-cards__item {
+    grid-template-rows: auto 1fr;
+  }
+
+  .lp-gallery-corporate-cards__content {
+    align-content: start;
+  }
+}
+</style>
+<section class="lp-gallery-corporate-cards" aria-labelledby="lp-gallery-corporate-cards-title">
+  <div class="lp-gallery-corporate-cards__inner">
+    <div class="lp-gallery-corporate-cards__header">
+      <p class="lp-gallery-corporate-cards__eyebrow">{{slot:eyebrow}}</p>
+      <h2 class="lp-gallery-corporate-cards__title" id="lp-gallery-corporate-cards-title">{{slot:heading}}</h2>
+      <p class="lp-gallery-corporate-cards__subhead">{{slot:subhead}}</p>
+    </div>
+
+    <div class="lp-gallery-corporate-cards__grid" role="list">
+      <figure class="lp-gallery-corporate-cards__item" role="listitem">
+        <div class="lp-gallery-corporate-cards__media">
+          <img src="{{slot:item-1-image}}" alt="{{slot:item-1-image-alt}}" loading="lazy">
+        </div>
+        <figcaption class="lp-gallery-corporate-cards__content">
+          <span class="lp-gallery-corporate-cards__badge">{{slot:item-1-badge}}</span>
+          <h3 class="lp-gallery-corporate-cards__name">{{slot:item-1-title}}</h3>
+          <p class="lp-gallery-corporate-cards__text">{{slot:item-1-text}}</p>
+          <div class="lp-gallery-corporate-cards__meta">
+            <span class="lp-gallery-corporate-cards__price">{{slot:item-1-price}}</span>
+            <a class="lp-gallery-corporate-cards__link" href="{{slot:item-1-link}}">{{slot:item-1-cta}}</a>
+          </div>
+        </figcaption>
+      </figure>
+
+      <figure class="lp-gallery-corporate-cards__item" role="listitem">
+        <div class="lp-gallery-corporate-cards__media">
+          <img src="{{slot:item-2-image}}" alt="{{slot:item-2-image-alt}}" loading="lazy">
+        </div>
+        <figcaption class="lp-gallery-corporate-cards__content">
+          <span class="lp-gallery-corporate-cards__badge">{{slot:item-2-badge}}</span>
+          <h3 class="lp-gallery-corporate-cards__name">{{slot:item-2-title}}</h3>
+          <p class="lp-gallery-corporate-cards__text">{{slot:item-2-text}}</p>
+          <div class="lp-gallery-corporate-cards__meta">
+            <span class="lp-gallery-corporate-cards__price">{{slot:item-2-price}}</span>
+            <a class="lp-gallery-corporate-cards__link" href="{{slot:item-2-link}}">{{slot:item-2-cta}}</a>
+          </div>
+        </figcaption>
+      </figure>
+
+      <figure class="lp-gallery-corporate-cards__item" role="listitem">
+        <div class="lp-gallery-corporate-cards__media">
+          <img src="{{slot:item-3-image}}" alt="{{slot:item-3-image-alt}}" loading="lazy">
+        </div>
+        <figcaption class="lp-gallery-corporate-cards__content">
+          <span class="lp-gallery-corporate-cards__badge">{{slot:item-3-badge}}</span>
+          <h3 class="lp-gallery-corporate-cards__name">{{slot:item-3-title}}</h3>
+          <p class="lp-gallery-corporate-cards__text">{{slot:item-3-text}}</p>
+          <div class="lp-gallery-corporate-cards__meta">
+            <span class="lp-gallery-corporate-cards__price">{{slot:item-3-price}}</span>
+            <a class="lp-gallery-corporate-cards__link" href="{{slot:item-3-link}}">{{slot:item-3-cta}}</a>
+          </div>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>

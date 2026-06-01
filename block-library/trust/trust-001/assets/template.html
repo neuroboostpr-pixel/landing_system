@@ -1,1 +1,207 @@
-<!-- trust grid block -->
+<style>.lp-trust-corporate-grid-2 {
+  background: var(--lp-bg);
+  color: var(--lp-text);
+  font-family: var(--lp-font-body);
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md);
+}
+
+.lp-trust-corporate-grid-2__inner {
+  display: grid;
+  gap: var(--lp-spacing-lg);
+  margin: 0 auto;
+  max-width: 1280px;
+}
+
+.lp-trust-corporate-grid-2__content {
+  display: grid;
+  gap: var(--lp-spacing-md);
+}
+
+.lp-trust-corporate-grid-2__eyebrow {
+  color: var(--lp-accent);
+  font-size: 0.875rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.lp-trust-corporate-grid-2__title {
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.05;
+  margin: 0;
+}
+
+.lp-trust-corporate-grid-2__text {
+  color: var(--lp-text-muted);
+  font-size: 1rem;
+  line-height: 1.7;
+  margin: 0;
+  max-width: 42rem;
+}
+
+.lp-trust-corporate-grid-2__stats {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.lp-trust-corporate-grid-2__stat {
+  background: var(--lp-bg-alt);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+  display: grid;
+  gap: var(--lp-spacing-xs);
+  padding: var(--lp-spacing-md);
+}
+
+.lp-trust-corporate-grid-2__stat strong {
+  color: var(--lp-primary);
+  font-family: var(--lp-font-display);
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.lp-trust-corporate-grid-2__stat span {
+  color: var(--lp-text-muted);
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.lp-trust-corporate-grid-2__cards {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+}
+
+.lp-trust-corporate-grid-2__card {
+  background: var(--lp-bg-alt);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  padding: var(--lp-spacing-md);
+}
+
+.lp-trust-corporate-grid-2__icon {
+  align-items: center;
+  background: var(--lp-bg);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+  color: var(--lp-primary);
+  display: inline-flex;
+  height: 2.75rem;
+  justify-content: center;
+  width: 2.75rem;
+}
+
+.lp-trust-corporate-grid-2__icon::before {
+  border: 2px solid currentColor;
+  border-radius: var(--lp-radius);
+  content: "";
+  height: 1rem;
+  width: 1rem;
+}
+
+.lp-trust-corporate-grid-2__card h3 {
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 1.125rem;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.lp-trust-corporate-grid-2__card p {
+  color: var(--lp-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.lp-trust-corporate-grid-2__partners {
+  align-items: center;
+  border-top: 1px solid var(--lp-border);
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding-top: var(--lp-spacing-lg);
+}
+
+.lp-trust-corporate-grid-2__partners img {
+  background: var(--lp-bg-alt);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+  display: block;
+  height: 4rem;
+  object-fit: contain;
+  padding: var(--lp-spacing-sm);
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .lp-trust-corporate-grid-2__inner {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  }
+
+  .lp-trust-corporate-grid-2__cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lp-trust-corporate-grid-2__partners {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+</style>
+<section class="lp-trust-corporate-grid-2" aria-labelledby="trust-corporate-grid-2-title">
+  <div class="lp-trust-corporate-grid-2__inner">
+    <div class="lp-trust-corporate-grid-2__content">
+      <p class="lp-trust-corporate-grid-2__eyebrow">{{slot:eyebrow}}</p>
+      <h2 class="lp-trust-corporate-grid-2__title" id="trust-corporate-grid-2-title">{{slot:heading}}</h2>
+      <p class="lp-trust-corporate-grid-2__text">{{slot:subhead}}</p>
+
+      <ul class="lp-trust-corporate-grid-2__stats" aria-label="{{slot:stats-label}}">
+        <li class="lp-trust-corporate-grid-2__stat">
+          <strong>{{slot:stat-1-value}}</strong>
+          <span>{{slot:stat-1-label}}</span>
+        </li>
+        <li class="lp-trust-corporate-grid-2__stat">
+          <strong>{{slot:stat-2-value}}</strong>
+          <span>{{slot:stat-2-label}}</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="lp-trust-corporate-grid-2__cards" aria-label="{{slot:benefits-label}}">
+      <article class="lp-trust-corporate-grid-2__card">
+        <span class="lp-trust-corporate-grid-2__icon" aria-hidden="true"></span>
+        <h3>{{slot:benefit-1-title}}</h3>
+        <p>{{slot:benefit-1-text}}</p>
+      </article>
+      <article class="lp-trust-corporate-grid-2__card">
+        <span class="lp-trust-corporate-grid-2__icon" aria-hidden="true"></span>
+        <h3>{{slot:benefit-2-title}}</h3>
+        <p>{{slot:benefit-2-text}}</p>
+      </article>
+      <article class="lp-trust-corporate-grid-2__card">
+        <span class="lp-trust-corporate-grid-2__icon" aria-hidden="true"></span>
+        <h3>{{slot:benefit-3-title}}</h3>
+        <p>{{slot:benefit-3-text}}</p>
+      </article>
+      <article class="lp-trust-corporate-grid-2__card">
+        <span class="lp-trust-corporate-grid-2__icon" aria-hidden="true"></span>
+        <h3>{{slot:benefit-4-title}}</h3>
+        <p>{{slot:benefit-4-text}}</p>
+      </article>
+    </div>
+
+    <div class="lp-trust-corporate-grid-2__partners" aria-label="{{slot:partners-label}}">
+      <img src="{{slot:partner-1-logo}}" alt="{{slot:partner-1-logo-alt}}" loading="lazy">
+      <img src="{{slot:partner-2-logo}}" alt="{{slot:partner-2-logo-alt}}" loading="lazy">
+      <img src="{{slot:partner-3-logo}}" alt="{{slot:partner-3-logo-alt}}" loading="lazy">
+      <img src="{{slot:partner-4-logo}}" alt="{{slot:partner-4-logo-alt}}" loading="lazy">
+    </div>
+  </div>
+</section>

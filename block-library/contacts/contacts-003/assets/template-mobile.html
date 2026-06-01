@@ -1,0 +1,363 @@
+<style>.lp-contacts-corporate-split {
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md);
+  background: var(--lp-bg-alt);
+  color: var(--lp-text);
+  font-family: var(--lp-font-body);
+}
+
+.lp-contacts-corporate-split * {
+  box-sizing: border-box;
+}
+
+.lp-contacts-corporate-split__inner {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  gap: var(--lp-spacing-lg);
+}
+
+.lp-contacts-corporate-split__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lp-spacing-lg);
+}
+
+.lp-contacts-corporate-split__brand {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  color: var(--lp-text);
+  text-decoration: none;
+}
+
+.lp-contacts-corporate-split__brand img {
+  display: block;
+  max-width: 11rem;
+  height: auto;
+}
+
+.lp-contacts-corporate-split__heading {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+}
+
+.lp-contacts-corporate-split__eyebrow {
+  margin: 0;
+  color: var(--lp-primary);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.lp-contacts-corporate-split h2,
+.lp-contacts-corporate-split h3,
+.lp-contacts-corporate-split p {
+  margin: 0;
+}
+
+.lp-contacts-corporate-split h2 {
+  max-width: 12em;
+  font-family: var(--lp-font-display);
+  font-size: clamp(2rem, 7vw, 4.25rem);
+  line-height: 0.98;
+  letter-spacing: 0;
+  color: var(--lp-text);
+}
+
+.lp-contacts-corporate-split__heading p:not(.lp-contacts-corporate-split__eyebrow) {
+  max-width: 38rem;
+  color: var(--lp-text-muted);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.lp-contacts-corporate-split__contacts {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.lp-contacts-corporate-split__contacts li {
+  display: grid;
+  grid-template-columns: 2.75rem 1fr;
+  align-items: center;
+  gap: var(--lp-spacing-sm);
+  min-height: 2.75rem;
+  color: var(--lp-text);
+}
+
+.lp-contacts-corporate-split__contacts a {
+  color: var(--lp-text);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.lp-contacts-corporate-split__contacts a:hover,
+.lp-contacts-corporate-split__contacts a:focus-visible {
+  color: var(--lp-primary);
+}
+
+.lp-contacts-corporate-split__icon {
+  display: inline-grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+  color: var(--lp-primary);
+  background: var(--lp-bg);
+}
+
+.lp-contacts-corporate-split__icon svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.lp-contacts-corporate-split__social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lp-spacing-xs);
+}
+
+.lp-contacts-corporate-split__social a {
+  display: inline-grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+  background: var(--lp-bg);
+  color: var(--lp-primary);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.lp-contacts-corporate-split__social a:hover,
+.lp-contacts-corporate-split__social a:focus-visible {
+  border-color: var(--lp-primary);
+  background: var(--lp-primary);
+  color: var(--lp-bg);
+}
+
+.lp-contacts-corporate-split__form {
+  display: grid;
+  gap: var(--lp-spacing-md);
+  padding: var(--lp-spacing-lg);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+  background: var(--lp-bg);
+  box-shadow: 0 1.25rem 3rem transparent;
+}
+
+.lp-contacts-corporate-split__form-head {
+  display: grid;
+  gap: var(--lp-spacing-xs);
+}
+
+.lp-contacts-corporate-split__form h3 {
+  font-family: var(--lp-font-display);
+  font-size: clamp(1.5rem, 5vw, 2.25rem);
+  line-height: 1.05;
+  letter-spacing: 0;
+  color: var(--lp-text);
+}
+
+.lp-contacts-corporate-split__form p {
+  color: var(--lp-text-muted);
+  line-height: 1.55;
+}
+
+.lp-contacts-corporate-split__form label {
+  display: grid;
+  gap: var(--lp-spacing-xs);
+  color: var(--lp-text);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.lp-contacts-corporate-split__form input,
+.lp-contacts-corporate-split__form textarea {
+  width: 100%;
+  min-height: 3rem;
+  padding: var(--lp-spacing-sm) var(--lp-spacing-md);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+  background: var(--lp-bg);
+  color: var(--lp-text);
+  font: inherit;
+}
+
+.lp-contacts-corporate-split__form textarea {
+  resize: vertical;
+}
+
+.lp-contacts-corporate-split__form input:focus,
+.lp-contacts-corporate-split__form textarea:focus {
+  outline: 2px solid var(--lp-accent);
+  outline-offset: 2px;
+  border-color: var(--lp-primary);
+}
+
+.lp-contacts-corporate-split__consent {
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  font-weight: 400;
+  color: var(--lp-text-muted);
+  line-height: 1.45;
+}
+
+.lp-contacts-corporate-split__consent input {
+  width: 1rem;
+  min-height: 1rem;
+  margin-top: 0.2rem;
+  accent-color: var(--lp-primary);
+}
+
+.lp-contacts-corporate-split__form button {
+  min-height: 3.25rem;
+  padding: var(--lp-spacing-sm) var(--lp-spacing-lg);
+  border: 1px solid var(--lp-primary);
+  border-radius: var(--lp-radius);
+  background: var(--lp-primary);
+  color: var(--lp-bg);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.lp-contacts-corporate-split__form button:hover,
+.lp-contacts-corporate-split__form button:focus-visible {
+  background: var(--lp-accent);
+  border-color: var(--lp-accent);
+}
+
+.lp-contacts-corporate-split a,
+.lp-contacts-corporate-split button,
+.lp-contacts-corporate-split input,
+.lp-contacts-corporate-split textarea {
+  transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, outline-color 180ms ease;
+}
+
+@media (min-width: 768px) {
+  .lp-contacts-corporate-split {
+    padding: var(--lp-spacing-xl) var(--lp-spacing-lg);
+  }
+
+  .lp-contacts-corporate-split__inner {
+    grid-template-columns: minmax(0, 1fr) minmax(22rem, 0.8fr);
+    align-items: center;
+    gap: var(--lp-spacing-xl);
+  }
+
+  .lp-contacts-corporate-split__content {
+    gap: var(--lp-spacing-xl);
+  }
+
+  .lp-contacts-corporate-split__contacts {
+    max-width: 36rem;
+  }
+
+  .lp-contacts-corporate-split__form {
+    padding: var(--lp-spacing-xl);
+  }
+}
+
+/* Forced mobile viewport for preview */
+@media (min-width: 0) {
+  body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
+}
+</style>
+<section class="lp-contacts-corporate-split" aria-labelledby="lp-contacts-corporate-split-title">
+  <div class="lp-contacts-corporate-split__inner">
+    <div class="lp-contacts-corporate-split__content">
+      <a class="lp-contacts-corporate-split__brand" href="{{slot:brand-link}}" aria-label="{{slot:brand-aria-label}}">
+        <img src="{{slot:brand-logo}}" alt="{{slot:brand-logo-alt}}" loading="lazy">
+      </a>
+
+      <div class="lp-contacts-corporate-split__heading">
+        <p class="lp-contacts-corporate-split__eyebrow">{{slot:eyebrow}}</p>
+        <h2 id="lp-contacts-corporate-split-title">{{slot:heading}}</h2>
+        <p>{{slot:subhead}}</p>
+      </div>
+
+      <ul class="lp-contacts-corporate-split__contacts" aria-label="{{slot:contacts-list-label}}">
+        <li>
+          <span class="lp-contacts-corporate-split__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path d="M7 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L17 13l5 2v4c0 1.1-.9 2-2 2A17 17 0 0 1 3 4c0-1.1.9-2 2-2h2z"></path>
+            </svg>
+          </span>
+          <a href="{{slot:phone-link}}">{{slot:phone}}</a>
+        </li>
+        <li>
+          <span class="lp-contacts-corporate-split__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path d="M4 6h16v12H4z"></path>
+              <path d="m4 7 8 6 8-6"></path>
+            </svg>
+          </span>
+          <a href="{{slot:email-link}}">{{slot:email}}</a>
+        </li>
+        <li>
+          <span class="lp-contacts-corporate-split__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path d="M12 21s7-5.2 7-11a7 7 0 0 0-14 0c0 5.8 7 11 7 11z"></path>
+              <circle cx="12" cy="10" r="2.5"></circle>
+            </svg>
+          </span>
+          <span>{{slot:address}}</span>
+        </li>
+      </ul>
+
+      <div class="lp-contacts-corporate-split__social" aria-label="{{slot:social-list-label}}">
+        <a href="{{slot:social-link-1}}" aria-label="{{slot:social-label-1}}">
+          <span>{{slot:social-icon-1}}</span>
+        </a>
+        <a href="{{slot:social-link-2}}" aria-label="{{slot:social-label-2}}">
+          <span>{{slot:social-icon-2}}</span>
+        </a>
+        <a href="{{slot:social-link-3}}" aria-label="{{slot:social-label-3}}">
+          <span>{{slot:social-icon-3}}</span>
+        </a>
+      </div>
+    </div>
+
+    <form class="lp-contacts-corporate-split__form" action="{{slot:form-action}}" method="post" aria-label="{{slot:form-label}}">
+      <div class="lp-contacts-corporate-split__form-head">
+        <h3>{{slot:form-heading}}</h3>
+        <p>{{slot:form-subhead}}</p>
+      </div>
+
+      <label>
+        <span>{{slot:name-label}}</span>
+        <input type="text" name="{{slot:name-field-name}}" placeholder="{{slot:name-placeholder}}" autocomplete="name">
+      </label>
+
+      <label>
+        <span>{{slot:phone-label}}</span>
+        <input type="tel" name="{{slot:phone-field-name}}" placeholder="{{slot:phone-placeholder}}" autocomplete="tel">
+      </label>
+
+      <label>
+        <span>{{slot:message-label}}</span>
+        <textarea name="{{slot:message-field-name}}" placeholder="{{slot:message-placeholder}}" rows="4"></textarea>
+      </label>
+
+      <label class="lp-contacts-corporate-split__consent">
+        <input type="checkbox" name="{{slot:consent-field-name}}">
+        <span>{{slot:consent-text}}</span>
+      </label>
+
+      <button type="submit">{{slot:submit-label}}</button>
+    </form>
+  </div>
+</section>
