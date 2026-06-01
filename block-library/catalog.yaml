@@ -1,990 +1,1099 @@
 blocks:
-- category: Footer
+- id: contacts-001
+  path: contacts/contacts-001/
+  type: contacts
+  category: contacts
   display_name_ru: 'contacts: brutalist'
-  id: contacts-001
   layout_pattern: brutalist
+- id: contacts-002
+  path: contacts/contacts-002/
   type: contacts
-- category: Footer
+  category: contacts
   display_name_ru: 'contacts: grid'
-  id: contacts-002
   layout_pattern: grid
+- id: contacts-003
+  path: contacts/contacts-003/
   type: contacts
-- category: Footer
+  category: contacts
   display_name_ru: 'contacts: split'
-  id: contacts-003
   layout_pattern: split
+- id: contacts-corporate-split-portfolio-kdm1-ru-16
+  path: contacts/contacts-corporate-split-portfolio-kdm1-ru-16/
   type: contacts
-- category: Footer
-  display_name_ru: Финальный контактный экран с крупным заголовком, формой выбора
-    времени и яркой к
-  id: contacts-corporate-split-portfolio-kdm1-ru-16
+  category: contacts
+  display_name_ru: 'Финальный контактный экран с крупным заголовком, формой выбора времени'
   layout_pattern: split
-  type: contacts
-- category: Conversion
+- id: cta-001
+  path: cta/cta-001/
+  type: cta
+  category: cta
   display_name_ru: 'CTA: сплит с фоном'
-  id: cta-001
   layout_pattern: split
+- id: cta-002
+  path: cta/cta-002/
   type: cta
-- category: Conversion
+  category: cta
   display_name_ru: 'cta: brutalist'
-  id: cta-002
   layout_pattern: brutalist
+- id: cta-003
+  path: cta/cta-003/
   type: cta
-- category: Conversion
+  category: cta
   display_name_ru: 'cta: cinematic'
-  id: cta-003
   layout_pattern: cinematic
+- id: cta-004
+  path: cta/cta-004/
   type: cta
-- category: Conversion
+  category: cta
   display_name_ru: 'cta: default'
-  id: cta-004
   layout_pattern: default
+- id: cta-005
+  path: cta/cta-005/
   type: cta
-- category: Conversion
+  category: cta
   display_name_ru: 'cta: grid'
-  id: cta-005
   layout_pattern: grid
+- id: cta-006
+  path: cta/cta-006/
   type: cta
-- category: Conversion
+  category: cta
   display_name_ru: 'cta: split'
-  id: cta-006
   layout_pattern: split
+- id: cta-007
+  path: cta/cta-007/
   type: cta
-- category: Conversion
+  category: cta
   display_name_ru: 'cta: minimal'
-  id: cta-007
   layout_pattern: minimal
+- id: cta-cinematic-split-portfolio-kdm1-ru-9
+  path: cta/cta-cinematic-split-portfolio-kdm1-ru-9/
   type: cta
-- category: Conversion
-  display_name_ru: Темный эмоциональный блок с крупной иллюстрацией действия и сильным
-    текстовым ак
-  id: cta-cinematic-split-portfolio-kdm1-ru-9
+  category: cta
+  display_name_ru: 'Темный эмоциональный блок с крупной иллюстрацией действия и сильным'
   layout_pattern: split
+- id: cta-corporate-centered-zilant-group-9
+  path: cta/cta-corporate-centered-zilant-group-9/
   type: cta
-- category: Conversion
-  display_name_ru: Финальный призыв с крупным заголовком, коротким текстом, красной
-    кнопкой и размы
-  id: cta-corporate-centered-zilant-group-9
+  category: cta
+  display_name_ru: 'Финальный призыв с крупным заголовком, коротким текстом, красной'
   layout_pattern: centered
+- id: cta-corporate-split-project21993216-tild-6
+  path: cta/cta-corporate-split-project21993216-tild-6/
   type: cta
-- category: Conversion
-  display_name_ru: Горизонтальный баннер с коротким оффером, поясняющим текстом и
-    кнопкой справа.
-  id: cta-corporate-split-project21993216-tild-6
+  category: cta
+  display_name_ru: 'Горизонтальный баннер с коротким оффером, поясняющим текстом и кнопкой'
   layout_pattern: split
+- id: cta-corporate-stacked-romanmelnikov-tilda-13
+  path: cta/cta-corporate-stacked-romanmelnikov-tilda-13/
   type: cta
-- category: Conversion
-  display_name_ru: Финальный призыв с крупным текстом, контактной строкой и компактной
-    формой в рам
-  id: cta-corporate-stacked-romanmelnikov-tilda-13
+  category: cta
+  display_name_ru: 'Финальный призыв с крупным текстом, контактной строкой и компактной'
   layout_pattern: stacked
+- id: cta-minimal-split-portfolio-kdm1-ru-8
+  path: cta/cta-minimal-split-portfolio-kdm1-ru-8/
   type: cta
-- category: Conversion
-  display_name_ru: Контактная форма в светлой карточке рядом с lifestyle-фото и заметной
-    кнопкой от
-  id: cta-minimal-split-portfolio-kdm1-ru-8
+  category: cta
+  display_name_ru: 'Контактная форма в светлой карточке рядом с lifestyle-фото и заметной'
   layout_pattern: split
+- id: cta-minimal-split-project21993216-tild-8
+  path: cta/cta-minimal-split-project21993216-tild-8/
   type: cta
-- category: Conversion
-  display_name_ru: Короткий подтверждающий баннер с спокойным фоном и одной кнопкой
-    действия.
-  id: cta-minimal-split-project21993216-tild-8
+  category: cta
+  display_name_ru: 'Короткий подтверждающий баннер с спокойным фоном и одной кнопкой'
   layout_pattern: split
+- id: cta-technical-centered-antidiler-karpov-ru-5
+  path: cta/cta-technical-centered-antidiler-karpov-ru-5/
   type: cta
-- category: Conversion
-  display_name_ru: Блок подбора запчастей с сильным заголовком, формой в одну строку
-    и оранжевой кн
-  id: cta-technical-centered-antidiler-karpov-ru-5
+  category: cta
+  display_name_ru: 'Блок подбора запчастей с сильным заголовком, формой в одну строку'
   layout_pattern: centered
+- id: cta-technical-split-medregistrant-ru-7
+  path: cta/cta-technical-split-medregistrant-ru-7/
   type: cta
-- category: Conversion
-  display_name_ru: Узкий CTA-блок с сильным заголовком слева и размытым тематическим
-    изображением с
-  id: cta-technical-split-medregistrant-ru-7
+  category: cta
+  display_name_ru: 'Узкий CTA-блок с сильным заголовком слева и размытым тематическим'
   layout_pattern: split
+- id: ru-cta-01-callback-tg-max
+  path: cta/ru-cta-01-callback-tg-max/
   type: cta
-- category: Conversion
+  category: cta
   display_name_ru: '📞 CTA: Telegram / Max / Перезвоните'
-  id: ru-cta-01-callback-tg-max
   layout_pattern: split
+- id: ru-cta-02-banner-stripe
+  path: cta/ru-cta-02-banner-stripe/
   type: cta
-- category: Conversion
-  display_name_ru: 🟧 Баннер-CTA на акцентном фоне
-  id: ru-cta-02-banner-stripe
+  category: cta
+  display_name_ru: '🟧 Баннер-CTA на акцентном фоне'
   layout_pattern: split
+- id: ru-cta-03-urgency-scarcity
+  path: cta/ru-cta-03-urgency-scarcity/
   type: cta
-- category: Conversion
-  display_name_ru: ⏰ Полоса срочности — осталось X мест
-  id: ru-cta-03-urgency-scarcity
+  category: cta
+  display_name_ru: '⏰ Полоса срочности — осталось X мест'
   layout_pattern: split
+- id: ru-cta-04-lead-magnet
+  path: cta/ru-cta-04-lead-magnet/
   type: cta
-- category: Conversion
-  display_name_ru: 🎁 Лид-магнит — получите бесплатно
-  id: ru-cta-04-lead-magnet
+  category: cta
+  display_name_ru: '🎁 Лид-магнит — получите бесплатно'
   layout_pattern: split
+- id: ru-cta-05-login-cta
+  path: cta/ru-cta-05-login-cta/
   type: cta
-- category: Conversion
-  display_name_ru: 🔐 CTA — форма регистрации/записи
-  id: ru-cta-05-login-cta
+  category: cta
+  display_name_ru: '🔐 CTA — форма регистрации/записи'
   layout_pattern: split
+- id: ru-cta-06-editorial-paper
+  path: cta/ru-cta-06-editorial-paper/
   type: cta
-- category: Conversion
-  display_name_ru: Редакционный CTA — бежевый, курсив, пульс, нумерация
-  id: ru-cta-06-editorial-paper
+  category: cta
+  display_name_ru: 'Редакционный CTA — бежевый, курсив, пульс, нумерация'
   layout_pattern: split
+- id: ru-cta-07-accent-bg
+  path: cta/ru-cta-07-accent-bg/
   type: cta
-- category: Conversion
-  display_name_ru: CTA на акцентном фоне — контраст, минимум элементов
-  id: ru-cta-07-accent-bg
+  category: cta
+  display_name_ru: 'CTA на акцентном фоне — контраст, минимум элементов'
   layout_pattern: split
-  type: cta
-- category: FAQ
-  display_name_ru: Компактный блок вопросов с аккордеонными строками на темном фоне.
-  id: faq-corporate-stacked-portfolio-kdm1-ru-15
-  layout_pattern: stacked
+- id: faq-corporate-stacked-portfolio-kdm1-ru-15
+  path: faq/faq-corporate-stacked-portfolio-kdm1-ru-15/
   type: faq
-- category: FAQ
-  display_name_ru: Аккордеон частых вопросов в белых строках с иконками раскрытия
-    справа.
-  id: faq-minimal-stacked-project21993216-tild-11
+  category: faq
+  display_name_ru: 'Компактный блок вопросов с аккордеонными строками на темном фоне.'
   layout_pattern: stacked
+- id: faq-minimal-stacked-project21993216-tild-11
+  path: faq/faq-minimal-stacked-project21993216-tild-11/
   type: faq
-- category: FAQ
-  display_name_ru: Аккордеон вопросов на светлом фоне с компактными строками и иконками
-    раскрытия.
-  id: faq-minimal-stacked-sskrusgun-ru-13
+  category: faq
+  display_name_ru: 'Аккордеон частых вопросов в белых строках с иконками раскрытия справа.'
   layout_pattern: stacked
+- id: faq-minimal-stacked-sskrusgun-ru-13
+  path: faq/faq-minimal-stacked-sskrusgun-ru-13/
   type: faq
-- category: FAQ
-  display_name_ru: ❓ FAQ-аккордеон 6 вопросов
-  id: ru-faq-01-accordion
+  category: faq
+  display_name_ru: 'Аккордеон вопросов на светлом фоне с компактными строками и иконками'
   layout_pattern: stacked
+- id: ru-faq-01-accordion
+  path: faq/ru-faq-01-accordion/
   type: faq
-- category: FAQ
-  display_name_ru: ❓ FAQ — Почему именно мы?
-  id: ru-faq-02-why-us
+  category: faq
+  display_name_ru: '❓ FAQ-аккордеон 6 вопросов'
   layout_pattern: stacked
+- id: ru-faq-02-why-us
+  path: faq/ru-faq-02-why-us/
   type: faq
-- category: FAQ
-  display_name_ru: ❓ FAQ с поиском и категориями
-  id: ru-faq-03-searchable
+  category: faq
+  display_name_ru: '❓ FAQ — Почему именно мы?'
   layout_pattern: stacked
+- id: ru-faq-03-searchable
+  path: faq/ru-faq-03-searchable/
   type: faq
-- category: FAQ
-  display_name_ru: FAQ — 5 вопросов без аккордеона, белый фон
-  id: ru-faq-04-pricing-faq
+  category: faq
+  display_name_ru: '❓ FAQ с поиском и категориями'
   layout_pattern: stacked
+- id: ru-faq-04-pricing-faq
+  path: faq/ru-faq-04-pricing-faq/
   type: faq
-- category: Content
+  category: faq
+  display_name_ru: 'FAQ — 5 вопросов без аккордеона, белый фон'
+  layout_pattern: stacked
+- id: unknown-001
+  path: faq/unknown-001/
+  type: demo
+  category: faq
   display_name_ru: 'faq: default'
-  id: unknown-001
   layout_pattern: default
+- id: unknown-002
+  path: faq/unknown-002/
   type: demo
-- category: Content
+  category: faq
   display_name_ru: 'faq: minimal'
-  id: unknown-002
   layout_pattern: minimal
-  type: demo
-- category: Content
+- id: features-001
+  path: features/features-001/
+  type: features
+  category: features
   display_name_ru: 'features: brutalist'
-  id: features-001
   layout_pattern: brutalist
+- id: features-002
+  path: features/features-002/
   type: features
-- category: Content
+  category: features
   display_name_ru: 'features: cinematic'
-  id: features-002
   layout_pattern: cinematic
+- id: features-003
+  path: features/features-003/
   type: features
-- category: Content
+  category: features
   display_name_ru: 'features: grid'
-  id: features-003
   layout_pattern: grid
+- id: features-004
+  path: features/features-004/
   type: features
-- category: Content
+  category: features
   display_name_ru: 'features: split'
-  id: features-004
   layout_pattern: split
+- id: features-005
+  path: features/features-005/
   type: features
-- category: Content
+  category: features
   display_name_ru: 'features: default'
-  id: features-005
   layout_pattern: default
+- id: features-006
+  path: features/features-006/
   type: features
-- category: Content
+  category: features
   display_name_ru: 'features: minimal'
-  id: features-006
   layout_pattern: minimal
+- id: features-brutalist-split-antidiler-karpov-ru-2
+  path: features/features-brutalist-split-antidiler-karpov-ru-2/
   type: features
-- category: Content
-  display_name_ru: Короткий темный блок с крупным заявлением и зеленой акцентной плашкой
-    преимущест
-  id: features-brutalist-split-antidiler-karpov-ru-2
+  category: features
+  display_name_ru: 'Короткий темный блок с крупным заявлением и зеленой акцентной плашкой'
   layout_pattern: split
+- id: features-corporate-grid-3-opt-ecowash-ru-8
+  path: features/features-corporate-grid-3-opt-ecowash-ru-8/
   type: features
-- category: Content
-  display_name_ru: Блок преимуществ с шестью пронумерованными карточками и нижней
-    полосой с призыво
-  id: features-corporate-grid-3-opt-ecowash-ru-8
+  category: features
+  display_name_ru: 'Блок преимуществ с шестью пронумерованными карточками и нижней полосой'
   layout_pattern: grid-3
+- id: features-corporate-split-sskrusgun-ru-8
+  path: features/features-corporate-split-sskrusgun-ru-8/
   type: features
-- category: Content
-  display_name_ru: Двухколоночный блок для корпоративного предложения с чек-листом
-    преимуществ и ин
-  id: features-corporate-split-sskrusgun-ru-8
+  category: features
+  display_name_ru: 'Двухколоночный блок для корпоративного предложения с чек-листом преимуществ'
   layout_pattern: split
+- id: features-editorial-grid-2-romanmelnikov-tilda-9
+  path: features/features-editorial-grid-2-romanmelnikov-tilda-9/
   type: features
-- category: Content
-  display_name_ru: Секция рисков с гигантским заголовком, контурной карточкой и несколькими
-    поясняю
-  id: features-editorial-grid-2-romanmelnikov-tilda-9
+  category: features
+  display_name_ru: 'Секция рисков с гигантским заголовком, контурной карточкой и несколькими'
   layout_pattern: grid-2
+- id: features-editorial-split-project21993216-tild-7
+  path: features/features-editorial-split-project21993216-tild-7/
   type: features
-- category: Content
-  display_name_ru: Раздел с сильным заголовком, текстовым списком слева и крупным
-    предметным фото с
-  id: features-editorial-split-project21993216-tild-7
+  category: features
+  display_name_ru: 'Раздел с сильным заголовком, текстовым списком слева и крупным предметным'
   layout_pattern: split
+- id: features-editorial-stacked-romanmelnikov-tilda-2
+  path: features/features-editorial-stacked-romanmelnikov-tilda-2/
   type: features
-- category: Content
-  display_name_ru: Плотный вводный блок с широкой плашкой, крупным тезисом и короткими
-    текстовыми к
-  id: features-editorial-stacked-romanmelnikov-tilda-2
+  category: features
+  display_name_ru: 'Плотный вводный блок с широкой плашкой, крупным тезисом и короткими'
   layout_pattern: stacked
+- id: features-technical-grid-3-portfolio-kdm1-ru-2
+  path: features/features-technical-grid-3-portfolio-kdm1-ru-2/
   type: features
-- category: Content
-  display_name_ru: Темная секция с крупным заголовком и сеткой проблемных карточек
-    с минимальными м
-  id: features-technical-grid-3-portfolio-kdm1-ru-2
+  category: features
+  display_name_ru: 'Темная секция с крупным заголовком и сеткой проблемных карточек с'
   layout_pattern: grid-3
+- id: features-technical-grid-3-portfolio-kdm1-ru-5
+  path: features/features-technical-grid-3-portfolio-kdm1-ru-5/
   type: features
-- category: Content
-  display_name_ru: Информационный блок с темным фоном, большим заголовком и тремя
-    карточками содерж
-  id: features-technical-grid-3-portfolio-kdm1-ru-5
+  category: features
+  display_name_ru: 'Информационный блок с темным фоном, большим заголовком и тремя карточками'
   layout_pattern: grid-3
+- id: features-technical-grid-3-portfolio-kdm1-ru-6
+  path: features/features-technical-grid-3-portfolio-kdm1-ru-6/
   type: features
-- category: Content
-  display_name_ru: Технологический раздел с карточками преимуществ, миниатюрами производства
-    и кноп
-  id: features-technical-grid-3-portfolio-kdm1-ru-6
+  category: features
+  display_name_ru: 'Технологический раздел с карточками преимуществ, миниатюрами производства'
   layout_pattern: grid-3
+- id: features-technical-grid-3-zilant-group-4
+  path: features/features-technical-grid-3-zilant-group-4/
   type: features
-- category: Content
-  display_name_ru: 'Воздушный блок с контрастным заголовком, тремя белыми карточками
-    и декоративной '
-  id: features-technical-grid-3-zilant-group-4
+  category: features
+  display_name_ru: 'Воздушный блок с контрастным заголовком, тремя белыми карточками'
   layout_pattern: grid-3
+- id: features-technical-grid-4-project21993216-tild-2
+  path: features/features-technical-grid-4-project21993216-tild-2/
   type: features
-- category: Content
-  display_name_ru: 'Полоса с коротким тезисом и четырьмя числовыми преимуществами
-    на светло-голубом '
-  id: features-technical-grid-4-project21993216-tild-2
+  category: features
+  display_name_ru: 'Полоса с коротким тезисом и четырьмя числовыми преимуществами на'
   layout_pattern: grid-4
+- id: features-technical-split-sskrusgun-ru-6
+  path: features/features-technical-split-sskrusgun-ru-6/
   type: features
-- category: Content
-  display_name_ru: Комбинация промо-карточки, списка направлений и ссылок на разные
-    форматы услуги.
-  id: features-technical-split-sskrusgun-ru-6
+  category: features
+  display_name_ru: 'Комбинация промо-карточки, списка направлений и ссылок на разные'
   layout_pattern: split
+- id: ru-features-01-3col-icons
+  path: features/ru-features-01-3col-icons/
   type: features
-- category: Content
-  display_name_ru: ✅ 3 преимущества с иконками
-  id: ru-features-01-3col-icons
+  category: features
+  display_name_ru: '✅ 3 преимущества с иконками'
   layout_pattern: grid-3
+- id: ru-features-02-bento-grid
+  path: features/ru-features-02-bento-grid/
   type: features
-- category: Content
+  category: features
   display_name_ru: '🔲 Bento-сетка: фото + 3 карточки'
-  id: ru-features-02-bento-grid
   layout_pattern: grid-3
+- id: ru-features-03-swiss-cards
+  path: features/ru-features-03-swiss-cards/
   type: features
-- category: Content
-  display_name_ru: 🎨 Фичи — 4 карточки швейцарский стиль
-  id: ru-features-03-swiss-cards
+  category: features
+  display_name_ru: '🎨 Фичи — 4 карточки швейцарский стиль'
   layout_pattern: grid-3
+- id: ru-features-04-numbered-list
+  path: features/ru-features-04-numbered-list/
   type: features
-- category: Content
-  display_name_ru: Нумерованные преимущества — 3 колонки, монопространство
-  id: ru-features-04-numbered-list
+  category: features
+  display_name_ru: 'Нумерованные преимущества — 3 колонки, монопространство'
   layout_pattern: grid-3
+- id: ru-features-05-method-steps
+  path: features/ru-features-05-method-steps/
   type: features
-- category: Content
-  display_name_ru: Метод — 4 шага с линией-соединителем
-  id: ru-features-05-method-steps
+  category: features
+  display_name_ru: 'Метод — 4 шага с линией-соединителем'
   layout_pattern: grid-3
+- id: ru-features-06-cards-2x2
+  path: features/ru-features-06-cards-2x2/
   type: features
-- category: Content
-  display_name_ru: Четыре карточки 2×2 — bone-фон, тени, курсивные числа
-  id: ru-features-06-cards-2x2
+  category: features
+  display_name_ru: 'Четыре карточки 2×2 — bone-фон, тени, курсивные числа'
   layout_pattern: grid-3
+- id: ru-features-07-2col-split
+  path: features/ru-features-07-2col-split/
   type: features
-- category: Content
-  display_name_ru: О нас — двухколоночный split с манифестом
-  id: ru-features-07-2col-split
+  category: features
+  display_name_ru: 'О нас — двухколоночный split с манифестом'
   layout_pattern: grid-3
+- id: ru-features-08-kpi-metrics
+  path: features/ru-features-08-kpi-metrics/
   type: features
-- category: Content
-  display_name_ru: 📊 4 KPI-метрики (87% / 12 лет / 1000+ клиентов)
-  id: ru-features-08-kpi-metrics
+  category: features
+  display_name_ru: '📊 4 KPI-метрики (87% / 12 лет / 1000+ клиентов)'
   layout_pattern: grid-3
-  type: features
-- category: Footer
+- id: footer-001
+  path: footer/footer-001/
+  type: footer
+  category: footer
   display_name_ru: 'footer: grid'
-  id: footer-001
   layout_pattern: grid
+- id: footer-002
+  path: footer/footer-002/
   type: footer
-- category: Footer
+  category: footer
   display_name_ru: 'footer: split'
-  id: footer-002
   layout_pattern: split
+- id: footer-003
+  path: footer/footer-003/
   type: footer
-- category: Footer
+  category: footer
   display_name_ru: 'footer: minimal'
-  id: footer-003
   layout_pattern: minimal
+- id: footer-corporate-grid-4-portfolio-kdm1-ru-8
+  path: footer/footer-corporate-grid-4-portfolio-kdm1-ru-8/
   type: footer
-- category: Footer
-  display_name_ru: 'Синий футер с логотипом, контактными колонками, ссылками и компактной
-    служебной '
-  id: footer-corporate-grid-4-portfolio-kdm1-ru-8
+  category: footer
+  display_name_ru: 'Синий футер с логотипом, контактными колонками, ссылками и компактной'
   layout_pattern: grid-4
+- id: footer-corporate-grid-4-zilant-group-10
+  path: footer/footer-corporate-grid-4-zilant-group-10/
   type: footer
-- category: Footer
-  display_name_ru: Мягкий бирюзовый футер с логотипом, навигационными колонками и
-    контактной информ
-  id: footer-corporate-grid-4-zilant-group-10
+  category: footer
+  display_name_ru: 'Мягкий бирюзовый футер с логотипом, навигационными колонками и контактной'
   layout_pattern: grid-4
+- id: footer-corporate-split-portfolio-kdm1-ru-9
+  path: footer/footer-corporate-split-portfolio-kdm1-ru-9/
   type: footer
-- category: Footer
-  display_name_ru: Темный подвал с навигацией, социальными иконками и контактными
-    строками.
-  id: footer-corporate-split-portfolio-kdm1-ru-9
+  category: footer
+  display_name_ru: 'Темный подвал с навигацией, социальными иконками и контактными строками.'
   layout_pattern: split
+- id: footer-minimal-split-antidiler-karpov-ru-8
+  path: footer/footer-minimal-split-antidiler-karpov-ru-8/
   type: footer
-- category: Footer
-  display_name_ru: Низкая темная нижняя панель с мелкими юридическими ссылками и служебными
-    данными
-  id: footer-minimal-split-antidiler-karpov-ru-8
+  category: footer
+  display_name_ru: 'Низкая темная нижняя панель с мелкими юридическими ссылками и служебными'
   layout_pattern: split
+- id: footer-minimal-split-portfolio-kdm1-ru-17
+  path: footer/footer-minimal-split-portfolio-kdm1-ru-17/
   type: footer
-- category: Footer
-  display_name_ru: Нижняя темная полоса с мелкими реквизитами, контактами и служебными
-    ссылками.
-  id: footer-minimal-split-portfolio-kdm1-ru-17
+  category: footer
+  display_name_ru: 'Нижняя темная полоса с мелкими реквизитами, контактами и служебными'
   layout_pattern: split
+- id: footer-minimal-split-romanmelnikov-tilda-14
+  path: footer/footer-minimal-split-romanmelnikov-tilda-14/
   type: footer
-- category: Footer
-  display_name_ru: Низ страницы с мелкими юридическими ссылками и приглушенной контактной
-    информаци
-  id: footer-minimal-split-romanmelnikov-tilda-14
+  category: footer
+  display_name_ru: 'Низ страницы с мелкими юридическими ссылками и приглушенной контактной'
   layout_pattern: split
-  type: footer
-- category: Gallery
+- id: gallery-001
+  path: gallery/gallery-001/
+  type: gallery
+  category: gallery
   display_name_ru: 'gallery: cinematic'
-  id: gallery-001
   layout_pattern: cinematic
+- id: gallery-002
+  path: gallery/gallery-002/
   type: gallery
-- category: Gallery
+  category: gallery
   display_name_ru: 'gallery: default'
-  id: gallery-002
   layout_pattern: default
+- id: gallery-003
+  path: gallery/gallery-003/
   type: gallery
-- category: Gallery
+  category: gallery
   display_name_ru: 'gallery: grid'
-  id: gallery-003
   layout_pattern: grid
+- id: gallery-004
+  path: gallery/gallery-004/
   type: gallery
-- category: Gallery
+  category: gallery
   display_name_ru: 'gallery: minimal'
-  id: gallery-004
   layout_pattern: minimal
+- id: gallery-cinematic-grid-4-sskrusgun-ru-12
+  path: gallery/gallery-cinematic-grid-4-sskrusgun-ru-12/
   type: gallery
-- category: Gallery
-  display_name_ru: Фотоколлаж в плотной сетке показывает атмосферу процесса через
-    реальные динамичн
-  id: gallery-cinematic-grid-4-sskrusgun-ru-12
+  category: gallery
+  display_name_ru: 'Фотоколлаж в плотной сетке показывает атмосферу процесса через реальные'
   layout_pattern: grid-4
+- id: gallery-minimal-stacked-portfolio-kdm1-ru-2
+  path: gallery/gallery-minimal-stacked-portfolio-kdm1-ru-2/
   type: gallery
-- category: Gallery
-  display_name_ru: Крупный медиа-блок с товарным фото во всю ширину контейнера и круглой
-    кнопкой во
-  id: gallery-minimal-stacked-portfolio-kdm1-ru-2
+  category: gallery
+  display_name_ru: 'Крупный медиа-блок с товарным фото во всю ширину контейнера и круглой'
   layout_pattern: stacked
+- id: gallery-playful-grid-4-project21993216-tild-4
+  path: gallery/gallery-playful-grid-4-project21993216-tild-4/
   type: gallery
-- category: Gallery
-  display_name_ru: Витрина вкусов или вариантов с круглыми предметными изображениями
-    и подписями.
-  id: gallery-playful-grid-4-project21993216-tild-4
+  category: gallery
+  display_name_ru: 'Витрина вкусов или вариантов с круглыми предметными изображениями'
   layout_pattern: grid-4
-  type: gallery
-- category: Navigation
+- id: header-001
+  path: header/header-001/
+  type: header
+  category: header
   display_name_ru: 'header: cinematic'
-  id: header-001
   layout_pattern: cinematic
+- id: header-002
+  path: header/header-002/
   type: header
-- category: Navigation
+  category: header
   display_name_ru: 'header: split'
-  id: header-002
   layout_pattern: split
+- id: header-003
+  path: header/header-003/
   type: header
-- category: Navigation
+  category: header
   display_name_ru: 'header: minimal'
-  id: header-003
   layout_pattern: minimal
+- id: header-cinematic-split-portfolio-kdm1-ru-0
+  path: header/header-cinematic-split-portfolio-kdm1-ru-0/
   type: header
-- category: Navigation
-  display_name_ru: Узкая верхняя навигация на светлом фоне с компактными ссылками
-    и контрастной кно
-  id: header-cinematic-split-portfolio-kdm1-ru-0
+  category: header
+  display_name_ru: 'Узкая верхняя навигация на светлом фоне с компактными ссылками и'
   layout_pattern: split
+- id: header-corporate-split-zilant-group-0
+  path: header/header-corporate-split-zilant-group-0/
   type: header
-- category: Navigation
-  display_name_ru: Компактная верхняя навигация с логотипом по центру зоны меню и
-    мягкой кнопкой де
-  id: header-corporate-split-zilant-group-0
+  category: header
+  display_name_ru: 'Компактная верхняя навигация с логотипом по центру зоны меню и мягкой'
   layout_pattern: split
+- id: header-luxury-split-romanmelnikov-tilda-0
+  path: header/header-luxury-split-romanmelnikov-tilda-0/
   type: header
-- category: Navigation
-  display_name_ru: Узкая навигационная шапка на темном фоне с мелкими ссылками и теплым
-    акцентом.
-  id: header-luxury-split-romanmelnikov-tilda-0
+  category: header
+  display_name_ru: 'Узкая навигационная шапка на темном фоне с мелкими ссылками и теплым'
   layout_pattern: split
+- id: header-minimal-split-portfolio-kdm1-ru-0
+  path: header/header-minimal-split-portfolio-kdm1-ru-0/
   type: header
-- category: Navigation
-  display_name_ru: Тонкая верхняя панель с логотипом, навигацией, контактами и компактными
-    иконками
-  id: header-minimal-split-portfolio-kdm1-ru-0
+  category: header
+  display_name_ru: 'Тонкая верхняя панель с логотипом, навигацией, контактами и компактными'
   layout_pattern: split
+- id: header-minimal-split-project21993216-tild-0
+  path: header/header-minimal-split-project21993216-tild-0/
   type: header
-- category: Navigation
-  display_name_ru: Компактная верхняя навигация с логотипом, пунктами меню, контактами
-    и яркой кноп
-  id: header-minimal-split-project21993216-tild-0
+  category: header
+  display_name_ru: 'Компактная верхняя навигация с логотипом, пунктами меню, контактами'
   layout_pattern: split
+- id: header-playful-split-opt-ecowash-ru-0
+  path: header/header-playful-split-opt-ecowash-ru-0/
   type: header
-- category: Navigation
-  display_name_ru: Компактная верхняя навигация на ярком фоне с логотипом, пунктами
-    меню и контактн
-  id: header-playful-split-opt-ecowash-ru-0
+  category: header
+  display_name_ru: 'Компактная верхняя навигация на ярком фоне с логотипом, пунктами'
   layout_pattern: split
+- id: header-technical-split-sskrusgun-ru-0
+  path: header/header-technical-split-sskrusgun-ru-0/
   type: header
-- category: Navigation
-  display_name_ru: Компактная верхняя панель с логотипом, навигацией, иконками и яркой
-    кнопкой дейс
-  id: header-technical-split-sskrusgun-ru-0
+  category: header
+  display_name_ru: 'Компактная верхняя панель с логотипом, навигацией, иконками и яркой'
   layout_pattern: split
-  type: header
-- category: Hero
+- id: hero-001
+  path: hero/hero-001/
+  type: hero
+  category: hero
   display_name_ru: 'hero: brutalist'
-  id: hero-001
   layout_pattern: brutalist
+- id: hero-002
+  path: hero/hero-002/
   type: hero
-- category: Hero
+  category: hero
   display_name_ru: 'hero: cinematic'
-  id: hero-002
   layout_pattern: cinematic
+- id: hero-003
+  path: hero/hero-003/
   type: hero
-- category: Hero
+  category: hero
   display_name_ru: 'hero: split'
-  id: hero-003
   layout_pattern: split
+- id: hero-004
+  path: hero/hero-004/
   type: hero
-- category: Hero
+  category: hero
   display_name_ru: 'hero: default'
-  id: hero-004
   layout_pattern: default
+- id: hero-005
+  path: hero/hero-005/
   type: hero
-- category: Hero
+  category: hero
   display_name_ru: 'hero: minimal'
-  id: hero-005
   layout_pattern: minimal
+- id: hero-cinematic-split-antidiler-karpov-ru-1
+  path: hero/hero-cinematic-split-antidiler-karpov-ru-1/
   type: hero
-- category: Hero
-  display_name_ru: Темный первый экран с крупным наклонным заголовком, автомобильным
-    фоном и контра
-  id: hero-cinematic-split-antidiler-karpov-ru-1
+  category: hero
+  display_name_ru: 'Темный первый экран с крупным наклонным заголовком, автомобильным'
   layout_pattern: split
+- id: hero-cinematic-split-portfolio-kdm1-ru-2
+  path: hero/hero-cinematic-split-portfolio-kdm1-ru-2/
   type: hero
-- category: Hero
-  display_name_ru: Темный промо-блок с крупным заголовком, CTA-кнопками, 3D-предметом
-    и плашками пр
-  id: hero-cinematic-split-portfolio-kdm1-ru-2
+  category: hero
+  display_name_ru: 'Темный промо-блок с крупным заголовком, CTA-кнопками, 3D-предметом'
   layout_pattern: split
+- id: hero-cinematic-split-romanmelnikov-tilda-1
+  path: hero/hero-cinematic-split-romanmelnikov-tilda-1/
   type: hero
-- category: Hero
-  display_name_ru: Крупный первый экран с контрастным заголовком, правым текстовым
-    блоком и монохро
-  id: hero-cinematic-split-romanmelnikov-tilda-1
+  category: hero
+  display_name_ru: 'Крупный первый экран с контрастным заголовком, правым текстовым блоком'
   layout_pattern: split
+- id: hero-corporate-split-zilant-group-1
+  path: hero/hero-corporate-split-zilant-group-1/
   type: hero
-- category: Hero
-  display_name_ru: Большой светло-бирюзовый первый экран с крупным заголовком, CTA
-    и деловой фотоко
-  id: hero-corporate-split-zilant-group-1
+  category: hero
+  display_name_ru: 'Большой светло-бирюзовый первый экран с крупным заголовком, CTA и'
   layout_pattern: split
+- id: hero-playful-split-opt-ecowash-ru-1
+  path: hero/hero-playful-split-opt-ecowash-ru-1/
   type: hero
-- category: Hero
-  display_name_ru: Первый экран с крупным оффером, продуктовой 3D-визуализацией, буллетами
-    и формой
-  id: hero-playful-split-opt-ecowash-ru-1
+  category: hero
+  display_name_ru: 'Первый экран с крупным оффером, продуктовой 3D-визуализацией, буллетами'
   layout_pattern: split
+- id: hero-technical-split-portfolio-kdm1-ru-1
+  path: hero/hero-technical-split-portfolio-kdm1-ru-1/
   type: hero
-- category: Hero
-  display_name_ru: Яркий первый экран с крупным заголовком слева и большим предметным
-    фото продукта
-  id: hero-technical-split-portfolio-kdm1-ru-1
+  category: hero
+  display_name_ru: 'Яркий первый экран с крупным заголовком слева и большим предметным'
   layout_pattern: split
+- id: ru-hero-01-services-calc
+  path: hero/ru-hero-01-services-calc/
   type: hero
-- category: Hero
-  display_name_ru: 🏗️ Услуги — фото фона + расчёт стоимости
-  id: ru-hero-01-services-calc
+  category: hero
+  display_name_ru: '🏗️ Услуги — фото фона + расчёт стоимости'
   layout_pattern: centered
+- id: ru-hero-02-b2c-expert
+  path: hero/ru-hero-02-b2c-expert/
   type: hero
-- category: Hero
-  display_name_ru: 🧑‍💼 Эксперт слева + оффер справа
-  id: ru-hero-02-b2c-expert
+  category: hero
+  display_name_ru: '🧑‍💼 Эксперт слева + оффер справа'
   layout_pattern: centered
+- id: ru-hero-03-local-interior
+  path: hero/ru-hero-03-local-interior/
   type: hero
-- category: Hero
-  display_name_ru: 🏠 Локальный бизнес — фото интерьера
-  id: ru-hero-03-local-interior
+  category: hero
+  display_name_ru: '🏠 Локальный бизнес — фото интерьера'
   layout_pattern: centered
+- id: ru-hero-04-split-form
+  path: hero/ru-hero-04-split-form/
   type: hero
-- category: Hero
-  display_name_ru: 📝 Текст слева + лид-форма справа
-  id: ru-hero-04-split-form
+  category: hero
+  display_name_ru: '📝 Текст слева + лид-форма справа'
   layout_pattern: centered
+- id: ru-hero-05-centered-bold
+  path: hero/ru-hero-05-centered-bold/
   type: hero
-- category: Hero
-  display_name_ru: 🎨 Центрированный hero с крупной типографикой
-  id: ru-hero-05-centered-bold
+  category: hero
+  display_name_ru: '🎨 Центрированный hero с крупной типографикой'
   layout_pattern: centered
+- id: ru-hero-06-swiss-metrics
+  path: hero/ru-hero-06-swiss-metrics/
   type: hero
-- category: Hero
-  display_name_ru: 📊 Hero — швейцарский + цифры-метрики
-  id: ru-hero-06-swiss-metrics
+  category: hero
+  display_name_ru: '📊 Hero — швейцарский + цифры-метрики'
   layout_pattern: centered
+- id: ru-hero-07-editorial-serif
+  path: hero/ru-hero-07-editorial-serif/
   type: hero
-- category: Hero
-  display_name_ru: Редакционный герой — бежевый фон, курсив, метрики-кольца
-  id: ru-hero-07-editorial-serif
+  category: hero
+  display_name_ru: 'Редакционный герой — бежевый фон, курсив, метрики-кольца'
   layout_pattern: centered
+- id: ru-hero-08-centered-emailcap
+  path: hero/ru-hero-08-centered-emailcap/
   type: hero
-- category: Hero
-  display_name_ru: Центрированный герой — email-форма + бегущая строка
-  id: ru-hero-08-centered-emailcap
+  category: hero
+  display_name_ru: 'Центрированный герой — email-форма + бегущая строка'
   layout_pattern: centered
+- id: ru-hero-09-kami-serif
+  path: hero/ru-hero-09-kami-serif/
   type: hero
-- category: Hero
-  display_name_ru: Ками-герой — пергамент, засечный шрифт, метрики
-  id: ru-hero-09-kami-serif
+  category: hero
+  display_name_ru: 'Ками-герой — пергамент, засечный шрифт, метрики'
   layout_pattern: centered
+- id: ru-hero-10-deck-cover
+  path: hero/ru-hero-10-deck-cover/
   type: hero
-- category: Hero
-  display_name_ru: Дек-обложка — угловые маркеры, нумерация, coral-акцент
-  id: ru-hero-10-deck-cover
+  category: hero
+  display_name_ru: 'Дек-обложка — угловые маркеры, нумерация, coral-акцент'
   layout_pattern: centered
-  type: hero
-- category: Pricing
+- id: pricing-001
+  path: pricing/pricing-001/
+  type: pricing
+  category: pricing
   display_name_ru: 'pricing: default'
-  id: pricing-001
   layout_pattern: default
+- id: pricing-002
+  path: pricing/pricing-002/
   type: pricing
-- category: Pricing
+  category: pricing
   display_name_ru: 'pricing: grid'
-  id: pricing-002
   layout_pattern: grid
+- id: pricing-003
+  path: pricing/pricing-003/
   type: pricing
-- category: Pricing
+  category: pricing
   display_name_ru: 'pricing: split'
-  id: pricing-003
   layout_pattern: split
+- id: pricing-004
+  path: pricing/pricing-004/
   type: pricing
-- category: Pricing
+  category: pricing
   display_name_ru: 'pricing: minimal'
-  id: pricing-004
   layout_pattern: minimal
+- id: pricing-corporate-grid-3-portfolio-kdm1-ru-7
+  path: pricing/pricing-corporate-grid-3-portfolio-kdm1-ru-7/
   type: pricing
-- category: Pricing
-  display_name_ru: 'Блок выбора пакетов с тремя тарифными карточками, списками преимуществ
-    и яркими '
-  id: pricing-corporate-grid-3-portfolio-kdm1-ru-7
+  category: pricing
+  display_name_ru: 'Блок выбора пакетов с тремя тарифными карточками, списками преимуществ'
   layout_pattern: grid-3
+- id: pricing-corporate-grid-3-sskrusgun-ru-5
+  path: pricing/pricing-corporate-grid-3-sskrusgun-ru-5/
   type: pricing
-- category: Pricing
-  display_name_ru: Раздел с карточками специализированных программ, фотофоном, ценовым
-    маркером и к
-  id: pricing-corporate-grid-3-sskrusgun-ru-5
+  category: pricing
+  display_name_ru: 'Раздел с карточками специализированных программ, фотофоном, ценовым'
   layout_pattern: grid-3
+- id: pricing-technical-grid-3-sskrusgun-ru-2
+  path: pricing/pricing-technical-grid-3-sskrusgun-ru-2/
   type: pricing
-- category: Pricing
-  display_name_ru: Сетка карточек программ с фото, краткими параметрами, ценовым акцентом
-    и кнопкам
-  id: pricing-technical-grid-3-sskrusgun-ru-2
+  category: pricing
+  display_name_ru: 'Сетка карточек программ с фото, краткими параметрами, ценовым акцентом'
   layout_pattern: grid-3
+- id: ru-pricing-01-rub-from
+  path: pricing/ru-pricing-01-rub-from/
   type: pricing
-- category: Pricing
-  display_name_ru: 💰 3 тарифа с ценой 'от X ₽'
-  id: ru-pricing-01-rub-from
+  category: pricing
+  display_name_ru: '💰 3 тарифа с ценой от X ₽'
   layout_pattern: grid-3
+- id: ru-pricing-02-comparison-table
+  path: pricing/ru-pricing-02-comparison-table/
   type: pricing
-- category: Pricing
-  display_name_ru: 📊 Сравнительная таблица тарифов
-  id: ru-pricing-02-comparison-table
+  category: pricing
+  display_name_ru: '📊 Сравнительная таблица тарифов'
   layout_pattern: grid-3
+- id: ru-pricing-03-3tier-saas
+  path: pricing/ru-pricing-03-3tier-saas/
   type: pricing
-- category: Pricing
-  display_name_ru: Три тарифа SaaS — рекомендованный тир, чеклист
-  id: ru-pricing-03-3tier-saas
+  category: pricing
+  display_name_ru: 'Три тарифа SaaS — рекомендованный тир, чеклист'
   layout_pattern: grid-3
+- id: ru-pricing-04-tiers-faq
+  path: pricing/ru-pricing-04-tiers-faq/
   type: pricing
-- category: Pricing
-  display_name_ru: Тарифы + FAQ о стоимости — комбинированный блок
-  id: ru-pricing-04-tiers-faq
+  category: pricing
+  display_name_ru: 'Тарифы + FAQ о стоимости — комбинированный блок'
   layout_pattern: grid-3
-  type: pricing
-- category: Content
+- id: process-001
+  path: process/process-001/
+  type: process
+  category: process
   display_name_ru: 'process: cinematic'
-  id: process-001
   layout_pattern: cinematic
+- id: process-002
+  path: process/process-002/
   type: process
-- category: Content
+  category: process
   display_name_ru: 'process: default'
-  id: process-002
   layout_pattern: default
+- id: process-003
+  path: process/process-003/
   type: process
-- category: Content
+  category: process
   display_name_ru: 'process: grid'
-  id: process-003
   layout_pattern: grid
+- id: process-004
+  path: process/process-004/
   type: process
-- category: Content
+  category: process
   display_name_ru: 'process: minimal'
-  id: process-004
   layout_pattern: minimal
+- id: process-corporate-timeline-project21993216-tild-10
+  path: process/process-corporate-timeline-project21993216-tild-10/
   type: process
-- category: Content
-  display_name_ru: Пошаговая схема старта с пронумерованными карточками и финальной
-    карточкой с кно
-  id: process-corporate-timeline-project21993216-tild-10
+  category: process
+  display_name_ru: 'Пошаговая схема старта с пронумерованными карточками и финальной'
   layout_pattern: timeline
+- id: process-minimal-grid-2-portfolio-kdm1-ru-4
+  path: process/process-minimal-grid-2-portfolio-kdm1-ru-4/
   type: process
-- category: Content
-  display_name_ru: Два информационных блока с иконками объясняют сценарии продаж через
-    отдельные ка
-  id: process-minimal-grid-2-portfolio-kdm1-ru-4
+  category: process
+  display_name_ru: 'Два информационных блока с иконками объясняют сценарии продаж через'
   layout_pattern: grid-2
+- id: process-technical-cards-medregistrant-ru-3
+  path: process/process-technical-cards-medregistrant-ru-3/
   type: process
-- category: Content
-  display_name_ru: Светлый блок с вопросительным заголовком, вкладками и карточками
-    вокруг размытог
-  id: process-technical-cards-medregistrant-ru-3
+  category: process
+  display_name_ru: 'Светлый блок с вопросительным заголовком, вкладками и карточками'
   layout_pattern: cards
+- id: process-technical-stacked-opt-ecowash-ru-6
+  path: process/process-technical-stacked-opt-ecowash-ru-6/
   type: process
-- category: Content
-  display_name_ru: Производственный блок с текстом, акцентной плашкой, декоративной
-    графикой и боль
-  id: process-technical-stacked-opt-ecowash-ru-6
+  category: process
+  display_name_ru: 'Производственный блок с текстом, акцентной плашкой, декоративной'
   layout_pattern: stacked
+- id: process-technical-timeline-romanmelnikov-tilda-10
+  path: process/process-technical-timeline-romanmelnikov-tilda-10/
   type: process
-- category: Content
-  display_name_ru: Линейная схема этапов с мелкими подписями и горизонтальным акцентом
-    прогресса.
-  id: process-technical-timeline-romanmelnikov-tilda-10
+  category: process
+  display_name_ru: 'Линейная схема этапов с мелкими подписями и горизонтальным акцентом'
   layout_pattern: timeline
+- id: ru-process-01-4steps-icons
+  path: process/ru-process-01-4steps-icons/
   type: process
-- category: Content
-  display_name_ru: 🔢 4 шага работы с иконками
-  id: ru-process-01-4steps-icons
+  category: process
+  display_name_ru: '🔢 4 шага работы с иконками'
   layout_pattern: centered
+- id: ru-process-02-next-steps
+  path: process/ru-process-02-next-steps/
   type: process
-- category: Content
-  display_name_ru: 📋 Процесс — 3 шага timeline-стиль
-  id: ru-process-02-next-steps
+  category: process
+  display_name_ru: '📋 Процесс — 3 шага timeline-стиль'
   layout_pattern: centered
+- id: ru-process-03-4steps-numbered
+  path: process/ru-process-03-4steps-numbered/
   type: process
-- category: Content
-  display_name_ru: Процесс — 4 шага в сетке с бордерами и иллюстрациями
-  id: ru-process-03-4steps-numbered
+  category: process
+  display_name_ru: 'Процесс — 4 шага в сетке с бордерами и иллюстрациями'
   layout_pattern: centered
-  type: process
-- category: Conversion
-  display_name_ru: 🎯 Квиз — шаг-карточка с вариантами
-  id: ru-quiz-01-step-card
-  layout_pattern: centered
+- id: ru-quiz-01-step-card
+  path: quiz/ru-quiz-01-step-card/
   type: lead-form
-- category: Conversion
-  display_name_ru: 📊 Квиз — вопрос с прогрессом сверху
-  id: ru-quiz-02-progress-top
+  category: quiz
+  display_name_ru: '🎯 Квиз — шаг-карточка с вариантами'
   layout_pattern: centered
+- id: ru-quiz-02-progress-top
+  path: quiz/ru-quiz-02-progress-top/
   type: lead-form
-- category: Conversion
-  display_name_ru: 🎉 Квиз — промежуточный мотивационный экран
-  id: ru-quiz-03-intermediate
+  category: quiz
+  display_name_ru: '📊 Квиз — вопрос с прогрессом сверху'
   layout_pattern: centered
+- id: ru-quiz-03-intermediate
+  path: quiz/ru-quiz-03-intermediate/
   type: lead-form
-- category: Conversion
-  display_name_ru: 📋 Квиз — финальная форма захвата
-  id: ru-quiz-04-lead-form
+  category: quiz
+  display_name_ru: '🎉 Квиз — промежуточный мотивационный экран'
   layout_pattern: centered
+- id: ru-quiz-04-lead-form
+  path: quiz/ru-quiz-04-lead-form/
   type: lead-form
-- category: Conversion
-  display_name_ru: ✅ Квиз — страница «Спасибо»
-  id: ru-quiz-05-thankyou
+  category: quiz
+  display_name_ru: '📋 Квиз — финальная форма захвата'
   layout_pattern: centered
+- id: ru-quiz-05-thankyou
+  path: quiz/ru-quiz-05-thankyou/
   type: lead-form
-- category: Conversion
-  display_name_ru: 🚀 Квиз — стартовый экран «Начать тест»
-  id: ru-quiz-06-welcome-screen
+  category: quiz
+  display_name_ru: '✅ Квиз — страница «Спасибо»'
   layout_pattern: centered
+- id: ru-quiz-06-welcome-screen
+  path: quiz/ru-quiz-06-welcome-screen/
   type: lead-form
-- category: Conversion
-  display_name_ru: 🖼️ Квиз — вопрос с картинками-вариантами
-  id: ru-quiz-07-image-choice
+  category: quiz
+  display_name_ru: '🚀 Квиз — стартовый экран «Начать тест»'
   layout_pattern: centered
+- id: ru-quiz-07-image-choice
+  path: quiz/ru-quiz-07-image-choice/
   type: lead-form
-- category: Conversion
-  display_name_ru: 📊 Квиз — вопрос со слайдером диапазона
-  id: ru-quiz-08-slider-range
+  category: quiz
+  display_name_ru: '🖼️ Квиз — вопрос с картинками-вариантами'
   layout_pattern: centered
+- id: ru-quiz-08-slider-range
+  path: quiz/ru-quiz-08-slider-range/
   type: lead-form
-- category: Conversion
-  display_name_ru: ☑️ Квиз — вопрос с мульти-выбором (чекбоксы)
-  id: ru-quiz-09-multi-select
+  category: quiz
+  display_name_ru: '📊 Квиз — вопрос со слайдером диапазона'
   layout_pattern: centered
+- id: ru-quiz-09-multi-select
+  path: quiz/ru-quiz-09-multi-select/
   type: lead-form
-- category: Conversion
-  display_name_ru: ⏳ Квиз — экран анализа ответов (лоадер)
-  id: ru-quiz-10-loader-analyzing
+  category: quiz
+  display_name_ru: '☑️ Квиз — вопрос с мульти-выбором (чекбоксы)'
   layout_pattern: centered
+- id: ru-quiz-10-loader-analyzing
+  path: quiz/ru-quiz-10-loader-analyzing/
   type: lead-form
-- category: Conversion
-  display_name_ru: 🎁 Квиз — экран подарка за прохождение
-  id: ru-quiz-11-discount-bonus
+  category: quiz
+  display_name_ru: '⏳ Квиз — экран анализа ответов (лоадер)'
   layout_pattern: centered
+- id: ru-quiz-11-discount-bonus
+  path: quiz/ru-quiz-11-discount-bonus/
   type: lead-form
-- category: Conversion
-  display_name_ru: 🧮 Квиз — мини-калькулятор стоимости
-  id: ru-quiz-12-mini-calculator
+  category: quiz
+  display_name_ru: '🎁 Квиз — экран подарка за прохождение'
   layout_pattern: centered
+- id: ru-quiz-12-mini-calculator
+  path: quiz/ru-quiz-12-mini-calculator/
   type: lead-form
-- category: Conversion
-  display_name_ru: ⚖️ Квиз — вопрос-сравнение «А или Б»
-  id: ru-quiz-13-comparison-question
+  category: quiz
+  display_name_ru: '🧮 Квиз — мини-калькулятор стоимости'
   layout_pattern: centered
+- id: ru-quiz-13-comparison-question
+  path: quiz/ru-quiz-13-comparison-question/
   type: lead-form
-- category: Social Proof
-  display_name_ru: 🏢 Логотипы клиентов — полоса доверия
-  id: ru-social-proof-03-client-logos
-  layout_pattern: grid-4
+  category: quiz
+  display_name_ru: '⚖️ Квиз — вопрос-сравнение «А или Б»'
+  layout_pattern: centered
+- id: ru-social-proof-03-client-logos
+  path: social-proof/ru-social-proof-03-client-logos/
   type: logos
-- category: Social Proof
-  display_name_ru: 🏆 3 кейса — авторитет через результаты
-  id: ru-social-proof-04-authority-cases
+  category: social-proof
+  display_name_ru: '🏢 Логотипы клиентов — полоса доверия'
   layout_pattern: grid-4
+- id: ru-social-proof-04-authority-cases
+  path: social-proof/ru-social-proof-04-authority-cases/
   type: logos
-- category: Social Proof
-  display_name_ru: 📈 Доказательства — редакционные метрики
-  id: ru-social-proof-05-metrics-editorial
+  category: social-proof
+  display_name_ru: '🏆 3 кейса — авторитет через результаты'
   layout_pattern: grid-4
+- id: ru-social-proof-05-metrics-editorial
+  path: social-proof/ru-social-proof-05-metrics-editorial/
   type: logos
-- category: Social Proof
-  display_name_ru: Редакционная цитата — засечный шрифт + партнёры
-  id: ru-social-proof-06-editorial-quote
+  category: social-proof
+  display_name_ru: '📈 Доказательства — редакционные метрики'
   layout_pattern: grid-4
+- id: ru-social-proof-06-editorial-quote
+  path: social-proof/ru-social-proof-06-editorial-quote/
   type: logos
-- category: Social Proof
-  display_name_ru: Тикер клиентов — бегущая строка с названиями
-  id: ru-social-proof-07-logo-ticker
+  category: social-proof
+  display_name_ru: 'Редакционная цитата — засечный шрифт + партнёры'
   layout_pattern: grid-4
+- id: ru-social-proof-07-logo-ticker
+  path: social-proof/ru-social-proof-07-logo-ticker/
   type: logos
-- category: Social Proof
-  display_name_ru: Метрики — сетка 4 статистики с чередующимся фоном
-  id: ru-social-proof-08-stats-deck
+  category: social-proof
+  display_name_ru: 'Тикер клиентов — бегущая строка с названиями'
   layout_pattern: grid-4
+- id: ru-social-proof-08-stats-deck
+  path: social-proof/ru-social-proof-08-stats-deck/
   type: logos
-- category: Social Proof
-  display_name_ru: 📈 График роста (клиенты / выручка / проекты за N лет)
-  id: ru-stats-01-growth-chart
-  layout_pattern: grid-2
+  category: social-proof
+  display_name_ru: 'Метрики — сетка 4 статистики с чередующимся фоном'
+  layout_pattern: grid-4
+- id: ru-stats-01-growth-chart
+  path: social-proof/ru-stats-01-growth-chart/
   type: stats
-- category: Social Proof
-  display_name_ru: 🎬 Отзывы в круглых кружках (Reels-стиль)
-  id: ru-testimonials-01-video-circles
-  layout_pattern: cards
+  category: social-proof
+  display_name_ru: '📈 График роста (клиенты / выручка / проекты за N лет)'
+  layout_pattern: grid-2
+- id: ru-testimonials-01-video-circles
+  path: social-proof/ru-testimonials-01-video-circles/
   type: testimonials
-- category: Social Proof
-  display_name_ru: 💬 4 карточки отзывов с фото 2×2
-  id: ru-testimonials-02-text-photo
+  category: social-proof
+  display_name_ru: '🎬 Отзывы в круглых кружках (Reels-стиль)'
   layout_pattern: cards
+- id: ru-testimonials-02-text-photo
+  path: social-proof/ru-testimonials-02-text-photo/
   type: testimonials
-- category: Social Proof
-  display_name_ru: Крупный кейс с фото клиента у автомобиля, диагональной типографикой,
-    текстом отз
-  id: social-proof-cinematic-split-antidiler-karpov-ru-3
+  category: social-proof
+  display_name_ru: '💬 4 карточки отзывов с фото 2×2'
+  layout_pattern: cards
+- id: social-proof-cinematic-split-antidiler-karpov-ru-3
+  path: social-proof/social-proof-cinematic-split-antidiler-karpov-ru-3/
+  type: logos
+  category: social-proof
+  display_name_ru: 'Крупный кейс с фото клиента у автомобиля, диагональной типографикой,'
   layout_pattern: split
+- id: social-proof-corporate-cards-medregistrant-ru-6
+  path: social-proof/social-proof-corporate-cards-medregistrant-ru-6/
   type: logos
-- category: Social Proof
-  display_name_ru: Карусель карточек клиентов с логотипами, краткими описаниями и
-    кнопками действия
-  id: social-proof-corporate-cards-medregistrant-ru-6
+  category: social-proof
+  display_name_ru: 'Карусель карточек клиентов с логотипами, краткими описаниями и кнопками'
   layout_pattern: cards
+- id: social-proof-corporate-grid-3-zilant-group-5
+  path: social-proof/social-proof-corporate-grid-3-zilant-group-5/
   type: logos
-- category: Social Proof
-  display_name_ru: Статистический блок с крупными красными числами, краткими подписями
-    и широким ви
-  id: social-proof-corporate-grid-3-zilant-group-5
+  category: social-proof
+  display_name_ru: 'Статистический блок с крупными красными числами, краткими подписями'
   layout_pattern: grid-3
+- id: social-proof-luxury-cards-romanmelnikov-tilda-12
+  path: social-proof/social-proof-luxury-cards-romanmelnikov-tilda-12/
   type: logos
-- category: Social Proof
-  display_name_ru: Отзывы показаны в темных контурных карточках с круглыми аватарами
-    и золотыми дет
-  id: social-proof-luxury-cards-romanmelnikov-tilda-12
+  category: social-proof
+  display_name_ru: 'Отзывы показаны в темных контурных карточках с круглыми аватарами'
   layout_pattern: cards
+- id: social-proof-minimal-centered-project21993216-tild-3
+  path: social-proof/social-proof-minimal-centered-project21993216-tild-3/
   type: logos
-- category: Social Proof
-  display_name_ru: Секция отзывов или клиентов с заголовком и маленькими кнопками
-    карусели.
-  id: social-proof-minimal-centered-project21993216-tild-3
+  category: social-proof
+  display_name_ru: 'Секция отзывов или клиентов с заголовком и маленькими кнопками карусели.'
   layout_pattern: centered
+- id: social-proof-minimal-stacked-antidiler-karpov-ru-4
+  path: social-proof/social-proof-minimal-stacked-antidiler-karpov-ru-4/
   type: logos
-- category: Social Proof
-  display_name_ru: 'Серия темных кейсов без крупных фото: имя, модель, услуга, отзыв
-    и акцентная кно'
-  id: social-proof-minimal-stacked-antidiler-karpov-ru-4
+  category: social-proof
+  display_name_ru: 'Серия темных кейсов без крупных фото: имя, модель, услуга, отзыв'
   layout_pattern: stacked
+- id: social-proof-playful-grid-2-opt-ecowash-ru-9
+  path: social-proof/social-proof-playful-grid-2-opt-ecowash-ru-9/
   type: logos
-- category: Social Proof
-  display_name_ru: Раздел отзывов с крупным заголовком и сеткой пустых белых карточек
-    для отзывов к
-  id: social-proof-playful-grid-2-opt-ecowash-ru-9
+  category: social-proof
+  display_name_ru: 'Раздел отзывов с крупным заголовком и сеткой пустых белых карточек'
   layout_pattern: grid-2
+- id: social-proof-technical-grid-4-portfolio-kdm1-ru-14
+  path: social-proof/social-proof-technical-grid-4-portfolio-kdm1-ru-14/
   type: logos
-- category: Social Proof
-  display_name_ru: Статистический блок с крупными процентами, короткими подписями
-    и темной инфограф
-  id: social-proof-technical-grid-4-portfolio-kdm1-ru-14
+  category: social-proof
+  display_name_ru: 'Статистический блок с крупными процентами, короткими подписями и'
   layout_pattern: grid-4
-  type: logos
-- category: Content
-  display_name_ru: 'social-proof: cinematic'
-  id: unknown-003
-  layout_pattern: cinematic
+- id: unknown-003
+  path: social-proof/unknown-003/
   type: demo
-- category: Gallery
-  display_name_ru: 'team: cinematic'
-  id: team-001
+  category: social-proof
+  display_name_ru: 'social-proof: cinematic'
   layout_pattern: cinematic
+- id: team-001
+  path: team/team-001/
   type: team
-- category: Trust
+  category: team
+  display_name_ru: 'team: cinematic'
+  layout_pattern: cinematic
+- id: ru-trust-01-guarantees-docs
+  path: trust/ru-trust-01-guarantees-docs/
+  type: guarantees
+  category: trust
   display_name_ru: '🛡️ 4 гарантии: договор + лицензия'
-  id: ru-trust-01-guarantees-docs
   layout_pattern: centered
+- id: ru-trust-02-numbers-row
+  path: trust/ru-trust-02-numbers-row/
   type: guarantees
-- category: Trust
-  display_name_ru: 📈 Полоса с 4 KPI-числами
-  id: ru-trust-02-numbers-row
+  category: trust
+  display_name_ru: '📈 Полоса с 4 KPI-числами'
   layout_pattern: centered
+- id: ru-trust-03-descriptor-header
+  path: trust/ru-trust-03-descriptor-header/
   type: guarantees
-- category: Trust
-  display_name_ru: 🏷️ Шапка с дескриптором — кто мы
-  id: ru-trust-03-descriptor-header
+  category: trust
+  display_name_ru: '🏷️ Шапка с дескриптором — кто мы'
   layout_pattern: centered
+- id: ru-trust-04-principles-grid
+  path: trust/ru-trust-04-principles-grid/
   type: guarantees
-- category: Trust
-  display_name_ru: 🏛️ Принципы работы — редакционная сетка
-  id: ru-trust-04-principles-grid
+  category: trust
+  display_name_ru: '🏛️ Принципы работы — редакционная сетка'
   layout_pattern: centered
+- id: ru-trust-05-manifesto-text
+  path: trust/ru-trust-05-manifesto-text/
   type: guarantees
-- category: Trust
-  display_name_ru: Манифест — засечная цитата с левой полосой и подписью
-  id: ru-trust-05-manifesto-text
+  category: trust
+  display_name_ru: 'Манифест — засечная цитата с левой полосой и подписью'
   layout_pattern: centered
+- id: ru-trust-06-labs-showcase
+  path: trust/ru-trust-06-labs-showcase/
   type: guarantees
-- category: Trust
-  display_name_ru: Витрина проектов — сетка 5 кейсов с тегами
-  id: ru-trust-06-labs-showcase
+  category: trust
+  display_name_ru: 'Витрина проектов — сетка 5 кейсов с тегами'
   layout_pattern: centered
+- id: ru-trust-07-partner-logos
+  path: trust/ru-trust-07-partner-logos/
   type: guarantees
-- category: Trust
-  display_name_ru: Полоса логотипов — компании-клиенты в ряд
-  id: ru-trust-07-partner-logos
+  category: trust
+  display_name_ru: 'Полоса логотипов — компании-клиенты в ряд'
   layout_pattern: centered
+- id: trust-001
+  path: trust/trust-001/
   type: guarantees
-- category: Trust
+  category: trust
   display_name_ru: 'trust: grid'
-  id: trust-001
   layout_pattern: grid
+- id: trust-002
+  path: trust/trust-002/
   type: guarantees
-- category: Trust
+  category: trust
   display_name_ru: 'trust: default'
-  id: trust-002
   layout_pattern: default
+- id: trust-003
+  path: trust/trust-003/
   type: guarantees
-- category: Trust
+  category: trust
   display_name_ru: 'trust: minimal'
-  id: trust-003
   layout_pattern: minimal
+- id: trust-corporate-grid-3-project21993216-tild-12
+  path: trust/trust-corporate-grid-3-project21993216-tild-12/
   type: guarantees
-- category: Trust
-  display_name_ru: Секция документов с тремя карточками сертификатов на светло-голубом
-    фоне.
-  id: trust-corporate-grid-3-project21993216-tild-12
+  category: trust
+  display_name_ru: 'Секция документов с тремя карточками сертификатов на светло-голубом'
   layout_pattern: grid-3
+- id: trust-corporate-grid-4-sskrusgun-ru-11
+  path: trust/trust-corporate-grid-4-sskrusgun-ru-11/
   type: guarantees
-- category: Trust
-  display_name_ru: 'Секция ценностей с четырьмя текстовыми колонками и крупными фоновыми
-    буквенными '
-  id: trust-corporate-grid-4-sskrusgun-ru-11
+  category: trust
+  display_name_ru: 'Секция ценностей с четырьмя текстовыми колонками и крупными фоновыми'
   layout_pattern: grid-4
+- id: trust-editorial-grid-2-romanmelnikov-tilda-11
+  path: trust/trust-editorial-grid-2-romanmelnikov-tilda-11/
   type: guarantees
-- category: Trust
-  display_name_ru: Длинный блок критериев с большим пустым пространством и двумя плотными
-    текстовым
-  id: trust-editorial-grid-2-romanmelnikov-tilda-11
+  category: trust
+  display_name_ru: 'Длинный блок критериев с большим пустым пространством и двумя плотными'
   layout_pattern: grid-2
+- id: trust-editorial-grid-2-zilant-group-7
+  path: trust/trust-editorial-grid-2-zilant-group-7/
   type: guarantees
-- category: Trust
-  display_name_ru: Секция кейса с большим заголовком, двумя документальными карточками
-    и бирюзовыми
-  id: trust-editorial-grid-2-zilant-group-7
+  category: trust
+  display_name_ru: 'Секция кейса с большим заголовком, двумя документальными карточками'
   layout_pattern: grid-2
+- id: trust-editorial-grid-3-portfolio-kdm1-ru-4
+  path: trust/trust-editorial-grid-3-portfolio-kdm1-ru-4/
   type: guarantees
-- category: Trust
-  display_name_ru: Секция принципов с диагональной светлой подложкой, крупными заголовками
-    и предме
-  id: trust-editorial-grid-3-portfolio-kdm1-ru-4
+  category: trust
+  display_name_ru: 'Секция принципов с диагональной светлой подложкой, крупными заголовками'
   layout_pattern: grid-3
+- id: trust-editorial-stacked-portfolio-kdm1-ru-12
+  path: trust/trust-editorial-stacked-portfolio-kdm1-ru-12/
   type: guarantees
-- category: Trust
-  display_name_ru: Контрастный доверительный блок с большим заголовком, светлой вставкой
-    и коротким
-  id: trust-editorial-stacked-portfolio-kdm1-ru-12
+  category: trust
+  display_name_ru: 'Контрастный доверительный блок с большим заголовком, светлой вставкой'
   layout_pattern: stacked
+- id: trust-luxury-centered-romanmelnikov-tilda-5
+  path: trust/trust-luxury-centered-romanmelnikov-tilda-5/
   type: guarantees
-- category: Trust
-  display_name_ru: Имиджевый блок с большим словом-заголовком, декоративной подписью
-    и спокойной те
-  id: trust-luxury-centered-romanmelnikov-tilda-5
+  category: trust
+  display_name_ru: 'Имиджевый блок с большим словом-заголовком, декоративной подписью'
   layout_pattern: centered
+- id: trust-minimal-grid-4-zilant-group-8
+  path: trust/trust-minimal-grid-4-zilant-group-8/
   type: guarantees
-- category: Trust
-  display_name_ru: Горизонтальная полоса небольших логотипов на большом белом поле
-    усиливает довери
-  id: trust-minimal-grid-4-zilant-group-8
+  category: trust
+  display_name_ru: 'Горизонтальная полоса небольших логотипов на большом белом поле усиливает'
   layout_pattern: grid-4
+- id: trust-playful-stacked-opt-ecowash-ru-4
+  path: trust/trust-playful-stacked-opt-ecowash-ru-4/
   type: guarantees
-- category: Trust
-  display_name_ru: Яркий блок доверия с большим заголовком, несколькими метриками
-    и крупной декорат
-  id: trust-playful-stacked-opt-ecowash-ru-4
+  category: trust
+  display_name_ru: 'Яркий блок доверия с большим заголовком, несколькими метриками и'
   layout_pattern: stacked
+- id: trust-technical-grid-3-project21993216-tild-9
+  path: trust/trust-technical-grid-3-project21993216-tild-9/
   type: guarantees
-- category: Trust
-  display_name_ru: Блок гарантий и поддержки в виде сетки карточек с иконками и короткими
-    пояснения
-  id: trust-technical-grid-3-project21993216-tild-9
+  category: trust
+  display_name_ru: 'Блок гарантий и поддержки в виде сетки карточек с иконками и короткими'
   layout_pattern: grid-3
-  type: guarantees
-generated: '2026-06-01'
-total_blocks: 183
-version: 3
