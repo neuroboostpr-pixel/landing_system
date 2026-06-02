@@ -67,17 +67,21 @@ WIREFRAME_BRIDGE_CSS = (
 
 
 def _wrap_srcdoc(block_html: str, mood_css: str = "", tokens_css: str = "") -> str:
-    """Префиксует HTML блока для srcdoc.
+    """Префиксует/обрамляет HTML блока для srcdoc.
 
     Порядок каскада (последнее переопределяет):
-      1. WIREFRAME_BRIDGE_CSS — нейтральные lp-дефолты + мост lp←color,
-      2. mood_css (если выбран mood блока),
-      3. tokens_css — дизайн-система проекта (tokens.json эт.05): реальные
-         цвета/шрифты клиента. Имеет наивысший приоритет → блок выглядит как
-         на готовом лендинге.
+      1. WIREFRAME_BRIDGE_CSS — нейтральные lp-дефолты + preview-overrides — ДО
+         блока (блок может переопределить дефолты под себя),
+      2. сам блок (его <style> с собственным :root --lp-*),
+      3. mood_css + tokens_css — ПОСЛЕ блока, поэтому переопределяют блочный
+         :root: дизайн-система проекта (tokens.json) и mood выигрывают, и блок
+         выглядит как на готовом лендинге, а не в своих дефолтных цветах.
     """
-    style = f"<style>{WIREFRAME_BRIDGE_CSS}{mood_css}{tokens_css}</style>"
-    return style + block_html
+    head = f"<style>{WIREFRAME_BRIDGE_CSS}</style>"
+    tail = ""
+    if mood_css or tokens_css:
+        tail = f"<style>{mood_css}{tokens_css}</style>"
+    return head + block_html + tail
 
 
 def _load_project_tokens(project_dir: Path) -> dict:
