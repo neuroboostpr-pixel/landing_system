@@ -4,7 +4,7 @@ conversion_notes: 'Скидка-подарок за прохождение — �
 created: '2026-05-13'
 description: 'Экран с подарком за прохождение квиза: скидка, бесплатный замер или
   консультация как лид-магнит.'
-display_name_ru: 🎁 Квиз — экран подарка за прохождение
+display_name_ru: ru-quiz-11-discount-bonus (centered)
 id: ru-quiz-11-discount-bonus
 layout_pattern: centered
 layout_summary_ru: Большой бейдж скидки, описание подарка, таймер ограничения (CSS-анимация).

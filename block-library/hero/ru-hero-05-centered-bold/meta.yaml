@@ -5,7 +5,7 @@ conversion_notes: 'Apple/Stripe-стиль: минимализм + сила сл
 created: '2026-05-13'
 description: Центрированный hero с гигантской типографикой (64px desktop, 36px mobile),
   декоративными линиями и одной CTA. Без фото — типографика IS the design.
-display_name_ru: 🎨 Центрированный hero с крупной типографикой
+display_name_ru: ru-hero-05-centered-bold (centered)
 id: ru-hero-05-centered-bold
 layout_pattern: centered
 layout_summary_ru: Гигантский заголовок 64px по центру, декоративные линии сверху/снизу,

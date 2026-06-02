@@ -4,7 +4,7 @@ conversion_notes: Native details — без JS, SEO-friendly. Частые во�
 created: 2026-05-12
 description: 6 вопросов-ответов через native HTML <details>-аккордеон. Без JavaScript.
   SEO-friendly.
-display_name_ru: ❓ FAQ-аккордеон 6 вопросов
+display_name_ru: ru-faq-01-accordion (stacked)
 id: ru-faq-01-accordion
 layout_pattern: stacked
 layout_summary_ru: 6 вопросов-ответов через нативный HTML details-аккордеон без JavaScript.

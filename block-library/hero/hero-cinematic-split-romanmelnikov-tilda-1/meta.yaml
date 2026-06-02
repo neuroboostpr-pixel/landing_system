@@ -1,8 +1,7 @@
 category: hero
 description: Крупный первый экран с контрастным заголовком, правым текстовым блоком
   и монохромной сценой внизу.
-display_name_ru: Крупный первый экран с контрастным заголовком, правым текстовым блоком
-  и монохро
+display_name_ru: hero-cinematic-split-romanmelnikov-tilda-1 (split)
 has_animation: false
 id: hero-cinematic-split-romanmelnikov-tilda-1
 imported:

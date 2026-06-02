@@ -6,7 +6,7 @@ created: '2026-05-13'
 description: 'Hero с декоративными угловыми маркерами и нумерацией разделов в стиле
   deck-обложки: бежевый фон, курсив в заголовке, coral-акцент. Адаптирован из open-design-landing-deck
   (Apache-2.0).'
-display_name_ru: Дек-обложка — угловые маркеры, нумерация, coral-акцент
+display_name_ru: ru-hero-10-deck-cover (centered)
 id: ru-hero-10-deck-cover
 layout_pattern: centered
 layout_summary_ru: Двухколоночный layout (текст слева, фото с угловыми маркерами справа).

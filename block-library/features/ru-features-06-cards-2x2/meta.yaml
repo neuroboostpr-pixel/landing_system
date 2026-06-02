@@ -5,7 +5,7 @@ conversion_notes: Сетка 2×2 предпочтительна для 4+ ра�
 created: '2026-05-13'
 description: Четыре карточки в сетке 2×2 (тёплый bone-фон, тени, скруглённые углы)
   рядом с заголовком и описанием. Стиль capabilities-grid от open-design-landing.
-display_name_ru: Четыре карточки 2×2 — bone-фон, тени, курсивные числа
+display_name_ru: ru-features-06-cards-2x2 (grid-3)
 id: ru-features-06-cards-2x2
 layout_pattern: grid-3
 layout_summary_ru: Левая колонка — kicker, заголовок, подзаголовок. Правая — сетка

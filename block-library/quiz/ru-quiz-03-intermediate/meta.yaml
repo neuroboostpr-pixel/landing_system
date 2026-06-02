@@ -4,7 +4,7 @@ conversion_notes: Промежуточный экран снижает abandon r
 created: 2026-05-12
 description: 'Промежуточный мотивационный экран квиза: большое эмодзи + поощрительный
   текст + CTA ''Продолжить''.'
-display_name_ru: 🎉 Квиз — промежуточный мотивационный экран
+display_name_ru: ru-quiz-03-intermediate (centered)
 id: ru-quiz-03-intermediate
 layout_pattern: centered
 layout_summary_ru: Большое эмодзи + поощрительный текст + кнопка 'Продолжить'. Появляется

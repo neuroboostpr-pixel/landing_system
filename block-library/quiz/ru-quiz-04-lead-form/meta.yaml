@@ -4,7 +4,7 @@ conversion_notes: Только разрешённые мессенджеры в 
 created: 2026-05-12
 description: Финальный экран квиза. Telegram + Max + звонок. Только разрешённые в
   РФ мессенджеры. Согласие на ПД.
-display_name_ru: 📋 Квиз — финальная форма захвата
+display_name_ru: ru-quiz-04-lead-form (centered)
 id: ru-quiz-04-lead-form
 layout_pattern: centered
 layout_summary_ru: 'Последний экран квиза: заголовок, поле телефона, выбор мессенджера

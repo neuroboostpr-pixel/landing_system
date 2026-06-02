@@ -4,7 +4,7 @@ conversion_notes: Принципы = ценности компании. Поку
 created: 2026-05-13
 description: 'Сетка 4×2 карточек с принципами работы. Editorial стиль: тёмные и акцентные
   карточки, нумерация, краткие тезисы.'
-display_name_ru: 🏛️ Принципы работы — редакционная сетка
+display_name_ru: ru-trust-04-principles-grid (centered)
 id: ru-trust-04-principles-grid
 layout_pattern: centered
 layout_summary_ru: Заголовок + сетка 4×2 карточек с порядковым номером, заголовком

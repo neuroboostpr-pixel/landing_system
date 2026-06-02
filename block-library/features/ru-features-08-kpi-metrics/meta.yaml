@@ -3,7 +3,7 @@ conversion_notes: KPI-блок повышает доверие. Числа до�
   с клиентом.
 created: 2026-05-13
 description: '4 KPI-метрики с инфографикой: % успеха, лет на рынке, клиентов, проектов'
-display_name_ru: 📊 4 KPI-метрики (87% / 12 лет / 1000+ клиентов)
+display_name_ru: ru-features-08-kpi-metrics (grid-3)
 id: ru-features-08-kpi-metrics
 layout_pattern: grid-3
 layout_summary_ru: Четыре крупные метрики в одной линии, каждая с infographic-визуалом

@@ -4,7 +4,7 @@ conversion_notes: 'Welcome screen увеличивает конверсию: п�
 created: '2026-05-13'
 description: 'Стартовый экран квиза: заголовок с обещанием пользы + кнопка «Начать
   тест». Разминает аудиторию перед вопросами.'
-display_name_ru: 🚀 Квиз — стартовый экран «Начать тест»
+display_name_ru: ru-quiz-06-welcome-screen (centered)
 id: ru-quiz-06-welcome-screen
 layout_pattern: centered
 layout_summary_ru: 'Центрированный экран: крупный заголовок, подзаголовок с выгодой,

@@ -5,7 +5,7 @@ conversion_notes: Форма на первом экране без скролл�
 created: '2026-05-13'
 description: 'Hero 60/40: текст + буллеты слева, форма захвата лида справа (телефон
   + Telegram/Max/звонок). Без фото.'
-display_name_ru: 📝 Текст слева + лид-форма справа
+display_name_ru: ru-hero-04-split-form (centered)
 id: ru-hero-04-split-form
 layout_pattern: centered
 layout_summary_ru: '60/40 split: оффер с 3 буллетами слева, форма захвата (телефон

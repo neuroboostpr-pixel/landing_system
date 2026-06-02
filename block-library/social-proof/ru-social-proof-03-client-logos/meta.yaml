@@ -5,7 +5,7 @@ conversion_notes: Логотипы известных клиентов — ав�
 created: '2026-05-13'
 description: Полоса логотипов компаний-клиентов (8 штук) с заголовком 'Нам доверяют'.
   Серые логотипы создают доверие без акцента на конкретные бренды.
-display_name_ru: 🏢 Логотипы клиентов — полоса доверия
+display_name_ru: ru-social-proof-03-client-logos (grid-4)
 id: ru-social-proof-03-client-logos
 layout_pattern: grid-4
 layout_summary_ru: Горизонтальная полоса с заголовком и 8 логотипами клиентов в ряд.

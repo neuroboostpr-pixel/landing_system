@@ -6,7 +6,7 @@ created: '2026-05-13'
 description: Pricing-блок с тремя тирами и секцией FAQ по оплате на одной странице.
   Синий акцент, featured-бейдж, встроенные FAQ без collapse. Адаптирован из pricing-page
   (Apache-2.0).
-display_name_ru: Тарифы + FAQ о стоимости — комбинированный блок
+display_name_ru: ru-pricing-04-tiers-faq (grid-3)
 id: ru-pricing-04-tiers-faq
 layout_pattern: grid-3
 layout_summary_ru: Три тарифные карточки вверху (featured с border-highlight), затем

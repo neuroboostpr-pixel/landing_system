@@ -4,7 +4,7 @@ conversion_notes: '''от X ₽'' снижает ценовой барьер. С
 created: 2026-05-12
 description: 3 тарифа в ряд (Базовый/Стандарт/Премиум) с ценой 'от X ₽', 5 пунктов
   с галочками, CTA 'Выбрать'.
-display_name_ru: 💰 3 тарифа с ценой 'от X ₽'
+display_name_ru: ru-pricing-01-rub-from (grid-3)
 id: ru-pricing-01-rub-from
 layout_pattern: grid-3
 layout_summary_ru: 'Три тарифных карточки в ряд: название, цена ''от X ₽'', 5 пунктов

@@ -4,7 +4,7 @@ conversion_notes: Круглые фото как Stories — высокое до
 created: 2026-05-12
 description: '5 отзывов в формате круглых кружков (Reels/Stories): фото клиента в
   круге, имя и цитата.'
-display_name_ru: 🎬 Отзывы в круглых кружках (Reels-стиль)
+display_name_ru: ru-testimonials-01-video-circles (cards)
 id: ru-testimonials-01-video-circles
 layout_pattern: cards
 layout_summary_ru: 5 круглых фото клиентов в ряд, под каждым имя и цитата 100 символов.

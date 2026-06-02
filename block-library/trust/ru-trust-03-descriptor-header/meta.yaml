@@ -5,7 +5,7 @@ created: '2026-05-13'
 description: 'Шапка с дескриптором: ''Что / Что продаём / Кому продаём'' — логотип
   слева, дескриптор по центру, телефон и CTA справа. Первый элемент, который видит
   пользователь.'
-display_name_ru: 🏷️ Шапка с дескриптором — кто мы
+display_name_ru: ru-trust-03-descriptor-header (centered)
 id: ru-trust-03-descriptor-header
 layout_pattern: centered
 layout_summary_ru: Логотип слева, дескриптор по центру (Ниша + Продукт + Город), телефон

@@ -1,8 +1,7 @@
 category: hero
 description: Первый экран с крупным оффером, продуктовой 3D-визуализацией, буллетами
   и формой заявки справа.
-display_name_ru: Первый экран с крупным оффером, продуктовой 3D-визуализацией, буллетами
-  и формой
+display_name_ru: hero-playful-split-opt-ecowash-ru-1 (split)
 has_animation: false
 id: hero-playful-split-opt-ecowash-ru-1
 imported:

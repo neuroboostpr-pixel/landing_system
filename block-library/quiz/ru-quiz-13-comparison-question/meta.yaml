@@ -4,7 +4,7 @@ conversion_notes: 'Бинарный выбор выявляет ключевой
 created: '2026-05-13'
 description: 'Вопрос-сравнение «что важнее: А или Б»: две большие карточки, пользователь
   выбирает приоритет.'
-display_name_ru: ⚖️ Квиз — вопрос-сравнение «А или Б»
+display_name_ru: ru-quiz-13-comparison-question (centered)
 id: ru-quiz-13-comparison-question
 layout_pattern: centered
 layout_summary_ru: 'Два варианта на весь экран: карточка А и карточка Б. Заголовок

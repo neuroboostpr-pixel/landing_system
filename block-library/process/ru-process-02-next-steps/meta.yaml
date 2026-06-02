@@ -4,7 +4,7 @@ conversion_notes: Временные метки снимают тревогу '�
 created: 2026-05-13
 description: '3-шаговый процесс в стиле editorial: временная шкала, чёрная/акцентная
   карточка для последнего шага. Вдохновлён release-notes one-pager.'
-display_name_ru: 📋 Процесс — 3 шага timeline-стиль
+display_name_ru: ru-process-02-next-steps (centered)
 id: ru-process-02-next-steps
 layout_pattern: centered
 layout_summary_ru: 3 горизонтальные карточки-строки с временной меткой, заголовком

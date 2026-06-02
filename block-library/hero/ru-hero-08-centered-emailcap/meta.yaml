@@ -6,7 +6,7 @@ created: '2026-05-13'
 description: 'Hero с центрированным заголовком и формой сбора email: терракотовый
   фон, бегущая строка внизу, декоративный цветной подвал. Адаптирован из waitlist-page
   (Open Design, Apache-2.0).'
-display_name_ru: Центрированный герой — email-форма + бегущая строка
+display_name_ru: ru-hero-08-centered-emailcap (centered)
 id: ru-hero-08-centered-emailcap
 layout_pattern: centered
 layout_summary_ru: Центрированный макет — eyebrow, крупный заголовок, подзаголовок,

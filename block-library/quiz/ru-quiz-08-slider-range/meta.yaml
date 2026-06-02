@@ -4,7 +4,7 @@ conversion_notes: 'Слайдер сегментирует аудиторию п
 created: '2026-05-13'
 description: 'Вопрос квиза со слайдером: пользователь задаёт бюджет, площадь или другой
   числовой параметр.'
-display_name_ru: 📊 Квиз — вопрос со слайдером диапазона
+display_name_ru: ru-quiz-08-slider-range (centered)
 id: ru-quiz-08-slider-range
 layout_pattern: centered
 layout_summary_ru: Нативный input[type=range] без JS. Текущее значение и единица измерения

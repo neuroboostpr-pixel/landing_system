@@ -4,7 +4,7 @@ conversion_notes: 'Лоадер создаёт ощущение персонал
 created: '2026-05-13'
 description: Экран «анализируем ваши ответы...» — визуальная пауза перед лид-формой,
   повышает доверие и конверсию.
-display_name_ru: ⏳ Квиз — экран анализа ответов (лоадер)
+display_name_ru: ru-quiz-10-loader-analyzing (centered)
 id: ru-quiz-10-loader-analyzing
 layout_pattern: centered
 layout_summary_ru: Анимированный прогресс-бар CSS + текст «Подбираем варианты для

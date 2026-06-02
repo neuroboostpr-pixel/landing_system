@@ -5,7 +5,7 @@ conversion_notes: Засечный шрифт с bordered текстом соз�
 created: '2026-05-13'
 description: 'Манифест-блок с засечным текстом, синей левой полосой и подписью: двухколоночный,
   метка слева, цитата справа. Стиль kami-landing (Apache-2.0).'
-display_name_ru: Манифест — засечная цитата с левой полосой и подписью
+display_name_ru: ru-trust-05-manifesto-text (centered)
 id: ru-trust-05-manifesto-text
 layout_pattern: centered
 layout_summary_ru: Двухколоночный layout (метка слева, текст справа). Засечный шрифт

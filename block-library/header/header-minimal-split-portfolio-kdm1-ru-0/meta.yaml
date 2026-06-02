@@ -1,8 +1,7 @@
 category: header
 description: Тонкая верхняя панель с логотипом, навигацией, контактами и компактными
   иконками действий.
-display_name_ru: Тонкая верхняя панель с логотипом, навигацией, контактами и компактными
-  иконками
+display_name_ru: header-minimal-split-portfolio-kdm1-ru-0 (split)
 has_animation: false
 id: header-minimal-split-portfolio-kdm1-ru-0
 imported:

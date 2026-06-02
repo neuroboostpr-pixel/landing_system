@@ -4,7 +4,7 @@ conversion_notes: Progress bar снижает отказы на 20-35%. Sticky �
 created: 2026-05-12
 description: 'Sticky progress bar для квиза: текст ''Вопрос N из M'' + CSS progress
   bar. Без JavaScript.'
-display_name_ru: 📊 Квиз — вопрос с прогрессом сверху
+display_name_ru: ru-quiz-02-progress-top (centered)
 id: ru-quiz-02-progress-top
 layout_pattern: centered
 layout_summary_ru: Шаг квиза с прогресс-баром вверху, вопрос по центру, варианты ответа

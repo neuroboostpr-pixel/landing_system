@@ -5,7 +5,7 @@ conversion_notes: Пульсирующая точка добавляет ощу�
 created: '2026-05-13'
 description: 'Горизонтальная бегущая строка с именами клиентов/партнёров: пульсирующая
   точка, лейбл слева, анимированный тикер справа. Адаптирован из wire-section open-design-landing.'
-display_name_ru: Тикер клиентов — бегущая строка с названиями
+display_name_ru: ru-social-proof-07-logo-ticker (grid-4)
 id: ru-social-proof-07-logo-ticker
 layout_pattern: grid-4
 layout_summary_ru: Тонкая полоса с пульсирующей точкой и бегущей строкой клиентов.

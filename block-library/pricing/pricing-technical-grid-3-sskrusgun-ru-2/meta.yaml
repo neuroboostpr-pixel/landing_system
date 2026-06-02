@@ -1,8 +1,7 @@
 category: pricing
 description: Сетка карточек программ с фото, краткими параметрами, ценовым акцентом
   и кнопками покупки.
-display_name_ru: Сетка карточек программ с фото, краткими параметрами, ценовым акцентом
-  и кнопкам
+display_name_ru: pricing-technical-grid-3-sskrusgun-ru-2 (grid-3)
 has_animation: false
 id: pricing-technical-grid-3-sskrusgun-ru-2
 imported:

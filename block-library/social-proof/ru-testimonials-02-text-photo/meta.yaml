@@ -4,7 +4,7 @@ conversion_notes: Конкретные цифры в цитатах повыша
 created: 2026-05-12
 description: '4 карточки отзывов 2x2: фото клиента + цитата + имя + роль. Конкретные
   результаты в цитатах.'
-display_name_ru: 💬 4 карточки отзывов с фото 2×2
+display_name_ru: ru-testimonials-02-text-photo (cards)
 id: ru-testimonials-02-text-photo
 layout_pattern: cards
 layout_summary_ru: 'Сетка 2×2: фото клиента + длинная цитата (200 символов) + имя

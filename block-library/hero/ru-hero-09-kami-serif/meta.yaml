@@ -5,7 +5,7 @@ conversion_notes: Засечный шрифт создаёт ощущение о
 created: '2026-05-13'
 description: 'Hero в стиле kami (紙): тёплый пергамент, крупный засечный шрифт, синий
   акцент, карточки-метрики справа. Адаптирован из kami-landing (Apache-2.0).'
-display_name_ru: Ками-герой — пергамент, засечный шрифт, метрики
+display_name_ru: ru-hero-09-kami-serif (centered)
 id: ru-hero-09-kami-serif
 layout_pattern: centered
 layout_summary_ru: 'Двухколоночный: заголовок и CTA слева, карточки-метрики справа.

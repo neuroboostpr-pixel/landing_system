@@ -5,7 +5,7 @@ conversion_notes: Нумерация создаёт ощущение после�
 created: '2026-05-13'
 description: 'Три колонки с нумерованными преимуществами: номер-монопространство,
   заголовок, описание. Минималистичный чистый стиль от saas-landing (Apache-2.0).'
-display_name_ru: Нумерованные преимущества — 3 колонки, монопространство
+display_name_ru: ru-features-04-numbered-list (grid-3)
 id: ru-features-04-numbered-list
 layout_pattern: grid-3
 layout_summary_ru: Три равные колонки на белом фоне с верхней/нижней границей. Номера

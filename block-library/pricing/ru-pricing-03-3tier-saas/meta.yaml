@@ -5,7 +5,7 @@ conversion_notes: Выделение среднего тарифа border+badge 
 created: '2026-05-13'
 description: Три тарифа с выделенным recommended-тиром, чеклистом функций и кнопками.
   Чистый white-surface стиль от saas-landing (Apache-2.0). Цены в рублях.
-display_name_ru: Три тарифа SaaS — рекомендованный тир, чеклист
+display_name_ru: ru-pricing-03-3tier-saas (grid-3)
 id: ru-pricing-03-3tier-saas
 layout_pattern: grid-3
 layout_summary_ru: Три колонки, средняя с border-highlight и бейджем. Цена крупно,

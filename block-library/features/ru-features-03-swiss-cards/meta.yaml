@@ -4,7 +4,7 @@ conversion_notes: Нумерация создаёт ощущение систе�
 created: 2026-05-13
 description: Этапы/преимущества в 2×2 карточках с цветным акцентом в швейцарском брутальном
   стиле. Нумерованные, разноцветные.
-display_name_ru: 🎨 Фичи — 4 карточки швейцарский стиль
+display_name_ru: ru-features-03-swiss-cards (grid-3)
 id: ru-features-03-swiss-cards
 layout_pattern: grid-3
 layout_summary_ru: '4 карточки 2×2, каждая с номером, заголовком и текстом. Акцентные

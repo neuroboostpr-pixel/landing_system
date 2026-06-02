@@ -5,7 +5,7 @@ conversion_notes: 'Средний тариф (tier-2) выделен акцен�
 created: '2026-05-13'
 description: 'Таблица сравнения тарифов 3×6: три тарифа в колонках, 6 строк функций,
   премиум-колонка с акцентным фоном. CTA-строка снизу.'
-display_name_ru: 📊 Сравнительная таблица тарифов
+display_name_ru: ru-pricing-02-comparison-table (grid-3)
 id: ru-pricing-02-comparison-table
 layout_pattern: grid-3
 layout_summary_ru: '3 тарифа в колонках × 6 строк функций, премиум-колонка подсвечена

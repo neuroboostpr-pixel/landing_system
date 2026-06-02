@@ -4,7 +4,7 @@ conversion_notes: Текстовые лого (не SVG) проще адапти
 created: '2026-05-13'
 description: Компактная полоса логотипов клиентов/партнёров с лейблом. Минималистичный
   стиль proof-section от saas-landing (Apache-2.0). Текстовые лого с opacity.
-display_name_ru: Полоса логотипов — компании-клиенты в ряд
+display_name_ru: ru-trust-07-partner-logos (centered)
 id: ru-trust-07-partner-logos
 layout_pattern: centered
 layout_summary_ru: Центрированная полоса с лейблом и 5 текстовыми логотипами в ряд.

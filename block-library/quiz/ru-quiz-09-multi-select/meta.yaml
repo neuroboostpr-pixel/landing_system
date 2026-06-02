@@ -4,7 +4,7 @@ conversion_notes: 'Множественный выбор собирает бол
 created: '2026-05-13'
 description: 'Вопрос квиза с множественным выбором: чекбоксы вместо radio, можно отметить
   несколько вариантов.'
-display_name_ru: ☑️ Квиз — вопрос с мульти-выбором (чекбоксы)
+display_name_ru: ru-quiz-09-multi-select (centered)
 id: ru-quiz-09-multi-select
 layout_pattern: centered
 layout_summary_ru: Список вариантов с чекбоксами — CSS :checked без JS. Кнопка «Далее»

@@ -5,7 +5,7 @@ conversion_notes: Горизонтальная линия визуально с�
 created: '2026-05-13'
 description: 'Четыре шага с горизонтальной линией-соединителем и нумерацией: кики,
   заголовок, подзаголовок слева; шаги справа. Стиль method-section от open-design-landing.'
-display_name_ru: Метод — 4 шага с линией-соединителем
+display_name_ru: ru-features-05-method-steps (grid-3)
 id: ru-features-05-method-steps
 layout_pattern: grid-3
 layout_summary_ru: Двухчастный layout (заголовок+лид слева, 4 шага справа). Горизонтальная

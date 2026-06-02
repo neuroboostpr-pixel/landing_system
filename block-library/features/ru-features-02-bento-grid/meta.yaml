@@ -4,7 +4,7 @@ conversion_notes: 'Bento-сетка: большое фото якорит вни
 created: 2026-05-12
 description: 'Bento grid 2x2: большая фото-ячейка + 3 мелких карточки с иконками и
   текстом.'
-display_name_ru: '🔲 Bento-сетка: фото + 3 карточки'
+display_name_ru: ru-features-02-bento-grid (grid-3)
 id: ru-features-02-bento-grid
 layout_pattern: grid-3
 layout_summary_ru: 'Сетка 2×2: большое фото (50% ширины) слева, три карточки с иконками

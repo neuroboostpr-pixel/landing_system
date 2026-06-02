@@ -5,7 +5,7 @@ conversion_notes: 'Числа как социальное доказательс
 created: '2026-05-13'
 description: 'Полноширинная полоса с 4 KPI-числами в ряд: гигантское число (56px desktop,
   36px mobile) + uppercase метка. Альтернатива иконочным плашкам доверия.'
-display_name_ru: 📈 Полоса с 4 KPI-числами
+display_name_ru: ru-trust-02-numbers-row (centered)
 id: ru-trust-02-numbers-row
 layout_pattern: centered
 layout_summary_ru: Горизонтальная полоса с четырьмя гигантскими числами (56px) и uppercase

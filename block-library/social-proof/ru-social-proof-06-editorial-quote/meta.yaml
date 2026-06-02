@@ -5,7 +5,7 @@ conversion_notes: Засечный шрифт цитаты создаёт дов
 created: '2026-05-13'
 description: Редакционная цитата в засечном шрифте с фото автора, инициалами-аватаром
   и блоком логотипов партнёров. Стиль testimonial-section от open-design-landing.
-display_name_ru: Редакционная цитата — засечный шрифт + партнёры
+display_name_ru: ru-social-proof-06-editorial-quote (grid-4)
 id: ru-social-proof-06-editorial-quote
 layout_pattern: grid-4
 layout_summary_ru: Двухколоночный layout (цитата + автор + партнёры слева, фото справа).

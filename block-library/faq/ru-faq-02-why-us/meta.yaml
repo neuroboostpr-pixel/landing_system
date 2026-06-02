@@ -4,7 +4,7 @@ conversion_notes: Ответ на вопрос 'Почему вы, а не ко�
 created: '2026-05-13'
 description: FAQ в стиле 'Почему именно мы?' — 5 возражений о цене, качестве, сроках
   с конкретными ответами. Закрывает финальные сомнения перед заявкой.
-display_name_ru: ❓ FAQ — Почему именно мы?
+display_name_ru: ru-faq-02-why-us (stacked)
 id: ru-faq-02-why-us
 layout_pattern: stacked
 layout_summary_ru: '5 вопросов-возражений в аккордеоне: цена, качество, сроки, гарантии,

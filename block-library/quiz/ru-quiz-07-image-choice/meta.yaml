@@ -3,7 +3,7 @@ conversion_notes: 'Визуальный выбор снижает когнити
   Люди чаще выбирают картинку, чем читают текст. Источник: Tilda Education.'
 created: '2026-05-13'
 description: 'Вопрос квиза с вариантами-картинками: пользователь кликает на фото покрытия/материала/стиля.'
-display_name_ru: 🖼️ Квиз — вопрос с картинками-вариантами
+display_name_ru: ru-quiz-07-image-choice (centered)
 id: ru-quiz-07-image-choice
 layout_pattern: centered
 layout_summary_ru: 'Сетка 2×2 карточек: изображение + подпись. Клик на карточку =

@@ -4,7 +4,7 @@ conversion_notes: Карточка по центру фокусирует вни
 created: 2026-05-12
 description: 'Карточка вопроса квиза: вопрос + 4 кнопки-варианта + комментарий ''зачем
   спрашиваем''.'
-display_name_ru: 🎯 Квиз — шаг-карточка с вариантами
+display_name_ru: ru-quiz-01-step-card (centered)
 id: ru-quiz-01-step-card
 layout_pattern: centered
 layout_summary_ru: 'Один вопрос на экран: заголовок + 4 карточки-ответа с иконками.

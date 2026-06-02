@@ -4,7 +4,7 @@ conversion_notes: Конкретный срок ('5 минут') снижает 
 created: 2026-05-12
 description: 'Финальный экран квиза: галочка ✓ + ''Спасибо!'' + ''Свяжемся в TG/Max
   через 5 минут'' + CTA ''На главную''.'
-display_name_ru: ✅ Квиз — страница «Спасибо»
+display_name_ru: ru-quiz-05-thankyou (centered)
 id: ru-quiz-05-thankyou
 layout_pattern: centered
 layout_summary_ru: 'Финальный экран квиза: галочка ✓ + ''Спасибо!'' + конкретный срок

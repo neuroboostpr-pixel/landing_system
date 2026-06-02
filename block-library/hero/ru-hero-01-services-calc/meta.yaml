@@ -4,7 +4,7 @@ conversion_notes: CTA контраст 7:1. Плашка 'от X ₽' в угл�
 created: 2026-05-12
 description: 'RU hero для услуг: фоновое фото объекта, оффер слева, кнопка ''Рассчитать
   стоимость'', плашка ''от X ₽'''
-display_name_ru: 🏗️ Услуги — фото фона + расчёт стоимости
+display_name_ru: ru-hero-01-services-calc (centered)
 id: ru-hero-01-services-calc
 layout_pattern: centered
 layout_summary_ru: Полноэкранное фото объекта на фоне, оффер с подзаголовком слева,

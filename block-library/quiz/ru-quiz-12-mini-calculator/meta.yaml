@@ -5,7 +5,7 @@ conversion_notes: 'Показ ориентировочной цены мотив
 created: '2026-05-13'
 description: 'Мини-калькулятор стоимости внутри квиза: пользователь видит ориентировочную
   цену до отправки контактов.'
-display_name_ru: 🧮 Квиз — мини-калькулятор стоимости
+display_name_ru: ru-quiz-12-mini-calculator (centered)
 id: ru-quiz-12-mini-calculator
 layout_pattern: centered
 layout_summary_ru: 'Несколько нативных radio/range без JS. Под вопросами — поле «Ваша

@@ -3,7 +3,7 @@ conversion_notes: Графики роста — мощный proof. Исполь
 created: 2026-05-13
 description: 'Блок социального доказательства: график роста (клиентов / выручки /
   проектов) за N лет'
-display_name_ru: 📈 График роста (клиенты / выручка / проекты за N лет)
+display_name_ru: ru-stats-01-growth-chart (grid-2)
 id: ru-stats-01-growth-chart
 layout_pattern: grid-2
 layout_summary_ru: Заголовок + один большой line-chart инфографик слева, краткое описание

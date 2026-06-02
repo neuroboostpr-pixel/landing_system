@@ -4,7 +4,7 @@ conversion_notes: Поиск снижает отказы у сомневающи
 created: 2026-05-13
 description: FAQ с категорией-фильтрами и поиском по тексту. До 12 вопросов с сортировкой
   по разделам. Без JS-фреймворков.
-display_name_ru: ❓ FAQ с поиском и категориями
+display_name_ru: ru-faq-03-searchable (stacked)
 id: ru-faq-03-searchable
 layout_pattern: stacked
 layout_summary_ru: Поле поиска + кнопки-категории сверху, аккордеон-список снизу.

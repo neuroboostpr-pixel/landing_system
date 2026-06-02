@@ -4,7 +4,7 @@ conversion_notes: Используйте для "О нас" или манифе�
 created: '2026-05-13'
 description: 'Двухколоночный split-блок: текст с манифестом или историей компании
   слева, изображение справа. Стиль about-section от open-design-landing.'
-display_name_ru: О нас — двухколоночный split с манифестом
+display_name_ru: ru-features-07-2col-split (grid-3)
 id: ru-features-07-2col-split
 layout_pattern: grid-3
 layout_summary_ru: Сетка 1.05fr / 1fr. Слева kicker, заголовок с засечным курсивом,

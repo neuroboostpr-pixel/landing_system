@@ -5,7 +5,7 @@ conversion_notes: Static FAQ (без collapse) эффективнее на landi
 created: '2026-05-13'
 description: Пять вопросов-ответов в static-режиме (без collapse) с чистым белым фоном
   и горизонтальными разделителями. Адаптирован из pricing-page (Apache-2.0).
-display_name_ru: FAQ — 5 вопросов без аккордеона, белый фон
+display_name_ru: ru-faq-04-pricing-faq (stacked)
 id: ru-faq-04-pricing-faq
 layout_pattern: stacked
 layout_summary_ru: Узкая колонка (800px max). Лейбл, заголовок, 5 пар вопрос-ответ

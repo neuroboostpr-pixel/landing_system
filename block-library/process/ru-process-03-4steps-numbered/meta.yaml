@@ -4,7 +4,7 @@ conversion_notes: Ячейки с бордером создают ощущени
 created: '2026-05-13'
 description: Четыре шага в сетке с бордерами между ячейками, иллюстрациями и акцентными
   числами 01–04. Стиль method-grid от open-design-landing (Apache-2.0).
-display_name_ru: Процесс — 4 шага в сетке с бордерами и иллюстрациями
+display_name_ru: ru-process-03-4steps-numbered (centered)
 id: ru-process-03-4steps-numbered
 layout_pattern: centered
 layout_summary_ru: Двухчастный header (заголовок слева, подзаголовок справа), затем

@@ -4,7 +4,7 @@ conversion_notes: Используйте реальные измеримые ц�
 created: '2026-05-13'
 description: Четыре метрики в сетке с чередующимися фонами (bone/тёплый) и крупными
   акцентными числами. Стиль stats-slide от open-design-landing-deck.
-display_name_ru: Метрики — сетка 4 статистики с чередующимся фоном
+display_name_ru: ru-social-proof-08-stats-deck (grid-4)
 id: ru-social-proof-08-stats-deck
 layout_pattern: grid-4
 layout_summary_ru: Заголовок вверху, сетка 4×1 метрик снизу с чередующимися фонами.

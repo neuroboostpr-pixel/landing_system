@@ -5,7 +5,7 @@ conversion_notes: Портфолио из 5 кейсов — оптимальн�
 created: '2026-05-13'
 description: Сетка из 5 проектов/кейсов с тегами-фильтрами (static), нумерацией Nº
   и типами. Стиль labs-grid от open-design-landing (Apache-2.0).
-display_name_ru: Витрина проектов — сетка 5 кейсов с тегами
+display_name_ru: ru-trust-06-labs-showcase (centered)
 id: ru-trust-06-labs-showcase
 layout_pattern: centered
 layout_summary_ru: Заголовок с тегами-фильтрами (декоративные, без JS). Сетка 5×1

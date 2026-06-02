@@ -1,8 +1,7 @@
 category: header
 description: Компактная верхняя навигация с логотипом по центру зоны меню и мягкой
   кнопкой действия справа.
-display_name_ru: Компактная верхняя навигация с логотипом по центру зоны меню и мягкой
-  кнопкой де
+display_name_ru: header-corporate-split-zilant-group-0 (split)
 has_animation: false
 id: header-corporate-split-zilant-group-0
 imported:

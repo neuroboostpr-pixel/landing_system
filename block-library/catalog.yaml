@@ -9,7 +9,7 @@ blocks:
   type: contacts
   layout_pattern: brutalist
   signature: contacts|brutalist|[content]|bg:false
-  display_name_ru: 'contacts: brutalist'
+  display_name_ru: contacts-001 (brutalist)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -24,7 +24,7 @@ blocks:
   type: contacts
   layout_pattern: grid
   signature: contacts|grid|[content]|bg:false
-  display_name_ru: 'contacts: grid'
+  display_name_ru: contacts-002 (grid)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -39,7 +39,7 @@ blocks:
   type: contacts
   layout_pattern: split
   signature: contacts|split|[content]|bg:false
-  display_name_ru: 'contacts: split'
+  display_name_ru: contacts-003 (split)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -54,8 +54,7 @@ blocks:
   type: contacts
   layout_pattern: split
   signature: forms|default|[content]|bg:false
-  display_name_ru: Финальный контактный экран с крупным заголовком, формой выбора
-    времени и яркой к
+  display_name_ru: contacts-corporate-split-portfolio-kdm1-ru-16 (split)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -71,7 +70,7 @@ blocks:
   type: faq
   layout_pattern: stacked
   signature: faq|default|[content]|bg:false
-  display_name_ru: Компактный блок вопросов с аккордеонными строками на темном фоне.
+  display_name_ru: faq-corporate-stacked-portfolio-kdm1-ru-15 (stacked)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -87,8 +86,7 @@ blocks:
   type: faq
   layout_pattern: stacked
   signature: faq|default|[content]|bg:false
-  display_name_ru: Аккордеон частых вопросов в белых строках с иконками раскрытия
-    справа.
+  display_name_ru: faq-minimal-stacked-project21993216-tild-11 (stacked)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -104,8 +102,7 @@ blocks:
   type: faq
   layout_pattern: stacked
   signature: faq|default|[content]|bg:false
-  display_name_ru: Аккордеон вопросов на светлом фоне с компактными строками и иконками
-    раскрытия.
+  display_name_ru: faq-minimal-stacked-sskrusgun-ru-13 (stacked)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -121,7 +118,7 @@ blocks:
   type: faq
   layout_pattern: stacked
   signature: faq|default|[content]|bg:false
-  display_name_ru: ❓ FAQ-аккордеон 6 вопросов
+  display_name_ru: ru-faq-01-accordion (stacked)
   created: 2026-05-12
   has_bg_image: false
   slots:
@@ -186,7 +183,7 @@ blocks:
   type: faq
   layout_pattern: stacked
   signature: faq|default|[content]|bg:false
-  display_name_ru: ❓ FAQ — Почему именно мы?
+  display_name_ru: ru-faq-02-why-us (stacked)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -243,7 +240,7 @@ blocks:
   type: faq
   layout_pattern: stacked
   signature: faq|default|[content]|bg:false
-  display_name_ru: ❓ FAQ с поиском и категориями
+  display_name_ru: ru-faq-03-searchable (stacked)
   created: 2026-05-13
   has_bg_image: false
   slots:
@@ -304,7 +301,7 @@ blocks:
   type: faq
   layout_pattern: stacked
   signature: faq|default|[content]|bg:false
-  display_name_ru: FAQ — 5 вопросов без аккордеона, белый фон
+  display_name_ru: ru-faq-04-pricing-faq (stacked)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -365,7 +362,7 @@ blocks:
   type: features
   layout_pattern: brutalist
   signature: features|brutalist|[content]|bg:false
-  display_name_ru: 'features: brutalist'
+  display_name_ru: features-001 (brutalist)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -380,7 +377,7 @@ blocks:
   type: features
   layout_pattern: cinematic
   signature: features|cinematic|[content]|bg:false
-  display_name_ru: 'features: cinematic'
+  display_name_ru: features-002 (cinematic)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -395,7 +392,7 @@ blocks:
   type: features
   layout_pattern: grid
   signature: features|grid|[content]|bg:false
-  display_name_ru: 'features: grid'
+  display_name_ru: features-003 (grid)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -410,7 +407,7 @@ blocks:
   type: features
   layout_pattern: split
   signature: features|split|[content]|bg:false
-  display_name_ru: 'features: split'
+  display_name_ru: features-004 (split)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -425,7 +422,7 @@ blocks:
   type: features
   layout_pattern: default
   signature: features|default|[content]|bg:false
-  display_name_ru: 'features: default'
+  display_name_ru: features-005 (default)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -440,7 +437,7 @@ blocks:
   type: features
   layout_pattern: minimal
   signature: features|minimal|[content]|bg:false
-  display_name_ru: 'features: minimal'
+  display_name_ru: features-006 (minimal)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -455,8 +452,7 @@ blocks:
   type: features
   layout_pattern: split
   signature: features|default|[content]|bg:false
-  display_name_ru: Короткий темный блок с крупным заявлением и зеленой акцентной плашкой
-    преимущест
+  display_name_ru: features-brutalist-split-antidiler-karpov-ru-2 (split)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -472,8 +468,7 @@ blocks:
   type: features
   layout_pattern: grid-3
   signature: features|default|[content]|bg:false
-  display_name_ru: Блок преимуществ с шестью пронумерованными карточками и нижней
-    полосой с призыво
+  display_name_ru: features-corporate-grid-3-opt-ecowash-ru-8 (grid-3)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -489,8 +484,7 @@ blocks:
   type: features
   layout_pattern: split
   signature: features|default|[content]|bg:false
-  display_name_ru: Двухколоночный блок для корпоративного предложения с чек-листом
-    преимуществ и ин
+  display_name_ru: features-corporate-split-sskrusgun-ru-8 (split)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -506,8 +500,7 @@ blocks:
   type: features
   layout_pattern: grid-2
   signature: features|default|[content]|bg:false
-  display_name_ru: Секция рисков с гигантским заголовком, контурной карточкой и несколькими
-    поясняю
+  display_name_ru: features-editorial-grid-2-romanmelnikov-tilda-9 (grid-2)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -523,8 +516,7 @@ blocks:
   type: features
   layout_pattern: split
   signature: features|default|[content]|bg:false
-  display_name_ru: Раздел с сильным заголовком, текстовым списком слева и крупным
-    предметным фото с
+  display_name_ru: features-editorial-split-project21993216-tild-7 (split)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -540,8 +532,7 @@ blocks:
   type: features
   layout_pattern: stacked
   signature: features|default|[content]|bg:false
-  display_name_ru: Плотный вводный блок с широкой плашкой, крупным тезисом и короткими
-    текстовыми к
+  display_name_ru: features-editorial-stacked-romanmelnikov-tilda-2 (stacked)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -557,8 +548,7 @@ blocks:
   type: features
   layout_pattern: grid-3
   signature: features|default|[content]|bg:false
-  display_name_ru: Темная секция с крупным заголовком и сеткой проблемных карточек
-    с минимальными м
+  display_name_ru: features-technical-grid-3-portfolio-kdm1-ru-2 (grid-3)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -574,8 +564,7 @@ blocks:
   type: features
   layout_pattern: grid-3
   signature: features|default|[content]|bg:false
-  display_name_ru: Информационный блок с темным фоном, большим заголовком и тремя
-    карточками содерж
+  display_name_ru: features-technical-grid-3-portfolio-kdm1-ru-5 (grid-3)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -591,8 +580,7 @@ blocks:
   type: features
   layout_pattern: grid-3
   signature: features|default|[content]|bg:false
-  display_name_ru: Технологический раздел с карточками преимуществ, миниатюрами производства
-    и кноп
+  display_name_ru: features-technical-grid-3-portfolio-kdm1-ru-6 (grid-3)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -608,8 +596,7 @@ blocks:
   type: features
   layout_pattern: grid-3
   signature: features|default|[content]|bg:false
-  display_name_ru: 'Воздушный блок с контрастным заголовком, тремя белыми карточками
-    и декоративной '
+  display_name_ru: features-technical-grid-3-zilant-group-4 (grid-3)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -625,8 +612,7 @@ blocks:
   type: features
   layout_pattern: grid-4
   signature: social-proof|default|[content]|bg:false
-  display_name_ru: 'Полоса с коротким тезисом и четырьмя числовыми преимуществами
-    на светло-голубом '
+  display_name_ru: features-technical-grid-4-project21993216-tild-2 (grid-4)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -642,8 +628,7 @@ blocks:
   type: features
   layout_pattern: split
   signature: features|default|[content]|bg:false
-  display_name_ru: Комбинация промо-карточки, списка направлений и ссылок на разные
-    форматы услуги.
+  display_name_ru: features-technical-split-sskrusgun-ru-6 (split)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -659,7 +644,7 @@ blocks:
   type: features
   layout_pattern: grid-3
   signature: features|default|[content]|bg:false
-  display_name_ru: ✅ 3 преимущества с иконками
+  display_name_ru: ru-features-01-3col-icons (grid-3)
   created: 2026-05-12
   has_bg_image: false
   slots:
@@ -709,7 +694,7 @@ blocks:
   type: features
   layout_pattern: grid-3
   signature: features|default|[content]|bg:false
-  display_name_ru: '🔲 Bento-сетка: фото + 3 карточки'
+  display_name_ru: ru-features-02-bento-grid (grid-3)
   created: 2026-05-12
   has_bg_image: false
   slots:
@@ -763,7 +748,7 @@ blocks:
   type: features
   layout_pattern: grid-3
   signature: features|default|[content]|bg:false
-  display_name_ru: 🎨 Фичи — 4 карточки швейцарский стиль
+  display_name_ru: ru-features-03-swiss-cards (grid-3)
   created: 2026-05-13
   has_bg_image: false
   slots:
@@ -812,7 +797,7 @@ blocks:
   type: features
   layout_pattern: grid-3
   signature: features|default|[content]|bg:false
-  display_name_ru: Нумерованные преимущества — 3 колонки, монопространство
+  display_name_ru: ru-features-04-numbered-list (grid-3)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -865,7 +850,7 @@ blocks:
   type: features
   layout_pattern: grid-3
   signature: content|default|[content]|bg:false
-  display_name_ru: Метод — 4 шага с линией-соединителем
+  display_name_ru: ru-features-05-method-steps (grid-3)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -922,7 +907,7 @@ blocks:
   type: features
   layout_pattern: grid-3
   signature: features|default|[content]|bg:false
-  display_name_ru: Четыре карточки 2×2 — bone-фон, тени, курсивные числа
+  display_name_ru: ru-features-06-cards-2x2 (grid-3)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -995,7 +980,7 @@ blocks:
   type: features
   layout_pattern: grid-3
   signature: content|default|[content]|bg:false
-  display_name_ru: О нас — двухколоночный split с манифестом
+  display_name_ru: ru-features-07-2col-split (grid-3)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -1033,7 +1018,7 @@ blocks:
   type: features
   layout_pattern: grid-3
   signature: social-proof|default|[content]|bg:false
-  display_name_ru: 📊 4 KPI-метрики (87% / 12 лет / 1000+ клиентов)
+  display_name_ru: ru-features-08-kpi-metrics (grid-3)
   created: 2026-05-13
   has_bg_image: false
   slots:
@@ -1078,7 +1063,7 @@ blocks:
   type: footer
   layout_pattern: grid
   signature: footer|grid|[content]|bg:false
-  display_name_ru: 'footer: grid'
+  display_name_ru: footer-001 (grid)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -1093,7 +1078,7 @@ blocks:
   type: footer
   layout_pattern: split
   signature: footer|split|[content]|bg:false
-  display_name_ru: 'footer: split'
+  display_name_ru: footer-002 (split)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -1108,7 +1093,7 @@ blocks:
   type: footer
   layout_pattern: minimal
   signature: footer|minimal|[content]|bg:false
-  display_name_ru: 'footer: minimal'
+  display_name_ru: footer-003 (minimal)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -1123,8 +1108,7 @@ blocks:
   type: footer
   layout_pattern: grid-4
   signature: footer|default|[content]|bg:false
-  display_name_ru: 'Синий футер с логотипом, контактными колонками, ссылками и компактной
-    служебной '
+  display_name_ru: footer-corporate-grid-4-portfolio-kdm1-ru-8 (grid-4)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -1140,8 +1124,7 @@ blocks:
   type: footer
   layout_pattern: grid-4
   signature: footer|default|[content]|bg:false
-  display_name_ru: Мягкий бирюзовый футер с логотипом, навигационными колонками и
-    контактной информ
+  display_name_ru: footer-corporate-grid-4-zilant-group-10 (grid-4)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -1157,8 +1140,7 @@ blocks:
   type: footer
   layout_pattern: split
   signature: footer|default|[content]|bg:false
-  display_name_ru: Темный подвал с навигацией, социальными иконками и контактными
-    строками.
+  display_name_ru: footer-corporate-split-portfolio-kdm1-ru-9 (split)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -1174,8 +1156,7 @@ blocks:
   type: footer
   layout_pattern: split
   signature: footer|default|[content]|bg:false
-  display_name_ru: Низкая темная нижняя панель с мелкими юридическими ссылками и служебными
-    данными
+  display_name_ru: footer-minimal-split-antidiler-karpov-ru-8 (split)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -1191,8 +1172,7 @@ blocks:
   type: footer
   layout_pattern: split
   signature: footer|default|[content]|bg:false
-  display_name_ru: Нижняя темная полоса с мелкими реквизитами, контактами и служебными
-    ссылками.
+  display_name_ru: footer-minimal-split-portfolio-kdm1-ru-17 (split)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -1208,8 +1188,7 @@ blocks:
   type: footer
   layout_pattern: split
   signature: footer|default|[content]|bg:false
-  display_name_ru: Низ страницы с мелкими юридическими ссылками и приглушенной контактной
-    информаци
+  display_name_ru: footer-minimal-split-romanmelnikov-tilda-14 (split)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -1225,7 +1204,7 @@ blocks:
   type: header
   layout_pattern: cinematic
   signature: header|cinematic|[content]|bg:false
-  display_name_ru: 'header: cinematic'
+  display_name_ru: header-001 (cinematic)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -1240,7 +1219,7 @@ blocks:
   type: header
   layout_pattern: split
   signature: header|split|[content]|bg:false
-  display_name_ru: 'header: split'
+  display_name_ru: header-002 (split)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -1255,7 +1234,7 @@ blocks:
   type: header
   layout_pattern: minimal
   signature: header|minimal|[content]|bg:false
-  display_name_ru: 'header: minimal'
+  display_name_ru: header-003 (minimal)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -1270,8 +1249,7 @@ blocks:
   type: header
   layout_pattern: split
   signature: header|default|[content]|bg:false
-  display_name_ru: Узкая верхняя навигация на светлом фоне с компактными ссылками
-    и контрастной кно
+  display_name_ru: header-cinematic-split-portfolio-kdm1-ru-0 (split)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -1287,8 +1265,7 @@ blocks:
   type: header
   layout_pattern: split
   signature: header|default|[content]|bg:false
-  display_name_ru: Компактная верхняя навигация с логотипом по центру зоны меню и
-    мягкой кнопкой де
+  display_name_ru: header-corporate-split-zilant-group-0 (split)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -1304,8 +1281,7 @@ blocks:
   type: header
   layout_pattern: split
   signature: header|default|[content]|bg:false
-  display_name_ru: Узкая навигационная шапка на темном фоне с мелкими ссылками и теплым
-    акцентом.
+  display_name_ru: header-luxury-split-romanmelnikov-tilda-0 (split)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -1321,8 +1297,7 @@ blocks:
   type: header
   layout_pattern: split
   signature: header|default|[content]|bg:false
-  display_name_ru: Тонкая верхняя панель с логотипом, навигацией, контактами и компактными
-    иконками
+  display_name_ru: header-minimal-split-portfolio-kdm1-ru-0 (split)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -1338,8 +1313,7 @@ blocks:
   type: header
   layout_pattern: split
   signature: header|default|[content]|bg:false
-  display_name_ru: Компактная верхняя навигация с логотипом, пунктами меню, контактами
-    и яркой кноп
+  display_name_ru: header-minimal-split-project21993216-tild-0 (split)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -1355,8 +1329,7 @@ blocks:
   type: header
   layout_pattern: split
   signature: header|default|[content]|bg:false
-  display_name_ru: Компактная верхняя навигация на ярком фоне с логотипом, пунктами
-    меню и контактн
+  display_name_ru: header-playful-split-opt-ecowash-ru-0 (split)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -1372,8 +1345,7 @@ blocks:
   type: header
   layout_pattern: split
   signature: header|default|[content]|bg:false
-  display_name_ru: Компактная верхняя панель с логотипом, навигацией, иконками и яркой
-    кнопкой дейс
+  display_name_ru: header-technical-split-sskrusgun-ru-0 (split)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -1389,7 +1361,7 @@ blocks:
   type: hero
   layout_pattern: brutalist
   signature: hero|brutalist|[content]|bg:false
-  display_name_ru: 'hero: brutalist'
+  display_name_ru: hero-001 (brutalist)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -1404,7 +1376,7 @@ blocks:
   type: hero
   layout_pattern: cinematic
   signature: hero|cinematic|[content]|bg:false
-  display_name_ru: 'hero: cinematic'
+  display_name_ru: hero-002 (cinematic)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -1419,7 +1391,7 @@ blocks:
   type: hero
   layout_pattern: split
   signature: hero|split|[content]|bg:false
-  display_name_ru: 'hero: split'
+  display_name_ru: hero-003 (split)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -1434,7 +1406,7 @@ blocks:
   type: hero
   layout_pattern: default
   signature: hero|default|[content]|bg:false
-  display_name_ru: 'hero: default'
+  display_name_ru: hero-004 (default)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -1449,7 +1421,7 @@ blocks:
   type: hero
   layout_pattern: minimal
   signature: hero|minimal|[content]|bg:false
-  display_name_ru: 'hero: minimal'
+  display_name_ru: hero-005 (minimal)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -1464,8 +1436,7 @@ blocks:
   type: hero
   layout_pattern: split
   signature: hero|default|[content]|bg:false
-  display_name_ru: Темный первый экран с крупным наклонным заголовком, автомобильным
-    фоном и контра
+  display_name_ru: hero-cinematic-split-antidiler-karpov-ru-1 (split)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -1481,8 +1452,7 @@ blocks:
   type: hero
   layout_pattern: split
   signature: hero|default|[content]|bg:false
-  display_name_ru: Темный промо-блок с крупным заголовком, CTA-кнопками, 3D-предметом
-    и плашками пр
+  display_name_ru: hero-cinematic-split-portfolio-kdm1-ru-2 (split)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -1498,8 +1468,7 @@ blocks:
   type: hero
   layout_pattern: split
   signature: hero|default|[content]|bg:false
-  display_name_ru: Крупный первый экран с контрастным заголовком, правым текстовым
-    блоком и монохро
+  display_name_ru: hero-cinematic-split-romanmelnikov-tilda-1 (split)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -1515,8 +1484,7 @@ blocks:
   type: hero
   layout_pattern: split
   signature: hero|default|[content]|bg:false
-  display_name_ru: Большой светло-бирюзовый первый экран с крупным заголовком, CTA
-    и деловой фотоко
+  display_name_ru: hero-corporate-split-zilant-group-1 (split)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -1532,8 +1500,7 @@ blocks:
   type: hero
   layout_pattern: split
   signature: hero|default|[content]|bg:false
-  display_name_ru: Первый экран с крупным оффером, продуктовой 3D-визуализацией, буллетами
-    и формой
+  display_name_ru: hero-playful-split-opt-ecowash-ru-1 (split)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -1549,8 +1516,7 @@ blocks:
   type: hero
   layout_pattern: split
   signature: hero|default|[content]|bg:false
-  display_name_ru: Яркий первый экран с крупным заголовком слева и большим предметным
-    фото продукта
+  display_name_ru: hero-technical-split-portfolio-kdm1-ru-1 (split)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -1566,7 +1532,7 @@ blocks:
   type: hero
   layout_pattern: centered
   signature: hero|default|[content]|bg:false
-  display_name_ru: 🏗️ Услуги — фото фона + расчёт стоимости
+  display_name_ru: ru-hero-01-services-calc (centered)
   created: 2026-05-12
   has_bg_image: false
   slots:
@@ -1600,7 +1566,7 @@ blocks:
   type: hero
   layout_pattern: centered
   signature: hero|default|[content]|bg:false
-  display_name_ru: 🧑‍💼 Эксперт слева + оффер справа
+  display_name_ru: ru-hero-02-b2c-expert (centered)
   created: 2026-05-12
   has_bg_image: false
   slots:
@@ -1637,7 +1603,7 @@ blocks:
   type: hero
   layout_pattern: centered
   signature: hero|default|[content]|bg:false
-  display_name_ru: 🏠 Локальный бизнес — фото интерьера
+  display_name_ru: ru-hero-03-local-interior (centered)
   created: 2026-05-12
   has_bg_image: false
   slots:
@@ -1666,7 +1632,7 @@ blocks:
   type: hero
   layout_pattern: centered
   signature: hero|default|[content]|bg:false
-  display_name_ru: 📝 Текст слева + лид-форма справа
+  display_name_ru: ru-hero-04-split-form (centered)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -1707,7 +1673,7 @@ blocks:
   type: hero
   layout_pattern: centered
   signature: hero|default|[content]|bg:false
-  display_name_ru: 🎨 Центрированный hero с крупной типографикой
+  display_name_ru: ru-hero-05-centered-bold (centered)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -1736,7 +1702,7 @@ blocks:
   type: hero
   layout_pattern: centered
   signature: hero|default|[content]|bg:false
-  display_name_ru: 📊 Hero — швейцарский + цифры-метрики
+  display_name_ru: ru-hero-06-swiss-metrics (centered)
   created: 2026-05-13
   has_bg_image: false
   slots:
@@ -1785,7 +1751,7 @@ blocks:
   type: hero
   layout_pattern: centered
   signature: hero|default|[content]|bg:false
-  display_name_ru: Редакционный герой — бежевый фон, курсив, метрики-кольца
+  display_name_ru: ru-hero-07-editorial-serif (centered)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -1847,7 +1813,7 @@ blocks:
   type: hero
   layout_pattern: centered
   signature: hero|default|[content]|bg:false
-  display_name_ru: Центрированный герой — email-форма + бегущая строка
+  display_name_ru: ru-hero-08-centered-emailcap (centered)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -1884,7 +1850,7 @@ blocks:
   type: hero
   layout_pattern: centered
   signature: hero|default|[content]|bg:false
-  display_name_ru: Ками-герой — пергамент, засечный шрифт, метрики
+  display_name_ru: ru-hero-09-kami-serif (centered)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -1945,7 +1911,7 @@ blocks:
   type: hero
   layout_pattern: centered
   signature: hero|default|[content]|bg:false
-  display_name_ru: Дек-обложка — угловые маркеры, нумерация, coral-акцент
+  display_name_ru: ru-hero-10-deck-cover (centered)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -1987,7 +1953,7 @@ blocks:
   type: pricing
   layout_pattern: default
   signature: pricing|default|[content]|bg:false
-  display_name_ru: 'pricing: default'
+  display_name_ru: pricing-001 (default)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -2002,7 +1968,7 @@ blocks:
   type: pricing
   layout_pattern: grid
   signature: pricing|grid|[content]|bg:false
-  display_name_ru: 'pricing: grid'
+  display_name_ru: pricing-002 (grid)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -2017,7 +1983,7 @@ blocks:
   type: pricing
   layout_pattern: split
   signature: pricing|split|[content]|bg:false
-  display_name_ru: 'pricing: split'
+  display_name_ru: pricing-003 (split)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -2032,7 +1998,7 @@ blocks:
   type: pricing
   layout_pattern: minimal
   signature: pricing|minimal|[content]|bg:false
-  display_name_ru: 'pricing: minimal'
+  display_name_ru: pricing-004 (minimal)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -2047,8 +2013,7 @@ blocks:
   type: pricing
   layout_pattern: grid-3
   signature: pricing|default|[content]|bg:false
-  display_name_ru: 'Блок выбора пакетов с тремя тарифными карточками, списками преимуществ
-    и яркими '
+  display_name_ru: pricing-corporate-grid-3-portfolio-kdm1-ru-7 (grid-3)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -2064,8 +2029,7 @@ blocks:
   type: pricing
   layout_pattern: grid-3
   signature: pricing|default|[content]|bg:false
-  display_name_ru: Раздел с карточками специализированных программ, фотофоном, ценовым
-    маркером и к
+  display_name_ru: pricing-corporate-grid-3-sskrusgun-ru-5 (grid-3)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -2081,8 +2045,7 @@ blocks:
   type: pricing
   layout_pattern: grid-3
   signature: pricing|default|[content]|bg:false
-  display_name_ru: Сетка карточек программ с фото, краткими параметрами, ценовым акцентом
-    и кнопкам
+  display_name_ru: pricing-technical-grid-3-sskrusgun-ru-2 (grid-3)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -2098,7 +2061,7 @@ blocks:
   type: pricing
   layout_pattern: grid-3
   signature: pricing|default|[content]|bg:false
-  display_name_ru: 💰 3 тарифа с ценой 'от X ₽'
+  display_name_ru: ru-pricing-01-rub-from (grid-3)
   created: 2026-05-12
   has_bg_image: false
   slots:
@@ -2160,7 +2123,7 @@ blocks:
   type: pricing
   layout_pattern: grid-3
   signature: pricing|default|[content]|bg:false
-  display_name_ru: 📊 Сравнительная таблица тарифов
+  display_name_ru: ru-pricing-02-comparison-table (grid-3)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -2237,7 +2200,7 @@ blocks:
   type: pricing
   layout_pattern: grid-3
   signature: pricing|default|[content]|bg:false
-  display_name_ru: Три тарифа SaaS — рекомендованный тир, чеклист
+  display_name_ru: ru-pricing-03-3tier-saas (grid-3)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -2346,7 +2309,7 @@ blocks:
   type: pricing
   layout_pattern: grid-3
   signature: pricing|default|[content]|bg:false
-  display_name_ru: Тарифы + FAQ о стоимости — комбинированный блок
+  display_name_ru: ru-pricing-04-tiers-faq (grid-3)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -2443,7 +2406,7 @@ blocks:
   type: process
   layout_pattern: cinematic
   signature: process|cinematic|[content]|bg:false
-  display_name_ru: 'process: cinematic'
+  display_name_ru: process-001 (cinematic)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -2458,7 +2421,7 @@ blocks:
   type: process
   layout_pattern: default
   signature: process|default|[content]|bg:false
-  display_name_ru: 'process: default'
+  display_name_ru: process-002 (default)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -2473,7 +2436,7 @@ blocks:
   type: process
   layout_pattern: grid
   signature: process|grid|[content]|bg:false
-  display_name_ru: 'process: grid'
+  display_name_ru: process-003 (grid)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -2488,7 +2451,7 @@ blocks:
   type: process
   layout_pattern: minimal
   signature: process|minimal|[content]|bg:false
-  display_name_ru: 'process: minimal'
+  display_name_ru: process-004 (minimal)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -2503,8 +2466,7 @@ blocks:
   type: process
   layout_pattern: timeline
   signature: content|default|[content]|bg:false
-  display_name_ru: Пошаговая схема старта с пронумерованными карточками и финальной
-    карточкой с кно
+  display_name_ru: process-corporate-timeline-project21993216-tild-10 (timeline)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -2520,8 +2482,7 @@ blocks:
   type: process
   layout_pattern: grid-2
   signature: content|default|[content]|bg:false
-  display_name_ru: Два информационных блока с иконками объясняют сценарии продаж через
-    отдельные ка
+  display_name_ru: process-minimal-grid-2-portfolio-kdm1-ru-4 (grid-2)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -2537,8 +2498,7 @@ blocks:
   type: process
   layout_pattern: cards
   signature: content|default|[content]|bg:false
-  display_name_ru: Светлый блок с вопросительным заголовком, вкладками и карточками
-    вокруг размытог
+  display_name_ru: process-technical-cards-medregistrant-ru-3 (cards)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -2554,8 +2514,7 @@ blocks:
   type: process
   layout_pattern: stacked
   signature: content|default|[content]|bg:false
-  display_name_ru: Производственный блок с текстом, акцентной плашкой, декоративной
-    графикой и боль
+  display_name_ru: process-technical-stacked-opt-ecowash-ru-6 (stacked)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -2571,8 +2530,7 @@ blocks:
   type: process
   layout_pattern: timeline
   signature: content|default|[content]|bg:false
-  display_name_ru: Линейная схема этапов с мелкими подписями и горизонтальным акцентом
-    прогресса.
+  display_name_ru: process-technical-timeline-romanmelnikov-tilda-10 (timeline)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -2588,7 +2546,7 @@ blocks:
   type: process
   layout_pattern: centered
   signature: content|default|[content]|bg:false
-  display_name_ru: 🔢 4 шага работы с иконками
+  display_name_ru: ru-process-01-4steps-icons (centered)
   created: 2026-05-12
   has_bg_image: false
   slots:
@@ -2649,7 +2607,7 @@ blocks:
   type: process
   layout_pattern: centered
   signature: content|default|[content]|bg:false
-  display_name_ru: 📋 Процесс — 3 шага timeline-стиль
+  display_name_ru: ru-process-02-next-steps (centered)
   created: 2026-05-13
   has_bg_image: false
   slots:
@@ -2706,7 +2664,7 @@ blocks:
   type: process
   layout_pattern: centered
   signature: content|default|[content]|bg:false
-  display_name_ru: Процесс — 4 шага в сетке с бордерами и иллюстрациями
+  display_name_ru: ru-process-03-4steps-numbered (centered)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -2763,7 +2721,7 @@ blocks:
   type: lead-form
   layout_pattern: centered
   signature: forms|default|[content]|bg:false
-  display_name_ru: 🎯 Квиз — шаг-карточка с вариантами
+  display_name_ru: ru-quiz-01-step-card (centered)
   created: 2026-05-12
   has_bg_image: false
   slots:
@@ -2800,7 +2758,7 @@ blocks:
   type: lead-form
   layout_pattern: centered
   signature: forms|default|[content]|bg:false
-  display_name_ru: 📊 Квиз — вопрос с прогрессом сверху
+  display_name_ru: ru-quiz-02-progress-top (centered)
   created: 2026-05-12
   has_bg_image: false
   slots:
@@ -2820,7 +2778,7 @@ blocks:
   type: lead-form
   layout_pattern: centered
   signature: forms|default|[content]|bg:false
-  display_name_ru: 🎉 Квиз — промежуточный мотивационный экран
+  display_name_ru: ru-quiz-03-intermediate (centered)
   created: 2026-05-12
   has_bg_image: false
   slots:
@@ -2844,7 +2802,7 @@ blocks:
   type: lead-form
   layout_pattern: centered
   signature: forms|default|[content]|bg:false
-  display_name_ru: 📋 Квиз — финальная форма захвата
+  display_name_ru: ru-quiz-04-lead-form (centered)
   created: 2026-05-12
   has_bg_image: false
   slots:
@@ -2884,7 +2842,7 @@ blocks:
   type: lead-form
   layout_pattern: centered
   signature: forms|default|[content]|bg:false
-  display_name_ru: ✅ Квиз — страница «Спасибо»
+  display_name_ru: ru-quiz-05-thankyou (centered)
   created: 2026-05-12
   has_bg_image: false
   slots:
@@ -2912,7 +2870,7 @@ blocks:
   type: lead-form
   layout_pattern: centered
   signature: forms|default|[content]|bg:false
-  display_name_ru: 🚀 Квиз — стартовый экран «Начать тест»
+  display_name_ru: ru-quiz-06-welcome-screen (centered)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -2945,7 +2903,7 @@ blocks:
   type: lead-form
   layout_pattern: centered
   signature: forms|default|[content]|bg:false
-  display_name_ru: 🖼️ Квиз — вопрос с картинками-вариантами
+  display_name_ru: ru-quiz-07-image-choice (centered)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -2998,7 +2956,7 @@ blocks:
   type: lead-form
   layout_pattern: centered
   signature: forms|default|[content]|bg:false
-  display_name_ru: 📊 Квиз — вопрос со слайдером диапазона
+  display_name_ru: ru-quiz-08-slider-range (centered)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -3035,7 +2993,7 @@ blocks:
   type: lead-form
   layout_pattern: centered
   signature: forms|default|[content]|bg:false
-  display_name_ru: ☑️ Квиз — вопрос с мульти-выбором (чекбоксы)
+  display_name_ru: ru-quiz-09-multi-select (centered)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -3084,7 +3042,7 @@ blocks:
   type: lead-form
   layout_pattern: centered
   signature: forms|default|[content]|bg:false
-  display_name_ru: ⏳ Квиз — экран анализа ответов (лоадер)
+  display_name_ru: ru-quiz-10-loader-analyzing (centered)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -3117,7 +3075,7 @@ blocks:
   type: lead-form
   layout_pattern: centered
   signature: trust|default|[content]|bg:false
-  display_name_ru: 🎁 Квиз — экран подарка за прохождение
+  display_name_ru: ru-quiz-11-discount-bonus (centered)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -3158,7 +3116,7 @@ blocks:
   type: lead-form
   layout_pattern: centered
   signature: forms|default|[content]|bg:false
-  display_name_ru: 🧮 Квиз — мини-калькулятор стоимости
+  display_name_ru: ru-quiz-12-mini-calculator (centered)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -3207,7 +3165,7 @@ blocks:
   type: lead-form
   layout_pattern: centered
   signature: forms|default|[content]|bg:false
-  display_name_ru: ⚖️ Квиз — вопрос-сравнение «А или Б»
+  display_name_ru: ru-quiz-13-comparison-question (centered)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -3248,7 +3206,7 @@ blocks:
   type: logos
   layout_pattern: grid-4
   signature: social-proof|default|[content]|bg:false
-  display_name_ru: 🏢 Логотипы клиентов — полоса доверия
+  display_name_ru: ru-social-proof-03-client-logos (grid-4)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -3297,7 +3255,7 @@ blocks:
   type: logos
   layout_pattern: grid-4
   signature: social-proof|default|[content]|bg:false
-  display_name_ru: 🏆 3 кейса — авторитет через результаты
+  display_name_ru: ru-social-proof-04-authority-cases (grid-4)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -3362,7 +3320,7 @@ blocks:
   type: logos
   layout_pattern: grid-4
   signature: social-proof|default|[content]|bg:false
-  display_name_ru: 📈 Доказательства — редакционные метрики
+  display_name_ru: ru-social-proof-05-metrics-editorial (grid-4)
   created: 2026-05-13
   has_bg_image: false
   slots:
@@ -3403,7 +3361,7 @@ blocks:
   type: logos
   layout_pattern: grid-4
   signature: social-proof|default|[content]|bg:false
-  display_name_ru: Редакционная цитата — засечный шрифт + партнёры
+  display_name_ru: ru-social-proof-06-editorial-quote (grid-4)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -3481,7 +3439,7 @@ blocks:
   type: logos
   layout_pattern: grid-4
   signature: marquee|default|[content]|bg:false
-  display_name_ru: Тикер клиентов — бегущая строка с названиями
+  display_name_ru: ru-social-proof-07-logo-ticker (grid-4)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -3534,7 +3492,7 @@ blocks:
   type: logos
   layout_pattern: grid-4
   signature: social-proof|default|[content]|bg:false
-  display_name_ru: Метрики — сетка 4 статистики с чередующимся фоном
+  display_name_ru: ru-social-proof-08-stats-deck (grid-4)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -3603,7 +3561,7 @@ blocks:
   type: stats
   layout_pattern: grid-2
   signature: social-proof|default|[content]|bg:false
-  display_name_ru: 📈 График роста (клиенты / выручка / проекты за N лет)
+  display_name_ru: ru-stats-01-growth-chart (grid-2)
   created: 2026-05-13
   has_bg_image: false
   slots:
@@ -3642,7 +3600,7 @@ blocks:
   type: testimonials
   layout_pattern: cards
   signature: social-proof|default|[content]|bg:false
-  display_name_ru: 🎬 Отзывы в круглых кружках (Reels-стиль)
+  display_name_ru: ru-testimonials-01-video-circles (cards)
   created: 2026-05-12
   has_bg_image: false
   slots:
@@ -3719,7 +3677,7 @@ blocks:
   type: testimonials
   layout_pattern: cards
   signature: social-proof|default|[content]|bg:false
-  display_name_ru: 💬 4 карточки отзывов с фото 2×2
+  display_name_ru: ru-testimonials-02-text-photo (cards)
   created: 2026-05-12
   has_bg_image: false
   slots:
@@ -3800,8 +3758,7 @@ blocks:
   type: logos
   layout_pattern: split
   signature: social-proof|default|[content]|bg:false
-  display_name_ru: Крупный кейс с фото клиента у автомобиля, диагональной типографикой,
-    текстом отз
+  display_name_ru: social-proof-cinematic-split-antidiler-karpov-ru-3 (split)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -3817,8 +3774,7 @@ blocks:
   type: logos
   layout_pattern: cards
   signature: social-proof|default|[content]|bg:false
-  display_name_ru: Карусель карточек клиентов с логотипами, краткими описаниями и
-    кнопками действия
+  display_name_ru: social-proof-corporate-cards-medregistrant-ru-6 (cards)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -3834,8 +3790,7 @@ blocks:
   type: logos
   layout_pattern: grid-3
   signature: social-proof|default|[content]|bg:false
-  display_name_ru: Статистический блок с крупными красными числами, краткими подписями
-    и широким ви
+  display_name_ru: social-proof-corporate-grid-3-zilant-group-5 (grid-3)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -3851,8 +3806,7 @@ blocks:
   type: logos
   layout_pattern: cards
   signature: social-proof|default|[content]|bg:false
-  display_name_ru: Отзывы показаны в темных контурных карточках с круглыми аватарами
-    и золотыми дет
+  display_name_ru: social-proof-luxury-cards-romanmelnikov-tilda-12 (cards)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -3868,8 +3822,7 @@ blocks:
   type: logos
   layout_pattern: centered
   signature: social-proof|default|[content]|bg:false
-  display_name_ru: Секция отзывов или клиентов с заголовком и маленькими кнопками
-    карусели.
+  display_name_ru: social-proof-minimal-centered-project21993216-tild-3 (centered)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -3885,8 +3838,7 @@ blocks:
   type: logos
   layout_pattern: stacked
   signature: social-proof|default|[content]|bg:false
-  display_name_ru: 'Серия темных кейсов без крупных фото: имя, модель, услуга, отзыв
-    и акцентная кно'
+  display_name_ru: social-proof-minimal-stacked-antidiler-karpov-ru-4 (stacked)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -3902,8 +3854,7 @@ blocks:
   type: logos
   layout_pattern: grid-2
   signature: social-proof|default|[content]|bg:false
-  display_name_ru: Раздел отзывов с крупным заголовком и сеткой пустых белых карточек
-    для отзывов к
+  display_name_ru: social-proof-playful-grid-2-opt-ecowash-ru-9 (grid-2)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -3919,8 +3870,7 @@ blocks:
   type: logos
   layout_pattern: grid-4
   signature: social-proof|default|[content]|bg:false
-  display_name_ru: Статистический блок с крупными процентами, короткими подписями
-    и темной инфограф
+  display_name_ru: social-proof-technical-grid-4-portfolio-kdm1-ru-14 (grid-4)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -3936,7 +3886,7 @@ blocks:
   type: team
   layout_pattern: cinematic
   signature: team|cinematic|[content]|bg:false
-  display_name_ru: 'team: cinematic'
+  display_name_ru: team-001 (cinematic)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -3951,7 +3901,7 @@ blocks:
   type: guarantees
   layout_pattern: centered
   signature: trust|default|[content]|bg:false
-  display_name_ru: '🛡️ 4 гарантии: договор + лицензия'
+  display_name_ru: ru-trust-01-guarantees-docs (centered)
   created: 2026-05-12
   has_bg_image: false
   slots:
@@ -4012,7 +3962,7 @@ blocks:
   type: guarantees
   layout_pattern: centered
   signature: social-proof|default|[content]|bg:false
-  display_name_ru: 📈 Полоса с 4 KPI-числами
+  display_name_ru: ru-trust-02-numbers-row (centered)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -4061,7 +4011,7 @@ blocks:
   type: guarantees
   layout_pattern: centered
   signature: header|default|[content]|bg:false
-  display_name_ru: 🏷️ Шапка с дескриптором — кто мы
+  display_name_ru: ru-trust-03-descriptor-header (centered)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -4094,7 +4044,7 @@ blocks:
   type: guarantees
   layout_pattern: centered
   signature: content|default|[content]|bg:false
-  display_name_ru: 🏛️ Принципы работы — редакционная сетка
+  display_name_ru: ru-trust-04-principles-grid (centered)
   created: 2026-05-13
   has_bg_image: false
   slots:
@@ -4159,7 +4109,7 @@ blocks:
   type: guarantees
   layout_pattern: centered
   signature: content|default|[content]|bg:false
-  display_name_ru: Манифест — засечная цитата с левой полосой и подписью
+  display_name_ru: ru-trust-05-manifesto-text (centered)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -4184,7 +4134,7 @@ blocks:
   type: guarantees
   layout_pattern: centered
   signature: social-proof|default|[content]|bg:false
-  display_name_ru: Витрина проектов — сетка 5 кейсов с тегами
+  display_name_ru: ru-trust-06-labs-showcase (centered)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -4301,7 +4251,7 @@ blocks:
   type: guarantees
   layout_pattern: centered
   signature: social-proof|default|[content]|bg:false
-  display_name_ru: Полоса логотипов — компании-клиенты в ряд
+  display_name_ru: ru-trust-07-partner-logos (centered)
   created: '2026-05-13'
   has_bg_image: false
   slots:
@@ -4338,7 +4288,7 @@ blocks:
   type: guarantees
   layout_pattern: grid
   signature: trust|grid|[content]|bg:false
-  display_name_ru: 'trust: grid'
+  display_name_ru: trust-001 (grid)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -4353,7 +4303,7 @@ blocks:
   type: guarantees
   layout_pattern: default
   signature: trust|default|[content]|bg:false
-  display_name_ru: 'trust: default'
+  display_name_ru: trust-002 (default)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -4368,7 +4318,7 @@ blocks:
   type: guarantees
   layout_pattern: minimal
   signature: trust|minimal|[content]|bg:false
-  display_name_ru: 'trust: minimal'
+  display_name_ru: trust-003 (minimal)
   created: '2026-06-01'
   has_bg_image: false
   slots:
@@ -4383,8 +4333,7 @@ blocks:
   type: guarantees
   layout_pattern: grid-3
   signature: trust|default|[content]|bg:false
-  display_name_ru: Секция документов с тремя карточками сертификатов на светло-голубом
-    фоне.
+  display_name_ru: trust-corporate-grid-3-project21993216-tild-12 (grid-3)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -4400,8 +4349,7 @@ blocks:
   type: guarantees
   layout_pattern: grid-4
   signature: content|default|[content]|bg:false
-  display_name_ru: 'Секция ценностей с четырьмя текстовыми колонками и крупными фоновыми
-    буквенными '
+  display_name_ru: trust-corporate-grid-4-sskrusgun-ru-11 (grid-4)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -4417,8 +4365,7 @@ blocks:
   type: guarantees
   layout_pattern: grid-2
   signature: features|default|[content]|bg:false
-  display_name_ru: Длинный блок критериев с большим пустым пространством и двумя плотными
-    текстовым
+  display_name_ru: trust-editorial-grid-2-romanmelnikov-tilda-11 (grid-2)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -4434,8 +4381,7 @@ blocks:
   type: guarantees
   layout_pattern: grid-2
   signature: social-proof|default|[content]|bg:false
-  display_name_ru: Секция кейса с большим заголовком, двумя документальными карточками
-    и бирюзовыми
+  display_name_ru: trust-editorial-grid-2-zilant-group-7 (grid-2)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -4451,8 +4397,7 @@ blocks:
   type: guarantees
   layout_pattern: grid-3
   signature: content|default|[content]|bg:false
-  display_name_ru: Секция принципов с диагональной светлой подложкой, крупными заголовками
-    и предме
+  display_name_ru: trust-editorial-grid-3-portfolio-kdm1-ru-4 (grid-3)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -4468,8 +4413,7 @@ blocks:
   type: guarantees
   layout_pattern: stacked
   signature: trust|default|[content]|bg:false
-  display_name_ru: Контрастный доверительный блок с большим заголовком, светлой вставкой
-    и коротким
+  display_name_ru: trust-editorial-stacked-portfolio-kdm1-ru-12 (stacked)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -4485,8 +4429,7 @@ blocks:
   type: guarantees
   layout_pattern: centered
   signature: social-proof|default|[content]|bg:false
-  display_name_ru: Имиджевый блок с большим словом-заголовком, декоративной подписью
-    и спокойной те
+  display_name_ru: trust-luxury-centered-romanmelnikov-tilda-5 (centered)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -4502,8 +4445,7 @@ blocks:
   type: guarantees
   layout_pattern: grid-4
   signature: social-proof|default|[content]|bg:false
-  display_name_ru: Горизонтальная полоса небольших логотипов на большом белом поле
-    усиливает довери
+  display_name_ru: trust-minimal-grid-4-zilant-group-8 (grid-4)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -4519,8 +4461,7 @@ blocks:
   type: guarantees
   layout_pattern: stacked
   signature: social-proof|default|[content]|bg:false
-  display_name_ru: Яркий блок доверия с большим заголовком, несколькими метриками
-    и крупной декорат
+  display_name_ru: trust-playful-stacked-opt-ecowash-ru-4 (stacked)
   created: '2026-06-02'
   has_bg_image: false
   slots:
@@ -4536,8 +4477,7 @@ blocks:
   type: guarantees
   layout_pattern: grid-3
   signature: trust|default|[content]|bg:false
-  display_name_ru: Блок гарантий и поддержки в виде сетки карточек с иконками и короткими
-    пояснения
+  display_name_ru: trust-technical-grid-3-project21993216-tild-9 (grid-3)
   created: '2026-06-02'
   has_bg_image: false
   slots:
