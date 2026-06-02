@@ -57,16 +57,19 @@ def fail(m: str) -> None:
 # Item-aware slots are handled by a separate regex (item-N-FIELD).
 SLOT_MAPPING: dict[str, list[str]] = {
     # --- titles / headings ---
-    "title": ["title", "headline", "heading"],
-    "heading": ["title", "headline", "heading"],
-    "headline": ["headline", "title", "heading"],
-    "eyebrow": ["eyebrow", "subtype", "category"],
-    "section-title": ["title", "headline"],
+    # prototype.yaml часто кладёт главный заголовок секции в `text` — добавляем
+    # его как кандидат после явных headline/title.
+    "title": ["title", "headline", "heading", "text"],
+    "heading": ["title", "headline", "heading", "text"],
+    "headline": ["headline", "title", "heading", "text"],
+    "eyebrow": ["eyebrow", "subtype", "category", "label"],
+    "section-title": ["title", "headline", "text"],
     # --- subtitles / intros ---
-    "subhead": ["subhead", "subtitle", "intro"],
-    "subtitle": ["subtitle", "subhead", "intro"],
-    "lead": ["intro", "subhead", "subtitle"],
-    "intro": ["intro", "subhead", "subtitle", "description"],
+    # `highlight` в прототипе — подзаголовок/акцентная строка hero.
+    "subhead": ["subhead", "subtitle", "intro", "highlight"],
+    "subtitle": ["subtitle", "subhead", "intro", "highlight"],
+    "lead": ["intro", "subhead", "subtitle", "highlight"],
+    "intro": ["intro", "subhead", "subtitle", "description", "highlight"],
     "description": ["description", "intro", "body", "text"],
     "body": ["body", "intro", "description", "text"],
     "text": ["text", "body", "description"],
@@ -267,30 +270,41 @@ def _placeholder_img_datauri() -> str:
 # (это текст/ссылки, не сам визуал).
 _IMG_SLOT_ROOTS = ("image", "img", "icon", "photo", "logo", "mark", "avatar",
                    "picture", "marker", "visual", "illustration")
-_IMG_SLOT_EXCLUDE = ("-alt", "-url", "-href", "-mobile", "-caption", "-label")
+# текст/ссылки рядом с картинкой — НЕ сам визуал. ВАЖНО: -mobile это вариант
+# картинки (srcset), а не текст, поэтому он НЕ исключается.
+_IMG_SLOT_EXCLUDE = ("-alt", "-url", "-href", "-caption", "-label", "-text", "-title")
 
 
 def _is_image_slot(name: str) -> bool:
     low = name.lower()
-    if any(low.endswith(suf) or f"{suf[1:]}" == low for suf in _IMG_SLOT_EXCLUDE):
-        return False
     if any(low.endswith(suf) for suf in _IMG_SLOT_EXCLUDE):
         return False
     parts = set(low.replace("_", "-").split("-"))
     return any(root in parts for root in _IMG_SLOT_ROOTS)
 
 
-def _attr_slot_value(block: dict, name: str) -> str:
+def _attr_slot_value(block: dict, name: str, is_media: bool = False) -> str:
     """Plain-текст для {{slot}} ВНУТРИ HTML-атрибута (href/aria-label/...).
 
     Никакого HTML: иначе ломается разметка. url/href/link → '#'.
+    is_media=True (слот в src/srcset) → незаполненный слот всегда даёт data-URI
+    картинки-плейсхолдера (иначе пустой src даёт битую картинку), даже если имя
+    слота не похоже на «картинку» (напр. pricing-portrait).
     """
     low = name.lower()
     if low.endswith(("url", "href")) or "link" in low.split("-"):
         val = resolve_slot(block, name)
         return val if (val and val not in ("#",)) else "#"
     val = resolve_slot(block, name)
-    return val or ""
+    if val:
+        return val
+    # незаполненный image/icon-слот → картинка-плейсхолдер. is_media=True, когда
+    # слот стоит в src/srcset (тогда это картинка по определению, имя не важно).
+    if is_media or _is_image_slot(name):
+        uri = _placeholder_img_datauri()
+        if uri:
+            return uri
+    return ""
 
 
 def substitute_text_placeholders(html_str: str, block: dict) -> str:
@@ -308,8 +322,10 @@ def substitute_text_placeholders(html_str: str, block: dict) -> str:
     # attr="<...{{slot:NAME}}...>" — заменяем каждый slot внутри значения атрибута
     def _attr_block(m: re.Match) -> str:
         attr_full = m.group(0)
+        attr_name = attr_full.split("=", 1)[0].strip().lower()
+        is_media = attr_name in ("src", "srcset", "data-src", "poster")
         return _SLOT_PLACEHOLDER_RE.sub(
-            lambda sm: _attr_slot_value(block, sm.group(1).strip()), attr_full
+            lambda sm: _attr_slot_value(block, sm.group(1).strip(), is_media), attr_full
         )
 
     html_str = re.sub(

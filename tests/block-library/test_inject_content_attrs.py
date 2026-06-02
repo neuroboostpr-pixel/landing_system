@@ -62,14 +62,39 @@ def test_image_slot_becomes_placeholder_img():
     assert "[headline]" in out  # текст не картинка
 
 
+def test_image_slot_in_src_attr_gets_datauri():
+    # <img src="{{slot:hero-image}}"> без значения → data-URI, не пустой src
+    m = _load()
+    html = '<picture><source srcset="{{slot:hero-image-mobile}}"><img src="{{slot:hero-image}}" alt="{{slot:hero-image-alt}}"></picture>'
+    out = m.substitute_text_placeholders(html, {})
+    assert 'src=""' not in out
+    assert "data:image/png;base64," in out
+    # alt — текст, остаётся пустым (не картинка)
+    assert 'alt=""' in out
+
+
+def test_src_attr_always_gets_image_even_with_nonimage_name():
+    # слот в src/srcset → картинка-плейсхолдер даже если имя не «image»
+    # (напр. pricing-portrait) — иначе пустой src даёт битую картинку.
+    m = _load()
+    html = '<picture><source srcset="{{slot:pricing-portrait-mobile}}"><img src="{{slot:pricing-portrait}}"></picture>'
+    out = m.substitute_text_placeholders(html, {})
+    assert 'src=""' not in out
+    assert 'srcset=""' not in out
+    assert out.count("data:image/png;base64,") == 2
+
+
 def test_image_slot_detection():
     m = _load()
     assert m._is_image_slot("brand-logo")
     assert m._is_image_slot("case-1-photo")
     assert m._is_image_slot("hero-visual-image")
-    # alt/url/mobile — это текст/ссылки, не визуал
+    # -mobile это вариант картинки (srcset), а не текст → True
+    assert m._is_image_slot("case-image-1-mobile")
+    assert m._is_image_slot("hero-image-mobile")
+    # alt/url/caption — это текст/ссылки, не визуал
     assert not m._is_image_slot("brand-logo-alt")
-    assert not m._is_image_slot("case-image-1-mobile")
+    assert not m._is_image_slot("hero-image-caption")
     assert not m._is_image_slot("nav-link-1-url")
     assert not m._is_image_slot("headline")
 
