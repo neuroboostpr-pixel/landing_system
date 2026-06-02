@@ -1,19 +1,19 @@
 <style>
   :root {
-    --color-bg: #fff; --color-fg: #111; --color-accent: #333; --color-border: #ccc;
+    --lp-bg: #f5f5f5; --lp-text: #1a1a1a; --lp-accent: #333; --lp-border: #e0e0e0;
     --font-display: system-ui, sans-serif; --font-body: system-ui, sans-serif;
     --spacing-md: 16px; --spacing-lg: 32px;
   }
-  body { margin: 0; font-family: var(--font-body); background: var(--color-bg); color: var(--color-fg); width: 375px; }
+  body { margin: 0; font-family: var(--font-body); background: var(--lp-bg); color: var(--lp-text); width: 375px; }
   .faq { padding: 40px 16px; }
   .section-headline { font-family: var(--font-display); font-size: 24px; text-align: center; margin: 0 0 28px; }
-  details { border-bottom: 1px solid var(--color-border); }
-  details:first-of-type { border-top: 1px solid var(--color-border); }
+  details { border-bottom: 1px solid var(--lp-border); }
+  details:first-of-type { border-top: 1px solid var(--lp-border); }
   summary { padding: 16px 0; font-weight: 600; font-size: 15px; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
   summary::-webkit-details-marker { display: none; }
-  summary::after { content: "+"; font-size: 20px; color: var(--color-accent); flex-shrink: 0; }
+  summary::after { content: "+"; font-size: 20px; color: var(--lp-accent); flex-shrink: 0; }
   details[open] summary::after { content: "−"; }
-  .faq-answer { padding: 0 0 16px; font-size: 14px; color: #444; line-height: 1.6; }
+  .faq-answer { padding: 0 0 16px; font-size: 14px; color:#444; line-height: 1.6; }
 </style>
 <section class="faq" data-block-id="ru-faq-01-accordion">
 <h2 class="section-headline">{{slot:headline}}</h2>

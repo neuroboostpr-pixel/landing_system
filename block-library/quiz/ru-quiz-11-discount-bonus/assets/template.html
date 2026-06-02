@@ -1,27 +1,27 @@
 <style>
   :root {
-    --color-bg: #fff;
-    --color-fg: #111;
-    --color-accent: #333;
-    --color-border: #ccc;
+    --lp-bg: #f5f5f5;
+    --lp-text: #1a1a1a;
+    --lp-accent: #333;
+    --lp-border: #e0e0e0;
     --font-display: system-ui, sans-serif;
     --font-body: system-ui, sans-serif;
     --spacing-md: 16px;
     --spacing-lg: 32px;
   }
-  body { margin: 0; font-family: var(--font-body); background: #f5f5f5; color: var(--color-fg); display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-  .bonus-card { background: var(--color-bg); border-radius: 16px; padding: 48px 48px 56px; max-width: 560px; width: 100%; box-shadow: 0 4px 24px rgba(0,0,0,0.08); text-align: center; }
+  body { margin: 0; font-family: var(--font-body); background:#f5f5f5; color: var(--lp-text); display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+  .bonus-card { background: var(--lp-bg); border-radius: 16px; padding: 48px 48px 56px; max-width: 560px; width: 100%; box-shadow: 0 4px 24px rgba(0,0,0,0.08); text-align: center; }
   .bonus-badge-wrap { margin-bottom: 24px; }
-  .bonus-badge { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--color-accent); }
-  .bonus-value { font-family: var(--font-display); font-size: 36px; font-weight: 900; color: var(--color-accent); line-height: 1; }
-  .bonus-unit { font-size: 14px; color: var(--color-accent); font-weight: 600; }
+  .bonus-badge { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--lp-accent); }
+  .bonus-value { font-family: var(--font-display); font-size: 36px; font-weight: 900; color: var(--lp-accent); line-height: 1; }
+  .bonus-unit { font-size: 14px; color: var(--lp-accent); font-weight: 600; }
   .headline { font-family: var(--font-display); font-size: 26px; font-weight: 700; margin: 0 0 12px; }
-  .discount-description { font-size: 16px; color: #555; margin: 0 0 28px; line-height: 1.5; }
+  .discount-description { font-size: 16px; color:#555; margin: 0 0 28px; line-height: 1.5; }
   .bonus-list { list-style: none; padding: 0; margin: 0 0 32px; text-align: left; display: inline-block; }
   .bonus-list li { display: flex; align-items: center; gap: 10px; font-size: 15px; margin-bottom: 8px; }
-  .bonus-list li::before { content: '✓'; font-weight: 700; color: var(--color-accent); }
-  .cta-button { display: inline-block; background: var(--color-accent); color: #fff; font-size: 18px; font-weight: 700; padding: 18px 48px; border-radius: 10px; text-decoration: none; border: none; cursor: pointer; }
-  .urgency-note { margin-top: 16px; font-size: 13px; color: #999; }
+  .bonus-list li::before { content: '✓'; font-weight: 700; color: var(--lp-accent); }
+  .cta-button { display: inline-block; background: var(--lp-accent); color:#fff; font-size: 18px; font-weight: 700; padding: 18px 48px; border-radius: 10px; text-decoration: none; border: none; cursor: pointer; }
+  .urgency-note { margin-top: 16px; font-size: 13px; color:#999; }
 </style>
 <div class="bonus-card" data-block-id="ru-quiz-11-discount-bonus">
 <div class="bonus-badge-wrap">

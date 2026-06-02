@@ -1,16 +1,16 @@
 <style>
   :root {
-    --color-bg: #fff;
-    --color-fg: #111;
-    --color-accent: #2563eb;
-    --color-border: #e5e7eb;
+    --lp-bg: #f5f5f5;
+    --lp-text: #1a1a1a;
+    --lp-accent: #333;
+    --lp-border: #e0e0e0;
     --font-display: system-ui, sans-serif;
     --font-body: system-ui, sans-serif;
     --spacing-md: 16px;
     --spacing-lg: 32px;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; font-family: var(--font-body); background: var(--color-bg); color: var(--color-fg); }
+  body { margin: 0; font-family: var(--font-body); background: var(--lp-bg); color: var(--lp-text); }
 
   .pricing-table-section {
     padding: calc(var(--spacing-lg) * 2) calc(var(--spacing-lg) * 2);
@@ -40,13 +40,13 @@
     padding: 20px 16px;
     font-family: var(--font-display);
     font-weight: 700;
-    border-bottom: 2px solid var(--color-border);
+    border-bottom: 2px solid var(--lp-border);
     vertical-align: bottom;
   }
   thead th:first-child {
     text-align: left;
     font-size: 14px;
-    color: #888;
+    color:#888;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     font-weight: 500;
@@ -55,20 +55,20 @@
   .tier-name {
     display: block;
     font-size: 18px;
-    color: var(--color-fg);
+    color: var(--lp-text);
     margin-bottom: 4px;
   }
   .tier-price {
     display: block;
     font-size: 28px;
     font-weight: 900;
-    color: var(--color-fg);
+    color: var(--lp-text);
     margin-bottom: 2px;
   }
 
   /* Feature rows */
   tbody tr {
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--lp-border);
   }
   tbody tr:last-child { border-bottom: none; }
   tbody td {
@@ -79,28 +79,28 @@
   }
   tbody td:first-child {
     text-align: left;
-    color: #444;
+    color:#444;
   }
 
   /* Premium column highlight */
   .col-premium thead,
   thead th.col-premium,
   tbody td.col-premium {
-    background: #eff6ff;
-    border-left: 2px solid var(--color-accent);
-    border-right: 2px solid var(--color-accent);
+    background:var(--lp-bg);
+    border-left: 2px solid var(--lp-accent);
+    border-right: 2px solid var(--lp-accent);
   }
   thead th.col-premium {
-    border-top: 2px solid var(--color-accent);
+    border-top: 2px solid var(--lp-accent);
     border-radius: 8px 8px 0 0;
   }
   tbody tr:last-child td.col-premium {
-    border-bottom: 2px solid var(--color-accent);
+    border-bottom: 2px solid var(--lp-accent);
     border-radius: 0 0 8px 8px;
   }
 
-  .check { color: #16a34a; font-size: 18px; font-weight: 700; }
-  .cross { color: #d1d5db; font-size: 18px; }
+  .check { color:var(--lp-accent); font-size: 18px; font-weight: 700; }
+  .cross { color:var(--lp-text-muted); font-size: 18px; }
 
   /* CTA row */
   .cta-row td {
@@ -114,12 +114,12 @@
     font-weight: 700;
     font-size: 15px;
     text-decoration: none;
-    background: var(--color-border);
-    color: var(--color-fg);
+    background: var(--lp-border);
+    color: var(--lp-text);
   }
   .tier-cta-btn.accent {
-    background: var(--color-accent);
-    color: #fff;
+    background: var(--lp-accent);
+    color:#fff;
   }
 </style>
 <section class="pricing-table-section" data-block-id="ru-pricing-02-comparison-table">

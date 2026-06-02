@@ -1,24 +1,24 @@
 <style>
   :root {
-    --color-bg: #f8f5ef;
-    --color-fg: #111;
-    --color-accent: #1a1a1a;
-    --color-border: rgba(17,17,17,.15);
+    --lp-bg: #f5f5f5;
+    --lp-text: #1a1a1a;
+    --lp-accent: #333;
+    --lp-border: #e0e0e0;
     --font-display: system-ui, sans-serif;
     --font-body: system-ui, sans-serif;
     --spacing-md: 16px;
     --spacing-lg: 24px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: var(--font-body); background: var(--color-bg); color: var(--color-fg); width: 375px; padding: 32px 16px; }
+  body { font-family: var(--font-body); background: var(--lp-bg); color: var(--lp-text); width: 375px; padding: 32px 16px; }
   .headline { font-family: var(--font-display); font-size: 1.8rem; letter-spacing: -.02em; margin-bottom: 24px; }
   .headline em { font-style: italic; opacity: .6; }
   .principles-grid { display: flex; flex-direction: column; gap: 10px; }
   .principle-card { border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
-  .pc-dark { background: var(--color-accent); color: #f5f1ea; }
+  .pc-dark { background: var(--lp-accent); color:var(--lp-text-muted); }
   .pc-light { background: rgba(0,0,0,.06); }
-  .pc-accent { background: var(--color-fg); color: #f5f1ea; }
-  .pc-warm { background: #e8dfc8; }
+  .pc-accent { background: var(--lp-text); color:var(--lp-text-muted); }
+  .pc-warm { background:var(--lp-bg); }
   .principle-num { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; opacity: .65; }
   .principle-title { font-size: 1.2rem; font-weight: 700; line-height: 1.05; }
   .principle-text { font-size: .875rem; line-height: 1.45; opacity: .85; }

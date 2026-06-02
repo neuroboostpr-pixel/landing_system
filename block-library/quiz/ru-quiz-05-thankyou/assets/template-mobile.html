@@ -1,15 +1,15 @@
 <style>
   :root {
-    --color-bg: #fff; --color-fg: #111; --color-accent: #333; --color-border: #ccc;
+    --lp-bg: #f5f5f5; --lp-text: #1a1a1a; --lp-accent: #333; --lp-border: #e0e0e0;
     --font-display: system-ui, sans-serif; --font-body: system-ui, sans-serif;
     --spacing-md: 16px; --spacing-lg: 32px;
   }
-  body { margin: 0; font-family: var(--font-body); background: var(--color-bg); color: var(--color-fg); width: 375px; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+  body { margin: 0; font-family: var(--font-body); background: var(--lp-bg); color: var(--lp-text); width: 375px; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
   .thankyou { text-align: center; padding: 40px 20px; }
-  .success-icon { font-size: 64px; line-height: 1; margin: 0 0 20px; display: block; color: var(--color-accent); }
+  .success-icon { font-size: 64px; line-height: 1; margin: 0 0 20px; display: block; color: var(--lp-accent); }
   .success-headline { font-family: var(--font-display); font-size: 28px; line-height: 1.15; margin: 0 0 12px; }
-  .success-subhead { font-size: 15px; color: #555; margin: 0 0 32px; line-height: 1.5; }
-  .cta { display: block; padding: 13px 32px; background: transparent; color: var(--color-fg); border: 2px solid var(--color-border); text-decoration: none; border-radius: 8px; font-weight: 600; }
+  .success-subhead { font-size: 15px; color:#555; margin: 0 0 32px; line-height: 1.5; }
+  .cta { display: block; padding: 13px 32px; background: transparent; color: var(--lp-text); border: 2px solid var(--lp-border); text-decoration: none; border-radius: 8px; font-weight: 600; }
 </style>
 <div class="thankyou" data-block-id="ru-quiz-05-thankyou">
 <span class="success-icon">{{slot:success-icon}}</span>

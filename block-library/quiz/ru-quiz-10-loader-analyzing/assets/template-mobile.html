@@ -1,20 +1,20 @@
 <style>
   :root {
-    --color-bg: #fff; --color-fg: #111; --color-accent: #333; --color-border: #ccc;
+    --lp-bg: #f5f5f5; --lp-text: #1a1a1a; --lp-accent: #333; --lp-border: #e0e0e0;
     --font-display: system-ui, sans-serif; --font-body: system-ui, sans-serif;
     --spacing-md: 16px; --spacing-lg: 32px;
   }
-  body { margin: 0; font-family: var(--font-body); background: var(--color-bg); color: var(--color-fg); width: 375px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px; box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font-body); background: var(--lp-bg); color: var(--lp-text); width: 375px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px; box-sizing: border-box; }
   .loader-card { text-align: center; width: 100%; }
   .loader-icon { font-size: 48px; margin-bottom: 20px; }
   .headline { font-family: var(--font-display); font-size: 22px; font-weight: 700; margin: 0 0 10px; }
-  .subheadline { font-size: 15px; color: #666; margin: 0 0 32px; line-height: 1.5; }
-  .loader-progress-track { background: #eee; border-radius: 8px; height: 8px; overflow: hidden; margin-bottom: 28px; }
-  .loader-progress-fill { height: 8px; border-radius: 8px; background: var(--color-accent); width: 0%; animation: fill-bar 2.5s ease-in-out forwards; }
+  .subheadline { font-size: 15px; color:#666; margin: 0 0 32px; line-height: 1.5; }
+  .loader-progress-track { background:#eee; border-radius: 8px; height: 8px; overflow: hidden; margin-bottom: 28px; }
+  .loader-progress-fill { height: 8px; border-radius: 8px; background: var(--lp-accent); width: 0%; animation: fill-bar 2.5s ease-in-out forwards; }
   @keyframes fill-bar { 0% { width: 0%; } 70% { width: 85%; } 100% { width: 95%; } }
   .steps-list { list-style: none; padding: 0; margin: 0; text-align: left; width: 100%; }
-  .steps-list li { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #555; margin-bottom: 10px; }
-  .step-text-done { color: var(--color-fg); font-weight: 500; }
+  .steps-list li { display: flex; align-items: center; gap: 10px; font-size: 14px; color:#555; margin-bottom: 10px; }
+  .step-text-done { color: var(--lp-text); font-weight: 500; }
 </style>
 <div class="loader-card" data-block-id="ru-quiz-10-loader-analyzing">
 <div class="loader-icon">🔍</div>

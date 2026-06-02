@@ -1,19 +1,19 @@
 <style>
   :root {
-    --color-bg: #fff;
-    --color-fg: #111;
-    --color-accent: #333;
-    --color-border: #ccc;
+    --lp-bg: #f5f5f5;
+    --lp-text: #1a1a1a;
+    --lp-accent: #333;
+    --lp-border: #e0e0e0;
     --font-display: system-ui, sans-serif;
     --font-body: system-ui, sans-serif;
     --spacing-md: 16px;
     --spacing-lg: 32px;
   }
-  body { margin: 0; font-family: var(--font-body); background: var(--color-bg); color: var(--color-fg); }
-  .progress-bar { position: sticky; top: 0; z-index: 100; background: var(--color-bg); border-bottom: 1px solid var(--color-border); padding: 12px var(--spacing-lg); display: flex; align-items: center; gap: 24px; }
-  .progress-text { font-size: 14px; color: #777; white-space: nowrap; flex-shrink: 0; }
-  .progress-track { flex: 1; height: 6px; background: #e8e8e8; border-radius: 3px; overflow: hidden; }
-  .progress-fill { height: 100%; background: var(--color-accent); border-radius: 3px; width: 50%; /* placeholder — inject-tokens or JS sets actual % */ }
+  body { margin: 0; font-family: var(--font-body); background: var(--lp-bg); color: var(--lp-text); }
+  .progress-bar { position: sticky; top: 0; z-index: 100; background: var(--lp-bg); border-bottom: 1px solid var(--lp-border); padding: 12px var(--spacing-lg); display: flex; align-items: center; gap: 24px; }
+  .progress-text { font-size: 14px; color:#777; white-space: nowrap; flex-shrink: 0; }
+  .progress-track { flex: 1; height: 6px; background:#e8e8e8; border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--lp-accent); border-radius: 3px; width: 50%; /* placeholder — inject-tokens or JS sets actual % */ }
 </style>
 <header class="progress-bar" data-block-id="ru-quiz-02-progress-top">
 <span class="progress-text">{{slot:progress-text}}</span>

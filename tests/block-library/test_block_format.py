@@ -22,6 +22,14 @@ SLOT_RE = re.compile(r"\{\{slot:([^}]+)\}\}")
 # псевдо-плейсхолдер: [текст с кириллицей] ИЛИ [N…]/[SLOT…] с заглавной —
 # запрещён. Чистые числовые сноски [1],[2] не считаются плейсхолдером.
 BRACKET_RE = re.compile(r"\[[^\]]*(?:[А-Яа-яЁё]|[A-Z][a-z]|N[^\]]|SLOT)[^\]]*\]")
+# B36: цвета — только через var(--lp-*); хардкод-хексы должны быть нейтральными.
+HEX_RE = re.compile(r"#[0-9a-fA-F]{3,6}\b")
+NEUTRAL_HEX = {
+    "#fff", "#ffffff", "#f5f5f5", "#e8e8e8", "#e0e0e0", "#d0d0d0", "#333",
+    "#333333", "#999", "#999999", "#666", "#666666", "#555", "#555555",
+    "#111", "#1a1a1a", "#fafafa", "#ccc", "#cccccc", "#888", "#777", "#aaa",
+    "#222", "#444", "#000", "#000000", "#eee", "#f0f0f0", "#d9d9d9", "#bbb",
+}
 # item-схема: эти префиксы резолвятся из items[] и не обязаны быть в meta.slots
 ITEM_PREFIX_RE = re.compile(
     r"^(item|feature|step|stage|faq|tier|plan|card|metric|stat|fact|"
@@ -70,6 +78,15 @@ def test_only_slot_placeholders(cat, bid, tpl):
         f"{bid}: используется legacy data-slot= (нужен {{{{slot:}}}})"
     m = BRACKET_RE.search(text)
     assert not m, f"{bid}: русский плейсхолдер в скобках '{m.group(0) if m else ''}' (нужен {{{{slot:}}}})"
+
+
+@pytest.mark.parametrize("cat,bid,tpl", _TEMPLATES, ids=_IDS)
+def test_no_brand_hardcoded_colors(cat, bid, tpl):
+    # B36: брендовые цвета должны идти через var(--lp-*); хардкод-хексы только
+    # из нейтральной lo-fi палитры.
+    text = tpl.read_text(encoding="utf-8")
+    brand = sorted({h for h in HEX_RE.findall(text) if h.lower() not in NEUTRAL_HEX})
+    assert not brand, f"{bid}: брендовые хардкод-цвета {brand} — нужен var(--lp-*)"
 
 
 @pytest.mark.parametrize("cat,bid,tpl", _TEMPLATES, ids=_IDS)

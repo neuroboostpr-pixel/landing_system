@@ -1,21 +1,21 @@
 <style>
   :root {
-    --color-bg: #fafaf9;
-    --color-fg: #1c1b1a;
-    --color-accent: #c96442;
-    --color-border: #e6e4e0;
-    --color-surface: #ffffff;
-    --color-muted: #6b6964;
+    --lp-bg: #f5f5f5;
+    --lp-text: #1a1a1a;
+    --lp-accent: #333;
+    --lp-border: #e0e0e0;
+    --lp-bg-alt: #e8e8e8;
+    --lp-text-muted: #999;
     --font-body: system-ui, sans-serif;
     --spacing-md: 16px;
     --spacing-lg: 24px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: var(--font-body); background: var(--color-bg); color: var(--color-fg); width: 375px; }
+  body { font-family: var(--font-body); background: var(--lp-bg); color: var(--lp-text); width: 375px; }
   .features-section {
-    background: var(--color-surface);
-    border-top: 1px solid var(--color-border);
-    border-bottom: 1px solid var(--color-border);
+    background: var(--lp-bg-alt);
+    border-top: 1px solid var(--lp-border);
+    border-bottom: 1px solid var(--lp-border);
     padding: 48px 20px;
     display: flex;
     flex-direction: column;
@@ -25,12 +25,12 @@
     font-size: 13px;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--color-muted);
+    color: var(--lp-text-muted);
     text-align: center;
   }
   .feature-num {
     font-family: ui-monospace, monospace;
-    color: var(--color-accent);
+    color: var(--lp-accent);
     font-size: 12px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -38,9 +38,9 @@
     display: block;
     font-weight: 600;
   }
-  .feature { border-top: 1px solid var(--color-border); padding-top: 24px; }
+  .feature { border-top: 1px solid var(--lp-border); padding-top: 24px; }
   .feature h3 { font-size: 18px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.01em; }
-  .feature p { color: var(--color-muted); font-size: 14px; line-height: 1.6; }
+  .feature p { color: var(--lp-text-muted); font-size: 14px; line-height: 1.6; }
 </style>
 <section class="features-section" data-block-id="ru-features-04-numbered-list">
 <p class="section-label">{{slot:section-label}}</p>

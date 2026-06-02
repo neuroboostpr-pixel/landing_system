@@ -1,27 +1,27 @@
 <style>
   :root {
-    --color-bg: #fff;
-    --color-fg: #111;
-    --color-accent: #333;
-    --color-border: #ccc;
+    --lp-bg: #f5f5f5;
+    --lp-text: #1a1a1a;
+    --lp-accent: #333;
+    --lp-border: #e0e0e0;
     --font-display: system-ui, sans-serif;
     --font-body: system-ui, sans-serif;
     --spacing-md: 16px;
     --spacing-lg: 32px;
   }
-  body { margin: 0; font-family: var(--font-body); background: #f5f5f5; color: var(--color-fg); display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-  .loader-card { background: var(--color-bg); border-radius: 16px; padding: 64px 48px; max-width: 520px; width: 100%; box-shadow: 0 4px 24px rgba(0,0,0,0.08); text-align: center; }
+  body { margin: 0; font-family: var(--font-body); background:#f5f5f5; color: var(--lp-text); display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+  .loader-card { background: var(--lp-bg); border-radius: 16px; padding: 64px 48px; max-width: 520px; width: 100%; box-shadow: 0 4px 24px rgba(0,0,0,0.08); text-align: center; }
   .loader-icon { font-size: 56px; margin-bottom: 24px; }
   .headline { font-family: var(--font-display); font-size: 26px; font-weight: 700; margin: 0 0 12px; }
-  .subheadline { font-size: 16px; color: #666; margin: 0 0 40px; line-height: 1.5; }
+  .subheadline { font-size: 16px; color:#666; margin: 0 0 40px; line-height: 1.5; }
   /* Animated progress bar — CSS only */
-  .loader-progress-track { background: #eee; border-radius: 8px; height: 10px; overflow: hidden; margin-bottom: 32px; }
-  .loader-progress-fill { height: 10px; border-radius: 8px; background: var(--color-accent); width: 0%; animation: fill-bar 2.5s ease-in-out forwards; }
+  .loader-progress-track { background:#eee; border-radius: 8px; height: 10px; overflow: hidden; margin-bottom: 32px; }
+  .loader-progress-fill { height: 10px; border-radius: 8px; background: var(--lp-accent); width: 0%; animation: fill-bar 2.5s ease-in-out forwards; }
   @keyframes fill-bar { 0% { width: 0%; } 70% { width: 85%; } 100% { width: 95%; } }
   .steps-list { list-style: none; padding: 0; margin: 0; text-align: left; display: inline-block; }
-  .steps-list li { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #555; margin-bottom: 10px; }
+  .steps-list li { display: flex; align-items: center; gap: 10px; font-size: 14px; color:#555; margin-bottom: 10px; }
   .step-icon { font-size: 16px; }
-  .step-text-done { color: var(--color-fg); font-weight: 500; }
+  .step-text-done { color: var(--lp-text); font-weight: 500; }
 </style>
 <div class="loader-card" data-block-id="ru-quiz-10-loader-analyzing">
 <div class="loader-icon">🔍</div>
