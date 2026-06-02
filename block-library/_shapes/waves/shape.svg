@@ -1,0 +1,11 @@
+<svg viewBox="0 0 1200 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+  <defs>
+    <style>
+      .shape-wave {
+        fill: var(--lp-shape-color, #FFA500);
+        opacity: var(--lp-shape-opacity, 0.1);
+      }
+    </style>
+  </defs>
+  <path class="shape-wave" d="M0,100 Q150,50 300,100 T600,100 T900,100 T1200,100 L1200,200 L0,200 Z"/>
+</svg>

@@ -46,9 +46,13 @@ def main() -> None:
     mobile_styles: list[str] = []
     log: list[str] = ["# Block injection log\n"]
 
+    # Feature 2: Sort by display_position (or block_position if display_position not set)
+    selections_list = selections["selections"]
+    selections_list.sort(key=lambda s: s.get("display_position", s["block_position"]))
+
     with tempfile.TemporaryDirectory() as tmp:
         tmp_p = Path(tmp)
-        for sel in selections["selections"]:
+        for sel in selections_list:
             position = sel["block_position"]
             variant = sel["chosen_variant"]
             style_mood = sel.get("style_mood")  # PR-S: optional mood selection (NEW)

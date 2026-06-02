@@ -512,15 +512,20 @@ def main() -> None:
             "--library", args.library,
             "--type", btype,
             "--niche", niche,
-            "--top", str(args.top),
+            "--top", "999",  # Show ALL candidates (no limiting)
         ]
         if quiz_role:
             matcher_cmd += ["--quiz-role", quiz_role]
-        res = subprocess.run(
-            matcher_cmd,
-            capture_output=True, text=True, check=True,
-        )
-        candidate_ids = json.loads(res.stdout)
+        try:
+            res = subprocess.run(
+                matcher_cmd,
+                capture_output=True, text=True, check=True,
+            )
+            candidate_ids = json.loads(res.stdout)
+        except (subprocess.CalledProcessError, json.JSONDecodeError) as e:
+            print(f"WARN: matcher failed for {btype}: {e}", file=sys.stderr)
+            candidate_ids = []
+
         if not candidate_ids:
             candidates_log["blocks"].append({
                 "block_position": position,
@@ -586,7 +591,18 @@ def main() -> None:
                             f"{e.stderr.strip()}",
                             file=sys.stderr,
                         )
-                        out_path.write_text(src_html.read_text(encoding="utf-8"))
+                        if src_html.exists():
+                            out_path.write_text(src_html.read_text(encoding="utf-8"))
+                        else:
+                            # Block template doesn't exist, skip this block
+                            out_path.write_text(f"<p>Block {cid}/{src_name} not found</p>")
+
+                # Ensure both files exist before reading
+                if not injected_d.exists():
+                    injected_d.write_text(f"<p>Desktop template for {cid} not found</p>")
+                if not injected_m.exists():
+                    injected_m.write_text(f"<p>Mobile template for {cid} not found</p>")
+
                 tmpl_d = injected_d.read_text(encoding="utf-8")
                 tmpl_m = injected_m.read_text(encoding="utf-8")
 
@@ -723,8 +739,19 @@ def main() -> None:
             f'</footer>'
         )
 
+        # Reorder buttons (Feature 2: Block Reordering)
+        reorder_buttons = (
+            f'<div class="lp-reorder-buttons">'
+            f'<button type="button" onclick="reorderBlock(this, -1)" {"disabled" if position == 1 else ""}>'
+            f'↑ вверх</button>'
+            f'<button type="button" onclick="reorderBlock(this, +1)" {"disabled" if position == total_blocks else ""}>'
+            f'↓ вниз</button>'
+            f'</div>'
+        )
+
         section = (
             f'<section class="lp-block-wrapper" data-block-position="{position}">'
+            f'{reorder_buttons}'
             f'<header class="lp-block-header">'
             f'<div class="lp-block-counter" style="font-size:11px;letter-spacing:1px;color:#888;text-transform:uppercase;font-weight:600;">'
             f'БЛОК {position} / {total_blocks}</div>'

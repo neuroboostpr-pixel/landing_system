@@ -76,6 +76,36 @@
     color: #1a3a1a;
   }
 
+  /* === BLOCK REORDERING BUTTONS (Feature 2) === */
+  .lp-reorder-buttons {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+  .lp-reorder-buttons button {
+    width: 32px;
+    height: 32px;
+    padding: 4px;
+    border: 1px solid #ddd;
+    background: #fafafa;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 6px;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .lp-reorder-buttons button:hover {
+    background: #fff;
+    border-color: #111;
+  }
+  .lp-reorder-buttons button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
   /* === BIG BLOCK SECTION (PR-R core) === */
   .lp-block-wrapper {
     max-width: 1320px;
@@ -84,6 +114,7 @@
     background: #fff;
     border-radius: 14px;
     box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+    position: relative;
   }
   .lp-block-header {
     margin-bottom: 20px;
@@ -163,18 +194,37 @@
   /* The :checked selector adds .lp-active class via CSS — we use direct display rule instead.
      Mobile toggle is enabled via JS adding body.show-mobile + per-variant class. */
 
-  /* === Variant tabs UNDER the preview === */
+  /* === Variant tabs UNDER the preview (horizontal carousel) === */
   .lp-variant-tabs {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 8px;
     margin-top: 18px;
     padding: 12px;
     background: #f0f0f3;
     border-radius: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: #ccc #f0f0f3;
+  }
+  .lp-variant-tabs::-webkit-scrollbar {
+    height: 6px;
+  }
+  .lp-variant-tabs::-webkit-scrollbar-track {
+    background: #f0f0f3;
+  }
+  .lp-variant-tabs::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+  }
+  .lp-variant-tabs::-webkit-scrollbar-thumb:hover {
+    background: #999;
   }
   .lp-variant-tabs label {
-    flex: 1 1 220px;
+    flex: 0 0 auto;
+    min-width: 220px;
     text-align: center;
     padding: 12px 14px;
     background: #fff;
@@ -188,6 +238,7 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
+    white-space: nowrap;
   }
   .lp-variant-tabs label:hover {
     border-color: #111;
@@ -235,6 +286,71 @@
   }
   /* Active mood tab — checked radio changes appearance (PR-S: via sibling combinator) */
   {{checked_mood_tab_rules}}
+
+  /* === Shape Selector (Feature 3: Shape Library) === */
+  .lp-shape-selector {
+    margin-top: 16px;
+    padding: 12px;
+    background: #f0f8ff;
+    border: 1px solid #b3d9ff;
+    border-radius: 8px;
+  }
+  .lp-shape-selector label {
+    display: inline-block;
+    font-weight: 600;
+    font-size: 12px;
+    color: #333;
+    margin-right: 12px;
+    margin-bottom: 8px;
+  }
+  .lp-shape-selector select,
+  .lp-shape-selector input[type="color"],
+  .lp-shape-selector input[type="range"] {
+    margin-right: 8px;
+    margin-bottom: 8px;
+  }
+  .lp-shape-selector select {
+    padding: 6px 10px;
+    border: 1px solid #b3d9ff;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .lp-shape-color-picker {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .lp-shape-color-swatch {
+    width: 28px;
+    height: 28px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .lp-shape-color-swatch:hover {
+    border-color: #111;
+    transform: scale(1.1);
+  }
+  .lp-shape-opacity-slider {
+    width: 150px;
+    vertical-align: middle;
+  }
+  .lp-shape-preview {
+    margin-top: 8px;
+    width: 100%;
+    height: 60px;
+    border: 1px dashed #999;
+    border-radius: 4px;
+    background: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: #888;
+  }
 
   /* === Confirm bar (unchanged behaviour) === */
   .confirm-bar {
@@ -349,6 +465,51 @@ document.getElementById('zoom-level').addEventListener('change', function(e) {
   document.body.classList.add('wireframe-zoom-' + e.target.value);
 });
 
+// Block reordering state (Feature 2)
+const blockOrder = [];  // Will be populated on page load, storing data-block-position values in current order
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Initialize block order from DOM
+  document.querySelectorAll('.lp-block-wrapper').forEach((section, idx) => {
+    blockOrder[idx] = parseInt(section.getAttribute('data-block-position'), 10);
+  });
+});
+
+function reorderBlock(button, direction) {
+  const section = button.closest('.lp-block-wrapper');
+  const currentIdx = Array.from(document.querySelectorAll('.lp-block-wrapper')).indexOf(section);
+  const newIdx = currentIdx + direction;
+
+  if (newIdx < 0 || newIdx >= blockOrder.length) return;
+
+  // Swap in blockOrder array
+  [blockOrder[currentIdx], blockOrder[newIdx]] = [blockOrder[newIdx], blockOrder[currentIdx]];
+
+  // Visually reorder sections in DOM
+  const container = section.parentElement;
+  const sibling = direction > 0 ? section.nextElementSibling : section.previousElementSibling;
+
+  if (direction > 0) {
+    section.after(sibling);
+  } else {
+    section.before(sibling);
+  }
+
+  // Update all counter labels
+  updateBlockNumbers();
+}
+
+function updateBlockNumbers() {
+  const sections = document.querySelectorAll('.lp-block-wrapper');
+  sections.forEach((section, idx) => {
+    const counter = section.querySelector('.lp-block-counter');
+    if (counter) {
+      const total = sections.length;
+      counter.textContent = `БЛОК ${idx + 1} / ${total}`;
+    }
+  });
+}
+
 function confirmSelections() {
   const radios = document.querySelectorAll('input[type=radio][name^="b"]:checked');
   const sel = [];
@@ -356,22 +517,53 @@ function confirmSelections() {
     const pos = r.getAttribute('data-position');
     if (!pos) return;
     const blockPos = parseInt(pos, 10);
-    // Find mood selection for this block position (NEW for PR-S)
+    // Find mood selection for this block position (PR-S)
     const moodRadio = document.querySelector(`input[type=radio][name="mood-${blockPos}"]:checked`);
     const mood = moodRadio ? moodRadio.getAttribute('data-mood') : undefined;
+
+    // NEW (Feature 3): Find shape selection for this block
+    const shapeSelect = document.querySelector(`select[data-position="${blockPos}"].shape-select`);
+    const shapeColor = document.querySelector(`input[data-position="${blockPos}"].shape-color`);
+    const shapeOpacity = document.querySelector(`input[data-position="${blockPos}"].shape-opacity`);
+
     const selection = {
       block_position: blockPos,
       chosen_variant: r.value,
     };
     if (mood) selection.style_mood = mood;
+
+    // Add shape fields if shape selected
+    if (shapeSelect && shapeSelect.value) {
+      selection.background_shape = shapeSelect.value;
+      selection.background_shape_color = shapeColor ? shapeColor.value : "primary";
+      selection.background_shape_opacity = shapeOpacity ? parseFloat(shapeOpacity.value) : 0.1;
+    }
+
     sel.push(selection);
   });
+
+  // Feature 2: Add display_position based on current visual order
+  const sections = document.querySelectorAll('.lp-block-wrapper');
+  const displayPosition = {};
+  sections.forEach((section, visIdx) => {
+    const blockPos = parseInt(section.getAttribute('data-block-position'), 10);
+    displayPosition[blockPos] = visIdx + 1;
+  });
+
   sel.sort((a, b) => a.block_position - b.block_position);
   const now = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
   let yaml = `project_slug: {{project_slug}}\nselections:\n`;
   sel.forEach(s => {
     yaml += `  - block_position: ${s.block_position}\n    chosen_variant: ${s.chosen_variant}\n`;
+    if (displayPosition[s.block_position] !== s.block_position) {
+      yaml += `    display_position: ${displayPosition[s.block_position]}\n`;
+    }
     if (s.style_mood) yaml += `    style_mood: ${s.style_mood}\n`;
+    if (s.background_shape) {
+      yaml += `    background_shape: ${s.background_shape}\n`;
+      yaml += `    background_shape_color: ${s.background_shape_color}\n`;
+      yaml += `    background_shape_opacity: ${s.background_shape_opacity}\n`;
+    }
   });
   yaml += `confirmed_at: "${now}"\n`;
   const blob = new Blob([yaml], {type: 'text/yaml'});
