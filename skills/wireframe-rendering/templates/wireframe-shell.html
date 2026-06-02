@@ -106,6 +106,18 @@
     cursor: not-allowed;
   }
 
+  /* Highlight block when it's moved */
+  .lp-block-wrapper.just-moved {
+    background: #fffbe6 !important;
+    border: 2px solid #ffc069 !important;
+    box-shadow: 0 0 20px rgba(255, 193, 7, 0.3) !important;
+    animation: moveHighlight 0.6s ease-out;
+  }
+  @keyframes moveHighlight {
+    0% { background-color: #fff7e6; border-color: #ffad33; box-shadow: 0 0 30px rgba(255, 193, 7, 0.5); }
+    100% { background-color: #fffbe6; border-color: #ffc069; box-shadow: 0 0 20px rgba(255, 193, 7, 0.3); }
+  }
+
   /* === BIG BLOCK SECTION (PR-R core) === */
   .lp-block-wrapper {
     max-width: 1320px;
@@ -477,23 +489,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function reorderBlock(button, direction) {
   const section = button.closest('.lp-block-wrapper');
-  const currentIdx = Array.from(document.querySelectorAll('.lp-block-wrapper')).indexOf(section);
+  if (!section) return;
+
+  const sections = Array.from(document.querySelectorAll('.lp-block-wrapper'));
+  const currentIdx = sections.indexOf(section);
   const newIdx = currentIdx + direction;
 
-  if (newIdx < 0 || newIdx >= blockOrder.length) return;
+  if (newIdx < 0 || newIdx >= sections.length) return;
 
-  // Swap in blockOrder array
-  [blockOrder[currentIdx], blockOrder[newIdx]] = [blockOrder[newIdx], blockOrder[currentIdx]];
+  // Get the element we want to swap with
+  const targetSection = sections[newIdx];
+  if (!targetSection) return;
 
-  // Visually reorder sections in DOM
-  const container = section.parentElement;
-  const sibling = direction > 0 ? section.nextElementSibling : section.previousElementSibling;
-
+  // Swap positions in DOM: if moving down, insert after target; if moving up, insert before target
   if (direction > 0) {
-    section.after(sibling);
+    // Moving down: insert section after targetSection
+    targetSection.after(section);
   } else {
-    section.before(sibling);
+    // Moving up: insert section before targetSection
+    targetSection.before(section);
   }
+
+  // Add visual highlight animation to moved section
+  section.classList.remove('just-moved');
+  // Force reflow to restart animation
+  void section.offsetWidth;
+  section.classList.add('just-moved');
+
+  // Remove highlight class after animation
+  setTimeout(() => {
+    section.classList.remove('just-moved');
+  }, 600);
 
   // Update all counter labels
   updateBlockNumbers();

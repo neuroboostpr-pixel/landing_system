@@ -740,11 +740,13 @@ def main() -> None:
         )
 
         # Reorder buttons (Feature 2: Block Reordering)
+        disabled_up = "disabled" if position == 1 else ""
+        disabled_down = "disabled" if position == total_blocks else ""
         reorder_buttons = (
             f'<div class="lp-reorder-buttons">'
-            f'<button type="button" onclick="reorderBlock(this, -1)" {"disabled" if position == 1 else ""}>'
+            f'<button type="button" onclick="reorderBlock(this, -1)" {disabled_up}>'
             f'↑ вверх</button>'
-            f'<button type="button" onclick="reorderBlock(this, +1)" {"disabled" if position == total_blocks else ""}>'
+            f'<button type="button" onclick="reorderBlock(this, +1)" {disabled_down}>'
             f'↓ вниз</button>'
             f'</div>'
         )
