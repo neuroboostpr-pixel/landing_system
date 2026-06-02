@@ -580,8 +580,7 @@ def main() -> None:
         variant_cards = []
         tab_labels = []
         for i, cid in enumerate(candidate_ids):
-            cat = _category_for(args.library, cid)
-            block_dir = Path(args.library) / cat / cid
+            block_dir = _block_dir_for(args.library, cid)
 
             # Inject content from prototype into each template before iframe embedding.
             # Uses inject-content.py from block-composition skill — same script as 07b Compose.
@@ -676,7 +675,7 @@ def main() -> None:
         hint = hint_for_block(btype, patterns)
         last_meta: dict = {}
         if candidate_ids:
-            last_block_dir = Path(args.library) / _category_for(args.library, candidate_ids[0]) / candidate_ids[0]
+            last_block_dir = _block_dir_for(args.library, candidate_ids[0])
             last_meta_path = last_block_dir / "meta.yaml"
             if last_meta_path.exists():
                 last_meta = yaml.safe_load(last_meta_path.read_text(encoding="utf-8")) or {}
@@ -835,6 +834,22 @@ def _category_for(library: str, block_id: str) -> str:
     for b in cat.get("blocks", []):
         if b["id"] == block_id:
             return b["category"]
+    raise SystemExit(f"ERROR: block {block_id} not in catalog")
+
+
+def _block_dir_for(library: str, block_id: str) -> Path:
+    """Физический путь к папке блока на диске.
+
+    B34: семантическая `category` (footer) может отличаться от папки на диске
+    (contacts/). Для путей берём `folder`/`path` из каталога, НЕ `category`.
+    """
+    lib = Path(library)
+    cat = yaml.safe_load((lib / "catalog.yaml").read_text(encoding="utf-8"))
+    for b in cat.get("blocks", []):
+        if b["id"] == block_id:
+            if b.get("path"):
+                return lib / b["path"]
+            return lib / b.get("folder", b["category"]) / block_id
     raise SystemExit(f"ERROR: block {block_id} not in catalog")
 
 
