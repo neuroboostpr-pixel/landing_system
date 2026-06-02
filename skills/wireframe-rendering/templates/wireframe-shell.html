@@ -206,6 +206,36 @@
   /* Active (checked) tab — uses sibling combinator via render-wireframe.py generated rules */
   {{checked_tab_rules}}
 
+  /* === Mood tabs (PR-S: Style Moods System) === */
+  .lp-mood-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+    padding: 8px;
+    background: #f9f9fb;
+    border-radius: 8px;
+    border: 1px solid #e5e5e5;
+  }
+  .lp-mood-tabs label {
+    padding: 8px 12px;
+    background: #fff;
+    border: 1px solid #d0d0d0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    color: #555;
+    transition: all 0.12s ease;
+    flex: 0 1 auto;
+  }
+  .lp-mood-tabs label:hover {
+    border-color: #999;
+    background: #f5f5f5;
+  }
+  /* Active mood tab — checked radio changes appearance (PR-S: via sibling combinator) */
+  {{checked_mood_tab_rules}}
+
   /* === Confirm bar (unchanged behaviour) === */
   .confirm-bar {
     position: fixed; bottom: 0; left: 0; right: 0;
@@ -325,16 +355,23 @@ function confirmSelections() {
   radios.forEach(r => {
     const pos = r.getAttribute('data-position');
     if (!pos) return;
-    sel.push({
-      block_position: parseInt(pos, 10),
+    const blockPos = parseInt(pos, 10);
+    // Find mood selection for this block position (NEW for PR-S)
+    const moodRadio = document.querySelector(`input[type=radio][name="mood-${blockPos}"]:checked`);
+    const mood = moodRadio ? moodRadio.getAttribute('data-mood') : undefined;
+    const selection = {
+      block_position: blockPos,
       chosen_variant: r.value,
-    });
+    };
+    if (mood) selection.style_mood = mood;
+    sel.push(selection);
   });
   sel.sort((a, b) => a.block_position - b.block_position);
   const now = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
   let yaml = `project_slug: {{project_slug}}\nselections:\n`;
   sel.forEach(s => {
     yaml += `  - block_position: ${s.block_position}\n    chosen_variant: ${s.chosen_variant}\n`;
+    if (s.style_mood) yaml += `    style_mood: ${s.style_mood}\n`;
   });
   yaml += `confirmed_at: "${now}"\n`;
   const blob = new Blob([yaml], {type: 'text/yaml'});

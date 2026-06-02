@@ -31,11 +31,38 @@
    - ✅ gate-check 07_content проходит validation (нет шаблонных текстов)
 4. Запусти `/landing-wireframe` → открой `07a_WIREFRAME/wireframe.html`, выбери варианты, нажми «Confirm» — скачается `selections.yaml`, положи его в `07a_WIREFRAME/`
    - **Теперь wireframe покажет РЕАЛЬНЫЙ контент из content.md, не template!**
+   - **Теперь в wireframe есть mood-табы (PR-S):** для каждого блока выбери стиль (brutalist/editorial-warm/swiss-modernist/retro-windows/coral-soft/monochrome-precision) → mood сохранится в selections.yaml
 5. Запусти `/landing-compose` → `07b_COMPOSED/composed.html` готов
+   - **Новое (PR-S):** compose автоматически применит выбранные mood'ы (CSS палитры, шрифты, паттерны)
 
 **Что исправилось:** Перед 2026-06-01 этап 07_content генерировал generic template (Lorem ipsum) вместо извлечения из прототипа. Теперь `/landing-content` читает prototype.yaml и пишет настоящие тексты клиента в content.md. Это фиксит [BUG-001](docs/BACKLOG.md).
 
 **NOTE:** PR-A команды вызываются ВРУЧНУЮ, не через `landing-orchestrator`. Интеграция в оркестратор — задача PR-D.
+
+## PR-S: Style Moods System (2026-06-02) ✅
+
+**Что это:** Пользователь теперь может выбирать **style mood** для каждого блока в wireframe и видеть превью в разных mood'ах. Mood это полный набор стилей (цвета, шрифты, паттерны), который меняет визуал без изменения структуры. **6 готовых mood'ов:** brutalist, editorial-warm, swiss-modernist, retro-windows, coral-soft, monochrome-precision.
+
+**Workflow PR-S (встроен в PR-A):**
+
+На этапе `/landing-wireframe` (шаг 4 выше):
+- Откроется `wireframe.html` с mood-табами под каждым блоком
+- Выбери layout variant (как обычно) + выбери mood tab (НОВОЕ)
+- Посмотри preview в выбранном mood'е
+- Нажми «Confirm» → скачается `selections.yaml` с `style_mood` полем
+
+На этапе `/landing-compose` (шаг 5 выше):
+- Compose прочитает `style_mood` из selections.yaml
+- Загрузит mood CSS (палитра, типография, анимации)
+- Применит к final composed.html
+
+**Результат:** Each блок может иметь свой mood, colors/fonts меняются автоматически, visual coherence сохраняется.
+
+**Руководство:** 📖 [`docs/MOOD-SELECTION-GUIDE.md`](docs/MOOD-SELECTION-GUIDE.md) — когда использовать какой mood, примеры для каждой ниши, матрица выбора.
+
+**Для опытных:** Если не хочешь выбирать mood, selections.yaml работает и без поля `style_mood` (дефолт к hardcoded mood в блоке). Backward compatible 100%.
+
+**Tech:** wireframe-shell.html + render-wireframe.py (UI) → compose-blocks.py + inject-tokens.py (CSS application). 20 unit-тестов, 100% pass.
 
 ## Новые команды PR-B (Photo Pipeline)
 

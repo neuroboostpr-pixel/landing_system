@@ -22,7 +22,13 @@ CHECKED_TAB_TPL = (
     "#{rid}:checked ~ .lp-variant-tabs label[for=\"{rid}\"] .lp-tab-title {{ color: #fff; }}"
     "#{rid}:checked ~ .lp-variant-tabs label[for=\"{rid}\"] .lp-tab-id {{ color: #bbb; }}"
 )
+CHECKED_MOOD_TAB_TPL = (
+    "#{rid}:checked ~ .lp-mood-tabs label[for=\"{rid}\"] {{ background: #111; color: #fff; border-color: #111; }}"
+)
 HIDDEN_RADIO_CSS = "input[name^=\"b\"][type=\"radio\"].lp-variant-radio { position: absolute; left: -9999px; opacity: 0; pointer-events: none; }"
+MOOD_RADIOS_CSS = "input[name^=\"mood-\"][type=\"radio\"].lp-mood-radio { position: absolute; left: -9999px; opacity: 0; pointer-events: none; }"
+
+MOODS = ["brutalist", "editorial-warm", "swiss-modernist", "retro-windows", "coral-soft", "monochrome-precision"]
 
 # Маппинг технического типа блока -> понятное русское название и цель
 BLOCK_TYPE_RU: dict[str, str] = {
@@ -110,6 +116,14 @@ UX_NOT_AVAILABLE_BANNER = (
 def fail(m: str) -> None:
     print(f"ERROR: {m}", file=sys.stderr)
     sys.exit(1)
+
+
+def _load_mood_css(library_dir: Path, mood_name: str) -> str:
+    """Load CSS from mood's palette.css file. Returns empty string if not found."""
+    palette_path = library_dir / "_styles" / mood_name / "palette.css"
+    if not palette_path.exists():
+        return ""
+    return palette_path.read_text(encoding="utf-8")
 
 
 def _flatten_sections_to_blocks(proto: dict) -> list[dict]:

@@ -51,6 +51,7 @@ def main() -> None:
         for sel in selections["selections"]:
             position = sel["block_position"]
             variant = sel["chosen_variant"]
+            style_mood = sel.get("style_mood")  # PR-S: optional mood selection (NEW)
             if variant not in block_to_cat:
                 print(f"ERROR: variant {variant} not in catalog", file=sys.stderr)
                 sys.exit(1)
@@ -62,8 +63,11 @@ def main() -> None:
                 stage1 = tmp_p / f"{position}-{kind}-1.html"
                 stage2 = tmp_p / f"{position}-{kind}-2.html"
 
+                inject_cmd_tokens = [sys.executable, str(inject_tokens), str(src), str(tokens_path), str(stage1)]
+                if style_mood:  # PR-S: pass mood to inject-tokens (NEW)
+                    inject_cmd_tokens += ["--mood", style_mood]
                 subprocess.run(
-                    [sys.executable, str(inject_tokens), str(src), str(tokens_path), str(stage1)],
+                    inject_cmd_tokens,
                     check=True,
                 )
                 inject_cmd = [
@@ -85,6 +89,17 @@ def main() -> None:
                 style_blocks = re.findall(r"<style[^>]*>(.*?)</style>", content, re.DOTALL)
                 combined_style = "\n".join(style_blocks)
 
+                # PR-S: Load mood CSS files if mood selected (NEW)
+                if style_mood:
+                    mood_css_parts = []
+                    for css_file in ["palette.css", "typography.css", "motion.css"]:
+                        mood_css_path = library / "_styles" / style_mood / css_file
+                        if mood_css_path.exists():
+                            mood_css_content = mood_css_path.read_text(encoding="utf-8")
+                            mood_css_parts.append(f"/* {style_mood}: {css_file} */\n{mood_css_content}")
+                    if mood_css_parts:
+                        combined_style = "\n".join(mood_css_parts) + "\n" + combined_style
+
                 body_start = content.find("<body")
                 body_close = content.rfind("</body>")
                 if body_start != -1 and body_close != -1:
@@ -99,7 +114,8 @@ def main() -> None:
                     mobile_styles.append(f"/* block {position}: {variant} */\n{combined_style}")
                     mobile_parts.append(f"<!-- block {position}: {variant} -->\n{inner}")
 
-            log.append(f"- block {position}: `{variant}` — desktop+mobile injected, tokens applied")
+            mood_note = f" + mood: {style_mood}" if style_mood else ""
+            log.append(f"- block {position}: `{variant}`{mood_note} — desktop+mobile injected, tokens applied")
 
     shell = (
         "<!DOCTYPE html><html lang='ru'><head><meta charset='UTF-8'>"

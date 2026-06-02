@@ -608,6 +608,37 @@ SVG-схемы — чистая геометрия               Те же бл�
 
 **Зависит от:** B31 (lo-fi wireframe), B32 (UI выбора блоков).
 
+### PR-S. Style Moods System — интерактивный выбор mood'ов в wireframe
+
+**Статус:** 🚀 PHASE 1-3 COMPLETE (2026-06-02) — Phase 4-5 PENDING
+
+**Что это:**
+Система стилевых mood'ов (brutalist, editorial-warm, swiss-modernist, retro-windows, coral-soft, monochrome-precision) уже полностью реализована в block-library (CSS palette, typography, motion, 38 patterns). Но пользователи не могут **выбирать** mood'ы и **видеть превью** разных mood-вариантов одного блока.
+
+**Цель:**
+Добавить mood как третье измерение в wireframe-selection (наряду с layout type + block variant):
+1. **Wireframe UI** — mood tabs ниже layout tabs, preview разных моодов для одного блока
+2. **Selections.yaml** — сохранять `style_mood` per block
+3. **Compose pipeline** — применять mood CSS + patterns автоматически
+4. **Для всех проектов** — не только neurokreator
+
+**Фазы реализации:**
+- **Phase 1:** Wireframe UI enhancement — mood tabs в `wireframe-shell.html`, mood previews в `render-wireframe.py`
+- **Phase 2:** Selections.yaml extension — добавить `style_mood` поле
+- **Phase 3:** Compose pipeline integration — читать mood, применять CSS + patterns в `compose-blocks.py`
+- **Phase 4:** Validation & Testing — e2e тесты
+- **Phase 5:** Docs & Onboarding — MOOD-SELECTION-GUIDE.md
+
+**Размер:** ~800 SLOC в 3 файлах. Неделя work.
+
+**Зависит от:** Ничего (mood infrastructure уже есть).
+
+**Блокирует:** Future PR-S.2 (mood auto-detection по niche).
+
+**Артефакты:**
+- ✏️ Spec: [Design spec](superpowers/specs/2026-06-02-pr-s-style-moods-system-spec.md) (TBD)
+- ✅ Plan: [Implementation plan](superpowers/plans/2026-06-02-pr-s-style-moods-system-plan.md) — готов, пошаговый (5 фаз, 800 SLOC, 5–7 дней)
+
 ---
 
 ## Прогресс
