@@ -538,16 +538,18 @@ def main() -> None:
 
     total_blocks = len(proto_blocks)
 
-    # Count how many blocks live under each category folder in the library —
-    # so the footer of each section can show "shown N of M available <cat> blocks".
+    # Count blocks per B34 category from catalog.yaml (NOT by folder name —
+    # after B34 a block's category can differ from its physical folder, which
+    # caused "shown 11 of 10": footer counted folders, matcher counted category).
     library_dir = Path(args.library)
     category_counts: dict[str, int] = {}
-    if library_dir.exists():
-        for cat_dir in library_dir.iterdir():
-            if not cat_dir.is_dir() or cat_dir.name.startswith((".", "_")):
-                continue
-            n = sum(1 for d in cat_dir.iterdir() if d.is_dir() and not d.name.startswith("."))
-            category_counts[cat_dir.name] = n
+    _catalog_path = library_dir / "catalog.yaml"
+    if _catalog_path.exists():
+        _cat = yaml.safe_load(_catalog_path.read_text(encoding="utf-8")) or {}
+        for b in _cat.get("blocks", []):
+            c = b.get("category")
+            if c:
+                category_counts[c] = category_counts.get(c, 0) + 1
     for block in proto_blocks:
         position = block["position"]
         btype = block["type"]
@@ -845,6 +847,9 @@ def main() -> None:
         .replace("{{blocks_html}}", "\n".join(blocks_html_parts))
         .replace("{{checked_rules}}", HIDDEN_RADIO_CSS + "\n" + "\n".join(checked_rules))
         .replace("{{checked_tab_rules}}", "\n".join(checked_tab_rules))
+        # mood-табы — неактивная фича; зануляем плейсхолдер, иначе он остаётся
+        # сырым текстом в CSS и ломает стиль (at-rule expected на этой строке).
+        .replace("{{checked_mood_tab_rules}}", "")
         .replace("{{ux_patterns_html}}", ux_patterns_html)
         .replace("{{ux_rules_html}}", ux_rules_html)
         .replace("{{palettes_html}}", palettes_html)

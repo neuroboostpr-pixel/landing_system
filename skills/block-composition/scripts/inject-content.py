@@ -244,12 +244,48 @@ def resolve_slot(block: dict, slot_name: str) -> str:
 _SLOT_PLACEHOLDER_RE = re.compile(r"\{\{slot:([^}]+)\}\}")
 
 
+def _attr_slot_value(block: dict, name: str) -> str:
+    """Plain-текст для {{slot}} ВНУТРИ HTML-атрибута (href/aria-label/...).
+
+    Никакого HTML: иначе ломается разметка. url/href/link → '#'.
+    """
+    low = name.lower()
+    if low.endswith(("url", "href")) or "link" in low.split("-"):
+        val = resolve_slot(block, name)
+        return val if (val and val not in ("#",)) else "#"
+    val = resolve_slot(block, name)
+    return val or ""
+
+
 def substitute_text_placeholders(html_str: str, block: dict) -> str:
     """Replace all {{slot:NAME}} occurrences using universal resolver.
 
-    Unfilled slots become a small inline gray italic placeholder so the
-    wireframe renders cleanly instead of leaking template syntax.
+    Контекст важен: {{slot}} внутри значения атрибута заменяется ТОЛЬКО на
+    plain-текст (HTML-заглушка сломала бы атрибут). В текстовых узлах
+    незаполненный слот становится маленькой серой заглушкой [name].
     """
+    # 1. Сначала слоты ВНУТРИ атрибутов: attr="...{{slot:x}}..." (одинарные/двойные).
+    def _attr_repl(m: re.Match) -> str:
+        prefix, name = m.group(1), m.group(2).strip()
+        return f"{prefix}{_attr_slot_value(block, name)}"
+
+    # attr="<...{{slot:NAME}}...>" — заменяем каждый slot внутри значения атрибута
+    def _attr_block(m: re.Match) -> str:
+        attr_full = m.group(0)
+        return _SLOT_PLACEHOLDER_RE.sub(
+            lambda sm: _attr_slot_value(block, sm.group(1).strip()), attr_full
+        )
+
+    html_str = re.sub(
+        r'[a-zA-Z_:][\w:-]*\s*=\s*"[^"]*\{\{slot:[^}]+\}\}[^"]*"',
+        _attr_block, html_str,
+    )
+    html_str = re.sub(
+        r"[a-zA-Z_:][\w:-]*\s*=\s*'[^']*\{\{slot:[^}]+\}\}[^']*'",
+        _attr_block, html_str,
+    )
+
+    # 2. Оставшиеся слоты — в текстовых узлах.
     def _repl(m: re.Match) -> str:
         name = m.group(1).strip()
         val = resolve_slot(block, name)
