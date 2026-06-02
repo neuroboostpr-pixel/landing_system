@@ -130,6 +130,54 @@ def test_cards_carry_data_variant(tmp_path):
            "hero-1 должен иметь пустой data-variant"
 
 
+def _load_gallery_module():
+    spec = importlib.util.spec_from_file_location("generate_gallery", SCRIPT)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_extract_srcdoc_falls_back_to_template(tmp_path):
+    g = _load_gallery_module()
+    bd = tmp_path / "blk"
+    (bd / "assets").mkdir(parents=True)
+    # нет index.html, но есть assets/template.html
+    (bd / "assets" / "template.html").write_text(
+        '<section class="lp-x"><h2>{{slot:title}}</h2></section>', encoding="utf-8"
+    )
+    src = g.extract_srcdoc("blk", bd)
+    assert "lp-x" in src and "slot:title" in src, "template.html не подхвачен как fallback"
+
+
+def test_extract_srcdoc_prefers_index_over_template(tmp_path):
+    g = _load_gallery_module()
+    bd = tmp_path / "blk"
+    (bd / "assets").mkdir(parents=True)
+    (bd / "index.html").write_text("<main>INDEX</main>", encoding="utf-8")
+    (bd / "assets" / "template.html").write_text("<main>TEMPLATE</main>", encoding="utf-8")
+    src = g.extract_srcdoc("blk", bd)
+    assert "INDEX" in src and "TEMPLATE" not in src
+
+
+def test_template_content_reaches_card_srcdoc(tmp_path):
+    # на уровне всей генерации: блок без index.html всё равно получает реальный
+    # srcdoc из template.html, а не заглушку с именем
+    lib = tmp_path / "block-library"
+    blocks = [{"id": "c-1", "path": "contacts/c-1/", "folder": "contacts",
+               "category": "footer", "variant": None, "layout_pattern": "grid",
+               "display_name_ru": "c-1 (grid)"}]
+    _make_catalog(lib, blocks)
+    (lib / "contacts" / "c-1" / "assets").mkdir(parents=True, exist_ok=True)
+    (lib / "contacts" / "c-1" / "assets" / "template.html").write_text(
+        '<section class="real-block">CONTACT FORM</section>', encoding="utf-8"
+    )
+    out = tmp_path / "gallery.html"
+    r = _run(lib, out)
+    assert r.returncode == 0, r.stderr
+    html = out.read_text(encoding="utf-8")
+    assert "real-block" in html, "template-контент не попал в srcdoc карточки"
+
+
 def test_preview_button_is_clickable_and_opens_modal(tmp_path):
     html = _build(tmp_path)
     # кнопка больше не заглушка

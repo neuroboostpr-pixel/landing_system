@@ -32,18 +32,22 @@ def _load_taxonomy_lib():
 
 
 def extract_srcdoc(block_id: str, block_dir: Path) -> str:
-    """Extract srcdoc from block's index.html preview."""
-    index_path = block_dir / "index.html"
-    if not index_path.exists():
-        return ""
+    """HTML для превью-iframe блока.
 
-    try:
-        content = index_path.read_text(encoding="utf-8")
+    Приоритет: index.html (готовый рендер) → assets/template.html (сырой
+    шаблон со слотами). 90 из 151 блоков не имеют index.html, и без fallback
+    их превью было пустым (показывало только имя).
+    """
+    for candidate in (block_dir / "index.html", block_dir / "assets" / "template.html"):
+        if not candidate.exists():
+            continue
+        try:
+            content = candidate.read_text(encoding="utf-8")
+        except Exception:
+            continue
         # Escape quotes and newlines for HTML attribute
-        content = content.replace('"', '&quot;').replace('\n', ' ')
-        return content
-    except Exception:
-        return ""
+        return content.replace('"', '&quot;').replace('\n', ' ')
+    return ""
 
 
 def main() -> None:
