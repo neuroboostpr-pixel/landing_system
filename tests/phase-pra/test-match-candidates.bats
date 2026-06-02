@@ -28,43 +28,53 @@ blocks:
     use_cases: [services, b2c, local]
   - id: ru-quiz-01-step-card
     path: quiz/ru-quiz-01-step-card/
-    category: quiz
+    category: forms
+    variant: quiz
     use_cases: [services]
   - id: ru-quiz-03-intermediate
     path: quiz/ru-quiz-03-intermediate/
-    category: quiz
+    category: forms
+    variant: quiz
     use_cases: [services]
   - id: ru-quiz-04-lead-form
     path: quiz/ru-quiz-04-lead-form/
-    category: quiz
+    category: forms
+    variant: quiz
     use_cases: [services]
   - id: ru-quiz-05-thankyou
     path: quiz/ru-quiz-05-thankyou/
-    category: quiz
+    category: forms
+    variant: quiz
     use_cases: [services]
   - id: ru-quiz-06-welcome-screen
     path: quiz/ru-quiz-06-welcome-screen/
-    category: quiz
+    category: forms
+    variant: quiz
     use_cases: [services]
   - id: ru-quiz-07-image-choice
     path: quiz/ru-quiz-07-image-choice/
-    category: quiz
+    category: forms
+    variant: quiz
     use_cases: [services]
   - id: ru-quiz-09-multi-select
     path: quiz/ru-quiz-09-multi-select/
-    category: quiz
+    category: forms
+    variant: quiz
     use_cases: [services]
   - id: ru-quiz-10-loader-analyzing
     path: quiz/ru-quiz-10-loader-analyzing/
-    category: quiz
+    category: forms
+    variant: quiz
     use_cases: [services]
   - id: ru-quiz-11-discount-bonus
     path: quiz/ru-quiz-11-discount-bonus/
-    category: quiz
+    category: forms
+    variant: quiz
     use_cases: [services]
   - id: ru-quiz-13-comparison-question
     path: quiz/ru-quiz-13-comparison-question/
-    category: quiz
+    category: forms
+    variant: quiz
     use_cases: [services]
 EOF
 }
@@ -135,10 +145,10 @@ EOF
   [ "$first" = "ru-quiz-05-thankyou" ]
 }
 
-@test "quiz without quiz_role falls back to generic top-N scoring" {
-  run python3 "$MATCHER" --library "$TMPLIB" --type quiz --niche services --top 3
+@test "forms with variant=quiz returns quiz blocks via generic path" {
+  # B34: квиз-блоки теперь category=forms, variant=quiz.
+  run python3 "$MATCHER" --library "$TMPLIB" --type forms --niche services --variant quiz --top 3
   [ "$status" -eq 0 ]
-  # Should return some quiz blocks via generic path
   count=$(echo "$output" | python3 -c "import sys, json; print(len(json.load(sys.stdin)))")
   [ "$count" -gt 0 ]
 }

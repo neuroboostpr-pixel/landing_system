@@ -65,7 +65,7 @@ def score_block_for_niche(block_meta: dict, niche: str, btype: str) -> int:
     """Возвращает score (выше = лучше match) с учётом ниши проекта."""
     score = 0
 
-    # 1. Тип совпадает — большой плюс
+    # 1. Категория совпадает — большой плюс
     if block_meta.get("category") == btype:
         score += 10
 
@@ -105,6 +105,7 @@ def main() -> None:
     p.add_argument("--type", required=True)
     p.add_argument("--niche", required=True)
     p.add_argument("--top", type=int, default=100)  # Show more candidates by default (Feature 1: Full Carousel)
+    p.add_argument("--variant", default="", help="B34 variant — фильтр по подкатегории")
     p.add_argument("--quiz-role", default="", dest="quiz_role")
     args = p.parse_args()
 
@@ -117,7 +118,12 @@ def main() -> None:
 
     niche = args.niche or "generic"
 
-    # quiz_role-specific path (unchanged)
+    def _is_quiz(b: dict) -> bool:
+        # B34: квиз-блоки — category=forms, variant=quiz.
+        # Старый формат (category=quiz) поддерживаем для обратной совместимости.
+        return b.get("variant") == "quiz" or b.get("category") == "quiz"
+
+    # quiz_role-specific path: квиз теперь forms/quiz, опираемся на variant.
     if args.type == "quiz" and args.quiz_role in QUIZ_ROLE_TOP:
         top_id = QUIZ_ROLE_TOP[args.quiz_role]
         result: list[str] = []
@@ -130,20 +136,24 @@ def main() -> None:
         for block in catalog.get("blocks", []):
             if len(result) >= args.top:
                 break
-            if block["category"] == "quiz" and block["id"] not in result:
+            if _is_quiz(block) and block["id"] not in result:
                 result.append(block["id"])
         print(json.dumps(result[: args.top]))
         return
 
-    # Niche-aware generic path
+    # Niche-aware generic path. Фильтр по category, опц. по variant.
     matching = [b for b in catalog.get("blocks", []) if b.get("category") == args.type]
+    if args.variant:
+        matching = [b for b in matching if (b.get("variant") or "") == args.variant]
     scored = [
         (score_block_for_niche(b, niche, args.type), b["id"])
         for b in matching
     ]
-    # сортируем: высокий score первым; при равенстве — стабильный порядок по id
+    # сортируем: высокий score первым; при равенстве — стабильный порядок по id.
+    # Возвращаем ВСЕ совпавшие по category/variant (до --top), без отсечки score>0:
+    # иначе категория без use_cases теряет всех кандидатов (баг «hero только 3»).
     scored.sort(key=lambda x: (-x[0], x[1]))
-    top_ids = [bid for s, bid in scored[: args.top] if s > 0]
+    top_ids = [bid for s, bid in scored[: args.top]]
     print(json.dumps(top_ids))
 
 

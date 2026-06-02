@@ -78,6 +78,9 @@ BLOCK_PURPOSE_RU: dict[str, str] = {
 }
 
 # Маппинг section.id → catalog block type (для sections-based prototype.yaml)
+# Маппинг prototype section.id → B34 category (11 категорий taxonomy.yaml).
+# Старых псевдо-категорий (conversion/gallery) больше нет — cta это forms,
+# team/gallery относятся к content/features по роли.
 SECTION_TO_CATALOG_TYPE: dict[str, str] = {
     "header": "header",
     "hero": "hero",
@@ -85,21 +88,33 @@ SECTION_TO_CATALOG_TYPE: dict[str, str] = {
     "why_ai_visual": "features",
     "why_neurokreator": "features",
     "for_whom": "features",
-    "curriculum": "process",
+    "curriculum": "content",       # «как это работает» → content/process
     "ai_tools": "features",
     "tariffs": "pricing",
     "footer": "footer",
     # Fallback для других типов:
     "features": "features",
-    "process": "process",
+    "process": "content",          # process — это variant content
     "pricing": "pricing",
     "faq": "faq",
-    "social-proof": "features",
-    "trust": "features",
-    "gallery": "gallery",
-    "team": "gallery",
+    "marquee": "marquee",
+    "social-proof": "social-proof",
+    "trust": "trust",
+    "about": "content",
+    "gallery": "features",          # галерея-секция → ближайшее по роли
+    "team": "content",              # team → content/about (B34 решение 4)
     "contacts": "footer",
-    "cta": "conversion",
+    "cta": "forms",                 # CTA-форма заявки → forms
+    "forms": "forms",
+    "quiz": "quiz",                 # спец-обработка quiz-role в matcher
+}
+
+# Опц. маппинг section.id → B34 variant (передаётся как --variant в matcher).
+SECTION_TO_VARIANT: dict[str, str] = {
+    "curriculum": "process",
+    "process": "process",
+    "about": "about",
+    "team": "about",
 }
 
 
@@ -148,9 +163,12 @@ def _flatten_sections_to_blocks(proto: dict) -> list[dict]:
     for section in sections:
         section_id = section.get("id", "")
         btype = SECTION_TO_CATALOG_TYPE.get(section_id, "features")
+        bvariant = section.get("variant") or SECTION_TO_VARIANT.get(section_id, "")
 
         # Merge all sub-block fields into one dict for slot injection
         merged: dict = {"id": section_id, "type": btype, "position": position}
+        if bvariant:
+            merged["variant"] = bvariant
 
         # Merge sub-blocks
         for sub in section.get("blocks", []):
@@ -506,6 +524,7 @@ def main() -> None:
     for block in proto_blocks:
         position = block["position"]
         btype = block["type"]
+        bvariant = block.get("variant", "")
         quiz_role = block.get("quiz_role", "")
         matcher_cmd = [
             sys.executable, str(matcher_script),
@@ -514,6 +533,8 @@ def main() -> None:
             "--niche", niche,
             "--top", "999",  # Show ALL candidates (no limiting)
         ]
+        if bvariant:
+            matcher_cmd += ["--variant", bvariant]
         if quiz_role:
             matcher_cmd += ["--quiz-role", quiz_role]
         try:
