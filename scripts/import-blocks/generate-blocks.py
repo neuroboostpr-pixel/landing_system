@@ -216,6 +216,17 @@ def main() -> int:
         assets_dir.mkdir(parents=True, exist_ok=True)
         (assets_dir / "template.html").write_text(html + "\n", encoding="utf-8")
 
+        # B35: meta.slots ДОЛЖНЫ совпадать с реальными {{slot}} шаблона.
+        # Извлекаем их из сгенерированного html и переопределяем structure-слоты.
+        tpl_slots: list[str] = []
+        for _name in re.findall(r"\{\{slot:([^}]+)\}\}", html):
+            _name = _name.strip()
+            if _name and _name not in tpl_slots:
+                tpl_slots.append(_name)
+        if tpl_slots:
+            _by_name = {s.get("name"): s for s in slots if isinstance(s, dict)}
+            slots = [_by_name.get(n, {"name": n, "type": "text"}) for n in tpl_slots]
+
         sig = _compute_sig(block) if _HAS_SIG else ""
         display_name_ru = (block.get("display_name_ru", "") or (desc or btype))[:80]
         # Строим dict и сериализуем через yaml.safe_dump — это корректно
