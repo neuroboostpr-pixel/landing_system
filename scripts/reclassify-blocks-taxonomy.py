@@ -269,7 +269,7 @@ def main():
     # Step 3: Regenerate gallery
     print("\n[3/3] Regenerating gallery.html...")
     import subprocess
-    render_script = Path(__file__).parent / "block-library-management" / "scripts" / "render-gallery.py"
+    render_script = Path(__file__).parent / "generate-gallery.py"
     if render_script.exists():
         result = subprocess.run(
             [sys.executable, str(render_script),
@@ -283,7 +283,7 @@ def main():
             print(f"  ⚠ Gallery generation had issues:")
             print(f"    {result.stderr}")
     else:
-        print(f"  ⚠ render-gallery.py not found at {render_script}")
+        print(f"  ⚠ generate-gallery.py not found at {render_script}")
 
     # Summary
     print("\n" + "=" * 70)

@@ -243,11 +243,11 @@ def main(argv: list[str] | None = None) -> int:
         "--added-from", str(added_json),
     ], check=True)
 
-    # [6] render-gallery.py
+    # [6] canonical gallery generator (B35: single scripts/generate-gallery.py)
     print("[6/6] Обновляю gallery.html...")
     subprocess.run([
         sys.executable,
-        str(REPO_ROOT / "skills" / "block-library-management" / "scripts" / "render-gallery.py"),
+        str(REPO_ROOT / "scripts" / "generate-gallery.py"),
         "--library", str(BLOCK_LIB),
         "--output", str(BLOCK_LIB / "gallery.html"),
     ], check=True)

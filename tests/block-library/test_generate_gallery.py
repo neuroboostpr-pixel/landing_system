@@ -130,6 +130,23 @@ def test_cards_carry_data_variant(tmp_path):
            "hero-1 должен иметь пустой data-variant"
 
 
+def test_real_gallery_covers_all_catalog_blocks(tmp_path):
+    # canonical-генератор на РЕАЛЬНОЙ библиотеке: каждый id каталога — в gallery,
+    # у каждого блока iframe-превью. (Заменяет tests/phase-pra/test-gallery.bats,
+    # который зависел от удалённого render-gallery.py и сломанного на Windows python3.)
+    lib = REPO_ROOT / "block-library"
+    catalog = yaml.safe_load((lib / "catalog.yaml").read_text(encoding="utf-8"))
+    ids = [b["id"] for b in catalog["blocks"]]
+    out = tmp_path / "gallery.html"
+    r = _run(lib, out)
+    assert r.returncode == 0, r.stderr
+    html = out.read_text(encoding="utf-8")
+    for bid in ids:
+        assert f'data-id="{bid}"' in html, f"блок {bid} отсутствует в gallery"
+    # iframe-превью на каждый блок
+    assert html.count("<iframe") >= len(ids), "не у каждого блока есть iframe-превью"
+
+
 def _load_gallery_module():
     spec = importlib.util.spec_from_file_location("generate_gallery", SCRIPT)
     mod = importlib.util.module_from_spec(spec)
