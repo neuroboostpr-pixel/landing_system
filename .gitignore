@@ -45,3 +45,6 @@ audit/
 .claude/worktrees/
 
 .cleanup-staging/
+
+# Claude Code scheduler lock (local)
+.claude/scheduled_tasks.lock
