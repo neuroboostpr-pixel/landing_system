@@ -57,7 +57,7 @@ def test_image_slot_becomes_placeholder_img():
     )
     # image/icon слоты → <img> с data-URI; текстовый слот — нет
     assert out.count("<img") == 2
-    assert "data:image/png;base64," in out
+    assert "data:image" in out
     assert 'alt="art-image"' in out
     assert "[headline]" in out  # текст не картинка
 
@@ -68,7 +68,7 @@ def test_image_slot_in_src_attr_gets_datauri():
     html = '<picture><source srcset="{{slot:hero-image-mobile}}"><img src="{{slot:hero-image}}" alt="{{slot:hero-image-alt}}"></picture>'
     out = m.substitute_text_placeholders(html, {})
     assert 'src=""' not in out
-    assert "data:image/png;base64," in out
+    assert "data:image" in out
     # alt — текст, остаётся пустым (не картинка)
     assert 'alt=""' in out
 
@@ -81,7 +81,7 @@ def test_src_attr_always_gets_image_even_with_nonimage_name():
     out = m.substitute_text_placeholders(html, {})
     assert 'src=""' not in out
     assert 'srcset=""' not in out
-    assert out.count("data:image/png;base64,") == 2
+    assert out.count("data:image") == 2
 
 
 def test_image_slot_detection():

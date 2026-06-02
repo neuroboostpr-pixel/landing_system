@@ -196,6 +196,77 @@ def _resolve_item_slot(block: dict, idx: int, field: str) -> str:
 _ITEM_SLOT_RE = re.compile(r"^item[-_]?(\d+)(?:[-_](.+))?$")
 
 
+# sub-block.type → семантическое поле блока для resolve_slot/SLOT_MAPPING.
+_SUBTYPE_TO_FIELD = {
+    "heading": "title", "title": "title", "headline": "title",
+    "paragraph": "subhead", "subtitle": "subhead", "lead": "subhead",
+    "text": "subhead",
+    "button": "cta", "cta_button": "cta", "cta": "cta",
+}
+_SINGULAR_SUBTYPES = set(_SUBTYPE_TO_FIELD) | {
+    "logo", "menu", "info_badge", "scrolling_list",
+}
+
+
+def merge_section_blocks(section: dict) -> dict:
+    """Собрать данные sub-блоков секции прототипа БЕЗ потери при коллизии.
+
+    - Повторяющиеся sub-блоки (module/feature/card/tariff/step/…) → items[]
+      (для слотов feature-N-*, card-N-*, tier-N-*).
+    - heading/paragraph/button → семантические поля title/subhead/cta.
+    - info_badge → badges[] + badge-N.
+    Общая для render-wireframe и inject-content (одна логика, без дублей).
+    """
+    merged: dict = {}
+    items: list = []
+    badges: list = []
+    secondary_cta_seen = False
+
+    for sub in section.get("blocks", []):
+        if not isinstance(sub, dict):
+            continue
+        stype = (sub.get("type") or "").lower()
+
+        if stype not in _SINGULAR_SUBTYPES:
+            items.append(dict(sub))
+            continue
+
+        if stype == "info_badge":
+            label = sub.get("label") or sub.get("text") or ""
+            value = sub.get("value") or ""
+            badges.append((f"{label} {value}".strip() or label or value))
+            continue
+
+        if stype in ("button", "cta_button", "cta"):
+            txt = sub.get("text") or sub.get("label") or ""
+            if "cta" not in merged:
+                merged["cta"] = {"text": txt, "href": sub.get("href", "#")}
+            elif not secondary_cta_seen:
+                merged["cta_secondary"] = txt
+                secondary_cta_seen = True
+            continue
+
+        field = _SUBTYPE_TO_FIELD.get(stype)
+        if field and field not in merged:
+            merged[field] = sub.get("text") or sub.get("highlight") or ""
+            for k, v in sub.items():
+                if k not in ("type", "text") and k not in merged:
+                    merged[k] = v
+            continue
+
+        for k, v in sub.items():
+            if k not in merged:
+                merged[k] = v
+
+    if items:
+        merged["items"] = items
+    if badges:
+        merged.setdefault("badges", badges)
+        for i, b in enumerate(badges, 1):
+            merged.setdefault(f"badge-{i}", b)
+    return merged
+
+
 def resolve_slot(block: dict, slot_name: str) -> str:
     """Universal slot resolver — returns a string value or '' if not found."""
     slot_name = slot_name.strip()
@@ -247,17 +318,27 @@ def resolve_slot(block: dict, slot_name: str) -> str:
 
 _SLOT_PLACEHOLDER_RE = re.compile(r"\{\{slot:([^}]+)\}\}")
 
-# Плейсхолдер-картинка для незаполненных image/icon слотов (wireframe-превью).
-# Файл: block-library/_assets/placeholder-image.png — встраиваем как data-URI,
-# чтобы wireframe.html был самодостаточным (без внешних путей).
-_PLACEHOLDER_IMG_PATH = (
-    Path(__file__).resolve().parents[3]
-    / "block-library" / "_assets" / "placeholder-image.png"
-)
+# Плейсхолдер для незаполненных image/icon слотов (wireframe-превью).
+# Предпочитаем SVG (широкий viewBox с серым фоном): при object-fit:cover/contain
+# он выглядит аккуратным фоном в любом контейнере и не пикселизуется, в отличие
+# от маленького PNG. Встраиваем как data-URI — wireframe самодостаточен.
+_ASSETS_DIR = Path(__file__).resolve().parents[3] / "block-library" / "_assets"
+_PLACEHOLDER_SVG_PATH = _ASSETS_DIR / "placeholder-image.svg"
+_PLACEHOLDER_IMG_PATH = _ASSETS_DIR / "placeholder-image.png"
 
 
 @lru_cache(maxsize=1)
 def _placeholder_img_datauri() -> str:
+    # 1) SVG как URL-encoded data-URI (компактно, масштабируется без потерь)
+    try:
+        from urllib.parse import quote
+        svg = _PLACEHOLDER_SVG_PATH.read_text(encoding="utf-8")
+        # минимизируем переносы строк
+        svg = " ".join(svg.split())
+        return "data:image/svg+xml," + quote(svg, safe="")
+    except Exception:
+        pass
+    # 2) fallback на PNG
     try:
         import base64
         data = _PLACEHOLDER_IMG_PATH.read_bytes()
@@ -344,13 +425,16 @@ def substitute_text_placeholders(html_str: str, block: dict) -> str:
         if val:
             return val
         # image/icon слот без значения → картинка-плейсхолдер (для превью).
+        # В текстовом узле это обычно иконка — даём её фиксированным компактным
+        # размером, чтобы не распирать контейнер (object-fit:contain).
         if _is_image_slot(name):
             uri = _placeholder_img_datauri()
             if uri:
                 return (
                     f'<img src="{uri}" alt="{name}" '
-                    f'style="max-width:100%;max-height:100%;object-fit:contain;'
-                    f'opacity:.45" loading="lazy">'
+                    f'style="display:inline-block;width:100%;height:100%;'
+                    f'max-width:64px;max-height:64px;object-fit:contain;'
+                    f'vertical-align:middle" loading="lazy">'
                 )
         # Inline placeholder — keep it visible but unobtrusive.
         return (
@@ -510,16 +594,14 @@ def main() -> None:
     if "blocks" in proto and isinstance(proto.get("blocks"), list):
         flat_blocks = proto["blocks"]
     else:
-        # Sections format — build flat list with positions
+        # Sections format — build flat list with positions. Используем общий
+        # merge_section_blocks (НЕ теряет данные sub-блоков: cta/badges/items).
         flat_blocks = []
         pos = 1
         for section in proto.get("sections", []):
-            merged = {"position": pos, "id": section.get("id", ""), "type": section.get("id", "")}
-            for sub in section.get("blocks", []):
-                if isinstance(sub, dict):
-                    for k, v in sub.items():
-                        if k not in merged:
-                            merged[k] = v
+            merged = merge_section_blocks(section)
+            merged.update({"position": pos, "id": section.get("id", ""),
+                           "type": section.get("id", "")})
             flat_blocks.append(merged)
             pos += 1
 

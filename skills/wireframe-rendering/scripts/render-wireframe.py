@@ -284,19 +284,12 @@ def _flatten_sections_to_blocks(proto: dict) -> list[dict]:
         btype = SECTION_TO_CATALOG_TYPE.get(section_id, "features")
         bvariant = section.get("variant") or SECTION_TO_VARIANT.get(section_id, "")
 
-        # Merge all sub-block fields into one dict for slot injection
-        merged: dict = {"id": section_id, "type": btype, "position": position}
+        merged = _merge_section_blocks(section)
+        merged.update({"id": section_id, "type": btype, "position": position})
         if bvariant:
             merged["variant"] = bvariant
 
-        # Merge sub-blocks
-        for sub in section.get("blocks", []):
-            if isinstance(sub, dict):
-                for k, v in sub.items():
-                    if k not in merged:
-                        merged[k] = v
-
-        # Copy section-level fields
+        # Copy section-level fields (не перетирая собранные)
         for k in ("name", "layout", "width", "height", "bg_color"):
             if k in section and k not in merged:
                 merged[k] = section[k]
@@ -305,6 +298,83 @@ def _flatten_sections_to_blocks(proto: dict) -> list[dict]:
         position += 1
 
     return result
+
+
+# sub-block.type → семантическое поле блока для resolve_slot/SLOT_MAPPING.
+_SUBTYPE_TO_FIELD = {
+    "heading": "title", "title": "title", "headline": "title",
+    "paragraph": "subhead", "subtitle": "subhead", "lead": "subhead",
+    "text": "subhead",
+    "button": "cta", "cta_button": "cta", "cta": "cta",
+}
+# типы sub-блоков, которые НЕ идут в items[] (это единичные смысловые поля).
+_SINGULAR_SUBTYPES = set(_SUBTYPE_TO_FIELD) | {
+    "logo", "menu", "info_badge", "scrolling_list",
+}
+
+
+def _merge_section_blocks(section: dict) -> dict:
+    """Собрать данные sub-блоков секции БЕЗ потери при коллизии.
+
+    - Повторяющиеся sub-блоки (module/feature/card/tariff/step/…) → items[]
+      (для слотов feature-N-*, card-N-*, tier-N-*, badge-N).
+    - heading/paragraph/button → семантические поля title/subhead/cta.
+    - Прочие первые-встреченные поля сохраняются как есть (обратная совмест.).
+    """
+    merged: dict = {}
+    items: list = []
+    badges: list = []
+    secondary_cta_seen = False
+
+    for sub in section.get("blocks", []):
+        if not isinstance(sub, dict):
+            continue
+        stype = (sub.get("type") or "").lower()
+
+        # повторяющиеся карточки → items[]
+        if stype not in _SINGULAR_SUBTYPES:
+            items.append(dict(sub))
+            continue
+
+        # info_badge → копим в badges[] (для badge-1/2/3)
+        if stype == "info_badge":
+            label = sub.get("label") or sub.get("text") or ""
+            value = sub.get("value") or ""
+            badges.append((f"{label} {value}".strip() or label or value))
+            continue
+
+        # кнопки → cta (первая = primary, вторая = secondary)
+        if stype in ("button", "cta_button", "cta"):
+            txt = sub.get("text") or sub.get("label") or ""
+            if "cta" not in merged:
+                merged["cta"] = {"text": txt, "href": sub.get("href", "#")}
+            elif not secondary_cta_seen:
+                merged["cta_secondary"] = txt
+                secondary_cta_seen = True
+            continue
+
+        # heading/paragraph → семантическое поле, не перетирая занятое
+        field = _SUBTYPE_TO_FIELD.get(stype)
+        if field and field not in merged:
+            merged[field] = sub.get("text") or sub.get("highlight") or ""
+            # сохраняем доп. поля sub-блока (highlight, label, value)
+            for k, v in sub.items():
+                if k not in ("type", "text") and k not in merged:
+                    merged[k] = v
+            continue
+
+        # прочее — первое встреченное поле выигрывает (как раньше)
+        for k, v in sub.items():
+            if k not in merged:
+                merged[k] = v
+
+    if items:
+        merged["items"] = items
+    if badges:
+        merged.setdefault("badges", badges)
+        for i, b in enumerate(badges, 1):
+            merged.setdefault(f"badge-{i}", b)
+    return merged
 
 
 def load_ux_patterns(rules_dir: Path, niche: str) -> list[dict]:
