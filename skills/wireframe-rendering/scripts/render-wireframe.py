@@ -30,6 +30,33 @@ MOOD_RADIOS_CSS = "input[name^=\"mood-\"][type=\"radio\"].lp-mood-radio { positi
 
 MOODS = ["brutalist", "editorial-warm", "swiss-modernist", "retro-windows", "coral-soft", "monochrome-precision"]
 
+# B36-bridge: блоки используют var(--lp-*); mood palette.css определяют --color-*.
+# Этот :root (а) даёт нейтральные lo-fi дефолты, чтобы блок был виден без mood,
+# (б) маппит --lp-* ← --color-* — если palette/mood определит --color-*, блок
+# подхватит цвет. Префикс блоков (--lp-*) и palette (--color-*) так состыкованы.
+WIREFRAME_BRIDGE_CSS = (
+    ":root{"
+    "--lp-bg:var(--color-bg,#f5f5f5);"
+    "--lp-bg-alt:var(--color-bg-alt,#e8e8e8);"
+    "--lp-text:var(--color-fg,#1a1a1a);"
+    "--lp-text-muted:var(--color-fg-muted,#777);"
+    "--lp-accent:var(--color-accent,#333);"
+    "--lp-primary:var(--color-accent,#333);"
+    "--lp-border:var(--color-border,#e0e0e0);"
+    "--lp-radius:8px;--lp-radius-lg:14px;"
+    "--lp-spacing-xs:6px;--lp-spacing-sm:12px;--lp-spacing-md:20px;"
+    "--lp-spacing-lg:36px;--lp-spacing-xl:64px;"
+    "--lp-font-display:system-ui,-apple-system,sans-serif;"
+    "--lp-font-body:system-ui,-apple-system,sans-serif;"
+    "}"
+)
+
+
+def _wrap_srcdoc(block_html: str, mood_css: str = "") -> str:
+    """Префиксует HTML блока bridge-:root (+ опц. mood palette) для srcdoc."""
+    style = f"<style>{WIREFRAME_BRIDGE_CSS}{mood_css}</style>"
+    return style + block_html
+
 # Маппинг технического типа блока -> понятное русское название и цель
 BLOCK_TYPE_RU: dict[str, str] = {
     "nav": "Навигация (шапка сайта)",
@@ -631,6 +658,13 @@ def main() -> None:
             # Load Russian display name and layout summary from meta.yaml
             meta_path = block_dir / "meta.yaml"
             meta = yaml.safe_load(meta_path.read_text(encoding="utf-8")) if meta_path.exists() else {}
+            # B36-bridge + дизайн-система: блоки на var(--lp-*); подмешиваем
+            # :root-дефолты (+ mood palette, если у блока выбран style_mood), чтобы
+            # переменные разрешались и стили накладывались в превью.
+            _mood = meta.get("style_mood") or ""
+            _mood_css = _load_mood_css(Path(args.library), _mood) if _mood else ""
+            tmpl_d = _wrap_srcdoc(tmpl_d, _mood_css)
+            tmpl_m = _wrap_srcdoc(tmpl_m, _mood_css)
             # display_name_ru — короткое человеко-понятное имя; layout_summary_ru — что в макете
             display_name_full = meta.get("display_name_ru") or cid
             # Trim until first dot/newline for a short headline; keep full as tooltip

@@ -92,6 +92,16 @@ SLOT_MAPPING: dict[str, list[str]] = {
     # --- counts / proof ---
     "count": ["count", "value"],
     "value": ["value", "count"],
+    # --- header: brand / logo (B35 granular slots) ---
+    "brand-name": ["brand", "logo", "text", "title", "name"],
+    "brand-text": ["brand", "logo", "text", "title"],
+    "brand-link": ["brand_url", "logo_url", "url"],
+    "brand-link-url": ["brand_url", "logo_url", "url"],
+    "logo": ["logo", "brand", "text"],
+    "logo-text": ["logo", "brand", "text"],
+    # --- nav links (single, non-numbered) ---
+    "nav-link": ["url"],
+    "nav-label": ["text", "label"],
 }
 
 
@@ -197,7 +207,7 @@ def resolve_slot(block: dict, slot_name: str) -> str:
     prefix_match = re.match(
         r"^(feature|step|stage|faq|item|tier|plan|card|metric|stat|fact|"
         r"benefit|advantage|service|testimonial|review|logo|model|tab|"
-        r"point|reason)[-_](\d+)(?:[-_](.+))?$",
+        r"point|reason|nav-link|nav-label|nav|menu|link)[-_](\d+)(?:[-_](.+))?$",
         slot_name,
     )
     if prefix_match:
