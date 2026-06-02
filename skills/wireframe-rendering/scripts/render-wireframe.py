@@ -49,6 +49,20 @@ WIREFRAME_BRIDGE_CSS = (
     "--lp-font-display:system-ui,-apple-system,sans-serif;"
     "--lp-font-body:system-ui,-apple-system,sans-serif;"
     "}"
+    # --- Preview-only safety overrides (диск-блоки НЕ трогаем) ---
+    # Заголовки некоторых блоков имеют max-width в em + overflow:hidden,
+    # рассчитанные на короткие тексты → длинный реальный заголовок обрезается.
+    # В превью разрешаем перенос и снимаем обрезку, чтобы текст был виден весь.
+    '[class*="__title"],[class*="__headline"],[class*="__heading"]{'
+    "max-width:none!important;overflow:visible!important;"
+    "white-space:normal!important;overflow-wrap:anywhere;word-break:break-word;"
+    "font-size:clamp(1.5rem,4vw,3.25rem)!important;}"
+    # Медиа-контейнеры с min-height:40rem+ распирают блок по вертикали в превью.
+    # Ограничиваем разумной высотой, картинка-плейсхолдер ложится аккуратно.
+    '[class*="__media"],[class*="__visual"],[class*="__image"],[class*="__art"],'
+    '[class*="__photo"],[class*="__portrait"],[class*="__picture"]{'
+    "min-height:0!important;max-height:26rem!important;}"
+    'img,picture{max-height:26rem;}'
 )
 
 
