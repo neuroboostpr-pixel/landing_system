@@ -1,4 +1,4 @@
-category: Social Proof
+category: social-proof
 conversion_notes: Круглые фото как Stories — высокое доверие. Реальные лица повышают
   конверсию на 20-35%.
 created: 2026-05-12
@@ -82,3 +82,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: testimonials

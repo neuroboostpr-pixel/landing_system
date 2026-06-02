@@ -1,4 +1,4 @@
-category: Content
+category: features
 conversion_notes: 'Bento-сетка: большое фото якорит внимание, карточки перечисляют
   выгоды лаконично.'
 created: 2026-05-12
@@ -62,3 +62,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: null

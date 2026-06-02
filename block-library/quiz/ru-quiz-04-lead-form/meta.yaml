@@ -1,4 +1,4 @@
-category: Conversion
+category: forms
 conversion_notes: Только разрешённые мессенджеры в РФ. Max Messenger обязателен. 152-ФЗ
   checkbox НЕ pre-checked.
 created: 2026-05-12
@@ -45,3 +45,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: email

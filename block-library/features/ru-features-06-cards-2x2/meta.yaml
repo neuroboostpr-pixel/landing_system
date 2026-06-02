@@ -1,4 +1,4 @@
-category: Content
+category: features
 conversion_notes: Сетка 2×2 предпочтительна для 4+ равноважных услуг. Тег в правом
   верхнем углу карточки помогает категоризации. Hover-эффект (translateY) добавляет
   живости без JS.
@@ -84,3 +84,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: null

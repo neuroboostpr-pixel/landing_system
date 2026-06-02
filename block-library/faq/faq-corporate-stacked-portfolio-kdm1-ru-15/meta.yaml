@@ -1,4 +1,4 @@
-category: FAQ
+category: faq
 description: Компактный блок вопросов с аккордеонными строками на темном фоне.
 display_name_ru: Компактный блок вопросов с аккордеонными строками на темном фоне.
 has_animation: false
@@ -20,3 +20,4 @@ slots:
   type: text
 style_mood: corporate
 type: faq
+variant: null

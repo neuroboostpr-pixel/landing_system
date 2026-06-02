@@ -1,4 +1,4 @@
-category: Hero
+category: hero
 conversion_notes: Фото эксперта в круге создаёт доверие. Регалии — социальное доказательство.
   CTA ведёт на квиз.
 created: 2026-05-12
@@ -43,3 +43,4 @@ source_attribution: ''
 type: hero
 use_cases:
 - b2c
+variant: null

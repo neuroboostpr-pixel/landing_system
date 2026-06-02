@@ -1,4 +1,4 @@
-category: Social Proof
+category: social-proof
 conversion_notes: Крупная цифра + контекст = мгновенная доверительность. Редакционный
   стиль воспринимается как объективный, не рекламный.
 created: 2026-05-13
@@ -49,3 +49,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: numbers

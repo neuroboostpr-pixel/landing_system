@@ -1,4 +1,4 @@
-category: Conversion
+category: forms
 conversion_notes: 'Welcome screen увеличивает конверсию: пользователь видит выгоду
   ДО начала опроса. Лид-магнит снижает барьер. Источники: Tilda Education, Skillbox.'
 created: '2026-05-13'
@@ -38,3 +38,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: quiz

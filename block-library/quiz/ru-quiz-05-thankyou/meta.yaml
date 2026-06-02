@@ -1,4 +1,4 @@
-category: Conversion
+category: forms
 conversion_notes: Конкретный срок ('5 минут') снижает тревожность. Упоминание канала
   управляет ожиданиями.
 created: 2026-05-12
@@ -33,3 +33,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: quiz

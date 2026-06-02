@@ -1,4 +1,4 @@
-category: Social Proof
+category: marquee
 conversion_notes: Пульсирующая точка добавляет ощущение активности. Для бесшовного
   зацикливания клиенты дублируются в HTML. Анимация CSS-only без JS. Хорошо ставить
   между hero и features для быстрого сигнала доверия.
@@ -64,3 +64,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: null

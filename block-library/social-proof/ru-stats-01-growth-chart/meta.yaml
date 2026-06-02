@@ -1,4 +1,4 @@
-category: Social Proof
+category: social-proof
 conversion_notes: Графики роста — мощный proof. Используй реальные данные.
 created: 2026-05-13
 description: 'Блок социального доказательства: график роста (клиентов / выручки /
@@ -45,3 +45,4 @@ type: stats
 use_cases:
 - services
 - b2c
+variant: numbers

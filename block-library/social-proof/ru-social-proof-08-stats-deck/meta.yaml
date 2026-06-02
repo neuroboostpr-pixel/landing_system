@@ -1,4 +1,4 @@
-category: Social Proof
+category: social-proof
 conversion_notes: Используйте реальные измеримые цифры. Акцентный символ (+ % × k)
   в coral усиливает читаемость. Чередующиеся фоны создают ритм без бордеров.
 created: '2026-05-13'
@@ -79,3 +79,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: numbers

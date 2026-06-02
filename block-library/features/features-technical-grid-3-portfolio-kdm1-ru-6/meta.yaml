@@ -1,4 +1,4 @@
-category: Content
+category: features
 description: Технологический раздел с карточками преимуществ, миниатюрами производства
   и кнопкой-пояснением.
 display_name_ru: Технологический раздел с карточками преимуществ, миниатюрами производства
@@ -21,3 +21,4 @@ slots:
   type: text
 style_mood: technical
 type: features
+variant: null

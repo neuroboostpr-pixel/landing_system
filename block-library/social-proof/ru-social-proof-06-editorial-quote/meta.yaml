@@ -1,4 +1,4 @@
-category: Social Proof
+category: social-proof
 conversion_notes: Засечный шрифт цитаты создаёт доверие и редакционную атмосферу.
   Список партнёров добавляет B2B-авторитетность. Использовать реальные цитаты с конкретными
   результатами.
@@ -89,3 +89,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: testimonials

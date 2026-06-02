@@ -1,4 +1,4 @@
-category: Trust
+category: social-proof
 description: Имиджевый блок с большим словом-заголовком, декоративной подписью и спокойной
   темной композицией.
 display_name_ru: Имиджевый блок с большим словом-заголовком, декоративной подписью
@@ -21,3 +21,4 @@ slots:
   type: text
 style_mood: luxury
 type: guarantees
+variant: numbers

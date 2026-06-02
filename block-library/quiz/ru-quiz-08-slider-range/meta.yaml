@@ -1,4 +1,4 @@
-category: Conversion
+category: forms
 conversion_notes: 'Слайдер сегментирует аудиторию по бюджету без ввода с клавиатуры.
   Снижает трение. Источники: Tilda Education, Skillbox (calculator quiz).'
 created: '2026-05-13'
@@ -42,3 +42,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: quiz

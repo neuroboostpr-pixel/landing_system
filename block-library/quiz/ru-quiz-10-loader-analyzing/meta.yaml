@@ -1,4 +1,4 @@
-category: Conversion
+category: forms
 conversion_notes: 'Лоадер создаёт ощущение персонального анализа и повышает ценность
   результата. Конверсия к лид-форме выше на 15-30%. Источник: практика Marquiz, Tilda.'
 created: '2026-05-13'
@@ -38,3 +38,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: quiz

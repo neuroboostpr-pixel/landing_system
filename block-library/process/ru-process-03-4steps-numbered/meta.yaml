@@ -1,4 +1,4 @@
-category: Content
+category: content
 conversion_notes: Ячейки с бордером создают ощущение таблицы/структуры — надёжно для
   B2B. Иллюстрации (placeholder) делают блок визуальнее. Четыре шага = оптимум.
 created: '2026-05-13'
@@ -67,3 +67,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: process

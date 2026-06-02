@@ -1,4 +1,4 @@
-category: FAQ
+category: faq
 conversion_notes: Ответ на вопрос 'Почему вы, а не конкуренты?' — снимает последний
   барьер. Конкретные цифры в ответах убедительнее общих слов (книга, стр. 35).
 created: '2026-05-13'
@@ -62,3 +62,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: null

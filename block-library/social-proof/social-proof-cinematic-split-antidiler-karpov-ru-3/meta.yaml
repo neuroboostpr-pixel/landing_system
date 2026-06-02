@@ -1,4 +1,4 @@
-category: Social Proof
+category: social-proof
 description: Крупный кейс с фото клиента у автомобиля, диагональной типографикой,
   текстом отзыва и CTA.
 display_name_ru: Крупный кейс с фото клиента у автомобиля, диагональной типографикой,
@@ -21,3 +21,4 @@ slots:
   type: text
 style_mood: cinematic
 type: logos
+variant: cases

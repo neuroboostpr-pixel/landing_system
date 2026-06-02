@@ -1,4 +1,4 @@
-category: Content
+category: features
 description: Комбинация промо-карточки, списка направлений и ссылок на разные форматы
   услуги.
 display_name_ru: Комбинация промо-карточки, списка направлений и ссылок на разные
@@ -20,3 +20,4 @@ slots:
   type: text
 style_mood: technical
 type: features
+variant: null

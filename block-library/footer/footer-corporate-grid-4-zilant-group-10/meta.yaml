@@ -1,4 +1,4 @@
-category: Footer
+category: footer
 description: Мягкий бирюзовый футер с логотипом, навигационными колонками и контактной
   информацией.
 display_name_ru: Мягкий бирюзовый футер с логотипом, навигационными колонками и контактной
@@ -21,3 +21,4 @@ slots:
   type: text
 style_mood: corporate
 type: footer
+variant: null

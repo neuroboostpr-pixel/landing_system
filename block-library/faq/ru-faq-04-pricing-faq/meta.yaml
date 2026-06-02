@@ -1,4 +1,4 @@
-category: FAQ
+category: faq
 conversion_notes: Static FAQ (без collapse) эффективнее на landing — клиент видит
   все ответы сразу. Белый фон отличает от других FAQ-блоков (accordion, searchable).
   Используйте реальные возражения клиентов.
@@ -72,3 +72,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: null

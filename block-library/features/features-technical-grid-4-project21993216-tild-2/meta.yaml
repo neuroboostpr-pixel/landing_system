@@ -1,4 +1,4 @@
-category: Content
+category: social-proof
 description: Полоса с коротким тезисом и четырьмя числовыми преимуществами на светло-голубом
   фоне.
 display_name_ru: 'Полоса с коротким тезисом и четырьмя числовыми преимуществами на
@@ -21,3 +21,4 @@ slots:
   type: text
 style_mood: technical
 type: features
+variant: numbers

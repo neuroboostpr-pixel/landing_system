@@ -1,4 +1,4 @@
-category: Social Proof
+category: social-proof
 description: Карусель карточек клиентов с логотипами, краткими описаниями и кнопками
   действия.
 display_name_ru: Карусель карточек клиентов с логотипами, краткими описаниями и кнопками
@@ -21,3 +21,4 @@ slots:
   type: text
 style_mood: corporate
 type: logos
+variant: clients

@@ -1,4 +1,4 @@
-category: Content
+category: features
 description: Блок преимуществ с шестью пронумерованными карточками и нижней полосой
   с призывом к действию.
 display_name_ru: Блок преимуществ с шестью пронумерованными карточками и нижней полосой
@@ -21,3 +21,4 @@ slots:
   type: text
 style_mood: corporate
 type: features
+variant: null

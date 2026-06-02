@@ -1,4 +1,4 @@
-category: Trust
+category: content
 description: Секция ценностей с четырьмя текстовыми колонками и крупными фоновыми
   буквенными формами.
 display_name_ru: 'Секция ценностей с четырьмя текстовыми колонками и крупными фоновыми
@@ -21,3 +21,4 @@ slots:
   type: text
 style_mood: corporate
 type: guarantees
+variant: about

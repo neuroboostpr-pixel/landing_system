@@ -1,4 +1,4 @@
-category: Conversion
+category: trust
 conversion_notes: 'Скидка-подарок за прохождение — главный лид-магнит по всем источникам.
   Показывать ПЕРЕД формой контактов. Источники: Skillbox, Tilda, Marquiz.'
 created: '2026-05-13'
@@ -47,3 +47,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: guarantees

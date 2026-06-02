@@ -1,4 +1,4 @@
-category: Hero
+category: hero
 conversion_notes: Inline email-форма прямо в hero даёт лучший CR для лид-магнитов
   и пресейлов. Бегущая строка создаёт ощущение активности и ажиотажа. НЕ использовать
   WhatsApp/Telegram в CTA (только email или нейтральная кнопка).
@@ -49,3 +49,4 @@ type: hero
 use_cases:
 - b2c
 - services
+variant: null

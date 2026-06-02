@@ -1,4 +1,4 @@
-category: Hero
+category: hero
 conversion_notes: CTA контраст 7:1. Плашка 'от X ₽' в углу desktop, под subhead на
   mobile. Sticky CTA после скролла за hero.
 created: 2026-05-12
@@ -40,3 +40,4 @@ source_attribution: ''
 type: hero
 use_cases:
 - services
+variant: null

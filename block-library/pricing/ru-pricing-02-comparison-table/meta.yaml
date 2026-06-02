@@ -1,4 +1,4 @@
-category: Pricing
+category: pricing
 conversion_notes: 'Средний тариф (tier-2) выделен акцентным фоном — якорный эффект.
   ✓/✗ матрица hardcoded в шаблоне, кастомизируется под проект. Mobile: горизонтальный
   скролл таблицы (overflow-x: auto), JS не нужен.'
@@ -83,3 +83,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: comparison

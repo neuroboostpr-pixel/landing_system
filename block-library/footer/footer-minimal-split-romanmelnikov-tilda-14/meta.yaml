@@ -1,4 +1,4 @@
-category: Footer
+category: footer
 description: Низ страницы с мелкими юридическими ссылками и приглушенной контактной
   информацией.
 display_name_ru: Низ страницы с мелкими юридическими ссылками и приглушенной контактной
@@ -21,3 +21,4 @@ slots:
   type: text
 style_mood: minimal
 type: footer
+variant: null

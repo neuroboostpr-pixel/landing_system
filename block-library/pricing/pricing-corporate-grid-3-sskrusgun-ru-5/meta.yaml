@@ -1,4 +1,4 @@
-category: Pricing
+category: pricing
 description: Раздел с карточками специализированных программ, фотофоном, ценовым маркером
   и кнопками.
 display_name_ru: Раздел с карточками специализированных программ, фотофоном, ценовым
@@ -20,3 +20,4 @@ slots:
   type: text
 style_mood: corporate
 type: pricing
+variant: cards

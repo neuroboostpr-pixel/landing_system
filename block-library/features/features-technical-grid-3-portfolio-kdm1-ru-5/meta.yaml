@@ -1,4 +1,4 @@
-category: Content
+category: features
 description: Информационный блок с темным фоном, большим заголовком и тремя карточками
   содержания.
 display_name_ru: Информационный блок с темным фоном, большим заголовком и тремя карточками
@@ -22,3 +22,4 @@ slots:
   type: text
 style_mood: technical
 type: features
+variant: null

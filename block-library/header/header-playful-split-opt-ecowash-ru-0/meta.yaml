@@ -1,4 +1,4 @@
-category: Navigation
+category: header
 description: Компактная верхняя навигация на ярком фоне с логотипом, пунктами меню
   и контактным действием.
 display_name_ru: Компактная верхняя навигация на ярком фоне с логотипом, пунктами
@@ -21,3 +21,4 @@ slots:
   type: text
 style_mood: playful
 type: header
+variant: null

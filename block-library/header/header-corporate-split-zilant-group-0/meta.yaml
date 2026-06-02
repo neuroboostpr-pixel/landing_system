@@ -1,4 +1,4 @@
-category: Navigation
+category: header
 description: Компактная верхняя навигация с логотипом по центру зоны меню и мягкой
   кнопкой действия справа.
 display_name_ru: Компактная верхняя навигация с логотипом по центру зоны меню и мягкой
@@ -21,3 +21,4 @@ slots:
   type: text
 style_mood: corporate
 type: header
+variant: null

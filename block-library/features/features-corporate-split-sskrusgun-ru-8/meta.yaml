@@ -1,4 +1,4 @@
-category: Content
+category: features
 description: Двухколоночный блок для корпоративного предложения с чек-листом преимуществ
   и интерьерным фото.
 display_name_ru: Двухколоночный блок для корпоративного предложения с чек-листом преимуществ
@@ -21,3 +21,4 @@ slots:
   type: text
 style_mood: corporate
 type: features
+variant: null

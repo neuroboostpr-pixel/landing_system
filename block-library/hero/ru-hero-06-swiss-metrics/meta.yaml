@@ -1,4 +1,4 @@
-category: Hero
+category: hero
 conversion_notes: Цифровые метрики немедленно убеждают в экспертизе. Швейцарская сетка
   = доверие и профессионализм. Лаймовый акцент выделяет CTA.
 created: 2026-05-13
@@ -56,3 +56,4 @@ type: hero
 use_cases:
 - services
 - b2c
+variant: null

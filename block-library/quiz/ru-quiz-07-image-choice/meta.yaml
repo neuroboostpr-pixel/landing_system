@@ -1,4 +1,4 @@
-category: Conversion
+category: forms
 conversion_notes: 'Визуальный выбор снижает когнитивную нагрузку, увеличивает вовлечённость.
   Люди чаще выбирают картинку, чем читают текст. Источник: Tilda Education.'
 created: '2026-05-13'
@@ -57,3 +57,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: quiz

@@ -1,4 +1,4 @@
-category: Hero
+category: hero
 description: Большой светло-бирюзовый первый экран с крупным заголовком, CTA и деловой
   фотокомпозицией справа.
 display_name_ru: Большой светло-бирюзовый первый экран с крупным заголовком, CTA и
@@ -22,3 +22,4 @@ slots:
   type: text
 style_mood: corporate
 type: hero
+variant: null

@@ -1,4 +1,4 @@
-category: Conversion
+category: forms
 conversion_notes: 'Множественный выбор собирает больше данных о потребностях. Пользователь
   чувствует, что его лучше поняли. Источники: Tilda Education, Marquiz.'
 created: '2026-05-13'
@@ -54,3 +54,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: quiz

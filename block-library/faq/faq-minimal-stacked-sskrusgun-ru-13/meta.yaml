@@ -1,4 +1,4 @@
-category: FAQ
+category: faq
 description: Аккордеон вопросов на светлом фоне с компактными строками и иконками
   раскрытия.
 display_name_ru: Аккордеон вопросов на светлом фоне с компактными строками и иконками
@@ -21,3 +21,4 @@ slots:
   type: text
 style_mood: minimal
 type: faq
+variant: null

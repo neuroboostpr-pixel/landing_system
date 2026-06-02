@@ -1,4 +1,4 @@
-category: Conversion
+category: forms
 conversion_notes: 'Бинарный выбор выявляет ключевой приоритет клиента — цена vs качество,
   скорость vs надёжность. Источник: Marquiz (подбор по параметрам для дифференциации).'
 created: '2026-05-13'
@@ -47,3 +47,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: quiz

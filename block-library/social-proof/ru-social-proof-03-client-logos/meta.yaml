@@ -1,4 +1,4 @@
-category: Social Proof
+category: social-proof
 conversion_notes: Логотипы известных клиентов — авторитет через ассоциацию. Серые
   (не цветные) — профессионально и ненавязчиво. Упоминается в книге стр. 28 в контексте
   социальных доказательств.
@@ -55,3 +55,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: clients

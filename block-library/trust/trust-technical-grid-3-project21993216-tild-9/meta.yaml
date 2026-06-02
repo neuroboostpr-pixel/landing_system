@@ -1,4 +1,4 @@
-category: Trust
+category: trust
 description: Блок гарантий и поддержки в виде сетки карточек с иконками и короткими
   пояснениями.
 display_name_ru: Блок гарантий и поддержки в виде сетки карточек с иконками и короткими
@@ -22,3 +22,4 @@ slots:
   type: text
 style_mood: technical
 type: guarantees
+variant: guarantees

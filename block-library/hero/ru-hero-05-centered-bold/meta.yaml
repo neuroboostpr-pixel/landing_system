@@ -1,4 +1,4 @@
-category: Hero
+category: hero
 conversion_notes: 'Apple/Stripe-стиль: минимализм + сила слова. Единственная CTA не
   конкурирует ни с чем. Tagline (uppercase, мелкий) добавляет контекст без загрязления.
   Декоративные линии создают ритм без графики.'
@@ -38,3 +38,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: null

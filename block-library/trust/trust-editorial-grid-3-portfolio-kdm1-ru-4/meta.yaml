@@ -1,4 +1,4 @@
-category: Trust
+category: content
 description: Секция принципов с диагональной светлой подложкой, крупными заголовками
   и предметными иллюстрациями.
 display_name_ru: Секция принципов с диагональной светлой подложкой, крупными заголовками
@@ -22,3 +22,4 @@ slots:
   type: text
 style_mood: editorial
 type: guarantees
+variant: about

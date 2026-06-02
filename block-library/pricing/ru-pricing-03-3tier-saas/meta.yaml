@@ -1,4 +1,4 @@
-category: Pricing
+category: pricing
 conversion_notes: Выделение среднего тарифа border+badge увеличивает его выбор. Всегда
   показывать цену в ₽. "Индивидуально" для верхнего тарифа работает лучше чем конкретная
   цена.
@@ -119,3 +119,4 @@ type: pricing
 use_cases:
 - services
 - b2c
+variant: cards

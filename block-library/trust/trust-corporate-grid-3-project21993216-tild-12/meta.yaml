@@ -1,4 +1,4 @@
-category: Trust
+category: trust
 description: Секция документов с тремя карточками сертификатов на светло-голубом фоне.
 display_name_ru: Секция документов с тремя карточками сертификатов на светло-голубом
   фоне.
@@ -21,3 +21,4 @@ slots:
   type: text
 style_mood: corporate
 type: guarantees
+variant: certificates

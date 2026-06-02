@@ -1,4 +1,4 @@
-category: FAQ
+category: faq
 conversion_notes: Native details — без JS, SEO-friendly. Частые возражения первыми.
   6 вопросов — оптимально.
 created: 2026-05-12
@@ -72,3 +72,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: null

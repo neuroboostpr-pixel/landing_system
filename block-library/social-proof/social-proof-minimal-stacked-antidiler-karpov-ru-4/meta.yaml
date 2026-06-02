@@ -1,4 +1,4 @@
-category: Social Proof
+category: social-proof
 description: 'Серия темных кейсов без крупных фото: имя, модель, услуга, отзыв и акцентная
   кнопка.'
 display_name_ru: 'Серия темных кейсов без крупных фото: имя, модель, услуга, отзыв
@@ -21,3 +21,4 @@ slots:
   type: text
 style_mood: minimal
 type: logos
+variant: testimonials

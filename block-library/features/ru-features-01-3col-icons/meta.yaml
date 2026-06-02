@@ -1,4 +1,4 @@
-category: Content
+category: features
 conversion_notes: 3 конкретных преимущества с иконками. Заголовки с цифрами и фактами
   конвертируют лучше.
 created: 2026-05-12
@@ -58,3 +58,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: null

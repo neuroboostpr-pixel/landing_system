@@ -1,4 +1,4 @@
-category: Hero
+category: hero
 description: Темный первый экран с крупным наклонным заголовком, автомобильным фоном
   и контрастной кнопкой.
 display_name_ru: Темный первый экран с крупным наклонным заголовком, автомобильным
@@ -21,3 +21,4 @@ slots:
   type: text
 style_mood: cinematic
 type: hero
+variant: null

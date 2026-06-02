@@ -1,4 +1,4 @@
-category: Content
+category: content
 conversion_notes: Временные метки снимают тревогу 'сколько ждать'. Финальный шаг с
   акцентом = итоговая выгода. Inline CTA после процесса.
 created: 2026-05-13
@@ -65,3 +65,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: process

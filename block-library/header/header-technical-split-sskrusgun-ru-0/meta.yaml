@@ -1,4 +1,4 @@
-category: Navigation
+category: header
 description: Компактная верхняя панель с логотипом, навигацией, иконками и яркой кнопкой
   действия.
 display_name_ru: Компактная верхняя панель с логотипом, навигацией, иконками и яркой
@@ -21,3 +21,4 @@ slots:
   type: text
 style_mood: technical
 type: header
+variant: null

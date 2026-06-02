@@ -1,4 +1,4 @@
-category: Content
+category: social-proof
 conversion_notes: KPI-блок повышает доверие. Числа должны быть честными — проверь
   с клиентом.
 created: 2026-05-13
@@ -51,3 +51,4 @@ type: features
 use_cases:
 - services
 - b2c
+variant: numbers

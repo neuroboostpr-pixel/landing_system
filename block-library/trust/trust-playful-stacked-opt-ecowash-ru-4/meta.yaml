@@ -1,4 +1,4 @@
-category: Trust
+category: social-proof
 description: Яркий блок доверия с большим заголовком, несколькими метриками и крупной
   декоративной графикой.
 display_name_ru: Яркий блок доверия с большим заголовком, несколькими метриками и
@@ -20,3 +20,4 @@ slots:
   type: text
 style_mood: playful
 type: guarantees
+variant: numbers

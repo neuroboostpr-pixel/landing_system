@@ -1,4 +1,4 @@
-category: Footer
+category: footer
 description: Синий футер с логотипом, контактными колонками, ссылками и компактной
   служебной информацией.
 display_name_ru: 'Синий футер с логотипом, контактными колонками, ссылками и компактной
@@ -21,3 +21,4 @@ slots:
   type: text
 style_mood: corporate
 type: footer
+variant: null

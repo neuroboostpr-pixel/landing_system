@@ -1,4 +1,4 @@
-category: Hero
+category: hero
 conversion_notes: Форма на первом экране без скролла — максимальная видимость. Радио-группа
   Telegram/Max/Звонок (без мессенджеров под запретом). Буллеты с ✓ усиливают доверие
   перед заполнением формы.
@@ -50,3 +50,4 @@ type: hero
 use_cases:
 - services
 - b2c
+variant: null

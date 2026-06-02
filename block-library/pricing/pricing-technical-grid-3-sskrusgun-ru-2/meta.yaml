@@ -1,4 +1,4 @@
-category: Pricing
+category: pricing
 description: Сетка карточек программ с фото, краткими параметрами, ценовым акцентом
   и кнопками покупки.
 display_name_ru: Сетка карточек программ с фото, краткими параметрами, ценовым акцентом
@@ -21,3 +21,4 @@ slots:
   type: text
 style_mood: technical
 type: pricing
+variant: cards

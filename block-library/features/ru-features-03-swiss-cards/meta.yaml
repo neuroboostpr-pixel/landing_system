@@ -1,4 +1,4 @@
-category: Content
+category: features
 conversion_notes: Нумерация создаёт ощущение системности и процесса. Цвета помогают
   запомнить этапы. Швейцарский стиль = доверие через порядок.
 created: 2026-05-13
@@ -57,3 +57,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: null

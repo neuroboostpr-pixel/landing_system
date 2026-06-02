@@ -1,4 +1,4 @@
-category: Trust
+category: social-proof
 conversion_notes: Текстовые лого (не SVG) проще адаптировать. Opacity 55% создаёт
   ощущение "нейтральности" — не реклама, а факт. Размещать между hero и features.
 created: '2026-05-13'
@@ -47,3 +47,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: clients

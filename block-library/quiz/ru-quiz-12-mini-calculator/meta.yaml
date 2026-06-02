@@ -1,4 +1,4 @@
-category: Conversion
+category: forms
 conversion_notes: 'Показ ориентировочной цены мотивирует оставить контакт — человек
   хочет уточнить точную цифру. Источники: Marquiz (калькулятор), Skillbox (calculator
   quiz).'
@@ -56,3 +56,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: quiz

@@ -1,4 +1,4 @@
-category: Pricing
+category: pricing
 description: Блок выбора пакетов с тремя тарифными карточками, списками преимуществ
   и яркими кнопками.
 display_name_ru: 'Блок выбора пакетов с тремя тарифными карточками, списками преимуществ
@@ -22,3 +22,4 @@ slots:
   type: text
 style_mood: corporate
 type: pricing
+variant: cards

@@ -1,4 +1,4 @@
-category: Content
+category: content
 description: Светлый блок с вопросительным заголовком, вкладками и карточками вокруг
   размытого объекта.
 display_name_ru: Светлый блок с вопросительным заголовком, вкладками и карточками
@@ -21,3 +21,4 @@ slots:
   type: text
 style_mood: technical
 type: process
+variant: process

@@ -1,4 +1,4 @@
-category: Hero
+category: hero
 description: Первый экран с крупным оффером, продуктовой 3D-визуализацией, буллетами
   и формой заявки справа.
 display_name_ru: Первый экран с крупным оффером, продуктовой 3D-визуализацией, буллетами
@@ -20,3 +20,4 @@ slots:
   type: text
 style_mood: playful
 type: hero
+variant: null

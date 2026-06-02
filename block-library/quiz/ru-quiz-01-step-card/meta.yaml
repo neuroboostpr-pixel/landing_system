@@ -1,4 +1,4 @@
-category: Conversion
+category: forms
 conversion_notes: Карточка по центру фокусирует внимание. Комментарий снимает тревожность
   'зачем спрашиваете'.
 created: 2026-05-12
@@ -42,3 +42,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: quiz

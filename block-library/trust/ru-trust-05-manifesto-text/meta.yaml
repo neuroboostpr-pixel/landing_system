@@ -1,4 +1,4 @@
-category: Trust
+category: content
 conversion_notes: Засечный шрифт с bordered текстом создаёт ощущение ценностей и философии.
   Идеально для "разрыва шаблона" между техническими блоками. Хорошо работает между
   hero и features.
@@ -36,3 +36,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: about

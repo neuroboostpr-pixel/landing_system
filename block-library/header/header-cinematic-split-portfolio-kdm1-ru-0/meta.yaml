@@ -1,4 +1,4 @@
-category: Navigation
+category: header
 description: Узкая верхняя навигация на светлом фоне с компактными ссылками и контрастной
   кнопкой.
 display_name_ru: Узкая верхняя навигация на светлом фоне с компактными ссылками и
@@ -21,3 +21,4 @@ slots:
   type: text
 style_mood: cinematic
 type: header
+variant: null

@@ -1,4 +1,4 @@
-category: Navigation
+category: header
 description: Тонкая верхняя панель с логотипом, навигацией, контактами и компактными
   иконками действий.
 display_name_ru: Тонкая верхняя панель с логотипом, навигацией, контактами и компактными
@@ -21,3 +21,4 @@ slots:
   type: text
 style_mood: minimal
 type: header
+variant: null

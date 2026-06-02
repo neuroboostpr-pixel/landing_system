@@ -1,4 +1,4 @@
-category: Social Proof
+category: social-proof
 description: Статистический блок с крупными процентами, короткими подписями и темной
   инфографичной подачей.
 display_name_ru: Статистический блок с крупными процентами, короткими подписями и
@@ -22,3 +22,4 @@ slots:
   type: text
 style_mood: technical
 type: logos
+variant: numbers

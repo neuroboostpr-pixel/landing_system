@@ -1,4 +1,4 @@
-category: Content
+category: features
 description: Раздел с сильным заголовком, текстовым списком слева и крупным предметным
   фото справа.
 display_name_ru: Раздел с сильным заголовком, текстовым списком слева и крупным предметным
@@ -21,3 +21,4 @@ slots:
   type: text
 style_mood: editorial
 type: features
+variant: null

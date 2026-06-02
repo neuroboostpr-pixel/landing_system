@@ -1,4 +1,4 @@
-category: Social Proof
+category: social-proof
 conversion_notes: Конкретные цифры в цитатах повышают доверие. Фото слева создаёт
   личное впечатление.
 created: 2026-05-12
@@ -86,3 +86,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: testimonials

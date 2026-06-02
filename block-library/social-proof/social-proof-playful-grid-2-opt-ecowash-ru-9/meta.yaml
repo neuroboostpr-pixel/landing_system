@@ -1,4 +1,4 @@
-category: Social Proof
+category: social-proof
 description: Раздел отзывов с крупным заголовком и сеткой пустых белых карточек для
   отзывов клиентов.
 display_name_ru: Раздел отзывов с крупным заголовком и сеткой пустых белых карточек
@@ -21,3 +21,4 @@ slots:
   type: text
 style_mood: playful
 type: logos
+variant: testimonials

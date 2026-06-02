@@ -1,4 +1,4 @@
-category: Content
+category: content
 conversion_notes: Используйте для "О нас" или манифеста компании. Доверительный тон
   важнее продажного. Кнопка ghost не должна быть главным CTA — она вспомогательная.
 created: '2026-05-13'
@@ -48,3 +48,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: about

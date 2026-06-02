@@ -1,4 +1,4 @@
-category: Content
+category: content
 description: Производственный блок с текстом, акцентной плашкой, декоративной графикой
   и большим медиаконтейнером.
 display_name_ru: Производственный блок с текстом, акцентной плашкой, декоративной
@@ -21,3 +21,4 @@ slots:
   type: text
 style_mood: technical
 type: process
+variant: process

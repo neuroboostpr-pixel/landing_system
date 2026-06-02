@@ -1,4 +1,4 @@
-category: Conversion
+category: forms
 conversion_notes: Промежуточный экран снижает abandon rate на 15-25%. Эмодзи создаёт
   эмоциональный момент.
 created: 2026-05-12
@@ -29,3 +29,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: quiz

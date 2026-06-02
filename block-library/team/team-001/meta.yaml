@@ -1,4 +1,4 @@
-category: Gallery
+category: content
 created: '2026-06-01'
 display_name_ru: 'team: cinematic'
 has_bg_image: false
@@ -10,3 +10,4 @@ slots:
   type: text
 source: cleaned
 type: team
+variant: about

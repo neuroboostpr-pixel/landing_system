@@ -1,4 +1,4 @@
-category: Content
+category: content
 description: Линейная схема этапов с мелкими подписями и горизонтальным акцентом прогресса.
 display_name_ru: Линейная схема этапов с мелкими подписями и горизонтальным акцентом
   прогресса.
@@ -20,3 +20,4 @@ slots:
   type: text
 style_mood: technical
 type: process
+variant: process

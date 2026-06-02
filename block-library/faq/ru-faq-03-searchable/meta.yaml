@@ -1,4 +1,4 @@
-category: FAQ
+category: faq
 conversion_notes: Поиск снижает отказы у сомневающихся. Категории ускоряют навигацию.
   Footer-CTA ловит тех, кто не нашёл ответ.
 created: 2026-05-13
@@ -69,3 +69,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: null

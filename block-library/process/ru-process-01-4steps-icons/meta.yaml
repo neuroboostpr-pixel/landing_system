@@ -1,4 +1,4 @@
-category: Content
+category: content
 conversion_notes: Большие цифры снижают тревожность клиента. 4 шага — оптимальная
   длина процесса.
 created: 2026-05-12
@@ -66,3 +66,4 @@ use_cases:
 - b2c
 - local
 - services
+variant: process

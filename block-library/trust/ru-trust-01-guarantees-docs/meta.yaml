@@ -1,4 +1,4 @@
-category: Trust
+category: trust
 conversion_notes: Договор + лицензия — юридическая защита. Гарантия + возврат — финансовая
   защита клиента.
 created: 2026-05-12
@@ -69,3 +69,4 @@ use_cases:
 - b2c
 - local
 - services
+variant: guarantees

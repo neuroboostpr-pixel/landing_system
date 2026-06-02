@@ -1,4 +1,4 @@
-category: Navigation
+category: header
 description: Узкая навигационная шапка на темном фоне с мелкими ссылками и теплым
   акцентом.
 display_name_ru: Узкая навигационная шапка на темном фоне с мелкими ссылками и теплым
@@ -21,3 +21,4 @@ slots:
   type: text
 style_mood: luxury
 type: header
+variant: null

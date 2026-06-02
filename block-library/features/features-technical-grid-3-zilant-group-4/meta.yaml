@@ -1,4 +1,4 @@
-category: Content
+category: features
 description: Воздушный блок с контрастным заголовком, тремя белыми карточками и декоративной
   бумажной графикой.
 display_name_ru: 'Воздушный блок с контрастным заголовком, тремя белыми карточками
@@ -22,3 +22,4 @@ slots:
   type: text
 style_mood: technical
 type: features
+variant: null

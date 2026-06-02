@@ -1,4 +1,4 @@
-category: Social Proof
+category: social-proof
 conversion_notes: Конкретные кейсы с цифрами убедительнее общих слов. Ярлык-теги 'Самый
   масштабный' / 'Рекорд скорости' добавляют контекст (книга, стр. 19).
 created: '2026-05-13'
@@ -70,3 +70,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: cases

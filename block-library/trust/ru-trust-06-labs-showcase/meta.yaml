@@ -1,4 +1,4 @@
-category: Trust
+category: social-proof
 conversion_notes: Портфолио из 5 кейсов — оптимальное число для страницы услуг. Теги-пилюли
   декоративные (нет JS), показывают категории услуг. Нумерация Nº добавляет редакционный
   характер.
@@ -127,3 +127,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: cases

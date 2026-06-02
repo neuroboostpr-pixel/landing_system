@@ -1,4 +1,4 @@
-category: Trust
+category: header
 conversion_notes: 'Дескриптор отвечает: ЧТО + ЧТО ПРОДАЁМ + КОМУ. Примеры: ''Франшиза
   мужских костюмов в Москве'', ''Ремонт квартир в Екатеринбурге'' (книга, стр. 4).'
 created: '2026-05-13'
@@ -39,3 +39,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: null

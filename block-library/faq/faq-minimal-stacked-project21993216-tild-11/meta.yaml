@@ -1,4 +1,4 @@
-category: FAQ
+category: faq
 description: Аккордеон частых вопросов в белых строках с иконками раскрытия справа.
 display_name_ru: Аккордеон частых вопросов в белых строках с иконками раскрытия справа.
 has_animation: false
@@ -20,3 +20,4 @@ slots:
   type: text
 style_mood: minimal
 type: faq
+variant: null

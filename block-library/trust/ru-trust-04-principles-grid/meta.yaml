@@ -1,4 +1,4 @@
-category: Trust
+category: content
 conversion_notes: Принципы = ценности компании. Покупатель сравнивает себя с ними.
   Editorial стиль = серьёзная, взрослая аудитория.
 created: 2026-05-13
@@ -73,3 +73,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: about

@@ -1,4 +1,4 @@
-category: Pricing
+category: pricing
 conversion_notes: '''от X ₽'' снижает ценовой барьер. Средний тариф выделен как популярный
   — якорный эффект.'
 created: 2026-05-12
@@ -67,3 +67,4 @@ use_cases:
 - services
 - b2c
 - local
+variant: cards

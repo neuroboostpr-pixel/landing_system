@@ -1,4 +1,4 @@
-category: Content
+category: features
 description: Темная секция с крупным заголовком и сеткой проблемных карточек с минимальными
   маркерами.
 display_name_ru: Темная секция с крупным заголовком и сеткой проблемных карточек с
@@ -22,3 +22,4 @@ slots:
   type: text
 style_mood: technical
 type: features
+variant: null

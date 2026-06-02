@@ -1,4 +1,4 @@
-category: Pricing
+category: pricing
 conversion_notes: Встроенный FAQ снимает страхи по оплате прямо в секции pricing.
   FAQ без collapse (всё видно) работает лучше на landing-страницах. Задавайте типичные
   возражения клиентов по оплате.
@@ -107,3 +107,4 @@ type: pricing
 use_cases:
 - services
 - b2c
+variant: cards

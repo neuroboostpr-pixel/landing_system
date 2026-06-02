@@ -1,4 +1,4 @@
-category: Content
+category: content
 description: Два информационных блока с иконками объясняют сценарии продаж через отдельные
   каналы.
 display_name_ru: Два информационных блока с иконками объясняют сценарии продаж через
@@ -22,3 +22,4 @@ slots:
   type: text
 style_mood: minimal
 type: process
+variant: process

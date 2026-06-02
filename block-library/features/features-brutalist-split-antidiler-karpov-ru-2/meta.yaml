@@ -1,4 +1,4 @@
-category: Content
+category: features
 description: Короткий темный блок с крупным заявлением и зеленой акцентной плашкой
   преимущества.
 display_name_ru: Короткий темный блок с крупным заявлением и зеленой акцентной плашкой
@@ -21,3 +21,4 @@ slots:
   type: text
 style_mood: brutalist
 type: features
+variant: null

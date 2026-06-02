@@ -1,4 +1,4 @@
-category: Hero
+category: hero
 conversion_notes: Full-width фото с overlay. Часы работы снижают барьер. CTA на форму
   записи.
 created: 2026-05-12
@@ -35,3 +35,4 @@ source_attribution: ''
 type: hero
 use_cases:
 - local
+variant: null
