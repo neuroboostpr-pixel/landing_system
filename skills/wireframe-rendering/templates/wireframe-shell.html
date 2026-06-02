@@ -180,12 +180,27 @@
     width: 100%;
     max-width: 1240px;
   }
-  .lp-preview-stage .device.desktop iframe {
+  /* Scaler: iframe рендерится при настоящих 1280×860, потом ужимается через
+     transform:scale до ширины контейнера. Блочные vw/min-height/clamp считаются
+     от 1280px (как на лендинге), а не от узкого контейнера → нет искажений. */
+  .iframe-scaler.desktop-scaler {
+    position: relative;
     width: 100%;
-    height: 760px;
+    /* высота = 1240/1280 * 860 ≈ 833px (сохраняет пропорцию после scale) */
+    aspect-ratio: 1280 / 860;
+    overflow: hidden;
+    background: #fff;
+  }
+  .iframe-scaler.desktop-scaler iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 1280px;
+    height: 860px;
     border: 0;
     display: block;
     background: #fff;
+    transform: scale(0.96875);          /* 1240 / 1280 */
+    transform-origin: top left;
   }
   .lp-preview-stage .device-label {
     font-size: 11px;
@@ -200,8 +215,13 @@
   body.show-mobile .lp-preview-card { display: none; }
   body.show-mobile .lp-preview-card.lp-active { display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap; justify-content: center; }
   body.show-mobile .lp-preview-card .device.mobile { display: block; width: 390px; }
-  body.show-mobile .lp-preview-card .device.mobile iframe {
-    width: 100%; height: 760px; border: 0; display: block; background: #fff;
+  .iframe-scaler.mobile-scaler {
+    position: relative; width: 390px; aspect-ratio: 390 / 780;
+    overflow: hidden; background: #fff;
+  }
+  .iframe-scaler.mobile-scaler iframe {
+    position: absolute; top: 0; left: 0;
+    width: 390px; height: 780px; border: 0; display: block; background: #fff;
   }
   /* The :checked selector adds .lp-active class via CSS — we use direct display rule instead.
      Mobile toggle is enabled via JS adding body.show-mobile + per-variant class. */

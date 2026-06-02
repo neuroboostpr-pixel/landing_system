@@ -234,7 +234,13 @@ def merge_section_blocks(section: dict) -> dict:
         if stype == "info_badge":
             label = sub.get("label") or sub.get("text") or ""
             value = sub.get("value") or ""
-            badges.append((f"{label} {value}".strip() or label or value))
+            text = (f"{label} {value}".strip() or label or value)
+            # info_badge — это надзаголовок-плашка (напр. «Старт 27 июня»).
+            # Первый идёт в eyebrow; последующие — в badges[].
+            if "eyebrow" not in merged:
+                merged["eyebrow"] = text
+            else:
+                badges.append(text)
             continue
 
         if stype in ("button", "cta_button", "cta"):

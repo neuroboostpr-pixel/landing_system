@@ -853,12 +853,18 @@ def main() -> None:
                 f'<input type="radio" class="lp-variant-radio" name="b{position}" id="{rid}" '
                 f'value="{html.escape(cid, quote=True)}" data-position="{position}" {checked}>'
             )
+            # Desktop iframe рендерится при ФИКСИРОВАННОЙ ширине 1280px (где
+            # блочные vw/min-height работают как на реальном лендинге), затем
+            # масштабируется CSS transform:scale внутри .iframe-scaler — блок
+            # выглядит как на странице, только уменьшенный (не искажён).
             variant_cards.append(
                 f'<div class="lp-preview-card" data-variant="{rid}">'
                 f'<div class="device desktop"><div class="device-label">Desktop · {html.escape(cid)}</div>'
-                f'<iframe sandbox srcdoc="{html.escape(tmpl_d, quote=True)}"></iframe></div>'
+                f'<div class="iframe-scaler desktop-scaler">'
+                f'<iframe sandbox srcdoc="{html.escape(tmpl_d, quote=True)}"></iframe></div></div>'
                 f'<div class="device mobile"><div class="device-label">Mobile · {html.escape(cid)}</div>'
-                f'<iframe sandbox srcdoc="{html.escape(tmpl_m, quote=True)}"></iframe></div>'
+                f'<div class="iframe-scaler mobile-scaler">'
+                f'<iframe sandbox srcdoc="{html.escape(tmpl_m, quote=True)}"></iframe></div></div>'
                 f'</div>'
             )
             tab_labels.append(
