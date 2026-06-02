@@ -2,28 +2,28 @@
   :root {
     --lp-bg: #f5f5f5; --lp-text: #1a1a1a; --lp-accent: #333;
     --lp-border: #e0e0e0; --lp-bg-alt: #e8e8e8;
-    --font-display: 'Playfair Display', Georgia, serif;
-    --font-body: 'Inter Tight', system-ui, sans-serif;
+    --lp-font-display: 'Playfair Display', Georgia, serif;
+    --lp-font-body: 'Inter Tight', system-ui, sans-serif;
     --spacing-md: 16px; --spacing-lg: 32px;
   }
   @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;1,400&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: var(--font-body); background: var(--lp-bg); color: var(--lp-text); }
+  body { font-family: var(--lp-font-body); background: var(--lp-bg); color: var(--lp-text); }
   .capabilities-section { padding: 100px 0; }
   .wrap { max-width: 1200px; margin: 0 auto; padding: 0 64px; }
   .cap-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
   .cap-copy { }
   .kicker { font-size: 11px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--lp-accent); display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
   .kicker::before { content: ''; width: 18px; height: 1px; background: var(--lp-accent); }
-  .section-title { font-family: var(--font-body); font-weight: 800; font-size: clamp(34px, 4vw, 56px); line-height: 1.0; letter-spacing: -0.028em; margin-bottom: 20px; }
-  .section-title em { font-family: var(--font-display); font-style: italic; font-weight: 500; }
+  .section-title { font-family: var(--lp-font-body); font-weight: 800; font-size: clamp(34px, 4vw, 56px); line-height: 1.0; letter-spacing: -0.028em; margin-bottom: 20px; }
+  .section-title em { font-family: var(--lp-font-display); font-style: italic; font-weight: 500; }
   .section-lead { font-size: 15px; line-height: 1.55; color: rgba(21,20,15,0.65); margin-bottom: 28px; max-width: 40ch; }
   .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .card { padding: 24px 22px 28px; background: var(--lp-bg-alt); border-radius: 16px; box-shadow: 0 20px 40px -20px rgba(21,20,15,0.15), inset 0 0 0 1px rgba(21,20,15,0.06); position: relative; transition: transform 0.2s ease; }
   .card:hover { transform: translateY(-2px); }
-  .card-num { font-family: var(--font-display); font-style: italic; font-size: 20px; font-weight: 500; color: var(--lp-accent); margin-bottom: 14px; display: flex; justify-content: space-between; align-items: baseline; }
-  .card-tag { font-family: var(--font-body); font-size: 9.5px; color: rgba(21,20,15,0.45); letter-spacing: 0.18em; text-transform: uppercase; font-style: normal; font-weight: 500; }
-  .card h3 { font-family: var(--font-body); font-size: 20px; font-weight: 700; line-height: 1.1; letter-spacing: -0.014em; margin-bottom: 10px; }
+  .card-num { font-family: var(--lp-font-display); font-style: italic; font-size: 20px; font-weight: 500; color: var(--lp-accent); margin-bottom: 14px; display: flex; justify-content: space-between; align-items: baseline; }
+  .card-tag { font-family: var(--lp-font-body); font-size: 9.5px; color: rgba(21,20,15,0.45); letter-spacing: 0.18em; text-transform: uppercase; font-style: normal; font-weight: 500; }
+  .card h3 { font-family: var(--lp-font-body); font-size: 20px; font-weight: 700; line-height: 1.1; letter-spacing: -0.014em; margin-bottom: 10px; }
   .card p { font-size: 13px; color: rgba(21,20,15,0.6); line-height: 1.55; }
 </style>
 <section class="capabilities-section" data-block-id="ru-features-06-cards-2x2">

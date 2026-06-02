@@ -1,18 +1,18 @@
 <style>
   :root {
     --lp-bg: #f5f5f5; --lp-text: #1a1a1a; --lp-accent: #333; --lp-border: #e0e0e0;
-    --font-display: system-ui, sans-serif; --font-body: system-ui, sans-serif;
+    --lp-font-display: system-ui, sans-serif; --lp-font-body: system-ui, sans-serif;
     --spacing-md: 16px; --spacing-lg: 32px;
   }
-  body { margin: 0; font-family: var(--font-body); background:#f5f5f5; color: var(--lp-text); width: 375px; }
+  body { margin: 0; font-family: var(--lp-font-body); background:#f5f5f5; color: var(--lp-text); width: 375px; }
   .step-card { background: var(--lp-bg); min-height: 100vh; padding: 28px 20px 40px; box-sizing: border-box; }
   .progress-bar-wrap { margin-bottom: 20px; }
   .progress-label { font-size: 11px; color:#999; margin-bottom: 5px; }
   .progress-track { background:#eee; border-radius: 4px; height: 5px; }
   .progress-fill { background: var(--lp-accent); height: 5px; border-radius: 4px; width: 60%; }
-  .question-text { font-family: var(--font-display); font-size: 20px; font-weight: 700; line-height: 1.25; margin: 0 0 32px; text-align: center; }
+  .question-text { font-family: var(--lp-font-display); font-size: 20px; font-weight: 700; line-height: 1.25; margin: 0 0 32px; text-align: center; }
   .slider-value-row { display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 14px; }
-  .slider-value-display { font-family: var(--font-display); font-size: 32px; font-weight: 700; }
+  .slider-value-display { font-family: var(--lp-font-display); font-size: 32px; font-weight: 700; }
   .slider-unit { font-size: 16px; color:#555; }
   input[type=range] { width: 100%; -webkit-appearance: none; appearance: none; height: 6px; border-radius: 4px; background:#e0e0e0; outline: none; }
   input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 28px; height: 28px; border-radius: 50%; background: var(--lp-accent); border:3px solid #fff; box-shadow: 0 1px 6px rgba(0,0,0,0.2); }

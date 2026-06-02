@@ -1,15 +1,15 @@
 <style>
-  :root { --lp-bg: #f5f5f5; --lp-text: #1a1a1a; --lp-accent: #333; --lp-border: #e0e0e0; --lp-bg-alt: #e8e8e8; --font-display:'Playfair Display',Georgia,serif; --font-body:'Inter Tight',system-ui,sans-serif; }
+  :root { --lp-bg: #f5f5f5; --lp-text: #1a1a1a; --lp-accent: #333; --lp-border: #e0e0e0; --lp-bg-alt: #e8e8e8; --lp-font-display:'Playfair Display',Georgia,serif; --lp-font-body:'Inter Tight',system-ui,sans-serif; }
   @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;1,400&display=swap');
   * { box-sizing:border-box; margin:0; padding:0; }
-  body { font-family:var(--font-body); background:var(--lp-bg); color:var(--lp-text); }
+  body { font-family:var(--lp-font-body); background:var(--lp-bg); color:var(--lp-text); }
   .labs-section { padding:100px 0; }
   .wrap { max-width:1200px; margin:0 auto; padding:0 64px; }
   .labs-head { display:grid; grid-template-columns:1.4fr 1fr; gap:60px; align-items:end; margin-bottom:48px; }
   .kicker { font-size:11px; font-weight:600; letter-spacing:0.22em; text-transform:uppercase; color:var(--lp-accent); display:flex; align-items:center; gap:12px; margin-bottom:22px; }
   .kicker::before { content:''; width:18px; height:1px; background:var(--lp-accent); }
-  .section-title { font-family:var(--font-body); font-weight:800; font-size:clamp(32px,3.8vw,54px); line-height:1.0; letter-spacing:-0.028em; }
-  .section-title em { font-family:var(--font-display); font-style:italic; font-weight:500; }
+  .section-title { font-family:var(--lp-font-body); font-weight:800; font-size:clamp(32px,3.8vw,54px); line-height:1.0; letter-spacing:-0.028em; }
+  .section-title em { font-family:var(--lp-font-display); font-style:italic; font-weight:500; }
   .labs-tags { display:flex; flex-wrap:wrap; gap:10px; justify-content:flex-end; }
   .tag { padding:8px 16px; border-radius:999px; border:1px solid var(--lp-border); font-size:13px; color:rgba(21,20,15,0.7); background:transparent; white-space:nowrap; }
   .tag.active { background:var(--lp-accent); border-color:var(--lp-accent); color:#fff; }

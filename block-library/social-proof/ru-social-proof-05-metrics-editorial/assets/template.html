@@ -4,25 +4,25 @@
     --lp-text: #1a1a1a;
     --lp-accent: #333;
     --lp-border: #e0e0e0;
-    --font-display: Georgia, serif;
-    --font-body: system-ui, sans-serif;
+    --lp-font-display: Georgia, serif;
+    --lp-font-body: system-ui, sans-serif;
     --spacing-md: 16px;
     --spacing-lg: 32px;
     --radius: 24px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: var(--font-body); background: var(--lp-bg); color: var(--lp-text); }
+  body { font-family: var(--lp-font-body); background: var(--lp-bg); color: var(--lp-text); }
   .metrics-wrap { padding: 60px var(--spacing-lg); max-width: 1100px; margin: 0 auto; }
   .section-label { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; opacity: .65; margin-bottom: 24px; }
   .metrics-grid { display: grid; grid-template-columns: 1.8fr 1fr; grid-template-rows: 1fr 1fr; gap: 18px; min-height: 420px; }
   .hero-card { grid-row: 1 / -1; background: var(--lp-accent); border-radius: var(--radius); padding: 32px; display: flex; flex-direction: column; justify-content: space-between; }
-  .hero-card em { display: block; font-family: var(--font-display); font-size: 1.4rem; line-height: 1.3; font-style: italic; max-width: 420px; margin-bottom: 16px; }
-  .hero-metric { font-family: var(--font-display); font-size: 96px; line-height: .9; font-weight: 700; }
+  .hero-card em { display: block; font-family: var(--lp-font-display); font-size: 1.4rem; line-height: 1.3; font-style: italic; max-width: 420px; margin-bottom: 16px; }
+  .hero-metric { font-family: var(--lp-font-display); font-size: 96px; line-height: .9; font-weight: 700; }
   .side-card { background:var(--lp-text); border-radius: var(--radius); padding: 24px; display: flex; flex-direction: column; justify-content: flex-end; }
   .side-card.pink { background:var(--lp-bg); }
   .side-card.peach { background:var(--lp-bg); }
   .metric-label { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; opacity: .75; margin-bottom: 8px; }
-  .metric-value { font-family: var(--font-display); font-size: 4rem; line-height: 1; font-weight: 700; }
+  .metric-value { font-family: var(--lp-font-display); font-size: 4rem; line-height: 1; font-weight: 700; }
 </style>
 <section class="metrics-wrap" data-block-id="ru-social-proof-05-metrics-editorial">
 <div class="section-label">{{slot:headline}}</div>

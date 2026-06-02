@@ -4,13 +4,13 @@
     --lp-text: #1a1a1a;
     --lp-accent: #333;
     --lp-border: #e0e0e0;
-    --font-display: 'Playfair Display', 'Times New Roman', serif;
-    --font-body: 'Inter Tight', system-ui, sans-serif;
+    --lp-font-display: 'Playfair Display', 'Times New Roman', serif;
+    --lp-font-body: 'Inter Tight', system-ui, sans-serif;
     --spacing-md: 16px;
     --spacing-lg: 24px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: var(--font-body); background: var(--lp-bg); color: var(--lp-text); width: 375px; padding: 32px 20px 40px; }
+  body { font-family: var(--lp-font-body); background: var(--lp-bg); color: var(--lp-text); width: 375px; padding: 32px 20px 40px; }
   .cover-label {
     font-size: 11px;
     font-weight: 600;
@@ -38,7 +38,7 @@
     margin-bottom: 24px;
   }
   .cover-title {
-    font-family: var(--font-body);
+    font-family: var(--lp-font-body);
     font-weight: 800;
     font-size: 42px;
     line-height: 0.96;
@@ -46,7 +46,7 @@
     margin-bottom: 18px;
   }
   .cover-title em {
-    font-family: var(--font-display);
+    font-family: var(--lp-font-display);
     font-style: italic;
     font-weight: 500;
     color: var(--lp-accent);
@@ -54,13 +54,13 @@
   .cover-sub { font-size: 15px; line-height: 1.55; color: rgba(21,20,15,0.65); margin-bottom: 28px; }
   .btn-primary {
     display: block; width: 100%; padding: 14px 24px; border-radius: 999px;
-    background: var(--lp-accent); color:#fff; font-family: var(--font-body);
+    background: var(--lp-accent); color:#fff; font-family: var(--lp-font-body);
     font-size: 15px; font-weight: 600; text-decoration: none; text-align: center;
     border: none; margin-bottom: 10px;
   }
   .btn-ghost {
     display: block; width: 100%; padding: 14px 24px; border-radius: 999px;
-    background: transparent; color: var(--lp-text); font-family: var(--font-body);
+    background: transparent; color: var(--lp-text); font-family: var(--lp-font-body);
     font-size: 15px; font-weight: 500; text-decoration: none; text-align: center;
     border: 1px solid var(--lp-border);
   }

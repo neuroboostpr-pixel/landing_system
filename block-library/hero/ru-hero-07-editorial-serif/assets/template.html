@@ -4,14 +4,14 @@
     --lp-text: #1a1a1a;
     --lp-accent: #333;
     --lp-border: #e0e0e0;
-    --font-display: 'Playfair Display', 'Times New Roman', serif;
-    --font-body: 'Inter', system-ui, sans-serif;
+    --lp-font-display: 'Playfair Display', 'Times New Roman', serif;
+    --lp-font-body: 'Inter', system-ui, sans-serif;
     --spacing-md: 16px;
     --spacing-lg: 32px;
   }
   @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,400;1,500;1,600;1,700&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: var(--font-body); background: var(--lp-bg); color: var(--lp-text); }
+  body { font-family: var(--lp-font-body); background: var(--lp-bg); color: var(--lp-text); }
   .hero {
     display: grid;
     grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
@@ -57,7 +57,7 @@
     margin-bottom: 24px;
   }
   .headline em {
-    font-family: var(--font-display);
+    font-family: var(--lp-font-display);
     font-style: italic;
     font-weight: 500;
     letter-spacing: -0.018em;
@@ -171,7 +171,7 @@
     margin: 0 auto;
   }
   .sec-rule .roman {
-    font-family: var(--font-display);
+    font-family: var(--lp-font-display);
     font-style: italic;
     color: var(--lp-accent);
     font-size: 14px;

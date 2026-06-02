@@ -4,19 +4,19 @@
     --lp-text: #1a1a1a;
     --lp-accent: #333;
     --lp-border: #e0e0e0;
-    --font-display: system-ui, sans-serif;
-    --font-body: system-ui, sans-serif;
+    --lp-font-display: system-ui, sans-serif;
+    --lp-font-body: system-ui, sans-serif;
     --spacing-md: 16px;
     --spacing-lg: 32px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: var(--font-body); background: var(--lp-bg); color: var(--lp-text); }
+  body { font-family: var(--lp-font-body); background: var(--lp-bg); color: var(--lp-text); }
   .hero { display: grid; grid-template-columns: 140px 1fr 340px; min-height: 580px; border: 1px solid var(--lp-border); }
   .hero-rail { background: var(--lp-accent); padding: 24px 18px; display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid var(--lp-border); }
   .rail-label { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; line-height: 1.5; font-weight: 700; }
   .hero-main { padding: 40px; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid var(--lp-border); }
   .kicker { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; opacity: .6; margin-bottom: 18px; }
-  .headline { font-family: var(--font-display); font-size: 72px; line-height: .92; letter-spacing: -.04em; text-transform: uppercase; margin-bottom: 20px; }
+  .headline { font-family: var(--lp-font-display); font-size: 72px; line-height: .92; letter-spacing: -.04em; text-transform: uppercase; margin-bottom: 20px; }
   .subhead { font-size: 18px; line-height: 1.45; max-width: 520px; opacity: .85; margin-bottom: 32px; }
   .cta-btn { display: inline-block; padding: 14px 32px; background: var(--lp-text); color: var(--lp-bg); font-weight: 700; font-size: 14px; letter-spacing: .06em; text-decoration: none; text-transform: uppercase; }
   .hero-metrics { padding: 28px 28px 28px 0; display: flex; flex-direction: column; gap: 14px; }

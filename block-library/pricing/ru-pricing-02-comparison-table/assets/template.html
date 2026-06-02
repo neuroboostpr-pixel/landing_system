@@ -4,13 +4,13 @@
     --lp-text: #1a1a1a;
     --lp-accent: #333;
     --lp-border: #e0e0e0;
-    --font-display: system-ui, sans-serif;
-    --font-body: system-ui, sans-serif;
+    --lp-font-display: system-ui, sans-serif;
+    --lp-font-body: system-ui, sans-serif;
     --spacing-md: 16px;
     --spacing-lg: 32px;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; font-family: var(--font-body); background: var(--lp-bg); color: var(--lp-text); }
+  body { margin: 0; font-family: var(--lp-font-body); background: var(--lp-bg); color: var(--lp-text); }
 
   .pricing-table-section {
     padding: calc(var(--spacing-lg) * 2) calc(var(--spacing-lg) * 2);
@@ -18,7 +18,7 @@
   }
 
   .section-headline {
-    font-family: var(--font-display);
+    font-family: var(--lp-font-display);
     font-size: 36px;
     font-weight: 800;
     margin: 0 0 var(--spacing-lg);
@@ -38,7 +38,7 @@
   /* Header row */
   thead th {
     padding: 20px 16px;
-    font-family: var(--font-display);
+    font-family: var(--lp-font-display);
     font-weight: 700;
     border-bottom: 2px solid var(--lp-border);
     vertical-align: bottom;

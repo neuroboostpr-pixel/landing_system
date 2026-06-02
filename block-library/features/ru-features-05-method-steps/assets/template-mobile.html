@@ -2,15 +2,15 @@
   :root {
     --lp-bg: #f5f5f5; --lp-text: #1a1a1a; --lp-accent: #333;
     --lp-border: #e0e0e0;
-    --font-display: 'Playfair Display', Georgia, serif;
-    --font-body: 'Inter Tight', system-ui, sans-serif;
+    --lp-font-display: 'Playfair Display', Georgia, serif;
+    --lp-font-body: 'Inter Tight', system-ui, sans-serif;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: var(--font-body); background: var(--lp-bg); color: var(--lp-text); width: 375px; padding: 40px 20px; }
+  body { font-family: var(--lp-font-body); background: var(--lp-bg); color: var(--lp-text); width: 375px; padding: 40px 20px; }
   .kicker { font-size: 11px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--lp-accent); display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
   .kicker::before { content: ''; width: 14px; height: 1px; background: var(--lp-accent); }
   .section-title { font-size: 36px; font-weight: 800; letter-spacing: -0.028em; margin-bottom: 16px; }
-  .section-title em { font-family: var(--font-display); font-style: italic; font-weight: 500; }
+  .section-title em { font-family: var(--lp-font-display); font-style: italic; font-weight: 500; }
   .section-lead { font-size: 15px; line-height: 1.55; color: rgba(21,20,15,0.65); margin-bottom: 36px; }
   .step { border-top: 1px solid var(--lp-border); padding: 20px 0; }
   .step-num { font-size: 24px; font-weight: 700; color: var(--lp-accent); margin-bottom: 12px; }

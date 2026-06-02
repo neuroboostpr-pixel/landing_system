@@ -6,14 +6,14 @@
     --lp-border: #e0e0e0;
     --lp-accent: #333;
     --lp-accent: #333;
-    --font-display: 'Syne', 'Inter Tight', system-ui, sans-serif;
-    --font-body: 'DM Sans', system-ui, sans-serif;
+    --lp-font-display: 'Syne', 'Inter Tight', system-ui, sans-serif;
+    --lp-font-body: 'DM Sans', system-ui, sans-serif;
     --spacing-md: 16px;
     --spacing-lg: 32px;
   }
   @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: var(--font-body); background: var(--lp-bg); color: var(--lp-text); min-height: 100vh; display: flex; flex-direction: column; }
+  body { font-family: var(--lp-font-body); background: var(--lp-bg); color: var(--lp-text); min-height: 100vh; display: flex; flex-direction: column; }
   .hero-upper {
     flex: 0 0 auto;
     display: flex;
@@ -32,7 +32,7 @@
     margin-bottom: 20px;
   }
   .headline {
-    font-family: var(--font-display);
+    font-family: var(--lp-font-display);
     font-weight: 800;
     font-size: clamp(52px, 7vw, 88px);
     letter-spacing: -0.03em;
@@ -61,7 +61,7 @@
     flex: 1;
     min-width: 0;
     padding: 14px 18px;
-    font-family: var(--font-body);
+    font-family: var(--lp-font-body);
     font-size: 15px;
     color: var(--lp-text);
     background: transparent;
@@ -73,7 +73,7 @@
   .form-row button {
     flex-shrink: 0;
     padding: 14px 24px;
-    font-family: var(--font-body);
+    font-family: var(--lp-font-body);
     font-size: 15px;
     font-weight: 500;
     color:#fff;

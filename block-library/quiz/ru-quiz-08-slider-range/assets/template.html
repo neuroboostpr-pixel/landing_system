@@ -4,21 +4,21 @@
     --lp-text: #1a1a1a;
     --lp-accent: #333;
     --lp-border: #e0e0e0;
-    --font-display: system-ui, sans-serif;
-    --font-body: system-ui, sans-serif;
+    --lp-font-display: system-ui, sans-serif;
+    --lp-font-body: system-ui, sans-serif;
     --spacing-md: 16px;
     --spacing-lg: 32px;
   }
-  body { margin: 0; font-family: var(--font-body); background:#f5f5f5; color: var(--lp-text); display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+  body { margin: 0; font-family: var(--lp-font-body); background:#f5f5f5; color: var(--lp-text); display: flex; align-items: center; justify-content: center; min-height: 100vh; }
   .step-card { background: var(--lp-bg); border-radius: 16px; padding: 48px 48px 56px; max-width: 560px; width: 100%; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
   .progress-bar-wrap { margin-bottom: 28px; }
   .progress-label { font-size: 12px; color:#999; margin-bottom: 6px; }
   .progress-track { background:#eee; border-radius: 4px; height: 6px; }
   .progress-fill { background: var(--lp-accent); height: 6px; border-radius: 4px; width: 60%; }
-  .question-text { font-family: var(--font-display); font-size: 24px; font-weight: 700; line-height: 1.25; margin: 0 0 40px; text-align: center; }
+  .question-text { font-family: var(--lp-font-display); font-size: 24px; font-weight: 700; line-height: 1.25; margin: 0 0 40px; text-align: center; }
   .slider-wrap { padding: 0 8px; }
   .slider-value-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 16px; }
-  .slider-value-display { font-family: var(--font-display); font-size: 36px; font-weight: 700; }
+  .slider-value-display { font-family: var(--lp-font-display); font-size: 36px; font-weight: 700; }
   .slider-unit { font-size: 18px; color:#555; }
   input[type=range] { width: 100%; -webkit-appearance: none; appearance: none; height: 6px; border-radius: 4px; background:#e0e0e0; outline: none; cursor: pointer; }
   input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; border-radius: 50%; background: var(--lp-accent); cursor: pointer; border: 3px solid var(--lp-bg); box-shadow: 0 1px 6px rgba(0,0,0,0.2); }

@@ -28,10 +28,12 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 LIB = REPO_ROOT / "block-library"
 SKIP_DIRS = {"_patterns", "_shapes", "_styles", "references"}
 
-# --color-* / прочие старые имена → канонические --lp-* по роли.
+# --color-* / --font-* / прочие старые имена → канонические --lp-* по роли.
+# ВАЖНО: длинные ключи раньше коротких (font-display до font), иначе подстрока
+# съест хвост. Переименование применяется по \b-границе.
 VAR_RENAME = {
-    "color-bg": "lp-bg",
     "color-bg-alt": "lp-bg-alt",
+    "color-bg": "lp-bg",
     "color-surface": "lp-bg-alt",
     "color-bone": "lp-bg-alt",
     "color-fg": "lp-text",
@@ -42,6 +44,9 @@ VAR_RENAME = {
     "color-deco": "lp-accent",
     "color-stripe": "lp-accent",
     "color-border": "lp-border",
+    # шрифты — те же канонические --lp-font-* (B36 их пропустил).
+    "font-display": "lp-font-display",
+    "font-body": "lp-font-body",
 }
 
 # нейтральные lo-fi дефолты по роли (то, что окажется в :root).

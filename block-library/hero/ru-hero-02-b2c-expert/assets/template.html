@@ -4,19 +4,19 @@
     --lp-text: #1a1a1a;
     --lp-accent: #333;
     --lp-border: #e0e0e0;
-    --font-display: system-ui, sans-serif;
-    --font-body: system-ui, sans-serif;
+    --lp-font-display: system-ui, sans-serif;
+    --lp-font-body: system-ui, sans-serif;
     --spacing-md: 16px;
     --spacing-lg: 32px;
   }
-  body { margin: 0; font-family: var(--font-body); background: var(--lp-bg); color: var(--lp-text); }
+  body { margin: 0; font-family: var(--lp-font-body); background: var(--lp-bg); color: var(--lp-text); }
   .hero { display: grid; grid-template-columns: 340px 1fr; min-height: 560px; align-items: center; gap: var(--spacing-lg); padding: var(--spacing-lg); max-width: 1200px; margin: 0 auto; }
   .expert-col { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; }
   .expert-photo { width: 220px; height: 220px; border-radius: 50%; background:var(--lp-bg); border: 3px solid var(--lp-border); display: flex; align-items: center; justify-content: center; font-size: 11px; color:#666; text-transform: uppercase; }
-  .expert-name { font-family: var(--font-display); font-size: 22px; font-weight: 700; margin: 0; }
+  .expert-name { font-family: var(--lp-font-display); font-size: 22px; font-weight: 700; margin: 0; }
   .expert-credentials { font-size: 15px; color:#555; margin: 0; }
   .text-col { display: flex; flex-direction: column; justify-content: center; }
-  .headline { font-family: var(--font-display); font-size: 40px; line-height: 1.1; margin: 0 0 16px; }
+  .headline { font-family: var(--lp-font-display); font-size: 40px; line-height: 1.1; margin: 0 0 16px; }
   .subhead { font-size: 18px; color:#444; margin: 0 0 28px; line-height: 1.5; }
   .cta { display: inline-block; padding: 16px 32px; background: var(--lp-accent); color:#fff; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px; }
 </style>
