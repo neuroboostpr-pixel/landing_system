@@ -1,9 +1,9 @@
 version: 3
-updated: '2026-06-01'
+updated: '2026-06-02'
 blocks:
 - id: contacts-001
   path: contacts/contacts-001/
-  category: footer
+  category: contacts
   type: contacts
   layout_pattern: brutalist
   signature: contacts|brutalist|[content]|bg:false
@@ -16,7 +16,7 @@ blocks:
   source: cleaned
 - id: contacts-002
   path: contacts/contacts-002/
-  category: footer
+  category: contacts
   type: contacts
   layout_pattern: grid
   signature: contacts|grid|[content]|bg:false
@@ -29,7 +29,7 @@ blocks:
   source: cleaned
 - id: contacts-003
   path: contacts/contacts-003/
-  category: footer
+  category: contacts
   type: contacts
   layout_pattern: split
   signature: contacts|split|[content]|bg:false
@@ -40,9 +40,24 @@ blocks:
   - name: content
     type: text
   source: cleaned
+- id: contacts-corporate-split-portfolio-kdm1-ru-16
+  path: contacts/contacts-corporate-split-portfolio-kdm1-ru-16/
+  category: contacts
+  type: contacts
+  layout_pattern: split
+  signature: contacts|default|[content]|bg:false
+  display_name_ru: Финальный контактный экран с крупным заголовком, формой выбора
+    времени и яркой к
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
 - id: cta-001
   path: cta/cta-001/
-  category: conversion
+  category: cta
   type: cta
   layout_pattern: split
   signature: cta|split|[badge,heading,subhead,primary-cta-label,primary-cta-link,secondary-cta-label,secondary-cta-link,background-image,background-image-mobile,background-image-alt]|bg:true
@@ -73,7 +88,7 @@ blocks:
   source: cleaned
 - id: cta-002
   path: cta/cta-002/
-  category: conversion
+  category: cta
   type: cta
   layout_pattern: brutalist
   signature: cta|brutalist|[content]|bg:false
@@ -86,7 +101,7 @@ blocks:
   source: cleaned
 - id: cta-003
   path: cta/cta-003/
-  category: conversion
+  category: cta
   type: cta
   layout_pattern: cinematic
   signature: cta|cinematic|[content]|bg:false
@@ -99,7 +114,7 @@ blocks:
   source: cleaned
 - id: cta-004
   path: cta/cta-004/
-  category: conversion
+  category: cta
   type: cta
   layout_pattern: default
   signature: cta|default|[content]|bg:false
@@ -112,7 +127,7 @@ blocks:
   source: cleaned
 - id: cta-005
   path: cta/cta-005/
-  category: conversion
+  category: cta
   type: cta
   layout_pattern: grid
   signature: cta|grid|[content]|bg:false
@@ -125,7 +140,7 @@ blocks:
   source: cleaned
 - id: cta-006
   path: cta/cta-006/
-  category: conversion
+  category: cta
   type: cta
   layout_pattern: split
   signature: cta|split|[content]|bg:false
@@ -138,7 +153,7 @@ blocks:
   source: cleaned
 - id: cta-007
   path: cta/cta-007/
-  category: conversion
+  category: cta
   type: cta
   layout_pattern: minimal
   signature: cta|minimal|[content]|bg:false
@@ -149,58 +164,664 @@ blocks:
   - name: content
     type: text
   source: cleaned
+- id: cta-cinematic-split-portfolio-kdm1-ru-9
+  path: cta/cta-cinematic-split-portfolio-kdm1-ru-9/
+  category: cta
+  type: cta
+  layout_pattern: split
+  signature: cta|default|[content]|bg:false
+  display_name_ru: Темный эмоциональный блок с крупной иллюстрацией действия и сильным
+    текстовым ак
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: cta-corporate-centered-zilant-group-9
+  path: cta/cta-corporate-centered-zilant-group-9/
+  category: cta
+  type: cta
+  layout_pattern: centered
+  signature: cta|default|[content]|bg:false
+  display_name_ru: Финальный призыв с крупным заголовком, коротким текстом, красной
+    кнопкой и размы
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: cta-corporate-split-project21993216-tild-6
+  path: cta/cta-corporate-split-project21993216-tild-6/
+  category: cta
+  type: cta
+  layout_pattern: split
+  signature: cta|default|[content]|bg:false
+  display_name_ru: Горизонтальный баннер с коротким оффером, поясняющим текстом и
+    кнопкой справа.
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: cta-corporate-stacked-romanmelnikov-tilda-13
+  path: cta/cta-corporate-stacked-romanmelnikov-tilda-13/
+  category: cta
+  type: cta
+  layout_pattern: stacked
+  signature: cta|default|[content]|bg:false
+  display_name_ru: Финальный призыв с крупным текстом, контактной строкой и компактной
+    формой в рам
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: cta-minimal-split-portfolio-kdm1-ru-8
+  path: cta/cta-minimal-split-portfolio-kdm1-ru-8/
+  category: cta
+  type: cta
+  layout_pattern: split
+  signature: cta|default|[content]|bg:false
+  display_name_ru: Контактная форма в светлой карточке рядом с lifestyle-фото и заметной
+    кнопкой от
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: cta-minimal-split-project21993216-tild-8
+  path: cta/cta-minimal-split-project21993216-tild-8/
+  category: cta
+  type: cta
+  layout_pattern: split
+  signature: cta|default|[content]|bg:false
+  display_name_ru: Короткий подтверждающий баннер с спокойным фоном и одной кнопкой
+    действия.
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: cta-technical-centered-antidiler-karpov-ru-5
+  path: cta/cta-technical-centered-antidiler-karpov-ru-5/
+  category: cta
+  type: cta
+  layout_pattern: centered
+  signature: cta|default|[content]|bg:false
+  display_name_ru: Блок подбора запчастей с сильным заголовком, формой в одну строку
+    и оранжевой кн
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: cta-technical-split-medregistrant-ru-7
+  path: cta/cta-technical-split-medregistrant-ru-7/
+  category: cta
+  type: cta
+  layout_pattern: split
+  signature: cta|default|[content]|bg:false
+  display_name_ru: Узкий CTA-блок с сильным заголовком слева и размытым тематическим
+    изображением с
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: ru-cta-01-callback-tg-max
+  path: cta/ru-cta-01-callback-tg-max/
+  category: cta
+  type: cta
+  layout_pattern: split
+  signature: cta|default|[content]|bg:false
+  display_name_ru: '📞 CTA: Telegram / Max / Перезвоните'
+  created: 2026-05-12
+  has_bg_image: false
+  slots:
+  - max_chars: 80
+    name: headline
+    required: true
+    type: text
+  - max_chars: 140
+    name: subhead
+    required: false
+    type: text
+  - default_text: Написать в Telegram
+    name: tg-cta
+    required: true
+    type: cta
+  - default_text: Написать в Max
+    name: max-cta
+    required: true
+    type: cta
+  - default_text: Перезвоните мне
+    name: callback-cta
+    required: true
+    type: cta
+  source: manual
+- id: ru-cta-02-banner-stripe
+  path: cta/ru-cta-02-banner-stripe/
+  category: cta
+  type: cta
+  layout_pattern: split
+  signature: cta|default|[content]|bg:false
+  display_name_ru: 🟧 Баннер-CTA на акцентном фоне
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 70
+    name: headline
+    required: true
+    type: text
+  - max_chars: 120
+    name: subhead
+    required: false
+    type: text
+  - default_text: Оставить заявку
+    name: primary-cta
+    required: true
+    type: cta
+  source: manual
+- id: ru-cta-03-urgency-scarcity
+  path: cta/ru-cta-03-urgency-scarcity/
+  category: cta
+  type: cta
+  layout_pattern: split
+  signature: cta|default|[content]|bg:false
+  display_name_ru: ⏰ Полоса срочности — осталось X мест
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 60
+    name: urgency-label
+    required: true
+    type: text
+  - max_chars: 5
+    name: seats-count
+    required: false
+    type: text
+  - max_chars: 30
+    name: deadline-date
+    required: false
+    type: text
+  - max_chars: 120
+    name: subhead
+    required: false
+    type: text
+  - default_text: Успеть получить
+    name: primary-cta
+    required: true
+    type: cta
+  source: manual
+- id: ru-cta-04-lead-magnet
+  path: cta/ru-cta-04-lead-magnet/
+  category: cta
+  type: cta
+  layout_pattern: split
+  signature: cta|default|[content]|bg:false
+  display_name_ru: 🎁 Лид-магнит — получите бесплатно
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 60
+    name: freebie-title
+    required: true
+    type: text
+  - max_chars: 200
+    name: freebie-description
+    required: true
+    type: text
+  - max_chars: 20
+    name: phone-input
+    required: true
+    type: text
+  - default_text: Получить бесплатно
+    name: primary-cta
+    required: true
+    type: cta
+  - max_chars: 200
+    name: agreement-text
+    required: false
+    type: text
+  source: manual
+- id: ru-cta-05-login-cta
+  path: cta/ru-cta-05-login-cta/
+  category: cta
+  type: cta
+  layout_pattern: split
+  signature: cta|default|[content]|bg:false
+  display_name_ru: 🔐 CTA — форма регистрации/записи
+  created: 2026-05-13
+  has_bg_image: false
+  slots:
+  - name: brand-icon
+    required: false
+    type: icon
+  - max_chars: 50
+    name: headline
+    required: true
+    type: text
+  - max_chars: 120
+    name: subhead
+    required: true
+    type: text
+  - max_chars: 40
+    name: input-placeholder
+    required: true
+    type: text
+  - default_text: Получить доступ
+    name: primary-cta
+    required: true
+    type: cta
+  - max_chars: 80
+    name: trust-note
+    required: false
+    type: text
+  source: opendesign
+- id: ru-cta-06-editorial-paper
+  path: cta/ru-cta-06-editorial-paper/
+  category: cta
+  type: cta
+  layout_pattern: split
+  signature: cta|default|[content]|bg:false
+  display_name_ru: Редакционный CTA — бежевый, курсив, пульс, нумерация
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 10
+    name: section-num
+    required: false
+    type: text
+  - max_chars: 40
+    name: section-label
+    required: false
+    type: text
+  - max_chars: 6
+    name: section-index
+    required: false
+    type: text
+  - max_chars: 50
+    name: kicker
+    required: false
+    type: text
+  - max_chars: 80
+    name: headline
+    required: true
+    type: text
+  - max_chars: 220
+    name: subhead
+    required: false
+    type: text
+  - default_text: Оставить заявку
+    name: primary-cta
+    required: true
+    type: cta
+  - default_text: Посмотреть кейсы
+    name: secondary-cta
+    required: false
+    type: cta
+  - max_chars: 60
+    name: footer-note
+    required: false
+    type: text
+  - mobile_ratio: skip
+    name: cta-image
+    ratio: '1:1'
+    required: false
+    type: photo
+  source: opendesign
+- id: ru-cta-07-accent-bg
+  path: cta/ru-cta-07-accent-bg/
+  category: cta
+  type: cta
+  layout_pattern: split
+  signature: cta|default|[content]|bg:false
+  display_name_ru: CTA на акцентном фоне — контраст, минимум элементов
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 70
+    name: headline
+    required: true
+    type: text
+  - max_chars: 180
+    name: subhead
+    required: false
+    type: text
+  - default_text: Начать сейчас
+    name: primary-cta
+    required: true
+    type: cta
+  - max_chars: 100
+    name: footnote
+    required: false
+    type: text
+  source: opendesign
 - id: faq-corporate-stacked-portfolio-kdm1-ru-15
   path: faq/faq-corporate-stacked-portfolio-kdm1-ru-15/
   category: faq
   type: faq
   layout_pattern: stacked
-  signature: ''
+  signature: faq|default|[content]|bg:false
   display_name_ru: Компактный блок вопросов с аккордеонными строками на темном фоне.
-  description: Компактный блок вопросов с аккордеонными строками на темном фоне.
-  has_animation: false
-  imported:
-    import_method: codex-block-generation
-    imported_at: '2026-05-16'
-    source_url: https://portfolio.kdm1.ru/upload/iblock/b31/i0qylig13hzo7ow4qcpia0qhtn3i87pk/Onlai_n_shkola-Dmitriya-Vykhodtseva.pdf
-  niches_suitable:
-  - services
-  - education
-  - b2b-saas
-  - ecommerce
-  ru_market: true
+  created: '2026-06-02'
+  has_bg_image: false
   slots:
   - name: heading
     required: true
     type: text
-  style_mood: corporate
+  source: auto-generated
 - id: faq-minimal-stacked-project21993216-tild-11
   path: faq/faq-minimal-stacked-project21993216-tild-11/
   category: faq
   type: faq
   layout_pattern: stacked
-  signature: ''
+  signature: faq|default|[content]|bg:false
   display_name_ru: Аккордеон частых вопросов в белых строках с иконками раскрытия
     справа.
-  description: Аккордеон частых вопросов в белых строках с иконками раскрытия справа.
-  has_animation: false
-  imported:
-    import_method: codex-block-generation
-    imported_at: '2026-05-16'
-    source_url: https://project21993216.tilda.ws/
-  niches_suitable:
-  - services
-  - ecommerce
-  - education
-  - medical
-  ru_market: true
+  created: '2026-06-02'
+  has_bg_image: false
   slots:
   - name: heading
     required: true
     type: text
-  style_mood: minimal
+  source: auto-generated
+- id: faq-minimal-stacked-sskrusgun-ru-13
+  path: faq/faq-minimal-stacked-sskrusgun-ru-13/
+  category: faq
+  type: faq
+  layout_pattern: stacked
+  signature: faq|default|[content]|bg:false
+  display_name_ru: Аккордеон вопросов на светлом фоне с компактными строками и иконками
+    раскрытия.
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: ru-faq-01-accordion
+  path: faq/ru-faq-01-accordion/
+  category: faq
+  type: faq
+  layout_pattern: stacked
+  signature: faq|default|[content]|bg:false
+  display_name_ru: ❓ FAQ-аккордеон 6 вопросов
+  created: 2026-05-12
+  has_bg_image: false
+  slots:
+  - max_chars: 60
+    name: headline
+    required: true
+    type: text
+  - max_chars: 100
+    name: faq-1-q
+    required: true
+    type: text
+  - max_chars: 400
+    name: faq-1-a
+    required: true
+    type: text
+  - max_chars: 100
+    name: faq-2-q
+    required: true
+    type: text
+  - max_chars: 400
+    name: faq-2-a
+    required: true
+    type: text
+  - max_chars: 100
+    name: faq-3-q
+    required: true
+    type: text
+  - max_chars: 400
+    name: faq-3-a
+    required: true
+    type: text
+  - max_chars: 100
+    name: faq-4-q
+    required: false
+    type: text
+  - max_chars: 400
+    name: faq-4-a
+    required: false
+    type: text
+  - max_chars: 100
+    name: faq-5-q
+    required: false
+    type: text
+  - max_chars: 400
+    name: faq-5-a
+    required: false
+    type: text
+  - max_chars: 100
+    name: faq-6-q
+    required: false
+    type: text
+  - max_chars: 400
+    name: faq-6-a
+    required: false
+    type: text
+  source: manual
+- id: ru-faq-02-why-us
+  path: faq/ru-faq-02-why-us/
+  category: faq
+  type: faq
+  layout_pattern: stacked
+  signature: faq|default|[content]|bg:false
+  display_name_ru: ❓ FAQ — Почему именно мы?
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 60
+    name: headline
+    required: true
+    type: text
+  - max_chars: 100
+    name: faq-1-q
+    required: true
+    type: text
+  - max_chars: 400
+    name: faq-1-a
+    required: true
+    type: text
+  - max_chars: 100
+    name: faq-2-q
+    required: true
+    type: text
+  - max_chars: 400
+    name: faq-2-a
+    required: true
+    type: text
+  - max_chars: 100
+    name: faq-3-q
+    required: true
+    type: text
+  - max_chars: 400
+    name: faq-3-a
+    required: true
+    type: text
+  - max_chars: 100
+    name: faq-4-q
+    required: false
+    type: text
+  - max_chars: 400
+    name: faq-4-a
+    required: false
+    type: text
+  - max_chars: 100
+    name: faq-5-q
+    required: false
+    type: text
+  - max_chars: 400
+    name: faq-5-a
+    required: false
+    type: text
+  source: manual
+- id: ru-faq-03-searchable
+  path: faq/ru-faq-03-searchable/
+  category: faq
+  type: faq
+  layout_pattern: stacked
+  signature: faq|default|[content]|bg:false
+  display_name_ru: ❓ FAQ с поиском и категориями
+  created: 2026-05-13
+  has_bg_image: false
+  slots:
+  - max_chars: 60
+    name: headline
+    required: true
+    type: text
+  - max_chars: 120
+    name: subhead
+    required: false
+    type: text
+  - max_chars: 30
+    name: faq-cat-1
+    required: true
+    type: text
+  - max_chars: 30
+    name: faq-cat-2
+    required: false
+    type: text
+  - max_chars: 30
+    name: faq-cat-3
+    required: false
+    type: text
+  - max_chars: 120
+    name: faq-1-q
+    required: true
+    type: text
+  - max_chars: 500
+    name: faq-1-a
+    required: true
+    type: text
+  - max_chars: 120
+    name: faq-2-q
+    required: true
+    type: text
+  - max_chars: 500
+    name: faq-2-a
+    required: true
+    type: text
+  - max_chars: 120
+    name: faq-3-q
+    required: true
+    type: text
+  - max_chars: 500
+    name: faq-3-a
+    required: true
+    type: text
+  - default_text: Задать вопрос
+    name: footer-cta
+    required: false
+    type: cta
+  source: opendesign
+- id: ru-faq-04-pricing-faq
+  path: faq/ru-faq-04-pricing-faq/
+  category: faq
+  type: faq
+  layout_pattern: stacked
+  signature: faq|default|[content]|bg:false
+  display_name_ru: FAQ — 5 вопросов без аккордеона, белый фон
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 40
+    name: section-label
+    required: false
+    type: text
+  - max_chars: 60
+    name: headline
+    required: true
+    type: text
+  - max_chars: 120
+    name: q-1
+    required: true
+    type: text
+  - max_chars: 400
+    name: a-1
+    required: true
+    type: text
+  - max_chars: 120
+    name: q-2
+    required: true
+    type: text
+  - max_chars: 400
+    name: a-2
+    required: true
+    type: text
+  - max_chars: 120
+    name: q-3
+    required: true
+    type: text
+  - max_chars: 400
+    name: a-3
+    required: true
+    type: text
+  - max_chars: 120
+    name: q-4
+    required: false
+    type: text
+  - max_chars: 400
+    name: a-4
+    required: false
+    type: text
+  - max_chars: 120
+    name: q-5
+    required: false
+    type: text
+  - max_chars: 400
+    name: a-5
+    required: false
+    type: text
+  source: opendesign
+- id: unknown-001
+  path: faq/unknown-001/
+  category: faq
+  type: demo
+  layout_pattern: default
+  signature: unknown|default|[content]|bg:false
+  display_name_ru: 'faq: default'
+  created: '2026-06-01'
+  has_bg_image: false
+  slots:
+  - name: content
+    type: text
+  source: cleaned
+- id: unknown-002
+  path: faq/unknown-002/
+  category: faq
+  type: demo
+  layout_pattern: minimal
+  signature: unknown|minimal|[content]|bg:false
+  display_name_ru: 'faq: minimal'
+  created: '2026-06-01'
+  has_bg_image: false
+  slots:
+  - name: content
+    type: text
+  source: cleaned
 - id: features-001
   path: features/features-001/
-  category: content
+  category: features
   type: features
   layout_pattern: brutalist
   signature: features|brutalist|[content]|bg:false
@@ -213,7 +834,7 @@ blocks:
   source: cleaned
 - id: features-002
   path: features/features-002/
-  category: content
+  category: features
   type: features
   layout_pattern: cinematic
   signature: features|cinematic|[content]|bg:false
@@ -226,7 +847,7 @@ blocks:
   source: cleaned
 - id: features-003
   path: features/features-003/
-  category: content
+  category: features
   type: features
   layout_pattern: grid
   signature: features|grid|[content]|bg:false
@@ -239,7 +860,7 @@ blocks:
   source: cleaned
 - id: features-004
   path: features/features-004/
-  category: content
+  category: features
   type: features
   layout_pattern: split
   signature: features|split|[content]|bg:false
@@ -252,7 +873,7 @@ blocks:
   source: cleaned
 - id: features-005
   path: features/features-005/
-  category: content
+  category: features
   type: features
   layout_pattern: default
   signature: features|default|[content]|bg:false
@@ -265,7 +886,7 @@ blocks:
   source: cleaned
 - id: features-006
   path: features/features-006/
-  category: content
+  category: features
   type: features
   layout_pattern: minimal
   signature: features|minimal|[content]|bg:false
@@ -276,6 +897,589 @@ blocks:
   - name: content
     type: text
   source: cleaned
+- id: features-brutalist-split-antidiler-karpov-ru-2
+  path: features/features-brutalist-split-antidiler-karpov-ru-2/
+  category: features
+  type: features
+  layout_pattern: split
+  signature: features|default|[content]|bg:false
+  display_name_ru: Короткий темный блок с крупным заявлением и зеленой акцентной плашкой
+    преимущест
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: features-corporate-grid-3-opt-ecowash-ru-8
+  path: features/features-corporate-grid-3-opt-ecowash-ru-8/
+  category: features
+  type: features
+  layout_pattern: grid-3
+  signature: features|default|[content]|bg:false
+  display_name_ru: Блок преимуществ с шестью пронумерованными карточками и нижней
+    полосой с призыво
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: features-corporate-split-sskrusgun-ru-8
+  path: features/features-corporate-split-sskrusgun-ru-8/
+  category: features
+  type: features
+  layout_pattern: split
+  signature: features|default|[content]|bg:false
+  display_name_ru: Двухколоночный блок для корпоративного предложения с чек-листом
+    преимуществ и ин
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: features-editorial-grid-2-romanmelnikov-tilda-9
+  path: features/features-editorial-grid-2-romanmelnikov-tilda-9/
+  category: features
+  type: features
+  layout_pattern: grid-2
+  signature: features|default|[content]|bg:false
+  display_name_ru: Секция рисков с гигантским заголовком, контурной карточкой и несколькими
+    поясняю
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: features-editorial-split-project21993216-tild-7
+  path: features/features-editorial-split-project21993216-tild-7/
+  category: features
+  type: features
+  layout_pattern: split
+  signature: features|default|[content]|bg:false
+  display_name_ru: Раздел с сильным заголовком, текстовым списком слева и крупным
+    предметным фото с
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: features-editorial-stacked-romanmelnikov-tilda-2
+  path: features/features-editorial-stacked-romanmelnikov-tilda-2/
+  category: features
+  type: features
+  layout_pattern: stacked
+  signature: features|default|[content]|bg:false
+  display_name_ru: Плотный вводный блок с широкой плашкой, крупным тезисом и короткими
+    текстовыми к
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: features-technical-grid-3-portfolio-kdm1-ru-2
+  path: features/features-technical-grid-3-portfolio-kdm1-ru-2/
+  category: features
+  type: features
+  layout_pattern: grid-3
+  signature: features|default|[content]|bg:false
+  display_name_ru: Темная секция с крупным заголовком и сеткой проблемных карточек
+    с минимальными м
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: features-technical-grid-3-portfolio-kdm1-ru-5
+  path: features/features-technical-grid-3-portfolio-kdm1-ru-5/
+  category: features
+  type: features
+  layout_pattern: grid-3
+  signature: features|default|[content]|bg:false
+  display_name_ru: Информационный блок с темным фоном, большим заголовком и тремя
+    карточками содерж
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: features-technical-grid-3-portfolio-kdm1-ru-6
+  path: features/features-technical-grid-3-portfolio-kdm1-ru-6/
+  category: features
+  type: features
+  layout_pattern: grid-3
+  signature: features|default|[content]|bg:false
+  display_name_ru: Технологический раздел с карточками преимуществ, миниатюрами производства
+    и кноп
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: features-technical-grid-3-zilant-group-4
+  path: features/features-technical-grid-3-zilant-group-4/
+  category: features
+  type: features
+  layout_pattern: grid-3
+  signature: features|default|[content]|bg:false
+  display_name_ru: 'Воздушный блок с контрастным заголовком, тремя белыми карточками
+    и декоративной '
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: features-technical-grid-4-project21993216-tild-2
+  path: features/features-technical-grid-4-project21993216-tild-2/
+  category: features
+  type: features
+  layout_pattern: grid-4
+  signature: features|default|[content]|bg:false
+  display_name_ru: 'Полоса с коротким тезисом и четырьмя числовыми преимуществами
+    на светло-голубом '
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: features-technical-split-sskrusgun-ru-6
+  path: features/features-technical-split-sskrusgun-ru-6/
+  category: features
+  type: features
+  layout_pattern: split
+  signature: features|default|[content]|bg:false
+  display_name_ru: Комбинация промо-карточки, списка направлений и ссылок на разные
+    форматы услуги.
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: ru-features-01-3col-icons
+  path: features/ru-features-01-3col-icons/
+  category: features
+  type: features
+  layout_pattern: grid-3
+  signature: features|default|[content]|bg:false
+  display_name_ru: ✅ 3 преимущества с иконками
+  created: 2026-05-12
+  has_bg_image: false
+  slots:
+  - max_chars: 60
+    name: headline
+    required: true
+    type: text
+  - name: feature-1-icon
+    required: false
+    type: icon
+  - max_chars: 30
+    name: feature-1-title
+    required: true
+    type: text
+  - max_chars: 80
+    name: feature-1-text
+    required: true
+    type: text
+  - name: feature-2-icon
+    required: false
+    type: icon
+  - max_chars: 30
+    name: feature-2-title
+    required: true
+    type: text
+  - max_chars: 80
+    name: feature-2-text
+    required: true
+    type: text
+  - name: feature-3-icon
+    required: false
+    type: icon
+  - max_chars: 30
+    name: feature-3-title
+    required: true
+    type: text
+  - max_chars: 80
+    name: feature-3-text
+    required: true
+    type: text
+  source: manual
+- id: ru-features-02-bento-grid
+  path: features/ru-features-02-bento-grid/
+  category: features
+  type: features
+  layout_pattern: grid-3
+  signature: features|default|[content]|bg:false
+  display_name_ru: '🔲 Bento-сетка: фото + 3 карточки'
+  created: 2026-05-12
+  has_bg_image: false
+  slots:
+  - max_chars: 60
+    name: headline
+    required: true
+    type: text
+  - name: feature-photo
+    ratio: '1:1'
+    required: true
+    type: photo
+  - name: bento-1-icon
+    required: false
+    type: icon
+  - max_chars: 30
+    name: bento-1-title
+    required: true
+    type: text
+  - max_chars: 80
+    name: bento-1-text
+    required: true
+    type: text
+  - name: bento-2-icon
+    required: false
+    type: icon
+  - max_chars: 30
+    name: bento-2-title
+    required: true
+    type: text
+  - max_chars: 80
+    name: bento-2-text
+    required: true
+    type: text
+  - name: bento-3-icon
+    required: false
+    type: icon
+  - max_chars: 30
+    name: bento-3-title
+    required: true
+    type: text
+  - max_chars: 80
+    name: bento-3-text
+    required: true
+    type: text
+  source: manual
+- id: ru-features-03-swiss-cards
+  path: features/ru-features-03-swiss-cards/
+  category: features
+  type: features
+  layout_pattern: grid-3
+  signature: features|default|[content]|bg:false
+  display_name_ru: 🎨 Фичи — 4 карточки швейцарский стиль
+  created: 2026-05-13
+  has_bg_image: false
+  slots:
+  - max_chars: 60
+    name: headline
+    required: true
+    type: text
+  - max_chars: 40
+    name: card-1-title
+    required: true
+    type: text
+  - max_chars: 160
+    name: card-1-text
+    required: true
+    type: text
+  - max_chars: 40
+    name: card-2-title
+    required: true
+    type: text
+  - max_chars: 160
+    name: card-2-text
+    required: true
+    type: text
+  - max_chars: 40
+    name: card-3-title
+    required: true
+    type: text
+  - max_chars: 160
+    name: card-3-text
+    required: true
+    type: text
+  - max_chars: 40
+    name: card-4-title
+    required: true
+    type: text
+  - max_chars: 160
+    name: card-4-text
+    required: true
+    type: text
+  source: opendesign
+- id: ru-features-04-numbered-list
+  path: features/ru-features-04-numbered-list/
+  category: features
+  type: features
+  layout_pattern: grid-3
+  signature: features|default|[content]|bg:false
+  display_name_ru: Нумерованные преимущества — 3 колонки, монопространство
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 50
+    name: section-label
+    required: false
+    type: text
+  - max_chars: 4
+    name: feat-1-num
+    required: false
+    type: text
+  - max_chars: 45
+    name: feat-1-title
+    required: true
+    type: text
+  - max_chars: 180
+    name: feat-1-desc
+    required: true
+    type: text
+  - max_chars: 4
+    name: feat-2-num
+    required: false
+    type: text
+  - max_chars: 45
+    name: feat-2-title
+    required: true
+    type: text
+  - max_chars: 180
+    name: feat-2-desc
+    required: true
+    type: text
+  - max_chars: 4
+    name: feat-3-num
+    required: false
+    type: text
+  - max_chars: 45
+    name: feat-3-title
+    required: true
+    type: text
+  - max_chars: 180
+    name: feat-3-desc
+    required: true
+    type: text
+  source: opendesign
+- id: ru-features-05-method-steps
+  path: features/ru-features-05-method-steps/
+  category: features
+  type: features
+  layout_pattern: grid-3
+  signature: features|default|[content]|bg:false
+  display_name_ru: Метод — 4 шага с линией-соединителем
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 50
+    name: kicker
+    required: false
+    type: text
+  - max_chars: 70
+    name: headline
+    required: true
+    type: text
+  - max_chars: 200
+    name: subhead
+    required: false
+    type: text
+  - max_chars: 40
+    name: step-1-title
+    required: true
+    type: text
+  - max_chars: 160
+    name: step-1-desc
+    required: true
+    type: text
+  - max_chars: 40
+    name: step-2-title
+    required: true
+    type: text
+  - max_chars: 160
+    name: step-2-desc
+    required: true
+    type: text
+  - max_chars: 40
+    name: step-3-title
+    required: true
+    type: text
+  - max_chars: 160
+    name: step-3-desc
+    required: true
+    type: text
+  - max_chars: 40
+    name: step-4-title
+    required: true
+    type: text
+  - max_chars: 160
+    name: step-4-desc
+    required: true
+    type: text
+  source: opendesign
+- id: ru-features-06-cards-2x2
+  path: features/ru-features-06-cards-2x2/
+  category: features
+  type: features
+  layout_pattern: grid-3
+  signature: features|default|[content]|bg:false
+  display_name_ru: Четыре карточки 2×2 — bone-фон, тени, курсивные числа
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 50
+    name: kicker
+    required: false
+    type: text
+  - max_chars: 70
+    name: headline
+    required: true
+    type: text
+  - max_chars: 200
+    name: subhead
+    required: false
+    type: text
+  - max_chars: 20
+    name: card-1-tag
+    required: false
+    type: text
+  - max_chars: 40
+    name: card-1-title
+    required: true
+    type: text
+  - max_chars: 140
+    name: card-1-desc
+    required: true
+    type: text
+  - max_chars: 20
+    name: card-2-tag
+    required: false
+    type: text
+  - max_chars: 40
+    name: card-2-title
+    required: true
+    type: text
+  - max_chars: 140
+    name: card-2-desc
+    required: true
+    type: text
+  - max_chars: 20
+    name: card-3-tag
+    required: false
+    type: text
+  - max_chars: 40
+    name: card-3-title
+    required: true
+    type: text
+  - max_chars: 140
+    name: card-3-desc
+    required: true
+    type: text
+  - max_chars: 20
+    name: card-4-tag
+    required: false
+    type: text
+  - max_chars: 40
+    name: card-4-title
+    required: true
+    type: text
+  - max_chars: 140
+    name: card-4-desc
+    required: true
+    type: text
+  source: opendesign
+- id: ru-features-07-2col-split
+  path: features/ru-features-07-2col-split/
+  category: features
+  type: features
+  layout_pattern: grid-3
+  signature: features|default|[content]|bg:false
+  display_name_ru: О нас — двухколоночный split с манифестом
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 50
+    name: kicker
+    required: false
+    type: text
+  - max_chars: 80
+    name: headline
+    required: true
+    type: text
+  - max_chars: 300
+    name: subhead
+    required: true
+    type: text
+  - mobile_ratio: '4:3'
+    name: art-image
+    ratio: '1:1'
+    required: false
+    type: photo
+  - default_text: Узнать больше о нас
+    name: cta
+    required: false
+    type: cta
+  - max_chars: 80
+    name: footnote
+    required: false
+    type: text
+  source: opendesign
+- id: ru-features-08-kpi-metrics
+  path: features/ru-features-08-kpi-metrics/
+  category: features
+  type: features
+  layout_pattern: grid-3
+  signature: features|default|[content]|bg:false
+  display_name_ru: 📊 4 KPI-метрики (87% / 12 лет / 1000+ клиентов)
+  created: 2026-05-13
+  has_bg_image: false
+  slots:
+  - chart_type: number
+    data:
+      caption: успешных проектов
+      label: '%'
+      value: 87
+    name: kpi-1
+    required: true
+    type: infographic
+  - chart_type: number
+    data:
+      caption: на рынке
+      label: лет
+      value: 12
+    name: kpi-2
+    required: true
+    type: infographic
+  - chart_type: number
+    data:
+      caption: клиентов
+      label: +
+      value: 1000
+    name: kpi-3
+    required: true
+    type: infographic
+  - chart_type: number
+    data:
+      caption: завершённых проектов
+      label: +
+      value: 500
+    name: kpi-4
+    required: false
+    type: infographic
+  source: manual
 - id: footer-001
   path: footer/footer-001/
   category: footer
@@ -315,6 +1519,96 @@ blocks:
   - name: content
     type: text
   source: cleaned
+- id: footer-corporate-grid-4-portfolio-kdm1-ru-8
+  path: footer/footer-corporate-grid-4-portfolio-kdm1-ru-8/
+  category: footer
+  type: footer
+  layout_pattern: grid-4
+  signature: footer|default|[content]|bg:false
+  display_name_ru: 'Синий футер с логотипом, контактными колонками, ссылками и компактной
+    служебной '
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: footer-corporate-grid-4-zilant-group-10
+  path: footer/footer-corporate-grid-4-zilant-group-10/
+  category: footer
+  type: footer
+  layout_pattern: grid-4
+  signature: footer|default|[content]|bg:false
+  display_name_ru: Мягкий бирюзовый футер с логотипом, навигационными колонками и
+    контактной информ
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: footer-corporate-split-portfolio-kdm1-ru-9
+  path: footer/footer-corporate-split-portfolio-kdm1-ru-9/
+  category: footer
+  type: footer
+  layout_pattern: split
+  signature: footer|default|[content]|bg:false
+  display_name_ru: Темный подвал с навигацией, социальными иконками и контактными
+    строками.
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: footer-minimal-split-antidiler-karpov-ru-8
+  path: footer/footer-minimal-split-antidiler-karpov-ru-8/
+  category: footer
+  type: footer
+  layout_pattern: split
+  signature: footer|default|[content]|bg:false
+  display_name_ru: Низкая темная нижняя панель с мелкими юридическими ссылками и служебными
+    данными
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: footer-minimal-split-portfolio-kdm1-ru-17
+  path: footer/footer-minimal-split-portfolio-kdm1-ru-17/
+  category: footer
+  type: footer
+  layout_pattern: split
+  signature: footer|default|[content]|bg:false
+  display_name_ru: Нижняя темная полоса с мелкими реквизитами, контактами и служебными
+    ссылками.
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: footer-minimal-split-romanmelnikov-tilda-14
+  path: footer/footer-minimal-split-romanmelnikov-tilda-14/
+  category: footer
+  type: footer
+  layout_pattern: split
+  signature: footer|default|[content]|bg:false
+  display_name_ru: Низ страницы с мелкими юридическими ссылками и приглушенной контактной
+    информаци
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
 - id: gallery-001
   path: gallery/gallery-001/
   category: gallery
@@ -367,9 +1661,54 @@ blocks:
   - name: content
     type: text
   source: cleaned
+- id: gallery-cinematic-grid-4-sskrusgun-ru-12
+  path: gallery/gallery-cinematic-grid-4-sskrusgun-ru-12/
+  category: gallery
+  type: gallery
+  layout_pattern: grid-4
+  signature: gallery|default|[content]|bg:false
+  display_name_ru: Фотоколлаж в плотной сетке показывает атмосферу процесса через
+    реальные динамичн
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: gallery-minimal-stacked-portfolio-kdm1-ru-2
+  path: gallery/gallery-minimal-stacked-portfolio-kdm1-ru-2/
+  category: gallery
+  type: gallery
+  layout_pattern: stacked
+  signature: gallery|default|[content]|bg:false
+  display_name_ru: Крупный медиа-блок с товарным фото во всю ширину контейнера и круглой
+    кнопкой во
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: gallery-playful-grid-4-project21993216-tild-4
+  path: gallery/gallery-playful-grid-4-project21993216-tild-4/
+  category: gallery
+  type: gallery
+  layout_pattern: grid-4
+  signature: gallery|default|[content]|bg:false
+  display_name_ru: Витрина вкусов или вариантов с круглыми предметными изображениями
+    и подписями.
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
 - id: header-001
   path: header/header-001/
-  category: navigation
+  category: header
   type: header
   layout_pattern: cinematic
   signature: header|cinematic|[content]|bg:false
@@ -382,7 +1721,7 @@ blocks:
   source: cleaned
 - id: header-002
   path: header/header-002/
-  category: navigation
+  category: header
   type: header
   layout_pattern: split
   signature: header|split|[content]|bg:false
@@ -395,7 +1734,7 @@ blocks:
   source: cleaned
 - id: header-003
   path: header/header-003/
-  category: navigation
+  category: header
   type: header
   layout_pattern: minimal
   signature: header|minimal|[content]|bg:false
@@ -406,6 +1745,111 @@ blocks:
   - name: content
     type: text
   source: cleaned
+- id: header-cinematic-split-portfolio-kdm1-ru-0
+  path: header/header-cinematic-split-portfolio-kdm1-ru-0/
+  category: header
+  type: header
+  layout_pattern: split
+  signature: header|default|[content]|bg:false
+  display_name_ru: Узкая верхняя навигация на светлом фоне с компактными ссылками
+    и контрастной кно
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: header-corporate-split-zilant-group-0
+  path: header/header-corporate-split-zilant-group-0/
+  category: header
+  type: header
+  layout_pattern: split
+  signature: header|default|[content]|bg:false
+  display_name_ru: Компактная верхняя навигация с логотипом по центру зоны меню и
+    мягкой кнопкой де
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: header-luxury-split-romanmelnikov-tilda-0
+  path: header/header-luxury-split-romanmelnikov-tilda-0/
+  category: header
+  type: header
+  layout_pattern: split
+  signature: header|default|[content]|bg:false
+  display_name_ru: Узкая навигационная шапка на темном фоне с мелкими ссылками и теплым
+    акцентом.
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: header-minimal-split-portfolio-kdm1-ru-0
+  path: header/header-minimal-split-portfolio-kdm1-ru-0/
+  category: header
+  type: header
+  layout_pattern: split
+  signature: header|default|[content]|bg:false
+  display_name_ru: Тонкая верхняя панель с логотипом, навигацией, контактами и компактными
+    иконками
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: header-minimal-split-project21993216-tild-0
+  path: header/header-minimal-split-project21993216-tild-0/
+  category: header
+  type: header
+  layout_pattern: split
+  signature: header|default|[content]|bg:false
+  display_name_ru: Компактная верхняя навигация с логотипом, пунктами меню, контактами
+    и яркой кноп
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: header-playful-split-opt-ecowash-ru-0
+  path: header/header-playful-split-opt-ecowash-ru-0/
+  category: header
+  type: header
+  layout_pattern: split
+  signature: header|default|[content]|bg:false
+  display_name_ru: Компактная верхняя навигация на ярком фоне с логотипом, пунктами
+    меню и контактн
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: header-technical-split-sskrusgun-ru-0
+  path: header/header-technical-split-sskrusgun-ru-0/
+  category: header
+  type: header
+  layout_pattern: split
+  signature: header|default|[content]|bg:false
+  display_name_ru: Компактная верхняя панель с логотипом, навигацией, иконками и яркой
+    кнопкой дейс
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
 - id: hero-001
   path: hero/hero-001/
   category: hero
@@ -471,6 +1915,497 @@ blocks:
   - name: content
     type: text
   source: cleaned
+- id: hero-cinematic-split-antidiler-karpov-ru-1
+  path: hero/hero-cinematic-split-antidiler-karpov-ru-1/
+  category: hero
+  type: hero
+  layout_pattern: split
+  signature: hero|default|[content]|bg:false
+  display_name_ru: Темный первый экран с крупным наклонным заголовком, автомобильным
+    фоном и контра
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: hero-cinematic-split-portfolio-kdm1-ru-2
+  path: hero/hero-cinematic-split-portfolio-kdm1-ru-2/
+  category: hero
+  type: hero
+  layout_pattern: split
+  signature: hero|default|[content]|bg:false
+  display_name_ru: Темный промо-блок с крупным заголовком, CTA-кнопками, 3D-предметом
+    и плашками пр
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: hero-cinematic-split-romanmelnikov-tilda-1
+  path: hero/hero-cinematic-split-romanmelnikov-tilda-1/
+  category: hero
+  type: hero
+  layout_pattern: split
+  signature: hero|default|[content]|bg:false
+  display_name_ru: Крупный первый экран с контрастным заголовком, правым текстовым
+    блоком и монохро
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: hero-corporate-split-zilant-group-1
+  path: hero/hero-corporate-split-zilant-group-1/
+  category: hero
+  type: hero
+  layout_pattern: split
+  signature: hero|default|[content]|bg:false
+  display_name_ru: Большой светло-бирюзовый первый экран с крупным заголовком, CTA
+    и деловой фотоко
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: hero-playful-split-opt-ecowash-ru-1
+  path: hero/hero-playful-split-opt-ecowash-ru-1/
+  category: hero
+  type: hero
+  layout_pattern: split
+  signature: hero|default|[content]|bg:false
+  display_name_ru: Первый экран с крупным оффером, продуктовой 3D-визуализацией, буллетами
+    и формой
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: hero-technical-split-portfolio-kdm1-ru-1
+  path: hero/hero-technical-split-portfolio-kdm1-ru-1/
+  category: hero
+  type: hero
+  layout_pattern: split
+  signature: hero|default|[content]|bg:false
+  display_name_ru: Яркий первый экран с крупным заголовком слева и большим предметным
+    фото продукта
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: ru-hero-01-services-calc
+  path: hero/ru-hero-01-services-calc/
+  category: hero
+  type: hero
+  layout_pattern: centered
+  signature: hero|default|[content]|bg:false
+  display_name_ru: 🏗️ Услуги — фото фона + расчёт стоимости
+  created: 2026-05-12
+  has_bg_image: false
+  slots:
+  - mobile_ratio: '9:16'
+    name: hero-bg
+    ratio: '16:9'
+    required: true
+    type: photo
+  - max_chars: 60
+    name: headline
+    required: true
+    type: text
+  - max_chars: 120
+    name: subhead
+    required: false
+    type: text
+  - max_chars: 12
+    name: price-tag
+    required: false
+    type: text
+  - default_text: Рассчитать стоимость
+    name: primary-cta
+    required: true
+    type: cta
+  source: manual
+- id: ru-hero-02-b2c-expert
+  path: hero/ru-hero-02-b2c-expert/
+  category: hero
+  type: hero
+  layout_pattern: centered
+  signature: hero|default|[content]|bg:false
+  display_name_ru: 🧑‍💼 Эксперт слева + оффер справа
+  created: 2026-05-12
+  has_bg_image: false
+  slots:
+  - name: expert-photo
+    ratio: '1:1'
+    required: true
+    type: photo
+  - max_chars: 30
+    name: expert-name
+    required: true
+    type: text
+  - max_chars: 80
+    name: expert-credentials
+    required: false
+    type: text
+  - max_chars: 60
+    name: headline
+    required: true
+    type: text
+  - max_chars: 120
+    name: subhead
+    required: false
+    type: text
+  - default_text: Подобрать программу
+    name: primary-cta
+    required: true
+    type: cta
+  source: manual
+- id: ru-hero-03-local-interior
+  path: hero/ru-hero-03-local-interior/
+  category: hero
+  type: hero
+  layout_pattern: centered
+  signature: hero|default|[content]|bg:false
+  display_name_ru: 🏠 Локальный бизнес — фото интерьера
+  created: 2026-05-12
+  has_bg_image: false
+  slots:
+  - name: interior-bg
+    ratio: '16:9'
+    required: true
+    type: photo
+  - max_chars: 60
+    name: headline
+    required: true
+    type: text
+  - max_chars: 20
+    name: hours-tag
+    required: false
+    type: text
+  - default_text: Записаться
+    name: primary-cta
+    required: true
+    type: cta
+  source: manual
+- id: ru-hero-04-split-form
+  path: hero/ru-hero-04-split-form/
+  category: hero
+  type: hero
+  layout_pattern: centered
+  signature: hero|default|[content]|bg:false
+  display_name_ru: 📝 Текст слева + лид-форма справа
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 60
+    name: headline
+    required: true
+    type: text
+  - max_chars: 80
+    name: bullet-1-text
+    required: true
+    type: text
+  - max_chars: 80
+    name: bullet-2-text
+    required: true
+    type: text
+  - max_chars: 80
+    name: bullet-3-text
+    required: false
+    type: text
+  - default_text: Узнать стоимость
+    name: primary-cta
+    required: true
+    type: cta
+  - max_chars: 20
+    name: lead-phone-input
+    required: true
+    type: text
+  - default_text: Отправить заявку
+    name: lead-submit-cta
+    required: true
+    type: cta
+  source: manual
+- id: ru-hero-05-centered-bold
+  path: hero/ru-hero-05-centered-bold/
+  category: hero
+  type: hero
+  layout_pattern: centered
+  signature: hero|default|[content]|bg:false
+  display_name_ru: 🎨 Центрированный hero с крупной типографикой
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 30
+    name: tagline
+    required: false
+    type: text
+  - max_chars: 80
+    name: headline
+    required: true
+    type: text
+  - max_chars: 160
+    name: subhead
+    required: false
+    type: text
+  - default_text: Начать сотрудничество
+    name: primary-cta
+    required: true
+    type: cta
+  source: manual
+- id: ru-hero-06-swiss-metrics
+  path: hero/ru-hero-06-swiss-metrics/
+  category: hero
+  type: hero
+  layout_pattern: centered
+  signature: hero|default|[content]|bg:false
+  display_name_ru: 📊 Hero — швейцарский + цифры-метрики
+  created: 2026-05-13
+  has_bg_image: false
+  slots:
+  - max_chars: 60
+    name: headline
+    required: true
+    type: text
+  - max_chars: 180
+    name: subhead
+    required: true
+    type: text
+  - max_chars: 12
+    name: metric-1-value
+    required: true
+    type: text
+  - max_chars: 40
+    name: metric-1-label
+    required: true
+    type: text
+  - max_chars: 12
+    name: metric-2-value
+    required: true
+    type: text
+  - max_chars: 40
+    name: metric-2-label
+    required: true
+    type: text
+  - max_chars: 12
+    name: metric-3-value
+    required: false
+    type: text
+  - max_chars: 40
+    name: metric-3-label
+    required: false
+    type: text
+  - default_text: Начать работу
+    name: primary-cta
+    required: true
+    type: cta
+  source: opendesign
+- id: ru-hero-07-editorial-serif
+  path: hero/ru-hero-07-editorial-serif/
+  category: hero
+  type: hero
+  layout_pattern: centered
+  signature: hero|default|[content]|bg:false
+  display_name_ru: Редакционный герой — бежевый фон, курсив, метрики-кольца
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 40
+    name: kicker
+    required: false
+    type: text
+  - max_chars: 70
+    name: headline
+    required: true
+    type: text
+  - max_chars: 180
+    name: subhead
+    required: false
+    type: text
+  - max_chars: 8
+    name: stat-1-value
+    required: false
+    type: text
+  - max_chars: 20
+    name: stat-1-label
+    required: false
+    type: text
+  - max_chars: 8
+    name: stat-2-value
+    required: false
+    type: text
+  - max_chars: 20
+    name: stat-2-label
+    required: false
+    type: text
+  - max_chars: 8
+    name: stat-3-value
+    required: false
+    type: text
+  - max_chars: 20
+    name: stat-3-label
+    required: false
+    type: text
+  - mobile_ratio: '4:3'
+    name: hero-image
+    ratio: '4:3'
+    required: false
+    type: photo
+  - default_text: Начать работу
+    name: primary-cta
+    required: true
+    type: cta
+  - default_text: Узнать подробнее
+    name: secondary-cta
+    required: false
+    type: cta
+  source: opendesign
+- id: ru-hero-08-centered-emailcap
+  path: hero/ru-hero-08-centered-emailcap/
+  category: hero
+  type: hero
+  layout_pattern: centered
+  signature: hero|default|[content]|bg:false
+  display_name_ru: Центрированный герой — email-форма + бегущая строка
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 50
+    name: kicker
+    required: false
+    type: text
+  - max_chars: 60
+    name: headline
+    required: true
+    type: text
+  - max_chars: 160
+    name: subhead
+    required: false
+    type: text
+  - max_chars: 30
+    name: email-placeholder
+    required: false
+    type: text
+  - default_text: Получить доступ
+    name: primary-cta
+    required: true
+    type: cta
+  - max_chars: 60
+    name: ticker-text
+    required: false
+    type: text
+  source: opendesign
+- id: ru-hero-09-kami-serif
+  path: hero/ru-hero-09-kami-serif/
+  category: hero
+  type: hero
+  layout_pattern: centered
+  signature: hero|default|[content]|bg:false
+  display_name_ru: Ками-герой — пергамент, засечный шрифт, метрики
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 40
+    name: eyebrow-left
+    required: false
+    type: text
+  - max_chars: 40
+    name: eyebrow-right
+    required: false
+    type: text
+  - max_chars: 80
+    name: headline
+    required: true
+    type: text
+  - max_chars: 220
+    name: subhead
+    required: false
+    type: text
+  - max_chars: 10
+    name: metric-1-value
+    required: false
+    type: text
+  - max_chars: 25
+    name: metric-1-label
+    required: false
+    type: text
+  - max_chars: 10
+    name: metric-2-value
+    required: false
+    type: text
+  - max_chars: 25
+    name: metric-2-label
+    required: false
+    type: text
+  - max_chars: 10
+    name: metric-3-value
+    required: false
+    type: text
+  - max_chars: 25
+    name: metric-3-label
+    required: false
+    type: text
+  - default_text: Начать сейчас
+    name: primary-cta
+    required: true
+    type: cta
+  - default_text: О нас
+    name: secondary-cta
+    required: false
+    type: cta
+  source: opendesign
+- id: ru-hero-10-deck-cover
+  path: hero/ru-hero-10-deck-cover/
+  category: hero
+  type: hero
+  layout_pattern: centered
+  signature: hero|default|[content]|bg:false
+  display_name_ru: Дек-обложка — угловые маркеры, нумерация, coral-акцент
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 50
+    name: kicker
+    required: false
+    type: text
+  - max_chars: 75
+    name: headline
+    required: true
+    type: text
+  - max_chars: 200
+    name: subhead
+    required: false
+    type: text
+  - mobile_ratio: '4:3'
+    name: hero-image
+    ratio: '1:1'
+    required: false
+    type: photo
+  - max_chars: 20
+    name: meta-label
+    required: false
+    type: text
+  - default_text: Обсудить проект
+    name: primary-cta
+    required: true
+    type: cta
+  - default_text: Наши работы
+    name: secondary-cta
+    required: false
+    type: cta
+  source: opendesign
 - id: pricing-001
   path: pricing/pricing-001/
   category: pricing
@@ -523,9 +2458,391 @@ blocks:
   - name: content
     type: text
   source: cleaned
+- id: pricing-corporate-grid-3-portfolio-kdm1-ru-7
+  path: pricing/pricing-corporate-grid-3-portfolio-kdm1-ru-7/
+  category: pricing
+  type: pricing
+  layout_pattern: grid-3
+  signature: pricing|default|[content]|bg:false
+  display_name_ru: 'Блок выбора пакетов с тремя тарифными карточками, списками преимуществ
+    и яркими '
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: pricing-corporate-grid-3-sskrusgun-ru-5
+  path: pricing/pricing-corporate-grid-3-sskrusgun-ru-5/
+  category: pricing
+  type: pricing
+  layout_pattern: grid-3
+  signature: pricing|default|[content]|bg:false
+  display_name_ru: Раздел с карточками специализированных программ, фотофоном, ценовым
+    маркером и к
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: pricing-technical-grid-3-sskrusgun-ru-2
+  path: pricing/pricing-technical-grid-3-sskrusgun-ru-2/
+  category: pricing
+  type: pricing
+  layout_pattern: grid-3
+  signature: pricing|default|[content]|bg:false
+  display_name_ru: Сетка карточек программ с фото, краткими параметрами, ценовым акцентом
+    и кнопкам
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: ru-pricing-01-rub-from
+  path: pricing/ru-pricing-01-rub-from/
+  category: pricing
+  type: pricing
+  layout_pattern: grid-3
+  signature: pricing|default|[content]|bg:false
+  display_name_ru: 💰 3 тарифа с ценой 'от X ₽'
+  created: 2026-05-12
+  has_bg_image: false
+  slots:
+  - max_chars: 60
+    name: headline
+    required: true
+    type: text
+  - max_chars: 20
+    name: tier-1-name
+    required: true
+    type: text
+  - max_chars: 20
+    name: tier-1-price
+    required: true
+    type: text
+  - name: tier-1-features
+    required: true
+    type: text
+  - default_text: Выбрать
+    name: tier-1-cta
+    required: true
+    type: cta
+  - max_chars: 20
+    name: tier-2-name
+    required: true
+    type: text
+  - max_chars: 20
+    name: tier-2-price
+    required: true
+    type: text
+  - name: tier-2-features
+    required: true
+    type: text
+  - default_text: Выбрать
+    name: tier-2-cta
+    required: true
+    type: cta
+  - max_chars: 20
+    name: tier-3-name
+    required: true
+    type: text
+  - max_chars: 20
+    name: tier-3-price
+    required: true
+    type: text
+  - name: tier-3-features
+    required: true
+    type: text
+  - default_text: Выбрать
+    name: tier-3-cta
+    required: true
+    type: cta
+  source: manual
+- id: ru-pricing-02-comparison-table
+  path: pricing/ru-pricing-02-comparison-table/
+  category: pricing
+  type: pricing
+  layout_pattern: grid-3
+  signature: pricing|default|[content]|bg:false
+  display_name_ru: 📊 Сравнительная таблица тарифов
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 60
+    name: headline
+    required: true
+    type: text
+  - max_chars: 20
+    name: tier-1-name
+    required: true
+    type: text
+  - max_chars: 20
+    name: tier-1-price
+    required: true
+    type: text
+  - default_text: Выбрать
+    name: tier-1-cta
+    required: true
+    type: cta
+  - max_chars: 20
+    name: tier-2-name
+    required: true
+    type: text
+  - max_chars: 20
+    name: tier-2-price
+    required: true
+    type: text
+  - default_text: Выбрать
+    name: tier-2-cta
+    required: true
+    type: cta
+  - max_chars: 20
+    name: tier-3-name
+    required: true
+    type: text
+  - max_chars: 20
+    name: tier-3-price
+    required: true
+    type: text
+  - default_text: Выбрать
+    name: tier-3-cta
+    required: true
+    type: cta
+  - max_chars: 60
+    name: feature-row-1
+    required: true
+    type: text
+  - max_chars: 60
+    name: feature-row-2
+    required: true
+    type: text
+  - max_chars: 60
+    name: feature-row-3
+    required: true
+    type: text
+  - max_chars: 60
+    name: feature-row-4
+    required: true
+    type: text
+  - max_chars: 60
+    name: feature-row-5
+    required: true
+    type: text
+  - max_chars: 60
+    name: feature-row-6
+    required: true
+    type: text
+  source: manual
+- id: ru-pricing-03-3tier-saas
+  path: pricing/ru-pricing-03-3tier-saas/
+  category: pricing
+  type: pricing
+  layout_pattern: grid-3
+  signature: pricing|default|[content]|bg:false
+  display_name_ru: Три тарифа SaaS — рекомендованный тир, чеклист
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 60
+    name: headline
+    required: true
+    type: text
+  - max_chars: 160
+    name: subhead
+    required: false
+    type: text
+  - max_chars: 30
+    name: tier-1-name
+    required: true
+    type: text
+  - max_chars: 60
+    name: tier-1-desc
+    required: false
+    type: text
+  - max_chars: 30
+    name: tier-1-price
+    required: true
+    type: text
+  - max_chars: 60
+    name: tier-1-f1
+    required: false
+    type: text
+  - max_chars: 60
+    name: tier-1-f2
+    required: false
+    type: text
+  - max_chars: 60
+    name: tier-1-f3
+    required: false
+    type: text
+  - default_text: Начать
+    name: tier-1-cta
+    required: true
+    type: cta
+  - max_chars: 30
+    name: tier-2-name
+    required: true
+    type: text
+  - max_chars: 60
+    name: tier-2-desc
+    required: false
+    type: text
+  - max_chars: 30
+    name: tier-2-price
+    required: true
+    type: text
+  - max_chars: 60
+    name: tier-2-f1
+    required: false
+    type: text
+  - max_chars: 60
+    name: tier-2-f2
+    required: false
+    type: text
+  - max_chars: 60
+    name: tier-2-f3
+    required: false
+    type: text
+  - max_chars: 60
+    name: tier-2-f4
+    required: false
+    type: text
+  - default_text: Выбрать Бизнес
+    name: tier-2-cta
+    required: true
+    type: cta
+  - max_chars: 30
+    name: tier-3-name
+    required: true
+    type: text
+  - max_chars: 60
+    name: tier-3-desc
+    required: false
+    type: text
+  - max_chars: 30
+    name: tier-3-price
+    required: true
+    type: text
+  - max_chars: 60
+    name: tier-3-f1
+    required: false
+    type: text
+  - max_chars: 60
+    name: tier-3-f2
+    required: false
+    type: text
+  - max_chars: 60
+    name: tier-3-f3
+    required: false
+    type: text
+  - default_text: Обсудить условия
+    name: tier-3-cta
+    required: true
+    type: cta
+  source: opendesign
+- id: ru-pricing-04-tiers-faq
+  path: pricing/ru-pricing-04-tiers-faq/
+  category: pricing
+  type: pricing
+  layout_pattern: grid-3
+  signature: pricing|default|[content]|bg:false
+  display_name_ru: Тарифы + FAQ о стоимости — комбинированный блок
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 60
+    name: headline
+    required: true
+    type: text
+  - max_chars: 160
+    name: subhead
+    required: false
+    type: text
+  - max_chars: 30
+    name: tier-1-name
+    required: true
+    type: text
+  - max_chars: 30
+    name: tier-1-price
+    required: true
+    type: text
+  - max_chars: 80
+    name: tier-1-desc
+    required: false
+    type: text
+  - default_text: Начать
+    name: tier-1-cta
+    required: true
+    type: cta
+  - max_chars: 30
+    name: tier-2-name
+    required: true
+    type: text
+  - max_chars: 30
+    name: tier-2-price
+    required: true
+    type: text
+  - max_chars: 80
+    name: tier-2-desc
+    required: false
+    type: text
+  - default_text: Выбрать Профи
+    name: tier-2-cta
+    required: true
+    type: cta
+  - max_chars: 30
+    name: tier-3-name
+    required: true
+    type: text
+  - max_chars: 30
+    name: tier-3-price
+    required: true
+    type: text
+  - max_chars: 80
+    name: tier-3-desc
+    required: false
+    type: text
+  - default_text: Связаться
+    name: tier-3-cta
+    required: true
+    type: cta
+  - max_chars: 60
+    name: faq-headline
+    required: false
+    type: text
+  - max_chars: 100
+    name: faq-1-q
+    required: true
+    type: text
+  - max_chars: 300
+    name: faq-1-a
+    required: true
+    type: text
+  - max_chars: 100
+    name: faq-2-q
+    required: true
+    type: text
+  - max_chars: 300
+    name: faq-2-a
+    required: true
+    type: text
+  - max_chars: 100
+    name: faq-3-q
+    required: true
+    type: text
+  - max_chars: 300
+    name: faq-3-a
+    required: true
+    type: text
+  source: opendesign
 - id: process-001
   path: process/process-001/
-  category: content
+  category: process
   type: process
   layout_pattern: cinematic
   signature: process|cinematic|[content]|bg:false
@@ -538,7 +2855,7 @@ blocks:
   source: cleaned
 - id: process-002
   path: process/process-002/
-  category: content
+  category: process
   type: process
   layout_pattern: default
   signature: process|default|[content]|bg:false
@@ -551,7 +2868,7 @@ blocks:
   source: cleaned
 - id: process-003
   path: process/process-003/
-  category: content
+  category: process
   type: process
   layout_pattern: grid
   signature: process|grid|[content]|bg:false
@@ -564,7 +2881,7 @@ blocks:
   source: cleaned
 - id: process-004
   path: process/process-004/
-  category: content
+  category: process
   type: process
   layout_pattern: minimal
   signature: process|minimal|[content]|bg:false
@@ -575,34 +2892,1379 @@ blocks:
   - name: content
     type: text
   source: cleaned
-- id: social-proof-cinematic-split-antidiler-karpov-ru-3
-  path: social-proof/social-proof-cinematic-split-antidiler-karpov-ru-3/
-  category: social proof
-  type: logos
-  layout_pattern: split
-  signature: ''
-  display_name_ru: Крупный кейс с фото клиента у автомобиля, диагональной типографикой,
-    текстом отз
-  description: Крупный кейс с фото клиента у автомобиля, диагональной типографикой,
-    текстом отзыва и CTA.
-  has_animation: false
-  imported:
-    import_method: codex-block-generation
-    imported_at: '2026-05-16'
-    source_url: https://antidiler-karpov.ru/
-  niches_suitable:
-  - premium-auto
-  - services
-  - luxury
-  ru_market: true
+- id: process-corporate-timeline-project21993216-tild-10
+  path: process/process-corporate-timeline-project21993216-tild-10/
+  category: process
+  type: process
+  layout_pattern: timeline
+  signature: process|default|[content]|bg:false
+  display_name_ru: Пошаговая схема старта с пронумерованными карточками и финальной
+    карточкой с кно
+  created: '2026-06-02'
+  has_bg_image: false
   slots:
   - name: heading
     required: true
     type: text
-  style_mood: cinematic
+  source: auto-generated
+- id: process-minimal-grid-2-portfolio-kdm1-ru-4
+  path: process/process-minimal-grid-2-portfolio-kdm1-ru-4/
+  category: process
+  type: process
+  layout_pattern: grid-2
+  signature: process|default|[content]|bg:false
+  display_name_ru: Два информационных блока с иконками объясняют сценарии продаж через
+    отдельные ка
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: process-technical-cards-medregistrant-ru-3
+  path: process/process-technical-cards-medregistrant-ru-3/
+  category: process
+  type: process
+  layout_pattern: cards
+  signature: process|default|[content]|bg:false
+  display_name_ru: Светлый блок с вопросительным заголовком, вкладками и карточками
+    вокруг размытог
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: process-technical-stacked-opt-ecowash-ru-6
+  path: process/process-technical-stacked-opt-ecowash-ru-6/
+  category: process
+  type: process
+  layout_pattern: stacked
+  signature: process|default|[content]|bg:false
+  display_name_ru: Производственный блок с текстом, акцентной плашкой, декоративной
+    графикой и боль
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: process-technical-timeline-romanmelnikov-tilda-10
+  path: process/process-technical-timeline-romanmelnikov-tilda-10/
+  category: process
+  type: process
+  layout_pattern: timeline
+  signature: process|default|[content]|bg:false
+  display_name_ru: Линейная схема этапов с мелкими подписями и горизонтальным акцентом
+    прогресса.
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: ru-process-01-4steps-icons
+  path: process/ru-process-01-4steps-icons/
+  category: process
+  type: process
+  layout_pattern: centered
+  signature: process|default|[content]|bg:false
+  display_name_ru: 🔢 4 шага работы с иконками
+  created: 2026-05-12
+  has_bg_image: false
+  slots:
+  - max_chars: 60
+    name: headline
+    required: true
+    type: text
+  - name: step-1-icon
+    required: false
+    type: icon
+  - max_chars: 30
+    name: step-1-title
+    required: true
+    type: text
+  - max_chars: 100
+    name: step-1-text
+    required: true
+    type: text
+  - name: step-2-icon
+    required: false
+    type: icon
+  - max_chars: 30
+    name: step-2-title
+    required: true
+    type: text
+  - max_chars: 100
+    name: step-2-text
+    required: true
+    type: text
+  - name: step-3-icon
+    required: false
+    type: icon
+  - max_chars: 30
+    name: step-3-title
+    required: true
+    type: text
+  - max_chars: 100
+    name: step-3-text
+    required: true
+    type: text
+  - name: step-4-icon
+    required: false
+    type: icon
+  - max_chars: 30
+    name: step-4-title
+    required: true
+    type: text
+  - max_chars: 100
+    name: step-4-text
+    required: true
+    type: text
+  source: manual
+- id: ru-process-02-next-steps
+  path: process/ru-process-02-next-steps/
+  category: process
+  type: process
+  layout_pattern: centered
+  signature: process|default|[content]|bg:false
+  display_name_ru: 📋 Процесс — 3 шага timeline-стиль
+  created: 2026-05-13
+  has_bg_image: false
+  slots:
+  - max_chars: 60
+    name: headline
+    required: true
+    type: text
+  - max_chars: 20
+    name: step1-timing
+    required: true
+    type: text
+  - max_chars: 50
+    name: step1-title
+    required: true
+    type: text
+  - max_chars: 200
+    name: step1-text
+    required: true
+    type: text
+  - max_chars: 20
+    name: step2-timing
+    required: true
+    type: text
+  - max_chars: 50
+    name: step2-title
+    required: true
+    type: text
+  - max_chars: 200
+    name: step2-text
+    required: true
+    type: text
+  - max_chars: 20
+    name: step3-timing
+    required: true
+    type: text
+  - max_chars: 50
+    name: step3-title
+    required: true
+    type: text
+  - max_chars: 200
+    name: step3-text
+    required: true
+    type: text
+  - default_text: Начать
+    name: primary-cta
+    required: true
+    type: cta
+  source: opendesign
+- id: ru-process-03-4steps-numbered
+  path: process/ru-process-03-4steps-numbered/
+  category: process
+  type: process
+  layout_pattern: centered
+  signature: process|default|[content]|bg:false
+  display_name_ru: Процесс — 4 шага в сетке с бордерами и иллюстрациями
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 50
+    name: kicker
+    required: false
+    type: text
+  - max_chars: 70
+    name: headline
+    required: true
+    type: text
+  - max_chars: 220
+    name: subhead
+    required: false
+    type: text
+  - max_chars: 40
+    name: step-1-title
+    required: true
+    type: text
+  - max_chars: 160
+    name: step-1-desc
+    required: true
+    type: text
+  - max_chars: 40
+    name: step-2-title
+    required: true
+    type: text
+  - max_chars: 160
+    name: step-2-desc
+    required: true
+    type: text
+  - max_chars: 40
+    name: step-3-title
+    required: true
+    type: text
+  - max_chars: 160
+    name: step-3-desc
+    required: true
+    type: text
+  - max_chars: 40
+    name: step-4-title
+    required: true
+    type: text
+  - max_chars: 160
+    name: step-4-desc
+    required: true
+    type: text
+  source: opendesign
+- id: ru-quiz-01-step-card
+  path: quiz/ru-quiz-01-step-card/
+  category: quiz
+  type: lead-form
+  layout_pattern: centered
+  signature: quiz|default|[content]|bg:false
+  display_name_ru: 🎯 Квиз — шаг-карточка с вариантами
+  created: 2026-05-12
+  has_bg_image: false
+  slots:
+  - max_chars: 120
+    name: question-text
+    required: true
+    type: text
+  - max_chars: 50
+    name: answer-1-text
+    required: true
+    type: text
+  - max_chars: 50
+    name: answer-2-text
+    required: true
+    type: text
+  - max_chars: 50
+    name: answer-3-text
+    required: true
+    type: text
+  - max_chars: 50
+    name: answer-4-text
+    required: false
+    type: text
+  - max_chars: 100
+    name: question-comment
+    required: false
+    type: text
+  source: manual
+- id: ru-quiz-02-progress-top
+  path: quiz/ru-quiz-02-progress-top/
+  category: quiz
+  type: lead-form
+  layout_pattern: centered
+  signature: quiz|default|[content]|bg:false
+  display_name_ru: 📊 Квиз — вопрос с прогрессом сверху
+  created: 2026-05-12
+  has_bg_image: false
+  slots:
+  - max_chars: 20
+    name: progress-text
+    required: true
+    type: text
+  - name: progress-bar
+    required: false
+    type: text
+  source: manual
+- id: ru-quiz-03-intermediate
+  path: quiz/ru-quiz-03-intermediate/
+  category: quiz
+  type: lead-form
+  layout_pattern: centered
+  signature: quiz|default|[content]|bg:false
+  display_name_ru: 🎉 Квиз — промежуточный мотивационный экран
+  created: 2026-05-12
+  has_bg_image: false
+  slots:
+  - name: emoji-icon
+    required: true
+    type: text
+  - max_chars: 100
+    name: motivation-text
+    required: true
+    type: text
+  - default_text: Продолжить
+    name: continue-cta
+    required: true
+    type: cta
+  source: manual
+- id: ru-quiz-04-lead-form
+  path: quiz/ru-quiz-04-lead-form/
+  category: quiz
+  type: lead-form
+  layout_pattern: centered
+  signature: quiz|default|[content]|bg:false
+  display_name_ru: 📋 Квиз — финальная форма захвата
+  created: 2026-05-12
+  has_bg_image: false
+  slots:
+  - max_chars: 80
+    name: headline
+    required: true
+    type: text
+  - max_chars: 140
+    name: subhead
+    required: false
+    type: text
+  - max_chars: 50
+    name: name-input
+    required: false
+    type: text
+  - max_chars: 20
+    name: phone-input
+    required: true
+    type: text
+  - name: channel-choice
+    required: true
+    type: text
+  - default_text: Получить расчёт
+    name: submit-cta
+    required: true
+    type: cta
+  - max_chars: 200
+    name: agreement-text
+    required: true
+    type: text
+  source: manual
+- id: ru-quiz-05-thankyou
+  path: quiz/ru-quiz-05-thankyou/
+  category: quiz
+  type: lead-form
+  layout_pattern: centered
+  signature: quiz|default|[content]|bg:false
+  display_name_ru: ✅ Квиз — страница «Спасибо»
+  created: 2026-05-12
+  has_bg_image: false
+  slots:
+  - name: success-icon
+    required: true
+    type: text
+  - max_chars: 80
+    name: success-headline
+    required: true
+    type: text
+  - max_chars: 140
+    name: success-subhead
+    required: true
+    type: text
+  - default_text: На главную
+    name: back-cta
+    required: true
+    type: cta
+  source: manual
+- id: ru-quiz-06-welcome-screen
+  path: quiz/ru-quiz-06-welcome-screen/
+  category: quiz
+  type: lead-form
+  layout_pattern: centered
+  signature: quiz|default|[content]|bg:false
+  display_name_ru: 🚀 Квиз — стартовый экран «Начать тест»
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 80
+    name: headline
+    required: true
+    type: text
+  - max_chars: 150
+    name: subheadline
+    required: true
+    type: text
+  - max_chars: 100
+    name: lead-magnet
+    required: false
+    type: text
+  - max_chars: 40
+    name: cta-button
+    required: true
+    type: text
+  - max_chars: 80
+    name: trust-note
+    required: false
+    type: text
+  source: manual
+- id: ru-quiz-07-image-choice
+  path: quiz/ru-quiz-07-image-choice/
+  category: quiz
+  type: lead-form
+  layout_pattern: centered
+  signature: quiz|default|[content]|bg:false
+  display_name_ru: 🖼️ Квиз — вопрос с картинками-вариантами
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 120
+    name: question-text
+    required: true
+    type: text
+  - max_chars: 0
+    name: image-1
+    required: true
+    type: photo
+  - max_chars: 40
+    name: label-1
+    required: true
+    type: text
+  - max_chars: 0
+    name: image-2
+    required: true
+    type: photo
+  - max_chars: 40
+    name: label-2
+    required: true
+    type: text
+  - max_chars: 0
+    name: image-3
+    required: false
+    type: photo
+  - max_chars: 40
+    name: label-3
+    required: false
+    type: text
+  - max_chars: 0
+    name: image-4
+    required: false
+    type: photo
+  - max_chars: 40
+    name: label-4
+    required: false
+    type: text
+  - max_chars: 60
+    name: progress-label
+    required: false
+    type: text
+  source: manual
+- id: ru-quiz-08-slider-range
+  path: quiz/ru-quiz-08-slider-range/
+  category: quiz
+  type: lead-form
+  layout_pattern: centered
+  signature: quiz|default|[content]|bg:false
+  display_name_ru: 📊 Квиз — вопрос со слайдером диапазона
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 120
+    name: question-text
+    required: true
+    type: text
+  - max_chars: 20
+    name: unit-label
+    required: true
+    type: text
+  - max_chars: 30
+    name: min-label
+    required: true
+    type: text
+  - max_chars: 30
+    name: max-label
+    required: true
+    type: text
+  - max_chars: 100
+    name: question-comment
+    required: false
+    type: text
+  - max_chars: 60
+    name: progress-label
+    required: false
+    type: text
+  source: manual
+- id: ru-quiz-09-multi-select
+  path: quiz/ru-quiz-09-multi-select/
+  category: quiz
+  type: lead-form
+  layout_pattern: centered
+  signature: quiz|default|[content]|bg:false
+  display_name_ru: ☑️ Квиз — вопрос с мульти-выбором (чекбоксы)
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 120
+    name: question-text
+    required: true
+    type: text
+  - max_chars: 60
+    name: option-1
+    required: true
+    type: text
+  - max_chars: 60
+    name: option-2
+    required: true
+    type: text
+  - max_chars: 60
+    name: option-3
+    required: false
+    type: text
+  - max_chars: 60
+    name: option-4
+    required: false
+    type: text
+  - max_chars: 60
+    name: option-5
+    required: false
+    type: text
+  - max_chars: 60
+    name: option-6
+    required: false
+    type: text
+  - max_chars: 30
+    name: next-button
+    required: true
+    type: text
+  - max_chars: 60
+    name: progress-label
+    required: false
+    type: text
+  source: manual
+- id: ru-quiz-10-loader-analyzing
+  path: quiz/ru-quiz-10-loader-analyzing/
+  category: quiz
+  type: lead-form
+  layout_pattern: centered
+  signature: quiz|default|[content]|bg:false
+  display_name_ru: ⏳ Квиз — экран анализа ответов (лоадер)
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 80
+    name: headline
+    required: true
+    type: text
+  - max_chars: 150
+    name: subheadline
+    required: false
+    type: text
+  - max_chars: 60
+    name: step-1-text
+    required: false
+    type: text
+  - max_chars: 60
+    name: step-2-text
+    required: false
+    type: text
+  - max_chars: 60
+    name: step-3-text
+    required: false
+    type: text
+  source: manual
+- id: ru-quiz-11-discount-bonus
+  path: quiz/ru-quiz-11-discount-bonus/
+  category: quiz
+  type: lead-form
+  layout_pattern: centered
+  signature: quiz|default|[content]|bg:false
+  display_name_ru: 🎁 Квиз — экран подарка за прохождение
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 80
+    name: headline
+    required: true
+    type: text
+  - max_chars: 20
+    name: discount-value
+    required: true
+    type: text
+  - max_chars: 150
+    name: discount-description
+    required: true
+    type: text
+  - max_chars: 80
+    name: bonus-item-1
+    required: false
+    type: text
+  - max_chars: 80
+    name: bonus-item-2
+    required: false
+    type: text
+  - max_chars: 50
+    name: cta-button
+    required: true
+    type: text
+  - max_chars: 80
+    name: urgency-note
+    required: false
+    type: text
+  source: manual
+- id: ru-quiz-12-mini-calculator
+  path: quiz/ru-quiz-12-mini-calculator/
+  category: quiz
+  type: lead-form
+  layout_pattern: centered
+  signature: quiz|default|[content]|bg:false
+  display_name_ru: 🧮 Квиз — мини-калькулятор стоимости
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 100
+    name: headline
+    required: true
+    type: text
+  - max_chars: 60
+    name: param-1-label
+    required: true
+    type: text
+  - max_chars: 50
+    name: param-1-opt-1
+    required: true
+    type: text
+  - max_chars: 50
+    name: param-1-opt-2
+    required: true
+    type: text
+  - max_chars: 60
+    name: param-2-label
+    required: false
+    type: text
+  - max_chars: 50
+    name: param-2-opt-1
+    required: false
+    type: text
+  - max_chars: 50
+    name: param-2-opt-2
+    required: false
+    type: text
+  - max_chars: 40
+    name: result-prefix
+    required: true
+    type: text
+  - max_chars: 50
+    name: cta-button
+    required: true
+    type: text
+  source: manual
+- id: ru-quiz-13-comparison-question
+  path: quiz/ru-quiz-13-comparison-question/
+  category: quiz
+  type: lead-form
+  layout_pattern: centered
+  signature: quiz|default|[content]|bg:false
+  display_name_ru: ⚖️ Квиз — вопрос-сравнение «А или Б»
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 120
+    name: question-text
+    required: true
+    type: text
+  - max_chars: 50
+    name: option-a-title
+    required: true
+    type: text
+  - max_chars: 100
+    name: option-a-description
+    required: false
+    type: text
+  - max_chars: 50
+    name: option-b-title
+    required: true
+    type: text
+  - max_chars: 100
+    name: option-b-description
+    required: false
+    type: text
+  - max_chars: 80
+    name: question-comment
+    required: false
+    type: text
+  - max_chars: 60
+    name: progress-label
+    required: false
+    type: text
+  source: manual
+- id: ru-social-proof-03-client-logos
+  path: social-proof/ru-social-proof-03-client-logos/
+  category: social-proof
+  type: logos
+  layout_pattern: grid-4
+  signature: social-proof|default|[content]|bg:false
+  display_name_ru: 🏢 Логотипы клиентов — полоса доверия
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 60
+    name: headline
+    required: true
+    type: text
+  - name: logo-1
+    ratio: '3:1'
+    required: true
+    type: photo
+  - name: logo-2
+    ratio: '3:1'
+    required: true
+    type: photo
+  - name: logo-3
+    ratio: '3:1'
+    required: true
+    type: photo
+  - name: logo-4
+    ratio: '3:1'
+    required: true
+    type: photo
+  - name: logo-5
+    ratio: '3:1'
+    required: false
+    type: photo
+  - name: logo-6
+    ratio: '3:1'
+    required: false
+    type: photo
+  - name: logo-7
+    ratio: '3:1'
+    required: false
+    type: photo
+  - name: logo-8
+    ratio: '3:1'
+    required: false
+    type: photo
+  source: manual
+- id: ru-social-proof-04-authority-cases
+  path: social-proof/ru-social-proof-04-authority-cases/
+  category: social-proof
+  type: logos
+  layout_pattern: grid-4
+  signature: social-proof|default|[content]|bg:false
+  display_name_ru: 🏆 3 кейса — авторитет через результаты
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 60
+    name: headline
+    required: true
+    type: text
+  - name: case-1-photo
+    ratio: '16:9'
+    required: true
+    type: photo
+  - max_chars: 20
+    name: case-1-tag
+    required: false
+    type: text
+  - max_chars: 50
+    name: case-1-name
+    required: true
+    type: text
+  - max_chars: 100
+    name: case-1-result
+    required: true
+    type: text
+  - name: case-2-photo
+    ratio: '16:9'
+    required: true
+    type: photo
+  - max_chars: 20
+    name: case-2-tag
+    required: false
+    type: text
+  - max_chars: 50
+    name: case-2-name
+    required: true
+    type: text
+  - max_chars: 100
+    name: case-2-result
+    required: true
+    type: text
+  - name: case-3-photo
+    ratio: '16:9'
+    required: false
+    type: photo
+  - max_chars: 20
+    name: case-3-tag
+    required: false
+    type: text
+  - max_chars: 50
+    name: case-3-name
+    required: false
+    type: text
+  - max_chars: 100
+    name: case-3-result
+    required: false
+    type: text
+  source: manual
+- id: ru-social-proof-05-metrics-editorial
+  path: social-proof/ru-social-proof-05-metrics-editorial/
+  category: social-proof
+  type: logos
+  layout_pattern: grid-4
+  signature: social-proof|default|[content]|bg:false
+  display_name_ru: 📈 Доказательства — редакционные метрики
+  created: 2026-05-13
+  has_bg_image: false
+  slots:
+  - max_chars: 10
+    name: hero-metric
+    required: true
+    type: text
+  - max_chars: 160
+    name: hero-context
+    required: true
+    type: text
+  - max_chars: 40
+    name: metric-2-label
+    required: true
+    type: text
+  - max_chars: 12
+    name: metric-2-value
+    required: true
+    type: text
+  - max_chars: 40
+    name: metric-3-label
+    required: true
+    type: text
+  - max_chars: 12
+    name: metric-3-value
+    required: true
+    type: text
+  - max_chars: 60
+    name: headline
+    required: true
+    type: text
+  source: opendesign
+- id: ru-social-proof-06-editorial-quote
+  path: social-proof/ru-social-proof-06-editorial-quote/
+  category: social-proof
+  type: logos
+  layout_pattern: grid-4
+  signature: social-proof|default|[content]|bg:false
+  display_name_ru: Редакционная цитата — засечный шрифт + партнёры
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 10
+    name: section-num
+    required: false
+    type: text
+  - max_chars: 40
+    name: section-label
+    required: false
+    type: text
+  - max_chars: 6
+    name: section-index
+    required: false
+    type: text
+  - max_chars: 50
+    name: kicker
+    required: false
+    type: text
+  - max_chars: 280
+    name: quote
+    required: true
+    type: text
+  - max_chars: 3
+    name: author-initial
+    required: false
+    type: text
+  - max_chars: 60
+    name: author-name
+    required: true
+    type: text
+  - max_chars: 80
+    name: author-role
+    required: true
+    type: text
+  - max_chars: 50
+    name: partners-label
+    required: false
+    type: text
+  - max_chars: 40
+    name: partner-1
+    required: false
+    type: text
+  - max_chars: 30
+    name: partner-1-role
+    required: false
+    type: text
+  - max_chars: 40
+    name: partner-2
+    required: false
+    type: text
+  - max_chars: 30
+    name: partner-2-role
+    required: false
+    type: text
+  - max_chars: 40
+    name: partner-3
+    required: false
+    type: text
+  - max_chars: 30
+    name: partner-3-role
+    required: false
+    type: text
+  - mobile_ratio: skip
+    name: testimonial-image
+    ratio: '4:5'
+    required: false
+    type: photo
+  source: opendesign
+- id: ru-social-proof-07-logo-ticker
+  path: social-proof/ru-social-proof-07-logo-ticker/
+  category: social-proof
+  type: logos
+  layout_pattern: grid-4
+  signature: social-proof|default|[content]|bg:false
+  display_name_ru: Тикер клиентов — бегущая строка с названиями
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 40
+    name: ticker-label
+    required: true
+    type: text
+  - max_chars: 40
+    name: ticker-sub
+    required: false
+    type: text
+  - max_chars: 40
+    name: client-1
+    required: true
+    type: text
+  - max_chars: 40
+    name: client-2
+    required: false
+    type: text
+  - max_chars: 40
+    name: client-3
+    required: false
+    type: text
+  - max_chars: 40
+    name: client-4
+    required: false
+    type: text
+  - max_chars: 40
+    name: client-5
+    required: false
+    type: text
+  - max_chars: 40
+    name: client-6
+    required: false
+    type: text
+  - max_chars: 40
+    name: client-7
+    required: false
+    type: text
+  - max_chars: 40
+    name: client-8
+    required: false
+    type: text
+  source: opendesign
+- id: ru-social-proof-08-stats-deck
+  path: social-proof/ru-social-proof-08-stats-deck/
+  category: social-proof
+  type: logos
+  layout_pattern: grid-4
+  signature: social-proof|default|[content]|bg:false
+  display_name_ru: Метрики — сетка 4 статистики с чередующимся фоном
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 50
+    name: kicker
+    required: false
+    type: text
+  - max_chars: 80
+    name: headline
+    required: true
+    type: text
+  - max_chars: 12
+    name: stat-1-value
+    required: true
+    type: text
+  - max_chars: 60
+    name: stat-1-label
+    required: true
+    type: text
+  - max_chars: 60
+    name: stat-1-desc
+    required: false
+    type: text
+  - max_chars: 12
+    name: stat-2-value
+    required: true
+    type: text
+  - max_chars: 60
+    name: stat-2-label
+    required: true
+    type: text
+  - max_chars: 60
+    name: stat-2-desc
+    required: false
+    type: text
+  - max_chars: 12
+    name: stat-3-value
+    required: true
+    type: text
+  - max_chars: 60
+    name: stat-3-label
+    required: true
+    type: text
+  - max_chars: 60
+    name: stat-3-desc
+    required: false
+    type: text
+  - max_chars: 12
+    name: stat-4-value
+    required: true
+    type: text
+  - max_chars: 60
+    name: stat-4-label
+    required: true
+    type: text
+  - max_chars: 60
+    name: stat-4-desc
+    required: false
+    type: text
+  source: opendesign
+- id: ru-stats-01-growth-chart
+  path: social-proof/ru-stats-01-growth-chart/
+  category: social-proof
+  type: stats
+  layout_pattern: grid-2
+  signature: social-proof|default|[content]|bg:false
+  display_name_ru: 📈 График роста (клиенты / выручка / проекты за N лет)
+  created: 2026-05-13
+  has_bg_image: false
+  slots:
+  - chart_type: line
+    data:
+      points:
+      - - 2019
+        - 50
+      - - 2020
+        - 180
+      - - 2021
+        - 420
+      - - 2022
+        - 700
+      - - 2023
+        - 1000
+      x_label: Год
+      y_label: Клиентов
+    name: growth-chart-main
+    required: true
+    type: infographic
+  - max_chars: 60
+    name: headline
+    required: true
+    type: text
+  - max_chars: 200
+    name: subhead
+    required: false
+    type: text
+  source: manual
+- id: ru-testimonials-01-video-circles
+  path: social-proof/ru-testimonials-01-video-circles/
+  category: social-proof
+  type: testimonials
+  layout_pattern: cards
+  signature: social-proof|default|[content]|bg:false
+  display_name_ru: 🎬 Отзывы в круглых кружках (Reels-стиль)
+  created: 2026-05-12
+  has_bg_image: false
+  slots:
+  - max_chars: 60
+    name: headline
+    required: true
+    type: text
+  - name: testimonial-1-photo
+    ratio: '1:1'
+    required: true
+    type: photo
+  - max_chars: 30
+    name: testimonial-1-name
+    required: true
+    type: text
+  - max_chars: 100
+    name: testimonial-1-quote
+    required: true
+    type: text
+  - name: testimonial-2-photo
+    ratio: '1:1'
+    required: true
+    type: photo
+  - max_chars: 30
+    name: testimonial-2-name
+    required: true
+    type: text
+  - max_chars: 100
+    name: testimonial-2-quote
+    required: true
+    type: text
+  - name: testimonial-3-photo
+    ratio: '1:1'
+    required: true
+    type: photo
+  - max_chars: 30
+    name: testimonial-3-name
+    required: true
+    type: text
+  - max_chars: 100
+    name: testimonial-3-quote
+    required: true
+    type: text
+  - name: testimonial-4-photo
+    ratio: '1:1'
+    required: false
+    type: photo
+  - max_chars: 30
+    name: testimonial-4-name
+    required: false
+    type: text
+  - max_chars: 100
+    name: testimonial-4-quote
+    required: false
+    type: text
+  - name: testimonial-5-photo
+    ratio: '1:1'
+    required: false
+    type: photo
+  - max_chars: 30
+    name: testimonial-5-name
+    required: false
+    type: text
+  - max_chars: 100
+    name: testimonial-5-quote
+    required: false
+    type: text
+  source: manual
+- id: ru-testimonials-02-text-photo
+  path: social-proof/ru-testimonials-02-text-photo/
+  category: social-proof
+  type: testimonials
+  layout_pattern: cards
+  signature: social-proof|default|[content]|bg:false
+  display_name_ru: 💬 4 карточки отзывов с фото 2×2
+  created: 2026-05-12
+  has_bg_image: false
+  slots:
+  - max_chars: 60
+    name: headline
+    required: true
+    type: text
+  - name: testimonial-1-photo
+    ratio: '1:1'
+    required: true
+    type: photo
+  - max_chars: 200
+    name: testimonial-1-quote
+    required: true
+    type: text
+  - max_chars: 30
+    name: testimonial-1-name
+    required: true
+    type: text
+  - max_chars: 50
+    name: testimonial-1-role
+    required: false
+    type: text
+  - name: testimonial-2-photo
+    ratio: '1:1'
+    required: true
+    type: photo
+  - max_chars: 200
+    name: testimonial-2-quote
+    required: true
+    type: text
+  - max_chars: 30
+    name: testimonial-2-name
+    required: true
+    type: text
+  - max_chars: 50
+    name: testimonial-2-role
+    required: false
+    type: text
+  - name: testimonial-3-photo
+    ratio: '1:1'
+    required: false
+    type: photo
+  - max_chars: 200
+    name: testimonial-3-quote
+    required: false
+    type: text
+  - max_chars: 30
+    name: testimonial-3-name
+    required: false
+    type: text
+  - max_chars: 50
+    name: testimonial-3-role
+    required: false
+    type: text
+  - name: testimonial-4-photo
+    ratio: '1:1'
+    required: false
+    type: photo
+  - max_chars: 200
+    name: testimonial-4-quote
+    required: false
+    type: text
+  - max_chars: 30
+    name: testimonial-4-name
+    required: false
+    type: text
+  - max_chars: 50
+    name: testimonial-4-role
+    required: false
+    type: text
+  source: manual
+- id: social-proof-cinematic-split-antidiler-karpov-ru-3
+  path: social-proof/social-proof-cinematic-split-antidiler-karpov-ru-3/
+  category: social-proof
+  type: logos
+  layout_pattern: split
+  signature: social-proof|default|[content]|bg:false
+  display_name_ru: Крупный кейс с фото клиента у автомобиля, диагональной типографикой,
+    текстом отз
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: social-proof-corporate-cards-medregistrant-ru-6
+  path: social-proof/social-proof-corporate-cards-medregistrant-ru-6/
+  category: social-proof
+  type: logos
+  layout_pattern: cards
+  signature: social-proof|default|[content]|bg:false
+  display_name_ru: Карусель карточек клиентов с логотипами, краткими описаниями и
+    кнопками действия
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: social-proof-corporate-grid-3-zilant-group-5
+  path: social-proof/social-proof-corporate-grid-3-zilant-group-5/
+  category: social-proof
+  type: logos
+  layout_pattern: grid-3
+  signature: social-proof|default|[content]|bg:false
+  display_name_ru: Статистический блок с крупными красными числами, краткими подписями
+    и широким ви
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: social-proof-luxury-cards-romanmelnikov-tilda-12
+  path: social-proof/social-proof-luxury-cards-romanmelnikov-tilda-12/
+  category: social-proof
+  type: logos
+  layout_pattern: cards
+  signature: social-proof|default|[content]|bg:false
+  display_name_ru: Отзывы показаны в темных контурных карточках с круглыми аватарами
+    и золотыми дет
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: social-proof-minimal-centered-project21993216-tild-3
+  path: social-proof/social-proof-minimal-centered-project21993216-tild-3/
+  category: social-proof
+  type: logos
+  layout_pattern: centered
+  signature: social-proof|default|[content]|bg:false
+  display_name_ru: Секция отзывов или клиентов с заголовком и маленькими кнопками
+    карусели.
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: social-proof-minimal-stacked-antidiler-karpov-ru-4
+  path: social-proof/social-proof-minimal-stacked-antidiler-karpov-ru-4/
+  category: social-proof
+  type: logos
+  layout_pattern: stacked
+  signature: social-proof|default|[content]|bg:false
+  display_name_ru: 'Серия темных кейсов без крупных фото: имя, модель, услуга, отзыв
+    и акцентная кно'
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: social-proof-playful-grid-2-opt-ecowash-ru-9
+  path: social-proof/social-proof-playful-grid-2-opt-ecowash-ru-9/
+  category: social-proof
+  type: logos
+  layout_pattern: grid-2
+  signature: social-proof|default|[content]|bg:false
+  display_name_ru: Раздел отзывов с крупным заголовком и сеткой пустых белых карточек
+    для отзывов к
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: social-proof-technical-grid-4-portfolio-kdm1-ru-14
+  path: social-proof/social-proof-technical-grid-4-portfolio-kdm1-ru-14/
+  category: social-proof
+  type: logos
+  layout_pattern: grid-4
+  signature: social-proof|default|[content]|bg:false
+  display_name_ru: Статистический блок с крупными процентами, короткими подписями
+    и темной инфограф
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: unknown-003
+  path: social-proof/unknown-003/
+  category: social-proof
+  type: demo
+  layout_pattern: cinematic
+  signature: unknown|cinematic|[content]|bg:false
+  display_name_ru: 'social-proof: cinematic'
+  created: '2026-06-01'
+  has_bg_image: false
+  slots:
+  - name: content
+    type: text
+  source: cleaned
 - id: team-001
   path: team/team-001/
-  category: gallery
+  category: team
   type: team
   layout_pattern: cinematic
   signature: team|cinematic|[content]|bg:false
@@ -613,6 +4275,379 @@ blocks:
   - name: content
     type: text
   source: cleaned
+- id: ru-trust-01-guarantees-docs
+  path: trust/ru-trust-01-guarantees-docs/
+  category: trust
+  type: guarantees
+  layout_pattern: centered
+  signature: trust|default|[content]|bg:false
+  display_name_ru: '🛡️ 4 гарантии: договор + лицензия'
+  created: 2026-05-12
+  has_bg_image: false
+  slots:
+  - max_chars: 60
+    name: headline
+    required: true
+    type: text
+  - name: trust-1-icon
+    required: false
+    type: icon
+  - max_chars: 20
+    name: trust-1-title
+    required: true
+    type: text
+  - max_chars: 80
+    name: trust-1-text
+    required: true
+    type: text
+  - name: trust-2-icon
+    required: false
+    type: icon
+  - max_chars: 20
+    name: trust-2-title
+    required: true
+    type: text
+  - max_chars: 80
+    name: trust-2-text
+    required: true
+    type: text
+  - name: trust-3-icon
+    required: false
+    type: icon
+  - max_chars: 20
+    name: trust-3-title
+    required: true
+    type: text
+  - max_chars: 80
+    name: trust-3-text
+    required: true
+    type: text
+  - name: trust-4-icon
+    required: false
+    type: icon
+  - max_chars: 20
+    name: trust-4-title
+    required: true
+    type: text
+  - max_chars: 80
+    name: trust-4-text
+    required: true
+    type: text
+  source: manual
+- id: ru-trust-02-numbers-row
+  path: trust/ru-trust-02-numbers-row/
+  category: trust
+  type: guarantees
+  layout_pattern: centered
+  signature: trust|default|[content]|bg:false
+  display_name_ru: 📈 Полоса с 4 KPI-числами
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 60
+    name: headline
+    required: false
+    type: text
+  - max_chars: 10
+    name: stat-1-number
+    required: true
+    type: text
+  - max_chars: 20
+    name: stat-1-label
+    required: true
+    type: text
+  - max_chars: 10
+    name: stat-2-number
+    required: true
+    type: text
+  - max_chars: 20
+    name: stat-2-label
+    required: true
+    type: text
+  - max_chars: 10
+    name: stat-3-number
+    required: true
+    type: text
+  - max_chars: 20
+    name: stat-3-label
+    required: true
+    type: text
+  - max_chars: 10
+    name: stat-4-number
+    required: true
+    type: text
+  - max_chars: 20
+    name: stat-4-label
+    required: true
+    type: text
+  source: manual
+- id: ru-trust-03-descriptor-header
+  path: trust/ru-trust-03-descriptor-header/
+  category: trust
+  type: guarantees
+  layout_pattern: centered
+  signature: trust|default|[content]|bg:false
+  display_name_ru: 🏷️ Шапка с дескриптором — кто мы
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - name: logo
+    ratio: '3:1'
+    required: true
+    type: photo
+  - max_chars: 60
+    name: descriptor-text
+    required: true
+    type: text
+  - max_chars: 20
+    name: phone
+    required: true
+    type: text
+  - max_chars: 30
+    name: city-tag
+    required: false
+    type: text
+  - default_text: Связаться
+    name: header-cta
+    required: false
+    type: cta
+  source: manual
+- id: ru-trust-04-principles-grid
+  path: trust/ru-trust-04-principles-grid/
+  category: trust
+  type: guarantees
+  layout_pattern: centered
+  signature: trust|default|[content]|bg:false
+  display_name_ru: 🏛️ Принципы работы — редакционная сетка
+  created: 2026-05-13
+  has_bg_image: false
+  slots:
+  - max_chars: 60
+    name: headline
+    required: true
+    type: text
+  - max_chars: 40
+    name: p1-title
+    required: true
+    type: text
+  - max_chars: 160
+    name: p1-text
+    required: true
+    type: text
+  - max_chars: 40
+    name: p2-title
+    required: true
+    type: text
+  - max_chars: 160
+    name: p2-text
+    required: true
+    type: text
+  - max_chars: 40
+    name: p3-title
+    required: true
+    type: text
+  - max_chars: 160
+    name: p3-text
+    required: true
+    type: text
+  - max_chars: 40
+    name: p4-title
+    required: true
+    type: text
+  - max_chars: 160
+    name: p4-text
+    required: true
+    type: text
+  - max_chars: 40
+    name: p5-title
+    required: false
+    type: text
+  - max_chars: 160
+    name: p5-text
+    required: false
+    type: text
+  - max_chars: 40
+    name: p6-title
+    required: false
+    type: text
+  - max_chars: 160
+    name: p6-text
+    required: false
+    type: text
+  source: opendesign
+- id: ru-trust-05-manifesto-text
+  path: trust/ru-trust-05-manifesto-text/
+  category: trust
+  type: guarantees
+  layout_pattern: centered
+  signature: trust|default|[content]|bg:false
+  display_name_ru: Манифест — засечная цитата с левой полосой и подписью
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 50
+    name: section-label
+    required: false
+    type: text
+  - max_chars: 500
+    name: manifesto-text
+    required: true
+    type: text
+  - max_chars: 60
+    name: sig-text
+    required: false
+    type: text
+  source: opendesign
+- id: ru-trust-06-labs-showcase
+  path: trust/ru-trust-06-labs-showcase/
+  category: trust
+  type: guarantees
+  layout_pattern: centered
+  signature: trust|default|[content]|bg:false
+  display_name_ru: Витрина проектов — сетка 5 кейсов с тегами
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 50
+    name: kicker
+    required: false
+    type: text
+  - max_chars: 80
+    name: headline
+    required: true
+    type: text
+  - max_chars: 20
+    name: tag-1
+    required: false
+    type: text
+  - max_chars: 20
+    name: tag-2
+    required: false
+    type: text
+  - max_chars: 20
+    name: tag-3
+    required: false
+    type: text
+  - max_chars: 20
+    name: tag-4
+    required: false
+    type: text
+  - max_chars: 20
+    name: lab-1-type
+    required: false
+    type: text
+  - max_chars: 50
+    name: lab-1-title
+    required: true
+    type: text
+  - max_chars: 120
+    name: lab-1-desc
+    required: true
+    type: text
+  - max_chars: 10
+    name: lab-1-year
+    required: false
+    type: text
+  - max_chars: 20
+    name: lab-2-type
+    required: false
+    type: text
+  - max_chars: 50
+    name: lab-2-title
+    required: true
+    type: text
+  - max_chars: 120
+    name: lab-2-desc
+    required: true
+    type: text
+  - max_chars: 10
+    name: lab-2-year
+    required: false
+    type: text
+  - max_chars: 20
+    name: lab-3-type
+    required: false
+    type: text
+  - max_chars: 50
+    name: lab-3-title
+    required: true
+    type: text
+  - max_chars: 120
+    name: lab-3-desc
+    required: true
+    type: text
+  - max_chars: 10
+    name: lab-3-year
+    required: false
+    type: text
+  - max_chars: 20
+    name: lab-4-type
+    required: false
+    type: text
+  - max_chars: 50
+    name: lab-4-title
+    required: true
+    type: text
+  - max_chars: 120
+    name: lab-4-desc
+    required: true
+    type: text
+  - max_chars: 10
+    name: lab-4-year
+    required: false
+    type: text
+  - max_chars: 20
+    name: lab-5-type
+    required: false
+    type: text
+  - max_chars: 50
+    name: lab-5-title
+    required: true
+    type: text
+  - max_chars: 120
+    name: lab-5-desc
+    required: true
+    type: text
+  - max_chars: 10
+    name: lab-5-year
+    required: false
+    type: text
+  source: opendesign
+- id: ru-trust-07-partner-logos
+  path: trust/ru-trust-07-partner-logos/
+  category: trust
+  type: guarantees
+  layout_pattern: centered
+  signature: trust|default|[content]|bg:false
+  display_name_ru: Полоса логотипов — компании-клиенты в ряд
+  created: '2026-05-13'
+  has_bg_image: false
+  slots:
+  - max_chars: 60
+    name: section-label
+    required: false
+    type: text
+  - max_chars: 40
+    name: logo-1
+    required: true
+    type: text
+  - max_chars: 40
+    name: logo-2
+    required: false
+    type: text
+  - max_chars: 40
+    name: logo-3
+    required: false
+    type: text
+  - max_chars: 40
+    name: logo-4
+    required: false
+    type: text
+  - max_chars: 40
+    name: logo-5
+    required: false
+    type: text
+  source: opendesign
 - id: trust-001
   path: trust/trust-001/
   category: trust
@@ -652,3 +4687,153 @@ blocks:
   - name: content
     type: text
   source: cleaned
+- id: trust-corporate-grid-3-project21993216-tild-12
+  path: trust/trust-corporate-grid-3-project21993216-tild-12/
+  category: trust
+  type: guarantees
+  layout_pattern: grid-3
+  signature: trust|default|[content]|bg:false
+  display_name_ru: Секция документов с тремя карточками сертификатов на светло-голубом
+    фоне.
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: trust-corporate-grid-4-sskrusgun-ru-11
+  path: trust/trust-corporate-grid-4-sskrusgun-ru-11/
+  category: trust
+  type: guarantees
+  layout_pattern: grid-4
+  signature: trust|default|[content]|bg:false
+  display_name_ru: 'Секция ценностей с четырьмя текстовыми колонками и крупными фоновыми
+    буквенными '
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: trust-editorial-grid-2-romanmelnikov-tilda-11
+  path: trust/trust-editorial-grid-2-romanmelnikov-tilda-11/
+  category: trust
+  type: guarantees
+  layout_pattern: grid-2
+  signature: trust|default|[content]|bg:false
+  display_name_ru: Длинный блок критериев с большим пустым пространством и двумя плотными
+    текстовым
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: trust-editorial-grid-2-zilant-group-7
+  path: trust/trust-editorial-grid-2-zilant-group-7/
+  category: trust
+  type: guarantees
+  layout_pattern: grid-2
+  signature: trust|default|[content]|bg:false
+  display_name_ru: Секция кейса с большим заголовком, двумя документальными карточками
+    и бирюзовыми
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: trust-editorial-grid-3-portfolio-kdm1-ru-4
+  path: trust/trust-editorial-grid-3-portfolio-kdm1-ru-4/
+  category: trust
+  type: guarantees
+  layout_pattern: grid-3
+  signature: trust|default|[content]|bg:false
+  display_name_ru: Секция принципов с диагональной светлой подложкой, крупными заголовками
+    и предме
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: trust-editorial-stacked-portfolio-kdm1-ru-12
+  path: trust/trust-editorial-stacked-portfolio-kdm1-ru-12/
+  category: trust
+  type: guarantees
+  layout_pattern: stacked
+  signature: trust|default|[content]|bg:false
+  display_name_ru: Контрастный доверительный блок с большим заголовком, светлой вставкой
+    и коротким
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: trust-luxury-centered-romanmelnikov-tilda-5
+  path: trust/trust-luxury-centered-romanmelnikov-tilda-5/
+  category: trust
+  type: guarantees
+  layout_pattern: centered
+  signature: trust|default|[content]|bg:false
+  display_name_ru: Имиджевый блок с большим словом-заголовком, декоративной подписью
+    и спокойной те
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: trust-minimal-grid-4-zilant-group-8
+  path: trust/trust-minimal-grid-4-zilant-group-8/
+  category: trust
+  type: guarantees
+  layout_pattern: grid-4
+  signature: trust|default|[content]|bg:false
+  display_name_ru: Горизонтальная полоса небольших логотипов на большом белом поле
+    усиливает довери
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: trust-playful-stacked-opt-ecowash-ru-4
+  path: trust/trust-playful-stacked-opt-ecowash-ru-4/
+  category: trust
+  type: guarantees
+  layout_pattern: stacked
+  signature: trust|default|[content]|bg:false
+  display_name_ru: Яркий блок доверия с большим заголовком, несколькими метриками
+    и крупной декорат
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated
+- id: trust-technical-grid-3-project21993216-tild-9
+  path: trust/trust-technical-grid-3-project21993216-tild-9/
+  category: trust
+  type: guarantees
+  layout_pattern: grid-3
+  signature: trust|default|[content]|bg:false
+  display_name_ru: Блок гарантий и поддержки в виде сетки карточек с иконками и короткими
+    пояснения
+  created: '2026-06-02'
+  has_bg_image: false
+  slots:
+  - name: heading
+    required: true
+    type: text
+  source: auto-generated

@@ -104,7 +104,7 @@ def main() -> None:
     p.add_argument("--library", required=True)
     p.add_argument("--type", required=True)
     p.add_argument("--niche", required=True)
-    p.add_argument("--top", type=int, default=3)
+    p.add_argument("--top", type=int, default=100)  # Show more candidates by default (Feature 1: Full Carousel)
     p.add_argument("--quiz-role", default="", dest="quiz_role")
     args = p.parse_args()
 
