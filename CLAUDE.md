@@ -200,6 +200,20 @@ bash scripts/migrate-template-readmes.sh ~/Lendings/<existing-project>
 
 Общая библиотека wireframe-блоков: `block-library/`. См. `block-library/README.md`.
 
+**Формат блока (B35) — обязателен:** каждый `template.html` это **фрагмент**
+(не полный HTML-документ), весь редактируемый контент — через текстовые
+плейсхолдеры `{{slot:name}}` (НЕ `data-slot`, НЕ `[русский текст]`), CSS inline
+с префиксом `lp-`, имена слотов синхронны с `meta.yaml::slots`. Канон:
+[`docs/standards/block-template-format.md`](docs/standards/block-template-format.md).
+
+**Жизненный цикл блока** (добавить/нормализовать/валидировать/регенерировать):
+[`docs/standards/block-lifecycle.md`](docs/standards/block-lifecycle.md).
+
+- Привести старые блоки к стандарту: `python scripts/normalize-block-templates.py`.
+- Единственный генератор галереи — `scripts/generate-gallery.py` (2 комбобокса
+  category→variant, демо-превью, модалка). Legacy `render-gallery.py/.js` удалены.
+- Валидация: `pytest tests/block-library/` (формат, таксономия, каталог, галерея).
+
 ## Атрибуция
 
 См. `THIRD_PARTY_NOTICES.md` — мы используем фрагменты OpenDesign (Apache-2.0).
