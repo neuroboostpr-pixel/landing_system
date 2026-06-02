@@ -3,7 +3,9 @@ updated: '2026-06-02'
 blocks:
 - id: contacts-001
   path: contacts/contacts-001/
-  category: contacts
+  folder: contacts
+  category: footer
+  variant: null
   type: contacts
   layout_pattern: brutalist
   signature: contacts|brutalist|[content]|bg:false
@@ -16,7 +18,9 @@ blocks:
   source: cleaned
 - id: contacts-002
   path: contacts/contacts-002/
-  category: contacts
+  folder: contacts
+  category: footer
+  variant: null
   type: contacts
   layout_pattern: grid
   signature: contacts|grid|[content]|bg:false
@@ -29,7 +33,9 @@ blocks:
   source: cleaned
 - id: contacts-003
   path: contacts/contacts-003/
-  category: contacts
+  folder: contacts
+  category: footer
+  variant: null
   type: contacts
   layout_pattern: split
   signature: contacts|split|[content]|bg:false
@@ -42,10 +48,12 @@ blocks:
   source: cleaned
 - id: contacts-corporate-split-portfolio-kdm1-ru-16
   path: contacts/contacts-corporate-split-portfolio-kdm1-ru-16/
-  category: contacts
+  folder: contacts
+  category: forms
+  variant: booking
   type: contacts
   layout_pattern: split
-  signature: contacts|default|[content]|bg:false
+  signature: forms|default|[content]|bg:false
   display_name_ru: Финальный контактный экран с крупным заголовком, формой выбора
     времени и яркой к
   created: '2026-06-02'
@@ -55,467 +63,11 @@ blocks:
     required: true
     type: text
   source: auto-generated
-- id: cta-001
-  path: cta/cta-001/
-  category: cta
-  type: cta
-  layout_pattern: split
-  signature: cta|split|[badge,heading,subhead,primary-cta-label,primary-cta-link,secondary-cta-label,secondary-cta-link,background-image,background-image-mobile,background-image-alt]|bg:true
-  display_name_ru: 'CTA: сплит с фоном'
-  created: '2026-06-01'
-  has_bg_image: true
-  slots:
-  - name: badge
-    type: text
-  - name: heading
-    type: text
-  - name: subhead
-    type: text
-  - name: primary-cta-label
-    type: text
-  - name: primary-cta-link
-    type: url
-  - name: secondary-cta-label
-    type: text
-  - name: secondary-cta-link
-    type: url
-  - name: background-image
-    type: image
-  - name: background-image-mobile
-    type: image
-  - name: background-image-alt
-    type: text
-  source: cleaned
-- id: cta-002
-  path: cta/cta-002/
-  category: cta
-  type: cta
-  layout_pattern: brutalist
-  signature: cta|brutalist|[content]|bg:false
-  display_name_ru: 'cta: brutalist'
-  created: '2026-06-01'
-  has_bg_image: false
-  slots:
-  - name: content
-    type: text
-  source: cleaned
-- id: cta-003
-  path: cta/cta-003/
-  category: cta
-  type: cta
-  layout_pattern: cinematic
-  signature: cta|cinematic|[content]|bg:false
-  display_name_ru: 'cta: cinematic'
-  created: '2026-06-01'
-  has_bg_image: false
-  slots:
-  - name: content
-    type: text
-  source: cleaned
-- id: cta-004
-  path: cta/cta-004/
-  category: cta
-  type: cta
-  layout_pattern: default
-  signature: cta|default|[content]|bg:false
-  display_name_ru: 'cta: default'
-  created: '2026-06-01'
-  has_bg_image: false
-  slots:
-  - name: content
-    type: text
-  source: cleaned
-- id: cta-005
-  path: cta/cta-005/
-  category: cta
-  type: cta
-  layout_pattern: grid
-  signature: cta|grid|[content]|bg:false
-  display_name_ru: 'cta: grid'
-  created: '2026-06-01'
-  has_bg_image: false
-  slots:
-  - name: content
-    type: text
-  source: cleaned
-- id: cta-006
-  path: cta/cta-006/
-  category: cta
-  type: cta
-  layout_pattern: split
-  signature: cta|split|[content]|bg:false
-  display_name_ru: 'cta: split'
-  created: '2026-06-01'
-  has_bg_image: false
-  slots:
-  - name: content
-    type: text
-  source: cleaned
-- id: cta-007
-  path: cta/cta-007/
-  category: cta
-  type: cta
-  layout_pattern: minimal
-  signature: cta|minimal|[content]|bg:false
-  display_name_ru: 'cta: minimal'
-  created: '2026-06-01'
-  has_bg_image: false
-  slots:
-  - name: content
-    type: text
-  source: cleaned
-- id: cta-cinematic-split-portfolio-kdm1-ru-9
-  path: cta/cta-cinematic-split-portfolio-kdm1-ru-9/
-  category: cta
-  type: cta
-  layout_pattern: split
-  signature: cta|default|[content]|bg:false
-  display_name_ru: Темный эмоциональный блок с крупной иллюстрацией действия и сильным
-    текстовым ак
-  created: '2026-06-02'
-  has_bg_image: false
-  slots:
-  - name: heading
-    required: true
-    type: text
-  source: auto-generated
-- id: cta-corporate-centered-zilant-group-9
-  path: cta/cta-corporate-centered-zilant-group-9/
-  category: cta
-  type: cta
-  layout_pattern: centered
-  signature: cta|default|[content]|bg:false
-  display_name_ru: Финальный призыв с крупным заголовком, коротким текстом, красной
-    кнопкой и размы
-  created: '2026-06-02'
-  has_bg_image: false
-  slots:
-  - name: heading
-    required: true
-    type: text
-  source: auto-generated
-- id: cta-corporate-split-project21993216-tild-6
-  path: cta/cta-corporate-split-project21993216-tild-6/
-  category: cta
-  type: cta
-  layout_pattern: split
-  signature: cta|default|[content]|bg:false
-  display_name_ru: Горизонтальный баннер с коротким оффером, поясняющим текстом и
-    кнопкой справа.
-  created: '2026-06-02'
-  has_bg_image: false
-  slots:
-  - name: heading
-    required: true
-    type: text
-  source: auto-generated
-- id: cta-corporate-stacked-romanmelnikov-tilda-13
-  path: cta/cta-corporate-stacked-romanmelnikov-tilda-13/
-  category: cta
-  type: cta
-  layout_pattern: stacked
-  signature: cta|default|[content]|bg:false
-  display_name_ru: Финальный призыв с крупным текстом, контактной строкой и компактной
-    формой в рам
-  created: '2026-06-02'
-  has_bg_image: false
-  slots:
-  - name: heading
-    required: true
-    type: text
-  source: auto-generated
-- id: cta-minimal-split-portfolio-kdm1-ru-8
-  path: cta/cta-minimal-split-portfolio-kdm1-ru-8/
-  category: cta
-  type: cta
-  layout_pattern: split
-  signature: cta|default|[content]|bg:false
-  display_name_ru: Контактная форма в светлой карточке рядом с lifestyle-фото и заметной
-    кнопкой от
-  created: '2026-06-02'
-  has_bg_image: false
-  slots:
-  - name: heading
-    required: true
-    type: text
-  source: auto-generated
-- id: cta-minimal-split-project21993216-tild-8
-  path: cta/cta-minimal-split-project21993216-tild-8/
-  category: cta
-  type: cta
-  layout_pattern: split
-  signature: cta|default|[content]|bg:false
-  display_name_ru: Короткий подтверждающий баннер с спокойным фоном и одной кнопкой
-    действия.
-  created: '2026-06-02'
-  has_bg_image: false
-  slots:
-  - name: heading
-    required: true
-    type: text
-  source: auto-generated
-- id: cta-technical-centered-antidiler-karpov-ru-5
-  path: cta/cta-technical-centered-antidiler-karpov-ru-5/
-  category: cta
-  type: cta
-  layout_pattern: centered
-  signature: cta|default|[content]|bg:false
-  display_name_ru: Блок подбора запчастей с сильным заголовком, формой в одну строку
-    и оранжевой кн
-  created: '2026-06-02'
-  has_bg_image: false
-  slots:
-  - name: heading
-    required: true
-    type: text
-  source: auto-generated
-- id: cta-technical-split-medregistrant-ru-7
-  path: cta/cta-technical-split-medregistrant-ru-7/
-  category: cta
-  type: cta
-  layout_pattern: split
-  signature: cta|default|[content]|bg:false
-  display_name_ru: Узкий CTA-блок с сильным заголовком слева и размытым тематическим
-    изображением с
-  created: '2026-06-02'
-  has_bg_image: false
-  slots:
-  - name: heading
-    required: true
-    type: text
-  source: auto-generated
-- id: ru-cta-01-callback-tg-max
-  path: cta/ru-cta-01-callback-tg-max/
-  category: cta
-  type: cta
-  layout_pattern: split
-  signature: cta|default|[content]|bg:false
-  display_name_ru: '📞 CTA: Telegram / Max / Перезвоните'
-  created: 2026-05-12
-  has_bg_image: false
-  slots:
-  - max_chars: 80
-    name: headline
-    required: true
-    type: text
-  - max_chars: 140
-    name: subhead
-    required: false
-    type: text
-  - default_text: Написать в Telegram
-    name: tg-cta
-    required: true
-    type: cta
-  - default_text: Написать в Max
-    name: max-cta
-    required: true
-    type: cta
-  - default_text: Перезвоните мне
-    name: callback-cta
-    required: true
-    type: cta
-  source: manual
-- id: ru-cta-02-banner-stripe
-  path: cta/ru-cta-02-banner-stripe/
-  category: cta
-  type: cta
-  layout_pattern: split
-  signature: cta|default|[content]|bg:false
-  display_name_ru: 🟧 Баннер-CTA на акцентном фоне
-  created: '2026-05-13'
-  has_bg_image: false
-  slots:
-  - max_chars: 70
-    name: headline
-    required: true
-    type: text
-  - max_chars: 120
-    name: subhead
-    required: false
-    type: text
-  - default_text: Оставить заявку
-    name: primary-cta
-    required: true
-    type: cta
-  source: manual
-- id: ru-cta-03-urgency-scarcity
-  path: cta/ru-cta-03-urgency-scarcity/
-  category: cta
-  type: cta
-  layout_pattern: split
-  signature: cta|default|[content]|bg:false
-  display_name_ru: ⏰ Полоса срочности — осталось X мест
-  created: '2026-05-13'
-  has_bg_image: false
-  slots:
-  - max_chars: 60
-    name: urgency-label
-    required: true
-    type: text
-  - max_chars: 5
-    name: seats-count
-    required: false
-    type: text
-  - max_chars: 30
-    name: deadline-date
-    required: false
-    type: text
-  - max_chars: 120
-    name: subhead
-    required: false
-    type: text
-  - default_text: Успеть получить
-    name: primary-cta
-    required: true
-    type: cta
-  source: manual
-- id: ru-cta-04-lead-magnet
-  path: cta/ru-cta-04-lead-magnet/
-  category: cta
-  type: cta
-  layout_pattern: split
-  signature: cta|default|[content]|bg:false
-  display_name_ru: 🎁 Лид-магнит — получите бесплатно
-  created: '2026-05-13'
-  has_bg_image: false
-  slots:
-  - max_chars: 60
-    name: freebie-title
-    required: true
-    type: text
-  - max_chars: 200
-    name: freebie-description
-    required: true
-    type: text
-  - max_chars: 20
-    name: phone-input
-    required: true
-    type: text
-  - default_text: Получить бесплатно
-    name: primary-cta
-    required: true
-    type: cta
-  - max_chars: 200
-    name: agreement-text
-    required: false
-    type: text
-  source: manual
-- id: ru-cta-05-login-cta
-  path: cta/ru-cta-05-login-cta/
-  category: cta
-  type: cta
-  layout_pattern: split
-  signature: cta|default|[content]|bg:false
-  display_name_ru: 🔐 CTA — форма регистрации/записи
-  created: 2026-05-13
-  has_bg_image: false
-  slots:
-  - name: brand-icon
-    required: false
-    type: icon
-  - max_chars: 50
-    name: headline
-    required: true
-    type: text
-  - max_chars: 120
-    name: subhead
-    required: true
-    type: text
-  - max_chars: 40
-    name: input-placeholder
-    required: true
-    type: text
-  - default_text: Получить доступ
-    name: primary-cta
-    required: true
-    type: cta
-  - max_chars: 80
-    name: trust-note
-    required: false
-    type: text
-  source: opendesign
-- id: ru-cta-06-editorial-paper
-  path: cta/ru-cta-06-editorial-paper/
-  category: cta
-  type: cta
-  layout_pattern: split
-  signature: cta|default|[content]|bg:false
-  display_name_ru: Редакционный CTA — бежевый, курсив, пульс, нумерация
-  created: '2026-05-13'
-  has_bg_image: false
-  slots:
-  - max_chars: 10
-    name: section-num
-    required: false
-    type: text
-  - max_chars: 40
-    name: section-label
-    required: false
-    type: text
-  - max_chars: 6
-    name: section-index
-    required: false
-    type: text
-  - max_chars: 50
-    name: kicker
-    required: false
-    type: text
-  - max_chars: 80
-    name: headline
-    required: true
-    type: text
-  - max_chars: 220
-    name: subhead
-    required: false
-    type: text
-  - default_text: Оставить заявку
-    name: primary-cta
-    required: true
-    type: cta
-  - default_text: Посмотреть кейсы
-    name: secondary-cta
-    required: false
-    type: cta
-  - max_chars: 60
-    name: footer-note
-    required: false
-    type: text
-  - mobile_ratio: skip
-    name: cta-image
-    ratio: '1:1'
-    required: false
-    type: photo
-  source: opendesign
-- id: ru-cta-07-accent-bg
-  path: cta/ru-cta-07-accent-bg/
-  category: cta
-  type: cta
-  layout_pattern: split
-  signature: cta|default|[content]|bg:false
-  display_name_ru: CTA на акцентном фоне — контраст, минимум элементов
-  created: '2026-05-13'
-  has_bg_image: false
-  slots:
-  - max_chars: 70
-    name: headline
-    required: true
-    type: text
-  - max_chars: 180
-    name: subhead
-    required: false
-    type: text
-  - default_text: Начать сейчас
-    name: primary-cta
-    required: true
-    type: cta
-  - max_chars: 100
-    name: footnote
-    required: false
-    type: text
-  source: opendesign
 - id: faq-corporate-stacked-portfolio-kdm1-ru-15
   path: faq/faq-corporate-stacked-portfolio-kdm1-ru-15/
+  folder: faq
   category: faq
+  variant: null
   type: faq
   layout_pattern: stacked
   signature: faq|default|[content]|bg:false
@@ -529,7 +81,9 @@ blocks:
   source: auto-generated
 - id: faq-minimal-stacked-project21993216-tild-11
   path: faq/faq-minimal-stacked-project21993216-tild-11/
+  folder: faq
   category: faq
+  variant: null
   type: faq
   layout_pattern: stacked
   signature: faq|default|[content]|bg:false
@@ -544,7 +98,9 @@ blocks:
   source: auto-generated
 - id: faq-minimal-stacked-sskrusgun-ru-13
   path: faq/faq-minimal-stacked-sskrusgun-ru-13/
+  folder: faq
   category: faq
+  variant: null
   type: faq
   layout_pattern: stacked
   signature: faq|default|[content]|bg:false
@@ -559,7 +115,9 @@ blocks:
   source: auto-generated
 - id: ru-faq-01-accordion
   path: faq/ru-faq-01-accordion/
+  folder: faq
   category: faq
+  variant: null
   type: faq
   layout_pattern: stacked
   signature: faq|default|[content]|bg:false
@@ -622,7 +180,9 @@ blocks:
   source: manual
 - id: ru-faq-02-why-us
   path: faq/ru-faq-02-why-us/
+  folder: faq
   category: faq
+  variant: null
   type: faq
   layout_pattern: stacked
   signature: faq|default|[content]|bg:false
@@ -677,7 +237,9 @@ blocks:
   source: manual
 - id: ru-faq-03-searchable
   path: faq/ru-faq-03-searchable/
+  folder: faq
   category: faq
+  variant: null
   type: faq
   layout_pattern: stacked
   signature: faq|default|[content]|bg:false
@@ -736,7 +298,9 @@ blocks:
   source: opendesign
 - id: ru-faq-04-pricing-faq
   path: faq/ru-faq-04-pricing-faq/
+  folder: faq
   category: faq
+  variant: null
   type: faq
   layout_pattern: stacked
   signature: faq|default|[content]|bg:false
@@ -793,35 +357,11 @@ blocks:
     required: false
     type: text
   source: opendesign
-- id: unknown-001
-  path: faq/unknown-001/
-  category: faq
-  type: demo
-  layout_pattern: default
-  signature: unknown|default|[content]|bg:false
-  display_name_ru: 'faq: default'
-  created: '2026-06-01'
-  has_bg_image: false
-  slots:
-  - name: content
-    type: text
-  source: cleaned
-- id: unknown-002
-  path: faq/unknown-002/
-  category: faq
-  type: demo
-  layout_pattern: minimal
-  signature: unknown|minimal|[content]|bg:false
-  display_name_ru: 'faq: minimal'
-  created: '2026-06-01'
-  has_bg_image: false
-  slots:
-  - name: content
-    type: text
-  source: cleaned
 - id: features-001
   path: features/features-001/
+  folder: features
   category: features
+  variant: null
   type: features
   layout_pattern: brutalist
   signature: features|brutalist|[content]|bg:false
@@ -834,7 +374,9 @@ blocks:
   source: cleaned
 - id: features-002
   path: features/features-002/
+  folder: features
   category: features
+  variant: null
   type: features
   layout_pattern: cinematic
   signature: features|cinematic|[content]|bg:false
@@ -847,7 +389,9 @@ blocks:
   source: cleaned
 - id: features-003
   path: features/features-003/
+  folder: features
   category: features
+  variant: null
   type: features
   layout_pattern: grid
   signature: features|grid|[content]|bg:false
@@ -860,7 +404,9 @@ blocks:
   source: cleaned
 - id: features-004
   path: features/features-004/
+  folder: features
   category: features
+  variant: null
   type: features
   layout_pattern: split
   signature: features|split|[content]|bg:false
@@ -873,7 +419,9 @@ blocks:
   source: cleaned
 - id: features-005
   path: features/features-005/
+  folder: features
   category: features
+  variant: null
   type: features
   layout_pattern: default
   signature: features|default|[content]|bg:false
@@ -886,7 +434,9 @@ blocks:
   source: cleaned
 - id: features-006
   path: features/features-006/
+  folder: features
   category: features
+  variant: null
   type: features
   layout_pattern: minimal
   signature: features|minimal|[content]|bg:false
@@ -899,7 +449,9 @@ blocks:
   source: cleaned
 - id: features-brutalist-split-antidiler-karpov-ru-2
   path: features/features-brutalist-split-antidiler-karpov-ru-2/
+  folder: features
   category: features
+  variant: null
   type: features
   layout_pattern: split
   signature: features|default|[content]|bg:false
@@ -914,7 +466,9 @@ blocks:
   source: auto-generated
 - id: features-corporate-grid-3-opt-ecowash-ru-8
   path: features/features-corporate-grid-3-opt-ecowash-ru-8/
+  folder: features
   category: features
+  variant: null
   type: features
   layout_pattern: grid-3
   signature: features|default|[content]|bg:false
@@ -929,7 +483,9 @@ blocks:
   source: auto-generated
 - id: features-corporate-split-sskrusgun-ru-8
   path: features/features-corporate-split-sskrusgun-ru-8/
+  folder: features
   category: features
+  variant: null
   type: features
   layout_pattern: split
   signature: features|default|[content]|bg:false
@@ -944,7 +500,9 @@ blocks:
   source: auto-generated
 - id: features-editorial-grid-2-romanmelnikov-tilda-9
   path: features/features-editorial-grid-2-romanmelnikov-tilda-9/
+  folder: features
   category: features
+  variant: null
   type: features
   layout_pattern: grid-2
   signature: features|default|[content]|bg:false
@@ -959,7 +517,9 @@ blocks:
   source: auto-generated
 - id: features-editorial-split-project21993216-tild-7
   path: features/features-editorial-split-project21993216-tild-7/
+  folder: features
   category: features
+  variant: null
   type: features
   layout_pattern: split
   signature: features|default|[content]|bg:false
@@ -974,7 +534,9 @@ blocks:
   source: auto-generated
 - id: features-editorial-stacked-romanmelnikov-tilda-2
   path: features/features-editorial-stacked-romanmelnikov-tilda-2/
+  folder: features
   category: features
+  variant: null
   type: features
   layout_pattern: stacked
   signature: features|default|[content]|bg:false
@@ -989,7 +551,9 @@ blocks:
   source: auto-generated
 - id: features-technical-grid-3-portfolio-kdm1-ru-2
   path: features/features-technical-grid-3-portfolio-kdm1-ru-2/
+  folder: features
   category: features
+  variant: null
   type: features
   layout_pattern: grid-3
   signature: features|default|[content]|bg:false
@@ -1004,7 +568,9 @@ blocks:
   source: auto-generated
 - id: features-technical-grid-3-portfolio-kdm1-ru-5
   path: features/features-technical-grid-3-portfolio-kdm1-ru-5/
+  folder: features
   category: features
+  variant: null
   type: features
   layout_pattern: grid-3
   signature: features|default|[content]|bg:false
@@ -1019,7 +585,9 @@ blocks:
   source: auto-generated
 - id: features-technical-grid-3-portfolio-kdm1-ru-6
   path: features/features-technical-grid-3-portfolio-kdm1-ru-6/
+  folder: features
   category: features
+  variant: null
   type: features
   layout_pattern: grid-3
   signature: features|default|[content]|bg:false
@@ -1034,7 +602,9 @@ blocks:
   source: auto-generated
 - id: features-technical-grid-3-zilant-group-4
   path: features/features-technical-grid-3-zilant-group-4/
+  folder: features
   category: features
+  variant: null
   type: features
   layout_pattern: grid-3
   signature: features|default|[content]|bg:false
@@ -1049,10 +619,12 @@ blocks:
   source: auto-generated
 - id: features-technical-grid-4-project21993216-tild-2
   path: features/features-technical-grid-4-project21993216-tild-2/
-  category: features
+  folder: features
+  category: social-proof
+  variant: numbers
   type: features
   layout_pattern: grid-4
-  signature: features|default|[content]|bg:false
+  signature: social-proof|default|[content]|bg:false
   display_name_ru: 'Полоса с коротким тезисом и четырьмя числовыми преимуществами
     на светло-голубом '
   created: '2026-06-02'
@@ -1064,7 +636,9 @@ blocks:
   source: auto-generated
 - id: features-technical-split-sskrusgun-ru-6
   path: features/features-technical-split-sskrusgun-ru-6/
+  folder: features
   category: features
+  variant: null
   type: features
   layout_pattern: split
   signature: features|default|[content]|bg:false
@@ -1079,7 +653,9 @@ blocks:
   source: auto-generated
 - id: ru-features-01-3col-icons
   path: features/ru-features-01-3col-icons/
+  folder: features
   category: features
+  variant: null
   type: features
   layout_pattern: grid-3
   signature: features|default|[content]|bg:false
@@ -1127,7 +703,9 @@ blocks:
   source: manual
 - id: ru-features-02-bento-grid
   path: features/ru-features-02-bento-grid/
+  folder: features
   category: features
+  variant: null
   type: features
   layout_pattern: grid-3
   signature: features|default|[content]|bg:false
@@ -1179,7 +757,9 @@ blocks:
   source: manual
 - id: ru-features-03-swiss-cards
   path: features/ru-features-03-swiss-cards/
+  folder: features
   category: features
+  variant: null
   type: features
   layout_pattern: grid-3
   signature: features|default|[content]|bg:false
@@ -1226,7 +806,9 @@ blocks:
   source: opendesign
 - id: ru-features-04-numbered-list
   path: features/ru-features-04-numbered-list/
+  folder: features
   category: features
+  variant: null
   type: features
   layout_pattern: grid-3
   signature: features|default|[content]|bg:false
@@ -1277,10 +859,12 @@ blocks:
   source: opendesign
 - id: ru-features-05-method-steps
   path: features/ru-features-05-method-steps/
-  category: features
+  folder: features
+  category: content
+  variant: process
   type: features
   layout_pattern: grid-3
-  signature: features|default|[content]|bg:false
+  signature: content|default|[content]|bg:false
   display_name_ru: Метод — 4 шага с линией-соединителем
   created: '2026-05-13'
   has_bg_image: false
@@ -1332,7 +916,9 @@ blocks:
   source: opendesign
 - id: ru-features-06-cards-2x2
   path: features/ru-features-06-cards-2x2/
+  folder: features
   category: features
+  variant: null
   type: features
   layout_pattern: grid-3
   signature: features|default|[content]|bg:false
@@ -1403,10 +989,12 @@ blocks:
   source: opendesign
 - id: ru-features-07-2col-split
   path: features/ru-features-07-2col-split/
-  category: features
+  folder: features
+  category: content
+  variant: about
   type: features
   layout_pattern: grid-3
-  signature: features|default|[content]|bg:false
+  signature: content|default|[content]|bg:false
   display_name_ru: О нас — двухколоночный split с манифестом
   created: '2026-05-13'
   has_bg_image: false
@@ -1439,10 +1027,12 @@ blocks:
   source: opendesign
 - id: ru-features-08-kpi-metrics
   path: features/ru-features-08-kpi-metrics/
-  category: features
+  folder: features
+  category: social-proof
+  variant: numbers
   type: features
   layout_pattern: grid-3
-  signature: features|default|[content]|bg:false
+  signature: social-proof|default|[content]|bg:false
   display_name_ru: 📊 4 KPI-метрики (87% / 12 лет / 1000+ клиентов)
   created: 2026-05-13
   has_bg_image: false
@@ -1482,7 +1072,9 @@ blocks:
   source: manual
 - id: footer-001
   path: footer/footer-001/
+  folder: footer
   category: footer
+  variant: null
   type: footer
   layout_pattern: grid
   signature: footer|grid|[content]|bg:false
@@ -1495,7 +1087,9 @@ blocks:
   source: cleaned
 - id: footer-002
   path: footer/footer-002/
+  folder: footer
   category: footer
+  variant: null
   type: footer
   layout_pattern: split
   signature: footer|split|[content]|bg:false
@@ -1508,7 +1102,9 @@ blocks:
   source: cleaned
 - id: footer-003
   path: footer/footer-003/
+  folder: footer
   category: footer
+  variant: null
   type: footer
   layout_pattern: minimal
   signature: footer|minimal|[content]|bg:false
@@ -1521,7 +1117,9 @@ blocks:
   source: cleaned
 - id: footer-corporate-grid-4-portfolio-kdm1-ru-8
   path: footer/footer-corporate-grid-4-portfolio-kdm1-ru-8/
+  folder: footer
   category: footer
+  variant: null
   type: footer
   layout_pattern: grid-4
   signature: footer|default|[content]|bg:false
@@ -1536,7 +1134,9 @@ blocks:
   source: auto-generated
 - id: footer-corporate-grid-4-zilant-group-10
   path: footer/footer-corporate-grid-4-zilant-group-10/
+  folder: footer
   category: footer
+  variant: null
   type: footer
   layout_pattern: grid-4
   signature: footer|default|[content]|bg:false
@@ -1551,7 +1151,9 @@ blocks:
   source: auto-generated
 - id: footer-corporate-split-portfolio-kdm1-ru-9
   path: footer/footer-corporate-split-portfolio-kdm1-ru-9/
+  folder: footer
   category: footer
+  variant: null
   type: footer
   layout_pattern: split
   signature: footer|default|[content]|bg:false
@@ -1566,7 +1168,9 @@ blocks:
   source: auto-generated
 - id: footer-minimal-split-antidiler-karpov-ru-8
   path: footer/footer-minimal-split-antidiler-karpov-ru-8/
+  folder: footer
   category: footer
+  variant: null
   type: footer
   layout_pattern: split
   signature: footer|default|[content]|bg:false
@@ -1581,7 +1185,9 @@ blocks:
   source: auto-generated
 - id: footer-minimal-split-portfolio-kdm1-ru-17
   path: footer/footer-minimal-split-portfolio-kdm1-ru-17/
+  folder: footer
   category: footer
+  variant: null
   type: footer
   layout_pattern: split
   signature: footer|default|[content]|bg:false
@@ -1596,7 +1202,9 @@ blocks:
   source: auto-generated
 - id: footer-minimal-split-romanmelnikov-tilda-14
   path: footer/footer-minimal-split-romanmelnikov-tilda-14/
+  folder: footer
   category: footer
+  variant: null
   type: footer
   layout_pattern: split
   signature: footer|default|[content]|bg:false
@@ -1609,106 +1217,11 @@ blocks:
     required: true
     type: text
   source: auto-generated
-- id: gallery-001
-  path: gallery/gallery-001/
-  category: gallery
-  type: gallery
-  layout_pattern: cinematic
-  signature: gallery|cinematic|[content]|bg:false
-  display_name_ru: 'gallery: cinematic'
-  created: '2026-06-01'
-  has_bg_image: false
-  slots:
-  - name: content
-    type: text
-  source: cleaned
-- id: gallery-002
-  path: gallery/gallery-002/
-  category: gallery
-  type: gallery
-  layout_pattern: default
-  signature: gallery|default|[content]|bg:false
-  display_name_ru: 'gallery: default'
-  created: '2026-06-01'
-  has_bg_image: false
-  slots:
-  - name: content
-    type: text
-  source: cleaned
-- id: gallery-003
-  path: gallery/gallery-003/
-  category: gallery
-  type: gallery
-  layout_pattern: grid
-  signature: gallery|grid|[content]|bg:false
-  display_name_ru: 'gallery: grid'
-  created: '2026-06-01'
-  has_bg_image: false
-  slots:
-  - name: content
-    type: text
-  source: cleaned
-- id: gallery-004
-  path: gallery/gallery-004/
-  category: gallery
-  type: gallery
-  layout_pattern: minimal
-  signature: gallery|minimal|[content]|bg:false
-  display_name_ru: 'gallery: minimal'
-  created: '2026-06-01'
-  has_bg_image: false
-  slots:
-  - name: content
-    type: text
-  source: cleaned
-- id: gallery-cinematic-grid-4-sskrusgun-ru-12
-  path: gallery/gallery-cinematic-grid-4-sskrusgun-ru-12/
-  category: gallery
-  type: gallery
-  layout_pattern: grid-4
-  signature: gallery|default|[content]|bg:false
-  display_name_ru: Фотоколлаж в плотной сетке показывает атмосферу процесса через
-    реальные динамичн
-  created: '2026-06-02'
-  has_bg_image: false
-  slots:
-  - name: heading
-    required: true
-    type: text
-  source: auto-generated
-- id: gallery-minimal-stacked-portfolio-kdm1-ru-2
-  path: gallery/gallery-minimal-stacked-portfolio-kdm1-ru-2/
-  category: gallery
-  type: gallery
-  layout_pattern: stacked
-  signature: gallery|default|[content]|bg:false
-  display_name_ru: Крупный медиа-блок с товарным фото во всю ширину контейнера и круглой
-    кнопкой во
-  created: '2026-06-02'
-  has_bg_image: false
-  slots:
-  - name: heading
-    required: true
-    type: text
-  source: auto-generated
-- id: gallery-playful-grid-4-project21993216-tild-4
-  path: gallery/gallery-playful-grid-4-project21993216-tild-4/
-  category: gallery
-  type: gallery
-  layout_pattern: grid-4
-  signature: gallery|default|[content]|bg:false
-  display_name_ru: Витрина вкусов или вариантов с круглыми предметными изображениями
-    и подписями.
-  created: '2026-06-02'
-  has_bg_image: false
-  slots:
-  - name: heading
-    required: true
-    type: text
-  source: auto-generated
 - id: header-001
   path: header/header-001/
+  folder: header
   category: header
+  variant: null
   type: header
   layout_pattern: cinematic
   signature: header|cinematic|[content]|bg:false
@@ -1721,7 +1234,9 @@ blocks:
   source: cleaned
 - id: header-002
   path: header/header-002/
+  folder: header
   category: header
+  variant: null
   type: header
   layout_pattern: split
   signature: header|split|[content]|bg:false
@@ -1734,7 +1249,9 @@ blocks:
   source: cleaned
 - id: header-003
   path: header/header-003/
+  folder: header
   category: header
+  variant: null
   type: header
   layout_pattern: minimal
   signature: header|minimal|[content]|bg:false
@@ -1747,7 +1264,9 @@ blocks:
   source: cleaned
 - id: header-cinematic-split-portfolio-kdm1-ru-0
   path: header/header-cinematic-split-portfolio-kdm1-ru-0/
+  folder: header
   category: header
+  variant: null
   type: header
   layout_pattern: split
   signature: header|default|[content]|bg:false
@@ -1762,7 +1281,9 @@ blocks:
   source: auto-generated
 - id: header-corporate-split-zilant-group-0
   path: header/header-corporate-split-zilant-group-0/
+  folder: header
   category: header
+  variant: null
   type: header
   layout_pattern: split
   signature: header|default|[content]|bg:false
@@ -1777,7 +1298,9 @@ blocks:
   source: auto-generated
 - id: header-luxury-split-romanmelnikov-tilda-0
   path: header/header-luxury-split-romanmelnikov-tilda-0/
+  folder: header
   category: header
+  variant: null
   type: header
   layout_pattern: split
   signature: header|default|[content]|bg:false
@@ -1792,7 +1315,9 @@ blocks:
   source: auto-generated
 - id: header-minimal-split-portfolio-kdm1-ru-0
   path: header/header-minimal-split-portfolio-kdm1-ru-0/
+  folder: header
   category: header
+  variant: null
   type: header
   layout_pattern: split
   signature: header|default|[content]|bg:false
@@ -1807,7 +1332,9 @@ blocks:
   source: auto-generated
 - id: header-minimal-split-project21993216-tild-0
   path: header/header-minimal-split-project21993216-tild-0/
+  folder: header
   category: header
+  variant: null
   type: header
   layout_pattern: split
   signature: header|default|[content]|bg:false
@@ -1822,7 +1349,9 @@ blocks:
   source: auto-generated
 - id: header-playful-split-opt-ecowash-ru-0
   path: header/header-playful-split-opt-ecowash-ru-0/
+  folder: header
   category: header
+  variant: null
   type: header
   layout_pattern: split
   signature: header|default|[content]|bg:false
@@ -1837,7 +1366,9 @@ blocks:
   source: auto-generated
 - id: header-technical-split-sskrusgun-ru-0
   path: header/header-technical-split-sskrusgun-ru-0/
+  folder: header
   category: header
+  variant: null
   type: header
   layout_pattern: split
   signature: header|default|[content]|bg:false
@@ -1852,7 +1383,9 @@ blocks:
   source: auto-generated
 - id: hero-001
   path: hero/hero-001/
+  folder: hero
   category: hero
+  variant: null
   type: hero
   layout_pattern: brutalist
   signature: hero|brutalist|[content]|bg:false
@@ -1865,7 +1398,9 @@ blocks:
   source: cleaned
 - id: hero-002
   path: hero/hero-002/
+  folder: hero
   category: hero
+  variant: null
   type: hero
   layout_pattern: cinematic
   signature: hero|cinematic|[content]|bg:false
@@ -1878,7 +1413,9 @@ blocks:
   source: cleaned
 - id: hero-003
   path: hero/hero-003/
+  folder: hero
   category: hero
+  variant: null
   type: hero
   layout_pattern: split
   signature: hero|split|[content]|bg:false
@@ -1891,7 +1428,9 @@ blocks:
   source: cleaned
 - id: hero-004
   path: hero/hero-004/
+  folder: hero
   category: hero
+  variant: null
   type: hero
   layout_pattern: default
   signature: hero|default|[content]|bg:false
@@ -1904,7 +1443,9 @@ blocks:
   source: cleaned
 - id: hero-005
   path: hero/hero-005/
+  folder: hero
   category: hero
+  variant: null
   type: hero
   layout_pattern: minimal
   signature: hero|minimal|[content]|bg:false
@@ -1917,7 +1458,9 @@ blocks:
   source: cleaned
 - id: hero-cinematic-split-antidiler-karpov-ru-1
   path: hero/hero-cinematic-split-antidiler-karpov-ru-1/
+  folder: hero
   category: hero
+  variant: null
   type: hero
   layout_pattern: split
   signature: hero|default|[content]|bg:false
@@ -1932,7 +1475,9 @@ blocks:
   source: auto-generated
 - id: hero-cinematic-split-portfolio-kdm1-ru-2
   path: hero/hero-cinematic-split-portfolio-kdm1-ru-2/
+  folder: hero
   category: hero
+  variant: null
   type: hero
   layout_pattern: split
   signature: hero|default|[content]|bg:false
@@ -1947,7 +1492,9 @@ blocks:
   source: auto-generated
 - id: hero-cinematic-split-romanmelnikov-tilda-1
   path: hero/hero-cinematic-split-romanmelnikov-tilda-1/
+  folder: hero
   category: hero
+  variant: null
   type: hero
   layout_pattern: split
   signature: hero|default|[content]|bg:false
@@ -1962,7 +1509,9 @@ blocks:
   source: auto-generated
 - id: hero-corporate-split-zilant-group-1
   path: hero/hero-corporate-split-zilant-group-1/
+  folder: hero
   category: hero
+  variant: null
   type: hero
   layout_pattern: split
   signature: hero|default|[content]|bg:false
@@ -1977,7 +1526,9 @@ blocks:
   source: auto-generated
 - id: hero-playful-split-opt-ecowash-ru-1
   path: hero/hero-playful-split-opt-ecowash-ru-1/
+  folder: hero
   category: hero
+  variant: null
   type: hero
   layout_pattern: split
   signature: hero|default|[content]|bg:false
@@ -1992,7 +1543,9 @@ blocks:
   source: auto-generated
 - id: hero-technical-split-portfolio-kdm1-ru-1
   path: hero/hero-technical-split-portfolio-kdm1-ru-1/
+  folder: hero
   category: hero
+  variant: null
   type: hero
   layout_pattern: split
   signature: hero|default|[content]|bg:false
@@ -2007,7 +1560,9 @@ blocks:
   source: auto-generated
 - id: ru-hero-01-services-calc
   path: hero/ru-hero-01-services-calc/
+  folder: hero
   category: hero
+  variant: null
   type: hero
   layout_pattern: centered
   signature: hero|default|[content]|bg:false
@@ -2039,7 +1594,9 @@ blocks:
   source: manual
 - id: ru-hero-02-b2c-expert
   path: hero/ru-hero-02-b2c-expert/
+  folder: hero
   category: hero
+  variant: null
   type: hero
   layout_pattern: centered
   signature: hero|default|[content]|bg:false
@@ -2074,7 +1631,9 @@ blocks:
   source: manual
 - id: ru-hero-03-local-interior
   path: hero/ru-hero-03-local-interior/
+  folder: hero
   category: hero
+  variant: null
   type: hero
   layout_pattern: centered
   signature: hero|default|[content]|bg:false
@@ -2101,7 +1660,9 @@ blocks:
   source: manual
 - id: ru-hero-04-split-form
   path: hero/ru-hero-04-split-form/
+  folder: hero
   category: hero
+  variant: null
   type: hero
   layout_pattern: centered
   signature: hero|default|[content]|bg:false
@@ -2140,7 +1701,9 @@ blocks:
   source: manual
 - id: ru-hero-05-centered-bold
   path: hero/ru-hero-05-centered-bold/
+  folder: hero
   category: hero
+  variant: null
   type: hero
   layout_pattern: centered
   signature: hero|default|[content]|bg:false
@@ -2167,7 +1730,9 @@ blocks:
   source: manual
 - id: ru-hero-06-swiss-metrics
   path: hero/ru-hero-06-swiss-metrics/
+  folder: hero
   category: hero
+  variant: null
   type: hero
   layout_pattern: centered
   signature: hero|default|[content]|bg:false
@@ -2214,7 +1779,9 @@ blocks:
   source: opendesign
 - id: ru-hero-07-editorial-serif
   path: hero/ru-hero-07-editorial-serif/
+  folder: hero
   category: hero
+  variant: null
   type: hero
   layout_pattern: centered
   signature: hero|default|[content]|bg:false
@@ -2274,7 +1841,9 @@ blocks:
   source: opendesign
 - id: ru-hero-08-centered-emailcap
   path: hero/ru-hero-08-centered-emailcap/
+  folder: hero
   category: hero
+  variant: null
   type: hero
   layout_pattern: centered
   signature: hero|default|[content]|bg:false
@@ -2309,7 +1878,9 @@ blocks:
   source: opendesign
 - id: ru-hero-09-kami-serif
   path: hero/ru-hero-09-kami-serif/
+  folder: hero
   category: hero
+  variant: null
   type: hero
   layout_pattern: centered
   signature: hero|default|[content]|bg:false
@@ -2368,7 +1939,9 @@ blocks:
   source: opendesign
 - id: ru-hero-10-deck-cover
   path: hero/ru-hero-10-deck-cover/
+  folder: hero
   category: hero
+  variant: null
   type: hero
   layout_pattern: centered
   signature: hero|default|[content]|bg:false
@@ -2408,7 +1981,9 @@ blocks:
   source: opendesign
 - id: pricing-001
   path: pricing/pricing-001/
+  folder: pricing
   category: pricing
+  variant: cards
   type: pricing
   layout_pattern: default
   signature: pricing|default|[content]|bg:false
@@ -2421,7 +1996,9 @@ blocks:
   source: cleaned
 - id: pricing-002
   path: pricing/pricing-002/
+  folder: pricing
   category: pricing
+  variant: cards
   type: pricing
   layout_pattern: grid
   signature: pricing|grid|[content]|bg:false
@@ -2434,7 +2011,9 @@ blocks:
   source: cleaned
 - id: pricing-003
   path: pricing/pricing-003/
+  folder: pricing
   category: pricing
+  variant: cards
   type: pricing
   layout_pattern: split
   signature: pricing|split|[content]|bg:false
@@ -2447,7 +2026,9 @@ blocks:
   source: cleaned
 - id: pricing-004
   path: pricing/pricing-004/
+  folder: pricing
   category: pricing
+  variant: cards
   type: pricing
   layout_pattern: minimal
   signature: pricing|minimal|[content]|bg:false
@@ -2460,7 +2041,9 @@ blocks:
   source: cleaned
 - id: pricing-corporate-grid-3-portfolio-kdm1-ru-7
   path: pricing/pricing-corporate-grid-3-portfolio-kdm1-ru-7/
+  folder: pricing
   category: pricing
+  variant: cards
   type: pricing
   layout_pattern: grid-3
   signature: pricing|default|[content]|bg:false
@@ -2475,7 +2058,9 @@ blocks:
   source: auto-generated
 - id: pricing-corporate-grid-3-sskrusgun-ru-5
   path: pricing/pricing-corporate-grid-3-sskrusgun-ru-5/
+  folder: pricing
   category: pricing
+  variant: cards
   type: pricing
   layout_pattern: grid-3
   signature: pricing|default|[content]|bg:false
@@ -2490,7 +2075,9 @@ blocks:
   source: auto-generated
 - id: pricing-technical-grid-3-sskrusgun-ru-2
   path: pricing/pricing-technical-grid-3-sskrusgun-ru-2/
+  folder: pricing
   category: pricing
+  variant: cards
   type: pricing
   layout_pattern: grid-3
   signature: pricing|default|[content]|bg:false
@@ -2505,7 +2092,9 @@ blocks:
   source: auto-generated
 - id: ru-pricing-01-rub-from
   path: pricing/ru-pricing-01-rub-from/
+  folder: pricing
   category: pricing
+  variant: cards
   type: pricing
   layout_pattern: grid-3
   signature: pricing|default|[content]|bg:false
@@ -2565,7 +2154,9 @@ blocks:
   source: manual
 - id: ru-pricing-02-comparison-table
   path: pricing/ru-pricing-02-comparison-table/
+  folder: pricing
   category: pricing
+  variant: comparison
   type: pricing
   layout_pattern: grid-3
   signature: pricing|default|[content]|bg:false
@@ -2640,7 +2231,9 @@ blocks:
   source: manual
 - id: ru-pricing-03-3tier-saas
   path: pricing/ru-pricing-03-3tier-saas/
+  folder: pricing
   category: pricing
+  variant: cards
   type: pricing
   layout_pattern: grid-3
   signature: pricing|default|[content]|bg:false
@@ -2747,7 +2340,9 @@ blocks:
   source: opendesign
 - id: ru-pricing-04-tiers-faq
   path: pricing/ru-pricing-04-tiers-faq/
+  folder: pricing
   category: pricing
+  variant: cards
   type: pricing
   layout_pattern: grid-3
   signature: pricing|default|[content]|bg:false
@@ -2842,7 +2437,9 @@ blocks:
   source: opendesign
 - id: process-001
   path: process/process-001/
-  category: process
+  folder: process
+  category: content
+  variant: process
   type: process
   layout_pattern: cinematic
   signature: process|cinematic|[content]|bg:false
@@ -2855,7 +2452,9 @@ blocks:
   source: cleaned
 - id: process-002
   path: process/process-002/
-  category: process
+  folder: process
+  category: content
+  variant: process
   type: process
   layout_pattern: default
   signature: process|default|[content]|bg:false
@@ -2868,7 +2467,9 @@ blocks:
   source: cleaned
 - id: process-003
   path: process/process-003/
-  category: process
+  folder: process
+  category: content
+  variant: process
   type: process
   layout_pattern: grid
   signature: process|grid|[content]|bg:false
@@ -2881,7 +2482,9 @@ blocks:
   source: cleaned
 - id: process-004
   path: process/process-004/
-  category: process
+  folder: process
+  category: social-proof
+  variant: numbers
   type: process
   layout_pattern: minimal
   signature: process|minimal|[content]|bg:false
@@ -2894,10 +2497,12 @@ blocks:
   source: cleaned
 - id: process-corporate-timeline-project21993216-tild-10
   path: process/process-corporate-timeline-project21993216-tild-10/
-  category: process
+  folder: process
+  category: content
+  variant: process
   type: process
   layout_pattern: timeline
-  signature: process|default|[content]|bg:false
+  signature: content|default|[content]|bg:false
   display_name_ru: Пошаговая схема старта с пронумерованными карточками и финальной
     карточкой с кно
   created: '2026-06-02'
@@ -2909,10 +2514,12 @@ blocks:
   source: auto-generated
 - id: process-minimal-grid-2-portfolio-kdm1-ru-4
   path: process/process-minimal-grid-2-portfolio-kdm1-ru-4/
-  category: process
+  folder: process
+  category: content
+  variant: process
   type: process
   layout_pattern: grid-2
-  signature: process|default|[content]|bg:false
+  signature: content|default|[content]|bg:false
   display_name_ru: Два информационных блока с иконками объясняют сценарии продаж через
     отдельные ка
   created: '2026-06-02'
@@ -2924,10 +2531,12 @@ blocks:
   source: auto-generated
 - id: process-technical-cards-medregistrant-ru-3
   path: process/process-technical-cards-medregistrant-ru-3/
-  category: process
+  folder: process
+  category: content
+  variant: process
   type: process
   layout_pattern: cards
-  signature: process|default|[content]|bg:false
+  signature: content|default|[content]|bg:false
   display_name_ru: Светлый блок с вопросительным заголовком, вкладками и карточками
     вокруг размытог
   created: '2026-06-02'
@@ -2939,10 +2548,12 @@ blocks:
   source: auto-generated
 - id: process-technical-stacked-opt-ecowash-ru-6
   path: process/process-technical-stacked-opt-ecowash-ru-6/
-  category: process
+  folder: process
+  category: content
+  variant: process
   type: process
   layout_pattern: stacked
-  signature: process|default|[content]|bg:false
+  signature: content|default|[content]|bg:false
   display_name_ru: Производственный блок с текстом, акцентной плашкой, декоративной
     графикой и боль
   created: '2026-06-02'
@@ -2954,10 +2565,12 @@ blocks:
   source: auto-generated
 - id: process-technical-timeline-romanmelnikov-tilda-10
   path: process/process-technical-timeline-romanmelnikov-tilda-10/
-  category: process
+  folder: process
+  category: content
+  variant: process
   type: process
   layout_pattern: timeline
-  signature: process|default|[content]|bg:false
+  signature: content|default|[content]|bg:false
   display_name_ru: Линейная схема этапов с мелкими подписями и горизонтальным акцентом
     прогресса.
   created: '2026-06-02'
@@ -2969,10 +2582,12 @@ blocks:
   source: auto-generated
 - id: ru-process-01-4steps-icons
   path: process/ru-process-01-4steps-icons/
-  category: process
+  folder: process
+  category: content
+  variant: process
   type: process
   layout_pattern: centered
-  signature: process|default|[content]|bg:false
+  signature: content|default|[content]|bg:false
   display_name_ru: 🔢 4 шага работы с иконками
   created: 2026-05-12
   has_bg_image: false
@@ -3028,10 +2643,12 @@ blocks:
   source: manual
 - id: ru-process-02-next-steps
   path: process/ru-process-02-next-steps/
-  category: process
+  folder: process
+  category: content
+  variant: process
   type: process
   layout_pattern: centered
-  signature: process|default|[content]|bg:false
+  signature: content|default|[content]|bg:false
   display_name_ru: 📋 Процесс — 3 шага timeline-стиль
   created: 2026-05-13
   has_bg_image: false
@@ -3083,10 +2700,12 @@ blocks:
   source: opendesign
 - id: ru-process-03-4steps-numbered
   path: process/ru-process-03-4steps-numbered/
-  category: process
+  folder: process
+  category: content
+  variant: process
   type: process
   layout_pattern: centered
-  signature: process|default|[content]|bg:false
+  signature: content|default|[content]|bg:false
   display_name_ru: Процесс — 4 шага в сетке с бордерами и иллюстрациями
   created: '2026-05-13'
   has_bg_image: false
@@ -3138,10 +2757,12 @@ blocks:
   source: opendesign
 - id: ru-quiz-01-step-card
   path: quiz/ru-quiz-01-step-card/
-  category: quiz
+  folder: quiz
+  category: forms
+  variant: quiz
   type: lead-form
   layout_pattern: centered
-  signature: quiz|default|[content]|bg:false
+  signature: forms|default|[content]|bg:false
   display_name_ru: 🎯 Квиз — шаг-карточка с вариантами
   created: 2026-05-12
   has_bg_image: false
@@ -3173,10 +2794,12 @@ blocks:
   source: manual
 - id: ru-quiz-02-progress-top
   path: quiz/ru-quiz-02-progress-top/
-  category: quiz
+  folder: quiz
+  category: forms
+  variant: quiz
   type: lead-form
   layout_pattern: centered
-  signature: quiz|default|[content]|bg:false
+  signature: forms|default|[content]|bg:false
   display_name_ru: 📊 Квиз — вопрос с прогрессом сверху
   created: 2026-05-12
   has_bg_image: false
@@ -3191,10 +2814,12 @@ blocks:
   source: manual
 - id: ru-quiz-03-intermediate
   path: quiz/ru-quiz-03-intermediate/
-  category: quiz
+  folder: quiz
+  category: forms
+  variant: quiz
   type: lead-form
   layout_pattern: centered
-  signature: quiz|default|[content]|bg:false
+  signature: forms|default|[content]|bg:false
   display_name_ru: 🎉 Квиз — промежуточный мотивационный экран
   created: 2026-05-12
   has_bg_image: false
@@ -3213,10 +2838,12 @@ blocks:
   source: manual
 - id: ru-quiz-04-lead-form
   path: quiz/ru-quiz-04-lead-form/
-  category: quiz
+  folder: quiz
+  category: forms
+  variant: email
   type: lead-form
   layout_pattern: centered
-  signature: quiz|default|[content]|bg:false
+  signature: forms|default|[content]|bg:false
   display_name_ru: 📋 Квиз — финальная форма захвата
   created: 2026-05-12
   has_bg_image: false
@@ -3251,10 +2878,12 @@ blocks:
   source: manual
 - id: ru-quiz-05-thankyou
   path: quiz/ru-quiz-05-thankyou/
-  category: quiz
+  folder: quiz
+  category: forms
+  variant: quiz
   type: lead-form
   layout_pattern: centered
-  signature: quiz|default|[content]|bg:false
+  signature: forms|default|[content]|bg:false
   display_name_ru: ✅ Квиз — страница «Спасибо»
   created: 2026-05-12
   has_bg_image: false
@@ -3277,10 +2906,12 @@ blocks:
   source: manual
 - id: ru-quiz-06-welcome-screen
   path: quiz/ru-quiz-06-welcome-screen/
-  category: quiz
+  folder: quiz
+  category: forms
+  variant: quiz
   type: lead-form
   layout_pattern: centered
-  signature: quiz|default|[content]|bg:false
+  signature: forms|default|[content]|bg:false
   display_name_ru: 🚀 Квиз — стартовый экран «Начать тест»
   created: '2026-05-13'
   has_bg_image: false
@@ -3308,10 +2939,12 @@ blocks:
   source: manual
 - id: ru-quiz-07-image-choice
   path: quiz/ru-quiz-07-image-choice/
-  category: quiz
+  folder: quiz
+  category: forms
+  variant: quiz
   type: lead-form
   layout_pattern: centered
-  signature: quiz|default|[content]|bg:false
+  signature: forms|default|[content]|bg:false
   display_name_ru: 🖼️ Квиз — вопрос с картинками-вариантами
   created: '2026-05-13'
   has_bg_image: false
@@ -3359,10 +2992,12 @@ blocks:
   source: manual
 - id: ru-quiz-08-slider-range
   path: quiz/ru-quiz-08-slider-range/
-  category: quiz
+  folder: quiz
+  category: forms
+  variant: quiz
   type: lead-form
   layout_pattern: centered
-  signature: quiz|default|[content]|bg:false
+  signature: forms|default|[content]|bg:false
   display_name_ru: 📊 Квиз — вопрос со слайдером диапазона
   created: '2026-05-13'
   has_bg_image: false
@@ -3394,10 +3029,12 @@ blocks:
   source: manual
 - id: ru-quiz-09-multi-select
   path: quiz/ru-quiz-09-multi-select/
-  category: quiz
+  folder: quiz
+  category: forms
+  variant: quiz
   type: lead-form
   layout_pattern: centered
-  signature: quiz|default|[content]|bg:false
+  signature: forms|default|[content]|bg:false
   display_name_ru: ☑️ Квиз — вопрос с мульти-выбором (чекбоксы)
   created: '2026-05-13'
   has_bg_image: false
@@ -3441,10 +3078,12 @@ blocks:
   source: manual
 - id: ru-quiz-10-loader-analyzing
   path: quiz/ru-quiz-10-loader-analyzing/
-  category: quiz
+  folder: quiz
+  category: forms
+  variant: quiz
   type: lead-form
   layout_pattern: centered
-  signature: quiz|default|[content]|bg:false
+  signature: forms|default|[content]|bg:false
   display_name_ru: ⏳ Квиз — экран анализа ответов (лоадер)
   created: '2026-05-13'
   has_bg_image: false
@@ -3472,10 +3111,12 @@ blocks:
   source: manual
 - id: ru-quiz-11-discount-bonus
   path: quiz/ru-quiz-11-discount-bonus/
-  category: quiz
+  folder: quiz
+  category: trust
+  variant: guarantees
   type: lead-form
   layout_pattern: centered
-  signature: quiz|default|[content]|bg:false
+  signature: trust|default|[content]|bg:false
   display_name_ru: 🎁 Квиз — экран подарка за прохождение
   created: '2026-05-13'
   has_bg_image: false
@@ -3511,10 +3152,12 @@ blocks:
   source: manual
 - id: ru-quiz-12-mini-calculator
   path: quiz/ru-quiz-12-mini-calculator/
-  category: quiz
+  folder: quiz
+  category: forms
+  variant: quiz
   type: lead-form
   layout_pattern: centered
-  signature: quiz|default|[content]|bg:false
+  signature: forms|default|[content]|bg:false
   display_name_ru: 🧮 Квиз — мини-калькулятор стоимости
   created: '2026-05-13'
   has_bg_image: false
@@ -3558,10 +3201,12 @@ blocks:
   source: manual
 - id: ru-quiz-13-comparison-question
   path: quiz/ru-quiz-13-comparison-question/
-  category: quiz
+  folder: quiz
+  category: forms
+  variant: quiz
   type: lead-form
   layout_pattern: centered
-  signature: quiz|default|[content]|bg:false
+  signature: forms|default|[content]|bg:false
   display_name_ru: ⚖️ Квиз — вопрос-сравнение «А или Б»
   created: '2026-05-13'
   has_bg_image: false
@@ -3597,7 +3242,9 @@ blocks:
   source: manual
 - id: ru-social-proof-03-client-logos
   path: social-proof/ru-social-proof-03-client-logos/
+  folder: social-proof
   category: social-proof
+  variant: clients
   type: logos
   layout_pattern: grid-4
   signature: social-proof|default|[content]|bg:false
@@ -3644,7 +3291,9 @@ blocks:
   source: manual
 - id: ru-social-proof-04-authority-cases
   path: social-proof/ru-social-proof-04-authority-cases/
+  folder: social-proof
   category: social-proof
+  variant: cases
   type: logos
   layout_pattern: grid-4
   signature: social-proof|default|[content]|bg:false
@@ -3707,7 +3356,9 @@ blocks:
   source: manual
 - id: ru-social-proof-05-metrics-editorial
   path: social-proof/ru-social-proof-05-metrics-editorial/
+  folder: social-proof
   category: social-proof
+  variant: numbers
   type: logos
   layout_pattern: grid-4
   signature: social-proof|default|[content]|bg:false
@@ -3746,7 +3397,9 @@ blocks:
   source: opendesign
 - id: ru-social-proof-06-editorial-quote
   path: social-proof/ru-social-proof-06-editorial-quote/
+  folder: social-proof
   category: social-proof
+  variant: testimonials
   type: logos
   layout_pattern: grid-4
   signature: social-proof|default|[content]|bg:false
@@ -3822,10 +3475,12 @@ blocks:
   source: opendesign
 - id: ru-social-proof-07-logo-ticker
   path: social-proof/ru-social-proof-07-logo-ticker/
-  category: social-proof
+  folder: social-proof
+  category: marquee
+  variant: null
   type: logos
   layout_pattern: grid-4
-  signature: social-proof|default|[content]|bg:false
+  signature: marquee|default|[content]|bg:false
   display_name_ru: Тикер клиентов — бегущая строка с названиями
   created: '2026-05-13'
   has_bg_image: false
@@ -3873,7 +3528,9 @@ blocks:
   source: opendesign
 - id: ru-social-proof-08-stats-deck
   path: social-proof/ru-social-proof-08-stats-deck/
+  folder: social-proof
   category: social-proof
+  variant: numbers
   type: logos
   layout_pattern: grid-4
   signature: social-proof|default|[content]|bg:false
@@ -3940,7 +3597,9 @@ blocks:
   source: opendesign
 - id: ru-stats-01-growth-chart
   path: social-proof/ru-stats-01-growth-chart/
+  folder: social-proof
   category: social-proof
+  variant: numbers
   type: stats
   layout_pattern: grid-2
   signature: social-proof|default|[content]|bg:false
@@ -3977,7 +3636,9 @@ blocks:
   source: manual
 - id: ru-testimonials-01-video-circles
   path: social-proof/ru-testimonials-01-video-circles/
+  folder: social-proof
   category: social-proof
+  variant: testimonials
   type: testimonials
   layout_pattern: cards
   signature: social-proof|default|[content]|bg:false
@@ -4052,7 +3713,9 @@ blocks:
   source: manual
 - id: ru-testimonials-02-text-photo
   path: social-proof/ru-testimonials-02-text-photo/
+  folder: social-proof
   category: social-proof
+  variant: testimonials
   type: testimonials
   layout_pattern: cards
   signature: social-proof|default|[content]|bg:false
@@ -4131,7 +3794,9 @@ blocks:
   source: manual
 - id: social-proof-cinematic-split-antidiler-karpov-ru-3
   path: social-proof/social-proof-cinematic-split-antidiler-karpov-ru-3/
+  folder: social-proof
   category: social-proof
+  variant: cases
   type: logos
   layout_pattern: split
   signature: social-proof|default|[content]|bg:false
@@ -4146,7 +3811,9 @@ blocks:
   source: auto-generated
 - id: social-proof-corporate-cards-medregistrant-ru-6
   path: social-proof/social-proof-corporate-cards-medregistrant-ru-6/
+  folder: social-proof
   category: social-proof
+  variant: clients
   type: logos
   layout_pattern: cards
   signature: social-proof|default|[content]|bg:false
@@ -4161,7 +3828,9 @@ blocks:
   source: auto-generated
 - id: social-proof-corporate-grid-3-zilant-group-5
   path: social-proof/social-proof-corporate-grid-3-zilant-group-5/
+  folder: social-proof
   category: social-proof
+  variant: numbers
   type: logos
   layout_pattern: grid-3
   signature: social-proof|default|[content]|bg:false
@@ -4176,7 +3845,9 @@ blocks:
   source: auto-generated
 - id: social-proof-luxury-cards-romanmelnikov-tilda-12
   path: social-proof/social-proof-luxury-cards-romanmelnikov-tilda-12/
+  folder: social-proof
   category: social-proof
+  variant: testimonials
   type: logos
   layout_pattern: cards
   signature: social-proof|default|[content]|bg:false
@@ -4191,7 +3862,9 @@ blocks:
   source: auto-generated
 - id: social-proof-minimal-centered-project21993216-tild-3
   path: social-proof/social-proof-minimal-centered-project21993216-tild-3/
+  folder: social-proof
   category: social-proof
+  variant: testimonials
   type: logos
   layout_pattern: centered
   signature: social-proof|default|[content]|bg:false
@@ -4206,7 +3879,9 @@ blocks:
   source: auto-generated
 - id: social-proof-minimal-stacked-antidiler-karpov-ru-4
   path: social-proof/social-proof-minimal-stacked-antidiler-karpov-ru-4/
+  folder: social-proof
   category: social-proof
+  variant: testimonials
   type: logos
   layout_pattern: stacked
   signature: social-proof|default|[content]|bg:false
@@ -4221,7 +3896,9 @@ blocks:
   source: auto-generated
 - id: social-proof-playful-grid-2-opt-ecowash-ru-9
   path: social-proof/social-proof-playful-grid-2-opt-ecowash-ru-9/
+  folder: social-proof
   category: social-proof
+  variant: testimonials
   type: logos
   layout_pattern: grid-2
   signature: social-proof|default|[content]|bg:false
@@ -4236,7 +3913,9 @@ blocks:
   source: auto-generated
 - id: social-proof-technical-grid-4-portfolio-kdm1-ru-14
   path: social-proof/social-proof-technical-grid-4-portfolio-kdm1-ru-14/
+  folder: social-proof
   category: social-proof
+  variant: numbers
   type: logos
   layout_pattern: grid-4
   signature: social-proof|default|[content]|bg:false
@@ -4249,22 +3928,11 @@ blocks:
     required: true
     type: text
   source: auto-generated
-- id: unknown-003
-  path: social-proof/unknown-003/
-  category: social-proof
-  type: demo
-  layout_pattern: cinematic
-  signature: unknown|cinematic|[content]|bg:false
-  display_name_ru: 'social-proof: cinematic'
-  created: '2026-06-01'
-  has_bg_image: false
-  slots:
-  - name: content
-    type: text
-  source: cleaned
 - id: team-001
   path: team/team-001/
-  category: team
+  folder: team
+  category: content
+  variant: about
   type: team
   layout_pattern: cinematic
   signature: team|cinematic|[content]|bg:false
@@ -4277,7 +3945,9 @@ blocks:
   source: cleaned
 - id: ru-trust-01-guarantees-docs
   path: trust/ru-trust-01-guarantees-docs/
+  folder: trust
   category: trust
+  variant: guarantees
   type: guarantees
   layout_pattern: centered
   signature: trust|default|[content]|bg:false
@@ -4336,10 +4006,12 @@ blocks:
   source: manual
 - id: ru-trust-02-numbers-row
   path: trust/ru-trust-02-numbers-row/
-  category: trust
+  folder: trust
+  category: social-proof
+  variant: numbers
   type: guarantees
   layout_pattern: centered
-  signature: trust|default|[content]|bg:false
+  signature: social-proof|default|[content]|bg:false
   display_name_ru: 📈 Полоса с 4 KPI-числами
   created: '2026-05-13'
   has_bg_image: false
@@ -4383,10 +4055,12 @@ blocks:
   source: manual
 - id: ru-trust-03-descriptor-header
   path: trust/ru-trust-03-descriptor-header/
-  category: trust
+  folder: trust
+  category: header
+  variant: null
   type: guarantees
   layout_pattern: centered
-  signature: trust|default|[content]|bg:false
+  signature: header|default|[content]|bg:false
   display_name_ru: 🏷️ Шапка с дескриптором — кто мы
   created: '2026-05-13'
   has_bg_image: false
@@ -4414,10 +4088,12 @@ blocks:
   source: manual
 - id: ru-trust-04-principles-grid
   path: trust/ru-trust-04-principles-grid/
-  category: trust
+  folder: trust
+  category: content
+  variant: about
   type: guarantees
   layout_pattern: centered
-  signature: trust|default|[content]|bg:false
+  signature: content|default|[content]|bg:false
   display_name_ru: 🏛️ Принципы работы — редакционная сетка
   created: 2026-05-13
   has_bg_image: false
@@ -4477,10 +4153,12 @@ blocks:
   source: opendesign
 - id: ru-trust-05-manifesto-text
   path: trust/ru-trust-05-manifesto-text/
-  category: trust
+  folder: trust
+  category: content
+  variant: about
   type: guarantees
   layout_pattern: centered
-  signature: trust|default|[content]|bg:false
+  signature: content|default|[content]|bg:false
   display_name_ru: Манифест — засечная цитата с левой полосой и подписью
   created: '2026-05-13'
   has_bg_image: false
@@ -4500,10 +4178,12 @@ blocks:
   source: opendesign
 - id: ru-trust-06-labs-showcase
   path: trust/ru-trust-06-labs-showcase/
-  category: trust
+  folder: trust
+  category: social-proof
+  variant: cases
   type: guarantees
   layout_pattern: centered
-  signature: trust|default|[content]|bg:false
+  signature: social-proof|default|[content]|bg:false
   display_name_ru: Витрина проектов — сетка 5 кейсов с тегами
   created: '2026-05-13'
   has_bg_image: false
@@ -4615,10 +4295,12 @@ blocks:
   source: opendesign
 - id: ru-trust-07-partner-logos
   path: trust/ru-trust-07-partner-logos/
-  category: trust
+  folder: trust
+  category: social-proof
+  variant: clients
   type: guarantees
   layout_pattern: centered
-  signature: trust|default|[content]|bg:false
+  signature: social-proof|default|[content]|bg:false
   display_name_ru: Полоса логотипов — компании-клиенты в ряд
   created: '2026-05-13'
   has_bg_image: false
@@ -4650,7 +4332,9 @@ blocks:
   source: opendesign
 - id: trust-001
   path: trust/trust-001/
+  folder: trust
   category: trust
+  variant: guarantees
   type: guarantees
   layout_pattern: grid
   signature: trust|grid|[content]|bg:false
@@ -4663,7 +4347,9 @@ blocks:
   source: cleaned
 - id: trust-002
   path: trust/trust-002/
-  category: trust
+  folder: trust
+  category: social-proof
+  variant: testimonials
   type: guarantees
   layout_pattern: default
   signature: trust|default|[content]|bg:false
@@ -4676,7 +4362,9 @@ blocks:
   source: cleaned
 - id: trust-003
   path: trust/trust-003/
-  category: trust
+  folder: trust
+  category: social-proof
+  variant: clients
   type: guarantees
   layout_pattern: minimal
   signature: trust|minimal|[content]|bg:false
@@ -4689,7 +4377,9 @@ blocks:
   source: cleaned
 - id: trust-corporate-grid-3-project21993216-tild-12
   path: trust/trust-corporate-grid-3-project21993216-tild-12/
+  folder: trust
   category: trust
+  variant: certificates
   type: guarantees
   layout_pattern: grid-3
   signature: trust|default|[content]|bg:false
@@ -4704,10 +4394,12 @@ blocks:
   source: auto-generated
 - id: trust-corporate-grid-4-sskrusgun-ru-11
   path: trust/trust-corporate-grid-4-sskrusgun-ru-11/
-  category: trust
+  folder: trust
+  category: content
+  variant: about
   type: guarantees
   layout_pattern: grid-4
-  signature: trust|default|[content]|bg:false
+  signature: content|default|[content]|bg:false
   display_name_ru: 'Секция ценностей с четырьмя текстовыми колонками и крупными фоновыми
     буквенными '
   created: '2026-06-02'
@@ -4719,10 +4411,12 @@ blocks:
   source: auto-generated
 - id: trust-editorial-grid-2-romanmelnikov-tilda-11
   path: trust/trust-editorial-grid-2-romanmelnikov-tilda-11/
-  category: trust
+  folder: trust
+  category: features
+  variant: null
   type: guarantees
   layout_pattern: grid-2
-  signature: trust|default|[content]|bg:false
+  signature: features|default|[content]|bg:false
   display_name_ru: Длинный блок критериев с большим пустым пространством и двумя плотными
     текстовым
   created: '2026-06-02'
@@ -4734,10 +4428,12 @@ blocks:
   source: auto-generated
 - id: trust-editorial-grid-2-zilant-group-7
   path: trust/trust-editorial-grid-2-zilant-group-7/
-  category: trust
+  folder: trust
+  category: social-proof
+  variant: cases
   type: guarantees
   layout_pattern: grid-2
-  signature: trust|default|[content]|bg:false
+  signature: social-proof|default|[content]|bg:false
   display_name_ru: Секция кейса с большим заголовком, двумя документальными карточками
     и бирюзовыми
   created: '2026-06-02'
@@ -4749,10 +4445,12 @@ blocks:
   source: auto-generated
 - id: trust-editorial-grid-3-portfolio-kdm1-ru-4
   path: trust/trust-editorial-grid-3-portfolio-kdm1-ru-4/
-  category: trust
+  folder: trust
+  category: content
+  variant: about
   type: guarantees
   layout_pattern: grid-3
-  signature: trust|default|[content]|bg:false
+  signature: content|default|[content]|bg:false
   display_name_ru: Секция принципов с диагональной светлой подложкой, крупными заголовками
     и предме
   created: '2026-06-02'
@@ -4764,7 +4462,9 @@ blocks:
   source: auto-generated
 - id: trust-editorial-stacked-portfolio-kdm1-ru-12
   path: trust/trust-editorial-stacked-portfolio-kdm1-ru-12/
+  folder: trust
   category: trust
+  variant: guarantees
   type: guarantees
   layout_pattern: stacked
   signature: trust|default|[content]|bg:false
@@ -4779,10 +4479,12 @@ blocks:
   source: auto-generated
 - id: trust-luxury-centered-romanmelnikov-tilda-5
   path: trust/trust-luxury-centered-romanmelnikov-tilda-5/
-  category: trust
+  folder: trust
+  category: social-proof
+  variant: numbers
   type: guarantees
   layout_pattern: centered
-  signature: trust|default|[content]|bg:false
+  signature: social-proof|default|[content]|bg:false
   display_name_ru: Имиджевый блок с большим словом-заголовком, декоративной подписью
     и спокойной те
   created: '2026-06-02'
@@ -4794,10 +4496,12 @@ blocks:
   source: auto-generated
 - id: trust-minimal-grid-4-zilant-group-8
   path: trust/trust-minimal-grid-4-zilant-group-8/
-  category: trust
+  folder: trust
+  category: social-proof
+  variant: clients
   type: guarantees
   layout_pattern: grid-4
-  signature: trust|default|[content]|bg:false
+  signature: social-proof|default|[content]|bg:false
   display_name_ru: Горизонтальная полоса небольших логотипов на большом белом поле
     усиливает довери
   created: '2026-06-02'
@@ -4809,10 +4513,12 @@ blocks:
   source: auto-generated
 - id: trust-playful-stacked-opt-ecowash-ru-4
   path: trust/trust-playful-stacked-opt-ecowash-ru-4/
-  category: trust
+  folder: trust
+  category: social-proof
+  variant: numbers
   type: guarantees
   layout_pattern: stacked
-  signature: trust|default|[content]|bg:false
+  signature: social-proof|default|[content]|bg:false
   display_name_ru: Яркий блок доверия с большим заголовком, несколькими метриками
     и крупной декорат
   created: '2026-06-02'
@@ -4824,7 +4530,9 @@ blocks:
   source: auto-generated
 - id: trust-technical-grid-3-project21993216-tild-9
   path: trust/trust-technical-grid-3-project21993216-tild-9/
+  folder: trust
   category: trust
+  variant: guarantees
   type: guarantees
   layout_pattern: grid-3
   signature: trust|default|[content]|bg:false
