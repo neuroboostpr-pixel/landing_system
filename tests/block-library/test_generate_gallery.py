@@ -163,7 +163,9 @@ def test_extract_srcdoc_falls_back_to_template(tmp_path):
         '<section class="lp-x"><h2>{{slot:title}}</h2></section>', encoding="utf-8"
     )
     src = g.extract_srcdoc("blk", bd)
-    assert "lp-x" in src and "slot:title" in src, "template.html не подхвачен как fallback"
+    # template подхвачен как fallback; {{slot}} заполнены демо (Фаза 4)
+    assert "lp-x" in src, "template.html не подхвачен как fallback"
+    assert "{{slot:" not in src, "сырой {{slot}} должен быть заменён демо-контентом"
 
 
 def test_extract_srcdoc_prefers_index_over_template(tmp_path):
@@ -193,6 +195,44 @@ def test_template_content_reaches_card_srcdoc(tmp_path):
     assert r.returncode == 0, r.stderr
     html = out.read_text(encoding="utf-8")
     assert "real-block" in html, "template-контент не попал в srcdoc карточки"
+
+
+def test_demo_value_by_slot_semantics(tmp_path):
+    g = _load_gallery_module()
+    # хвост имени определяет тип демо-значения
+    assert "₽" in g.demo_value("plan-1-price")
+    assert g.demo_value("primary-cta-label")  # непустая метка кнопки
+    assert g.demo_value("feature-2-title")
+    assert g.demo_value("faq-1-q").endswith("?")
+    # url/href → #
+    assert g.demo_value("nav-link-1-url") == "#"
+    # value/number → число
+    assert any(ch.isdigit() for ch in g.demo_value("stat-1-value"))
+    # неизвестный слот → не пусто и не {{slot}}
+    v = g.demo_value("some-weird-slot")
+    assert v and "{{" not in v
+
+
+def test_gallery_srcdoc_has_no_raw_slots(tmp_path):
+    # после демо-подстановки в превью не остаётся сырых {{slot:}}
+    lib = tmp_path / "block-library"
+    blocks = [{"id": "b-1", "path": "hero/b-1/", "folder": "hero",
+               "category": "hero", "variant": None, "layout_pattern": "split",
+               "display_name_ru": "b-1 (split)"}]
+    _make_catalog(lib, blocks)
+    (lib / "hero" / "b-1" / "assets").mkdir(parents=True, exist_ok=True)
+    (lib / "hero" / "b-1" / "assets" / "template.html").write_text(
+        '<section><h1>{{slot:headline}}</h1><a>{{slot:primary-cta-label}}</a></section>',
+        encoding="utf-8",
+    )
+    out = tmp_path / "gallery.html"
+    r = _run(lib, out)
+    assert r.returncode == 0, r.stderr
+    html = out.read_text(encoding="utf-8")
+    # в srcdoc карточки нет сырого {{slot:
+    m = re.search(r'data-id="b-1".*?</article>', html, re.S)
+    card = m.group(0) if m else ""
+    assert "{{slot:" not in card, "в превью остались сырые {{slot}}"
 
 
 def test_preview_button_is_clickable_and_opens_modal(tmp_path):

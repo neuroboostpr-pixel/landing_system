@@ -15,6 +15,7 @@ import argparse
 import html as _html
 import importlib.util
 import json as _json
+import re
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -31,12 +32,77 @@ def _load_taxonomy_lib():
     return mod
 
 
+_SLOT_RE = re.compile(r"\{\{slot:([^}]+)\}\}")
+
+# B35 Фаза 4: демо-значения по семантике ХВОСТА имени слота, чтобы превью
+# выглядело как настоящий блок, а не как сырые {{slot}}. Универсальный fallback
+# плюс короткий явный словарь для частых хвостов.
+_DEMO_BY_TAIL = {
+    "headline": "Заголовок секции",
+    "heading": "Заголовок секции",
+    "title": "Название",
+    "subhead": "Короткое пояснение к заголовку",
+    "subtitle": "Короткое пояснение к заголовку",
+    "eyebrow": "Надзаголовок",
+    "lead": "Вводный абзац о продукте.",
+    "intro": "Вводный абзац о продукте.",
+    "text": "Описание преимущества — конкретно и по делу.",
+    "description": "Описание преимущества — конкретно и по делу.",
+    "body": "Основной текст блока в пару предложений.",
+    "caption": "Подпись",
+    "q": "Частый вопрос клиента?",
+    "a": "Понятный ответ на вопрос клиента.",
+    "question": "Частый вопрос клиента?",
+    "answer": "Понятный ответ на вопрос клиента.",
+    "price": "от 9 900 ₽",
+    "value": "1 200",
+    "number": "01",
+    "count": "250",
+    "label": "Метка",
+    "name": "Название",
+    "phone": "+7 900 000-00-00",
+    "email": "hello@example.com",
+    "address": "Москва, ул. Примерная, 1",
+    "copyright": "© 2026 Компания",
+    "badge": "Хит",
+    "tag": "Тег",
+}
+
+
+def demo_value(slot_name: str) -> str:
+    """Демо-значение для {{slot:name}} по семантике имени."""
+    name = slot_name.strip().lower()
+    # url/href/link → якорь
+    if name.endswith(("url", "href")) or name.endswith("-link"):
+        return "#"
+    if name.endswith(("cta", "cta-label", "button")) or "cta" in name.split("-"):
+        return "Оставить заявку"
+    # ищем самый длинный совпавший хвост
+    parts = name.split("-")
+    for i in range(len(parts)):
+        tail = "-".join(parts[i:])
+        if tail in _DEMO_BY_TAIL:
+            return _DEMO_BY_TAIL[tail]
+    last = parts[-1] if parts else name
+    if last in _DEMO_BY_TAIL:
+        return _DEMO_BY_TAIL[last]
+    # числовой хвост → число
+    if last.isdigit():
+        return last
+    return "Текст"
+
+
+def _fill_demo(html: str) -> str:
+    return _SLOT_RE.sub(lambda m: demo_value(m.group(1)), html)
+
+
 def extract_srcdoc(block_id: str, block_dir: Path) -> str:
     """HTML для превью-iframe блока.
 
     Приоритет: index.html (готовый рендер) → assets/template.html (сырой
     шаблон со слотами). 90 из 151 блоков не имеют index.html, и без fallback
-    их превью было пустым (показывало только имя).
+    их превью было пустым (показывало только имя). {{slot}} заполняются демо-
+    контентом (Фаза 4), чтобы превью выглядело как настоящий блок.
     """
     for candidate in (block_dir / "index.html", block_dir / "assets" / "template.html"):
         if not candidate.exists():
@@ -45,6 +111,7 @@ def extract_srcdoc(block_id: str, block_dir: Path) -> str:
             content = candidate.read_text(encoding="utf-8")
         except Exception:
             continue
+        content = _fill_demo(content)
         # Escape quotes and newlines for HTML attribute
         return content.replace('"', '&quot;').replace('\n', ' ')
     return ""
