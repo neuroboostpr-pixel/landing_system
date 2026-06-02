@@ -44,10 +44,21 @@
   .card-variant { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; background: #eef2ff; color: #4338ca; }
   .card-layout-pattern { font-size: 10px; color: #777; font-family: monospace; background: #f0f0f0; padding: 1px 7px; border-radius: 6px; }
   .card-id { font-size: 10px; color: #999; font-family: monospace; margin-top: 2px; }
-  .card-open-btn { display: block; text-align: center; padding: 10px; background: #f5f5f5; color: #333; text-decoration: none; font-size: 13px; font-weight: 500; border-top: 1px solid #eee; transition: background .15s; }
+  .card-open-btn { display: block; width: 100%; text-align: center; padding: 10px; background: #f5f5f5; color: #333; text-decoration: none; font-size: 13px; font-weight: 500; font-family: inherit; border: none; border-top: 1px solid #eee; cursor: pointer; transition: background .15s; }
   .card-open-btn:hover { background: #111; color: #fff; }
 
   .filter-stats { font-size: 12px; color: #888; margin-left: auto; }
+
+  /* Preview modal */
+  .preview-modal { display: none; position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,.75); }
+  .preview-modal.open { display: flex; align-items: center; justify-content: center; padding: 32px; }
+  .preview-dialog { position: relative; width: min(1280px, 95vw); height: min(820px, 90vh); background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,.4); display: flex; flex-direction: column; }
+  .preview-bar { display: flex; align-items: center; gap: 12px; padding: 10px 16px; background: #111; color: #fff; font-size: 13px; }
+  .preview-title { font-weight: 600; font-family: monospace; }
+  .preview-close { margin-left: auto; background: transparent; color: #fff; border: 1px solid #555; border-radius: 6px; padding: 4px 12px; font-size: 14px; cursor: pointer; }
+  .preview-close:hover { background: #fff; color: #111; }
+  .preview-frame-wrap { flex: 1; overflow: auto; background: #f0f0f0; }
+  .preview-frame-wrap iframe { width: 100%; height: 100%; border: none; background: #fff; }
 </style>
 </head>
 <body>
@@ -100,7 +111,7 @@
       </div>
       <div class="card-id">contacts-001</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="footer" data-variant="" data-layout="grid" data-id="contacts-002">
     <div class="card-thumb">
@@ -117,7 +128,7 @@
       </div>
       <div class="card-id">contacts-002</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="footer" data-variant="" data-layout="split" data-id="contacts-003">
     <div class="card-thumb">
@@ -134,7 +145,7 @@
       </div>
       <div class="card-id">contacts-003</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="forms" data-variant="booking" data-layout="split" data-id="contacts-corporate-split-portfolio-kdm1-ru-16">
     <div class="card-thumb">
@@ -151,7 +162,7 @@
       </div>
       <div class="card-id">contacts-corporate-split-portfolio-kdm1-ru-16</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="faq" data-variant="" data-layout="stacked" data-id="faq-corporate-stacked-portfolio-kdm1-ru-15">
     <div class="card-thumb">
@@ -168,7 +179,7 @@
       </div>
       <div class="card-id">faq-corporate-stacked-portfolio-kdm1-ru-15</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="faq" data-variant="" data-layout="stacked" data-id="faq-minimal-stacked-project21993216-tild-11">
     <div class="card-thumb">
@@ -185,7 +196,7 @@
       </div>
       <div class="card-id">faq-minimal-stacked-project21993216-tild-11</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="faq" data-variant="" data-layout="stacked" data-id="faq-minimal-stacked-sskrusgun-ru-13">
     <div class="card-thumb">
@@ -202,7 +213,7 @@
       </div>
       <div class="card-id">faq-minimal-stacked-sskrusgun-ru-13</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="faq" data-variant="" data-layout="stacked" data-id="ru-faq-01-accordion">
     <div class="card-thumb">
@@ -219,7 +230,7 @@
       </div>
       <div class="card-id">ru-faq-01-accordion</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="faq" data-variant="" data-layout="stacked" data-id="ru-faq-02-why-us">
     <div class="card-thumb">
@@ -236,7 +247,7 @@
       </div>
       <div class="card-id">ru-faq-02-why-us</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="faq" data-variant="" data-layout="stacked" data-id="ru-faq-03-searchable">
     <div class="card-thumb">
@@ -253,7 +264,7 @@
       </div>
       <div class="card-id">ru-faq-03-searchable</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="faq" data-variant="" data-layout="stacked" data-id="ru-faq-04-pricing-faq">
     <div class="card-thumb">
@@ -270,7 +281,7 @@
       </div>
       <div class="card-id">ru-faq-04-pricing-faq</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="features" data-variant="" data-layout="brutalist" data-id="features-001">
     <div class="card-thumb">
@@ -287,7 +298,7 @@
       </div>
       <div class="card-id">features-001</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="features" data-variant="" data-layout="cinematic" data-id="features-002">
     <div class="card-thumb">
@@ -304,7 +315,7 @@
       </div>
       <div class="card-id">features-002</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="features" data-variant="" data-layout="grid" data-id="features-003">
     <div class="card-thumb">
@@ -321,7 +332,7 @@
       </div>
       <div class="card-id">features-003</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="features" data-variant="" data-layout="split" data-id="features-004">
     <div class="card-thumb">
@@ -338,7 +349,7 @@
       </div>
       <div class="card-id">features-004</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="features" data-variant="" data-layout="default" data-id="features-005">
     <div class="card-thumb">
@@ -355,7 +366,7 @@
       </div>
       <div class="card-id">features-005</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="features" data-variant="" data-layout="minimal" data-id="features-006">
     <div class="card-thumb">
@@ -372,7 +383,7 @@
       </div>
       <div class="card-id">features-006</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="features" data-variant="" data-layout="split" data-id="features-brutalist-split-antidiler-karpov-ru-2">
     <div class="card-thumb">
@@ -389,7 +400,7 @@
       </div>
       <div class="card-id">features-brutalist-split-antidiler-karpov-ru-2</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="features" data-variant="" data-layout="grid-3" data-id="features-corporate-grid-3-opt-ecowash-ru-8">
     <div class="card-thumb">
@@ -406,7 +417,7 @@
       </div>
       <div class="card-id">features-corporate-grid-3-opt-ecowash-ru-8</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="features" data-variant="" data-layout="split" data-id="features-corporate-split-sskrusgun-ru-8">
     <div class="card-thumb">
@@ -423,7 +434,7 @@
       </div>
       <div class="card-id">features-corporate-split-sskrusgun-ru-8</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="features" data-variant="" data-layout="grid-2" data-id="features-editorial-grid-2-romanmelnikov-tilda-9">
     <div class="card-thumb">
@@ -440,7 +451,7 @@
       </div>
       <div class="card-id">features-editorial-grid-2-romanmelnikov-tilda-9</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="features" data-variant="" data-layout="split" data-id="features-editorial-split-project21993216-tild-7">
     <div class="card-thumb">
@@ -457,7 +468,7 @@
       </div>
       <div class="card-id">features-editorial-split-project21993216-tild-7</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="features" data-variant="" data-layout="stacked" data-id="features-editorial-stacked-romanmelnikov-tilda-2">
     <div class="card-thumb">
@@ -474,7 +485,7 @@
       </div>
       <div class="card-id">features-editorial-stacked-romanmelnikov-tilda-2</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="features" data-variant="" data-layout="grid-3" data-id="features-technical-grid-3-portfolio-kdm1-ru-2">
     <div class="card-thumb">
@@ -491,7 +502,7 @@
       </div>
       <div class="card-id">features-technical-grid-3-portfolio-kdm1-ru-2</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="features" data-variant="" data-layout="grid-3" data-id="features-technical-grid-3-portfolio-kdm1-ru-5">
     <div class="card-thumb">
@@ -508,7 +519,7 @@
       </div>
       <div class="card-id">features-technical-grid-3-portfolio-kdm1-ru-5</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="features" data-variant="" data-layout="grid-3" data-id="features-technical-grid-3-portfolio-kdm1-ru-6">
     <div class="card-thumb">
@@ -525,7 +536,7 @@
       </div>
       <div class="card-id">features-technical-grid-3-portfolio-kdm1-ru-6</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="features" data-variant="" data-layout="grid-3" data-id="features-technical-grid-3-zilant-group-4">
     <div class="card-thumb">
@@ -542,7 +553,7 @@
       </div>
       <div class="card-id">features-technical-grid-3-zilant-group-4</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="social-proof" data-variant="numbers" data-layout="grid-4" data-id="features-technical-grid-4-project21993216-tild-2">
     <div class="card-thumb">
@@ -559,7 +570,7 @@
       </div>
       <div class="card-id">features-technical-grid-4-project21993216-tild-2</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="features" data-variant="" data-layout="split" data-id="features-technical-split-sskrusgun-ru-6">
     <div class="card-thumb">
@@ -576,7 +587,7 @@
       </div>
       <div class="card-id">features-technical-split-sskrusgun-ru-6</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="features" data-variant="" data-layout="grid-3" data-id="ru-features-01-3col-icons">
     <div class="card-thumb">
@@ -593,7 +604,7 @@
       </div>
       <div class="card-id">ru-features-01-3col-icons</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="features" data-variant="" data-layout="grid-3" data-id="ru-features-02-bento-grid">
     <div class="card-thumb">
@@ -610,7 +621,7 @@
       </div>
       <div class="card-id">ru-features-02-bento-grid</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="features" data-variant="" data-layout="grid-3" data-id="ru-features-03-swiss-cards">
     <div class="card-thumb">
@@ -627,7 +638,7 @@
       </div>
       <div class="card-id">ru-features-03-swiss-cards</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="features" data-variant="" data-layout="grid-3" data-id="ru-features-04-numbered-list">
     <div class="card-thumb">
@@ -644,7 +655,7 @@
       </div>
       <div class="card-id">ru-features-04-numbered-list</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="content" data-variant="process" data-layout="grid-3" data-id="ru-features-05-method-steps">
     <div class="card-thumb">
@@ -661,7 +672,7 @@
       </div>
       <div class="card-id">ru-features-05-method-steps</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="features" data-variant="" data-layout="grid-3" data-id="ru-features-06-cards-2x2">
     <div class="card-thumb">
@@ -678,7 +689,7 @@
       </div>
       <div class="card-id">ru-features-06-cards-2x2</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="content" data-variant="about" data-layout="grid-3" data-id="ru-features-07-2col-split">
     <div class="card-thumb">
@@ -695,7 +706,7 @@
       </div>
       <div class="card-id">ru-features-07-2col-split</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="social-proof" data-variant="numbers" data-layout="grid-3" data-id="ru-features-08-kpi-metrics">
     <div class="card-thumb">
@@ -712,7 +723,7 @@
       </div>
       <div class="card-id">ru-features-08-kpi-metrics</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="footer" data-variant="" data-layout="grid" data-id="footer-001">
     <div class="card-thumb">
@@ -729,7 +740,7 @@
       </div>
       <div class="card-id">footer-001</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="footer" data-variant="" data-layout="split" data-id="footer-002">
     <div class="card-thumb">
@@ -746,7 +757,7 @@
       </div>
       <div class="card-id">footer-002</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="footer" data-variant="" data-layout="minimal" data-id="footer-003">
     <div class="card-thumb">
@@ -763,7 +774,7 @@
       </div>
       <div class="card-id">footer-003</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="footer" data-variant="" data-layout="grid-4" data-id="footer-corporate-grid-4-portfolio-kdm1-ru-8">
     <div class="card-thumb">
@@ -780,7 +791,7 @@
       </div>
       <div class="card-id">footer-corporate-grid-4-portfolio-kdm1-ru-8</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="footer" data-variant="" data-layout="grid-4" data-id="footer-corporate-grid-4-zilant-group-10">
     <div class="card-thumb">
@@ -797,7 +808,7 @@
       </div>
       <div class="card-id">footer-corporate-grid-4-zilant-group-10</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="footer" data-variant="" data-layout="split" data-id="footer-corporate-split-portfolio-kdm1-ru-9">
     <div class="card-thumb">
@@ -814,7 +825,7 @@
       </div>
       <div class="card-id">footer-corporate-split-portfolio-kdm1-ru-9</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="footer" data-variant="" data-layout="split" data-id="footer-minimal-split-antidiler-karpov-ru-8">
     <div class="card-thumb">
@@ -831,7 +842,7 @@
       </div>
       <div class="card-id">footer-minimal-split-antidiler-karpov-ru-8</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="footer" data-variant="" data-layout="split" data-id="footer-minimal-split-portfolio-kdm1-ru-17">
     <div class="card-thumb">
@@ -848,7 +859,7 @@
       </div>
       <div class="card-id">footer-minimal-split-portfolio-kdm1-ru-17</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="footer" data-variant="" data-layout="split" data-id="footer-minimal-split-romanmelnikov-tilda-14">
     <div class="card-thumb">
@@ -865,7 +876,7 @@
       </div>
       <div class="card-id">footer-minimal-split-romanmelnikov-tilda-14</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="header" data-variant="" data-layout="cinematic" data-id="header-001">
     <div class="card-thumb">
@@ -882,7 +893,7 @@
       </div>
       <div class="card-id">header-001</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="header" data-variant="" data-layout="split" data-id="header-002">
     <div class="card-thumb">
@@ -899,7 +910,7 @@
       </div>
       <div class="card-id">header-002</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="header" data-variant="" data-layout="minimal" data-id="header-003">
     <div class="card-thumb">
@@ -916,7 +927,7 @@
       </div>
       <div class="card-id">header-003</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="header" data-variant="" data-layout="split" data-id="header-cinematic-split-portfolio-kdm1-ru-0">
     <div class="card-thumb">
@@ -933,7 +944,7 @@
       </div>
       <div class="card-id">header-cinematic-split-portfolio-kdm1-ru-0</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="header" data-variant="" data-layout="split" data-id="header-corporate-split-zilant-group-0">
     <div class="card-thumb">
@@ -950,7 +961,7 @@
       </div>
       <div class="card-id">header-corporate-split-zilant-group-0</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="header" data-variant="" data-layout="split" data-id="header-luxury-split-romanmelnikov-tilda-0">
     <div class="card-thumb">
@@ -967,7 +978,7 @@
       </div>
       <div class="card-id">header-luxury-split-romanmelnikov-tilda-0</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="header" data-variant="" data-layout="split" data-id="header-minimal-split-portfolio-kdm1-ru-0">
     <div class="card-thumb">
@@ -984,7 +995,7 @@
       </div>
       <div class="card-id">header-minimal-split-portfolio-kdm1-ru-0</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="header" data-variant="" data-layout="split" data-id="header-minimal-split-project21993216-tild-0">
     <div class="card-thumb">
@@ -1001,7 +1012,7 @@
       </div>
       <div class="card-id">header-minimal-split-project21993216-tild-0</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="header" data-variant="" data-layout="split" data-id="header-playful-split-opt-ecowash-ru-0">
     <div class="card-thumb">
@@ -1018,7 +1029,7 @@
       </div>
       <div class="card-id">header-playful-split-opt-ecowash-ru-0</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="header" data-variant="" data-layout="split" data-id="header-technical-split-sskrusgun-ru-0">
     <div class="card-thumb">
@@ -1035,7 +1046,7 @@
       </div>
       <div class="card-id">header-technical-split-sskrusgun-ru-0</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="hero" data-variant="" data-layout="brutalist" data-id="hero-001">
     <div class="card-thumb">
@@ -1052,7 +1063,7 @@
       </div>
       <div class="card-id">hero-001</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="hero" data-variant="" data-layout="cinematic" data-id="hero-002">
     <div class="card-thumb">
@@ -1069,7 +1080,7 @@
       </div>
       <div class="card-id">hero-002</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="hero" data-variant="" data-layout="split" data-id="hero-003">
     <div class="card-thumb">
@@ -1086,7 +1097,7 @@
       </div>
       <div class="card-id">hero-003</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="hero" data-variant="" data-layout="default" data-id="hero-004">
     <div class="card-thumb">
@@ -1103,7 +1114,7 @@
       </div>
       <div class="card-id">hero-004</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="hero" data-variant="" data-layout="minimal" data-id="hero-005">
     <div class="card-thumb">
@@ -1120,7 +1131,7 @@
       </div>
       <div class="card-id">hero-005</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="hero" data-variant="" data-layout="split" data-id="hero-cinematic-split-antidiler-karpov-ru-1">
     <div class="card-thumb">
@@ -1137,7 +1148,7 @@
       </div>
       <div class="card-id">hero-cinematic-split-antidiler-karpov-ru-1</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="hero" data-variant="" data-layout="split" data-id="hero-cinematic-split-portfolio-kdm1-ru-2">
     <div class="card-thumb">
@@ -1154,7 +1165,7 @@
       </div>
       <div class="card-id">hero-cinematic-split-portfolio-kdm1-ru-2</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="hero" data-variant="" data-layout="split" data-id="hero-cinematic-split-romanmelnikov-tilda-1">
     <div class="card-thumb">
@@ -1171,7 +1182,7 @@
       </div>
       <div class="card-id">hero-cinematic-split-romanmelnikov-tilda-1</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="hero" data-variant="" data-layout="split" data-id="hero-corporate-split-zilant-group-1">
     <div class="card-thumb">
@@ -1188,7 +1199,7 @@
       </div>
       <div class="card-id">hero-corporate-split-zilant-group-1</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="hero" data-variant="" data-layout="split" data-id="hero-playful-split-opt-ecowash-ru-1">
     <div class="card-thumb">
@@ -1205,7 +1216,7 @@
       </div>
       <div class="card-id">hero-playful-split-opt-ecowash-ru-1</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="hero" data-variant="" data-layout="split" data-id="hero-technical-split-portfolio-kdm1-ru-1">
     <div class="card-thumb">
@@ -1222,7 +1233,7 @@
       </div>
       <div class="card-id">hero-technical-split-portfolio-kdm1-ru-1</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="hero" data-variant="" data-layout="centered" data-id="ru-hero-01-services-calc">
     <div class="card-thumb">
@@ -1239,7 +1250,7 @@
       </div>
       <div class="card-id">ru-hero-01-services-calc</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="hero" data-variant="" data-layout="centered" data-id="ru-hero-02-b2c-expert">
     <div class="card-thumb">
@@ -1256,7 +1267,7 @@
       </div>
       <div class="card-id">ru-hero-02-b2c-expert</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="hero" data-variant="" data-layout="centered" data-id="ru-hero-03-local-interior">
     <div class="card-thumb">
@@ -1273,7 +1284,7 @@
       </div>
       <div class="card-id">ru-hero-03-local-interior</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="hero" data-variant="" data-layout="centered" data-id="ru-hero-04-split-form">
     <div class="card-thumb">
@@ -1290,7 +1301,7 @@
       </div>
       <div class="card-id">ru-hero-04-split-form</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="hero" data-variant="" data-layout="centered" data-id="ru-hero-05-centered-bold">
     <div class="card-thumb">
@@ -1307,7 +1318,7 @@
       </div>
       <div class="card-id">ru-hero-05-centered-bold</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="hero" data-variant="" data-layout="centered" data-id="ru-hero-06-swiss-metrics">
     <div class="card-thumb">
@@ -1324,7 +1335,7 @@
       </div>
       <div class="card-id">ru-hero-06-swiss-metrics</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="hero" data-variant="" data-layout="centered" data-id="ru-hero-07-editorial-serif">
     <div class="card-thumb">
@@ -1341,7 +1352,7 @@
       </div>
       <div class="card-id">ru-hero-07-editorial-serif</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="hero" data-variant="" data-layout="centered" data-id="ru-hero-08-centered-emailcap">
     <div class="card-thumb">
@@ -1358,7 +1369,7 @@
       </div>
       <div class="card-id">ru-hero-08-centered-emailcap</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="hero" data-variant="" data-layout="centered" data-id="ru-hero-09-kami-serif">
     <div class="card-thumb">
@@ -1375,7 +1386,7 @@
       </div>
       <div class="card-id">ru-hero-09-kami-serif</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="hero" data-variant="" data-layout="centered" data-id="ru-hero-10-deck-cover">
     <div class="card-thumb">
@@ -1392,7 +1403,7 @@
       </div>
       <div class="card-id">ru-hero-10-deck-cover</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="pricing" data-variant="cards" data-layout="default" data-id="pricing-001">
     <div class="card-thumb">
@@ -1409,7 +1420,7 @@
       </div>
       <div class="card-id">pricing-001</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="pricing" data-variant="cards" data-layout="grid" data-id="pricing-002">
     <div class="card-thumb">
@@ -1426,7 +1437,7 @@
       </div>
       <div class="card-id">pricing-002</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="pricing" data-variant="cards" data-layout="split" data-id="pricing-003">
     <div class="card-thumb">
@@ -1443,7 +1454,7 @@
       </div>
       <div class="card-id">pricing-003</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="pricing" data-variant="cards" data-layout="minimal" data-id="pricing-004">
     <div class="card-thumb">
@@ -1460,7 +1471,7 @@
       </div>
       <div class="card-id">pricing-004</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="pricing" data-variant="cards" data-layout="grid-3" data-id="pricing-corporate-grid-3-portfolio-kdm1-ru-7">
     <div class="card-thumb">
@@ -1477,7 +1488,7 @@
       </div>
       <div class="card-id">pricing-corporate-grid-3-portfolio-kdm1-ru-7</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="pricing" data-variant="cards" data-layout="grid-3" data-id="pricing-corporate-grid-3-sskrusgun-ru-5">
     <div class="card-thumb">
@@ -1494,7 +1505,7 @@
       </div>
       <div class="card-id">pricing-corporate-grid-3-sskrusgun-ru-5</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="pricing" data-variant="cards" data-layout="grid-3" data-id="pricing-technical-grid-3-sskrusgun-ru-2">
     <div class="card-thumb">
@@ -1511,7 +1522,7 @@
       </div>
       <div class="card-id">pricing-technical-grid-3-sskrusgun-ru-2</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="pricing" data-variant="cards" data-layout="grid-3" data-id="ru-pricing-01-rub-from">
     <div class="card-thumb">
@@ -1528,7 +1539,7 @@
       </div>
       <div class="card-id">ru-pricing-01-rub-from</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="pricing" data-variant="comparison" data-layout="grid-3" data-id="ru-pricing-02-comparison-table">
     <div class="card-thumb">
@@ -1545,7 +1556,7 @@
       </div>
       <div class="card-id">ru-pricing-02-comparison-table</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="pricing" data-variant="cards" data-layout="grid-3" data-id="ru-pricing-03-3tier-saas">
     <div class="card-thumb">
@@ -1562,7 +1573,7 @@
       </div>
       <div class="card-id">ru-pricing-03-3tier-saas</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="pricing" data-variant="cards" data-layout="grid-3" data-id="ru-pricing-04-tiers-faq">
     <div class="card-thumb">
@@ -1579,7 +1590,7 @@
       </div>
       <div class="card-id">ru-pricing-04-tiers-faq</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="content" data-variant="process" data-layout="cinematic" data-id="process-001">
     <div class="card-thumb">
@@ -1596,7 +1607,7 @@
       </div>
       <div class="card-id">process-001</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="content" data-variant="process" data-layout="default" data-id="process-002">
     <div class="card-thumb">
@@ -1613,7 +1624,7 @@
       </div>
       <div class="card-id">process-002</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="content" data-variant="process" data-layout="grid" data-id="process-003">
     <div class="card-thumb">
@@ -1630,7 +1641,7 @@
       </div>
       <div class="card-id">process-003</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="social-proof" data-variant="numbers" data-layout="minimal" data-id="process-004">
     <div class="card-thumb">
@@ -1647,7 +1658,7 @@
       </div>
       <div class="card-id">process-004</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="content" data-variant="process" data-layout="timeline" data-id="process-corporate-timeline-project21993216-tild-10">
     <div class="card-thumb">
@@ -1664,7 +1675,7 @@
       </div>
       <div class="card-id">process-corporate-timeline-project21993216-tild-10</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="content" data-variant="process" data-layout="grid-2" data-id="process-minimal-grid-2-portfolio-kdm1-ru-4">
     <div class="card-thumb">
@@ -1681,7 +1692,7 @@
       </div>
       <div class="card-id">process-minimal-grid-2-portfolio-kdm1-ru-4</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="content" data-variant="process" data-layout="cards" data-id="process-technical-cards-medregistrant-ru-3">
     <div class="card-thumb">
@@ -1698,7 +1709,7 @@
       </div>
       <div class="card-id">process-technical-cards-medregistrant-ru-3</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="content" data-variant="process" data-layout="stacked" data-id="process-technical-stacked-opt-ecowash-ru-6">
     <div class="card-thumb">
@@ -1715,7 +1726,7 @@
       </div>
       <div class="card-id">process-technical-stacked-opt-ecowash-ru-6</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="content" data-variant="process" data-layout="timeline" data-id="process-technical-timeline-romanmelnikov-tilda-10">
     <div class="card-thumb">
@@ -1732,7 +1743,7 @@
       </div>
       <div class="card-id">process-technical-timeline-romanmelnikov-tilda-10</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="content" data-variant="process" data-layout="centered" data-id="ru-process-01-4steps-icons">
     <div class="card-thumb">
@@ -1749,7 +1760,7 @@
       </div>
       <div class="card-id">ru-process-01-4steps-icons</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="content" data-variant="process" data-layout="centered" data-id="ru-process-02-next-steps">
     <div class="card-thumb">
@@ -1766,7 +1777,7 @@
       </div>
       <div class="card-id">ru-process-02-next-steps</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="content" data-variant="process" data-layout="centered" data-id="ru-process-03-4steps-numbered">
     <div class="card-thumb">
@@ -1783,7 +1794,7 @@
       </div>
       <div class="card-id">ru-process-03-4steps-numbered</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="forms" data-variant="quiz" data-layout="centered" data-id="ru-quiz-01-step-card">
     <div class="card-thumb">
@@ -1800,7 +1811,7 @@
       </div>
       <div class="card-id">ru-quiz-01-step-card</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="forms" data-variant="quiz" data-layout="centered" data-id="ru-quiz-02-progress-top">
     <div class="card-thumb">
@@ -1817,7 +1828,7 @@
       </div>
       <div class="card-id">ru-quiz-02-progress-top</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="forms" data-variant="quiz" data-layout="centered" data-id="ru-quiz-03-intermediate">
     <div class="card-thumb">
@@ -1834,7 +1845,7 @@
       </div>
       <div class="card-id">ru-quiz-03-intermediate</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="forms" data-variant="email" data-layout="centered" data-id="ru-quiz-04-lead-form">
     <div class="card-thumb">
@@ -1851,7 +1862,7 @@
       </div>
       <div class="card-id">ru-quiz-04-lead-form</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="forms" data-variant="quiz" data-layout="centered" data-id="ru-quiz-05-thankyou">
     <div class="card-thumb">
@@ -1868,7 +1879,7 @@
       </div>
       <div class="card-id">ru-quiz-05-thankyou</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="forms" data-variant="quiz" data-layout="centered" data-id="ru-quiz-06-welcome-screen">
     <div class="card-thumb">
@@ -1885,7 +1896,7 @@
       </div>
       <div class="card-id">ru-quiz-06-welcome-screen</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="forms" data-variant="quiz" data-layout="centered" data-id="ru-quiz-07-image-choice">
     <div class="card-thumb">
@@ -1902,7 +1913,7 @@
       </div>
       <div class="card-id">ru-quiz-07-image-choice</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="forms" data-variant="quiz" data-layout="centered" data-id="ru-quiz-08-slider-range">
     <div class="card-thumb">
@@ -1919,7 +1930,7 @@
       </div>
       <div class="card-id">ru-quiz-08-slider-range</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="forms" data-variant="quiz" data-layout="centered" data-id="ru-quiz-09-multi-select">
     <div class="card-thumb">
@@ -1936,7 +1947,7 @@
       </div>
       <div class="card-id">ru-quiz-09-multi-select</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="forms" data-variant="quiz" data-layout="centered" data-id="ru-quiz-10-loader-analyzing">
     <div class="card-thumb">
@@ -1953,7 +1964,7 @@
       </div>
       <div class="card-id">ru-quiz-10-loader-analyzing</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="trust" data-variant="guarantees" data-layout="centered" data-id="ru-quiz-11-discount-bonus">
     <div class="card-thumb">
@@ -1970,7 +1981,7 @@
       </div>
       <div class="card-id">ru-quiz-11-discount-bonus</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="forms" data-variant="quiz" data-layout="centered" data-id="ru-quiz-12-mini-calculator">
     <div class="card-thumb">
@@ -1987,7 +1998,7 @@
       </div>
       <div class="card-id">ru-quiz-12-mini-calculator</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="forms" data-variant="quiz" data-layout="centered" data-id="ru-quiz-13-comparison-question">
     <div class="card-thumb">
@@ -2004,7 +2015,7 @@
       </div>
       <div class="card-id">ru-quiz-13-comparison-question</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="social-proof" data-variant="clients" data-layout="grid-4" data-id="ru-social-proof-03-client-logos">
     <div class="card-thumb">
@@ -2021,7 +2032,7 @@
       </div>
       <div class="card-id">ru-social-proof-03-client-logos</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="social-proof" data-variant="cases" data-layout="grid-4" data-id="ru-social-proof-04-authority-cases">
     <div class="card-thumb">
@@ -2038,7 +2049,7 @@
       </div>
       <div class="card-id">ru-social-proof-04-authority-cases</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="social-proof" data-variant="numbers" data-layout="grid-4" data-id="ru-social-proof-05-metrics-editorial">
     <div class="card-thumb">
@@ -2055,7 +2066,7 @@
       </div>
       <div class="card-id">ru-social-proof-05-metrics-editorial</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="social-proof" data-variant="testimonials" data-layout="grid-4" data-id="ru-social-proof-06-editorial-quote">
     <div class="card-thumb">
@@ -2072,7 +2083,7 @@
       </div>
       <div class="card-id">ru-social-proof-06-editorial-quote</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="marquee" data-variant="" data-layout="grid-4" data-id="ru-social-proof-07-logo-ticker">
     <div class="card-thumb">
@@ -2089,7 +2100,7 @@
       </div>
       <div class="card-id">ru-social-proof-07-logo-ticker</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="social-proof" data-variant="numbers" data-layout="grid-4" data-id="ru-social-proof-08-stats-deck">
     <div class="card-thumb">
@@ -2106,7 +2117,7 @@
       </div>
       <div class="card-id">ru-social-proof-08-stats-deck</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="social-proof" data-variant="numbers" data-layout="grid-2" data-id="ru-stats-01-growth-chart">
     <div class="card-thumb">
@@ -2123,7 +2134,7 @@
       </div>
       <div class="card-id">ru-stats-01-growth-chart</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="social-proof" data-variant="testimonials" data-layout="cards" data-id="ru-testimonials-01-video-circles">
     <div class="card-thumb">
@@ -2140,7 +2151,7 @@
       </div>
       <div class="card-id">ru-testimonials-01-video-circles</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="social-proof" data-variant="testimonials" data-layout="cards" data-id="ru-testimonials-02-text-photo">
     <div class="card-thumb">
@@ -2157,7 +2168,7 @@
       </div>
       <div class="card-id">ru-testimonials-02-text-photo</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="social-proof" data-variant="cases" data-layout="split" data-id="social-proof-cinematic-split-antidiler-karpov-ru-3">
     <div class="card-thumb">
@@ -2174,7 +2185,7 @@
       </div>
       <div class="card-id">social-proof-cinematic-split-antidiler-karpov-ru-3</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="social-proof" data-variant="clients" data-layout="cards" data-id="social-proof-corporate-cards-medregistrant-ru-6">
     <div class="card-thumb">
@@ -2191,7 +2202,7 @@
       </div>
       <div class="card-id">social-proof-corporate-cards-medregistrant-ru-6</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="social-proof" data-variant="numbers" data-layout="grid-3" data-id="social-proof-corporate-grid-3-zilant-group-5">
     <div class="card-thumb">
@@ -2208,7 +2219,7 @@
       </div>
       <div class="card-id">social-proof-corporate-grid-3-zilant-group-5</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="social-proof" data-variant="testimonials" data-layout="cards" data-id="social-proof-luxury-cards-romanmelnikov-tilda-12">
     <div class="card-thumb">
@@ -2225,7 +2236,7 @@
       </div>
       <div class="card-id">social-proof-luxury-cards-romanmelnikov-tilda-12</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="social-proof" data-variant="testimonials" data-layout="centered" data-id="social-proof-minimal-centered-project21993216-tild-3">
     <div class="card-thumb">
@@ -2242,7 +2253,7 @@
       </div>
       <div class="card-id">social-proof-minimal-centered-project21993216-tild-3</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="social-proof" data-variant="testimonials" data-layout="stacked" data-id="social-proof-minimal-stacked-antidiler-karpov-ru-4">
     <div class="card-thumb">
@@ -2259,7 +2270,7 @@
       </div>
       <div class="card-id">social-proof-minimal-stacked-antidiler-karpov-ru-4</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="social-proof" data-variant="testimonials" data-layout="grid-2" data-id="social-proof-playful-grid-2-opt-ecowash-ru-9">
     <div class="card-thumb">
@@ -2276,7 +2287,7 @@
       </div>
       <div class="card-id">social-proof-playful-grid-2-opt-ecowash-ru-9</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="social-proof" data-variant="numbers" data-layout="grid-4" data-id="social-proof-technical-grid-4-portfolio-kdm1-ru-14">
     <div class="card-thumb">
@@ -2293,7 +2304,7 @@
       </div>
       <div class="card-id">social-proof-technical-grid-4-portfolio-kdm1-ru-14</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="content" data-variant="about" data-layout="cinematic" data-id="team-001">
     <div class="card-thumb">
@@ -2310,7 +2321,7 @@
       </div>
       <div class="card-id">team-001</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="trust" data-variant="guarantees" data-layout="centered" data-id="ru-trust-01-guarantees-docs">
     <div class="card-thumb">
@@ -2327,7 +2338,7 @@
       </div>
       <div class="card-id">ru-trust-01-guarantees-docs</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="social-proof" data-variant="numbers" data-layout="centered" data-id="ru-trust-02-numbers-row">
     <div class="card-thumb">
@@ -2344,7 +2355,7 @@
       </div>
       <div class="card-id">ru-trust-02-numbers-row</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="header" data-variant="" data-layout="centered" data-id="ru-trust-03-descriptor-header">
     <div class="card-thumb">
@@ -2361,7 +2372,7 @@
       </div>
       <div class="card-id">ru-trust-03-descriptor-header</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="content" data-variant="about" data-layout="centered" data-id="ru-trust-04-principles-grid">
     <div class="card-thumb">
@@ -2378,7 +2389,7 @@
       </div>
       <div class="card-id">ru-trust-04-principles-grid</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="content" data-variant="about" data-layout="centered" data-id="ru-trust-05-manifesto-text">
     <div class="card-thumb">
@@ -2395,7 +2406,7 @@
       </div>
       <div class="card-id">ru-trust-05-manifesto-text</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="social-proof" data-variant="cases" data-layout="centered" data-id="ru-trust-06-labs-showcase">
     <div class="card-thumb">
@@ -2412,7 +2423,7 @@
       </div>
       <div class="card-id">ru-trust-06-labs-showcase</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="social-proof" data-variant="clients" data-layout="centered" data-id="ru-trust-07-partner-logos">
     <div class="card-thumb">
@@ -2429,7 +2440,7 @@
       </div>
       <div class="card-id">ru-trust-07-partner-logos</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="trust" data-variant="guarantees" data-layout="grid" data-id="trust-001">
     <div class="card-thumb">
@@ -2446,7 +2457,7 @@
       </div>
       <div class="card-id">trust-001</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="social-proof" data-variant="testimonials" data-layout="default" data-id="trust-002">
     <div class="card-thumb">
@@ -2463,7 +2474,7 @@
       </div>
       <div class="card-id">trust-002</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="social-proof" data-variant="clients" data-layout="minimal" data-id="trust-003">
     <div class="card-thumb">
@@ -2480,7 +2491,7 @@
       </div>
       <div class="card-id">trust-003</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="trust" data-variant="certificates" data-layout="grid-3" data-id="trust-corporate-grid-3-project21993216-tild-12">
     <div class="card-thumb">
@@ -2497,7 +2508,7 @@
       </div>
       <div class="card-id">trust-corporate-grid-3-project21993216-tild-12</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="content" data-variant="about" data-layout="grid-4" data-id="trust-corporate-grid-4-sskrusgun-ru-11">
     <div class="card-thumb">
@@ -2514,7 +2525,7 @@
       </div>
       <div class="card-id">trust-corporate-grid-4-sskrusgun-ru-11</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="features" data-variant="" data-layout="grid-2" data-id="trust-editorial-grid-2-romanmelnikov-tilda-11">
     <div class="card-thumb">
@@ -2531,7 +2542,7 @@
       </div>
       <div class="card-id">trust-editorial-grid-2-romanmelnikov-tilda-11</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="social-proof" data-variant="cases" data-layout="grid-2" data-id="trust-editorial-grid-2-zilant-group-7">
     <div class="card-thumb">
@@ -2548,7 +2559,7 @@
       </div>
       <div class="card-id">trust-editorial-grid-2-zilant-group-7</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="content" data-variant="about" data-layout="grid-3" data-id="trust-editorial-grid-3-portfolio-kdm1-ru-4">
     <div class="card-thumb">
@@ -2565,7 +2576,7 @@
       </div>
       <div class="card-id">trust-editorial-grid-3-portfolio-kdm1-ru-4</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="trust" data-variant="guarantees" data-layout="stacked" data-id="trust-editorial-stacked-portfolio-kdm1-ru-12">
     <div class="card-thumb">
@@ -2582,7 +2593,7 @@
       </div>
       <div class="card-id">trust-editorial-stacked-portfolio-kdm1-ru-12</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="social-proof" data-variant="numbers" data-layout="centered" data-id="trust-luxury-centered-romanmelnikov-tilda-5">
     <div class="card-thumb">
@@ -2599,7 +2610,7 @@
       </div>
       <div class="card-id">trust-luxury-centered-romanmelnikov-tilda-5</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="social-proof" data-variant="clients" data-layout="grid-4" data-id="trust-minimal-grid-4-zilant-group-8">
     <div class="card-thumb">
@@ -2616,7 +2627,7 @@
       </div>
       <div class="card-id">trust-minimal-grid-4-zilant-group-8</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="social-proof" data-variant="numbers" data-layout="stacked" data-id="trust-playful-stacked-opt-ecowash-ru-4">
     <div class="card-thumb">
@@ -2633,7 +2644,7 @@
       </div>
       <div class="card-id">trust-playful-stacked-opt-ecowash-ru-4</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   <article class="gallery-card" data-category="trust" data-variant="guarantees" data-layout="grid-3" data-id="trust-technical-grid-3-project21993216-tild-9">
     <div class="card-thumb">
@@ -2650,9 +2661,21 @@
       </div>
       <div class="card-id">trust-technical-grid-3-project21993216-tild-9</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
   </div>
+
+<div class="preview-modal" id="preview-modal">
+  <div class="preview-dialog">
+    <div class="preview-bar">
+      <span class="preview-title" id="preview-title"></span>
+      <button type="button" class="preview-close" id="preview-close">Закрыть ✕</button>
+    </div>
+    <div class="preview-frame-wrap">
+      <iframe sandbox id="preview-frame"></iframe>
+    </div>
+  </div>
+</div>
 
 <script>
   const CAT_VARIANTS = {"content": {"about": {"label": "о продукте", "count": 6}, "process": {"label": "как это работает", "count": 12}}, "social-proof": {"testimonials": {"label": "отзывы", "count": 8}, "clients": {"label": "наши клиенты", "count": 5}, "numbers": {"label": "цифры", "count": 11}, "cases": {"label": "кейсы", "count": 4}}, "trust": {"certificates": {"label": "сертификаты", "count": 1}, "guarantees": {"label": "гарантии", "count": 5}}, "pricing": {"cards": {"label": "карточки тарифов", "count": 10}, "comparison": {"label": "сравнительные таблицы", "count": 1}}, "forms": {"email": {"label": "сбор email", "count": 1}, "quiz": {"label": "квиз", "count": 11}, "booking": {"label": "бронирование", "count": 1}}};
@@ -2715,6 +2738,39 @@
 
   // Initial state
   blockCount.textContent = '151';
+
+  // --- Preview modal ---
+  const previewModal = document.getElementById('preview-modal');
+  const previewFrame = document.getElementById('preview-frame');
+  const previewTitle = document.getElementById('preview-title');
+  const previewClose = document.getElementById('preview-close');
+
+  function openPreview(btn) {
+    const card = btn.closest('.gallery-card');
+    if (!card) return;
+    const thumbFrame = card.querySelector('.card-thumb iframe');
+    // переиспользуем srcdoc миниатюры, но в полный размер
+    previewFrame.srcdoc = thumbFrame ? thumbFrame.getAttribute('srcdoc') : '';
+    previewTitle.textContent = card.dataset.id || '';
+    previewModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closePreview() {
+    previewModal.classList.remove('open');
+    previewFrame.srcdoc = '';
+    document.body.style.overflow = '';
+  }
+
+  previewClose.addEventListener('click', closePreview);
+  // клик по затемнённому фону (вне диалога) закрывает
+  previewModal.addEventListener('click', (e) => {
+    if (e.target === previewModal) closePreview();
+  });
+  // Esc закрывает
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && previewModal.classList.contains('open')) closePreview();
+  });
 </script>
 </body>
 </html>

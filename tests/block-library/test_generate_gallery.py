@@ -128,3 +128,16 @@ def test_cards_carry_data_variant(tmp_path):
     assert re.search(r'data-id="hero-1"[^>]*data-variant=""', html) or \
            re.search(r'data-variant=""[^>]*data-id="hero-1"', html), \
            "hero-1 должен иметь пустой data-variant"
+
+
+def test_preview_button_is_clickable_and_opens_modal(tmp_path):
+    html = _build(tmp_path)
+    # кнопка больше не заглушка
+    assert 'onclick="return false;"' not in html, "кнопка осталась нерабочей заглушкой"
+    # есть элемент модального окна и его iframe
+    assert 'id="preview-modal"' in html
+    assert 'id="preview-frame"' in html
+    # кнопка «Просмотр» вызывает открытие модалки
+    assert "openPreview" in html
+    # закрытие по Esc реализовано
+    assert "Escape" in html

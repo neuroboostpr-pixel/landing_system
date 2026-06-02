@@ -154,10 +154,21 @@ def main() -> None:
   .card-variant {{ font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; background: #eef2ff; color: #4338ca; }}
   .card-layout-pattern {{ font-size: 10px; color: #777; font-family: monospace; background: #f0f0f0; padding: 1px 7px; border-radius: 6px; }}
   .card-id {{ font-size: 10px; color: #999; font-family: monospace; margin-top: 2px; }}
-  .card-open-btn {{ display: block; text-align: center; padding: 10px; background: #f5f5f5; color: #333; text-decoration: none; font-size: 13px; font-weight: 500; border-top: 1px solid #eee; transition: background .15s; }}
+  .card-open-btn {{ display: block; width: 100%; text-align: center; padding: 10px; background: #f5f5f5; color: #333; text-decoration: none; font-size: 13px; font-weight: 500; font-family: inherit; border: none; border-top: 1px solid #eee; cursor: pointer; transition: background .15s; }}
   .card-open-btn:hover {{ background: #111; color: #fff; }}
 
   .filter-stats {{ font-size: 12px; color: #888; margin-left: auto; }}
+
+  /* Preview modal */
+  .preview-modal {{ display: none; position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,.75); }}
+  .preview-modal.open {{ display: flex; align-items: center; justify-content: center; padding: 32px; }}
+  .preview-dialog {{ position: relative; width: min(1280px, 95vw); height: min(820px, 90vh); background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,.4); display: flex; flex-direction: column; }}
+  .preview-bar {{ display: flex; align-items: center; gap: 12px; padding: 10px 16px; background: #111; color: #fff; font-size: 13px; }}
+  .preview-title {{ font-weight: 600; font-family: monospace; }}
+  .preview-close {{ margin-left: auto; background: transparent; color: #fff; border: 1px solid #555; border-radius: 6px; padding: 4px 12px; font-size: 14px; cursor: pointer; }}
+  .preview-close:hover {{ background: #fff; color: #111; }}
+  .preview-frame-wrap {{ flex: 1; overflow: auto; background: #f0f0f0; }}
+  .preview-frame-wrap iframe {{ width: 100%; height: 100%; border: none; background: #fff; }}
 </style>
 </head>
 <body>
@@ -228,11 +239,23 @@ def main() -> None:
       </div>
       <div class="card-id">{block_id}</div>
     </div>
-    <a href="#" class="card-open-btn" onclick="return false;">Просмотр</a>
+    <button type="button" class="card-open-btn" onclick="openPreview(this)">Просмотр</button>
   </article>
 """
 
     html += """  </div>
+
+<div class="preview-modal" id="preview-modal">
+  <div class="preview-dialog">
+    <div class="preview-bar">
+      <span class="preview-title" id="preview-title"></span>
+      <button type="button" class="preview-close" id="preview-close">Закрыть ✕</button>
+    </div>
+    <div class="preview-frame-wrap">
+      <iframe sandbox id="preview-frame"></iframe>
+    </div>
+  </div>
+</div>
 
 <script>
   const CAT_VARIANTS = """ + cat_variants_json + """;
@@ -295,6 +318,39 @@ def main() -> None:
 
   // Initial state
   blockCount.textContent = '""" + str(total) + """';
+
+  // --- Preview modal ---
+  const previewModal = document.getElementById('preview-modal');
+  const previewFrame = document.getElementById('preview-frame');
+  const previewTitle = document.getElementById('preview-title');
+  const previewClose = document.getElementById('preview-close');
+
+  function openPreview(btn) {
+    const card = btn.closest('.gallery-card');
+    if (!card) return;
+    const thumbFrame = card.querySelector('.card-thumb iframe');
+    // переиспользуем srcdoc миниатюры, но в полный размер
+    previewFrame.srcdoc = thumbFrame ? thumbFrame.getAttribute('srcdoc') : '';
+    previewTitle.textContent = card.dataset.id || '';
+    previewModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closePreview() {
+    previewModal.classList.remove('open');
+    previewFrame.srcdoc = '';
+    document.body.style.overflow = '';
+  }
+
+  previewClose.addEventListener('click', closePreview);
+  // клик по затемнённому фону (вне диалога) закрывает
+  previewModal.addEventListener('click', (e) => {
+    if (e.target === previewModal) closePreview();
+  });
+  // Esc закрывает
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && previewModal.classList.contains('open')) closePreview();
+  });
 </script>
 </body>
 </html>
