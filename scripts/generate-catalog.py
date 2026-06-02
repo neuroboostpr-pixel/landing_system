@@ -8,15 +8,30 @@ Usage:
   python scripts/generate-catalog.py --library block-library --output block-library/catalog.yaml
 """
 import argparse
+import importlib.util
 import sys
 from pathlib import Path
 from typing import Any
 
 import yaml
 
+LOADER_PATH = Path(__file__).resolve().parent / "lib" / "taxonomy.py"
 
-def extract_block_info(block_dir: Path, category: str) -> dict[str, Any] | None:
-    """Extract block metadata from meta.yaml or infer from directory structure."""
+
+def _load_taxonomy_lib():
+    spec = importlib.util.spec_from_file_location("taxonomy_lib_catalog", LOADER_PATH)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def extract_block_info(block_dir: Path, folder: str, tax=None) -> dict[str, Any] | None:
+    """Extract block metadata from meta.yaml or infer from directory structure.
+
+    `folder` — имя физической папки-категории (для path). Семантическая B34
+    `category` и `variant` берутся из meta.yaml (source of truth), а НЕ из
+    имени папки — они могут различаться (напр. блок в quiz/ → category forms).
+    """
     meta_path = block_dir / "meta.yaml"
 
     if not meta_path.exists():
@@ -24,12 +39,14 @@ def extract_block_info(block_dir: Path, category: str) -> dict[str, Any] | None:
         block_id = block_dir.name
         return {
             "id": block_id,
-            "path": f"{category}/{block_id}/",
-            "category": category,
-            "type": category,  # Assume type matches category
+            "path": f"{folder}/{block_id}/",
+            "folder": folder,
+            "category": folder,
+            "variant": None,
+            "type": folder,  # Assume type matches folder
             "layout_pattern": "default",
-            "signature": f"{category}|default|[content]|bg:false",
-            "display_name_ru": f"{category}: {block_id}",
+            "signature": f"{folder}|default|[content]|bg:false",
+            "display_name_ru": f"{folder}: {block_id}",
             "created": "2026-06-02",
             "has_bg_image": False,
             "slots": [{"name": "content", "type": "text"}],
@@ -44,11 +61,33 @@ def extract_block_info(block_dir: Path, category: str) -> dict[str, Any] | None:
         return None
 
     block_id = meta.get("id", block_dir.name)
+    # B34: category/variant — из meta.yaml (source of truth), не из папки.
+    category = meta.get("category", folder)
+    variant = meta.get("variant")
+    if variant in ("", "null"):
+        variant = None
+
+    # Валидация против taxonomy.yaml — warning, но блок не падает.
+    if tax is not None:
+        if not tax.valid_category(category):
+            print(
+                f"WARNING: {block_id}: невалидная category '{category}' "
+                f"(нет в taxonomy.yaml, folder={folder})",
+                file=sys.stderr,
+            )
+        elif not tax.valid_variant(category, variant):
+            print(
+                f"WARNING: {block_id}: невалидный variant '{variant}' "
+                f"для category '{category}'",
+                file=sys.stderr,
+            )
 
     return {
         "id": block_id,
-        "path": f"{category}/{block_id}/",
+        "path": f"{folder}/{block_id}/",
+        "folder": folder,
         "category": category,
+        "variant": variant,
         "type": meta.get("type", category),
         "layout_pattern": meta.get("layout_pattern", "default"),
         "signature": meta.get("signature", f"{category}|default|[content]|bg:false"),
@@ -75,19 +114,27 @@ def main() -> None:
         print(f"ERROR: library directory not found: {library_dir}", file=sys.stderr)
         sys.exit(1)
 
-    # Collect all blocks from category subdirectories
+    # Taxonomy для валидации category/variant (warning-only).
+    try:
+        tax = _load_taxonomy_lib()
+    except Exception as e:
+        print(f"WARNING: не удалось загрузить taxonomy.yaml ({e}); валидация пропущена",
+              file=sys.stderr)
+        tax = None
+
+    # Collect all blocks from folder subdirectories
     blocks: list[dict[str, Any]] = []
     seen_ids: set[str] = set()
 
-    # Iterate through category directories (skip hidden and special dirs)
-    for category_dir in sorted(library_dir.iterdir()):
-        if not category_dir.is_dir() or category_dir.name.startswith((".", "_")):
+    # Iterate through folder directories (skip hidden and special dirs)
+    for folder_dir in sorted(library_dir.iterdir()):
+        if not folder_dir.is_dir() or folder_dir.name.startswith((".", "_")):
             continue
 
-        category = category_dir.name
+        folder = folder_dir.name
 
-        # Iterate through block directories within each category
-        for block_dir in sorted(category_dir.iterdir()):
+        # Iterate through block directories within each folder
+        for block_dir in sorted(folder_dir.iterdir()):
             if not block_dir.is_dir() or block_dir.name.startswith("."):
                 continue
 
@@ -104,10 +151,10 @@ def main() -> None:
             seen_ids.add(block_id)
 
             # Extract metadata
-            block_info = extract_block_info(block_dir, category)
+            block_info = extract_block_info(block_dir, folder, tax)
             if block_info:
                 blocks.append(block_info)
-                print(f"✓ {category}/{block_id}")
+                print(f"✓ {folder}/{block_id}")
 
     # Write catalog
     catalog = {
