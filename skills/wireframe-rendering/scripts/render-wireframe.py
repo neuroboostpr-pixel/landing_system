@@ -52,10 +52,102 @@ WIREFRAME_BRIDGE_CSS = (
 )
 
 
-def _wrap_srcdoc(block_html: str, mood_css: str = "") -> str:
-    """Префиксует HTML блока bridge-:root (+ опц. mood palette) для srcdoc."""
-    style = f"<style>{WIREFRAME_BRIDGE_CSS}{mood_css}</style>"
+def _wrap_srcdoc(block_html: str, mood_css: str = "", tokens_css: str = "") -> str:
+    """Префиксует HTML блока для srcdoc.
+
+    Порядок каскада (последнее переопределяет):
+      1. WIREFRAME_BRIDGE_CSS — нейтральные lp-дефолты + мост lp←color,
+      2. mood_css (если выбран mood блока),
+      3. tokens_css — дизайн-система проекта (tokens.json эт.05): реальные
+         цвета/шрифты клиента. Имеет наивысший приоритет → блок выглядит как
+         на готовом лендинге.
+    """
+    style = f"<style>{WIREFRAME_BRIDGE_CSS}{mood_css}{tokens_css}</style>"
     return style + block_html
+
+
+def _load_project_tokens(project_dir: Path) -> dict:
+    """Загрузить tokens.json дизайн-системы проекта (этап 05). {} если нет."""
+    import json as _json
+    for rel in ("05_ДИЗАЙН-СИСТЕМА/tokens.json", "04_БРЕНД/tokens.json"):
+        p = project_dir / rel
+        if p.exists():
+            try:
+                return _json.loads(p.read_text(encoding="utf-8")) or {}
+            except Exception:
+                return {}
+    return {}
+
+
+def _flatten_token_strings(node, out: dict, prefix: str = "") -> None:
+    """Собрать все строковые листья токенов в плоскую карту key→value."""
+    if isinstance(node, dict):
+        for k, v in node.items():
+            key = f"{prefix}-{k}" if prefix else str(k)
+            _flatten_token_strings(v, out, key)
+    elif isinstance(node, str):
+        out[prefix.lower()] = node
+
+
+def _pick(flat: dict, *needles: str) -> str:
+    """Первое значение-цвет, чей ключ содержит ВСЕ слова одного из needles."""
+    import re as _re
+    hexre = _re.compile(r"^#[0-9a-fA-F]{3,8}$|^rgb")
+    for needle in needles:
+        words = needle.split()
+        for k, v in flat.items():
+            if all(w in k for w in words) and hexre.match(str(v).strip()):
+                return v.strip()
+    return ""
+
+
+def _design_tokens_root_css(tokens: dict | None) -> str:
+    """Построить :root{--lp-*} из tokens.json проекта (любая структура).
+
+    Возвращает '' если токенов нет. Маппинг по семантике ключей.
+    """
+    if not tokens:
+        return ""
+    flat: dict = {}
+    _flatten_token_strings(tokens.get("colors") or tokens.get("color") or {}, flat)
+    fonts: dict = {}
+    _flatten_token_strings(
+        tokens.get("typography") or tokens.get("fonts") or {}, fonts
+    )
+
+    accent = _pick(flat, "primary orange", "accent", "primary", "brand")
+    bg = _pick(flat, "bg primary", "neutral white", "bg", "background", "white", "light")
+    bg_alt = _pick(flat, "bg alt", "bg secondary", "surface", "light gray", "bg-alt")
+    text = _pick(flat, "text primary", "text gray", "fg", "secondary black", "text", "ink")
+    muted = _pick(flat, "text muted", "text secondary", "medium gray", "placeholder", "muted")
+    border = _pick(flat, "border gray", "border", "border-gray")
+    font = ""
+    for k, v in fonts.items():
+        if "primary" in k or "body" in k or "base" in k or "sans" in k:
+            font = v
+            break
+    if not font and fonts:
+        font = next(iter(fonts.values()))
+
+    rules: list[str] = []
+    if accent:
+        rules.append(f"--lp-accent:{accent};--lp-primary:{accent};")
+    if bg:
+        rules.append(f"--lp-bg:{bg};")
+    if bg_alt:
+        rules.append(f"--lp-bg-alt:{bg_alt};")
+    if text:
+        rules.append(f"--lp-text:{text};")
+    if muted:
+        rules.append(f"--lp-text-muted:{muted};")
+    if border:
+        rules.append(f"--lp-border:{border};")
+    if font:
+        safe = font.replace("{", "").replace("}", "")
+        rules.append(f"--lp-font-display:{safe};--lp-font-body:{safe};")
+    if not rules:
+        return ""
+    return ":root{" + "".join(rules) + "}"
 
 # Маппинг технического типа блока -> понятное русское название и цель
 BLOCK_TYPE_RU: dict[str, str] = {
@@ -466,6 +558,9 @@ def main() -> None:
     if not proto_path.exists():
         fail(f"no prototype.yaml at {proto_path}")
     proto = yaml.safe_load(proto_path.read_text(encoding="utf-8"))
+    # Дизайн-система проекта (этап 05) → :root для каждого блока в превью.
+    # Реальные цвета/шрифты клиента; пусто (нейтральный fallback) до этапа 05.
+    _tokens_css = _design_tokens_root_css(_load_project_tokens(project_dir))
     niche = (proto.get("project") or {}).get("niche") or proto.get("niche") or "generic"
     slug = (
         (proto.get("project") or {}).get("slug")
@@ -665,8 +760,8 @@ def main() -> None:
             # переменные разрешались и стили накладывались в превью.
             _mood = meta.get("style_mood") or ""
             _mood_css = _load_mood_css(Path(args.library), _mood) if _mood else ""
-            tmpl_d = _wrap_srcdoc(tmpl_d, _mood_css)
-            tmpl_m = _wrap_srcdoc(tmpl_m, _mood_css)
+            tmpl_d = _wrap_srcdoc(tmpl_d, _mood_css, _tokens_css)
+            tmpl_m = _wrap_srcdoc(tmpl_m, _mood_css, _tokens_css)
             # display_name_ru — короткое человеко-понятное имя; layout_summary_ru — что в макете
             display_name_full = meta.get("display_name_ru") or cid
             # Trim until first dot/newline for a short headline; keep full as tooltip
