@@ -1,7 +1,15 @@
 #!/usr/bin/env python3
 """
-Reclassify all blocks in block-library to the correct taxonomy from taxonomy.yaml.
+DEPRECATED (2026-06-02, B34 rewrite). НЕ ЗАПУСКАТЬ.
 
+Этот скрипт реализует СТАРУЮ модель таксономии (27 types в 10 категориях,
+schema `tax['types']`). B34 переписан на двухуровневую модель
+category → variant (11 категорий), у taxonomy.yaml больше НЕТ ключа `types`,
+поэтому этот скрипт упадёт. Заменён на scripts/migrate-block-taxonomy.py
+(Фаза 1 плана 2026-06-02-b34-taxonomy-implementation-plan.md).
+Оставлен для git-истории.
+
+Reclassify all blocks in block-library to the correct taxonomy from taxonomy.yaml.
 Maps current types to 27 canonical types and their categories.
 Updates meta.yaml files and rebuilds catalog.yaml.
 """
@@ -10,6 +18,11 @@ import yaml
 import sys
 from pathlib import Path
 from collections import defaultdict
+
+sys.exit(
+    "DEPRECATED: scripts/reclassify-blocks-taxonomy.py использует старую 27-type "
+    "модель. Используй scripts/migrate-block-taxonomy.py (B34 Фаза 1)."
+)
 
 # Block library directory
 BLOCK_LIB = Path(__file__).parent.parent / "block-library"

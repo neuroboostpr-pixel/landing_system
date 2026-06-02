@@ -1,55 +1,80 @@
-version: 1
+# B34 — двухуровневая семантическая таксономия блоков.
+# Уровень 2 = категория (роль блока на странице).
+# Уровень 3 = variant (семантический подтип по РОЛИ, не по вёрстке).
+# layout_pattern (split/grid-3/...) живёт в meta.yaml блока, НЕ здесь.
+# Единственный источник истины для слагов и русских меток UI.
+version: 2
 
 categories:
-  - {id: Navigation, label_ru: "Навигация"}
-  - {id: Hero, label_ru: "Первый экран"}
-  - {id: Content, label_ru: "Контент"}
-  - {id: "Social Proof", label_ru: "Социальное доказательство"}
-  - {id: Trust, label_ru: "Доверие"}
-  - {id: Conversion, label_ru: "Конверсия"}
-  - {id: Pricing, label_ru: "Цены"}
-  - {id: FAQ, label_ru: "FAQ"}
-  - {id: Gallery, label_ru: "Галерея"}
-  - {id: Footer, label_ru: "Подвал"}
+  header:
+    label_ru: "Шапка / Навигация"
+    order: 1
+    variants: {}
 
-types:
-  - {id: header,           category: Navigation,    label_ru: "Шапка / навигация"}
-  - {id: menu,             category: Navigation,    label_ru: "Меню (мобильное/sidebar)"}
-  - {id: hero,             category: Hero,          label_ru: "Первый экран"}
-  - {id: features,         category: Content,       label_ru: "Преимущества"}
-  - {id: characteristics,  category: Content,       label_ru: "Характеристики продукта"}
-  - {id: about,            category: Content,       label_ru: "О продукте / компании"}
-  - {id: problem-solution, category: Content,       label_ru: "Проблема → решение"}
-  - {id: process,          category: Content,       label_ru: "Как это работает"}
-  - {id: demo,             category: Content,       label_ru: "Демо / showcase"}
-  - {id: testimonials,     category: "Social Proof", label_ru: "Отзывы"}
-  - {id: logos,            category: "Social Proof", label_ru: "Логотипы клиентов"}
-  - {id: stats,            category: "Social Proof", label_ru: "Цифры и метрики"}
-  - {id: case-study,       category: "Social Proof", label_ru: "Кейсы / результаты"}
-  - {id: media-mentions,   category: "Social Proof", label_ru: "Упоминания в СМИ"}
-  - {id: guarantees,       category: Trust,         label_ru: "Гарантии / сертификаты"}
-  - {id: comparison,       category: Trust,         label_ru: "Мы vs альтернативы"}
-  - {id: integrations,     category: Trust,         label_ru: "Интеграции"}
-  - {id: cta,              category: Conversion,    label_ru: "Призыв к действию"}
-  - {id: banner,           category: Conversion,    label_ru: "Баннер / промо-полоса"}
-  - {id: urgency,          category: Conversion,    label_ru: "Срочность / дефицит"}
-  - {id: lead-form,        category: Conversion,    label_ru: "Форма захвата / квиз"}
-  - {id: pricing,          category: Pricing,       label_ru: "Тарифы / цены"}
-  - {id: faq,              category: FAQ,           label_ru: "Вопросы и ответы"}
-  - {id: gallery,          category: Gallery,       label_ru: "Фотогалерея"}
-  - {id: team,             category: Gallery,       label_ru: "Команда"}
-  - {id: footer,           category: Footer,        label_ru: "Подвал"}
-  - {id: contacts,         category: Footer,        label_ru: "Контакты"}
+  hero:
+    label_ru: "Первый экран"
+    order: 2
+    variants: {}
 
-layout_patterns:
-  - split
-  - centered
-  - grid-2
-  - grid-3
-  - grid-4
-  - stacked
-  - bento
-  - sidebar
-  - cards
-  - timeline
-  - multi-step
+  marquee:
+    label_ru: "Бегущая строка"
+    order: 3
+    variants: {}
+
+  features:
+    label_ru: "Преимущества"
+    order: 4
+    variants: {}
+
+  content:
+    label_ru: "Контент"
+    order: 5
+    variants:
+      about:            { label_ru: "о продукте" }
+      problem-solution: { label_ru: "проблема → решение" }
+      process:          { label_ru: "как это работает" }
+
+  social-proof:
+    label_ru: "Соц. доказательства"
+    order: 6
+    variants:
+      testimonials: { label_ru: "отзывы" }
+      clients:      { label_ru: "наши клиенты" }
+      ratings:      { label_ru: "рейтинги" }
+      numbers:      { label_ru: "цифры" }
+      cases:        { label_ru: "кейсы" }
+      media:        { label_ru: "упоминания в медиа" }
+
+  trust:
+    label_ru: "Доверие"
+    order: 7
+    variants:
+      certificates: { label_ru: "сертификаты" }
+      guarantees:   { label_ru: "гарантии" }
+      security:     { label_ru: "безопасность" }
+
+  pricing:
+    label_ru: "Цены"
+    order: 8
+    variants:
+      cards:      { label_ru: "карточки тарифов" }
+      comparison: { label_ru: "сравнительные таблицы" }
+
+  forms:
+    label_ru: "Формы"
+    order: 9
+    variants:
+      email:      { label_ru: "сбор email" }
+      multi-step: { label_ru: "многошаговая" }
+      quiz:       { label_ru: "квиз" }
+      booking:    { label_ru: "бронирование" }
+
+  faq:
+    label_ru: "FAQ"
+    order: 10
+    variants: {}
+
+  footer:
+    label_ru: "Подвал"
+    order: 11
+    variants: {}
