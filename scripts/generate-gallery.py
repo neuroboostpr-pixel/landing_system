@@ -48,14 +48,24 @@ def main() -> None:
     catalog = yaml.safe_load(cat_path.read_text(encoding="utf-8"))
     blocks = catalog.get("blocks", [])
 
-    # Group blocks by category
+    # Group blocks by category, and track layout_patterns within each category
     blocks_by_cat = defaultdict(list)
+    patterns_by_cat = defaultdict(lambda: defaultdict(int))
     for block in blocks:
         cat = block.get("category", "unknown")
+        pattern = block.get("layout_pattern", "default")
         blocks_by_cat[cat].append(block)
+        patterns_by_cat[cat][pattern] += 1
 
     # Sort categories alphabetically
     categories = sorted(blocks_by_cat.keys())
+
+    # Build JS map: category -> {pattern: count} for the second combobox
+    import json as _json
+    cat_patterns_json = _json.dumps(
+        {cat: dict(sorted(patterns_by_cat[cat].items())) for cat in categories},
+        ensure_ascii=False,
+    )
 
     # Build stats for header
     total = len(blocks)
@@ -81,6 +91,7 @@ def main() -> None:
   select.filter-combo {{ padding: 8px 12px; border: 1.5px solid #ccc; border-radius: 6px; font-size: 13px; cursor: pointer; background: #fff; color: #111; }}
   select.filter-combo:hover {{ border-color: #888; }}
   select.filter-combo:focus {{ outline: none; border-color: #111; }}
+  select.filter-combo:disabled {{ background: #f5f5f5; color: #bbb; cursor: not-allowed; }}
 
   .gallery-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; padding: 24px; }}
 
@@ -103,6 +114,7 @@ def main() -> None:
   .card-name {{ font-size: 14px; font-weight: 600; line-height: 1.3; }}
   .card-meta {{ display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }}
   .card-cat {{ font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; background: #f0f0f0; color: #555; text-transform: uppercase; letter-spacing: .04em; }}
+  .card-layout-pattern {{ font-size: 10px; color: #777; font-family: monospace; background: #eef2ff; color: #4338ca; padding: 1px 7px; border-radius: 6px; }}
   .card-id {{ font-size: 10px; color: #999; font-family: monospace; margin-top: 2px; }}
   .card-open-btn {{ display: block; text-align: center; padding: 10px; background: #f5f5f5; color: #333; text-decoration: none; font-size: 13px; font-weight: 500; border-top: 1px solid #eee; transition: background .15s; }}
   .card-open-btn:hover {{ background: #111; color: #fff; }}
@@ -120,16 +132,20 @@ def main() -> None:
 <div class="filter-bar">
   <label class="filter-label">Категория:</label>
   <select class="filter-combo" id="category-filter">
-    <option value="">Все ({total})</option>
+    <option value="">Все категории ({total})</option>
 """
 
-    # Add category options
+    # Add category options (level 1)
     for cat in categories:
         count = len(blocks_by_cat[cat])
         html += f'    <option value="{cat}">{cat.title()} ({count})</option>\n'
 
     html += """  </select>
-  <span class="filter-stats" id="filter-stats">Всего: <span id="block-count">0</span> блоков</span>
+  <label class="filter-label">Структура:</label>
+  <select class="filter-combo" id="layout-filter">
+    <option value="">Все структуры</option>
+  </select>
+  <span class="filter-stats" id="filter-stats">Показано: <span id="block-count">0</span> блоков</span>
 </div>
 
 <div class="gallery-grid" id="gallery">
@@ -139,6 +155,7 @@ def main() -> None:
     for block in blocks:
         block_id = block.get("id", "")
         category = block.get("category", "")
+        layout_pattern = block.get("layout_pattern", "default")
         display_name = block.get("display_name_ru", block_id)
         path = block.get("path", "")
 
@@ -148,7 +165,7 @@ def main() -> None:
         if not srcdoc:
             srcdoc = f"<p>{display_name}</p>"
 
-        html += f"""  <article class="gallery-card" data-category="{category}" data-id="{block_id}">
+        html += f"""  <article class="gallery-card" data-category="{category}" data-layout="{layout_pattern}" data-id="{block_id}">
     <div class="card-thumb">
       <div class="thumb-scaler">
         <iframe sandbox srcdoc="{srcdoc}"></iframe>
@@ -158,6 +175,7 @@ def main() -> None:
       <div class="card-name">{display_name}</div>
       <div class="card-meta">
         <span class="card-cat">{category.upper()}</span>
+        <span class="card-layout-pattern">{layout_pattern}</span>
       </div>
       <div class="card-id">{block_id}</div>
     </div>
@@ -168,18 +186,43 @@ def main() -> None:
     html += """  </div>
 
 <script>
+  const CAT_PATTERNS = """ + cat_patterns_json + """;
   const galleryGrid = document.getElementById('gallery');
   const categoryFilter = document.getElementById('category-filter');
+  const layoutFilter = document.getElementById('layout-filter');
   const blockCount = document.getElementById('block-count');
+
+  // When category changes, repopulate the layout (structure) combobox
+  function populateLayoutFilter() {
+    const selectedCat = categoryFilter.value;
+    layoutFilter.innerHTML = '<option value="">Все структуры</option>';
+
+    if (!selectedCat) {
+      // No category selected — disable second combo (would be ambiguous across cats)
+      layoutFilter.disabled = true;
+      return;
+    }
+
+    layoutFilter.disabled = false;
+    const patterns = CAT_PATTERNS[selectedCat] || {};
+    Object.keys(patterns).forEach(pattern => {
+      const opt = document.createElement('option');
+      opt.value = pattern;
+      opt.textContent = pattern + ' (' + patterns[pattern] + ')';
+      layoutFilter.appendChild(opt);
+    });
+  }
 
   function updateGallery() {
     const selectedCat = categoryFilter.value;
+    const selectedLayout = layoutFilter.value;
     let visibleCount = 0;
 
     const cards = galleryGrid.querySelectorAll('.gallery-card');
     cards.forEach(card => {
-      const cardCat = card.dataset.category;
-      const isVisible = !selectedCat || cardCat === selectedCat;
+      const catMatch = !selectedCat || card.dataset.category === selectedCat;
+      const layoutMatch = !selectedLayout || card.dataset.layout === selectedLayout;
+      const isVisible = catMatch && layoutMatch;
 
       if (isVisible) {
         card.classList.remove('hidden');
@@ -192,9 +235,14 @@ def main() -> None:
     blockCount.textContent = visibleCount;
   }
 
-  categoryFilter.addEventListener('change', updateGallery);
+  categoryFilter.addEventListener('change', () => {
+    populateLayoutFilter();
+    updateGallery();
+  });
+  layoutFilter.addEventListener('change', updateGallery);
 
-  // Initial count
+  // Initial state
+  layoutFilter.disabled = true;
   blockCount.textContent = '""" + str(total) + """';
 </script>
 </body>
