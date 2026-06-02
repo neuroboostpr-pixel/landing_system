@@ -49,6 +49,31 @@ def test_filled_attr_url_uses_value():
     assert 'href="https://e.com"' in out
 
 
+def test_image_slot_becomes_placeholder_img():
+    m = _load()
+    out = m.substitute_text_placeholders(
+        "<div>{{slot:art-image}}</div><span>{{slot:badge-1-icon}}</span><h2>{{slot:headline}}</h2>",
+        {},
+    )
+    # image/icon слоты → <img> с data-URI; текстовый слот — нет
+    assert out.count("<img") == 2
+    assert "data:image/png;base64," in out
+    assert 'alt="art-image"' in out
+    assert "[headline]" in out  # текст не картинка
+
+
+def test_image_slot_detection():
+    m = _load()
+    assert m._is_image_slot("brand-logo")
+    assert m._is_image_slot("case-1-photo")
+    assert m._is_image_slot("hero-visual-image")
+    # alt/url/mobile — это текст/ссылки, не визуал
+    assert not m._is_image_slot("brand-logo-alt")
+    assert not m._is_image_slot("case-image-1-mobile")
+    assert not m._is_image_slot("nav-link-1-url")
+    assert not m._is_image_slot("headline")
+
+
 def test_header_block_renders_valid_html(tmp_path):
     # сквозной: header-блок со слотами-в-атрибутах → валидный <header>
     m = _load()

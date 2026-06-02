@@ -34,6 +34,7 @@ import argparse
 import json
 import re
 import sys
+from functools import lru_cache
 from pathlib import Path
 
 import yaml
@@ -243,6 +244,41 @@ def resolve_slot(block: dict, slot_name: str) -> str:
 
 _SLOT_PLACEHOLDER_RE = re.compile(r"\{\{slot:([^}]+)\}\}")
 
+# Плейсхолдер-картинка для незаполненных image/icon слотов (wireframe-превью).
+# Файл: block-library/_assets/placeholder-image.png — встраиваем как data-URI,
+# чтобы wireframe.html был самодостаточным (без внешних путей).
+_PLACEHOLDER_IMG_PATH = (
+    Path(__file__).resolve().parents[3]
+    / "block-library" / "_assets" / "placeholder-image.png"
+)
+
+
+@lru_cache(maxsize=1)
+def _placeholder_img_datauri() -> str:
+    try:
+        import base64
+        data = _PLACEHOLDER_IMG_PATH.read_bytes()
+        return "data:image/png;base64," + base64.b64encode(data).decode("ascii")
+    except Exception:
+        return ""
+
+
+# image/icon слот по имени: содержит один из корней, но НЕ -alt/-url/-mobile
+# (это текст/ссылки, не сам визуал).
+_IMG_SLOT_ROOTS = ("image", "img", "icon", "photo", "logo", "mark", "avatar",
+                   "picture", "marker", "visual", "illustration")
+_IMG_SLOT_EXCLUDE = ("-alt", "-url", "-href", "-mobile", "-caption", "-label")
+
+
+def _is_image_slot(name: str) -> bool:
+    low = name.lower()
+    if any(low.endswith(suf) or f"{suf[1:]}" == low for suf in _IMG_SLOT_EXCLUDE):
+        return False
+    if any(low.endswith(suf) for suf in _IMG_SLOT_EXCLUDE):
+        return False
+    parts = set(low.replace("_", "-").split("-"))
+    return any(root in parts for root in _IMG_SLOT_ROOTS)
+
 
 def _attr_slot_value(block: dict, name: str) -> str:
     """Plain-текст для {{slot}} ВНУТРИ HTML-атрибута (href/aria-label/...).
@@ -291,6 +327,15 @@ def substitute_text_placeholders(html_str: str, block: dict) -> str:
         val = resolve_slot(block, name)
         if val:
             return val
+        # image/icon слот без значения → картинка-плейсхолдер (для превью).
+        if _is_image_slot(name):
+            uri = _placeholder_img_datauri()
+            if uri:
+                return (
+                    f'<img src="{uri}" alt="{name}" '
+                    f'style="max-width:100%;max-height:100%;object-fit:contain;'
+                    f'opacity:.45" loading="lazy">'
+                )
         # Inline placeholder — keep it visible but unobtrusive.
         return (
             f'<span style="color:#bbb;font-style:italic;font-size:11px">'
