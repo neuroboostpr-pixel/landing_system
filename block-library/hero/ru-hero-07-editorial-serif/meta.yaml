@@ -19,9 +19,7 @@ slots:
   name: kicker
   required: false
   type: text
-- max_chars: 70
-  name: headline
-  required: true
+- name: headline
   type: text
 - max_chars: 180
   name: subhead
@@ -51,11 +49,6 @@ slots:
   name: stat-3-label
   required: false
   type: text
-- mobile_ratio: '4:3'
-  name: hero-image
-  ratio: '4:3'
-  required: false
-  type: photo
 - default_text: Начать работу
   name: primary-cta
   required: true
@@ -64,6 +57,11 @@ slots:
   name: secondary-cta
   required: false
   type: cta
+- mobile_ratio: '4:3'
+  name: hero-image
+  ratio: '4:3'
+  required: false
+  type: photo
 source: opendesign
 source_attribution: 'github.com/nexu-io/open-design: design-templates/open-design-landing
   (Apache-2.0)'

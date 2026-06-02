@@ -20,9 +20,7 @@ slots:
   name: section-label
   required: false
   type: text
-- max_chars: 500
-  name: manifesto-text
-  required: true
+- name: manifesto-body
   type: text
 - max_chars: 60
   name: sig-text

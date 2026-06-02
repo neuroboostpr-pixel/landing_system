@@ -163,77 +163,74 @@
   body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
 }
 </style>
-<section class="lp-trust-editorial-grid-2" aria-labelledby="trust-editorial-grid-2-title">
-  <div class="lp-trust-editorial-grid-2__inner">
-    <header class="lp-trust-editorial-grid-2__header">
-      <p class="lp-trust-editorial-grid-2__eyebrow">{{slot:eyebrow}}</p>
-      <h2 class="lp-trust-editorial-grid-2__title" id="trust-editorial-grid-2-title">{{slot:heading}}</h2>
-      <p class="lp-trust-editorial-grid-2__lead">{{slot:subhead}}</p>
-    </header>
-
-    <div class="lp-trust-editorial-grid-2__body">
-      <ul class="lp-trust-editorial-grid-2__criteria" aria-label="{{slot:left-column-label}}">
-        <li class="lp-trust-editorial-grid-2__criterion">
-          <span class="lp-trust-editorial-grid-2__mark">{{slot:criterion-1-badge}}</span>
-          <div>
-            <h3 class="lp-trust-editorial-grid-2__criterion-title">{{slot:criterion-1-title}}</h3>
-            <p class="lp-trust-editorial-grid-2__criterion-text">{{slot:criterion-1-text}}</p>
-          </div>
-        </li>
-        <li class="lp-trust-editorial-grid-2__criterion">
-          <span class="lp-trust-editorial-grid-2__mark">{{slot:criterion-2-badge}}</span>
-          <div>
-            <h3 class="lp-trust-editorial-grid-2__criterion-title">{{slot:criterion-2-title}}</h3>
-            <p class="lp-trust-editorial-grid-2__criterion-text">{{slot:criterion-2-text}}</p>
-          </div>
-        </li>
-        <li class="lp-trust-editorial-grid-2__criterion">
-          <span class="lp-trust-editorial-grid-2__mark">{{slot:criterion-3-badge}}</span>
-          <div>
-            <h3 class="lp-trust-editorial-grid-2__criterion-title">{{slot:criterion-3-title}}</h3>
-            <p class="lp-trust-editorial-grid-2__criterion-text">{{slot:criterion-3-text}}</p>
-          </div>
-        </li>
-      </ul>
-
-      <ul class="lp-trust-editorial-grid-2__criteria" aria-label="{{slot:right-column-label}}">
-        <li class="lp-trust-editorial-grid-2__criterion">
-          <span class="lp-trust-editorial-grid-2__mark">{{slot:criterion-4-badge}}</span>
-          <div>
-            <h3 class="lp-trust-editorial-grid-2__criterion-title">{{slot:criterion-4-title}}</h3>
-            <p class="lp-trust-editorial-grid-2__criterion-text">{{slot:criterion-4-text}}</p>
-          </div>
-        </li>
-        <li class="lp-trust-editorial-grid-2__criterion">
-          <span class="lp-trust-editorial-grid-2__mark">{{slot:criterion-5-badge}}</span>
-          <div>
-            <h3 class="lp-trust-editorial-grid-2__criterion-title">{{slot:criterion-5-title}}</h3>
-            <p class="lp-trust-editorial-grid-2__criterion-text">{{slot:criterion-5-text}}</p>
-          </div>
-        </li>
-        <li class="lp-trust-editorial-grid-2__criterion">
-          <span class="lp-trust-editorial-grid-2__mark">{{slot:criterion-6-badge}}</span>
-          <div>
-            <h3 class="lp-trust-editorial-grid-2__criterion-title">{{slot:criterion-6-title}}</h3>
-            <p class="lp-trust-editorial-grid-2__criterion-text">{{slot:criterion-6-text}}</p>
-          </div>
-        </li>
-      </ul>
-    </div>
-
-    <aside class="lp-trust-editorial-grid-2__summary" aria-label="{{slot:summary-label}}">
-      <div class="lp-trust-editorial-grid-2__stat">
-        <strong class="lp-trust-editorial-grid-2__stat-value">{{slot:stat-1-value}}</strong>
-        <span class="lp-trust-editorial-grid-2__stat-label">{{slot:stat-1-label}}</span>
-      </div>
-      <div class="lp-trust-editorial-grid-2__stat">
-        <strong class="lp-trust-editorial-grid-2__stat-value">{{slot:stat-2-value}}</strong>
-        <span class="lp-trust-editorial-grid-2__stat-label">{{slot:stat-2-label}}</span>
-      </div>
-      <div class="lp-trust-editorial-grid-2__stat">
-        <strong class="lp-trust-editorial-grid-2__stat-value">{{slot:stat-3-value}}</strong>
-        <span class="lp-trust-editorial-grid-2__stat-label">{{slot:stat-3-label}}</span>
-      </div>
-    </aside>
-  </div>
+<section aria-labelledby="trust-editorial-grid-2-title" class="lp-trust-editorial-grid-2">
+<div class="lp-trust-editorial-grid-2__inner">
+<header class="lp-trust-editorial-grid-2__header">
+<p class="lp-trust-editorial-grid-2__eyebrow">{{slot:eyebrow}}</p>
+<h2 class="lp-trust-editorial-grid-2__title" id="trust-editorial-grid-2-title">{{slot:heading}}</h2>
+<p class="lp-trust-editorial-grid-2__lead">{{slot:subhead}}</p>
+</header>
+<div class="lp-trust-editorial-grid-2__body">
+<ul aria-label="{{slot:left-column-label}}" class="lp-trust-editorial-grid-2__criteria">
+<li class="lp-trust-editorial-grid-2__criterion">
+<span class="lp-trust-editorial-grid-2__mark">{{slot:criterion-1-badge}}</span>
+<div>
+<h3 class="lp-trust-editorial-grid-2__criterion-title">{{slot:criterion-1-title}}</h3>
+<p class="lp-trust-editorial-grid-2__criterion-text">{{slot:criterion-1-text}}</p>
+</div>
+</li>
+<li class="lp-trust-editorial-grid-2__criterion">
+<span class="lp-trust-editorial-grid-2__mark">{{slot:criterion-2-badge}}</span>
+<div>
+<h3 class="lp-trust-editorial-grid-2__criterion-title">{{slot:criterion-2-title}}</h3>
+<p class="lp-trust-editorial-grid-2__criterion-text">{{slot:criterion-2-text}}</p>
+</div>
+</li>
+<li class="lp-trust-editorial-grid-2__criterion">
+<span class="lp-trust-editorial-grid-2__mark">{{slot:criterion-3-badge}}</span>
+<div>
+<h3 class="lp-trust-editorial-grid-2__criterion-title">{{slot:criterion-3-title}}</h3>
+<p class="lp-trust-editorial-grid-2__criterion-text">{{slot:criterion-3-text}}</p>
+</div>
+</li>
+</ul>
+<ul aria-label="{{slot:right-column-label}}" class="lp-trust-editorial-grid-2__criteria">
+<li class="lp-trust-editorial-grid-2__criterion">
+<span class="lp-trust-editorial-grid-2__mark">{{slot:criterion-4-badge}}</span>
+<div>
+<h3 class="lp-trust-editorial-grid-2__criterion-title">{{slot:criterion-4-title}}</h3>
+<p class="lp-trust-editorial-grid-2__criterion-text">{{slot:criterion-4-text}}</p>
+</div>
+</li>
+<li class="lp-trust-editorial-grid-2__criterion">
+<span class="lp-trust-editorial-grid-2__mark">{{slot:criterion-5-badge}}</span>
+<div>
+<h3 class="lp-trust-editorial-grid-2__criterion-title">{{slot:criterion-5-title}}</h3>
+<p class="lp-trust-editorial-grid-2__criterion-text">{{slot:criterion-5-text}}</p>
+</div>
+</li>
+<li class="lp-trust-editorial-grid-2__criterion">
+<span class="lp-trust-editorial-grid-2__mark">{{slot:criterion-6-badge}}</span>
+<div>
+<h3 class="lp-trust-editorial-grid-2__criterion-title">{{slot:criterion-6-title}}</h3>
+<p class="lp-trust-editorial-grid-2__criterion-text">{{slot:criterion-6-text}}</p>
+</div>
+</li>
+</ul>
+</div>
+<aside aria-label="{{slot:summary-label}}" class="lp-trust-editorial-grid-2__summary">
+<div class="lp-trust-editorial-grid-2__stat">
+<strong class="lp-trust-editorial-grid-2__stat-value">{{slot:stat-1-value}}</strong>
+<span class="lp-trust-editorial-grid-2__stat-label">{{slot:stat-1-label}}</span>
+</div>
+<div class="lp-trust-editorial-grid-2__stat">
+<strong class="lp-trust-editorial-grid-2__stat-value">{{slot:stat-2-value}}</strong>
+<span class="lp-trust-editorial-grid-2__stat-label">{{slot:stat-2-label}}</span>
+</div>
+<div class="lp-trust-editorial-grid-2__stat">
+<strong class="lp-trust-editorial-grid-2__stat-value">{{slot:stat-3-value}}</strong>
+<span class="lp-trust-editorial-grid-2__stat-label">{{slot:stat-3-label}}</span>
+</div>
+</aside>
+</div>
 </section>

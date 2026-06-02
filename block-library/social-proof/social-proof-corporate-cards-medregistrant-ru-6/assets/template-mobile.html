@@ -174,58 +174,54 @@
   body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
 }
 </style>
-<section class="lp-social-proof-corporate-cards" aria-labelledby="lp-social-proof-corporate-cards-title">
-  <div class="lp-social-proof-corporate-cards__inner">
-    <div class="lp-social-proof-corporate-cards__header">
-      <p class="lp-social-proof-corporate-cards__eyebrow">{{slot:eyebrow}}</p>
-      <h2 class="lp-social-proof-corporate-cards__title" id="lp-social-proof-corporate-cards-title">{{slot:heading}}</h2>
-      <p class="lp-social-proof-corporate-cards__lead">{{slot:subhead}}</p>
-    </div>
-
-    <div class="lp-social-proof-corporate-cards__track" aria-label="{{slot:carousel-label}}">
-      <article class="lp-social-proof-corporate-cards__card">
-        <div class="lp-social-proof-corporate-cards__logo">
-          <img src="{{slot:client-logo-1}}" alt="{{slot:client-logo-1-alt}}" loading="lazy">
-        </div>
-        <div class="lp-social-proof-corporate-cards__content">
-          <h3 class="lp-social-proof-corporate-cards__card-title">{{slot:client-title-1}}</h3>
-          <p class="lp-social-proof-corporate-cards__text">{{slot:client-description-1}}</p>
-        </div>
-        <a class="lp-social-proof-corporate-cards__link" href="{{slot:client-link-1}}">{{slot:client-cta-1}}</a>
-      </article>
-
-      <article class="lp-social-proof-corporate-cards__card">
-        <div class="lp-social-proof-corporate-cards__logo">
-          <img src="{{slot:client-logo-2}}" alt="{{slot:client-logo-2-alt}}" loading="lazy">
-        </div>
-        <div class="lp-social-proof-corporate-cards__content">
-          <h3 class="lp-social-proof-corporate-cards__card-title">{{slot:client-title-2}}</h3>
-          <p class="lp-social-proof-corporate-cards__text">{{slot:client-description-2}}</p>
-        </div>
-        <a class="lp-social-proof-corporate-cards__link" href="{{slot:client-link-2}}">{{slot:client-cta-2}}</a>
-      </article>
-
-      <article class="lp-social-proof-corporate-cards__card">
-        <div class="lp-social-proof-corporate-cards__logo">
-          <img src="{{slot:client-logo-3}}" alt="{{slot:client-logo-3-alt}}" loading="lazy">
-        </div>
-        <div class="lp-social-proof-corporate-cards__content">
-          <h3 class="lp-social-proof-corporate-cards__card-title">{{slot:client-title-3}}</h3>
-          <p class="lp-social-proof-corporate-cards__text">{{slot:client-description-3}}</p>
-        </div>
-        <a class="lp-social-proof-corporate-cards__link" href="{{slot:client-link-3}}">{{slot:client-cta-3}}</a>
-      </article>
-
-      <article class="lp-social-proof-corporate-cards__card">
-        <div class="lp-social-proof-corporate-cards__logo">
-          <img src="{{slot:client-logo-4}}" alt="{{slot:client-logo-4-alt}}" loading="lazy">
-        </div>
-        <div class="lp-social-proof-corporate-cards__content">
-          <h3 class="lp-social-proof-corporate-cards__card-title">{{slot:client-title-4}}</h3>
-          <p class="lp-social-proof-corporate-cards__text">{{slot:client-description-4}}</p>
-        </div>
-        <a class="lp-social-proof-corporate-cards__link" href="{{slot:client-link-4}}">{{slot:client-cta-4}}</a>
-      </article>
-    </div>
-  </div>
+<section aria-labelledby="lp-social-proof-corporate-cards-title" class="lp-social-proof-corporate-cards">
+<div class="lp-social-proof-corporate-cards__inner">
+<div class="lp-social-proof-corporate-cards__header">
+<p class="lp-social-proof-corporate-cards__eyebrow">{{slot:eyebrow}}</p>
+<h2 class="lp-social-proof-corporate-cards__title" id="lp-social-proof-corporate-cards-title">{{slot:heading}}</h2>
+<p class="lp-social-proof-corporate-cards__lead">{{slot:subhead}}</p>
+</div>
+<div aria-label="{{slot:carousel-label}}" class="lp-social-proof-corporate-cards__track">
+<article class="lp-social-proof-corporate-cards__card">
+<div class="lp-social-proof-corporate-cards__logo">
+<img alt="{{slot:client-logo-1-alt}}" loading="lazy" src="{{slot:client-logo-1}}"/>
+</div>
+<div class="lp-social-proof-corporate-cards__content">
+<h3 class="lp-social-proof-corporate-cards__card-title">{{slot:client-title-1}}</h3>
+<p class="lp-social-proof-corporate-cards__text">{{slot:client-description-1}}</p>
+</div>
+<a class="lp-social-proof-corporate-cards__link" href="{{slot:client-link-1}}">{{slot:client-cta-1}}</a>
+</article>
+<article class="lp-social-proof-corporate-cards__card">
+<div class="lp-social-proof-corporate-cards__logo">
+<img alt="{{slot:client-logo-2-alt}}" loading="lazy" src="{{slot:client-logo-2}}"/>
+</div>
+<div class="lp-social-proof-corporate-cards__content">
+<h3 class="lp-social-proof-corporate-cards__card-title">{{slot:client-title-2}}</h3>
+<p class="lp-social-proof-corporate-cards__text">{{slot:client-description-2}}</p>
+</div>
+<a class="lp-social-proof-corporate-cards__link" href="{{slot:client-link-2}}">{{slot:client-cta-2}}</a>
+</article>
+<article class="lp-social-proof-corporate-cards__card">
+<div class="lp-social-proof-corporate-cards__logo">
+<img alt="{{slot:client-logo-3-alt}}" loading="lazy" src="{{slot:client-logo-3}}"/>
+</div>
+<div class="lp-social-proof-corporate-cards__content">
+<h3 class="lp-social-proof-corporate-cards__card-title">{{slot:client-title-3}}</h3>
+<p class="lp-social-proof-corporate-cards__text">{{slot:client-description-3}}</p>
+</div>
+<a class="lp-social-proof-corporate-cards__link" href="{{slot:client-link-3}}">{{slot:client-cta-3}}</a>
+</article>
+<article class="lp-social-proof-corporate-cards__card">
+<div class="lp-social-proof-corporate-cards__logo">
+<img alt="{{slot:client-logo-4-alt}}" loading="lazy" src="{{slot:client-logo-4}}"/>
+</div>
+<div class="lp-social-proof-corporate-cards__content">
+<h3 class="lp-social-proof-corporate-cards__card-title">{{slot:client-title-4}}</h3>
+<p class="lp-social-proof-corporate-cards__text">{{slot:client-description-4}}</p>
+</div>
+<a class="lp-social-proof-corporate-cards__link" href="{{slot:client-link-4}}">{{slot:client-cta-4}}</a>
+</article>
+</div>
+</div>
 </section>

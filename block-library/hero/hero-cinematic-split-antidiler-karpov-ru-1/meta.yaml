@@ -15,8 +15,31 @@ niches_suitable:
 - luxury
 ru_market: true
 slots:
-- name: heading
-  required: true
+- name: hero-image-mobile
+  type: text
+- name: hero-image-alt
+  type: text
+- name: hero-image
+  type: text
+- name: hero-badge
+  type: text
+- name: hero-title
+  type: text
+- name: hero-subhead
+  type: text
+- name: primary-cta-url
+  type: text
+- name: primary-cta-label
+  type: text
+- name: secondary-cta-url
+  type: text
+- name: secondary-cta-label
+  type: text
+- name: hero-panel-label
+  type: text
+- name: hero-panel-value
+  type: text
+- name: hero-panel-text
   type: text
 style_mood: cinematic
 type: hero

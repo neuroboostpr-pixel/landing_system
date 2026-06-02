@@ -32,9 +32,7 @@ slots:
   name: tier-1-desc
   required: false
   type: text
-- max_chars: 30
-  name: tier-1-price
-  required: true
+- name: tier-price
   type: text
 - max_chars: 60
   name: tier-1-f1
@@ -60,9 +58,7 @@ slots:
   name: tier-2-desc
   required: false
   type: text
-- max_chars: 30
-  name: tier-2-price
-  required: true
+- name: div-1
   type: text
 - max_chars: 60
   name: tier-2-f1
@@ -112,6 +108,28 @@ slots:
   name: tier-3-cta
   required: true
   type: cta
+- name: li-1
+  type: text
+- name: li-2
+  type: text
+- name: li-3
+  type: text
+- name: div-4
+  type: text
+- name: li-5
+  type: text
+- name: li-6
+  type: text
+- name: li-7
+  type: text
+- name: li-8
+  type: text
+- name: div-9
+  type: text
+- name: li-10
+  type: text
+- name: li-11
+  type: text
 source: opendesign
 source_attribution: 'github.com/nexu-io/open-design: design-templates/saas-landing
   (Apache-2.0)'

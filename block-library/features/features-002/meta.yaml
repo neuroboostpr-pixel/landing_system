@@ -6,7 +6,49 @@ id: features-002
 layout_pattern: cinematic
 signature: features|cinematic|[content]|bg:false
 slots:
-- name: content
+- name: eyebrow
+  type: text
+- name: heading
+  type: text
+- name: subhead
+  type: text
+- name: feature-1-image-alt
+  type: text
+- name: feature-1-image
+  type: text
+- name: feature-1-kicker
+  type: text
+- name: feature-1-title
+  type: text
+- name: feature-1-text
+  type: text
+- name: feature-2-image-alt
+  type: text
+- name: feature-2-image
+  type: text
+- name: feature-2-kicker
+  type: text
+- name: feature-2-title
+  type: text
+- name: feature-2-text
+  type: text
+- name: feature-3-image-alt
+  type: text
+- name: feature-3-image
+  type: text
+- name: feature-3-kicker
+  type: text
+- name: feature-3-title
+  type: text
+- name: feature-3-text
+  type: text
+- name: summary-heading
+  type: text
+- name: summary-text
+  type: text
+- name: primary-cta-url
+  type: text
+- name: primary-cta-label
   type: text
 source: cleaned
 type: features

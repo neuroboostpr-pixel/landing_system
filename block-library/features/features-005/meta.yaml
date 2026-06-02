@@ -6,7 +6,29 @@ id: features-005
 layout_pattern: default
 signature: features|default|[content]|bg:false
 slots:
-- name: content
+- name: features-eyebrow
+  type: text
+- name: features-title
+  type: text
+- name: features-lead
+  type: text
+- name: feature-1-index
+  type: text
+- name: feature-1-title
+  type: text
+- name: feature-1-text
+  type: text
+- name: feature-2-index
+  type: text
+- name: feature-2-title
+  type: text
+- name: feature-2-text
+  type: text
+- name: feature-3-index
+  type: text
+- name: feature-3-title
+  type: text
+- name: feature-3-text
   type: text
 source: cleaned
 type: features

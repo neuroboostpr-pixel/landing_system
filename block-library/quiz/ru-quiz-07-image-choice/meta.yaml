@@ -10,6 +10,10 @@ layout_summary_ru: 'Сетка 2×2 карточек: изображение + �
   выбор (CSS :checked). Прогресс-бар сверху. Для подбора материала, стиля, цвета покрытия.'
 ru_market: true
 slots:
+- max_chars: 60
+  name: progress-label
+  required: false
+  type: text
 - max_chars: 120
   name: question-text
   required: true
@@ -44,10 +48,6 @@ slots:
   type: photo
 - max_chars: 40
   name: label-4
-  required: false
-  type: text
-- max_chars: 60
-  name: progress-label
   required: false
   type: text
 source: manual

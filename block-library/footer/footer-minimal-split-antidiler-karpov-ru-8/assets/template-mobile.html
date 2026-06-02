@@ -83,19 +83,18 @@
   body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
 }
 </style>
-<footer class="lp-footer-minimal-split" aria-labelledby="lp-footer-minimal-split-title">
-  <div class="lp-footer-minimal-split__inner">
-    <div class="lp-footer-minimal-split__brand">
-      <a class="lp-footer-minimal-split__brand-link" href="{{slot:brand-url}}" aria-label="{{slot:brand-label}}">
-        <span id="lp-footer-minimal-split-title" class="lp-footer-minimal-split__brand-name">{{slot:brand-name}}</span>
-      </a>
-      <p class="lp-footer-minimal-split__meta">{{slot:company-meta}}</p>
-    </div>
-
-    <nav class="lp-footer-minimal-split__nav" aria-label="{{slot:footer-nav-label}}">
-      <a class="lp-footer-minimal-split__link" href="{{slot:legal-link-1-url}}">{{slot:legal-link-1-label}}</a>
-      <a class="lp-footer-minimal-split__link" href="{{slot:legal-link-2-url}}">{{slot:legal-link-2-label}}</a>
-      <a class="lp-footer-minimal-split__link" href="{{slot:legal-link-3-url}}">{{slot:legal-link-3-label}}</a>
-    </nav>
-  </div>
+<footer aria-labelledby="lp-footer-minimal-split-title" class="lp-footer-minimal-split">
+<div class="lp-footer-minimal-split__inner">
+<div class="lp-footer-minimal-split__brand">
+<a aria-label="{{slot:brand-label}}" class="lp-footer-minimal-split__brand-link" href="{{slot:brand-url}}">
+<span class="lp-footer-minimal-split__brand-name" id="lp-footer-minimal-split-title">{{slot:brand-name}}</span>
+</a>
+<p class="lp-footer-minimal-split__meta">{{slot:company-meta}}</p>
+</div>
+<nav aria-label="{{slot:footer-nav-label}}" class="lp-footer-minimal-split__nav">
+<a class="lp-footer-minimal-split__link" href="{{slot:legal-link-1-url}}">{{slot:legal-link-1-label}}</a>
+<a class="lp-footer-minimal-split__link" href="{{slot:legal-link-2-url}}">{{slot:legal-link-2-label}}</a>
+<a class="lp-footer-minimal-split__link" href="{{slot:legal-link-3-url}}">{{slot:legal-link-3-label}}</a>
+</nav>
+</div>
 </footer>

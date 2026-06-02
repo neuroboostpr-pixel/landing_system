@@ -1,9 +1,3 @@
-<!DOCTYPE html>
-<!-- Source: /tmp/open-design/skills/release-notes-one-pager/example.html (Apache-2.0, adapted for RU block-library schema) -->
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<title>ru-process-02-next-steps — desktop</title>
 <style>
   :root {
     --color-bg: #fafaf7;
@@ -33,39 +27,35 @@
   .step-row.final .step-timing, .step-row.final .step-content h3, .step-row.final .step-content p, .step-row.final .step-badge { color: #f5f1ea; }
   .step-row.final .step-content p { color: #aaa; }
 </style>
-</head>
-<body>
-  <section class="process-wrap" data-block-id="ru-process-02-next-steps">
-    <div class="process-header">
-      <h2 data-slot="headline">[HEADLINE: как мы работаем]</h2>
-    </div>
-    <div class="step-row">
-      <span class="step-timing" data-slot="step1-timing">[День 1–2]</span>
-      <div class="step-content">
-        <h3 data-slot="step1-title">[Шаг 1: Знакомство]</h3>
-        <p data-slot="step1-text">[Описание первого шага — что происходит, что делаем вместе с клиентом]</p>
-      </div>
-      <span class="step-badge" data-slot="step1-timing">[= 2 дня]</span>
-    </div>
-    <div class="step-row">
-      <span class="step-timing" data-slot="step2-timing">[День 3–7]</span>
-      <div class="step-content">
-        <h3 data-slot="step2-title">[Шаг 2: Подготовка]</h3>
-        <p data-slot="step2-text">[Описание второго шага]</p>
-      </div>
-      <span class="step-badge">[= 5 дней]</span>
-    </div>
-    <div class="step-row final">
-      <span class="step-timing" data-slot="step3-timing">[День 8+]</span>
-      <div class="step-content">
-        <h3 data-slot="step3-title">[Шаг 3: Результат]</h3>
-        <p data-slot="step3-text">[Итоговый результат — что клиент получает в руки]</p>
-      </div>
-      <span class="step-badge">→</span>
-    </div>
-    <div class="process-cta">
-      <a class="cta-btn" data-slot="primary-cta" href="#contact">[CTA: Начать работу]</a>
-    </div>
-  </section>
-</body>
-</html>
+<section class="process-wrap" data-block-id="ru-process-02-next-steps">
+<div class="process-header">
+<h2>{{slot:headline}}</h2>
+</div>
+<div class="step-row">
+<span class="step-timing">{{slot:step1-timing}}</span>
+<div class="step-content">
+<h3>{{slot:step1-title}}</h3>
+<p>{{slot:step1-text}}</p>
+</div>
+<span class="step-badge">{{slot:step1-timing}}</span>
+</div>
+<div class="step-row">
+<span class="step-timing">{{slot:step2-timing}}</span>
+<div class="step-content">
+<h3>{{slot:step2-title}}</h3>
+<p>{{slot:step2-text}}</p>
+</div>
+<span class="step-badge">{{slot:step-badge}}</span>
+</div>
+<div class="step-row final">
+<span class="step-timing">{{slot:step3-timing}}</span>
+<div class="step-content">
+<h3>{{slot:step3-title}}</h3>
+<p>{{slot:step3-text}}</p>
+</div>
+<span class="step-badge">→</span>
+</div>
+<div class="process-cta">
+<a class="cta-btn" href="#contact">{{slot:primary-cta}}</a>
+</div>
+</section>

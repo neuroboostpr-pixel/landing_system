@@ -217,53 +217,48 @@
   body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
 }
 </style>
-<section class="lp-process-cinematic-timeline" aria-labelledby="process-cinematic-timeline-title">
-  <div class="lp-process-cinematic-timeline__inner">
-    <header class="lp-process-cinematic-timeline__header">
-      <p class="lp-process-cinematic-timeline__eyebrow">{{slot:process-eyebrow}}</p>
-      <h2 class="lp-process-cinematic-timeline__title" id="process-cinematic-timeline-title">{{slot:process-heading}}</h2>
-      <p class="lp-process-cinematic-timeline__lead">{{slot:process-subhead}}</p>
-    </header>
-
-    <div class="lp-process-cinematic-timeline__stage">
-      <ol class="lp-process-cinematic-timeline__steps" aria-label="{{slot:process-list-label}}">
-        <li class="lp-process-cinematic-timeline__step lp-process-cinematic-timeline__step--left">
-          <span class="lp-process-cinematic-timeline__number">{{slot:step-1-number}}</span>
-          <div class="lp-process-cinematic-timeline__card">
-            <h3 class="lp-process-cinematic-timeline__step-title">{{slot:step-1-title}}</h3>
-            <p class="lp-process-cinematic-timeline__text">{{slot:step-1-text}}</p>
-          </div>
-        </li>
-
-        <li class="lp-process-cinematic-timeline__step lp-process-cinematic-timeline__step--right">
-          <span class="lp-process-cinematic-timeline__number">{{slot:step-2-number}}</span>
-          <div class="lp-process-cinematic-timeline__card">
-            <h3 class="lp-process-cinematic-timeline__step-title">{{slot:step-2-title}}</h3>
-            <p class="lp-process-cinematic-timeline__text">{{slot:step-2-text}}</p>
-          </div>
-        </li>
-
-        <li class="lp-process-cinematic-timeline__step lp-process-cinematic-timeline__step--left">
-          <span class="lp-process-cinematic-timeline__number">{{slot:step-3-number}}</span>
-          <div class="lp-process-cinematic-timeline__card">
-            <h3 class="lp-process-cinematic-timeline__step-title">{{slot:step-3-title}}</h3>
-            <p class="lp-process-cinematic-timeline__text">{{slot:step-3-text}}</p>
-          </div>
-        </li>
-
-        <li class="lp-process-cinematic-timeline__step lp-process-cinematic-timeline__step--right">
-          <span class="lp-process-cinematic-timeline__number">{{slot:step-4-number}}</span>
-          <div class="lp-process-cinematic-timeline__card">
-            <h3 class="lp-process-cinematic-timeline__step-title">{{slot:step-4-title}}</h3>
-            <p class="lp-process-cinematic-timeline__text">{{slot:step-4-text}}</p>
-          </div>
-        </li>
-      </ol>
-
-      <figure class="lp-process-cinematic-timeline__visual">
-        <img src="{{slot:process-visual}}" alt="{{slot:process-visual-alt}}" loading="lazy">
-        <figcaption class="lp-process-cinematic-timeline__caption">{{slot:process-visual-caption}}</figcaption>
-      </figure>
-    </div>
-  </div>
+<section aria-labelledby="process-cinematic-timeline-title" class="lp-process-cinematic-timeline">
+<div class="lp-process-cinematic-timeline__inner">
+<header class="lp-process-cinematic-timeline__header">
+<p class="lp-process-cinematic-timeline__eyebrow">{{slot:process-eyebrow}}</p>
+<h2 class="lp-process-cinematic-timeline__title" id="process-cinematic-timeline-title">{{slot:process-heading}}</h2>
+<p class="lp-process-cinematic-timeline__lead">{{slot:process-subhead}}</p>
+</header>
+<div class="lp-process-cinematic-timeline__stage">
+<ol aria-label="{{slot:process-list-label}}" class="lp-process-cinematic-timeline__steps">
+<li class="lp-process-cinematic-timeline__step lp-process-cinematic-timeline__step--left">
+<span class="lp-process-cinematic-timeline__number">{{slot:step-1-number}}</span>
+<div class="lp-process-cinematic-timeline__card">
+<h3 class="lp-process-cinematic-timeline__step-title">{{slot:step-1-title}}</h3>
+<p class="lp-process-cinematic-timeline__text">{{slot:step-1-text}}</p>
+</div>
+</li>
+<li class="lp-process-cinematic-timeline__step lp-process-cinematic-timeline__step--right">
+<span class="lp-process-cinematic-timeline__number">{{slot:step-2-number}}</span>
+<div class="lp-process-cinematic-timeline__card">
+<h3 class="lp-process-cinematic-timeline__step-title">{{slot:step-2-title}}</h3>
+<p class="lp-process-cinematic-timeline__text">{{slot:step-2-text}}</p>
+</div>
+</li>
+<li class="lp-process-cinematic-timeline__step lp-process-cinematic-timeline__step--left">
+<span class="lp-process-cinematic-timeline__number">{{slot:step-3-number}}</span>
+<div class="lp-process-cinematic-timeline__card">
+<h3 class="lp-process-cinematic-timeline__step-title">{{slot:step-3-title}}</h3>
+<p class="lp-process-cinematic-timeline__text">{{slot:step-3-text}}</p>
+</div>
+</li>
+<li class="lp-process-cinematic-timeline__step lp-process-cinematic-timeline__step--right">
+<span class="lp-process-cinematic-timeline__number">{{slot:step-4-number}}</span>
+<div class="lp-process-cinematic-timeline__card">
+<h3 class="lp-process-cinematic-timeline__step-title">{{slot:step-4-title}}</h3>
+<p class="lp-process-cinematic-timeline__text">{{slot:step-4-text}}</p>
+</div>
+</li>
+</ol>
+<figure class="lp-process-cinematic-timeline__visual">
+<img alt="{{slot:process-visual-alt}}" loading="lazy" src="{{slot:process-visual}}"/>
+<figcaption class="lp-process-cinematic-timeline__caption">{{slot:process-visual-caption}}</figcaption>
+</figure>
+</div>
+</div>
 </section>

@@ -1,8 +1,3 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<title>ru-social-proof-04-authority-cases — desktop wireframe</title>
 <style>
   /* Wireframe: ч/б, CSS-only, no external deps.
      CSS vars in :root are MANDATORY — block-composition/inject-tokens.py relies on these names. */
@@ -47,36 +42,32 @@
   .case-name { font-weight: 700; font-size: 17px; margin: 0 0 8px; }
   .case-result { font-size: 14px; color: #555; margin: 0; line-height: 1.5; }
 </style>
-</head>
-<body>
-  <section class="cases" data-block-id="ru-social-proof-04-authority-cases">
-    <h2 class="section-headline" data-slot="headline">[Наши лучшие кейсы]</h2>
-    <div class="cases-grid">
-      <div class="case-card">
-        <div class="case-photo" data-slot="case-1-photo">[Фото кейса 1]</div>
-        <div class="case-body">
-          <span class="case-tag" data-slot="case-1-tag">Самый масштабный</span>
-          <p class="case-name" data-slot="case-1-name">[Название клиента 1]</p>
-          <p class="case-result" data-slot="case-1-result">[Результат: +150% продаж за 3 месяца]</p>
-        </div>
-      </div>
-      <div class="case-card">
-        <div class="case-photo" data-slot="case-2-photo">[Фото кейса 2]</div>
-        <div class="case-body">
-          <span class="case-tag" data-slot="case-2-tag">Рекорд скорости</span>
-          <p class="case-name" data-slot="case-2-name">[Название клиента 2]</p>
-          <p class="case-result" data-slot="case-2-result">[Результат в цифрах]</p>
-        </div>
-      </div>
-      <div class="case-card">
-        <div class="case-photo" data-slot="case-3-photo">[Фото кейса 3]</div>
-        <div class="case-body">
-          <span class="case-tag" data-slot="case-3-tag">Предмет гордости</span>
-          <p class="case-name" data-slot="case-3-name">[Название клиента 3]</p>
-          <p class="case-result" data-slot="case-3-result">[Результат в цифрах]</p>
-        </div>
-      </div>
-    </div>
-  </section>
-</body>
-</html>
+<section class="cases" data-block-id="ru-social-proof-04-authority-cases">
+<h2 class="section-headline">{{slot:headline}}</h2>
+<div class="cases-grid">
+<div class="case-card">
+<div class="case-photo">{{slot:case-1-photo}}</div>
+<div class="case-body">
+<span class="case-tag">{{slot:case-1-tag}}</span>
+<p class="case-name">{{slot:case-1-name}}</p>
+<p class="case-result">{{slot:case-1-result}}</p>
+</div>
+</div>
+<div class="case-card">
+<div class="case-photo">{{slot:case-2-photo}}</div>
+<div class="case-body">
+<span class="case-tag">{{slot:case-2-tag}}</span>
+<p class="case-name">{{slot:case-2-name}}</p>
+<p class="case-result">{{slot:case-2-result}}</p>
+</div>
+</div>
+<div class="case-card">
+<div class="case-photo">{{slot:case-3-photo}}</div>
+<div class="case-body">
+<span class="case-tag">{{slot:case-3-tag}}</span>
+<p class="case-name">{{slot:case-3-name}}</p>
+<p class="case-result">{{slot:case-3-result}}</p>
+</div>
+</div>
+</div>
+</section>

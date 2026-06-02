@@ -6,7 +6,47 @@ id: header-001
 layout_pattern: cinematic
 signature: header|cinematic|[content]|bg:false
 slots:
-- name: content
+- name: header-aria-label
+  type: text
+- name: brand-aria-label
+  type: text
+- name: brand-link
+  type: text
+- name: brand-name
+  type: text
+- name: nav-aria-label
+  type: text
+- name: nav-link-1
+  type: text
+- name: nav-label-1
+  type: text
+- name: nav-link-2
+  type: text
+- name: nav-label-2
+  type: text
+- name: nav-link-3
+  type: text
+- name: nav-label-3
+  type: text
+- name: nav-link-4
+  type: text
+- name: nav-label-4
+  type: text
+- name: contact-link
+  type: text
+- name: contact-caption
+  type: text
+- name: contact-value
+  type: text
+- name: socials-aria-label
+  type: text
+- name: social-label-1
+  type: text
+- name: social-link-1
+  type: text
+- name: social-label-2
+  type: text
+- name: social-link-2
   type: text
 source: cleaned
 type: header

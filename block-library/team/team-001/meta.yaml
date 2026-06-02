@@ -6,7 +6,55 @@ id: team-001
 layout_pattern: cinematic
 signature: team|cinematic|[content]|bg:false
 slots:
-- name: content
+- name: eyebrow
+  type: text
+- name: heading
+  type: text
+- name: subhead
+  type: text
+- name: stats-label
+  type: text
+- name: stat-1-value
+  type: text
+- name: stat-1-label
+  type: text
+- name: stat-2-value
+  type: text
+- name: stat-2-label
+  type: text
+- name: stat-3-value
+  type: text
+- name: stat-3-label
+  type: text
+- name: primary-cta-link
+  type: text
+- name: primary-cta-label
+  type: text
+- name: secondary-cta-link
+  type: text
+- name: secondary-cta-label
+  type: text
+- name: team-visual-label
+  type: text
+- name: team-image-mobile
+  type: text
+- name: team-image-alt
+  type: text
+- name: team-image
+  type: text
+- name: team-list-label
+  type: text
+- name: member-1-name
+  type: text
+- name: member-1-role
+  type: text
+- name: member-2-name
+  type: text
+- name: member-2-role
+  type: text
+- name: member-3-name
+  type: text
+- name: member-3-role
   type: text
 source: cleaned
 type: team

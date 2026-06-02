@@ -15,8 +15,48 @@ niches_suitable:
 - ecommerce
 ru_market: true
 slots:
+- name: eyebrow
+  type: text
 - name: heading
   required: true
+  type: text
+- name: subhead
+  type: text
+- name: feature-1-image-alt
+  type: text
+- name: feature-1-image
+  type: text
+- name: feature-1-badge
+  type: text
+- name: feature-1-title
+  type: text
+- name: feature-1-text
+  type: text
+- name: feature-2-image-alt
+  type: text
+- name: feature-2-image
+  type: text
+- name: feature-2-badge
+  type: text
+- name: feature-2-title
+  type: text
+- name: feature-2-text
+  type: text
+- name: feature-3-image-alt
+  type: text
+- name: feature-3-image
+  type: text
+- name: feature-3-badge
+  type: text
+- name: feature-3-title
+  type: text
+- name: feature-3-text
+  type: text
+- name: cta-url
+  type: text
+- name: cta-label
+  type: text
+- name: cta-note
   type: text
 style_mood: technical
 type: features

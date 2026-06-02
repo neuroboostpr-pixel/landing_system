@@ -23,8 +23,15 @@ slots:
   name: tier-1-price
   required: true
   type: text
-- name: tier-1-features
-  required: true
+- name: li-1
+  type: text
+- name: li-2
+  type: text
+- name: li-3
+  type: text
+- name: li-4
+  type: text
+- name: li-5
   type: text
 - default_text: Выбрать
   name: tier-1-cta
@@ -38,8 +45,15 @@ slots:
   name: tier-2-price
   required: true
   type: text
-- name: tier-2-features
-  required: true
+- name: li-6
+  type: text
+- name: li-7
+  type: text
+- name: li-8
+  type: text
+- name: li-9
+  type: text
+- name: li-10
   type: text
 - default_text: Выбрать
   name: tier-2-cta
@@ -53,8 +67,15 @@ slots:
   name: tier-3-price
   required: true
   type: text
-- name: tier-3-features
-  required: true
+- name: li-11
+  type: text
+- name: li-12
+  type: text
+- name: li-13
+  type: text
+- name: li-14
+  type: text
+- name: li-15
   type: text
 - default_text: Выбрать
   name: tier-3-cta

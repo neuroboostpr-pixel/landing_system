@@ -56,6 +56,30 @@ slots:
   name: client-8
   required: false
   type: text
+- name: span-1
+  type: text
+- name: span-2
+  type: text
+- name: span-3
+  type: text
+- name: span-4
+  type: text
+- name: span-5
+  type: text
+- name: span-6
+  type: text
+- name: span-7
+  type: text
+- name: span-8
+  type: text
+- name: span-9
+  type: text
+- name: span-10
+  type: text
+- name: span-11
+  type: text
+- name: span-12
+  type: text
 source: opendesign
 source_attribution: 'github.com/nexu-io/open-design: design-templates/open-design-landing
   (Apache-2.0)'

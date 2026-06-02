@@ -19,13 +19,13 @@ slots:
   name: kicker
   required: false
   type: text
-- max_chars: 70
-  name: headline
-  required: true
+- name: section-title
   type: text
 - max_chars: 220
   name: subhead
   required: false
+  type: text
+- name: step-1-img
   type: text
 - max_chars: 40
   name: step-1-title
@@ -35,6 +35,8 @@ slots:
   name: step-1-desc
   required: true
   type: text
+- name: step-2-img
+  type: text
 - max_chars: 40
   name: step-2-title
   required: true
@@ -42,6 +44,8 @@ slots:
 - max_chars: 160
   name: step-2-desc
   required: true
+  type: text
+- name: step-3-img
   type: text
 - max_chars: 40
   name: step-3-title
@@ -51,6 +55,8 @@ slots:
   name: step-3-desc
   required: true
   type: text
+- name: step-4-img
+  type: text
 - max_chars: 40
   name: step-4-title
   required: true
@@ -58,6 +64,8 @@ slots:
 - max_chars: 160
   name: step-4-desc
   required: true
+  type: text
+- name: h2-1
   type: text
 source: opendesign
 source_attribution: 'github.com/nexu-io/open-design: design-templates/open-design-landing

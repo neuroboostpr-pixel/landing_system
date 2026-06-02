@@ -154,34 +154,32 @@
   body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
 }
 </style>
-<section class="lp-features-editorial-stacked" aria-labelledby="lp-features-editorial-stacked-title">
-  <div class="lp-features-editorial-stacked__intro">
-    <p class="lp-features-editorial-stacked__eyebrow">{{slot:eyebrow}}</p>
-    <h2 class="lp-features-editorial-stacked__title" id="lp-features-editorial-stacked-title">{{slot:heading}}</h2>
-    <p class="lp-features-editorial-stacked__lead">{{slot:subhead}}</p>
-  </div>
-
-  <div class="lp-features-editorial-stacked__panel">
-    <div class="lp-features-editorial-stacked__statement">
-      <p>{{slot:statement}}</p>
-    </div>
-
-    <ul class="lp-features-editorial-stacked__list">
-      <li class="lp-features-editorial-stacked__item">
-        <span class="lp-features-editorial-stacked__marker" aria-hidden="true"></span>
-        <h3 class="lp-features-editorial-stacked__item-title">{{slot:feature-1-title}}</h3>
-        <p class="lp-features-editorial-stacked__item-text">{{slot:feature-1-text}}</p>
-      </li>
-      <li class="lp-features-editorial-stacked__item">
-        <span class="lp-features-editorial-stacked__marker" aria-hidden="true"></span>
-        <h3 class="lp-features-editorial-stacked__item-title">{{slot:feature-2-title}}</h3>
-        <p class="lp-features-editorial-stacked__item-text">{{slot:feature-2-text}}</p>
-      </li>
-      <li class="lp-features-editorial-stacked__item">
-        <span class="lp-features-editorial-stacked__marker" aria-hidden="true"></span>
-        <h3 class="lp-features-editorial-stacked__item-title">{{slot:feature-3-title}}</h3>
-        <p class="lp-features-editorial-stacked__item-text">{{slot:feature-3-text}}</p>
-      </li>
-    </ul>
-  </div>
+<section aria-labelledby="lp-features-editorial-stacked-title" class="lp-features-editorial-stacked">
+<div class="lp-features-editorial-stacked__intro">
+<p class="lp-features-editorial-stacked__eyebrow">{{slot:eyebrow}}</p>
+<h2 class="lp-features-editorial-stacked__title" id="lp-features-editorial-stacked-title">{{slot:heading}}</h2>
+<p class="lp-features-editorial-stacked__lead">{{slot:subhead}}</p>
+</div>
+<div class="lp-features-editorial-stacked__panel">
+<div class="lp-features-editorial-stacked__statement">
+<p>{{slot:statement}}</p>
+</div>
+<ul class="lp-features-editorial-stacked__list">
+<li class="lp-features-editorial-stacked__item">
+<span aria-hidden="true" class="lp-features-editorial-stacked__marker"></span>
+<h3 class="lp-features-editorial-stacked__item-title">{{slot:feature-1-title}}</h3>
+<p class="lp-features-editorial-stacked__item-text">{{slot:feature-1-text}}</p>
+</li>
+<li class="lp-features-editorial-stacked__item">
+<span aria-hidden="true" class="lp-features-editorial-stacked__marker"></span>
+<h3 class="lp-features-editorial-stacked__item-title">{{slot:feature-2-title}}</h3>
+<p class="lp-features-editorial-stacked__item-text">{{slot:feature-2-text}}</p>
+</li>
+<li class="lp-features-editorial-stacked__item">
+<span aria-hidden="true" class="lp-features-editorial-stacked__marker"></span>
+<h3 class="lp-features-editorial-stacked__item-title">{{slot:feature-3-title}}</h3>
+<p class="lp-features-editorial-stacked__item-text">{{slot:feature-3-text}}</p>
+</li>
+</ul>
+</div>
 </section>

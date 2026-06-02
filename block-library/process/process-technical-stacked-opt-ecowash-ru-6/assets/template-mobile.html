@@ -252,58 +252,55 @@
   body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
 }
 </style>
-<section class="lp-process-technical-stacked" aria-labelledby="lp-process-technical-stacked-title">
-  <div class="lp-process-technical-stacked__inner">
-    <div class="lp-process-technical-stacked__header">
-      <p class="lp-process-technical-stacked__eyebrow">{{slot:eyebrow}}</p>
-      <h2 class="lp-process-technical-stacked__title" id="lp-process-technical-stacked-title">{{slot:heading}}</h2>
-      <p class="lp-process-technical-stacked__lead">{{slot:subhead}}</p>
-    </div>
-
-    <div class="lp-process-technical-stacked__accent">
-      <span class="lp-process-technical-stacked__accent-mark" aria-hidden="true"></span>
-      <div class="lp-process-technical-stacked__accent-content">
-        <h3 class="lp-process-technical-stacked__accent-title">{{slot:accent-title}}</h3>
-        <p class="lp-process-technical-stacked__accent-text">{{slot:accent-text}}</p>
-      </div>
-    </div>
-
-    <div class="lp-process-technical-stacked__body">
-      <ol class="lp-process-technical-stacked__steps">
-        <li class="lp-process-technical-stacked__step">
-          <span class="lp-process-technical-stacked__step-index">{{slot:step-1-index}}</span>
-          <div class="lp-process-technical-stacked__step-content">
-            <h3 class="lp-process-technical-stacked__step-title">{{slot:step-1-title}}</h3>
-            <p class="lp-process-technical-stacked__step-text">{{slot:step-1-text}}</p>
-          </div>
-        </li>
-        <li class="lp-process-technical-stacked__step">
-          <span class="lp-process-technical-stacked__step-index">{{slot:step-2-index}}</span>
-          <div class="lp-process-technical-stacked__step-content">
-            <h3 class="lp-process-technical-stacked__step-title">{{slot:step-2-title}}</h3>
-            <p class="lp-process-technical-stacked__step-text">{{slot:step-2-text}}</p>
-          </div>
-        </li>
-        <li class="lp-process-technical-stacked__step">
-          <span class="lp-process-technical-stacked__step-index">{{slot:step-3-index}}</span>
-          <div class="lp-process-technical-stacked__step-content">
-            <h3 class="lp-process-technical-stacked__step-title">{{slot:step-3-title}}</h3>
-            <p class="lp-process-technical-stacked__step-text">{{slot:step-3-text}}</p>
-          </div>
-        </li>
-      </ol>
-
-      <figure class="lp-process-technical-stacked__media">
-        <div class="lp-process-technical-stacked__decor" aria-hidden="true">
-          <span class="lp-process-technical-stacked__decor-line"></span>
-          <span class="lp-process-technical-stacked__decor-dot"></span>
-        </div>
-        <picture>
-          <source media="(max-width: 767px)" srcset="{{slot:process-image-mobile}}">
-          <img src="{{slot:process-image}}" alt="{{slot:process-image-alt}}" loading="lazy">
-        </picture>
-        <figcaption class="lp-process-technical-stacked__caption">{{slot:media-caption}}</figcaption>
-      </figure>
-    </div>
-  </div>
+<section aria-labelledby="lp-process-technical-stacked-title" class="lp-process-technical-stacked">
+<div class="lp-process-technical-stacked__inner">
+<div class="lp-process-technical-stacked__header">
+<p class="lp-process-technical-stacked__eyebrow">{{slot:eyebrow}}</p>
+<h2 class="lp-process-technical-stacked__title" id="lp-process-technical-stacked-title">{{slot:heading}}</h2>
+<p class="lp-process-technical-stacked__lead">{{slot:subhead}}</p>
+</div>
+<div class="lp-process-technical-stacked__accent">
+<span aria-hidden="true" class="lp-process-technical-stacked__accent-mark"></span>
+<div class="lp-process-technical-stacked__accent-content">
+<h3 class="lp-process-technical-stacked__accent-title">{{slot:accent-title}}</h3>
+<p class="lp-process-technical-stacked__accent-text">{{slot:accent-text}}</p>
+</div>
+</div>
+<div class="lp-process-technical-stacked__body">
+<ol class="lp-process-technical-stacked__steps">
+<li class="lp-process-technical-stacked__step">
+<span class="lp-process-technical-stacked__step-index">{{slot:step-1-index}}</span>
+<div class="lp-process-technical-stacked__step-content">
+<h3 class="lp-process-technical-stacked__step-title">{{slot:step-1-title}}</h3>
+<p class="lp-process-technical-stacked__step-text">{{slot:step-1-text}}</p>
+</div>
+</li>
+<li class="lp-process-technical-stacked__step">
+<span class="lp-process-technical-stacked__step-index">{{slot:step-2-index}}</span>
+<div class="lp-process-technical-stacked__step-content">
+<h3 class="lp-process-technical-stacked__step-title">{{slot:step-2-title}}</h3>
+<p class="lp-process-technical-stacked__step-text">{{slot:step-2-text}}</p>
+</div>
+</li>
+<li class="lp-process-technical-stacked__step">
+<span class="lp-process-technical-stacked__step-index">{{slot:step-3-index}}</span>
+<div class="lp-process-technical-stacked__step-content">
+<h3 class="lp-process-technical-stacked__step-title">{{slot:step-3-title}}</h3>
+<p class="lp-process-technical-stacked__step-text">{{slot:step-3-text}}</p>
+</div>
+</li>
+</ol>
+<figure class="lp-process-technical-stacked__media">
+<div aria-hidden="true" class="lp-process-technical-stacked__decor">
+<span class="lp-process-technical-stacked__decor-line"></span>
+<span class="lp-process-technical-stacked__decor-dot"></span>
+</div>
+<picture>
+<source media="(max-width: 767px)" srcset="{{slot:process-image-mobile}}"/>
+<img alt="{{slot:process-image-alt}}" loading="lazy" src="{{slot:process-image}}"/>
+</picture>
+<figcaption class="lp-process-technical-stacked__caption">{{slot:media-caption}}</figcaption>
+</figure>
+</div>
+</div>
 </section>

@@ -14,6 +14,10 @@ recommended_styles_ru:
 - Minimalism & Swiss Style
 ru_market: true
 slots:
+- max_chars: 12
+  name: metric-1-value
+  required: true
+  type: text
 - max_chars: 60
   name: headline
   required: true
@@ -22,16 +26,12 @@ slots:
   name: subhead
   required: true
   type: text
-- max_chars: 12
-  name: metric-1-value
+- default_text: Начать работу
+  name: primary-cta
   required: true
-  type: text
+  type: cta
 - max_chars: 40
   name: metric-1-label
-  required: true
-  type: text
-- max_chars: 12
-  name: metric-2-value
   required: true
   type: text
 - max_chars: 40
@@ -39,17 +39,17 @@ slots:
   required: true
   type: text
 - max_chars: 12
-  name: metric-3-value
-  required: false
+  name: metric-2-value
+  required: true
   type: text
 - max_chars: 40
   name: metric-3-label
   required: false
   type: text
-- default_text: Начать работу
-  name: primary-cta
-  required: true
-  type: cta
+- max_chars: 12
+  name: metric-3-value
+  required: false
+  type: text
 source: opendesign
 source_attribution: /tmp/open-design/skills/digits-fintech-swiss-template/example.html
 type: hero

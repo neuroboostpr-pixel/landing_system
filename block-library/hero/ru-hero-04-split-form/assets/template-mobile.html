@@ -1,8 +1,3 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<title>ru-hero-04-split-form — mobile</title>
 <style>
   :root {
     --color-bg: #fff;
@@ -127,40 +122,33 @@
     margin: 0;
   }
 </style>
-</head>
-<body>
-  <section class="hero" data-block-id="ru-hero-04-split-form">
-
-    <!-- Value prop -->
-    <div>
-      <h1 class="headline" data-slot="headline">[HEADLINE: ваш главный оффер]</h1>
-    </div>
-    <ul class="bullets">
-      <li data-slot="bullet-1-text">[BULLET 1: преимущество]</li>
-      <li data-slot="bullet-2-text">[BULLET 2: преимущество]</li>
-      <li data-slot="bullet-3-text">[BULLET 3: преимущество]</li>
-    </ul>
-    <a class="hero-cta" data-slot="primary-cta" href="#form">[Узнать стоимость]</a>
-
-    <!-- Form below on mobile -->
-    <form class="lead-form" novalidate>
-      <p class="form-title">Получить консультацию</p>
-      <div>
-        <label class="field-label" for="m-phone">Ваш телефон</label>
-        <input class="phone-input" id="m-phone" type="tel" placeholder="+7 (___) ___-__-__" data-slot="lead-phone-input">
-      </div>
-      <div>
-        <span class="contact-label">Как связаться?</span>
-        <div class="radio-group">
-          <label class="radio-row"><input type="radio" name="m-contact" value="telegram" checked> Telegram</label>
-          <label class="radio-row"><input type="radio" name="m-contact" value="max"> Max</label>
-          <label class="radio-row"><input type="radio" name="m-contact" value="call"> Позвоните мне</label>
-        </div>
-      </div>
-      <button type="submit" class="submit-btn" data-slot="lead-submit-cta">[Отправить заявку]</button>
-      <p class="form-disclaimer">Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности</p>
-    </form>
-
-  </section>
-</body>
-</html>
+<section class="hero" data-block-id="ru-hero-04-split-form">
+<!-- Value prop -->
+<div>
+<h1 class="headline">{{slot:headline}}</h1>
+</div>
+<ul class="bullets">
+<li>{{slot:bullet-1-text}}</li>
+<li>{{slot:bullet-2-text}}</li>
+<li>{{slot:bullet-3-text}}</li>
+</ul>
+<a class="hero-cta" href="#form">{{slot:primary-cta}}</a>
+<!-- Form below on mobile -->
+<form class="lead-form" novalidate="">
+<p class="form-title">Получить консультацию</p>
+<div>
+<label class="field-label" for="m-phone">Ваш телефон</label>
+<input class="phone-input" id="m-phone" placeholder="+7 (___) ___-__-__" type="tel"/>{{slot:lead-phone-input}}
+</div>
+<div>
+<span class="contact-label">Как связаться?</span>
+<div class="radio-group">
+<label class="radio-row"><input checked="" name="m-contact" type="radio" value="telegram"/> Telegram</label>
+<label class="radio-row"><input name="m-contact" type="radio" value="max"/> Max</label>
+<label class="radio-row"><input name="m-contact" type="radio" value="call"/> Позвоните мне</label>
+</div>
+</div>
+<button class="submit-btn" type="submit">{{slot:lead-submit-cta}}</button>
+<p class="form-disclaimer">Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности</p>
+</form>
+</section>

@@ -164,50 +164,48 @@
   body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
 }
 </style>
-<section class="lp-features-technical-split" aria-labelledby="lp-features-technical-split-title">
-  <div class="lp-features-technical-split__inner">
-    <article class="lp-features-technical-split__promo">
-      <div class="lp-features-technical-split__kicker">{{slot:promo-kicker}}</div>
-      <h2 class="lp-features-technical-split__title" id="lp-features-technical-split-title">{{slot:heading}}</h2>
-      <p class="lp-features-technical-split__lead">{{slot:subhead}}</p>
-      <a class="lp-features-technical-split__button" href="{{slot:primary-cta-link}}">
+<section aria-labelledby="lp-features-technical-split-title" class="lp-features-technical-split">
+<div class="lp-features-technical-split__inner">
+<article class="lp-features-technical-split__promo">
+<div class="lp-features-technical-split__kicker">{{slot:promo-kicker}}</div>
+<h2 class="lp-features-technical-split__title" id="lp-features-technical-split-title">{{slot:heading}}</h2>
+<p class="lp-features-technical-split__lead">{{slot:subhead}}</p>
+<a class="lp-features-technical-split__button" href="{{slot:primary-cta-link}}">
         {{slot:primary-cta-label}}
       </a>
-    </article>
-
-    <div class="lp-features-technical-split__content">
-      <ul class="lp-features-technical-split__grid" aria-label="{{slot:features-list-label}}">
-        <li class="lp-features-technical-split__card">
-          <span class="lp-features-technical-split__marker" aria-hidden="true"></span>
-          <h3 class="lp-features-technical-split__card-title">{{slot:feature-1-title}}</h3>
-          <p class="lp-features-technical-split__card-text">{{slot:feature-1-text}}</p>
-          <a class="lp-features-technical-split__link" href="{{slot:feature-1-link}}">{{slot:feature-1-link-label}}</a>
-        </li>
-        <li class="lp-features-technical-split__card">
-          <span class="lp-features-technical-split__marker" aria-hidden="true"></span>
-          <h3 class="lp-features-technical-split__card-title">{{slot:feature-2-title}}</h3>
-          <p class="lp-features-technical-split__card-text">{{slot:feature-2-text}}</p>
-          <a class="lp-features-technical-split__link" href="{{slot:feature-2-link}}">{{slot:feature-2-link-label}}</a>
-        </li>
-        <li class="lp-features-technical-split__card">
-          <span class="lp-features-technical-split__marker" aria-hidden="true"></span>
-          <h3 class="lp-features-technical-split__card-title">{{slot:feature-3-title}}</h3>
-          <p class="lp-features-technical-split__card-text">{{slot:feature-3-text}}</p>
-          <a class="lp-features-technical-split__link" href="{{slot:feature-3-link}}">{{slot:feature-3-link-label}}</a>
-        </li>
-        <li class="lp-features-technical-split__card">
-          <span class="lp-features-technical-split__marker" aria-hidden="true"></span>
-          <h3 class="lp-features-technical-split__card-title">{{slot:feature-4-title}}</h3>
-          <p class="lp-features-technical-split__card-text">{{slot:feature-4-text}}</p>
-          <a class="lp-features-technical-split__link" href="{{slot:feature-4-link}}">{{slot:feature-4-link-label}}</a>
-        </li>
-      </ul>
-
-      <nav class="lp-features-technical-split__formats" aria-label="{{slot:formats-nav-label}}">
-        <a href="{{slot:format-1-link}}">{{slot:format-1-label}}</a>
-        <a href="{{slot:format-2-link}}">{{slot:format-2-label}}</a>
-        <a href="{{slot:format-3-link}}">{{slot:format-3-label}}</a>
-      </nav>
-    </div>
-  </div>
+</article>
+<div class="lp-features-technical-split__content">
+<ul aria-label="{{slot:features-list-label}}" class="lp-features-technical-split__grid">
+<li class="lp-features-technical-split__card">
+<span aria-hidden="true" class="lp-features-technical-split__marker"></span>
+<h3 class="lp-features-technical-split__card-title">{{slot:feature-1-title}}</h3>
+<p class="lp-features-technical-split__card-text">{{slot:feature-1-text}}</p>
+<a class="lp-features-technical-split__link" href="{{slot:feature-1-link}}">{{slot:feature-1-link-label}}</a>
+</li>
+<li class="lp-features-technical-split__card">
+<span aria-hidden="true" class="lp-features-technical-split__marker"></span>
+<h3 class="lp-features-technical-split__card-title">{{slot:feature-2-title}}</h3>
+<p class="lp-features-technical-split__card-text">{{slot:feature-2-text}}</p>
+<a class="lp-features-technical-split__link" href="{{slot:feature-2-link}}">{{slot:feature-2-link-label}}</a>
+</li>
+<li class="lp-features-technical-split__card">
+<span aria-hidden="true" class="lp-features-technical-split__marker"></span>
+<h3 class="lp-features-technical-split__card-title">{{slot:feature-3-title}}</h3>
+<p class="lp-features-technical-split__card-text">{{slot:feature-3-text}}</p>
+<a class="lp-features-technical-split__link" href="{{slot:feature-3-link}}">{{slot:feature-3-link-label}}</a>
+</li>
+<li class="lp-features-technical-split__card">
+<span aria-hidden="true" class="lp-features-technical-split__marker"></span>
+<h3 class="lp-features-technical-split__card-title">{{slot:feature-4-title}}</h3>
+<p class="lp-features-technical-split__card-text">{{slot:feature-4-text}}</p>
+<a class="lp-features-technical-split__link" href="{{slot:feature-4-link}}">{{slot:feature-4-link-label}}</a>
+</li>
+</ul>
+<nav aria-label="{{slot:formats-nav-label}}" class="lp-features-technical-split__formats">
+<a href="{{slot:format-1-link}}">{{slot:format-1-label}}</a>
+<a href="{{slot:format-2-link}}">{{slot:format-2-label}}</a>
+<a href="{{slot:format-3-link}}">{{slot:format-3-label}}</a>
+</nav>
+</div>
+</div>
 </section>

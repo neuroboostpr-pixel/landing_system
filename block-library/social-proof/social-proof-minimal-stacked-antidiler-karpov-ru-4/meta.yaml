@@ -15,8 +15,48 @@ niches_suitable:
 - luxury
 ru_market: true
 slots:
+- name: eyebrow
+  type: text
 - name: heading
   required: true
+  type: text
+- name: subhead
+  type: text
+- name: case-1-name
+  type: text
+- name: case-1-model
+  type: text
+- name: case-1-service
+  type: text
+- name: case-1-review
+  type: text
+- name: case-1-link
+  type: text
+- name: case-1-cta
+  type: text
+- name: case-2-name
+  type: text
+- name: case-2-model
+  type: text
+- name: case-2-service
+  type: text
+- name: case-2-review
+  type: text
+- name: case-2-link
+  type: text
+- name: case-2-cta
+  type: text
+- name: case-3-name
+  type: text
+- name: case-3-model
+  type: text
+- name: case-3-service
+  type: text
+- name: case-3-review
+  type: text
+- name: case-3-link
+  type: text
+- name: case-3-cta
   type: text
 style_mood: minimal
 type: logos

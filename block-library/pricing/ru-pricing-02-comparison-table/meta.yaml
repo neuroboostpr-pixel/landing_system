@@ -24,10 +24,6 @@ slots:
   name: tier-1-price
   required: true
   type: text
-- default_text: Выбрать
-  name: tier-1-cta
-  required: true
-  type: cta
 - max_chars: 20
   name: tier-2-name
   required: true
@@ -36,10 +32,6 @@ slots:
   name: tier-2-price
   required: true
   type: text
-- default_text: Выбрать
-  name: tier-2-cta
-  required: true
-  type: cta
 - max_chars: 20
   name: tier-3-name
   required: true
@@ -48,10 +40,6 @@ slots:
   name: tier-3-price
   required: true
   type: text
-- default_text: Выбрать
-  name: tier-3-cta
-  required: true
-  type: cta
 - max_chars: 60
   name: feature-row-1
   required: true
@@ -76,6 +64,18 @@ slots:
   name: feature-row-6
   required: true
   type: text
+- default_text: Выбрать
+  name: tier-1-cta
+  required: true
+  type: cta
+- default_text: Выбрать
+  name: tier-2-cta
+  required: true
+  type: cta
+- default_text: Выбрать
+  name: tier-3-cta
+  required: true
+  type: cta
 source: manual
 source_attribution: ''
 type: pricing

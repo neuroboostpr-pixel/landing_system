@@ -1,9 +1,3 @@
-<!DOCTYPE html>
-<!-- Source: /tmp/open-design/skills/editorial-burgundy-principles-template/example.html (Apache-2.0, adapted for RU block-library schema) -->
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<title>ru-trust-04-principles-grid — desktop</title>
 <style>
   :root {
     --color-bg: #f8f5ef;
@@ -31,46 +25,42 @@
   .principle-title { font-size: 1.5rem; line-height: 1.05; font-weight: 700; }
   .principle-text { font-size: .9rem; line-height: 1.45; opacity: .85; flex: 1; }
 </style>
-</head>
-<body>
-  <section class="principles-wrap" data-block-id="ru-trust-04-principles-grid">
-    <h2 class="headline" data-slot="headline">[HEADLINE: наши принципы, <em>без исключений</em>]</h2>
-    <div class="principles-grid">
-      <article class="principle-card pc-dark">
-        <div class="principle-num">/ 01</div>
-        <div class="principle-title" data-slot="p1-title">[Принцип 1]</div>
-        <p class="principle-text" data-slot="p1-text">[Описание принципа — честно и коротко]</p>
-      </article>
-      <article class="principle-card pc-light">
-        <div class="principle-num">/ 02</div>
-        <div class="principle-title" data-slot="p2-title">[Принцип 2]</div>
-        <p class="principle-text" data-slot="p2-text">[Описание принципа 2]</p>
-      </article>
-      <article class="principle-card pc-dark">
-        <div class="principle-num">/ 03</div>
-        <div class="principle-title" data-slot="p3-title">[Принцип 3]</div>
-        <p class="principle-text" data-slot="p3-text">[Описание принципа 3]</p>
-      </article>
-      <article class="principle-card pc-warm">
-        <div class="principle-num">/ 04</div>
-        <div class="principle-title" data-slot="p4-title">[Принцип 4]</div>
-        <p class="principle-text" data-slot="p4-text">[Описание принципа 4]</p>
-      </article>
-      <article class="principle-card pc-light">
-        <div class="principle-num">/ 05</div>
-        <div class="principle-title" data-slot="p5-title">[Принцип 5]</div>
-        <p class="principle-text" data-slot="p5-text">[Описание принципа 5]</p>
-      </article>
-      <article class="principle-card pc-accent">
-        <div class="principle-num">/ 06</div>
-        <div class="principle-title" data-slot="p6-title">[Принцип 6]</div>
-        <p class="principle-text" data-slot="p6-text">[Описание принципа 6]</p>
-      </article>
-      <article class="principle-card pc-dark" style="grid-column: span 2;">
-        <div class="principle-num">Наш подход</div>
-        <div class="principle-title">Каждый проект — как первый.</div>
-      </article>
-    </div>
-  </section>
-</body>
-</html>
+<section class="principles-wrap" data-block-id="ru-trust-04-principles-grid">
+<h2 class="headline">{{slot:headline}}</h2>
+<div class="principles-grid">
+<article class="principle-card pc-dark">
+<div class="principle-num">/ 01</div>
+<div class="principle-title">{{slot:p1-title}}</div>
+<p class="principle-text">{{slot:p1-text}}</p>
+</article>
+<article class="principle-card pc-light">
+<div class="principle-num">/ 02</div>
+<div class="principle-title">{{slot:p2-title}}</div>
+<p class="principle-text">{{slot:p2-text}}</p>
+</article>
+<article class="principle-card pc-dark">
+<div class="principle-num">/ 03</div>
+<div class="principle-title">{{slot:p3-title}}</div>
+<p class="principle-text">{{slot:p3-text}}</p>
+</article>
+<article class="principle-card pc-warm">
+<div class="principle-num">/ 04</div>
+<div class="principle-title">{{slot:p4-title}}</div>
+<p class="principle-text">{{slot:p4-text}}</p>
+</article>
+<article class="principle-card pc-light">
+<div class="principle-num">/ 05</div>
+<div class="principle-title">{{slot:p5-title}}</div>
+<p class="principle-text">{{slot:p5-text}}</p>
+</article>
+<article class="principle-card pc-accent">
+<div class="principle-num">/ 06</div>
+<div class="principle-title">{{slot:p6-title}}</div>
+<p class="principle-text">{{slot:p6-text}}</p>
+</article>
+<article class="principle-card pc-dark" style="grid-column: span 2;">
+<div class="principle-num">Наш подход</div>
+<div class="principle-title">Каждый проект — как первый.</div>
+</article>
+</div>
+</section>

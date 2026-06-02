@@ -1,9 +1,3 @@
-<!DOCTYPE html>
-<!-- Source: github.com/nexu-io/open-design @ main | design-templates/open-design-landing/example.html | License: Apache-2.0 -->
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<title>ru-hero-07-editorial-serif — desktop</title>
 <style>
   :root {
     --color-bg: #efe7d2;
@@ -185,42 +179,36 @@
     text-transform: none;
   }
 </style>
-</head>
-<body>
-  <div class="sec-rule">
-    <span class="roman">I.</span>
-    <span>Hero / Редакционный</span>
-    <span>001</span>
-  </div>
-  <section class="hero" data-block-id="ru-hero-07-editorial-serif">
-    <div class="hero-copy">
-      <span class="kicker" data-slot="kicker">[Ниша / Специализация]</span>
-      <h1 class="headline" data-slot="headline">
-        [Заголовок с <em>курсивным акцентом</em> на ключевом слове]
-      </h1>
-      <p class="subhead" data-slot="subhead">[Подзаголовок: 1–2 предложения о главной ценности для клиента. Конкретно, без воды.]</p>
-      <div class="hero-stats">
-        <div class="stat">
-          <span class="stat-ring accent" data-slot="stat-1-value">[N]</span>
-          <span class="stat-label"><b data-slot="stat-1-label">[Лет опыта]</b></span>
-        </div>
-        <div class="stat">
-          <span class="stat-ring" data-slot="stat-2-value">[N]</span>
-          <span class="stat-label"><b data-slot="stat-2-label">[Проектов]</b></span>
-        </div>
-        <div class="stat">
-          <span class="stat-ring" data-slot="stat-3-value">[N]</span>
-          <span class="stat-label"><b data-slot="stat-3-label">[Клиентов]</b></span>
-        </div>
-      </div>
-      <div class="hero-actions">
-        <a class="btn-primary" data-slot="primary-cta" href="#contact">[Начать работу]</a>
-        <a class="btn-ghost" data-slot="secondary-cta" href="#about">[Узнать подробнее]</a>
-      </div>
-    </div>
-    <div class="hero-art">
-      <div class="art-placeholder" data-slot="hero-image">Фото / Иллюстрация</div>
-    </div>
-  </section>
-</body>
-</html>
+<div class="sec-rule">
+<span class="roman">I.</span>
+<span>Hero / Редакционный</span>
+<span>001</span>
+</div>
+<section class="hero" data-block-id="ru-hero-07-editorial-serif">
+<div class="hero-copy">
+<span class="kicker">{{slot:kicker}}</span>
+<h1 class="headline">{{slot:headline}}</h1>
+<p class="subhead">{{slot:subhead}}</p>
+<div class="hero-stats">
+<div class="stat">
+<span class="stat-ring accent">{{slot:stat-1-value}}</span>
+<span class="stat-label"><b>{{slot:stat-1-label}}</b></span>
+</div>
+<div class="stat">
+<span class="stat-ring">{{slot:stat-2-value}}</span>
+<span class="stat-label"><b>{{slot:stat-2-label}}</b></span>
+</div>
+<div class="stat">
+<span class="stat-ring">{{slot:stat-3-value}}</span>
+<span class="stat-label"><b>{{slot:stat-3-label}}</b></span>
+</div>
+</div>
+<div class="hero-actions">
+<a class="btn-primary" href="#contact">{{slot:primary-cta}}</a>
+<a class="btn-ghost" href="#about">{{slot:secondary-cta}}</a>
+</div>
+</div>
+<div class="hero-art">
+<div class="art-placeholder">{{slot:hero-image}}</div>
+</div>
+</section>

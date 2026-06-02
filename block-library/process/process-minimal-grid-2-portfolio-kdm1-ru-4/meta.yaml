@@ -16,8 +16,28 @@ niches_suitable:
 - ecommerce
 ru_market: true
 slots:
+- name: eyebrow
+  type: text
 - name: heading
   required: true
+  type: text
+- name: subhead
+  type: text
+- name: step-1-icon
+  type: text
+- name: step-1-label
+  type: text
+- name: step-1-title
+  type: text
+- name: step-1-text
+  type: text
+- name: step-2-icon
+  type: text
+- name: step-2-label
+  type: text
+- name: step-2-title
+  type: text
+- name: step-2-text
   type: text
 style_mood: minimal
 type: process

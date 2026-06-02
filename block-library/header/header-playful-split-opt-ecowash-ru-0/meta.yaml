@@ -15,8 +15,43 @@ niches_suitable:
 - b2b-saas
 ru_market: true
 slots:
-- name: heading
-  required: true
+- name: header-aria-label
+  type: text
+- name: brand-aria-label
+  type: text
+- name: brand-link
+  type: text
+- name: brand-logo-alt
+  type: text
+- name: brand-logo
+  type: text
+- name: brand-name
+  type: text
+- name: nav-aria-label
+  type: text
+- name: nav-link-1-url
+  type: text
+- name: nav-link-1-label
+  type: text
+- name: nav-link-2-url
+  type: text
+- name: nav-link-2-label
+  type: text
+- name: nav-link-3-url
+  type: text
+- name: nav-link-3-label
+  type: text
+- name: nav-link-4-url
+  type: text
+- name: nav-link-4-label
+  type: text
+- name: contact-link
+  type: text
+- name: contact-label
+  type: text
+- name: cta-link
+  type: text
+- name: cta-label
   type: text
 style_mood: playful
 type: header

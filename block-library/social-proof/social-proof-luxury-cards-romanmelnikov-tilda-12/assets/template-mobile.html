@@ -143,50 +143,47 @@
   body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
 }
 </style>
-<section class="lp-social-proof-luxury-cards" aria-labelledby="lp-social-proof-luxury-cards-title">
-  <div class="lp-social-proof-luxury-cards__inner">
-    <div class="lp-social-proof-luxury-cards__header">
-      <p class="lp-social-proof-luxury-cards__eyebrow">{{slot:eyebrow}}</p>
-      <h2 class="lp-social-proof-luxury-cards__title" id="lp-social-proof-luxury-cards-title">{{slot:heading}}</h2>
-      <p class="lp-social-proof-luxury-cards__lead">{{slot:subhead}}</p>
-    </div>
-
-    <div class="lp-social-proof-luxury-cards__grid">
-      <article class="lp-social-proof-luxury-cards__card">
-        <div class="lp-social-proof-luxury-cards__mark" aria-hidden="true"></div>
-        <p class="lp-social-proof-luxury-cards__quote">{{slot:testimonial-1-text}}</p>
-        <div class="lp-social-proof-luxury-cards__person">
-          <img class="lp-social-proof-luxury-cards__avatar" src="{{slot:testimonial-1-avatar}}" alt="{{slot:testimonial-1-avatar-alt}}" loading="lazy">
-          <div>
-            <p class="lp-social-proof-luxury-cards__name">{{slot:testimonial-1-name}}</p>
-            <p class="lp-social-proof-luxury-cards__meta">{{slot:testimonial-1-meta}}</p>
-          </div>
-        </div>
-      </article>
-
-      <article class="lp-social-proof-luxury-cards__card">
-        <div class="lp-social-proof-luxury-cards__mark" aria-hidden="true"></div>
-        <p class="lp-social-proof-luxury-cards__quote">{{slot:testimonial-2-text}}</p>
-        <div class="lp-social-proof-luxury-cards__person">
-          <img class="lp-social-proof-luxury-cards__avatar" src="{{slot:testimonial-2-avatar}}" alt="{{slot:testimonial-2-avatar-alt}}" loading="lazy">
-          <div>
-            <p class="lp-social-proof-luxury-cards__name">{{slot:testimonial-2-name}}</p>
-            <p class="lp-social-proof-luxury-cards__meta">{{slot:testimonial-2-meta}}</p>
-          </div>
-        </div>
-      </article>
-
-      <article class="lp-social-proof-luxury-cards__card">
-        <div class="lp-social-proof-luxury-cards__mark" aria-hidden="true"></div>
-        <p class="lp-social-proof-luxury-cards__quote">{{slot:testimonial-3-text}}</p>
-        <div class="lp-social-proof-luxury-cards__person">
-          <img class="lp-social-proof-luxury-cards__avatar" src="{{slot:testimonial-3-avatar}}" alt="{{slot:testimonial-3-avatar-alt}}" loading="lazy">
-          <div>
-            <p class="lp-social-proof-luxury-cards__name">{{slot:testimonial-3-name}}</p>
-            <p class="lp-social-proof-luxury-cards__meta">{{slot:testimonial-3-meta}}</p>
-          </div>
-        </div>
-      </article>
-    </div>
-  </div>
+<section aria-labelledby="lp-social-proof-luxury-cards-title" class="lp-social-proof-luxury-cards">
+<div class="lp-social-proof-luxury-cards__inner">
+<div class="lp-social-proof-luxury-cards__header">
+<p class="lp-social-proof-luxury-cards__eyebrow">{{slot:eyebrow}}</p>
+<h2 class="lp-social-proof-luxury-cards__title" id="lp-social-proof-luxury-cards-title">{{slot:heading}}</h2>
+<p class="lp-social-proof-luxury-cards__lead">{{slot:subhead}}</p>
+</div>
+<div class="lp-social-proof-luxury-cards__grid">
+<article class="lp-social-proof-luxury-cards__card">
+<div aria-hidden="true" class="lp-social-proof-luxury-cards__mark"></div>
+<p class="lp-social-proof-luxury-cards__quote">{{slot:testimonial-1-text}}</p>
+<div class="lp-social-proof-luxury-cards__person">
+<img alt="{{slot:testimonial-1-avatar-alt}}" class="lp-social-proof-luxury-cards__avatar" loading="lazy" src="{{slot:testimonial-1-avatar}}"/>
+<div>
+<p class="lp-social-proof-luxury-cards__name">{{slot:testimonial-1-name}}</p>
+<p class="lp-social-proof-luxury-cards__meta">{{slot:testimonial-1-meta}}</p>
+</div>
+</div>
+</article>
+<article class="lp-social-proof-luxury-cards__card">
+<div aria-hidden="true" class="lp-social-proof-luxury-cards__mark"></div>
+<p class="lp-social-proof-luxury-cards__quote">{{slot:testimonial-2-text}}</p>
+<div class="lp-social-proof-luxury-cards__person">
+<img alt="{{slot:testimonial-2-avatar-alt}}" class="lp-social-proof-luxury-cards__avatar" loading="lazy" src="{{slot:testimonial-2-avatar}}"/>
+<div>
+<p class="lp-social-proof-luxury-cards__name">{{slot:testimonial-2-name}}</p>
+<p class="lp-social-proof-luxury-cards__meta">{{slot:testimonial-2-meta}}</p>
+</div>
+</div>
+</article>
+<article class="lp-social-proof-luxury-cards__card">
+<div aria-hidden="true" class="lp-social-proof-luxury-cards__mark"></div>
+<p class="lp-social-proof-luxury-cards__quote">{{slot:testimonial-3-text}}</p>
+<div class="lp-social-proof-luxury-cards__person">
+<img alt="{{slot:testimonial-3-avatar-alt}}" class="lp-social-proof-luxury-cards__avatar" loading="lazy" src="{{slot:testimonial-3-avatar}}"/>
+<div>
+<p class="lp-social-proof-luxury-cards__name">{{slot:testimonial-3-name}}</p>
+<p class="lp-social-proof-luxury-cards__meta">{{slot:testimonial-3-meta}}</p>
+</div>
+</div>
+</article>
+</div>
+</div>
 </section>

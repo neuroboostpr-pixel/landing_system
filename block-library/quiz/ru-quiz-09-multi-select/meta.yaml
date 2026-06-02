@@ -11,6 +11,10 @@ layout_summary_ru: Список вариантов с чекбоксами — C
   внизу. Прогресс-бар сверху. Для выбора нескольких характеристик сразу.
 ru_market: true
 slots:
+- max_chars: 60
+  name: progress-label
+  required: false
+  type: text
 - max_chars: 120
   name: question-text
   required: true
@@ -42,10 +46,6 @@ slots:
 - max_chars: 30
   name: next-button
   required: true
-  type: text
-- max_chars: 60
-  name: progress-label
-  required: false
   type: text
 source: manual
 source_attribution: tilda.education/how-to-create-marketing-quiz; marquiz.ru/blog

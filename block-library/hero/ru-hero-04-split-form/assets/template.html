@@ -1,8 +1,3 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<title>ru-hero-04-split-form — desktop</title>
 <style>
   :root {
     --color-bg: #fff;
@@ -151,60 +146,44 @@
     margin: 0;
   }
 </style>
-</head>
-<body>
-  <section class="hero" data-block-id="ru-hero-04-split-form">
-
-    <!-- LEFT: value prop -->
-    <div class="hero-text">
-      <h1 class="headline" data-slot="headline">[HEADLINE: ваш главный оффер и выгода]</h1>
-      <ul class="bullets">
-        <li data-slot="bullet-1-text">[BULLET 1: ключевое преимущество — срок / гарантия / экономия]</li>
-        <li data-slot="bullet-2-text">[BULLET 2: ключевое преимущество — лицензия / договор / опыт]</li>
-        <li data-slot="bullet-3-text">[BULLET 3: ключевое преимущество — бесплатная консультация / выезд]</li>
-      </ul>
-      <a class="hero-cta" data-slot="primary-cta" href="#form">[Узнать стоимость]</a>
-    </div>
-
-    <!-- RIGHT: lead-capture form -->
-    <div class="hero-form-wrap">
-      <form class="lead-form" novalidate>
-        <p class="form-title">Получить консультацию</p>
-
-        <div>
-          <label class="field-label" for="hero-phone">Ваш телефон</label>
-          <input
-            class="phone-input"
-            id="hero-phone"
-            type="tel"
-            placeholder="+7 (___) ___-__-__"
-            data-slot="lead-phone-input"
-          >
-        </div>
-
-        <div>
-          <span class="contact-label">Как удобнее связаться?</span>
-          <div class="radio-group">
-            <label class="radio-row">
-              <input type="radio" name="contact-method" value="telegram" checked>
+<section class="hero" data-block-id="ru-hero-04-split-form">
+<!-- LEFT: value prop -->
+<div class="hero-text">
+<h1 class="headline">{{slot:headline}}</h1>
+<ul class="bullets">
+<li>{{slot:bullet-1-text}}</li>
+<li>{{slot:bullet-2-text}}</li>
+<li>{{slot:bullet-3-text}}</li>
+</ul>
+<a class="hero-cta" href="#form">{{slot:primary-cta}}</a>
+</div>
+<!-- RIGHT: lead-capture form -->
+<div class="hero-form-wrap">
+<form class="lead-form" novalidate="">
+<p class="form-title">Получить консультацию</p>
+<div>
+<label class="field-label" for="hero-phone">Ваш телефон</label>
+<input class="phone-input" id="hero-phone" placeholder="+7 (___) ___-__-__" type="tel"/>{{slot:lead-phone-input}}
+</div>
+<div>
+<span class="contact-label">Как удобнее связаться?</span>
+<div class="radio-group">
+<label class="radio-row">
+<input checked="" name="contact-method" type="radio" value="telegram"/>
               Telegram
             </label>
-            <label class="radio-row">
-              <input type="radio" name="contact-method" value="max">
+<label class="radio-row">
+<input name="contact-method" type="radio" value="max"/>
               Max
             </label>
-            <label class="radio-row">
-              <input type="radio" name="contact-method" value="call">
+<label class="radio-row">
+<input name="contact-method" type="radio" value="call"/>
               Позвоните мне
             </label>
-          </div>
-        </div>
-
-        <button type="submit" class="submit-btn" data-slot="lead-submit-cta">[Отправить заявку]</button>
-        <p class="form-disclaimer">Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности</p>
-      </form>
-    </div>
-
-  </section>
-</body>
-</html>
+</div>
+</div>
+<button class="submit-btn" type="submit">{{slot:lead-submit-cta}}</button>
+<p class="form-disclaimer">Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности</p>
+</form>
+</div>
+</section>

@@ -134,31 +134,29 @@
   body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
 }
 </style>
-<section class="lp-hero-cinematic-split" aria-labelledby="lp-hero-cinematic-split-title">
-  <div class="lp-hero-cinematic-split__inner">
-    <div class="lp-hero-cinematic-split__headline">
-      <p class="lp-hero-cinematic-split__eyebrow">{{slot:eyebrow}}</p>
-      <h1 id="lp-hero-cinematic-split-title" class="lp-hero-cinematic-split__title">{{slot:title}}</h1>
-    </div>
-
-    <div class="lp-hero-cinematic-split__content">
-      <p class="lp-hero-cinematic-split__lead">{{slot:subhead}}</p>
-      <div class="lp-hero-cinematic-split__actions">
-        <a class="lp-hero-cinematic-split__button lp-hero-cinematic-split__button--primary" href="{{slot:primary-cta-link}}">
+<section aria-labelledby="lp-hero-cinematic-split-title" class="lp-hero-cinematic-split">
+<div class="lp-hero-cinematic-split__inner">
+<div class="lp-hero-cinematic-split__headline">
+<p class="lp-hero-cinematic-split__eyebrow">{{slot:eyebrow}}</p>
+<h1 class="lp-hero-cinematic-split__title" id="lp-hero-cinematic-split-title">{{slot:title}}</h1>
+</div>
+<div class="lp-hero-cinematic-split__content">
+<p class="lp-hero-cinematic-split__lead">{{slot:subhead}}</p>
+<div class="lp-hero-cinematic-split__actions">
+<a class="lp-hero-cinematic-split__button lp-hero-cinematic-split__button--primary" href="{{slot:primary-cta-link}}">
           {{slot:primary-cta-label}}
         </a>
-        <a class="lp-hero-cinematic-split__button lp-hero-cinematic-split__button--secondary" href="{{slot:secondary-cta-link}}">
+<a class="lp-hero-cinematic-split__button lp-hero-cinematic-split__button--secondary" href="{{slot:secondary-cta-link}}">
           {{slot:secondary-cta-label}}
         </a>
-      </div>
-    </div>
-
-    <figure class="lp-hero-cinematic-split__scene">
-      <picture>
-        <source media="(max-width: 767px)" srcset="{{slot:scene-image-mobile}}">
-        <img src="{{slot:scene-image}}" alt="{{slot:scene-image-alt}}" loading="lazy">
-      </picture>
-      <figcaption class="lp-hero-cinematic-split__caption">{{slot:scene-caption}}</figcaption>
-    </figure>
-  </div>
+</div>
+</div>
+<figure class="lp-hero-cinematic-split__scene">
+<picture>
+<source media="(max-width: 767px)" srcset="{{slot:scene-image-mobile}}"/>
+<img alt="{{slot:scene-image-alt}}" loading="lazy" src="{{slot:scene-image}}"/>
+</picture>
+<figcaption class="lp-hero-cinematic-split__caption">{{slot:scene-caption}}</figcaption>
+</figure>
+</div>
 </section>

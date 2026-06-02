@@ -127,28 +127,26 @@
   }
 }
 </style>
-<header class="lp-header-technical-split" aria-labelledby="lp-header-technical-split-brand">
-  <div class="lp-header-technical-split__inner">
-    <a class="lp-header-technical-split__brand" href="{{slot:brand-link}}" aria-label="{{slot:brand-aria-label}}">
-      <img class="lp-header-technical-split__logo" src="{{slot:brand-logo}}" alt="{{slot:brand-logo-alt}}" loading="lazy">
-      <span class="lp-header-technical-split__brand-text" id="lp-header-technical-split-brand">{{slot:brand-name}}</span>
-    </a>
-
-    <nav class="lp-header-technical-split__nav" aria-label="{{slot:navigation-aria-label}}">
-      <a class="lp-header-technical-split__nav-link" href="{{slot:nav-link-1}}">{{slot:nav-label-1}}</a>
-      <a class="lp-header-technical-split__nav-link" href="{{slot:nav-link-2}}">{{slot:nav-label-2}}</a>
-      <a class="lp-header-technical-split__nav-link" href="{{slot:nav-link-3}}">{{slot:nav-label-3}}</a>
-      <a class="lp-header-technical-split__nav-link" href="{{slot:nav-link-4}}">{{slot:nav-label-4}}</a>
-    </nav>
-
-    <div class="lp-header-technical-split__actions">
-      <a class="lp-header-technical-split__icon-link" href="{{slot:icon-link-1}}" aria-label="{{slot:icon-label-1}}">
-        <span aria-hidden="true">{{slot:icon-1}}</span>
-      </a>
-      <a class="lp-header-technical-split__icon-link" href="{{slot:icon-link-2}}" aria-label="{{slot:icon-label-2}}">
-        <span aria-hidden="true">{{slot:icon-2}}</span>
-      </a>
-      <a class="lp-header-technical-split__cta" href="{{slot:primary-cta-link}}">{{slot:primary-cta-label}}</a>
-    </div>
-  </div>
+<header aria-labelledby="lp-header-technical-split-brand" class="lp-header-technical-split">
+<div class="lp-header-technical-split__inner">
+<a aria-label="{{slot:brand-aria-label}}" class="lp-header-technical-split__brand" href="{{slot:brand-link}}">
+<img alt="{{slot:brand-logo-alt}}" class="lp-header-technical-split__logo" loading="lazy" src="{{slot:brand-logo}}"/>
+<span class="lp-header-technical-split__brand-text" id="lp-header-technical-split-brand">{{slot:brand-name}}</span>
+</a>
+<nav aria-label="{{slot:navigation-aria-label}}" class="lp-header-technical-split__nav">
+<a class="lp-header-technical-split__nav-link" href="{{slot:nav-link-1}}">{{slot:nav-label-1}}</a>
+<a class="lp-header-technical-split__nav-link" href="{{slot:nav-link-2}}">{{slot:nav-label-2}}</a>
+<a class="lp-header-technical-split__nav-link" href="{{slot:nav-link-3}}">{{slot:nav-label-3}}</a>
+<a class="lp-header-technical-split__nav-link" href="{{slot:nav-link-4}}">{{slot:nav-label-4}}</a>
+</nav>
+<div class="lp-header-technical-split__actions">
+<a aria-label="{{slot:icon-label-1}}" class="lp-header-technical-split__icon-link" href="{{slot:icon-link-1}}">
+<span aria-hidden="true">{{slot:icon-1}}</span>
+</a>
+<a aria-label="{{slot:icon-label-2}}" class="lp-header-technical-split__icon-link" href="{{slot:icon-link-2}}">
+<span aria-hidden="true">{{slot:icon-2}}</span>
+</a>
+<a class="lp-header-technical-split__cta" href="{{slot:primary-cta-link}}">{{slot:primary-cta-label}}</a>
+</div>
+</div>
 </header>

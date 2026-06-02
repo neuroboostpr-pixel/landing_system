@@ -1,9 +1,3 @@
-<!DOCTYPE html>
-<!-- Source: /tmp/open-design/skills/faq-page/example.html (Apache-2.0, adapted for RU block-library schema) -->
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<title>ru-faq-03-searchable — desktop</title>
 <style>
   :root {
     --color-bg: #fafafa;
@@ -41,53 +35,51 @@
   .footer-cta-block p { color: #666; margin-bottom: 18px; }
   .cta-btn { display: inline-block; padding: 12px 30px; background: var(--color-accent); color: #fff; text-decoration: none; border-radius: 8px; font-weight: 600; }
 </style>
-</head>
-<body>
-  <section class="faq-wrap" data-block-id="ru-faq-03-searchable">
-    <header class="faq-header">
-      <h2 data-slot="headline">[HEADLINE: частые вопросы]</h2>
-      <p data-slot="subhead">[SUBHEAD: найдите ответ на свой вопрос]</p>
-    </header>
-    <div class="search-box">
-      <input type="text" id="faqSearch" placeholder="Поиск по вопросам..." aria-label="Поиск FAQ">
-      <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM18 18l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-    </div>
-    <div class="faq-cats">
-      <button class="faq-cat active" data-cat="all">Все</button>
-      <button class="faq-cat" data-cat="cat1" data-slot="faq-cat-1">[Категория 1]</button>
-      <button class="faq-cat" data-cat="cat2" data-slot="faq-cat-2">[Категория 2]</button>
-      <button class="faq-cat" data-cat="cat3" data-slot="faq-cat-3">[Категория 3]</button>
-    </div>
-    <div class="faq-list" id="faqList">
-      <div class="faq-item" data-cat="cat1">
-        <button class="faq-question">
-          <span data-slot="faq-1-q">[Вопрос 1 — главное возражение]</span>
-          <svg class="faq-icon" viewBox="0 0 20 20" fill="none"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
-        <div class="faq-answer"><div class="faq-answer-content" data-slot="faq-1-a">[Ответ 1 — честный и конкретный]</div></div>
-      </div>
-      <div class="faq-item" data-cat="cat1">
-        <button class="faq-question">
-          <span data-slot="faq-2-q">[Вопрос 2]</span>
-          <svg class="faq-icon" viewBox="0 0 20 20" fill="none"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
-        <div class="faq-answer"><div class="faq-answer-content" data-slot="faq-2-a">[Ответ 2]</div></div>
-      </div>
-      <div class="faq-item" data-cat="cat2">
-        <button class="faq-question">
-          <span data-slot="faq-3-q">[Вопрос 3]</span>
-          <svg class="faq-icon" viewBox="0 0 20 20" fill="none"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
-        <div class="faq-answer"><div class="faq-answer-content" data-slot="faq-3-a">[Ответ 3]</div></div>
-      </div>
-    </div>
-    <div class="footer-cta-block">
-      <h3>Не нашли ответ?</h3>
-      <p>Наш менеджер ответит в течение часа.</p>
-      <a class="cta-btn" data-slot="footer-cta" href="#contact">[CTA: Задать вопрос]</a>
-    </div>
-  </section>
-  <script>
+<section class="faq-wrap" data-block-id="ru-faq-03-searchable">
+<header class="faq-header">
+<h2>{{slot:headline}}</h2>
+<p>{{slot:subhead}}</p>
+</header>
+<div class="search-box">
+<input aria-label="Поиск FAQ" id="faqSearch" placeholder="Поиск по вопросам..." type="text"/>
+<svg fill="none" height="18" viewbox="0 0 20 20" width="18"><path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM18 18l-4-4" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg>
+</div>
+<div class="faq-cats">
+<button class="faq-cat active" data-cat="all">Все</button>
+<button class="faq-cat" data-cat="cat1">{{slot:faq-cat-1}}</button>
+<button class="faq-cat" data-cat="cat2">{{slot:faq-cat-2}}</button>
+<button class="faq-cat" data-cat="cat3">{{slot:faq-cat-3}}</button>
+</div>
+<div class="faq-list" id="faqList">
+<div class="faq-item" data-cat="cat1">
+<button class="faq-question">
+<span>{{slot:faq-1-q}}</span>
+<svg class="faq-icon" fill="none" viewbox="0 0 20 20"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg>
+</button>
+<div class="faq-answer"><div class="faq-answer-content">{{slot:faq-1-a}}</div></div>
+</div>
+<div class="faq-item" data-cat="cat1">
+<button class="faq-question">
+<span>{{slot:faq-2-q}}</span>
+<svg class="faq-icon" fill="none" viewbox="0 0 20 20"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg>
+</button>
+<div class="faq-answer"><div class="faq-answer-content">{{slot:faq-2-a}}</div></div>
+</div>
+<div class="faq-item" data-cat="cat2">
+<button class="faq-question">
+<span>{{slot:faq-3-q}}</span>
+<svg class="faq-icon" fill="none" viewbox="0 0 20 20"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg>
+</button>
+<div class="faq-answer"><div class="faq-answer-content">{{slot:faq-3-a}}</div></div>
+</div>
+</div>
+<div class="footer-cta-block">
+<h3>Не нашли ответ?</h3>
+<p>Наш менеджер ответит в течение часа.</p>
+<a class="cta-btn" href="#contact">{{slot:footer-cta}}</a>
+</div>
+</section>
+<script>
     const items = document.querySelectorAll('.faq-item');
     items.forEach(item => {
       item.querySelector('.faq-question').addEventListener('click', () => {
@@ -113,5 +105,3 @@
       });
     });
   </script>
-</body>
-</html>

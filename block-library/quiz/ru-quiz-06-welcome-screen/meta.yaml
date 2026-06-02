@@ -19,10 +19,6 @@ slots:
   name: subheadline
   required: true
   type: text
-- max_chars: 100
-  name: lead-magnet
-  required: false
-  type: text
 - max_chars: 40
   name: cta-button
   required: true

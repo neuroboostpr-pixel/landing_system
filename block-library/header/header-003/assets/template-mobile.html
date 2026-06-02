@@ -142,26 +142,24 @@
   body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
 }
 </style>
-<header class="lp-header-minimal-split" aria-label="{{slot:header-aria-label}}">
-  <div class="lp-header-minimal-split__inner">
-    <a class="lp-header-minimal-split__brand" href="{{slot:brand-link}}" aria-label="{{slot:brand-aria-label}}">
-      <img class="lp-header-minimal-split__logo" src="{{slot:logo-image}}" alt="{{slot:logo-image-alt}}" loading="lazy">
-      <span class="lp-header-minimal-split__brand-text">{{slot:brand-name}}</span>
-    </a>
-
-    <nav class="lp-header-minimal-split__nav" aria-label="{{slot:navigation-aria-label}}">
-      <a class="lp-header-minimal-split__nav-link" href="{{slot:nav-link-1-url}}">{{slot:nav-link-1-label}}</a>
-      <a class="lp-header-minimal-split__nav-link" href="{{slot:nav-link-2-url}}">{{slot:nav-link-2-label}}</a>
-      <a class="lp-header-minimal-split__nav-link" href="{{slot:nav-link-3-url}}">{{slot:nav-link-3-label}}</a>
-      <a class="lp-header-minimal-split__nav-link" href="{{slot:nav-link-4-url}}">{{slot:nav-link-4-label}}</a>
-    </nav>
-
-    <div class="lp-header-minimal-split__actions">
-      <a class="lp-header-minimal-split__contact" href="{{slot:contact-link}}">
-        <span class="lp-header-minimal-split__contact-label">{{slot:contact-label}}</span>
-        <span class="lp-header-minimal-split__contact-value">{{slot:contact-value}}</span>
-      </a>
-      <a class="lp-header-minimal-split__cta" href="{{slot:cta-link}}">{{slot:cta-label}}</a>
-    </div>
-  </div>
+<header aria-label="{{slot:header-aria-label}}" class="lp-header-minimal-split">
+<div class="lp-header-minimal-split__inner">
+<a aria-label="{{slot:brand-aria-label}}" class="lp-header-minimal-split__brand" href="{{slot:brand-link}}">
+<img alt="{{slot:logo-image-alt}}" class="lp-header-minimal-split__logo" loading="lazy" src="{{slot:logo-image}}"/>
+<span class="lp-header-minimal-split__brand-text">{{slot:brand-name}}</span>
+</a>
+<nav aria-label="{{slot:navigation-aria-label}}" class="lp-header-minimal-split__nav">
+<a class="lp-header-minimal-split__nav-link" href="{{slot:nav-link-1-url}}">{{slot:nav-link-1-label}}</a>
+<a class="lp-header-minimal-split__nav-link" href="{{slot:nav-link-2-url}}">{{slot:nav-link-2-label}}</a>
+<a class="lp-header-minimal-split__nav-link" href="{{slot:nav-link-3-url}}">{{slot:nav-link-3-label}}</a>
+<a class="lp-header-minimal-split__nav-link" href="{{slot:nav-link-4-url}}">{{slot:nav-link-4-label}}</a>
+</nav>
+<div class="lp-header-minimal-split__actions">
+<a class="lp-header-minimal-split__contact" href="{{slot:contact-link}}">
+<span class="lp-header-minimal-split__contact-label">{{slot:contact-label}}</span>
+<span class="lp-header-minimal-split__contact-value">{{slot:contact-value}}</span>
+</a>
+<a class="lp-header-minimal-split__cta" href="{{slot:cta-link}}">{{slot:cta-label}}</a>
+</div>
+</div>
 </header>

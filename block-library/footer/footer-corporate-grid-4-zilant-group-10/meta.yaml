@@ -15,8 +15,73 @@ niches_suitable:
 - education
 ru_market: true
 slots:
-- name: heading
-  required: true
+- name: brand-aria-label
+  type: text
+- name: brand-url
+  type: text
+- name: brand-logo-alt
+  type: text
+- name: brand-logo
+  type: text
+- name: footer-heading
+  type: text
+- name: footer-description
+  type: text
+- name: nav-column-1-label
+  type: text
+- name: nav-column-1-heading
+  type: text
+- name: nav-1-link-1-url
+  type: text
+- name: nav-1-link-1-label
+  type: text
+- name: nav-1-link-2-url
+  type: text
+- name: nav-1-link-2-label
+  type: text
+- name: nav-1-link-3-url
+  type: text
+- name: nav-1-link-3-label
+  type: text
+- name: nav-column-2-label
+  type: text
+- name: nav-column-2-heading
+  type: text
+- name: nav-2-link-1-url
+  type: text
+- name: nav-2-link-1-label
+  type: text
+- name: nav-2-link-2-url
+  type: text
+- name: nav-2-link-2-label
+  type: text
+- name: nav-2-link-3-url
+  type: text
+- name: nav-2-link-3-label
+  type: text
+- name: contacts-heading
+  type: text
+- name: contact-phone-url
+  type: text
+- name: contact-phone-label
+  type: text
+- name: contact-email-url
+  type: text
+- name: contact-email-label
+  type: text
+- name: contact-address
+  type: text
+- name: copyright
+  type: text
+- name: legal-nav-label
+  type: text
+- name: legal-link-1-url
+  type: text
+- name: legal-link-1-label
+  type: text
+- name: legal-link-2-url
+  type: text
+- name: legal-link-2-label
   type: text
 style_mood: corporate
 type: footer

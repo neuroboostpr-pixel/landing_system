@@ -98,29 +98,26 @@
   body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
 }
 </style>
-<section class="lp-trust-luxury-centered" aria-labelledby="lp-trust-luxury-centered-title">
-  <div class="lp-trust-luxury-centered__inner">
-    <p class="lp-trust-luxury-centered__eyebrow">{{slot:eyebrow}}</p>
-
-    <h2 class="lp-trust-luxury-centered__title" id="lp-trust-luxury-centered-title">
+<section aria-labelledby="lp-trust-luxury-centered-title" class="lp-trust-luxury-centered">
+<div class="lp-trust-luxury-centered__inner">
+<p class="lp-trust-luxury-centered__eyebrow">{{slot:eyebrow}}</p>
+<h2 class="lp-trust-luxury-centered__title" id="lp-trust-luxury-centered-title">
       {{slot:heading}}
     </h2>
-
-    <p class="lp-trust-luxury-centered__caption">{{slot:caption}}</p>
-
-    <ul class="lp-trust-luxury-centered__list" aria-label="{{slot:trust-list-label}}">
-      <li class="lp-trust-luxury-centered__item">
-        <span class="lp-trust-luxury-centered__value">{{slot:stat-1-value}}</span>
-        <span class="lp-trust-luxury-centered__label">{{slot:stat-1-label}}</span>
-      </li>
-      <li class="lp-trust-luxury-centered__item">
-        <span class="lp-trust-luxury-centered__value">{{slot:stat-2-value}}</span>
-        <span class="lp-trust-luxury-centered__label">{{slot:stat-2-label}}</span>
-      </li>
-      <li class="lp-trust-luxury-centered__item">
-        <span class="lp-trust-luxury-centered__value">{{slot:stat-3-value}}</span>
-        <span class="lp-trust-luxury-centered__label">{{slot:stat-3-label}}</span>
-      </li>
-    </ul>
-  </div>
+<p class="lp-trust-luxury-centered__caption">{{slot:caption}}</p>
+<ul aria-label="{{slot:trust-list-label}}" class="lp-trust-luxury-centered__list">
+<li class="lp-trust-luxury-centered__item">
+<span class="lp-trust-luxury-centered__value">{{slot:stat-1-value}}</span>
+<span class="lp-trust-luxury-centered__label">{{slot:stat-1-label}}</span>
+</li>
+<li class="lp-trust-luxury-centered__item">
+<span class="lp-trust-luxury-centered__value">{{slot:stat-2-value}}</span>
+<span class="lp-trust-luxury-centered__label">{{slot:stat-2-label}}</span>
+</li>
+<li class="lp-trust-luxury-centered__item">
+<span class="lp-trust-luxury-centered__value">{{slot:stat-3-value}}</span>
+<span class="lp-trust-luxury-centered__label">{{slot:stat-3-label}}</span>
+</li>
+</ul>
+</div>
 </section>

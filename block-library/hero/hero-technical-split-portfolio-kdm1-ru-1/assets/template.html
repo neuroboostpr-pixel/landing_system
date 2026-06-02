@@ -156,33 +156,32 @@
   }
 }
 </style>
-<section class="lp-hero-technical-split" aria-labelledby="lp-hero-technical-split-title">
-  <div class="lp-hero-technical-split__inner">
-    <div class="lp-hero-technical-split__content">
-      <p class="lp-hero-technical-split__eyebrow">{{slot:eyebrow}}</p>
-      <h1 class="lp-hero-technical-split__title" id="lp-hero-technical-split-title">{{slot:heading}}</h1>
-      <p class="lp-hero-technical-split__subhead">{{slot:subhead}}</p>
-      <div class="lp-hero-technical-split__actions">
-        <a class="lp-hero-technical-split__button lp-hero-technical-split__button--primary" href="{{slot:primary-cta-url}}">
+<section aria-labelledby="lp-hero-technical-split-title" class="lp-hero-technical-split">
+<div class="lp-hero-technical-split__inner">
+<div class="lp-hero-technical-split__content">
+<p class="lp-hero-technical-split__eyebrow">{{slot:eyebrow}}</p>
+<h1 class="lp-hero-technical-split__title" id="lp-hero-technical-split-title">{{slot:heading}}</h1>
+<p class="lp-hero-technical-split__subhead">{{slot:subhead}}</p>
+<div class="lp-hero-technical-split__actions">
+<a class="lp-hero-technical-split__button lp-hero-technical-split__button--primary" href="{{slot:primary-cta-url}}">
           {{slot:primary-cta-label}}
         </a>
-        <a class="lp-hero-technical-split__button lp-hero-technical-split__button--secondary" href="{{slot:secondary-cta-url}}">
+<a class="lp-hero-technical-split__button lp-hero-technical-split__button--secondary" href="{{slot:secondary-cta-url}}">
           {{slot:secondary-cta-label}}
         </a>
-      </div>
-      <ul class="lp-hero-technical-split__badges" aria-label="{{slot:badges-label}}">
-        <li>{{slot:badge-1}}</li>
-        <li>{{slot:badge-2}}</li>
-        <li>{{slot:badge-3}}</li>
-      </ul>
-    </div>
-
-    <figure class="lp-hero-technical-split__media">
-      <picture>
-        <source media="(max-width: 767px)" srcset="{{slot:product-image-mobile}}">
-        <img src="{{slot:product-image}}" alt="{{slot:product-image-alt}}" loading="lazy">
-      </picture>
-      <figcaption class="lp-hero-technical-split__caption">{{slot:image-caption}}</figcaption>
-    </figure>
-  </div>
+</div>
+<ul aria-label="{{slot:badges-label}}" class="lp-hero-technical-split__badges">
+<li>{{slot:badge-1}}</li>
+<li>{{slot:badge-2}}</li>
+<li>{{slot:badge-3}}</li>
+</ul>
+</div>
+<figure class="lp-hero-technical-split__media">
+<picture>
+<source media="(max-width: 767px)" srcset="{{slot:product-image-mobile}}"/>
+<img alt="{{slot:product-image-alt}}" loading="lazy" src="{{slot:product-image}}"/>
+</picture>
+<figcaption class="lp-hero-technical-split__caption">{{slot:image-caption}}</figcaption>
+</figure>
+</div>
 </section>

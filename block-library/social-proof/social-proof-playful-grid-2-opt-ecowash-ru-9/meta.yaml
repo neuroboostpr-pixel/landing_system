@@ -15,8 +15,52 @@ niches_suitable:
 - education
 ru_market: true
 slots:
+- name: eyebrow
+  type: text
 - name: heading
   required: true
+  type: text
+- name: subhead
+  type: text
+- name: review-1-rating-label
+  type: text
+- name: review-1-rating
+  type: text
+- name: review-1-text
+  type: text
+- name: review-1-author-name
+  type: text
+- name: review-1-author-meta
+  type: text
+- name: review-2-rating-label
+  type: text
+- name: review-2-rating
+  type: text
+- name: review-2-text
+  type: text
+- name: review-2-author-name
+  type: text
+- name: review-2-author-meta
+  type: text
+- name: review-3-rating-label
+  type: text
+- name: review-3-rating
+  type: text
+- name: review-3-text
+  type: text
+- name: review-3-author-name
+  type: text
+- name: review-3-author-meta
+  type: text
+- name: review-4-rating-label
+  type: text
+- name: review-4-rating
+  type: text
+- name: review-4-text
+  type: text
+- name: review-4-author-name
+  type: text
+- name: review-4-author-meta
   type: text
 style_mood: playful
 type: logos

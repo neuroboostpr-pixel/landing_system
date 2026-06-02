@@ -16,8 +16,50 @@ niches_suitable:
 - medical
 ru_market: true
 slots:
+- name: eyebrow
+  type: text
 - name: heading
   required: true
+  type: text
+- name: subhead
+  type: text
+- name: case-image-1-mobile
+  type: text
+- name: case-image-1-alt
+  type: text
+- name: case-image-1
+  type: text
+- name: case-label-1
+  type: text
+- name: case-title-1
+  type: text
+- name: case-text-1
+  type: text
+- name: case-image-2-mobile
+  type: text
+- name: case-image-2-alt
+  type: text
+- name: case-image-2
+  type: text
+- name: case-label-2
+  type: text
+- name: case-title-2
+  type: text
+- name: case-text-2
+  type: text
+- name: takeaways-label
+  type: text
+- name: takeaway-value-1
+  type: text
+- name: takeaway-text-1
+  type: text
+- name: takeaway-value-2
+  type: text
+- name: takeaway-text-2
+  type: text
+- name: takeaway-value-3
+  type: text
+- name: takeaway-text-3
   type: text
 style_mood: editorial
 type: guarantees

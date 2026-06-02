@@ -15,8 +15,62 @@ niches_suitable:
 - b2b-saas
 ru_market: true
 slots:
+- name: eyebrow
+  type: text
 - name: heading
   required: true
+  type: text
+- name: subhead
+  type: text
+- name: carousel-label
+  type: text
+- name: client-logo-1-alt
+  type: text
+- name: client-logo-1
+  type: text
+- name: client-title-1
+  type: text
+- name: client-description-1
+  type: text
+- name: client-link-1
+  type: text
+- name: client-cta-1
+  type: text
+- name: client-logo-2-alt
+  type: text
+- name: client-logo-2
+  type: text
+- name: client-title-2
+  type: text
+- name: client-description-2
+  type: text
+- name: client-link-2
+  type: text
+- name: client-cta-2
+  type: text
+- name: client-logo-3-alt
+  type: text
+- name: client-logo-3
+  type: text
+- name: client-title-3
+  type: text
+- name: client-description-3
+  type: text
+- name: client-link-3
+  type: text
+- name: client-cta-3
+  type: text
+- name: client-logo-4-alt
+  type: text
+- name: client-logo-4
+  type: text
+- name: client-title-4
+  type: text
+- name: client-description-4
+  type: text
+- name: client-link-4
+  type: text
+- name: client-cta-4
   type: text
 style_mood: corporate
 type: logos

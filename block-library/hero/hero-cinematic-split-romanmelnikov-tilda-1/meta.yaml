@@ -15,8 +15,27 @@ niches_suitable:
 - education
 ru_market: true
 slots:
-- name: heading
-  required: true
+- name: eyebrow
+  type: text
+- name: title
+  type: text
+- name: subhead
+  type: text
+- name: primary-cta-link
+  type: text
+- name: primary-cta-label
+  type: text
+- name: secondary-cta-link
+  type: text
+- name: secondary-cta-label
+  type: text
+- name: scene-image-mobile
+  type: text
+- name: scene-image-alt
+  type: text
+- name: scene-image
+  type: text
+- name: scene-caption
   type: text
 style_mood: cinematic
 type: hero

@@ -1,10 +1,3 @@
-<!DOCTYPE html>
-<!-- Source: /tmp/open-design/skills/digits-fintech-swiss-template/example.html (Apache-2.0, adapted for RU block-library schema) -->
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ru-hero-06-swiss-metrics — mobile</title>
 <style>
   :root {
     --color-bg: #f2f2ed;
@@ -29,29 +22,25 @@
   .metric-value { font-size: 2rem; font-weight: 900; letter-spacing: -.03em; line-height: 1; }
   .metric-label { font-size: 9px; letter-spacing: .12em; text-transform: uppercase; opacity: .75; margin-top: 4px; }
 </style>
-</head>
-<body>
-  <section data-block-id="ru-hero-06-swiss-metrics">
-    <div class="hero-top">Профессиональные решения</div>
-    <div class="hero-main">
-      <h1 class="headline" data-slot="headline">[HEADLINE]</h1>
-      <p class="subhead" data-slot="subhead">[SUBHEAD]</p>
-      <a class="cta-btn" data-slot="primary-cta" href="#contact">[CTA]</a>
-    </div>
-    <div class="metrics-grid">
-      <div class="metric-card">
-        <div class="metric-value" data-slot="metric-1-value">[123]</div>
-        <div class="metric-label" data-slot="metric-1-label">[Метрика 1]</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-value" data-slot="metric-2-value">[456]</div>
-        <div class="metric-label" data-slot="metric-2-label">[Метрика 2]</div>
-      </div>
-      <div class="metric-card accent" style="grid-column: 1/-1;">
-        <div class="metric-value" data-slot="metric-3-value">[789]</div>
-        <div class="metric-label" data-slot="metric-3-label">[Главная метрика]</div>
-      </div>
-    </div>
-  </section>
-</body>
-</html>
+<section data-block-id="ru-hero-06-swiss-metrics">
+<div class="hero-top">Профессиональные решения</div>
+<div class="hero-main">
+<h1 class="headline">{{slot:headline}}</h1>
+<p class="subhead">{{slot:subhead}}</p>
+<a class="cta-btn" href="#contact">{{slot:primary-cta}}</a>
+</div>
+<div class="metrics-grid">
+<div class="metric-card">
+<div class="metric-value">{{slot:metric-1-value}}</div>
+<div class="metric-label">{{slot:metric-1-label}}</div>
+</div>
+<div class="metric-card">
+<div class="metric-value">{{slot:metric-2-value}}</div>
+<div class="metric-label">{{slot:metric-2-label}}</div>
+</div>
+<div class="metric-card accent" style="grid-column: 1/-1;">
+<div class="metric-value">{{slot:metric-3-value}}</div>
+<div class="metric-label">{{slot:metric-3-label}}</div>
+</div>
+</div>
+</section>

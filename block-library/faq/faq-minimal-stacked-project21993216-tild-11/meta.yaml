@@ -15,8 +15,27 @@ niches_suitable:
 - medical
 ru_market: true
 slots:
-- name: heading
-  required: true
+- name: faq-eyebrow
+  type: text
+- name: faq-title
+  type: text
+- name: faq-subhead
+  type: text
+- name: faq-question-1
+  type: text
+- name: faq-answer-1
+  type: text
+- name: faq-question-2
+  type: text
+- name: faq-answer-2
+  type: text
+- name: faq-question-3
+  type: text
+- name: faq-answer-3
+  type: text
+- name: faq-question-4
+  type: text
+- name: faq-answer-4
   type: text
 style_mood: minimal
 type: faq

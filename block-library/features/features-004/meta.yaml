@@ -6,7 +6,39 @@ id: features-004
 layout_pattern: split
 signature: features|split|[content]|bg:false
 slots:
-- name: content
+- name: eyebrow
+  type: text
+- name: heading
+  type: text
+- name: subhead
+  type: text
+- name: features-list-label
+  type: text
+- name: feature-1-number
+  type: text
+- name: feature-1-title
+  type: text
+- name: feature-1-text
+  type: text
+- name: feature-2-number
+  type: text
+- name: feature-2-title
+  type: text
+- name: feature-2-text
+  type: text
+- name: feature-3-number
+  type: text
+- name: feature-3-title
+  type: text
+- name: feature-3-text
+  type: text
+- name: expert-image-alt
+  type: text
+- name: expert-image
+  type: text
+- name: expert-name
+  type: text
+- name: expert-role
   type: text
 source: cleaned
 type: features

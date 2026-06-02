@@ -19,8 +19,9 @@ LIB = REPO_ROOT / "block-library"
 SKIP_DIRS = {"_patterns", "_shapes", "_styles", "references"}
 
 SLOT_RE = re.compile(r"\{\{slot:([^}]+)\}\}")
-# псевдо-плейсхолдер: [любой текст с кириллицей] — запрещён
-BRACKET_RE = re.compile(r"\[[^\]]*[А-Яа-яЁё][^\]]*\]")
+# псевдо-плейсхолдер: [текст с кириллицей] ИЛИ [N…]/[SLOT…] с заглавной —
+# запрещён. Чистые числовые сноски [1],[2] не считаются плейсхолдером.
+BRACKET_RE = re.compile(r"\[[^\]]*(?:[А-Яа-яЁё]|[A-Z][a-z]|N[^\]]|SLOT)[^\]]*\]")
 # item-схема: эти префиксы резолвятся из items[] и не обязаны быть в meta.slots
 ITEM_PREFIX_RE = re.compile(
     r"^(item|feature|step|stage|faq|tier|plan|card|metric|stat|fact|"
@@ -53,7 +54,6 @@ def test_templates_exist():
     assert _TEMPLATES, "не найдено ни одного template.html"
 
 
-@_PENDING_NORMALIZE
 @pytest.mark.parametrize("cat,bid,tpl", _TEMPLATES, ids=_IDS)
 def test_is_fragment_not_document(cat, bid, tpl):
     text = tpl.read_text(encoding="utf-8")
@@ -62,16 +62,16 @@ def test_is_fragment_not_document(cat, bid, tpl):
     assert "<html" not in low, f"{bid}: template содержит <html> (должен быть фрагмент)"
 
 
-@_PENDING_NORMALIZE
 @pytest.mark.parametrize("cat,bid,tpl", _TEMPLATES, ids=_IDS)
 def test_only_slot_placeholders(cat, bid, tpl):
     text = tpl.read_text(encoding="utf-8")
-    assert "data-slot" not in text, f"{bid}: используется legacy data-slot (нужен {{{{slot:}}}})"
+    # именно атрибут data-slot= (не data-slot-type= и подобные)
+    assert not re.search(r"data-slot\s*=", text), \
+        f"{bid}: используется legacy data-slot= (нужен {{{{slot:}}}})"
     m = BRACKET_RE.search(text)
     assert not m, f"{bid}: русский плейсхолдер в скобках '{m.group(0) if m else ''}' (нужен {{{{slot:}}}})"
 
 
-@_PENDING_NORMALIZE
 @pytest.mark.parametrize("cat,bid,tpl", _TEMPLATES, ids=_IDS)
 def test_slots_subset_of_meta(cat, bid, tpl):
     text = tpl.read_text(encoding="utf-8")

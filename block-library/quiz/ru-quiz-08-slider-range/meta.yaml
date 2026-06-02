@@ -11,6 +11,10 @@ layout_summary_ru: Нативный input[type=range] без JS. Текущее 
   под слайдером. Прогресс-бар сверху. Для бюджета, площади, срока.
 ru_market: true
 slots:
+- max_chars: 60
+  name: progress-label
+  required: false
+  type: text
 - max_chars: 120
   name: question-text
   required: true
@@ -29,10 +33,6 @@ slots:
   type: text
 - max_chars: 100
   name: question-comment
-  required: false
-  type: text
-- max_chars: 60
-  name: progress-label
   required: false
   type: text
 source: manual

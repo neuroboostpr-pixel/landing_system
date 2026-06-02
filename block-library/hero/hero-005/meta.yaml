@@ -6,7 +6,43 @@ id: hero-005
 layout_pattern: minimal
 signature: hero|minimal|[content]|bg:false
 slots:
-- name: content
+- name: eyebrow
+  type: text
+- name: heading
+  type: text
+- name: subhead
+  type: text
+- name: cta-group-label
+  type: text
+- name: primary-cta-link
+  type: text
+- name: primary-cta-label
+  type: text
+- name: secondary-cta-link
+  type: text
+- name: secondary-cta-label
+  type: text
+- name: trust-list-label
+  type: text
+- name: trust-value-1
+  type: text
+- name: trust-label-1
+  type: text
+- name: trust-value-2
+  type: text
+- name: trust-label-2
+  type: text
+- name: visual-label
+  type: text
+- name: hero-image-alt
+  type: text
+- name: hero-image
+  type: text
+- name: benefits-list-label
+  type: text
+- name: benefit-marker-1
+  type: text
+- name: benefit-marker-2
   type: text
 source: cleaned
 type: hero

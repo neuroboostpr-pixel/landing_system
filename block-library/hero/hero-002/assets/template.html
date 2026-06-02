@@ -146,29 +146,26 @@
   }
 }
 </style>
-<section class="lp-hero-cinematic-centered" aria-labelledby="lp-hero-cinematic-centered-title">
-  <div class="lp-hero-cinematic-centered__inner">
-    <div class="lp-hero-cinematic-centered__badge">{{slot:eyebrow}}</div>
-
-    <div class="lp-hero-cinematic-centered__content">
-      <h1 class="lp-hero-cinematic-centered__title" id="lp-hero-cinematic-centered-title">{{slot:heading}}</h1>
-      <p class="lp-hero-cinematic-centered__subhead">{{slot:subhead}}</p>
-
-      <div class="lp-hero-cinematic-centered__actions">
-        <a class="lp-hero-cinematic-centered__button lp-hero-cinematic-centered__button--primary" href="{{slot:primary-cta-link}}">
+<section aria-labelledby="lp-hero-cinematic-centered-title" class="lp-hero-cinematic-centered">
+<div class="lp-hero-cinematic-centered__inner">
+<div class="lp-hero-cinematic-centered__badge">{{slot:eyebrow}}</div>
+<div class="lp-hero-cinematic-centered__content">
+<h1 class="lp-hero-cinematic-centered__title" id="lp-hero-cinematic-centered-title">{{slot:heading}}</h1>
+<p class="lp-hero-cinematic-centered__subhead">{{slot:subhead}}</p>
+<div class="lp-hero-cinematic-centered__actions">
+<a class="lp-hero-cinematic-centered__button lp-hero-cinematic-centered__button--primary" href="{{slot:primary-cta-link}}">
           {{slot:primary-cta-label}}
         </a>
-        <a class="lp-hero-cinematic-centered__button lp-hero-cinematic-centered__button--secondary" href="{{slot:secondary-cta-link}}">
+<a class="lp-hero-cinematic-centered__button lp-hero-cinematic-centered__button--secondary" href="{{slot:secondary-cta-link}}">
           {{slot:secondary-cta-label}}
         </a>
-      </div>
-    </div>
-
-    <div class="lp-hero-cinematic-centered__media" aria-label="{{slot:media-label}}">
-      <picture class="lp-hero-cinematic-centered__picture">
-        <source media="(max-width: 767px)" srcset="{{slot:hero-image-mobile}}">
-        <img src="{{slot:hero-image}}" alt="{{slot:hero-image-alt}}" loading="lazy">
-      </picture>
-    </div>
-  </div>
+</div>
+</div>
+<div aria-label="{{slot:media-label}}" class="lp-hero-cinematic-centered__media">
+<picture class="lp-hero-cinematic-centered__picture">
+<source media="(max-width: 767px)" srcset="{{slot:hero-image-mobile}}"/>
+<img alt="{{slot:hero-image-alt}}" loading="lazy" src="{{slot:hero-image}}"/>
+</picture>
+</div>
+</div>
 </section>

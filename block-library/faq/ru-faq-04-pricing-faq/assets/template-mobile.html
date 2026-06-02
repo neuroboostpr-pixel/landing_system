@@ -1,6 +1,3 @@
-<!DOCTYPE html>
-<!-- Source: github.com/nexu-io/open-design @ main | design-templates/pricing-page/example.html | License: Apache-2.0 -->
-<html lang="ru"><head><meta charset="UTF-8"><title>ru-faq-04-pricing-faq — mobile</title>
 <style>
   :root { --color-bg:#ffffff; --color-fg:#111110; --color-border:#e5e7eb; --color-muted:#6b7280; --font-body:system-ui,sans-serif; }
   * { box-sizing:border-box; margin:0; padding:0; }
@@ -11,15 +8,13 @@
   .faq-item:last-child { border-bottom:1px solid var(--color-border); }
   .faq-q { font-size:15px; font-weight:600; margin-bottom:8px; }
   .faq-a { font-size:14px; line-height:1.65; color:var(--color-muted); }
-</style></head>
-<body>
-  <section data-block-id="ru-faq-04-pricing-faq">
-    <div class="faq-label" data-slot="section-label">[Вопросы и ответы]</div>
-    <h2 data-slot="headline">[Часто задаваемые вопросы]</h2>
-    <div class="faq-item"><div class="faq-q" data-slot="q-1">[Вопрос 1]</div><div class="faq-a" data-slot="a-1">[Ответ 1]</div></div>
-    <div class="faq-item"><div class="faq-q" data-slot="q-2">[Вопрос 2]</div><div class="faq-a" data-slot="a-2">[Ответ 2]</div></div>
-    <div class="faq-item"><div class="faq-q" data-slot="q-3">[Вопрос 3]</div><div class="faq-a" data-slot="a-3">[Ответ 3]</div></div>
-    <div class="faq-item"><div class="faq-q" data-slot="q-4">[Вопрос 4]</div><div class="faq-a" data-slot="a-4">[Ответ 4]</div></div>
-    <div class="faq-item"><div class="faq-q" data-slot="q-5">[Вопрос 5]</div><div class="faq-a" data-slot="a-5">[Ответ 5]</div></div>
-  </section>
-</body></html>
+</style>
+<section data-block-id="ru-faq-04-pricing-faq">
+<div class="faq-label">{{slot:section-label}}</div>
+<h2>{{slot:headline}}</h2>
+<div class="faq-item"><div class="faq-q">{{slot:q-1}}</div><div class="faq-a">{{slot:a-1}}</div></div>
+<div class="faq-item"><div class="faq-q">{{slot:q-2}}</div><div class="faq-a">{{slot:a-2}}</div></div>
+<div class="faq-item"><div class="faq-q">{{slot:q-3}}</div><div class="faq-a">{{slot:a-3}}</div></div>
+<div class="faq-item"><div class="faq-q">{{slot:q-4}}</div><div class="faq-a">{{slot:a-4}}</div></div>
+<div class="faq-item"><div class="faq-q">{{slot:q-5}}</div><div class="faq-a">{{slot:a-5}}</div></div>
+</section>

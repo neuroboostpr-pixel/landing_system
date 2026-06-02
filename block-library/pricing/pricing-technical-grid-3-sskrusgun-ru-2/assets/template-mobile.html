@@ -206,107 +206,104 @@
   body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
 }
 </style>
-<section class="lp-pricing-technical-grid-3" aria-labelledby="lp-pricing-technical-grid-3-title">
-  <div class="lp-pricing-technical-grid-3__inner">
-    <div class="lp-pricing-technical-grid-3__header">
-      <span class="lp-pricing-technical-grid-3__eyebrow">{{slot:pricing-eyebrow}}</span>
-      <h2 class="lp-pricing-technical-grid-3__title" id="lp-pricing-technical-grid-3-title">{{slot:pricing-title}}</h2>
-      <p class="lp-pricing-technical-grid-3__subtitle">{{slot:pricing-subtitle}}</p>
-    </div>
-
-    <div class="lp-pricing-technical-grid-3__grid">
-      <article class="lp-pricing-technical-grid-3__card">
-        <figure class="lp-pricing-technical-grid-3__media">
-          <img src="{{slot:plan-1-image}}" alt="{{slot:plan-1-image-alt}}" loading="lazy">
-        </figure>
-        <div class="lp-pricing-technical-grid-3__body">
-          <div class="lp-pricing-technical-grid-3__card-head">
-            <span class="lp-pricing-technical-grid-3__badge">{{slot:plan-1-badge}}</span>
-            <h3 class="lp-pricing-technical-grid-3__plan">{{slot:plan-1-title}}</h3>
-          </div>
-          <p class="lp-pricing-technical-grid-3__text">{{slot:plan-1-description}}</p>
-          <dl class="lp-pricing-technical-grid-3__params">
-            <div>
-              <dt>{{slot:plan-1-param-1-label}}</dt>
-              <dd>{{slot:plan-1-param-1-value}}</dd>
-            </div>
-            <div>
-              <dt>{{slot:plan-1-param-2-label}}</dt>
-              <dd>{{slot:plan-1-param-2-value}}</dd>
-            </div>
-            <div>
-              <dt>{{slot:plan-1-param-3-label}}</dt>
-              <dd>{{slot:plan-1-param-3-value}}</dd>
-            </div>
-          </dl>
-          <div class="lp-pricing-technical-grid-3__footer">
-            <p class="lp-pricing-technical-grid-3__price">{{slot:plan-1-price}}</p>
-            <a class="lp-pricing-technical-grid-3__button" href="{{slot:plan-1-cta-url}}">{{slot:plan-1-cta-label}}</a>
-          </div>
-        </div>
-      </article>
-
-      <article class="lp-pricing-technical-grid-3__card lp-pricing-technical-grid-3__card--featured">
-        <figure class="lp-pricing-technical-grid-3__media">
-          <img src="{{slot:plan-2-image}}" alt="{{slot:plan-2-image-alt}}" loading="lazy">
-        </figure>
-        <div class="lp-pricing-technical-grid-3__body">
-          <div class="lp-pricing-technical-grid-3__card-head">
-            <span class="lp-pricing-technical-grid-3__badge">{{slot:plan-2-badge}}</span>
-            <h3 class="lp-pricing-technical-grid-3__plan">{{slot:plan-2-title}}</h3>
-          </div>
-          <p class="lp-pricing-technical-grid-3__text">{{slot:plan-2-description}}</p>
-          <dl class="lp-pricing-technical-grid-3__params">
-            <div>
-              <dt>{{slot:plan-2-param-1-label}}</dt>
-              <dd>{{slot:plan-2-param-1-value}}</dd>
-            </div>
-            <div>
-              <dt>{{slot:plan-2-param-2-label}}</dt>
-              <dd>{{slot:plan-2-param-2-value}}</dd>
-            </div>
-            <div>
-              <dt>{{slot:plan-2-param-3-label}}</dt>
-              <dd>{{slot:plan-2-param-3-value}}</dd>
-            </div>
-          </dl>
-          <div class="lp-pricing-technical-grid-3__footer">
-            <p class="lp-pricing-technical-grid-3__price">{{slot:plan-2-price}}</p>
-            <a class="lp-pricing-technical-grid-3__button" href="{{slot:plan-2-cta-url}}">{{slot:plan-2-cta-label}}</a>
-          </div>
-        </div>
-      </article>
-
-      <article class="lp-pricing-technical-grid-3__card">
-        <figure class="lp-pricing-technical-grid-3__media">
-          <img src="{{slot:plan-3-image}}" alt="{{slot:plan-3-image-alt}}" loading="lazy">
-        </figure>
-        <div class="lp-pricing-technical-grid-3__body">
-          <div class="lp-pricing-technical-grid-3__card-head">
-            <span class="lp-pricing-technical-grid-3__badge">{{slot:plan-3-badge}}</span>
-            <h3 class="lp-pricing-technical-grid-3__plan">{{slot:plan-3-title}}</h3>
-          </div>
-          <p class="lp-pricing-technical-grid-3__text">{{slot:plan-3-description}}</p>
-          <dl class="lp-pricing-technical-grid-3__params">
-            <div>
-              <dt>{{slot:plan-3-param-1-label}}</dt>
-              <dd>{{slot:plan-3-param-1-value}}</dd>
-            </div>
-            <div>
-              <dt>{{slot:plan-3-param-2-label}}</dt>
-              <dd>{{slot:plan-3-param-2-value}}</dd>
-            </div>
-            <div>
-              <dt>{{slot:plan-3-param-3-label}}</dt>
-              <dd>{{slot:plan-3-param-3-value}}</dd>
-            </div>
-          </dl>
-          <div class="lp-pricing-technical-grid-3__footer">
-            <p class="lp-pricing-technical-grid-3__price">{{slot:plan-3-price}}</p>
-            <a class="lp-pricing-technical-grid-3__button" href="{{slot:plan-3-cta-url}}">{{slot:plan-3-cta-label}}</a>
-          </div>
-        </div>
-      </article>
-    </div>
-  </div>
+<section aria-labelledby="lp-pricing-technical-grid-3-title" class="lp-pricing-technical-grid-3">
+<div class="lp-pricing-technical-grid-3__inner">
+<div class="lp-pricing-technical-grid-3__header">
+<span class="lp-pricing-technical-grid-3__eyebrow">{{slot:pricing-eyebrow}}</span>
+<h2 class="lp-pricing-technical-grid-3__title" id="lp-pricing-technical-grid-3-title">{{slot:pricing-title}}</h2>
+<p class="lp-pricing-technical-grid-3__subtitle">{{slot:pricing-subtitle}}</p>
+</div>
+<div class="lp-pricing-technical-grid-3__grid">
+<article class="lp-pricing-technical-grid-3__card">
+<figure class="lp-pricing-technical-grid-3__media">
+<img alt="{{slot:plan-1-image-alt}}" loading="lazy" src="{{slot:plan-1-image}}"/>
+</figure>
+<div class="lp-pricing-technical-grid-3__body">
+<div class="lp-pricing-technical-grid-3__card-head">
+<span class="lp-pricing-technical-grid-3__badge">{{slot:plan-1-badge}}</span>
+<h3 class="lp-pricing-technical-grid-3__plan">{{slot:plan-1-title}}</h3>
+</div>
+<p class="lp-pricing-technical-grid-3__text">{{slot:plan-1-description}}</p>
+<dl class="lp-pricing-technical-grid-3__params">
+<div>
+<dt>{{slot:plan-1-param-1-label}}</dt>
+<dd>{{slot:plan-1-param-1-value}}</dd>
+</div>
+<div>
+<dt>{{slot:plan-1-param-2-label}}</dt>
+<dd>{{slot:plan-1-param-2-value}}</dd>
+</div>
+<div>
+<dt>{{slot:plan-1-param-3-label}}</dt>
+<dd>{{slot:plan-1-param-3-value}}</dd>
+</div>
+</dl>
+<div class="lp-pricing-technical-grid-3__footer">
+<p class="lp-pricing-technical-grid-3__price">{{slot:plan-1-price}}</p>
+<a class="lp-pricing-technical-grid-3__button" href="{{slot:plan-1-cta-url}}">{{slot:plan-1-cta-label}}</a>
+</div>
+</div>
+</article>
+<article class="lp-pricing-technical-grid-3__card lp-pricing-technical-grid-3__card--featured">
+<figure class="lp-pricing-technical-grid-3__media">
+<img alt="{{slot:plan-2-image-alt}}" loading="lazy" src="{{slot:plan-2-image}}"/>
+</figure>
+<div class="lp-pricing-technical-grid-3__body">
+<div class="lp-pricing-technical-grid-3__card-head">
+<span class="lp-pricing-technical-grid-3__badge">{{slot:plan-2-badge}}</span>
+<h3 class="lp-pricing-technical-grid-3__plan">{{slot:plan-2-title}}</h3>
+</div>
+<p class="lp-pricing-technical-grid-3__text">{{slot:plan-2-description}}</p>
+<dl class="lp-pricing-technical-grid-3__params">
+<div>
+<dt>{{slot:plan-2-param-1-label}}</dt>
+<dd>{{slot:plan-2-param-1-value}}</dd>
+</div>
+<div>
+<dt>{{slot:plan-2-param-2-label}}</dt>
+<dd>{{slot:plan-2-param-2-value}}</dd>
+</div>
+<div>
+<dt>{{slot:plan-2-param-3-label}}</dt>
+<dd>{{slot:plan-2-param-3-value}}</dd>
+</div>
+</dl>
+<div class="lp-pricing-technical-grid-3__footer">
+<p class="lp-pricing-technical-grid-3__price">{{slot:plan-2-price}}</p>
+<a class="lp-pricing-technical-grid-3__button" href="{{slot:plan-2-cta-url}}">{{slot:plan-2-cta-label}}</a>
+</div>
+</div>
+</article>
+<article class="lp-pricing-technical-grid-3__card">
+<figure class="lp-pricing-technical-grid-3__media">
+<img alt="{{slot:plan-3-image-alt}}" loading="lazy" src="{{slot:plan-3-image}}"/>
+</figure>
+<div class="lp-pricing-technical-grid-3__body">
+<div class="lp-pricing-technical-grid-3__card-head">
+<span class="lp-pricing-technical-grid-3__badge">{{slot:plan-3-badge}}</span>
+<h3 class="lp-pricing-technical-grid-3__plan">{{slot:plan-3-title}}</h3>
+</div>
+<p class="lp-pricing-technical-grid-3__text">{{slot:plan-3-description}}</p>
+<dl class="lp-pricing-technical-grid-3__params">
+<div>
+<dt>{{slot:plan-3-param-1-label}}</dt>
+<dd>{{slot:plan-3-param-1-value}}</dd>
+</div>
+<div>
+<dt>{{slot:plan-3-param-2-label}}</dt>
+<dd>{{slot:plan-3-param-2-value}}</dd>
+</div>
+<div>
+<dt>{{slot:plan-3-param-3-label}}</dt>
+<dd>{{slot:plan-3-param-3-value}}</dd>
+</div>
+</dl>
+<div class="lp-pricing-technical-grid-3__footer">
+<p class="lp-pricing-technical-grid-3__price">{{slot:plan-3-price}}</p>
+<a class="lp-pricing-technical-grid-3__button" href="{{slot:plan-3-cta-url}}">{{slot:plan-3-cta-label}}</a>
+</div>
+</div>
+</article>
+</div>
+</div>
 </section>

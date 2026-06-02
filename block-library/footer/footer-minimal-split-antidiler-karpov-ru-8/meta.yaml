@@ -15,8 +15,27 @@ niches_suitable:
 - b2b-saas
 ru_market: true
 slots:
-- name: heading
-  required: true
+- name: brand-label
+  type: text
+- name: brand-url
+  type: text
+- name: brand-name
+  type: text
+- name: company-meta
+  type: text
+- name: footer-nav-label
+  type: text
+- name: legal-link-1-url
+  type: text
+- name: legal-link-1-label
+  type: text
+- name: legal-link-2-url
+  type: text
+- name: legal-link-2-label
+  type: text
+- name: legal-link-3-url
+  type: text
+- name: legal-link-3-label
   type: text
 style_mood: minimal
 type: footer

@@ -201,55 +201,52 @@
   body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
 }
 </style>
-<section class="lp-contacts-corporate-grid-2" aria-labelledby="lp-contacts-corporate-grid-2-title">
-  <div class="lp-contacts-corporate-grid-2__decor lp-contacts-corporate-grid-2__decor--one" aria-hidden="true"></div>
-  <div class="lp-contacts-corporate-grid-2__decor lp-contacts-corporate-grid-2__decor--two" aria-hidden="true"></div>
-
-  <div class="lp-contacts-corporate-grid-2__inner">
-    <div class="lp-contacts-corporate-grid-2__header">
-      <p class="lp-contacts-corporate-grid-2__eyebrow">{{slot:contacts-eyebrow}}</p>
-      <h2 class="lp-contacts-corporate-grid-2__title" id="lp-contacts-corporate-grid-2-title">{{slot:contacts-heading}}</h2>
-      <p class="lp-contacts-corporate-grid-2__subhead">{{slot:contacts-subhead}}</p>
-    </div>
-
-    <div class="lp-contacts-corporate-grid-2__grid">
-      <article class="lp-contacts-corporate-grid-2__card">
-        <div class="lp-contacts-corporate-grid-2__card-media">
-          <img src="{{slot:contact-card-one-image}}" alt="{{slot:contact-card-one-image-alt}}" loading="lazy">
-        </div>
-        <div class="lp-contacts-corporate-grid-2__card-body">
-          <p class="lp-contacts-corporate-grid-2__card-label">{{slot:contact-card-one-label}}</p>
-          <h3 class="lp-contacts-corporate-grid-2__card-title">{{slot:contact-card-one-title}}</h3>
-          <address class="lp-contacts-corporate-grid-2__address">{{slot:contact-card-one-address}}</address>
-          <ul class="lp-contacts-corporate-grid-2__list" aria-label="{{slot:contact-card-one-list-label}}">
-            <li>{{slot:contact-card-one-phone}}</li>
-            <li>{{slot:contact-card-one-email}}</li>
-            <li>{{slot:contact-card-one-hours}}</li>
-          </ul>
-          <a class="lp-contacts-corporate-grid-2__button" href="{{slot:contact-card-one-link}}">
+<section aria-labelledby="lp-contacts-corporate-grid-2-title" class="lp-contacts-corporate-grid-2">
+<div aria-hidden="true" class="lp-contacts-corporate-grid-2__decor lp-contacts-corporate-grid-2__decor--one"></div>
+<div aria-hidden="true" class="lp-contacts-corporate-grid-2__decor lp-contacts-corporate-grid-2__decor--two"></div>
+<div class="lp-contacts-corporate-grid-2__inner">
+<div class="lp-contacts-corporate-grid-2__header">
+<p class="lp-contacts-corporate-grid-2__eyebrow">{{slot:contacts-eyebrow}}</p>
+<h2 class="lp-contacts-corporate-grid-2__title" id="lp-contacts-corporate-grid-2-title">{{slot:contacts-heading}}</h2>
+<p class="lp-contacts-corporate-grid-2__subhead">{{slot:contacts-subhead}}</p>
+</div>
+<div class="lp-contacts-corporate-grid-2__grid">
+<article class="lp-contacts-corporate-grid-2__card">
+<div class="lp-contacts-corporate-grid-2__card-media">
+<img alt="{{slot:contact-card-one-image-alt}}" loading="lazy" src="{{slot:contact-card-one-image}}"/>
+</div>
+<div class="lp-contacts-corporate-grid-2__card-body">
+<p class="lp-contacts-corporate-grid-2__card-label">{{slot:contact-card-one-label}}</p>
+<h3 class="lp-contacts-corporate-grid-2__card-title">{{slot:contact-card-one-title}}</h3>
+<address class="lp-contacts-corporate-grid-2__address">{{slot:contact-card-one-address}}</address>
+<ul aria-label="{{slot:contact-card-one-list-label}}" class="lp-contacts-corporate-grid-2__list">
+<li>{{slot:contact-card-one-phone}}</li>
+<li>{{slot:contact-card-one-email}}</li>
+<li>{{slot:contact-card-one-hours}}</li>
+</ul>
+<a class="lp-contacts-corporate-grid-2__button" href="{{slot:contact-card-one-link}}">
             {{slot:contact-card-one-cta}}
           </a>
-        </div>
-      </article>
-
-      <article class="lp-contacts-corporate-grid-2__card">
-        <div class="lp-contacts-corporate-grid-2__card-media">
-          <img src="{{slot:contact-card-two-image}}" alt="{{slot:contact-card-two-image-alt}}" loading="lazy">
-        </div>
-        <div class="lp-contacts-corporate-grid-2__card-body">
-          <p class="lp-contacts-corporate-grid-2__card-label">{{slot:contact-card-two-label}}</p>
-          <h3 class="lp-contacts-corporate-grid-2__card-title">{{slot:contact-card-two-title}}</h3>
-          <address class="lp-contacts-corporate-grid-2__address">{{slot:contact-card-two-address}}</address>
-          <ul class="lp-contacts-corporate-grid-2__list" aria-label="{{slot:contact-card-two-list-label}}">
-            <li>{{slot:contact-card-two-phone}}</li>
-            <li>{{slot:contact-card-two-email}}</li>
-            <li>{{slot:contact-card-two-hours}}</li>
-          </ul>
-          <a class="lp-contacts-corporate-grid-2__button" href="{{slot:contact-card-two-link}}">
+</div>
+</article>
+<article class="lp-contacts-corporate-grid-2__card">
+<div class="lp-contacts-corporate-grid-2__card-media">
+<img alt="{{slot:contact-card-two-image-alt}}" loading="lazy" src="{{slot:contact-card-two-image}}"/>
+</div>
+<div class="lp-contacts-corporate-grid-2__card-body">
+<p class="lp-contacts-corporate-grid-2__card-label">{{slot:contact-card-two-label}}</p>
+<h3 class="lp-contacts-corporate-grid-2__card-title">{{slot:contact-card-two-title}}</h3>
+<address class="lp-contacts-corporate-grid-2__address">{{slot:contact-card-two-address}}</address>
+<ul aria-label="{{slot:contact-card-two-list-label}}" class="lp-contacts-corporate-grid-2__list">
+<li>{{slot:contact-card-two-phone}}</li>
+<li>{{slot:contact-card-two-email}}</li>
+<li>{{slot:contact-card-two-hours}}</li>
+</ul>
+<a class="lp-contacts-corporate-grid-2__button" href="{{slot:contact-card-two-link}}">
             {{slot:contact-card-two-cta}}
           </a>
-        </div>
-      </article>
-    </div>
-  </div>
+</div>
+</article>
+</div>
+</div>
 </section>

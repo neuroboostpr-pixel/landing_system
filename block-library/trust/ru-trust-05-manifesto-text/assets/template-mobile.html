@@ -1,6 +1,3 @@
-<!DOCTYPE html>
-<!-- Source: github.com/nexu-io/open-design @ main | design-templates/kami-landing/example.html | License: Apache-2.0 -->
-<html lang="ru"><head><meta charset="UTF-8"><title>ru-trust-05-manifesto-text — mobile</title>
 <style>
   :root { --color-bg:#f5f4ed; --color-fg:#141413; --color-accent:#1B365D; --color-border:#e8e6dc; --font-display:'Source Serif 4',Charter,Georgia,serif; --font-body:'Source Sans 3',system-ui,sans-serif; }
   * { box-sizing:border-box; margin:0; padding:0; }
@@ -11,14 +8,12 @@
   .sig { margin-top:18px; display:flex; align-items:center; gap:12px; }
   .sig-line { width:30px; height:1px; background:var(--color-border); }
   .sig-text { font-family:var(--font-body); font-size:11px; letter-spacing:0.8px; text-transform:uppercase; color:#6b6a64; }
-</style></head>
-<body>
-  <section data-block-id="ru-trust-05-manifesto-text" style="border-top:1px solid var(--color-border);border-bottom:1px solid var(--color-border);">
-    <div class="section-label" data-slot="section-label">[Философия]</div>
-    <p class="manifesto-body" data-slot="manifesto-text">[Ключевое утверждение с <strong>выделением важного</strong>]</p>
-    <div class="sig">
-      <div class="sig-line"></div>
-      <span class="sig-text" data-slot="sig-text">[Компания · Год]</span>
-    </div>
-  </section>
-</body></html>
+</style>
+<section data-block-id="ru-trust-05-manifesto-text" style="border-top:1px solid var(--color-border);border-bottom:1px solid var(--color-border);">
+<div class="section-label">{{slot:section-label}}</div>
+<p class="manifesto-body">{{slot:manifesto-body}}</p>
+<div class="sig">
+<div class="sig-line"></div>
+<span class="sig-text">{{slot:sig-text}}</span>
+</div>
+</section>

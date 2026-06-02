@@ -1,8 +1,3 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<title>ru-quiz-05-thankyou — mobile</title>
 <style>
   :root {
     --color-bg: #fff; --color-fg: #111; --color-accent: #333; --color-border: #ccc;
@@ -16,13 +11,9 @@
   .success-subhead { font-size: 15px; color: #555; margin: 0 0 32px; line-height: 1.5; }
   .cta { display: block; padding: 13px 32px; background: transparent; color: var(--color-fg); border: 2px solid var(--color-border); text-decoration: none; border-radius: 8px; font-weight: 600; }
 </style>
-</head>
-<body>
-  <div class="thankyou" data-block-id="ru-quiz-05-thankyou">
-    <span class="success-icon" data-slot="success-icon">✓</span>
-    <h1 class="success-headline" data-slot="success-headline">[Спасибо!]</h1>
-    <p class="success-subhead" data-slot="success-subhead">[Свяжемся в TG/Max через 5 минут]</p>
-    <a class="cta" data-slot="back-cta" href="/">[На главную]</a>
-  </div>
-</body>
-</html>
+<div class="thankyou" data-block-id="ru-quiz-05-thankyou">
+<span class="success-icon">{{slot:success-icon}}</span>
+<h1 class="success-headline">{{slot:success-headline}}</h1>
+<p class="success-subhead">{{slot:success-subhead}}</p>
+<a class="cta" href="/">{{slot:back-cta}}</a>
+</div>

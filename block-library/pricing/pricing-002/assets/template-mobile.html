@@ -189,49 +189,46 @@
   body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
 }
 </style>
-<section class="lp-pricing-corporate-grid-2" aria-labelledby="pricing-corporate-grid-2-title">
-  <div class="lp-pricing-corporate-grid-2__inner">
-    <div class="lp-pricing-corporate-grid-2__header">
-      <p class="lp-pricing-corporate-grid-2__eyebrow">{{slot:pricing-eyebrow}}</p>
-      <h2 class="lp-pricing-corporate-grid-2__title" id="pricing-corporate-grid-2-title">{{slot:pricing-heading}}</h2>
-      <p class="lp-pricing-corporate-grid-2__subtitle">{{slot:pricing-subhead}}</p>
-    </div>
-
-    <div class="lp-pricing-corporate-grid-2__plans" role="list">
-      <article class="lp-pricing-corporate-grid-2__plan" role="listitem">
-        <div class="lp-pricing-corporate-grid-2__plan-head">
-          <p class="lp-pricing-corporate-grid-2__label">{{slot:plan-1-label}}</p>
-          <h3 class="lp-pricing-corporate-grid-2__plan-title">{{slot:plan-1-title}}</h3>
-          <p class="lp-pricing-corporate-grid-2__price">{{slot:plan-1-price}}</p>
-          <p class="lp-pricing-corporate-grid-2__note">{{slot:plan-1-note}}</p>
-        </div>
-        <ul class="lp-pricing-corporate-grid-2__features">
-          <li>{{slot:plan-1-feature-1}}</li>
-          <li>{{slot:plan-1-feature-2}}</li>
-          <li>{{slot:plan-1-feature-3}}</li>
-        </ul>
-        <a class="lp-pricing-corporate-grid-2__button" href="{{slot:plan-1-cta-link}}">{{slot:plan-1-cta-label}}</a>
-      </article>
-
-      <article class="lp-pricing-corporate-grid-2__plan lp-pricing-corporate-grid-2__plan--accent" role="listitem">
-        <div class="lp-pricing-corporate-grid-2__plan-head">
-          <p class="lp-pricing-corporate-grid-2__label">{{slot:plan-2-label}}</p>
-          <h3 class="lp-pricing-corporate-grid-2__plan-title">{{slot:plan-2-title}}</h3>
-          <p class="lp-pricing-corporate-grid-2__price">{{slot:plan-2-price}}</p>
-          <p class="lp-pricing-corporate-grid-2__note">{{slot:plan-2-note}}</p>
-        </div>
-        <ul class="lp-pricing-corporate-grid-2__features">
-          <li>{{slot:plan-2-feature-1}}</li>
-          <li>{{slot:plan-2-feature-2}}</li>
-          <li>{{slot:plan-2-feature-3}}</li>
-        </ul>
-        <a class="lp-pricing-corporate-grid-2__button lp-pricing-corporate-grid-2__button--accent" href="{{slot:plan-2-cta-link}}">{{slot:plan-2-cta-label}}</a>
-      </article>
-    </div>
-
-    <aside class="lp-pricing-corporate-grid-2__bonus" aria-label="{{slot:bonus-aria-label}}">
-      <span class="lp-pricing-corporate-grid-2__bonus-label">{{slot:bonus-label}}</span>
-      <p class="lp-pricing-corporate-grid-2__bonus-text">{{slot:bonus-text}}</p>
-    </aside>
-  </div>
+<section aria-labelledby="pricing-corporate-grid-2-title" class="lp-pricing-corporate-grid-2">
+<div class="lp-pricing-corporate-grid-2__inner">
+<div class="lp-pricing-corporate-grid-2__header">
+<p class="lp-pricing-corporate-grid-2__eyebrow">{{slot:pricing-eyebrow}}</p>
+<h2 class="lp-pricing-corporate-grid-2__title" id="pricing-corporate-grid-2-title">{{slot:pricing-heading}}</h2>
+<p class="lp-pricing-corporate-grid-2__subtitle">{{slot:pricing-subhead}}</p>
+</div>
+<div class="lp-pricing-corporate-grid-2__plans" role="list">
+<article class="lp-pricing-corporate-grid-2__plan" role="listitem">
+<div class="lp-pricing-corporate-grid-2__plan-head">
+<p class="lp-pricing-corporate-grid-2__label">{{slot:plan-1-label}}</p>
+<h3 class="lp-pricing-corporate-grid-2__plan-title">{{slot:plan-1-title}}</h3>
+<p class="lp-pricing-corporate-grid-2__price">{{slot:plan-1-price}}</p>
+<p class="lp-pricing-corporate-grid-2__note">{{slot:plan-1-note}}</p>
+</div>
+<ul class="lp-pricing-corporate-grid-2__features">
+<li>{{slot:plan-1-feature-1}}</li>
+<li>{{slot:plan-1-feature-2}}</li>
+<li>{{slot:plan-1-feature-3}}</li>
+</ul>
+<a class="lp-pricing-corporate-grid-2__button" href="{{slot:plan-1-cta-link}}">{{slot:plan-1-cta-label}}</a>
+</article>
+<article class="lp-pricing-corporate-grid-2__plan lp-pricing-corporate-grid-2__plan--accent" role="listitem">
+<div class="lp-pricing-corporate-grid-2__plan-head">
+<p class="lp-pricing-corporate-grid-2__label">{{slot:plan-2-label}}</p>
+<h3 class="lp-pricing-corporate-grid-2__plan-title">{{slot:plan-2-title}}</h3>
+<p class="lp-pricing-corporate-grid-2__price">{{slot:plan-2-price}}</p>
+<p class="lp-pricing-corporate-grid-2__note">{{slot:plan-2-note}}</p>
+</div>
+<ul class="lp-pricing-corporate-grid-2__features">
+<li>{{slot:plan-2-feature-1}}</li>
+<li>{{slot:plan-2-feature-2}}</li>
+<li>{{slot:plan-2-feature-3}}</li>
+</ul>
+<a class="lp-pricing-corporate-grid-2__button lp-pricing-corporate-grid-2__button--accent" href="{{slot:plan-2-cta-link}}">{{slot:plan-2-cta-label}}</a>
+</article>
+</div>
+<aside aria-label="{{slot:bonus-aria-label}}" class="lp-pricing-corporate-grid-2__bonus">
+<span class="lp-pricing-corporate-grid-2__bonus-label">{{slot:bonus-label}}</span>
+<p class="lp-pricing-corporate-grid-2__bonus-text">{{slot:bonus-text}}</p>
+</aside>
+</div>
 </section>

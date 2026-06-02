@@ -14,12 +14,16 @@ recommended_styles_ru:
 - Neumorphism
 ru_market: true
 slots:
-- max_chars: 10
-  name: hero-metric
+- max_chars: 60
+  name: headline
   required: true
   type: text
 - max_chars: 160
   name: hero-context
+  required: true
+  type: text
+- max_chars: 10
+  name: hero-metric
   required: true
   type: text
 - max_chars: 40
@@ -36,10 +40,6 @@ slots:
   type: text
 - max_chars: 12
   name: metric-3-value
-  required: true
-  type: text
-- max_chars: 60
-  name: headline
   required: true
   type: text
 source: opendesign

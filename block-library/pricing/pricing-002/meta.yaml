@@ -6,7 +6,53 @@ id: pricing-002
 layout_pattern: grid
 signature: pricing|grid|[content]|bg:false
 slots:
-- name: content
+- name: pricing-eyebrow
+  type: text
+- name: pricing-heading
+  type: text
+- name: pricing-subhead
+  type: text
+- name: plan-1-label
+  type: text
+- name: plan-1-title
+  type: text
+- name: plan-1-price
+  type: text
+- name: plan-1-note
+  type: text
+- name: plan-1-feature-1
+  type: text
+- name: plan-1-feature-2
+  type: text
+- name: plan-1-feature-3
+  type: text
+- name: plan-1-cta-link
+  type: text
+- name: plan-1-cta-label
+  type: text
+- name: plan-2-label
+  type: text
+- name: plan-2-title
+  type: text
+- name: plan-2-price
+  type: text
+- name: plan-2-note
+  type: text
+- name: plan-2-feature-1
+  type: text
+- name: plan-2-feature-2
+  type: text
+- name: plan-2-feature-3
+  type: text
+- name: plan-2-cta-link
+  type: text
+- name: plan-2-cta-label
+  type: text
+- name: bonus-aria-label
+  type: text
+- name: bonus-label
+  type: text
+- name: bonus-text
   type: text
 source: cleaned
 type: pricing

@@ -6,7 +6,21 @@ id: contacts-001
 layout_pattern: brutalist
 signature: contacts|brutalist|[content]|bg:false
 slots:
-- name: content
+- name: contacts-eyebrow
+  type: text
+- name: contacts-title
+  type: text
+- name: contacts-caption
+  type: text
+- name: contacts-action-label
+  type: text
+- name: phone-link
+  type: text
+- name: phone
+  type: text
+- name: secondary-link-url
+  type: text
+- name: secondary-link-label
   type: text
 source: cleaned
 type: contacts

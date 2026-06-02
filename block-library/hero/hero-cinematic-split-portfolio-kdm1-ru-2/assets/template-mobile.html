@@ -211,53 +211,48 @@
   body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
 }
 </style>
-<section class="lp-hero-cinematic-split" aria-labelledby="lp-hero-cinematic-split-title">
-  <div class="lp-hero-cinematic-split__inner">
-    <div class="lp-hero-cinematic-split__content">
-      <p class="lp-hero-cinematic-split__eyebrow">{{slot:eyebrow}}</p>
-      <h1 class="lp-hero-cinematic-split__title" id="lp-hero-cinematic-split-title">{{slot:headline}}</h1>
-      <p class="lp-hero-cinematic-split__text">{{slot:subhead}}</p>
-
-      <div class="lp-hero-cinematic-split__actions" aria-label="{{slot:actions-label}}">
-        <a class="lp-hero-cinematic-split__button lp-hero-cinematic-split__button--primary" href="{{slot:primary-cta-link}}">
+<section aria-labelledby="lp-hero-cinematic-split-title" class="lp-hero-cinematic-split">
+<div class="lp-hero-cinematic-split__inner">
+<div class="lp-hero-cinematic-split__content">
+<p class="lp-hero-cinematic-split__eyebrow">{{slot:eyebrow}}</p>
+<h1 class="lp-hero-cinematic-split__title" id="lp-hero-cinematic-split-title">{{slot:headline}}</h1>
+<p class="lp-hero-cinematic-split__text">{{slot:subhead}}</p>
+<div aria-label="{{slot:actions-label}}" class="lp-hero-cinematic-split__actions">
+<a class="lp-hero-cinematic-split__button lp-hero-cinematic-split__button--primary" href="{{slot:primary-cta-link}}">
           {{slot:primary-cta-label}}
         </a>
-        <a class="lp-hero-cinematic-split__button lp-hero-cinematic-split__button--secondary" href="{{slot:secondary-cta-link}}">
+<a class="lp-hero-cinematic-split__button lp-hero-cinematic-split__button--secondary" href="{{slot:secondary-cta-link}}">
           {{slot:secondary-cta-label}}
         </a>
-      </div>
-
-      <ul class="lp-hero-cinematic-split__benefits" aria-label="{{slot:benefits-label}}">
-        <li class="lp-hero-cinematic-split__benefit">
-          <span class="lp-hero-cinematic-split__benefit-mark" aria-hidden="true"></span>
-          <span>{{slot:benefit-1}}</span>
-        </li>
-        <li class="lp-hero-cinematic-split__benefit">
-          <span class="lp-hero-cinematic-split__benefit-mark" aria-hidden="true"></span>
-          <span>{{slot:benefit-2}}</span>
-        </li>
-        <li class="lp-hero-cinematic-split__benefit">
-          <span class="lp-hero-cinematic-split__benefit-mark" aria-hidden="true"></span>
-          <span>{{slot:benefit-3}}</span>
-        </li>
-      </ul>
-    </div>
-
-    <div class="lp-hero-cinematic-split__visual" aria-label="{{slot:visual-label}}">
-      <picture class="lp-hero-cinematic-split__picture">
-        <source media="(max-width: 767px)" srcset="{{slot:hero-image-mobile}}">
-        <img src="{{slot:hero-image}}" alt="{{slot:hero-image-alt}}" loading="lazy">
-      </picture>
-
-      <div class="lp-hero-cinematic-split__stat lp-hero-cinematic-split__stat--top">
-        <span class="lp-hero-cinematic-split__stat-value">{{slot:stat-1-value}}</span>
-        <span class="lp-hero-cinematic-split__stat-label">{{slot:stat-1-label}}</span>
-      </div>
-
-      <div class="lp-hero-cinematic-split__stat lp-hero-cinematic-split__stat--bottom">
-        <span class="lp-hero-cinematic-split__stat-value">{{slot:stat-2-value}}</span>
-        <span class="lp-hero-cinematic-split__stat-label">{{slot:stat-2-label}}</span>
-      </div>
-    </div>
-  </div>
+</div>
+<ul aria-label="{{slot:benefits-label}}" class="lp-hero-cinematic-split__benefits">
+<li class="lp-hero-cinematic-split__benefit">
+<span aria-hidden="true" class="lp-hero-cinematic-split__benefit-mark"></span>
+<span>{{slot:benefit-1}}</span>
+</li>
+<li class="lp-hero-cinematic-split__benefit">
+<span aria-hidden="true" class="lp-hero-cinematic-split__benefit-mark"></span>
+<span>{{slot:benefit-2}}</span>
+</li>
+<li class="lp-hero-cinematic-split__benefit">
+<span aria-hidden="true" class="lp-hero-cinematic-split__benefit-mark"></span>
+<span>{{slot:benefit-3}}</span>
+</li>
+</ul>
+</div>
+<div aria-label="{{slot:visual-label}}" class="lp-hero-cinematic-split__visual">
+<picture class="lp-hero-cinematic-split__picture">
+<source media="(max-width: 767px)" srcset="{{slot:hero-image-mobile}}"/>
+<img alt="{{slot:hero-image-alt}}" loading="lazy" src="{{slot:hero-image}}"/>
+</picture>
+<div class="lp-hero-cinematic-split__stat lp-hero-cinematic-split__stat--top">
+<span class="lp-hero-cinematic-split__stat-value">{{slot:stat-1-value}}</span>
+<span class="lp-hero-cinematic-split__stat-label">{{slot:stat-1-label}}</span>
+</div>
+<div class="lp-hero-cinematic-split__stat lp-hero-cinematic-split__stat--bottom">
+<span class="lp-hero-cinematic-split__stat-value">{{slot:stat-2-value}}</span>
+<span class="lp-hero-cinematic-split__stat-label">{{slot:stat-2-label}}</span>
+</div>
+</div>
+</div>
 </section>

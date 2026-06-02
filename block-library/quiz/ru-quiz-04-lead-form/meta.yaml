@@ -27,16 +27,15 @@ slots:
   name: phone-input
   required: true
   type: text
-- name: channel-choice
+- max_chars: 200
+  name: agreement-text
   required: true
   type: text
 - default_text: Получить расчёт
   name: submit-cta
   required: true
   type: cta
-- max_chars: 200
-  name: agreement-text
-  required: true
+- name: cta
   type: text
 source: manual
 source_attribution: ''

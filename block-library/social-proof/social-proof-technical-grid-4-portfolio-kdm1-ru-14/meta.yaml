@@ -16,8 +16,38 @@ niches_suitable:
 - tech
 ru_market: true
 slots:
+- name: eyebrow
+  type: text
 - name: heading
   required: true
+  type: text
+- name: subhead
+  type: text
+- name: stats-list-label
+  type: text
+- name: stat-1-index
+  type: text
+- name: stat-1-value
+  type: text
+- name: stat-1-label
+  type: text
+- name: stat-2-index
+  type: text
+- name: stat-2-value
+  type: text
+- name: stat-2-label
+  type: text
+- name: stat-3-index
+  type: text
+- name: stat-3-value
+  type: text
+- name: stat-3-label
+  type: text
+- name: stat-4-index
+  type: text
+- name: stat-4-value
+  type: text
+- name: stat-4-label
   type: text
 style_mood: technical
 type: logos

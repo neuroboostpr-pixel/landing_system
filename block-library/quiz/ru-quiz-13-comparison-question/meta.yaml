@@ -12,6 +12,10 @@ layout_summary_ru: 'Два варианта на весь экран: карто
   предложения.'
 ru_market: true
 slots:
+- max_chars: 60
+  name: progress-label
+  required: false
+  type: text
 - max_chars: 120
   name: question-text
   required: true
@@ -34,10 +38,6 @@ slots:
   type: text
 - max_chars: 80
   name: question-comment
-  required: false
-  type: text
-- max_chars: 60
-  name: progress-label
   required: false
   type: text
 source: manual

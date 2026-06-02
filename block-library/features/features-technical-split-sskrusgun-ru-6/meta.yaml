@@ -14,8 +14,64 @@ niches_suitable:
 - education
 ru_market: true
 slots:
+- name: promo-kicker
+  type: text
 - name: heading
   required: true
+  type: text
+- name: subhead
+  type: text
+- name: primary-cta-link
+  type: text
+- name: primary-cta-label
+  type: text
+- name: features-list-label
+  type: text
+- name: feature-1-title
+  type: text
+- name: feature-1-text
+  type: text
+- name: feature-1-link
+  type: text
+- name: feature-1-link-label
+  type: text
+- name: feature-2-title
+  type: text
+- name: feature-2-text
+  type: text
+- name: feature-2-link
+  type: text
+- name: feature-2-link-label
+  type: text
+- name: feature-3-title
+  type: text
+- name: feature-3-text
+  type: text
+- name: feature-3-link
+  type: text
+- name: feature-3-link-label
+  type: text
+- name: feature-4-title
+  type: text
+- name: feature-4-text
+  type: text
+- name: feature-4-link
+  type: text
+- name: feature-4-link-label
+  type: text
+- name: formats-nav-label
+  type: text
+- name: format-1-link
+  type: text
+- name: format-1-label
+  type: text
+- name: format-2-link
+  type: text
+- name: format-2-label
+  type: text
+- name: format-3-link
+  type: text
+- name: format-3-label
   type: text
 style_mood: technical
 type: features

@@ -138,47 +138,44 @@
   body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
 }
 </style>
-<footer class="lp-footer-corporate-grid-3" aria-labelledby="lp-footer-corporate-grid-3-title">
-  <div class="lp-footer-corporate-grid-3__inner">
-    <div class="lp-footer-corporate-grid-3__brand">
-      <a class="lp-footer-corporate-grid-3__brand-link" href="{{slot:brand-url}}" aria-label="{{slot:brand-aria-label}}">
-        <span class="lp-footer-corporate-grid-3__brand-mark" aria-hidden="true"></span>
-        <span id="lp-footer-corporate-grid-3-title" class="lp-footer-corporate-grid-3__brand-name">{{slot:brand-name}}</span>
-      </a>
-      <p class="lp-footer-corporate-grid-3__summary">{{slot:footer-summary}}</p>
-      <div class="lp-footer-corporate-grid-3__social" aria-label="{{slot:social-label}}">
-        <a class="lp-footer-corporate-grid-3__social-link" href="{{slot:social-link-1}}" aria-label="{{slot:social-link-1-label}}"></a>
-        <a class="lp-footer-corporate-grid-3__social-link" href="{{slot:social-link-2}}" aria-label="{{slot:social-link-2-label}}"></a>
-        <a class="lp-footer-corporate-grid-3__social-link" href="{{slot:social-link-3}}" aria-label="{{slot:social-link-3-label}}"></a>
-      </div>
-    </div>
-
-    <nav class="lp-footer-corporate-grid-3__nav" aria-label="{{slot:footer-nav-label}}">
-      <h2 class="lp-footer-corporate-grid-3__heading">{{slot:menu-heading}}</h2>
-      <ul class="lp-footer-corporate-grid-3__list">
-        <li><a href="{{slot:menu-link-1-url}}">{{slot:menu-link-1-label}}</a></li>
-        <li><a href="{{slot:menu-link-2-url}}">{{slot:menu-link-2-label}}</a></li>
-        <li><a href="{{slot:menu-link-3-url}}">{{slot:menu-link-3-label}}</a></li>
-        <li><a href="{{slot:menu-link-4-url}}">{{slot:menu-link-4-label}}</a></li>
-      </ul>
-    </nav>
-
-    <address class="lp-footer-corporate-grid-3__contacts">
-      <h2 class="lp-footer-corporate-grid-3__heading">{{slot:contacts-heading}}</h2>
-      <ul class="lp-footer-corporate-grid-3__list">
-        <li><a href="{{slot:phone-url}}">{{slot:phone-label}}</a></li>
-        <li><a href="{{slot:email-url}}">{{slot:email-label}}</a></li>
-        <li><span>{{slot:address-line}}</span></li>
-        <li><span>{{slot:work-hours}}</span></li>
-      </ul>
-    </address>
-  </div>
-
-  <div class="lp-footer-corporate-grid-3__bottom">
-    <p class="lp-footer-corporate-grid-3__legal">{{slot:copyright}}</p>
-    <nav class="lp-footer-corporate-grid-3__legal-nav" aria-label="{{slot:legal-nav-label}}">
-      <a href="{{slot:legal-link-1-url}}">{{slot:legal-link-1-label}}</a>
-      <a href="{{slot:legal-link-2-url}}">{{slot:legal-link-2-label}}</a>
-    </nav>
-  </div>
+<footer aria-labelledby="lp-footer-corporate-grid-3-title" class="lp-footer-corporate-grid-3">
+<div class="lp-footer-corporate-grid-3__inner">
+<div class="lp-footer-corporate-grid-3__brand">
+<a aria-label="{{slot:brand-aria-label}}" class="lp-footer-corporate-grid-3__brand-link" href="{{slot:brand-url}}">
+<span aria-hidden="true" class="lp-footer-corporate-grid-3__brand-mark"></span>
+<span class="lp-footer-corporate-grid-3__brand-name" id="lp-footer-corporate-grid-3-title">{{slot:brand-name}}</span>
+</a>
+<p class="lp-footer-corporate-grid-3__summary">{{slot:footer-summary}}</p>
+<div aria-label="{{slot:social-label}}" class="lp-footer-corporate-grid-3__social">
+<a aria-label="{{slot:social-link-1-label}}" class="lp-footer-corporate-grid-3__social-link" href="{{slot:social-link-1}}"></a>
+<a aria-label="{{slot:social-link-2-label}}" class="lp-footer-corporate-grid-3__social-link" href="{{slot:social-link-2}}"></a>
+<a aria-label="{{slot:social-link-3-label}}" class="lp-footer-corporate-grid-3__social-link" href="{{slot:social-link-3}}"></a>
+</div>
+</div>
+<nav aria-label="{{slot:footer-nav-label}}" class="lp-footer-corporate-grid-3__nav">
+<h2 class="lp-footer-corporate-grid-3__heading">{{slot:menu-heading}}</h2>
+<ul class="lp-footer-corporate-grid-3__list">
+<li><a href="{{slot:menu-link-1-url}}">{{slot:menu-link-1-label}}</a></li>
+<li><a href="{{slot:menu-link-2-url}}">{{slot:menu-link-2-label}}</a></li>
+<li><a href="{{slot:menu-link-3-url}}">{{slot:menu-link-3-label}}</a></li>
+<li><a href="{{slot:menu-link-4-url}}">{{slot:menu-link-4-label}}</a></li>
+</ul>
+</nav>
+<address class="lp-footer-corporate-grid-3__contacts">
+<h2 class="lp-footer-corporate-grid-3__heading">{{slot:contacts-heading}}</h2>
+<ul class="lp-footer-corporate-grid-3__list">
+<li><a href="{{slot:phone-url}}">{{slot:phone-label}}</a></li>
+<li><a href="{{slot:email-url}}">{{slot:email-label}}</a></li>
+<li><span>{{slot:address-line}}</span></li>
+<li><span>{{slot:work-hours}}</span></li>
+</ul>
+</address>
+</div>
+<div class="lp-footer-corporate-grid-3__bottom">
+<p class="lp-footer-corporate-grid-3__legal">{{slot:copyright}}</p>
+<nav aria-label="{{slot:legal-nav-label}}" class="lp-footer-corporate-grid-3__legal-nav">
+<a href="{{slot:legal-link-1-url}}">{{slot:legal-link-1-label}}</a>
+<a href="{{slot:legal-link-2-url}}">{{slot:legal-link-2-label}}</a>
+</nav>
+</div>
 </footer>

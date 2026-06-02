@@ -1,8 +1,3 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<title>ru-trust-01-guarantees-docs — desktop</title>
 <style>
   :root {
     --color-bg: #fff;
@@ -23,32 +18,28 @@
   .badge-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; margin: 0; }
   .badge-text { font-size: 13px; color: #555; margin: 0; line-height: 1.5; }
 </style>
-</head>
-<body>
-  <section class="trust" data-block-id="ru-trust-01-guarantees-docs">
-    <h2 class="section-headline" data-slot="headline">[HEADLINE: ваши гарантии]</h2>
-    <div class="badges">
-      <div class="badge">
-        <div class="badge-icon" data-slot="trust-1-icon" data-slot-type="icon">icon</div>
-        <h3 class="badge-title" data-slot="trust-1-title">[Договор]</h3>
-        <p class="badge-text" data-slot="trust-1-text">[Работаем только по официальному договору с ответственностью]</p>
-      </div>
-      <div class="badge">
-        <div class="badge-icon" data-slot="trust-2-icon" data-slot-type="icon">icon</div>
-        <h3 class="badge-title" data-slot="trust-2-title">[Лицензия]</h3>
-        <p class="badge-text" data-slot="trust-2-text">[Все лицензии и сертификаты в наличии и открытом доступе]</p>
-      </div>
-      <div class="badge">
-        <div class="badge-icon" data-slot="trust-3-icon" data-slot-type="icon">icon</div>
-        <h3 class="badge-title" data-slot="trust-3-title">[Гарантия]</h3>
-        <p class="badge-text" data-slot="trust-3-text">[Гарантия на выполненные работы — 12 месяцев]</p>
-      </div>
-      <div class="badge">
-        <div class="badge-icon" data-slot="trust-4-icon" data-slot-type="icon">icon</div>
-        <h3 class="badge-title" data-slot="trust-4-title">[Возврат]</h3>
-        <p class="badge-text" data-slot="trust-4-text">[Вернём деньги если не выполним обязательства по договору]</p>
-      </div>
-    </div>
-  </section>
-</body>
-</html>
+<section class="trust" data-block-id="ru-trust-01-guarantees-docs">
+<h2 class="section-headline">{{slot:headline}}</h2>
+<div class="badges">
+<div class="badge">
+<div class="badge-icon" data-slot-type="icon">{{slot:trust-1-icon}}</div>
+<h3 class="badge-title">{{slot:trust-1-title}}</h3>
+<p class="badge-text">{{slot:trust-1-text}}</p>
+</div>
+<div class="badge">
+<div class="badge-icon" data-slot-type="icon">{{slot:trust-2-icon}}</div>
+<h3 class="badge-title">{{slot:trust-2-title}}</h3>
+<p class="badge-text">{{slot:trust-2-text}}</p>
+</div>
+<div class="badge">
+<div class="badge-icon" data-slot-type="icon">{{slot:trust-3-icon}}</div>
+<h3 class="badge-title">{{slot:trust-3-title}}</h3>
+<p class="badge-text">{{slot:trust-3-text}}</p>
+</div>
+<div class="badge">
+<div class="badge-icon" data-slot-type="icon">{{slot:trust-4-icon}}</div>
+<h3 class="badge-title">{{slot:trust-4-title}}</h3>
+<p class="badge-text">{{slot:trust-4-text}}</p>
+</div>
+</div>
+</section>

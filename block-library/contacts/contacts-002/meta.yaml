@@ -6,7 +6,55 @@ id: contacts-002
 layout_pattern: grid
 signature: contacts|grid|[content]|bg:false
 slots:
-- name: content
+- name: contacts-eyebrow
+  type: text
+- name: contacts-heading
+  type: text
+- name: contacts-subhead
+  type: text
+- name: contact-card-one-image-alt
+  type: text
+- name: contact-card-one-image
+  type: text
+- name: contact-card-one-label
+  type: text
+- name: contact-card-one-title
+  type: text
+- name: contact-card-one-address
+  type: text
+- name: contact-card-one-list-label
+  type: text
+- name: contact-card-one-phone
+  type: text
+- name: contact-card-one-email
+  type: text
+- name: contact-card-one-hours
+  type: text
+- name: contact-card-one-link
+  type: text
+- name: contact-card-one-cta
+  type: text
+- name: contact-card-two-image-alt
+  type: text
+- name: contact-card-two-image
+  type: text
+- name: contact-card-two-label
+  type: text
+- name: contact-card-two-title
+  type: text
+- name: contact-card-two-address
+  type: text
+- name: contact-card-two-list-label
+  type: text
+- name: contact-card-two-phone
+  type: text
+- name: contact-card-two-email
+  type: text
+- name: contact-card-two-hours
+  type: text
+- name: contact-card-two-link
+  type: text
+- name: contact-card-two-cta
   type: text
 source: cleaned
 type: contacts

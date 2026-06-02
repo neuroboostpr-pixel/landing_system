@@ -152,47 +152,44 @@
   }
 }
 </style>
-<section class="lp-trust-editorial-grid-3" aria-labelledby="trust-editorial-grid-3-title">
-  <div class="lp-trust-editorial-grid-3__inner">
-    <div class="lp-trust-editorial-grid-3__intro">
-      <span class="lp-trust-editorial-grid-3__eyebrow">{{slot:eyebrow}}</span>
-      <h2 class="lp-trust-editorial-grid-3__title" id="trust-editorial-grid-3-title">{{slot:title}}</h2>
-      <p class="lp-trust-editorial-grid-3__lead">{{slot:lead}}</p>
-    </div>
-
-    <ul class="lp-trust-editorial-grid-3__list" aria-label="{{slot:list-label}}">
-      <li class="lp-trust-editorial-grid-3__item">
-        <figure class="lp-trust-editorial-grid-3__figure">
-          <img src="{{slot:principle-1-image}}" alt="{{slot:principle-1-image-alt}}" loading="lazy">
-        </figure>
-        <div class="lp-trust-editorial-grid-3__content">
-          <span class="lp-trust-editorial-grid-3__number">{{slot:principle-1-number}}</span>
-          <h3 class="lp-trust-editorial-grid-3__item-title">{{slot:principle-1-title}}</h3>
-          <p class="lp-trust-editorial-grid-3__text">{{slot:principle-1-text}}</p>
-        </div>
-      </li>
-
-      <li class="lp-trust-editorial-grid-3__item">
-        <figure class="lp-trust-editorial-grid-3__figure">
-          <img src="{{slot:principle-2-image}}" alt="{{slot:principle-2-image-alt}}" loading="lazy">
-        </figure>
-        <div class="lp-trust-editorial-grid-3__content">
-          <span class="lp-trust-editorial-grid-3__number">{{slot:principle-2-number}}</span>
-          <h3 class="lp-trust-editorial-grid-3__item-title">{{slot:principle-2-title}}</h3>
-          <p class="lp-trust-editorial-grid-3__text">{{slot:principle-2-text}}</p>
-        </div>
-      </li>
-
-      <li class="lp-trust-editorial-grid-3__item">
-        <figure class="lp-trust-editorial-grid-3__figure">
-          <img src="{{slot:principle-3-image}}" alt="{{slot:principle-3-image-alt}}" loading="lazy">
-        </figure>
-        <div class="lp-trust-editorial-grid-3__content">
-          <span class="lp-trust-editorial-grid-3__number">{{slot:principle-3-number}}</span>
-          <h3 class="lp-trust-editorial-grid-3__item-title">{{slot:principle-3-title}}</h3>
-          <p class="lp-trust-editorial-grid-3__text">{{slot:principle-3-text}}</p>
-        </div>
-      </li>
-    </ul>
-  </div>
+<section aria-labelledby="trust-editorial-grid-3-title" class="lp-trust-editorial-grid-3">
+<div class="lp-trust-editorial-grid-3__inner">
+<div class="lp-trust-editorial-grid-3__intro">
+<span class="lp-trust-editorial-grid-3__eyebrow">{{slot:eyebrow}}</span>
+<h2 class="lp-trust-editorial-grid-3__title" id="trust-editorial-grid-3-title">{{slot:title}}</h2>
+<p class="lp-trust-editorial-grid-3__lead">{{slot:lead}}</p>
+</div>
+<ul aria-label="{{slot:list-label}}" class="lp-trust-editorial-grid-3__list">
+<li class="lp-trust-editorial-grid-3__item">
+<figure class="lp-trust-editorial-grid-3__figure">
+<img alt="{{slot:principle-1-image-alt}}" loading="lazy" src="{{slot:principle-1-image}}"/>
+</figure>
+<div class="lp-trust-editorial-grid-3__content">
+<span class="lp-trust-editorial-grid-3__number">{{slot:principle-1-number}}</span>
+<h3 class="lp-trust-editorial-grid-3__item-title">{{slot:principle-1-title}}</h3>
+<p class="lp-trust-editorial-grid-3__text">{{slot:principle-1-text}}</p>
+</div>
+</li>
+<li class="lp-trust-editorial-grid-3__item">
+<figure class="lp-trust-editorial-grid-3__figure">
+<img alt="{{slot:principle-2-image-alt}}" loading="lazy" src="{{slot:principle-2-image}}"/>
+</figure>
+<div class="lp-trust-editorial-grid-3__content">
+<span class="lp-trust-editorial-grid-3__number">{{slot:principle-2-number}}</span>
+<h3 class="lp-trust-editorial-grid-3__item-title">{{slot:principle-2-title}}</h3>
+<p class="lp-trust-editorial-grid-3__text">{{slot:principle-2-text}}</p>
+</div>
+</li>
+<li class="lp-trust-editorial-grid-3__item">
+<figure class="lp-trust-editorial-grid-3__figure">
+<img alt="{{slot:principle-3-image-alt}}" loading="lazy" src="{{slot:principle-3-image}}"/>
+</figure>
+<div class="lp-trust-editorial-grid-3__content">
+<span class="lp-trust-editorial-grid-3__number">{{slot:principle-3-number}}</span>
+<h3 class="lp-trust-editorial-grid-3__item-title">{{slot:principle-3-title}}</h3>
+<p class="lp-trust-editorial-grid-3__text">{{slot:principle-3-text}}</p>
+</div>
+</li>
+</ul>
+</div>
 </section>

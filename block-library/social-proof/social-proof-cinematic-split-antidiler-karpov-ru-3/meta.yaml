@@ -15,8 +15,42 @@ niches_suitable:
 - luxury
 ru_market: true
 slots:
+- name: case-image-mobile
+  type: text
+- name: case-image-alt
+  type: text
+- name: case-image
+  type: text
+- name: case-badge
+  type: text
+- name: eyebrow
+  type: text
 - name: heading
   required: true
+  type: text
+- name: testimonial-text
+  type: text
+- name: author-name
+  type: text
+- name: author-meta
+  type: text
+- name: stats-label
+  type: text
+- name: stat-1-value
+  type: text
+- name: stat-1-label
+  type: text
+- name: stat-2-value
+  type: text
+- name: stat-2-label
+  type: text
+- name: primary-cta-link
+  type: text
+- name: primary-cta-label
+  type: text
+- name: secondary-cta-link
+  type: text
+- name: secondary-cta-label
   type: text
 style_mood: cinematic
 type: logos

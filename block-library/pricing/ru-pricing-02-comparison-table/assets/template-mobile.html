@@ -1,8 +1,3 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<title>ru-pricing-02-comparison-table — mobile</title>
 <style>
   :root {
     --color-bg: #fff;
@@ -117,78 +112,71 @@
     color: #fff;
   }
 </style>
-</head>
-<body>
-  <section class="pricing-table-section" data-block-id="ru-pricing-02-comparison-table">
-
-    <h2 class="section-headline" data-slot="headline">[HEADLINE: выберите тариф]</h2>
-
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Функции</th>
-            <th>
-              <span class="tier-name" data-slot="tier-1-name">[Базовый]</span>
-              <span class="tier-price" data-slot="tier-1-price">[9 900 ₽]</span>
-            </th>
-            <th class="col-premium">
-              <span class="tier-name" data-slot="tier-2-name">[Стандарт]</span>
-              <span class="tier-price" data-slot="tier-2-price">[19 900 ₽]</span>
-            </th>
-            <th>
-              <span class="tier-name" data-slot="tier-3-name">[Премиум]</span>
-              <span class="tier-price" data-slot="tier-3-price">[39 900 ₽]</span>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td data-slot="feature-row-1">[Функция 1]</td>
-            <td><span class="check">✓</span></td>
-            <td class="col-premium"><span class="check">✓</span></td>
-            <td><span class="check">✓</span></td>
-          </tr>
-          <tr>
-            <td data-slot="feature-row-2">[Функция 2]</td>
-            <td><span class="cross">✗</span></td>
-            <td class="col-premium"><span class="check">✓</span></td>
-            <td><span class="check">✓</span></td>
-          </tr>
-          <tr>
-            <td data-slot="feature-row-3">[Функция 3]</td>
-            <td><span class="cross">✗</span></td>
-            <td class="col-premium"><span class="check">✓</span></td>
-            <td><span class="check">✓</span></td>
-          </tr>
-          <tr>
-            <td data-slot="feature-row-4">[Функция 4]</td>
-            <td><span class="cross">✗</span></td>
-            <td class="col-premium"><span class="cross">✗</span></td>
-            <td><span class="check">✓</span></td>
-          </tr>
-          <tr>
-            <td data-slot="feature-row-5">[Функция 5]</td>
-            <td><span class="cross">✗</span></td>
-            <td class="col-premium"><span class="cross">✗</span></td>
-            <td><span class="check">✓</span></td>
-          </tr>
-          <tr>
-            <td data-slot="feature-row-6">[Функция 6]</td>
-            <td>Базовая</td>
-            <td class="col-premium">Расширенная</td>
-            <td>Приоритетная</td>
-          </tr>
-          <tr class="cta-row">
-            <td></td>
-            <td><a class="tier-cta-btn" data-slot="tier-1-cta" href="#order-1">[Выбрать]</a></td>
-            <td class="col-premium"><a class="tier-cta-btn accent" data-slot="tier-2-cta" href="#order-2">[Выбрать]</a></td>
-            <td><a class="tier-cta-btn" data-slot="tier-3-cta" href="#order-3">[Выбрать]</a></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-  </section>
-</body>
-</html>
+<section class="pricing-table-section" data-block-id="ru-pricing-02-comparison-table">
+<h2 class="section-headline">{{slot:headline}}</h2>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Функции</th>
+<th>
+<span class="tier-name">{{slot:tier-1-name}}</span>
+<span class="tier-price">{{slot:tier-1-price}}</span>
+</th>
+<th class="col-premium">
+<span class="tier-name">{{slot:tier-2-name}}</span>
+<span class="tier-price">{{slot:tier-2-price}}</span>
+</th>
+<th>
+<span class="tier-name">{{slot:tier-3-name}}</span>
+<span class="tier-price">{{slot:tier-3-price}}</span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>{{slot:feature-row-1}}</td>
+<td><span class="check">✓</span></td>
+<td class="col-premium"><span class="check">✓</span></td>
+<td><span class="check">✓</span></td>
+</tr>
+<tr>
+<td>{{slot:feature-row-2}}</td>
+<td><span class="cross">✗</span></td>
+<td class="col-premium"><span class="check">✓</span></td>
+<td><span class="check">✓</span></td>
+</tr>
+<tr>
+<td>{{slot:feature-row-3}}</td>
+<td><span class="cross">✗</span></td>
+<td class="col-premium"><span class="check">✓</span></td>
+<td><span class="check">✓</span></td>
+</tr>
+<tr>
+<td>{{slot:feature-row-4}}</td>
+<td><span class="cross">✗</span></td>
+<td class="col-premium"><span class="cross">✗</span></td>
+<td><span class="check">✓</span></td>
+</tr>
+<tr>
+<td>{{slot:feature-row-5}}</td>
+<td><span class="cross">✗</span></td>
+<td class="col-premium"><span class="cross">✗</span></td>
+<td><span class="check">✓</span></td>
+</tr>
+<tr>
+<td>{{slot:feature-row-6}}</td>
+<td>Базовая</td>
+<td class="col-premium">Расширенная</td>
+<td>Приоритетная</td>
+</tr>
+<tr class="cta-row">
+<td></td>
+<td><a class="tier-cta-btn" href="#order-1">{{slot:tier-1-cta}}</a></td>
+<td class="col-premium"><a class="tier-cta-btn accent" href="#order-2">{{slot:tier-2-cta}}</a></td>
+<td><a class="tier-cta-btn" href="#order-3">{{slot:tier-3-cta}}</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>

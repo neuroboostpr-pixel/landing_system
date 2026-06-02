@@ -13,7 +13,21 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: contacts-eyebrow
+    type: text
+  - name: contacts-title
+    type: text
+  - name: contacts-caption
+    type: text
+  - name: contacts-action-label
+    type: text
+  - name: phone-link
+    type: text
+  - name: phone
+    type: text
+  - name: secondary-link-url
+    type: text
+  - name: secondary-link-label
     type: text
   source: cleaned
 - id: contacts-002
@@ -28,7 +42,55 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: contacts-eyebrow
+    type: text
+  - name: contacts-heading
+    type: text
+  - name: contacts-subhead
+    type: text
+  - name: contact-card-one-image-alt
+    type: text
+  - name: contact-card-one-image
+    type: text
+  - name: contact-card-one-label
+    type: text
+  - name: contact-card-one-title
+    type: text
+  - name: contact-card-one-address
+    type: text
+  - name: contact-card-one-list-label
+    type: text
+  - name: contact-card-one-phone
+    type: text
+  - name: contact-card-one-email
+    type: text
+  - name: contact-card-one-hours
+    type: text
+  - name: contact-card-one-link
+    type: text
+  - name: contact-card-one-cta
+    type: text
+  - name: contact-card-two-image-alt
+    type: text
+  - name: contact-card-two-image
+    type: text
+  - name: contact-card-two-label
+    type: text
+  - name: contact-card-two-title
+    type: text
+  - name: contact-card-two-address
+    type: text
+  - name: contact-card-two-list-label
+    type: text
+  - name: contact-card-two-phone
+    type: text
+  - name: contact-card-two-email
+    type: text
+  - name: contact-card-two-hours
+    type: text
+  - name: contact-card-two-link
+    type: text
+  - name: contact-card-two-cta
     type: text
   source: cleaned
 - id: contacts-003
@@ -43,7 +105,83 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: brand-aria-label
+    type: text
+  - name: brand-link
+    type: text
+  - name: brand-logo-alt
+    type: text
+  - name: brand-logo
+    type: text
+  - name: eyebrow
+    type: text
+  - name: heading
+    type: text
+  - name: subhead
+    type: text
+  - name: contacts-list-label
+    type: text
+  - name: phone-link
+    type: text
+  - name: phone
+    type: text
+  - name: email-link
+    type: text
+  - name: email
+    type: text
+  - name: address
+    type: text
+  - name: social-list-label
+    type: text
+  - name: social-label-1
+    type: text
+  - name: social-link-1
+    type: text
+  - name: social-icon-1
+    type: text
+  - name: social-label-2
+    type: text
+  - name: social-link-2
+    type: text
+  - name: social-icon-2
+    type: text
+  - name: social-label-3
+    type: text
+  - name: social-link-3
+    type: text
+  - name: social-icon-3
+    type: text
+  - name: form-action
+    type: text
+  - name: form-label
+    type: text
+  - name: form-heading
+    type: text
+  - name: form-subhead
+    type: text
+  - name: name-label
+    type: text
+  - name: name-field-name
+    type: text
+  - name: name-placeholder
+    type: text
+  - name: phone-label
+    type: text
+  - name: phone-field-name
+    type: text
+  - name: phone-placeholder
+    type: text
+  - name: message-label
+    type: text
+  - name: message-field-name
+    type: text
+  - name: message-placeholder
+    type: text
+  - name: consent-field-name
+    type: text
+  - name: consent-text
+    type: text
+  - name: submit-label
     type: text
   source: cleaned
 - id: contacts-corporate-split-portfolio-kdm1-ru-16
@@ -58,8 +196,63 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: contacts-eyebrow
+    type: text
+  - name: contacts-heading
+    type: text
+  - name: contacts-subhead
+    type: text
+  - name: contacts-list-label
+    type: text
+  - name: contact-method-one-label
+    type: text
+  - name: contact-method-one-link
+    type: text
+  - name: contact-method-one-text
+    type: text
+  - name: contact-method-two-label
+    type: text
+  - name: contact-method-two-link
+    type: text
+  - name: contact-method-two-text
+    type: text
+  - name: form-action
+    type: text
+  - name: form-label
+    type: text
+  - name: name-label
+    type: text
+  - name: name-placeholder
+    type: text
+  - name: contact-label
+    type: text
+  - name: contact-placeholder
+    type: text
+  - name: date-label
+    type: text
+  - name: date-aria-label
+    type: text
+  - name: time-label
+    type: text
+  - name: time-aria-label
+    type: text
+  - name: time-option-default
+    type: text
+  - name: time-option-one-value
+    type: text
+  - name: time-option-one-label
+    type: text
+  - name: time-option-two-value
+    type: text
+  - name: time-option-two-label
+    type: text
+  - name: time-option-three-value
+    type: text
+  - name: time-option-three-label
+    type: text
+  - name: primary-cta-label
+    type: text
+  - name: form-note
     type: text
   source: auto-generated
 - id: faq-corporate-stacked-portfolio-kdm1-ru-15
@@ -74,8 +267,34 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: subhead
+    type: text
+  - name: question-1
+    type: text
+  - name: answer-1
+    type: text
+  - name: question-2
+    type: text
+  - name: answer-2
+    type: text
+  - name: question-3
+    type: text
+  - name: answer-3
+    type: text
+  - name: question-4
+    type: text
+  - name: answer-4
+    type: text
+  - name: note
+    type: text
+  - name: cta-link
+    type: text
+  - name: cta-label
     type: text
   source: auto-generated
 - id: faq-minimal-stacked-project21993216-tild-11
@@ -90,8 +309,27 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: faq-eyebrow
+    type: text
+  - name: faq-title
+    type: text
+  - name: faq-subhead
+    type: text
+  - name: faq-question-1
+    type: text
+  - name: faq-answer-1
+    type: text
+  - name: faq-question-2
+    type: text
+  - name: faq-answer-2
+    type: text
+  - name: faq-question-3
+    type: text
+  - name: faq-answer-3
+    type: text
+  - name: faq-question-4
+    type: text
+  - name: faq-answer-4
     type: text
   source: auto-generated
 - id: faq-minimal-stacked-sskrusgun-ru-13
@@ -106,8 +344,32 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: subhead
+    type: text
+  - name: question-1
+    type: text
+  - name: answer-1
+    type: text
+  - name: question-2
+    type: text
+  - name: answer-2
+    type: text
+  - name: question-3
+    type: text
+  - name: answer-3
+    type: text
+  - name: question-4
+    type: text
+  - name: answer-4
+    type: text
+  - name: question-5
+    type: text
+  - name: answer-5
     type: text
   source: auto-generated
 - id: ru-faq-01-accordion
@@ -366,7 +628,53 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: eyebrow
+    type: text
+  - name: heading
+    type: text
+  - name: subhead
+    type: text
+  - name: portrait-image-alt
+    type: text
+  - name: portrait-image
+    type: text
+  - name: portrait-caption
+    type: text
+  - name: feature-1-badge
+    type: text
+  - name: feature-1-title
+    type: text
+  - name: feature-1-text
+    type: text
+  - name: feature-2-badge
+    type: text
+  - name: feature-2-title
+    type: text
+  - name: feature-2-text
+    type: text
+  - name: feature-3-badge
+    type: text
+  - name: feature-3-title
+    type: text
+  - name: feature-3-text
+    type: text
+  - name: feature-4-badge
+    type: text
+  - name: feature-4-title
+    type: text
+  - name: feature-4-text
+    type: text
+  - name: feature-5-badge
+    type: text
+  - name: feature-5-title
+    type: text
+  - name: feature-5-text
+    type: text
+  - name: feature-6-badge
+    type: text
+  - name: feature-6-title
+    type: text
+  - name: feature-6-text
     type: text
   source: cleaned
 - id: features-002
@@ -381,7 +689,49 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: eyebrow
+    type: text
+  - name: heading
+    type: text
+  - name: subhead
+    type: text
+  - name: feature-1-image-alt
+    type: text
+  - name: feature-1-image
+    type: text
+  - name: feature-1-kicker
+    type: text
+  - name: feature-1-title
+    type: text
+  - name: feature-1-text
+    type: text
+  - name: feature-2-image-alt
+    type: text
+  - name: feature-2-image
+    type: text
+  - name: feature-2-kicker
+    type: text
+  - name: feature-2-title
+    type: text
+  - name: feature-2-text
+    type: text
+  - name: feature-3-image-alt
+    type: text
+  - name: feature-3-image
+    type: text
+  - name: feature-3-kicker
+    type: text
+  - name: feature-3-title
+    type: text
+  - name: feature-3-text
+    type: text
+  - name: summary-heading
+    type: text
+  - name: summary-text
+    type: text
+  - name: primary-cta-url
+    type: text
+  - name: primary-cta-label
     type: text
   source: cleaned
 - id: features-003
@@ -396,7 +746,67 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: features-eyebrow
+    type: text
+  - name: features-title
+    type: text
+  - name: features-subtitle
+    type: text
+  - name: feature-1-image-alt
+    type: text
+  - name: feature-1-image
+    type: text
+  - name: feature-1-label
+    type: text
+  - name: feature-1-title
+    type: text
+  - name: feature-1-text
+    type: text
+  - name: feature-1-link
+    type: text
+  - name: feature-1-cta
+    type: text
+  - name: feature-2-image-alt
+    type: text
+  - name: feature-2-image
+    type: text
+  - name: feature-2-label
+    type: text
+  - name: feature-2-title
+    type: text
+  - name: feature-2-text
+    type: text
+  - name: feature-2-link
+    type: text
+  - name: feature-2-cta
+    type: text
+  - name: feature-3-image-alt
+    type: text
+  - name: feature-3-image
+    type: text
+  - name: feature-3-label
+    type: text
+  - name: feature-3-title
+    type: text
+  - name: feature-3-text
+    type: text
+  - name: feature-3-link
+    type: text
+  - name: feature-3-cta
+    type: text
+  - name: feature-4-image-alt
+    type: text
+  - name: feature-4-image
+    type: text
+  - name: feature-4-label
+    type: text
+  - name: feature-4-title
+    type: text
+  - name: feature-4-text
+    type: text
+  - name: feature-4-link
+    type: text
+  - name: feature-4-cta
     type: text
   source: cleaned
 - id: features-004
@@ -411,7 +821,39 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: eyebrow
+    type: text
+  - name: heading
+    type: text
+  - name: subhead
+    type: text
+  - name: features-list-label
+    type: text
+  - name: feature-1-number
+    type: text
+  - name: feature-1-title
+    type: text
+  - name: feature-1-text
+    type: text
+  - name: feature-2-number
+    type: text
+  - name: feature-2-title
+    type: text
+  - name: feature-2-text
+    type: text
+  - name: feature-3-number
+    type: text
+  - name: feature-3-title
+    type: text
+  - name: feature-3-text
+    type: text
+  - name: expert-image-alt
+    type: text
+  - name: expert-image
+    type: text
+  - name: expert-name
+    type: text
+  - name: expert-role
     type: text
   source: cleaned
 - id: features-005
@@ -426,7 +868,29 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: features-eyebrow
+    type: text
+  - name: features-title
+    type: text
+  - name: features-lead
+    type: text
+  - name: feature-1-index
+    type: text
+  - name: feature-1-title
+    type: text
+  - name: feature-1-text
+    type: text
+  - name: feature-2-index
+    type: text
+  - name: feature-2-title
+    type: text
+  - name: feature-2-text
+    type: text
+  - name: feature-3-index
+    type: text
+  - name: feature-3-title
+    type: text
+  - name: feature-3-text
     type: text
   source: cleaned
 - id: features-006
@@ -441,7 +905,41 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: eyebrow
+    type: text
+  - name: heading
+    type: text
+  - name: subhead
+    type: text
+  - name: features-list-label
+    type: text
+  - name: feature-1-title
+    type: text
+  - name: feature-1-text
+    type: text
+  - name: feature-2-title
+    type: text
+  - name: feature-2-text
+    type: text
+  - name: feature-3-title
+    type: text
+  - name: feature-3-text
+    type: text
+  - name: feature-4-title
+    type: text
+  - name: feature-4-text
+    type: text
+  - name: feature-5-title
+    type: text
+  - name: feature-5-text
+    type: text
+  - name: feature-6-title
+    type: text
+  - name: feature-6-text
+    type: text
+  - name: primary-cta-url
+    type: text
+  - name: primary-cta-label
     type: text
   source: cleaned
 - id: features-brutalist-split-antidiler-karpov-ru-2
@@ -456,8 +954,36 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: subhead
+    type: text
+  - name: accent-label
+    type: text
+  - name: accent-title
+    type: text
+  - name: accent-text
+    type: text
+  - name: feature-1-index
+    type: text
+  - name: feature-1-title
+    type: text
+  - name: feature-1-text
+    type: text
+  - name: feature-2-index
+    type: text
+  - name: feature-2-title
+    type: text
+  - name: feature-2-text
+    type: text
+  - name: feature-3-index
+    type: text
+  - name: feature-3-title
+    type: text
+  - name: feature-3-text
     type: text
   source: auto-generated
 - id: features-corporate-grid-3-opt-ecowash-ru-8
@@ -472,8 +998,56 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: subhead
+    type: text
+  - name: feature-1-number
+    type: text
+  - name: feature-1-title
+    type: text
+  - name: feature-1-text
+    type: text
+  - name: feature-2-number
+    type: text
+  - name: feature-2-title
+    type: text
+  - name: feature-2-text
+    type: text
+  - name: feature-3-number
+    type: text
+  - name: feature-3-title
+    type: text
+  - name: feature-3-text
+    type: text
+  - name: feature-4-number
+    type: text
+  - name: feature-4-title
+    type: text
+  - name: feature-4-text
+    type: text
+  - name: feature-5-number
+    type: text
+  - name: feature-5-title
+    type: text
+  - name: feature-5-text
+    type: text
+  - name: feature-6-number
+    type: text
+  - name: feature-6-title
+    type: text
+  - name: feature-6-text
+    type: text
+  - name: cta-heading
+    type: text
+  - name: cta-text
+    type: text
+  - name: cta-link
+    type: text
+  - name: cta-label
     type: text
   source: auto-generated
 - id: features-corporate-split-sskrusgun-ru-8
@@ -488,8 +1062,37 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: eyebrow
+    type: text
+  - name: title
+    type: text
+  - name: lead
+    type: text
+  - name: features-list-label
+    type: text
+  - name: feature-1-title
+    type: text
+  - name: feature-1-text
+    type: text
+  - name: feature-2-title
+    type: text
+  - name: feature-2-text
+    type: text
+  - name: feature-3-title
+    type: text
+  - name: feature-3-text
+    type: text
+  - name: feature-4-title
+    type: text
+  - name: feature-4-text
+    type: text
+  - name: image-mobile
+    type: text
+  - name: image-alt
+    type: text
+  - name: image
+    type: text
+  - name: image-caption
     type: text
   source: auto-generated
 - id: features-editorial-grid-2-romanmelnikov-tilda-9
@@ -504,8 +1107,40 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: lead-mark
+    type: text
+  - name: lead-title
+    type: text
+  - name: lead-text
+    type: text
+  - name: feature-1-number
+    type: text
+  - name: feature-1-title
+    type: text
+  - name: feature-1-text
+    type: text
+  - name: feature-2-number
+    type: text
+  - name: feature-2-title
+    type: text
+  - name: feature-2-text
+    type: text
+  - name: feature-3-number
+    type: text
+  - name: feature-3-title
+    type: text
+  - name: feature-3-text
+    type: text
+  - name: feature-4-number
+    type: text
+  - name: feature-4-title
+    type: text
+  - name: feature-4-text
     type: text
   source: auto-generated
 - id: features-editorial-split-project21993216-tild-7
@@ -520,8 +1155,36 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: subhead
+    type: text
+  - name: feature-1-title
+    type: text
+  - name: feature-1-text
+    type: text
+  - name: feature-2-title
+    type: text
+  - name: feature-2-text
+    type: text
+  - name: feature-3-title
+    type: text
+  - name: feature-3-text
+    type: text
+  - name: cta-url
+    type: text
+  - name: cta-label
+    type: text
+  - name: image-mobile
+    type: text
+  - name: image-alt
+    type: text
+  - name: image
+    type: text
+  - name: image-caption
     type: text
   source: auto-generated
 - id: features-editorial-stacked-romanmelnikov-tilda-2
@@ -536,8 +1199,26 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: subhead
+    type: text
+  - name: statement
+    type: text
+  - name: feature-1-title
+    type: text
+  - name: feature-1-text
+    type: text
+  - name: feature-2-title
+    type: text
+  - name: feature-2-text
+    type: text
+  - name: feature-3-title
+    type: text
+  - name: feature-3-text
     type: text
   source: auto-generated
 - id: features-technical-grid-3-portfolio-kdm1-ru-2
@@ -552,8 +1233,36 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: subhead
+    type: text
+  - name: feature-1-title
+    type: text
+  - name: feature-1-text
+    type: text
+  - name: feature-2-title
+    type: text
+  - name: feature-2-text
+    type: text
+  - name: feature-3-title
+    type: text
+  - name: feature-3-text
+    type: text
+  - name: feature-4-title
+    type: text
+  - name: feature-4-text
+    type: text
+  - name: feature-5-title
+    type: text
+  - name: feature-5-text
+    type: text
+  - name: feature-6-title
+    type: text
+  - name: feature-6-text
     type: text
   source: auto-generated
 - id: features-technical-grid-3-portfolio-kdm1-ru-5
@@ -568,8 +1277,41 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: features-eyebrow
+    type: text
+  - name: features-title
+    type: text
+  - name: features-subhead
+    type: text
+  - name: feature-1-image-alt
+    type: text
+  - name: feature-1-image
+    type: text
+  - name: feature-1-badge
+    type: text
+  - name: feature-1-title
+    type: text
+  - name: feature-1-text
+    type: text
+  - name: feature-2-image-alt
+    type: text
+  - name: feature-2-image
+    type: text
+  - name: feature-2-badge
+    type: text
+  - name: feature-2-title
+    type: text
+  - name: feature-2-text
+    type: text
+  - name: feature-3-image-alt
+    type: text
+  - name: feature-3-image
+    type: text
+  - name: feature-3-badge
+    type: text
+  - name: feature-3-title
+    type: text
+  - name: feature-3-text
     type: text
   source: auto-generated
 - id: features-technical-grid-3-portfolio-kdm1-ru-6
@@ -584,8 +1326,48 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: subhead
+    type: text
+  - name: feature-1-image-alt
+    type: text
+  - name: feature-1-image
+    type: text
+  - name: feature-1-badge
+    type: text
+  - name: feature-1-title
+    type: text
+  - name: feature-1-text
+    type: text
+  - name: feature-2-image-alt
+    type: text
+  - name: feature-2-image
+    type: text
+  - name: feature-2-badge
+    type: text
+  - name: feature-2-title
+    type: text
+  - name: feature-2-text
+    type: text
+  - name: feature-3-image-alt
+    type: text
+  - name: feature-3-image
+    type: text
+  - name: feature-3-badge
+    type: text
+  - name: feature-3-title
+    type: text
+  - name: feature-3-text
+    type: text
+  - name: cta-url
+    type: text
+  - name: cta-label
+    type: text
+  - name: cta-note
     type: text
   source: auto-generated
 - id: features-technical-grid-3-zilant-group-4
@@ -600,8 +1382,24 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: subhead
+    type: text
+  - name: feature-1-title
+    type: text
+  - name: feature-1-text
+    type: text
+  - name: feature-2-title
+    type: text
+  - name: feature-2-text
+    type: text
+  - name: feature-3-title
+    type: text
+  - name: feature-3-text
     type: text
   source: auto-generated
 - id: features-technical-grid-4-project21993216-tild-2
@@ -616,8 +1414,35 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: features-eyebrow
+    type: text
+  - name: features-title
+    type: text
+  - name: features-description
+    type: text
+  - name: feature-1-value
+    type: text
+  - name: feature-1-title
+    type: text
+  - name: feature-1-text
+    type: text
+  - name: feature-2-value
+    type: text
+  - name: feature-2-title
+    type: text
+  - name: feature-2-text
+    type: text
+  - name: feature-3-value
+    type: text
+  - name: feature-3-title
+    type: text
+  - name: feature-3-text
+    type: text
+  - name: feature-4-value
+    type: text
+  - name: feature-4-title
+    type: text
+  - name: feature-4-text
     type: text
   source: auto-generated
 - id: features-technical-split-sskrusgun-ru-6
@@ -632,8 +1457,64 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: promo-kicker
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: subhead
+    type: text
+  - name: primary-cta-link
+    type: text
+  - name: primary-cta-label
+    type: text
+  - name: features-list-label
+    type: text
+  - name: feature-1-title
+    type: text
+  - name: feature-1-text
+    type: text
+  - name: feature-1-link
+    type: text
+  - name: feature-1-link-label
+    type: text
+  - name: feature-2-title
+    type: text
+  - name: feature-2-text
+    type: text
+  - name: feature-2-link
+    type: text
+  - name: feature-2-link-label
+    type: text
+  - name: feature-3-title
+    type: text
+  - name: feature-3-text
+    type: text
+  - name: feature-3-link
+    type: text
+  - name: feature-3-link-label
+    type: text
+  - name: feature-4-title
+    type: text
+  - name: feature-4-text
+    type: text
+  - name: feature-4-link
+    type: text
+  - name: feature-4-link-label
+    type: text
+  - name: formats-nav-label
+    type: text
+  - name: format-1-link
+    type: text
+  - name: format-1-label
+    type: text
+  - name: format-2-link
+    type: text
+  - name: format-2-label
+    type: text
+  - name: format-3-link
+    type: text
+  - name: format-3-label
     type: text
   source: auto-generated
 - id: ru-features-01-3col-icons
@@ -752,9 +1633,7 @@ blocks:
   created: 2026-05-13
   has_bg_image: false
   slots:
-  - max_chars: 60
-    name: headline
-    required: true
+  - name: headline
     type: text
   - max_chars: 40
     name: card-1-title
@@ -858,9 +1737,7 @@ blocks:
     name: kicker
     required: false
     type: text
-  - max_chars: 70
-    name: headline
-    required: true
+  - name: section-title
     type: text
   - max_chars: 200
     name: subhead
@@ -915,9 +1792,7 @@ blocks:
     name: kicker
     required: false
     type: text
-  - max_chars: 70
-    name: headline
-    required: true
+  - name: section-title
     type: text
   - max_chars: 200
     name: subhead
@@ -988,19 +1863,12 @@ blocks:
     name: kicker
     required: false
     type: text
-  - max_chars: 80
-    name: headline
-    required: true
+  - name: section-title
     type: text
   - max_chars: 300
     name: subhead
     required: true
     type: text
-  - mobile_ratio: '4:3'
-    name: art-image
-    ratio: '1:1'
-    required: false
-    type: photo
   - default_text: Узнать больше о нас
     name: cta
     required: false
@@ -1008,6 +1876,13 @@ blocks:
   - max_chars: 80
     name: footnote
     required: false
+    type: text
+  - mobile_ratio: '4:3'
+    name: art-image
+    ratio: '1:1'
+    required: false
+    type: photo
+  - name: h2-1
     type: text
   source: opendesign
 - id: ru-features-08-kpi-metrics
@@ -1067,7 +1942,73 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: brand-aria-label
+    type: text
+  - name: brand-url
+    type: text
+  - name: brand-name
+    type: text
+  - name: footer-summary
+    type: text
+  - name: social-label
+    type: text
+  - name: social-link-1-label
+    type: text
+  - name: social-link-1
+    type: text
+  - name: social-link-2-label
+    type: text
+  - name: social-link-2
+    type: text
+  - name: social-link-3-label
+    type: text
+  - name: social-link-3
+    type: text
+  - name: footer-nav-label
+    type: text
+  - name: menu-heading
+    type: text
+  - name: menu-link-1-url
+    type: text
+  - name: menu-link-1-label
+    type: text
+  - name: menu-link-2-url
+    type: text
+  - name: menu-link-2-label
+    type: text
+  - name: menu-link-3-url
+    type: text
+  - name: menu-link-3-label
+    type: text
+  - name: menu-link-4-url
+    type: text
+  - name: menu-link-4-label
+    type: text
+  - name: contacts-heading
+    type: text
+  - name: phone-url
+    type: text
+  - name: phone-label
+    type: text
+  - name: email-url
+    type: text
+  - name: email-label
+    type: text
+  - name: address-line
+    type: text
+  - name: work-hours
+    type: text
+  - name: copyright
+    type: text
+  - name: legal-nav-label
+    type: text
+  - name: legal-link-1-url
+    type: text
+  - name: legal-link-1-label
+    type: text
+  - name: legal-link-2-url
+    type: text
+  - name: legal-link-2-label
     type: text
   source: cleaned
 - id: footer-002
@@ -1082,7 +2023,55 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: brand-aria-label
+    type: text
+  - name: brand-link
+    type: text
+  - name: logo-image-alt
+    type: text
+  - name: logo-image
+    type: text
+  - name: footer-heading
+    type: text
+  - name: footer-description
+    type: text
+  - name: contact-area-label
+    type: text
+  - name: primary-cta-link
+    type: text
+  - name: primary-cta-label
+    type: text
+  - name: contact-note
+    type: text
+  - name: footer-nav-label
+    type: text
+  - name: nav-link-1-url
+    type: text
+  - name: nav-link-1-label
+    type: text
+  - name: nav-link-2-url
+    type: text
+  - name: nav-link-2-label
+    type: text
+  - name: nav-link-3-url
+    type: text
+  - name: nav-link-3-label
+    type: text
+  - name: nav-link-4-url
+    type: text
+  - name: nav-link-4-label
+    type: text
+  - name: legal-text
+    type: text
+  - name: legal-nav-label
+    type: text
+  - name: legal-link-1-url
+    type: text
+  - name: legal-link-1-label
+    type: text
+  - name: legal-link-2-url
+    type: text
+  - name: legal-link-2-label
     type: text
   source: cleaned
 - id: footer-003
@@ -1097,7 +2086,67 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: brand-aria-label
+    type: text
+  - name: brand-link
+    type: text
+  - name: brand-logo-alt
+    type: text
+  - name: brand-logo
+    type: text
+  - name: footer-title
+    type: text
+  - name: footer-description
+    type: text
+  - name: primary-cta-link
+    type: text
+  - name: primary-cta-label
+    type: text
+  - name: nav-aria-label
+    type: text
+  - name: nav-title
+    type: text
+  - name: nav-link-1-url
+    type: text
+  - name: nav-link-1-label
+    type: text
+  - name: nav-link-2-url
+    type: text
+  - name: nav-link-2-label
+    type: text
+  - name: nav-link-3-url
+    type: text
+  - name: nav-link-3-label
+    type: text
+  - name: nav-link-4-url
+    type: text
+  - name: nav-link-4-label
+    type: text
+  - name: contacts-title
+    type: text
+  - name: contact-link-1-url
+    type: text
+  - name: contact-link-1-label
+    type: text
+  - name: contact-link-2-url
+    type: text
+  - name: contact-link-2-label
+    type: text
+  - name: contact-line-1
+    type: text
+  - name: contact-line-2
+    type: text
+  - name: legal-text
+    type: text
+  - name: legal-nav-aria-label
+    type: text
+  - name: legal-link-1-url
+    type: text
+  - name: legal-link-1-label
+    type: text
+  - name: legal-link-2-url
+    type: text
+  - name: legal-link-2-label
     type: text
   source: cleaned
 - id: footer-corporate-grid-4-portfolio-kdm1-ru-8
@@ -1112,8 +2161,83 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: brand-aria-label
+    type: text
+  - name: brand-link
+    type: text
+  - name: brand-logo-alt
+    type: text
+  - name: brand-logo
+    type: text
+  - name: footer-heading
+    type: text
+  - name: footer-description
+    type: text
+  - name: nav-primary-label
+    type: text
+  - name: column-1-title
+    type: text
+  - name: column-1-link-1-url
+    type: text
+  - name: column-1-link-1-label
+    type: text
+  - name: column-1-link-2-url
+    type: text
+  - name: column-1-link-2-label
+    type: text
+  - name: column-1-link-3-url
+    type: text
+  - name: column-1-link-3-label
+    type: text
+  - name: column-1-link-4-url
+    type: text
+  - name: column-1-link-4-label
+    type: text
+  - name: nav-secondary-label
+    type: text
+  - name: column-2-title
+    type: text
+  - name: column-2-link-1-url
+    type: text
+  - name: column-2-link-1-label
+    type: text
+  - name: column-2-link-2-url
+    type: text
+  - name: column-2-link-2-label
+    type: text
+  - name: column-2-link-3-url
+    type: text
+  - name: column-2-link-3-label
+    type: text
+  - name: column-2-link-4-url
+    type: text
+  - name: column-2-link-4-label
+    type: text
+  - name: contacts-title
+    type: text
+  - name: phone-url
+    type: text
+  - name: phone-label
+    type: text
+  - name: email-url
+    type: text
+  - name: email-label
+    type: text
+  - name: address-line
+    type: text
+  - name: working-hours
+    type: text
+  - name: copyright
+    type: text
+  - name: legal-nav-label
+    type: text
+  - name: policy-url
+    type: text
+  - name: policy-label
+    type: text
+  - name: terms-url
+    type: text
+  - name: terms-label
     type: text
   source: auto-generated
 - id: footer-corporate-grid-4-zilant-group-10
@@ -1128,8 +2252,73 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: brand-aria-label
+    type: text
+  - name: brand-url
+    type: text
+  - name: brand-logo-alt
+    type: text
+  - name: brand-logo
+    type: text
+  - name: footer-heading
+    type: text
+  - name: footer-description
+    type: text
+  - name: nav-column-1-label
+    type: text
+  - name: nav-column-1-heading
+    type: text
+  - name: nav-1-link-1-url
+    type: text
+  - name: nav-1-link-1-label
+    type: text
+  - name: nav-1-link-2-url
+    type: text
+  - name: nav-1-link-2-label
+    type: text
+  - name: nav-1-link-3-url
+    type: text
+  - name: nav-1-link-3-label
+    type: text
+  - name: nav-column-2-label
+    type: text
+  - name: nav-column-2-heading
+    type: text
+  - name: nav-2-link-1-url
+    type: text
+  - name: nav-2-link-1-label
+    type: text
+  - name: nav-2-link-2-url
+    type: text
+  - name: nav-2-link-2-label
+    type: text
+  - name: nav-2-link-3-url
+    type: text
+  - name: nav-2-link-3-label
+    type: text
+  - name: contacts-heading
+    type: text
+  - name: contact-phone-url
+    type: text
+  - name: contact-phone-label
+    type: text
+  - name: contact-email-url
+    type: text
+  - name: contact-email-label
+    type: text
+  - name: contact-address
+    type: text
+  - name: copyright
+    type: text
+  - name: legal-nav-label
+    type: text
+  - name: legal-link-1-url
+    type: text
+  - name: legal-link-1-label
+    type: text
+  - name: legal-link-2-url
+    type: text
+  - name: legal-link-2-label
     type: text
   source: auto-generated
 - id: footer-corporate-split-portfolio-kdm1-ru-9
@@ -1144,8 +2333,83 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: brand-link
+    type: text
+  - name: brand-mark
+    type: text
+  - name: brand-name
+    type: text
+  - name: footer-description
+    type: text
+  - name: social-nav-label
+    type: text
+  - name: social-label-1
+    type: text
+  - name: social-link-1
+    type: text
+  - name: social-icon-1
+    type: text
+  - name: social-label-2
+    type: text
+  - name: social-link-2
+    type: text
+  - name: social-icon-2
+    type: text
+  - name: social-label-3
+    type: text
+  - name: social-link-3
+    type: text
+  - name: social-icon-3
+    type: text
+  - name: footer-nav-label
+    type: text
+  - name: nav-title-1
+    type: text
+  - name: nav-link-1-url
+    type: text
+  - name: nav-link-1-label
+    type: text
+  - name: nav-link-2-url
+    type: text
+  - name: nav-link-2-label
+    type: text
+  - name: nav-link-3-url
+    type: text
+  - name: nav-link-3-label
+    type: text
+  - name: nav-title-2
+    type: text
+  - name: nav-link-4-url
+    type: text
+  - name: nav-link-4-label
+    type: text
+  - name: nav-link-5-url
+    type: text
+  - name: nav-link-5-label
+    type: text
+  - name: nav-link-6-url
+    type: text
+  - name: nav-link-6-label
+    type: text
+  - name: contact-line-1
+    type: text
+  - name: contact-link-1
+    type: text
+  - name: contact-label-1
+    type: text
+  - name: contact-link-2
+    type: text
+  - name: contact-label-2
+    type: text
+  - name: copyright
+    type: text
+  - name: legal-link-1-url
+    type: text
+  - name: legal-link-1-label
+    type: text
+  - name: legal-link-2-url
+    type: text
+  - name: legal-link-2-label
     type: text
   source: auto-generated
 - id: footer-minimal-split-antidiler-karpov-ru-8
@@ -1160,8 +2424,27 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: brand-label
+    type: text
+  - name: brand-url
+    type: text
+  - name: brand-name
+    type: text
+  - name: company-meta
+    type: text
+  - name: footer-nav-label
+    type: text
+  - name: legal-link-1-url
+    type: text
+  - name: legal-link-1-label
+    type: text
+  - name: legal-link-2-url
+    type: text
+  - name: legal-link-2-label
+    type: text
+  - name: legal-link-3-url
+    type: text
+  - name: legal-link-3-label
     type: text
   source: auto-generated
 - id: footer-minimal-split-portfolio-kdm1-ru-17
@@ -1176,8 +2459,49 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: brand-label
+    type: text
+  - name: brand-url
+    type: text
+  - name: brand-name
+    type: text
+  - name: footer-summary
+    type: text
+  - name: footer-nav-label
+    type: text
+  - name: nav-link-1-url
+    type: text
+  - name: nav-link-1-label
+    type: text
+  - name: nav-link-2-url
+    type: text
+  - name: nav-link-2-label
+    type: text
+  - name: nav-link-3-url
+    type: text
+  - name: nav-link-3-label
+    type: text
+  - name: contact-phone-url
+    type: text
+  - name: contact-phone
+    type: text
+  - name: contact-email-url
+    type: text
+  - name: contact-email
+    type: text
+  - name: contact-address
+    type: text
+  - name: legal-requisites
+    type: text
+  - name: legal-nav-label
+    type: text
+  - name: privacy-url
+    type: text
+  - name: privacy-label
+    type: text
+  - name: terms-url
+    type: text
+  - name: terms-label
     type: text
   source: auto-generated
 - id: footer-minimal-split-romanmelnikov-tilda-14
@@ -1192,8 +2516,39 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: brand-aria-label
+    type: text
+  - name: brand-url
+    type: text
+  - name: brand-name
+    type: text
+  - name: footer-summary
+    type: text
+  - name: phone-url
+    type: text
+  - name: phone-label
+    type: text
+  - name: email-url
+    type: text
+  - name: email-label
+    type: text
+  - name: address-line
+    type: text
+  - name: legal-nav-label
+    type: text
+  - name: privacy-url
+    type: text
+  - name: privacy-label
+    type: text
+  - name: terms-url
+    type: text
+  - name: terms-label
+    type: text
+  - name: cookies-url
+    type: text
+  - name: cookies-label
+    type: text
+  - name: copyright
     type: text
   source: auto-generated
 - id: header-001
@@ -1208,7 +2563,47 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: header-aria-label
+    type: text
+  - name: brand-aria-label
+    type: text
+  - name: brand-link
+    type: text
+  - name: brand-name
+    type: text
+  - name: nav-aria-label
+    type: text
+  - name: nav-link-1
+    type: text
+  - name: nav-label-1
+    type: text
+  - name: nav-link-2
+    type: text
+  - name: nav-label-2
+    type: text
+  - name: nav-link-3
+    type: text
+  - name: nav-label-3
+    type: text
+  - name: nav-link-4
+    type: text
+  - name: nav-label-4
+    type: text
+  - name: contact-link
+    type: text
+  - name: contact-caption
+    type: text
+  - name: contact-value
+    type: text
+  - name: socials-aria-label
+    type: text
+  - name: social-label-1
+    type: text
+  - name: social-link-1
+    type: text
+  - name: social-label-2
+    type: text
+  - name: social-link-2
     type: text
   source: cleaned
 - id: header-002
@@ -1223,7 +2618,43 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: brand-label
+    type: text
+  - name: brand-link
+    type: text
+  - name: logo-image-alt
+    type: text
+  - name: logo-image
+    type: text
+  - name: brand-name
+    type: text
+  - name: nav-label
+    type: text
+  - name: nav-link-1-url
+    type: text
+  - name: nav-link-1-label
+    type: text
+  - name: nav-link-2-url
+    type: text
+  - name: nav-link-2-label
+    type: text
+  - name: nav-link-3-url
+    type: text
+  - name: nav-link-3-label
+    type: text
+  - name: nav-link-4-url
+    type: text
+  - name: nav-link-4-label
+    type: text
+  - name: contacts-label
+    type: text
+  - name: contact-link
+    type: text
+  - name: contact-label
+    type: text
+  - name: cta-link
+    type: text
+  - name: cta-label
     type: text
   source: cleaned
 - id: header-003
@@ -1238,7 +2669,45 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: header-aria-label
+    type: text
+  - name: brand-aria-label
+    type: text
+  - name: brand-link
+    type: text
+  - name: logo-image-alt
+    type: text
+  - name: logo-image
+    type: text
+  - name: brand-name
+    type: text
+  - name: navigation-aria-label
+    type: text
+  - name: nav-link-1-url
+    type: text
+  - name: nav-link-1-label
+    type: text
+  - name: nav-link-2-url
+    type: text
+  - name: nav-link-2-label
+    type: text
+  - name: nav-link-3-url
+    type: text
+  - name: nav-link-3-label
+    type: text
+  - name: nav-link-4-url
+    type: text
+  - name: nav-link-4-label
+    type: text
+  - name: contact-link
+    type: text
+  - name: contact-label
+    type: text
+  - name: contact-value
+    type: text
+  - name: cta-link
+    type: text
+  - name: cta-label
     type: text
   source: cleaned
 - id: header-cinematic-split-portfolio-kdm1-ru-0
@@ -1253,8 +2722,41 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: header-aria-label
+    type: text
+  - name: brand-aria-label
+    type: text
+  - name: brand-link
+    type: text
+  - name: brand-mark
+    type: text
+  - name: brand-name
+    type: text
+  - name: nav-aria-label
+    type: text
+  - name: nav-link-1-url
+    type: text
+  - name: nav-link-1-label
+    type: text
+  - name: nav-link-2-url
+    type: text
+  - name: nav-link-2-label
+    type: text
+  - name: nav-link-3-url
+    type: text
+  - name: nav-link-3-label
+    type: text
+  - name: nav-link-4-url
+    type: text
+  - name: nav-link-4-label
+    type: text
+  - name: secondary-cta-url
+    type: text
+  - name: secondary-cta-label
+    type: text
+  - name: primary-cta-url
+    type: text
+  - name: primary-cta-label
     type: text
   source: auto-generated
 - id: header-corporate-split-zilant-group-0
@@ -1269,8 +2771,39 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: brand-aria-label
+    type: text
+  - name: brand-link
+    type: text
+  - name: brand-logo-alt
+    type: text
+  - name: brand-logo
+    type: text
+  - name: navigation-aria-label
+    type: text
+  - name: nav-link-1
+    type: text
+  - name: nav-label-1
+    type: text
+  - name: nav-link-2
+    type: text
+  - name: nav-label-2
+    type: text
+  - name: nav-link-3
+    type: text
+  - name: nav-label-3
+    type: text
+  - name: nav-link-4
+    type: text
+  - name: nav-label-4
+    type: text
+  - name: phone-link
+    type: text
+  - name: phone-label
+    type: text
+  - name: cta-link
+    type: text
+  - name: cta-label
     type: text
   source: auto-generated
 - id: header-luxury-split-romanmelnikov-tilda-0
@@ -1285,8 +2818,39 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: header-aria-label
+    type: text
+  - name: brand-aria-label
+    type: text
+  - name: brand-link
+    type: text
+  - name: brand-name
+    type: text
+  - name: navigation-aria-label
+    type: text
+  - name: nav-link-1
+    type: text
+  - name: nav-label-1
+    type: text
+  - name: nav-link-2
+    type: text
+  - name: nav-label-2
+    type: text
+  - name: nav-link-3
+    type: text
+  - name: nav-label-3
+    type: text
+  - name: nav-link-4
+    type: text
+  - name: nav-label-4
+    type: text
+  - name: contact-link
+    type: text
+  - name: contact-label
+    type: text
+  - name: cta-link
+    type: text
+  - name: cta-label
     type: text
   source: auto-generated
 - id: header-minimal-split-portfolio-kdm1-ru-0
@@ -1301,8 +2865,51 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: brand-aria-label
+    type: text
+  - name: brand-link
+    type: text
+  - name: logo-image-alt
+    type: text
+  - name: logo-image
+    type: text
+  - name: brand-name
+    type: text
+  - name: navigation-aria-label
+    type: text
+  - name: nav-link-1-url
+    type: text
+  - name: nav-link-1-label
+    type: text
+  - name: nav-link-2-url
+    type: text
+  - name: nav-link-2-label
+    type: text
+  - name: nav-link-3-url
+    type: text
+  - name: nav-link-3-label
+    type: text
+  - name: nav-link-4-url
+    type: text
+  - name: nav-link-4-label
+    type: text
+  - name: contact-link
+    type: text
+  - name: contact-label
+    type: text
+  - name: contact-value
+    type: text
+  - name: action-1-aria-label
+    type: text
+  - name: action-1-url
+    type: text
+  - name: action-2-aria-label
+    type: text
+  - name: action-2-url
+    type: text
+  - name: cta-url
+    type: text
+  - name: cta-label
     type: text
   source: auto-generated
 - id: header-minimal-split-project21993216-tild-0
@@ -1317,8 +2924,43 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: header-aria-label
+    type: text
+  - name: brand-aria-label
+    type: text
+  - name: brand-link
+    type: text
+  - name: brand-logo-alt
+    type: text
+  - name: brand-logo
+    type: text
+  - name: brand-name
+    type: text
+  - name: nav-aria-label
+    type: text
+  - name: nav-link-1-url
+    type: text
+  - name: nav-link-1-label
+    type: text
+  - name: nav-link-2-url
+    type: text
+  - name: nav-link-2-label
+    type: text
+  - name: nav-link-3-url
+    type: text
+  - name: nav-link-3-label
+    type: text
+  - name: nav-link-4-url
+    type: text
+  - name: nav-link-4-label
+    type: text
+  - name: contact-url
+    type: text
+  - name: contact-label
+    type: text
+  - name: cta-url
+    type: text
+  - name: cta-label
     type: text
   source: auto-generated
 - id: header-playful-split-opt-ecowash-ru-0
@@ -1333,8 +2975,43 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: header-aria-label
+    type: text
+  - name: brand-aria-label
+    type: text
+  - name: brand-link
+    type: text
+  - name: brand-logo-alt
+    type: text
+  - name: brand-logo
+    type: text
+  - name: brand-name
+    type: text
+  - name: nav-aria-label
+    type: text
+  - name: nav-link-1-url
+    type: text
+  - name: nav-link-1-label
+    type: text
+  - name: nav-link-2-url
+    type: text
+  - name: nav-link-2-label
+    type: text
+  - name: nav-link-3-url
+    type: text
+  - name: nav-link-3-label
+    type: text
+  - name: nav-link-4-url
+    type: text
+  - name: nav-link-4-label
+    type: text
+  - name: contact-link
+    type: text
+  - name: contact-label
+    type: text
+  - name: cta-link
+    type: text
+  - name: cta-label
     type: text
   source: auto-generated
 - id: header-technical-split-sskrusgun-ru-0
@@ -1349,8 +3026,49 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: brand-aria-label
+    type: text
+  - name: brand-link
+    type: text
+  - name: brand-logo-alt
+    type: text
+  - name: brand-logo
+    type: text
+  - name: brand-name
+    type: text
+  - name: navigation-aria-label
+    type: text
+  - name: nav-link-1
+    type: text
+  - name: nav-label-1
+    type: text
+  - name: nav-link-2
+    type: text
+  - name: nav-label-2
+    type: text
+  - name: nav-link-3
+    type: text
+  - name: nav-label-3
+    type: text
+  - name: nav-link-4
+    type: text
+  - name: nav-label-4
+    type: text
+  - name: icon-label-1
+    type: text
+  - name: icon-link-1
+    type: text
+  - name: icon-1
+    type: text
+  - name: icon-label-2
+    type: text
+  - name: icon-link-2
+    type: text
+  - name: icon-2
+    type: text
+  - name: primary-cta-link
+    type: text
+  - name: primary-cta-label
     type: text
   source: auto-generated
 - id: hero-001
@@ -1365,7 +3083,33 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: eyebrow
+    type: text
+  - name: title
+    type: text
+  - name: subhead
+    type: text
+  - name: primary-cta-link
+    type: text
+  - name: primary-cta-label
+    type: text
+  - name: secondary-cta-link
+    type: text
+  - name: secondary-cta-label
+    type: text
+  - name: badges-label
+    type: text
+  - name: badge-1
+    type: text
+  - name: badge-2
+    type: text
+  - name: badge-3
+    type: text
+  - name: hero-image-mobile
+    type: text
+  - name: hero-image-alt
+    type: text
+  - name: hero-image
     type: text
   source: cleaned
 - id: hero-002
@@ -1380,7 +3124,27 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: eyebrow
+    type: text
+  - name: heading
+    type: text
+  - name: subhead
+    type: text
+  - name: primary-cta-link
+    type: text
+  - name: primary-cta-label
+    type: text
+  - name: secondary-cta-link
+    type: text
+  - name: secondary-cta-label
+    type: text
+  - name: media-label
+    type: text
+  - name: hero-image-mobile
+    type: text
+  - name: hero-image-alt
+    type: text
+  - name: hero-image
     type: text
   source: cleaned
 - id: hero-003
@@ -1395,7 +3159,37 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: hero-image-mobile
+    type: text
+  - name: hero-image-alt
+    type: text
+  - name: hero-image
+    type: text
+  - name: hero-badge
+    type: text
+  - name: hero-title
+    type: text
+  - name: hero-subtitle
+    type: text
+  - name: form-action
+    type: text
+  - name: form-aria-label
+    type: text
+  - name: form-title
+    type: text
+  - name: form-note
+    type: text
+  - name: name-label
+    type: text
+  - name: name-placeholder
+    type: text
+  - name: phone-label
+    type: text
+  - name: phone-placeholder
+    type: text
+  - name: primary-cta-label
+    type: text
+  - name: privacy-text
     type: text
   source: cleaned
 - id: hero-004
@@ -1410,7 +3204,27 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: eyebrow
+    type: text
+  - name: heading
+    type: text
+  - name: subhead
+    type: text
+  - name: primary-cta-url
+    type: text
+  - name: primary-cta-label
+    type: text
+  - name: secondary-cta-url
+    type: text
+  - name: secondary-cta-label
+    type: text
+  - name: hero-image-mobile
+    type: text
+  - name: hero-image-alt
+    type: text
+  - name: hero-image
+    type: text
+  - name: media-caption
     type: text
   source: cleaned
 - id: hero-005
@@ -1425,7 +3239,43 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: eyebrow
+    type: text
+  - name: heading
+    type: text
+  - name: subhead
+    type: text
+  - name: cta-group-label
+    type: text
+  - name: primary-cta-link
+    type: text
+  - name: primary-cta-label
+    type: text
+  - name: secondary-cta-link
+    type: text
+  - name: secondary-cta-label
+    type: text
+  - name: trust-list-label
+    type: text
+  - name: trust-value-1
+    type: text
+  - name: trust-label-1
+    type: text
+  - name: trust-value-2
+    type: text
+  - name: trust-label-2
+    type: text
+  - name: visual-label
+    type: text
+  - name: hero-image-alt
+    type: text
+  - name: hero-image
+    type: text
+  - name: benefits-list-label
+    type: text
+  - name: benefit-marker-1
+    type: text
+  - name: benefit-marker-2
     type: text
   source: cleaned
 - id: hero-cinematic-split-antidiler-karpov-ru-1
@@ -1440,8 +3290,31 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: hero-image-mobile
+    type: text
+  - name: hero-image-alt
+    type: text
+  - name: hero-image
+    type: text
+  - name: hero-badge
+    type: text
+  - name: hero-title
+    type: text
+  - name: hero-subhead
+    type: text
+  - name: primary-cta-url
+    type: text
+  - name: primary-cta-label
+    type: text
+  - name: secondary-cta-url
+    type: text
+  - name: secondary-cta-label
+    type: text
+  - name: hero-panel-label
+    type: text
+  - name: hero-panel-value
+    type: text
+  - name: hero-panel-text
     type: text
   source: auto-generated
 - id: hero-cinematic-split-portfolio-kdm1-ru-2
@@ -1456,8 +3329,45 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: eyebrow
+    type: text
+  - name: headline
+    type: text
+  - name: subhead
+    type: text
+  - name: actions-label
+    type: text
+  - name: primary-cta-link
+    type: text
+  - name: primary-cta-label
+    type: text
+  - name: secondary-cta-link
+    type: text
+  - name: secondary-cta-label
+    type: text
+  - name: benefits-label
+    type: text
+  - name: benefit-1
+    type: text
+  - name: benefit-2
+    type: text
+  - name: benefit-3
+    type: text
+  - name: visual-label
+    type: text
+  - name: hero-image-mobile
+    type: text
+  - name: hero-image-alt
+    type: text
+  - name: hero-image
+    type: text
+  - name: stat-1-value
+    type: text
+  - name: stat-1-label
+    type: text
+  - name: stat-2-value
+    type: text
+  - name: stat-2-label
     type: text
   source: auto-generated
 - id: hero-cinematic-split-romanmelnikov-tilda-1
@@ -1472,8 +3382,27 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: eyebrow
+    type: text
+  - name: title
+    type: text
+  - name: subhead
+    type: text
+  - name: primary-cta-link
+    type: text
+  - name: primary-cta-label
+    type: text
+  - name: secondary-cta-link
+    type: text
+  - name: secondary-cta-label
+    type: text
+  - name: scene-image-mobile
+    type: text
+  - name: scene-image-alt
+    type: text
+  - name: scene-image
+    type: text
+  - name: scene-caption
     type: text
   source: auto-generated
 - id: hero-corporate-split-zilant-group-1
@@ -1488,8 +3417,42 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: subhead
+    type: text
+  - name: actions-label
+    type: text
+  - name: primary-cta-url
+    type: text
+  - name: primary-cta-label
+    type: text
+  - name: secondary-cta-url
+    type: text
+  - name: secondary-cta-label
+    type: text
+  - name: badges-label
+    type: text
+  - name: badge-1
+    type: text
+  - name: badge-2
+    type: text
+  - name: badge-3
+    type: text
+  - name: media-label
+    type: text
+  - name: hero-image-mobile
+    type: text
+  - name: hero-image-alt
+    type: text
+  - name: hero-image
+    type: text
+  - name: stat-value
+    type: text
+  - name: stat-label
     type: text
   source: auto-generated
 - id: hero-playful-split-opt-ecowash-ru-1
@@ -1504,8 +3467,69 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: hero-badge
+    type: text
+  - name: hero-title
+    type: text
+  - name: hero-subhead
+    type: text
+  - name: hero-bullets-label
+    type: text
+  - name: hero-bullet-1
+    type: text
+  - name: hero-bullet-2
+    type: text
+  - name: hero-bullet-3
+    type: text
+  - name: primary-cta-url
+    type: text
+  - name: primary-cta-label
+    type: text
+  - name: secondary-cta-url
+    type: text
+  - name: secondary-cta-label
+    type: text
+  - name: trust-label
+    type: text
+  - name: trust-item-1
+    type: text
+  - name: trust-item-2
+    type: text
+  - name: hero-image-mobile
+    type: text
+  - name: hero-image-alt
+    type: text
+  - name: hero-image
+    type: text
+  - name: hero-image-caption
+    type: text
+  - name: form-action
+    type: text
+  - name: form-label
+    type: text
+  - name: form-title
+    type: text
+  - name: name-label
+    type: text
+  - name: name-field-name
+    type: text
+  - name: name-placeholder
+    type: text
+  - name: phone-label
+    type: text
+  - name: phone-field-name
+    type: text
+  - name: phone-placeholder
+    type: text
+  - name: message-label
+    type: text
+  - name: message-field-name
+    type: text
+  - name: message-placeholder
+    type: text
+  - name: form-submit-label
+    type: text
+  - name: form-notice
     type: text
   source: auto-generated
 - id: hero-technical-split-portfolio-kdm1-ru-1
@@ -1520,8 +3544,36 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: subhead
+    type: text
+  - name: primary-cta-url
+    type: text
+  - name: primary-cta-label
+    type: text
+  - name: secondary-cta-url
+    type: text
+  - name: secondary-cta-label
+    type: text
+  - name: badges-label
+    type: text
+  - name: badge-1
+    type: text
+  - name: badge-2
+    type: text
+  - name: badge-3
+    type: text
+  - name: product-image-mobile
+    type: text
+  - name: product-image-alt
+    type: text
+  - name: product-image
+    type: text
+  - name: image-caption
     type: text
   source: auto-generated
 - id: ru-hero-01-services-calc
@@ -1536,11 +3588,6 @@ blocks:
   created: 2026-05-12
   has_bg_image: false
   slots:
-  - mobile_ratio: '9:16'
-    name: hero-bg
-    ratio: '16:9'
-    required: true
-    type: photo
   - max_chars: 60
     name: headline
     required: true
@@ -1549,14 +3596,14 @@ blocks:
     name: subhead
     required: false
     type: text
-  - max_chars: 12
-    name: price-tag
-    required: false
-    type: text
   - default_text: Рассчитать стоимость
     name: primary-cta
     required: true
     type: cta
+  - max_chars: 12
+    name: price-tag
+    required: false
+    type: text
   source: manual
 - id: ru-hero-02-b2c-expert
   path: hero/ru-hero-02-b2c-expert/
@@ -1706,6 +3753,10 @@ blocks:
   created: 2026-05-13
   has_bg_image: false
   slots:
+  - max_chars: 12
+    name: metric-1-value
+    required: true
+    type: text
   - max_chars: 60
     name: headline
     required: true
@@ -1714,16 +3765,12 @@ blocks:
     name: subhead
     required: true
     type: text
-  - max_chars: 12
-    name: metric-1-value
+  - default_text: Начать работу
+    name: primary-cta
     required: true
-    type: text
+    type: cta
   - max_chars: 40
     name: metric-1-label
-    required: true
-    type: text
-  - max_chars: 12
-    name: metric-2-value
     required: true
     type: text
   - max_chars: 40
@@ -1731,17 +3778,17 @@ blocks:
     required: true
     type: text
   - max_chars: 12
-    name: metric-3-value
-    required: false
+    name: metric-2-value
+    required: true
     type: text
   - max_chars: 40
     name: metric-3-label
     required: false
     type: text
-  - default_text: Начать работу
-    name: primary-cta
-    required: true
-    type: cta
+  - max_chars: 12
+    name: metric-3-value
+    required: false
+    type: text
   source: opendesign
 - id: ru-hero-07-editorial-serif
   path: hero/ru-hero-07-editorial-serif/
@@ -1759,9 +3806,7 @@ blocks:
     name: kicker
     required: false
     type: text
-  - max_chars: 70
-    name: headline
-    required: true
+  - name: headline
     type: text
   - max_chars: 180
     name: subhead
@@ -1791,11 +3836,6 @@ blocks:
     name: stat-3-label
     required: false
     type: text
-  - mobile_ratio: '4:3'
-    name: hero-image
-    ratio: '4:3'
-    required: false
-    type: photo
   - default_text: Начать работу
     name: primary-cta
     required: true
@@ -1804,6 +3844,11 @@ blocks:
     name: secondary-cta
     required: false
     type: cta
+  - mobile_ratio: '4:3'
+    name: hero-image
+    ratio: '4:3'
+    required: false
+    type: photo
   source: opendesign
 - id: ru-hero-08-centered-emailcap
   path: hero/ru-hero-08-centered-emailcap/
@@ -1837,9 +3882,21 @@ blocks:
     name: primary-cta
     required: true
     type: cta
-  - max_chars: 60
-    name: ticker-text
-    required: false
+  - name: ticker-unit
+    type: text
+  - name: span-1
+    type: text
+  - name: span-2
+    type: text
+  - name: span-3
+    type: text
+  - name: span-4
+    type: text
+  - name: span-5
+    type: text
+  - name: span-6
+    type: text
+  - name: span-7
     type: text
   source: opendesign
 - id: ru-hero-09-kami-serif
@@ -1862,14 +3919,20 @@ blocks:
     name: eyebrow-right
     required: false
     type: text
-  - max_chars: 80
-    name: headline
-    required: true
+  - name: h1-1
     type: text
   - max_chars: 220
     name: subhead
     required: false
     type: text
+  - default_text: Начать сейчас
+    name: primary-cta
+    required: true
+    type: cta
+  - default_text: О нас
+    name: secondary-cta
+    required: false
+    type: cta
   - max_chars: 10
     name: metric-1-value
     required: false
@@ -1894,14 +3957,8 @@ blocks:
     name: metric-3-label
     required: false
     type: text
-  - default_text: Начать сейчас
-    name: primary-cta
-    required: true
-    type: cta
-  - default_text: О нас
-    name: secondary-cta
-    required: false
-    type: cta
+  - name: headline
+    type: text
   source: opendesign
 - id: ru-hero-10-deck-cover
   path: hero/ru-hero-10-deck-cover/
@@ -1919,21 +3976,10 @@ blocks:
     name: kicker
     required: false
     type: text
-  - max_chars: 75
-    name: headline
-    required: true
+  - name: cover-title
     type: text
   - max_chars: 200
     name: subhead
-    required: false
-    type: text
-  - mobile_ratio: '4:3'
-    name: hero-image
-    ratio: '1:1'
-    required: false
-    type: photo
-  - max_chars: 20
-    name: meta-label
     required: false
     type: text
   - default_text: Обсудить проект
@@ -1944,6 +3990,15 @@ blocks:
     name: secondary-cta
     required: false
     type: cta
+  - max_chars: 20
+    name: meta-label
+    required: false
+    type: text
+  - mobile_ratio: '4:3'
+    name: hero-image
+    ratio: '1:1'
+    required: false
+    type: photo
   source: opendesign
 - id: pricing-001
   path: pricing/pricing-001/
@@ -1957,7 +4012,77 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: pricing-eyebrow
+    type: text
+  - name: pricing-title
+    type: text
+  - name: pricing-subhead
+    type: text
+  - name: plan-1-title
+    type: text
+  - name: plan-1-description
+    type: text
+  - name: plan-1-price
+    type: text
+  - name: plan-1-period
+    type: text
+  - name: plan-1-features-label
+    type: text
+  - name: plan-1-feature-1
+    type: text
+  - name: plan-1-feature-2
+    type: text
+  - name: plan-1-feature-3
+    type: text
+  - name: plan-1-cta-url
+    type: text
+  - name: plan-1-cta-label
+    type: text
+  - name: plan-2-badge
+    type: text
+  - name: plan-2-title
+    type: text
+  - name: plan-2-description
+    type: text
+  - name: plan-2-price
+    type: text
+  - name: plan-2-period
+    type: text
+  - name: plan-2-features-label
+    type: text
+  - name: plan-2-feature-1
+    type: text
+  - name: plan-2-feature-2
+    type: text
+  - name: plan-2-feature-3
+    type: text
+  - name: plan-2-feature-4
+    type: text
+  - name: plan-2-cta-url
+    type: text
+  - name: plan-2-cta-label
+    type: text
+  - name: plan-3-title
+    type: text
+  - name: plan-3-description
+    type: text
+  - name: plan-3-price
+    type: text
+  - name: plan-3-period
+    type: text
+  - name: plan-3-features-label
+    type: text
+  - name: plan-3-feature-1
+    type: text
+  - name: plan-3-feature-2
+    type: text
+  - name: plan-3-feature-3
+    type: text
+  - name: plan-3-cta-url
+    type: text
+  - name: plan-3-cta-label
+    type: text
+  - name: pricing-note
     type: text
   source: cleaned
 - id: pricing-002
@@ -1972,7 +4097,53 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: pricing-eyebrow
+    type: text
+  - name: pricing-heading
+    type: text
+  - name: pricing-subhead
+    type: text
+  - name: plan-1-label
+    type: text
+  - name: plan-1-title
+    type: text
+  - name: plan-1-price
+    type: text
+  - name: plan-1-note
+    type: text
+  - name: plan-1-feature-1
+    type: text
+  - name: plan-1-feature-2
+    type: text
+  - name: plan-1-feature-3
+    type: text
+  - name: plan-1-cta-link
+    type: text
+  - name: plan-1-cta-label
+    type: text
+  - name: plan-2-label
+    type: text
+  - name: plan-2-title
+    type: text
+  - name: plan-2-price
+    type: text
+  - name: plan-2-note
+    type: text
+  - name: plan-2-feature-1
+    type: text
+  - name: plan-2-feature-2
+    type: text
+  - name: plan-2-feature-3
+    type: text
+  - name: plan-2-cta-link
+    type: text
+  - name: plan-2-cta-label
+    type: text
+  - name: bonus-aria-label
+    type: text
+  - name: bonus-label
+    type: text
+  - name: bonus-text
     type: text
   source: cleaned
 - id: pricing-003
@@ -1987,7 +4158,57 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: pricing-eyebrow
+    type: text
+  - name: pricing-title
+    type: text
+  - name: pricing-subhead
+    type: text
+  - name: plan-1-title
+    type: text
+  - name: plan-1-price
+    type: text
+  - name: plan-1-description
+    type: text
+  - name: plan-1-feature-1
+    type: text
+  - name: plan-1-feature-2
+    type: text
+  - name: plan-1-feature-3
+    type: text
+  - name: plan-1-link
+    type: text
+  - name: plan-1-cta
+    type: text
+  - name: plan-2-badge
+    type: text
+  - name: plan-2-title
+    type: text
+  - name: plan-2-price
+    type: text
+  - name: plan-2-description
+    type: text
+  - name: plan-2-feature-1
+    type: text
+  - name: plan-2-feature-2
+    type: text
+  - name: plan-2-feature-3
+    type: text
+  - name: plan-2-link
+    type: text
+  - name: plan-2-cta
+    type: text
+  - name: pricing-media-label
+    type: text
+  - name: pricing-portrait-mobile
+    type: text
+  - name: pricing-portrait-alt
+    type: text
+  - name: pricing-portrait
+    type: text
+  - name: pricing-note-kicker
+    type: text
+  - name: pricing-note-text
     type: text
   source: cleaned
 - id: pricing-004
@@ -2002,7 +4223,103 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: pricing-eyebrow
+    type: text
+  - name: pricing-title
+    type: text
+  - name: pricing-subhead
+    type: text
+  - name: plan-1-title
+    type: text
+  - name: plan-1-note
+    type: text
+  - name: plan-1-price
+    type: text
+  - name: plan-1-price-caption
+    type: text
+  - name: plan-1-option-1
+    type: text
+  - name: plan-1-option-2
+    type: text
+  - name: plan-1-option-3
+    type: text
+  - name: plan-1-link
+    type: text
+  - name: plan-1-link-label
+    type: text
+  - name: plan-2-title
+    type: text
+  - name: plan-2-note
+    type: text
+  - name: plan-2-price
+    type: text
+  - name: plan-2-price-caption
+    type: text
+  - name: plan-2-option-1
+    type: text
+  - name: plan-2-option-2
+    type: text
+  - name: plan-2-option-3
+    type: text
+  - name: plan-2-link
+    type: text
+  - name: plan-2-link-label
+    type: text
+  - name: plan-3-title
+    type: text
+  - name: plan-3-note
+    type: text
+  - name: plan-3-price
+    type: text
+  - name: plan-3-price-caption
+    type: text
+  - name: plan-3-option-1
+    type: text
+  - name: plan-3-option-2
+    type: text
+  - name: plan-3-option-3
+    type: text
+  - name: plan-3-link
+    type: text
+  - name: plan-3-link-label
+    type: text
+  - name: plan-4-title
+    type: text
+  - name: plan-4-note
+    type: text
+  - name: plan-4-price
+    type: text
+  - name: plan-4-price-caption
+    type: text
+  - name: plan-4-option-1
+    type: text
+  - name: plan-4-option-2
+    type: text
+  - name: plan-4-option-3
+    type: text
+  - name: plan-4-link
+    type: text
+  - name: plan-4-link-label
+    type: text
+  - name: extras-aria-label
+    type: text
+  - name: extras-title
+    type: text
+  - name: extra-1-link
+    type: text
+  - name: extra-1-label
+    type: text
+  - name: extra-2-link
+    type: text
+  - name: extra-2-label
+    type: text
+  - name: extra-3-link
+    type: text
+  - name: extra-3-label
+    type: text
+  - name: extra-4-link
+    type: text
+  - name: extra-4-label
     type: text
   source: cleaned
 - id: pricing-corporate-grid-3-portfolio-kdm1-ru-7
@@ -2017,8 +4334,81 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: pricing-eyebrow
+    type: text
+  - name: pricing-title
+    type: text
+  - name: pricing-subtitle
+    type: text
+  - name: plan-1-title
+    type: text
+  - name: plan-1-description
+    type: text
+  - name: plan-1-price
+    type: text
+  - name: plan-1-period
+    type: text
+  - name: plan-1-features-label
+    type: text
+  - name: plan-1-feature-1
+    type: text
+  - name: plan-1-feature-2
+    type: text
+  - name: plan-1-feature-3
+    type: text
+  - name: plan-1-feature-4
+    type: text
+  - name: plan-1-link
+    type: text
+  - name: plan-1-cta
+    type: text
+  - name: plan-2-badge
+    type: text
+  - name: plan-2-title
+    type: text
+  - name: plan-2-description
+    type: text
+  - name: plan-2-price
+    type: text
+  - name: plan-2-period
+    type: text
+  - name: plan-2-features-label
+    type: text
+  - name: plan-2-feature-1
+    type: text
+  - name: plan-2-feature-2
+    type: text
+  - name: plan-2-feature-3
+    type: text
+  - name: plan-2-feature-4
+    type: text
+  - name: plan-2-link
+    type: text
+  - name: plan-2-cta
+    type: text
+  - name: plan-3-title
+    type: text
+  - name: plan-3-description
+    type: text
+  - name: plan-3-price
+    type: text
+  - name: plan-3-period
+    type: text
+  - name: plan-3-features-label
+    type: text
+  - name: plan-3-feature-1
+    type: text
+  - name: plan-3-feature-2
+    type: text
+  - name: plan-3-feature-3
+    type: text
+  - name: plan-3-feature-4
+    type: text
+  - name: plan-3-link
+    type: text
+  - name: plan-3-cta
+    type: text
+  - name: pricing-note
     type: text
   source: auto-generated
 - id: pricing-corporate-grid-3-sskrusgun-ru-5
@@ -2033,8 +4423,89 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: pricing-eyebrow
+    type: text
+  - name: pricing-title
+    type: text
+  - name: pricing-subtitle
+    type: text
+  - name: plan-1-image-alt
+    type: text
+  - name: plan-1-image
+    type: text
+  - name: plan-1-badge
+    type: text
+  - name: plan-1-title
+    type: text
+  - name: plan-1-description
+    type: text
+  - name: plan-1-price-label
+    type: text
+  - name: plan-1-price
+    type: text
+  - name: plan-1-price-note
+    type: text
+  - name: plan-1-feature-1
+    type: text
+  - name: plan-1-feature-2
+    type: text
+  - name: plan-1-feature-3
+    type: text
+  - name: plan-1-cta-url
+    type: text
+  - name: plan-1-cta-label
+    type: text
+  - name: plan-2-image-alt
+    type: text
+  - name: plan-2-image
+    type: text
+  - name: plan-2-badge
+    type: text
+  - name: plan-2-title
+    type: text
+  - name: plan-2-description
+    type: text
+  - name: plan-2-price-label
+    type: text
+  - name: plan-2-price
+    type: text
+  - name: plan-2-price-note
+    type: text
+  - name: plan-2-feature-1
+    type: text
+  - name: plan-2-feature-2
+    type: text
+  - name: plan-2-feature-3
+    type: text
+  - name: plan-2-cta-url
+    type: text
+  - name: plan-2-cta-label
+    type: text
+  - name: plan-3-image-alt
+    type: text
+  - name: plan-3-image
+    type: text
+  - name: plan-3-badge
+    type: text
+  - name: plan-3-title
+    type: text
+  - name: plan-3-description
+    type: text
+  - name: plan-3-price-label
+    type: text
+  - name: plan-3-price
+    type: text
+  - name: plan-3-price-note
+    type: text
+  - name: plan-3-feature-1
+    type: text
+  - name: plan-3-feature-2
+    type: text
+  - name: plan-3-feature-3
+    type: text
+  - name: plan-3-cta-url
+    type: text
+  - name: plan-3-cta-label
     type: text
   source: auto-generated
 - id: pricing-technical-grid-3-sskrusgun-ru-2
@@ -2049,8 +4520,95 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: pricing-eyebrow
+    type: text
+  - name: pricing-title
+    type: text
+  - name: pricing-subtitle
+    type: text
+  - name: plan-1-image-alt
+    type: text
+  - name: plan-1-image
+    type: text
+  - name: plan-1-badge
+    type: text
+  - name: plan-1-title
+    type: text
+  - name: plan-1-description
+    type: text
+  - name: plan-1-param-1-label
+    type: text
+  - name: plan-1-param-1-value
+    type: text
+  - name: plan-1-param-2-label
+    type: text
+  - name: plan-1-param-2-value
+    type: text
+  - name: plan-1-param-3-label
+    type: text
+  - name: plan-1-param-3-value
+    type: text
+  - name: plan-1-price
+    type: text
+  - name: plan-1-cta-url
+    type: text
+  - name: plan-1-cta-label
+    type: text
+  - name: plan-2-image-alt
+    type: text
+  - name: plan-2-image
+    type: text
+  - name: plan-2-badge
+    type: text
+  - name: plan-2-title
+    type: text
+  - name: plan-2-description
+    type: text
+  - name: plan-2-param-1-label
+    type: text
+  - name: plan-2-param-1-value
+    type: text
+  - name: plan-2-param-2-label
+    type: text
+  - name: plan-2-param-2-value
+    type: text
+  - name: plan-2-param-3-label
+    type: text
+  - name: plan-2-param-3-value
+    type: text
+  - name: plan-2-price
+    type: text
+  - name: plan-2-cta-url
+    type: text
+  - name: plan-2-cta-label
+    type: text
+  - name: plan-3-image-alt
+    type: text
+  - name: plan-3-image
+    type: text
+  - name: plan-3-badge
+    type: text
+  - name: plan-3-title
+    type: text
+  - name: plan-3-description
+    type: text
+  - name: plan-3-param-1-label
+    type: text
+  - name: plan-3-param-1-value
+    type: text
+  - name: plan-3-param-2-label
+    type: text
+  - name: plan-3-param-2-value
+    type: text
+  - name: plan-3-param-3-label
+    type: text
+  - name: plan-3-param-3-value
+    type: text
+  - name: plan-3-price
+    type: text
+  - name: plan-3-cta-url
+    type: text
+  - name: plan-3-cta-label
     type: text
   source: auto-generated
 - id: ru-pricing-01-rub-from
@@ -2077,8 +4635,15 @@ blocks:
     name: tier-1-price
     required: true
     type: text
-  - name: tier-1-features
-    required: true
+  - name: li-1
+    type: text
+  - name: li-2
+    type: text
+  - name: li-3
+    type: text
+  - name: li-4
+    type: text
+  - name: li-5
     type: text
   - default_text: Выбрать
     name: tier-1-cta
@@ -2092,8 +4657,15 @@ blocks:
     name: tier-2-price
     required: true
     type: text
-  - name: tier-2-features
-    required: true
+  - name: li-6
+    type: text
+  - name: li-7
+    type: text
+  - name: li-8
+    type: text
+  - name: li-9
+    type: text
+  - name: li-10
     type: text
   - default_text: Выбрать
     name: tier-2-cta
@@ -2107,8 +4679,15 @@ blocks:
     name: tier-3-price
     required: true
     type: text
-  - name: tier-3-features
-    required: true
+  - name: li-11
+    type: text
+  - name: li-12
+    type: text
+  - name: li-13
+    type: text
+  - name: li-14
+    type: text
+  - name: li-15
     type: text
   - default_text: Выбрать
     name: tier-3-cta
@@ -2139,10 +4718,6 @@ blocks:
     name: tier-1-price
     required: true
     type: text
-  - default_text: Выбрать
-    name: tier-1-cta
-    required: true
-    type: cta
   - max_chars: 20
     name: tier-2-name
     required: true
@@ -2151,10 +4726,6 @@ blocks:
     name: tier-2-price
     required: true
     type: text
-  - default_text: Выбрать
-    name: tier-2-cta
-    required: true
-    type: cta
   - max_chars: 20
     name: tier-3-name
     required: true
@@ -2163,10 +4734,6 @@ blocks:
     name: tier-3-price
     required: true
     type: text
-  - default_text: Выбрать
-    name: tier-3-cta
-    required: true
-    type: cta
   - max_chars: 60
     name: feature-row-1
     required: true
@@ -2191,6 +4758,18 @@ blocks:
     name: feature-row-6
     required: true
     type: text
+  - default_text: Выбрать
+    name: tier-1-cta
+    required: true
+    type: cta
+  - default_text: Выбрать
+    name: tier-2-cta
+    required: true
+    type: cta
+  - default_text: Выбрать
+    name: tier-3-cta
+    required: true
+    type: cta
   source: manual
 - id: ru-pricing-03-3tier-saas
   path: pricing/ru-pricing-03-3tier-saas/
@@ -2220,9 +4799,7 @@ blocks:
     name: tier-1-desc
     required: false
     type: text
-  - max_chars: 30
-    name: tier-1-price
-    required: true
+  - name: tier-price
     type: text
   - max_chars: 60
     name: tier-1-f1
@@ -2248,9 +4825,7 @@ blocks:
     name: tier-2-desc
     required: false
     type: text
-  - max_chars: 30
-    name: tier-2-price
-    required: true
+  - name: div-1
     type: text
   - max_chars: 60
     name: tier-2-f1
@@ -2300,6 +4875,28 @@ blocks:
     name: tier-3-cta
     required: true
     type: cta
+  - name: li-1
+    type: text
+  - name: li-2
+    type: text
+  - name: li-3
+    type: text
+  - name: div-4
+    type: text
+  - name: li-5
+    type: text
+  - name: li-6
+    type: text
+  - name: li-7
+    type: text
+  - name: li-8
+    type: text
+  - name: div-9
+    type: text
+  - name: li-10
+    type: text
+  - name: li-11
+    type: text
   source: opendesign
 - id: ru-pricing-04-tiers-faq
   path: pricing/ru-pricing-04-tiers-faq/
@@ -2325,9 +4922,7 @@ blocks:
     name: tier-1-name
     required: true
     type: text
-  - max_chars: 30
-    name: tier-1-price
-    required: true
+  - name: tier-price
     type: text
   - max_chars: 80
     name: tier-1-desc
@@ -2341,9 +4936,7 @@ blocks:
     name: tier-2-name
     required: true
     type: text
-  - max_chars: 30
-    name: tier-2-price
-    required: true
+  - name: div-1
     type: text
   - max_chars: 80
     name: tier-2-desc
@@ -2397,6 +4990,18 @@ blocks:
     name: faq-3-a
     required: true
     type: text
+  - name: tier-name
+    type: text
+  - name: tier-btn
+    type: text
+  - name: div-2
+    type: text
+  - name: btn-primary
+    type: text
+  - name: div-3
+    type: text
+  - name: btn-outline
+    type: text
   source: opendesign
 - id: process-001
   path: process/process-001/
@@ -2410,7 +5015,43 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: process-eyebrow
+    type: text
+  - name: process-heading
+    type: text
+  - name: process-subhead
+    type: text
+  - name: process-list-label
+    type: text
+  - name: step-1-number
+    type: text
+  - name: step-1-title
+    type: text
+  - name: step-1-text
+    type: text
+  - name: step-2-number
+    type: text
+  - name: step-2-title
+    type: text
+  - name: step-2-text
+    type: text
+  - name: step-3-number
+    type: text
+  - name: step-3-title
+    type: text
+  - name: step-3-text
+    type: text
+  - name: step-4-number
+    type: text
+  - name: step-4-title
+    type: text
+  - name: step-4-text
+    type: text
+  - name: process-visual-alt
+    type: text
+  - name: process-visual
+    type: text
+  - name: process-visual-caption
     type: text
   source: cleaned
 - id: process-002
@@ -2425,7 +5066,49 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: process-eyebrow
+    type: text
+  - name: process-heading
+    type: text
+  - name: process-subhead
+    type: text
+  - name: expert-image-alt
+    type: text
+  - name: expert-image
+    type: text
+  - name: expert-label
+    type: text
+  - name: expert-name
+    type: text
+  - name: expert-text
+    type: text
+  - name: step-1-number
+    type: text
+  - name: step-1-title
+    type: text
+  - name: step-1-text
+    type: text
+  - name: step-2-number
+    type: text
+  - name: step-2-title
+    type: text
+  - name: step-2-text
+    type: text
+  - name: step-3-number
+    type: text
+  - name: step-3-title
+    type: text
+  - name: step-3-text
+    type: text
+  - name: team-gallery-label
+    type: text
+  - name: team-image-1-alt
+    type: text
+  - name: team-image-1
+    type: text
+  - name: team-image-2-alt
+    type: text
+  - name: team-image-2
     type: text
   source: cleaned
 - id: process-003
@@ -2440,7 +5123,43 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: process-eyebrow
+    type: text
+  - name: process-title
+    type: text
+  - name: process-paragraph-1
+    type: text
+  - name: process-paragraph-2
+    type: text
+  - name: process-paragraph-3
+    type: text
+  - name: process-cta-link
+    type: text
+  - name: process-cta-label
+    type: text
+  - name: process-step-1-number
+    type: text
+  - name: process-step-1-title
+    type: text
+  - name: process-step-1-text
+    type: text
+  - name: process-step-2-number
+    type: text
+  - name: process-step-2-title
+    type: text
+  - name: process-step-2-text
+    type: text
+  - name: process-step-3-number
+    type: text
+  - name: process-step-3-title
+    type: text
+  - name: process-step-3-text
+    type: text
+  - name: process-step-4-number
+    type: text
+  - name: process-step-4-title
+    type: text
+  - name: process-step-4-text
     type: text
   source: cleaned
 - id: process-004
@@ -2455,7 +5174,35 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: eyebrow
+    type: text
+  - name: title
+    type: text
+  - name: subhead
+    type: text
+  - name: stat-1-number
+    type: text
+  - name: stat-1-title
+    type: text
+  - name: stat-1-text
+    type: text
+  - name: stat-2-number
+    type: text
+  - name: stat-2-title
+    type: text
+  - name: stat-2-text
+    type: text
+  - name: stat-3-number
+    type: text
+  - name: stat-3-title
+    type: text
+  - name: stat-3-text
+    type: text
+  - name: stat-4-number
+    type: text
+  - name: stat-4-title
+    type: text
+  - name: stat-4-text
     type: text
   source: cleaned
 - id: process-corporate-timeline-project21993216-tild-10
@@ -2470,8 +5217,39 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: process-eyebrow
+    type: text
+  - name: process-title
+    type: text
+  - name: process-lead
+    type: text
+  - name: step-1-number
+    type: text
+  - name: step-1-title
+    type: text
+  - name: step-1-text
+    type: text
+  - name: step-2-number
+    type: text
+  - name: step-2-title
+    type: text
+  - name: step-2-text
+    type: text
+  - name: step-3-number
+    type: text
+  - name: step-3-title
+    type: text
+  - name: step-3-text
+    type: text
+  - name: final-step-number
+    type: text
+  - name: final-step-title
+    type: text
+  - name: final-step-text
+    type: text
+  - name: final-cta-link
+    type: text
+  - name: final-cta-label
     type: text
   source: auto-generated
 - id: process-minimal-grid-2-portfolio-kdm1-ru-4
@@ -2486,8 +5264,28 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: subhead
+    type: text
+  - name: step-1-icon
+    type: text
+  - name: step-1-label
+    type: text
+  - name: step-1-title
+    type: text
+  - name: step-1-text
+    type: text
+  - name: step-2-icon
+    type: text
+  - name: step-2-label
+    type: text
+  - name: step-2-title
+    type: text
+  - name: step-2-text
     type: text
   source: auto-generated
 - id: process-technical-cards-medregistrant-ru-3
@@ -2502,8 +5300,51 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: process-eyebrow
+    type: text
+  - name: process-title
+    type: text
+  - name: process-subhead
+    type: text
+  - name: process-tabs-label
+    type: text
+  - name: tab-1-label
+    type: text
+  - name: tab-2-label
+    type: text
+  - name: tab-3-label
+    type: text
+  - name: step-1-number
+    type: text
+  - name: step-1-title
+    type: text
+  - name: step-1-text
+    type: text
+  - name: step-2-number
+    type: text
+  - name: step-2-title
+    type: text
+  - name: step-2-text
+    type: text
+  - name: step-3-number
+    type: text
+  - name: step-3-title
+    type: text
+  - name: step-3-text
+    type: text
+  - name: step-4-number
+    type: text
+  - name: step-4-title
+    type: text
+  - name: step-4-text
+    type: text
+  - name: primary-cta-url
+    type: text
+  - name: primary-cta-label
+    type: text
+  - name: secondary-cta-url
+    type: text
+  - name: secondary-cta-label
     type: text
   source: auto-generated
 - id: process-technical-stacked-opt-ecowash-ru-6
@@ -2518,8 +5359,42 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: subhead
+    type: text
+  - name: accent-title
+    type: text
+  - name: accent-text
+    type: text
+  - name: step-1-index
+    type: text
+  - name: step-1-title
+    type: text
+  - name: step-1-text
+    type: text
+  - name: step-2-index
+    type: text
+  - name: step-2-title
+    type: text
+  - name: step-2-text
+    type: text
+  - name: step-3-index
+    type: text
+  - name: step-3-title
+    type: text
+  - name: step-3-text
+    type: text
+  - name: process-image-mobile
+    type: text
+  - name: process-image-alt
+    type: text
+  - name: process-image
+    type: text
+  - name: media-caption
     type: text
   source: auto-generated
 - id: process-technical-timeline-romanmelnikov-tilda-10
@@ -2534,8 +5409,44 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: subhead
+    type: text
+  - name: step-1-number
+    type: text
+  - name: step-1-meta
+    type: text
+  - name: step-1-title
+    type: text
+  - name: step-1-text
+    type: text
+  - name: step-2-number
+    type: text
+  - name: step-2-meta
+    type: text
+  - name: step-2-title
+    type: text
+  - name: step-2-text
+    type: text
+  - name: step-3-number
+    type: text
+  - name: step-3-meta
+    type: text
+  - name: step-3-title
+    type: text
+  - name: step-3-text
+    type: text
+  - name: step-4-number
+    type: text
+  - name: step-4-meta
+    type: text
+  - name: step-4-title
+    type: text
+  - name: step-4-text
     type: text
   source: auto-generated
 - id: ru-process-01-4steps-icons
@@ -2639,6 +5550,8 @@ blocks:
     name: step2-text
     required: true
     type: text
+  - name: step-badge
+    type: text
   - max_chars: 20
     name: step3-timing
     required: true
@@ -2672,13 +5585,13 @@ blocks:
     name: kicker
     required: false
     type: text
-  - max_chars: 70
-    name: headline
-    required: true
+  - name: section-title
     type: text
   - max_chars: 220
     name: subhead
     required: false
+    type: text
+  - name: step-1-img
     type: text
   - max_chars: 40
     name: step-1-title
@@ -2688,6 +5601,8 @@ blocks:
     name: step-1-desc
     required: true
     type: text
+  - name: step-2-img
+    type: text
   - max_chars: 40
     name: step-2-title
     required: true
@@ -2695,6 +5610,8 @@ blocks:
   - max_chars: 160
     name: step-2-desc
     required: true
+    type: text
+  - name: step-3-img
     type: text
   - max_chars: 40
     name: step-3-title
@@ -2704,6 +5621,8 @@ blocks:
     name: step-3-desc
     required: true
     type: text
+  - name: step-4-img
+    type: text
   - max_chars: 40
     name: step-4-title
     required: true
@@ -2711,6 +5630,8 @@ blocks:
   - max_chars: 160
     name: step-4-desc
     required: true
+    type: text
+  - name: h2-1
     type: text
   source: opendesign
 - id: ru-quiz-01-step-card
@@ -2822,16 +5743,15 @@ blocks:
     name: phone-input
     required: true
     type: text
-  - name: channel-choice
+  - max_chars: 200
+    name: agreement-text
     required: true
     type: text
   - default_text: Получить расчёт
     name: submit-cta
     required: true
     type: cta
-  - max_chars: 200
-    name: agreement-text
-    required: true
+  - name: cta
     type: text
   source: manual
 - id: ru-quiz-05-thankyou
@@ -2882,10 +5802,6 @@ blocks:
     name: subheadline
     required: true
     type: text
-  - max_chars: 100
-    name: lead-magnet
-    required: false
-    type: text
   - max_chars: 40
     name: cta-button
     required: true
@@ -2907,6 +5823,10 @@ blocks:
   created: '2026-05-13'
   has_bg_image: false
   slots:
+  - max_chars: 60
+    name: progress-label
+    required: false
+    type: text
   - max_chars: 120
     name: question-text
     required: true
@@ -2943,10 +5863,6 @@ blocks:
     name: label-4
     required: false
     type: text
-  - max_chars: 60
-    name: progress-label
-    required: false
-    type: text
   source: manual
 - id: ru-quiz-08-slider-range
   path: quiz/ru-quiz-08-slider-range/
@@ -2960,6 +5876,10 @@ blocks:
   created: '2026-05-13'
   has_bg_image: false
   slots:
+  - max_chars: 60
+    name: progress-label
+    required: false
+    type: text
   - max_chars: 120
     name: question-text
     required: true
@@ -2980,10 +5900,6 @@ blocks:
     name: question-comment
     required: false
     type: text
-  - max_chars: 60
-    name: progress-label
-    required: false
-    type: text
   source: manual
 - id: ru-quiz-09-multi-select
   path: quiz/ru-quiz-09-multi-select/
@@ -2997,6 +5913,10 @@ blocks:
   created: '2026-05-13'
   has_bg_image: false
   slots:
+  - max_chars: 60
+    name: progress-label
+    required: false
+    type: text
   - max_chars: 120
     name: question-text
     required: true
@@ -3028,10 +5948,6 @@ blocks:
   - max_chars: 30
     name: next-button
     required: true
-    type: text
-  - max_chars: 60
-    name: progress-label
-    required: false
     type: text
   source: manual
 - id: ru-quiz-10-loader-analyzing
@@ -3079,12 +5995,12 @@ blocks:
   created: '2026-05-13'
   has_bg_image: false
   slots:
-  - max_chars: 80
-    name: headline
-    required: true
-    type: text
   - max_chars: 20
     name: discount-value
+    required: true
+    type: text
+  - max_chars: 80
+    name: headline
     required: true
     type: text
   - max_chars: 150
@@ -3169,6 +6085,10 @@ blocks:
   created: '2026-05-13'
   has_bg_image: false
   slots:
+  - max_chars: 60
+    name: progress-label
+    required: false
+    type: text
   - max_chars: 120
     name: question-text
     required: true
@@ -3191,10 +6111,6 @@ blocks:
     type: text
   - max_chars: 80
     name: question-comment
-    required: false
-    type: text
-  - max_chars: 60
-    name: progress-label
     required: false
     type: text
   source: manual
@@ -3324,12 +6240,16 @@ blocks:
   created: 2026-05-13
   has_bg_image: false
   slots:
-  - max_chars: 10
-    name: hero-metric
+  - max_chars: 60
+    name: headline
     required: true
     type: text
   - max_chars: 160
     name: hero-context
+    required: true
+    type: text
+  - max_chars: 10
+    name: hero-metric
     required: true
     type: text
   - max_chars: 40
@@ -3346,10 +6266,6 @@ blocks:
     type: text
   - max_chars: 12
     name: metric-3-value
-    required: true
-    type: text
-  - max_chars: 60
-    name: headline
     required: true
     type: text
   source: opendesign
@@ -3483,6 +6399,30 @@ blocks:
     name: client-8
     required: false
     type: text
+  - name: span-1
+    type: text
+  - name: span-2
+    type: text
+  - name: span-3
+    type: text
+  - name: span-4
+    type: text
+  - name: span-5
+    type: text
+  - name: span-6
+    type: text
+  - name: span-7
+    type: text
+  - name: span-8
+    type: text
+  - name: span-9
+    type: text
+  - name: span-10
+    type: text
+  - name: span-11
+    type: text
+  - name: span-12
+    type: text
   source: opendesign
 - id: ru-social-proof-08-stats-deck
   path: social-proof/ru-social-proof-08-stats-deck/
@@ -3500,13 +6440,9 @@ blocks:
     name: kicker
     required: false
     type: text
-  - max_chars: 80
-    name: headline
-    required: true
+  - name: section-title
     type: text
-  - max_chars: 12
-    name: stat-1-value
-    required: true
+  - name: stat-value
     type: text
   - max_chars: 60
     name: stat-1-label
@@ -3516,9 +6452,7 @@ blocks:
     name: stat-1-desc
     required: false
     type: text
-  - max_chars: 12
-    name: stat-2-value
-    required: true
+  - name: div-1
     type: text
   - max_chars: 60
     name: stat-2-label
@@ -3528,9 +6462,7 @@ blocks:
     name: stat-2-desc
     required: false
     type: text
-  - max_chars: 12
-    name: stat-3-value
-    required: true
+  - name: div-2
     type: text
   - max_chars: 60
     name: stat-3-label
@@ -3540,9 +6472,7 @@ blocks:
     name: stat-3-desc
     required: false
     type: text
-  - max_chars: 12
-    name: stat-4-value
-    required: true
+  - name: div-3
     type: text
   - max_chars: 60
     name: stat-4-label
@@ -3762,8 +6692,42 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: case-image-mobile
+    type: text
+  - name: case-image-alt
+    type: text
+  - name: case-image
+    type: text
+  - name: case-badge
+    type: text
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: testimonial-text
+    type: text
+  - name: author-name
+    type: text
+  - name: author-meta
+    type: text
+  - name: stats-label
+    type: text
+  - name: stat-1-value
+    type: text
+  - name: stat-1-label
+    type: text
+  - name: stat-2-value
+    type: text
+  - name: stat-2-label
+    type: text
+  - name: primary-cta-link
+    type: text
+  - name: primary-cta-label
+    type: text
+  - name: secondary-cta-link
+    type: text
+  - name: secondary-cta-label
     type: text
   source: auto-generated
 - id: social-proof-corporate-cards-medregistrant-ru-6
@@ -3778,8 +6742,62 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: subhead
+    type: text
+  - name: carousel-label
+    type: text
+  - name: client-logo-1-alt
+    type: text
+  - name: client-logo-1
+    type: text
+  - name: client-title-1
+    type: text
+  - name: client-description-1
+    type: text
+  - name: client-link-1
+    type: text
+  - name: client-cta-1
+    type: text
+  - name: client-logo-2-alt
+    type: text
+  - name: client-logo-2
+    type: text
+  - name: client-title-2
+    type: text
+  - name: client-description-2
+    type: text
+  - name: client-link-2
+    type: text
+  - name: client-cta-2
+    type: text
+  - name: client-logo-3-alt
+    type: text
+  - name: client-logo-3
+    type: text
+  - name: client-title-3
+    type: text
+  - name: client-description-3
+    type: text
+  - name: client-link-3
+    type: text
+  - name: client-cta-3
+    type: text
+  - name: client-logo-4-alt
+    type: text
+  - name: client-logo-4
+    type: text
+  - name: client-title-4
+    type: text
+  - name: client-description-4
+    type: text
+  - name: client-link-4
+    type: text
+  - name: client-cta-4
     type: text
   source: auto-generated
 - id: social-proof-corporate-grid-3-zilant-group-5
@@ -3794,8 +6812,36 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: subhead
+    type: text
+  - name: stats-list-label
+    type: text
+  - name: stat-1-number
+    type: text
+  - name: stat-1-caption
+    type: text
+  - name: stat-2-number
+    type: text
+  - name: stat-2-caption
+    type: text
+  - name: stat-3-number
+    type: text
+  - name: stat-3-caption
+    type: text
+  - name: video-preview-mobile
+    type: text
+  - name: video-preview-alt
+    type: text
+  - name: video-preview
+    type: text
+  - name: video-play-label
+    type: text
+  - name: video-caption
     type: text
   source: auto-generated
 - id: social-proof-luxury-cards-romanmelnikov-tilda-12
@@ -3810,8 +6856,42 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: subhead
+    type: text
+  - name: testimonial-1-text
+    type: text
+  - name: testimonial-1-avatar-alt
+    type: text
+  - name: testimonial-1-avatar
+    type: text
+  - name: testimonial-1-name
+    type: text
+  - name: testimonial-1-meta
+    type: text
+  - name: testimonial-2-text
+    type: text
+  - name: testimonial-2-avatar-alt
+    type: text
+  - name: testimonial-2-avatar
+    type: text
+  - name: testimonial-2-name
+    type: text
+  - name: testimonial-2-meta
+    type: text
+  - name: testimonial-3-text
+    type: text
+  - name: testimonial-3-avatar-alt
+    type: text
+  - name: testimonial-3-avatar
+    type: text
+  - name: testimonial-3-name
+    type: text
+  - name: testimonial-3-meta
     type: text
   source: auto-generated
 - id: social-proof-minimal-centered-project21993216-tild-3
@@ -3826,8 +6906,78 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: subhead
+    type: text
+  - name: carousel-controls-label
+    type: text
+  - name: previous-button-label
+    type: text
+  - name: next-button-label
+    type: text
+  - name: review-1-rating-label
+    type: text
+  - name: review-1-rating
+    type: text
+  - name: review-1-text
+    type: text
+  - name: review-1-image-alt
+    type: text
+  - name: review-1-image
+    type: text
+  - name: review-1-name
+    type: text
+  - name: review-1-meta
+    type: text
+  - name: review-2-rating-label
+    type: text
+  - name: review-2-rating
+    type: text
+  - name: review-2-text
+    type: text
+  - name: review-2-image-alt
+    type: text
+  - name: review-2-image
+    type: text
+  - name: review-2-name
+    type: text
+  - name: review-2-meta
+    type: text
+  - name: review-3-rating-label
+    type: text
+  - name: review-3-rating
+    type: text
+  - name: review-3-text
+    type: text
+  - name: review-3-image-alt
+    type: text
+  - name: review-3-image
+    type: text
+  - name: review-3-name
+    type: text
+  - name: review-3-meta
+    type: text
+  - name: logos-list-label
+    type: text
+  - name: logo-1-image-alt
+    type: text
+  - name: logo-1-image
+    type: text
+  - name: logo-2-image-alt
+    type: text
+  - name: logo-2-image
+    type: text
+  - name: logo-3-image-alt
+    type: text
+  - name: logo-3-image
+    type: text
+  - name: logo-4-image-alt
+    type: text
+  - name: logo-4-image
     type: text
   source: auto-generated
 - id: social-proof-minimal-stacked-antidiler-karpov-ru-4
@@ -3842,8 +6992,48 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: subhead
+    type: text
+  - name: case-1-name
+    type: text
+  - name: case-1-model
+    type: text
+  - name: case-1-service
+    type: text
+  - name: case-1-review
+    type: text
+  - name: case-1-link
+    type: text
+  - name: case-1-cta
+    type: text
+  - name: case-2-name
+    type: text
+  - name: case-2-model
+    type: text
+  - name: case-2-service
+    type: text
+  - name: case-2-review
+    type: text
+  - name: case-2-link
+    type: text
+  - name: case-2-cta
+    type: text
+  - name: case-3-name
+    type: text
+  - name: case-3-model
+    type: text
+  - name: case-3-service
+    type: text
+  - name: case-3-review
+    type: text
+  - name: case-3-link
+    type: text
+  - name: case-3-cta
     type: text
   source: auto-generated
 - id: social-proof-playful-grid-2-opt-ecowash-ru-9
@@ -3858,8 +7048,52 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: subhead
+    type: text
+  - name: review-1-rating-label
+    type: text
+  - name: review-1-rating
+    type: text
+  - name: review-1-text
+    type: text
+  - name: review-1-author-name
+    type: text
+  - name: review-1-author-meta
+    type: text
+  - name: review-2-rating-label
+    type: text
+  - name: review-2-rating
+    type: text
+  - name: review-2-text
+    type: text
+  - name: review-2-author-name
+    type: text
+  - name: review-2-author-meta
+    type: text
+  - name: review-3-rating-label
+    type: text
+  - name: review-3-rating
+    type: text
+  - name: review-3-text
+    type: text
+  - name: review-3-author-name
+    type: text
+  - name: review-3-author-meta
+    type: text
+  - name: review-4-rating-label
+    type: text
+  - name: review-4-rating
+    type: text
+  - name: review-4-text
+    type: text
+  - name: review-4-author-name
+    type: text
+  - name: review-4-author-meta
     type: text
   source: auto-generated
 - id: social-proof-technical-grid-4-portfolio-kdm1-ru-14
@@ -3874,8 +7108,38 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: subhead
+    type: text
+  - name: stats-list-label
+    type: text
+  - name: stat-1-index
+    type: text
+  - name: stat-1-value
+    type: text
+  - name: stat-1-label
+    type: text
+  - name: stat-2-index
+    type: text
+  - name: stat-2-value
+    type: text
+  - name: stat-2-label
+    type: text
+  - name: stat-3-index
+    type: text
+  - name: stat-3-value
+    type: text
+  - name: stat-3-label
+    type: text
+  - name: stat-4-index
+    type: text
+  - name: stat-4-value
+    type: text
+  - name: stat-4-label
     type: text
   source: auto-generated
 - id: team-001
@@ -3890,7 +7154,55 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: eyebrow
+    type: text
+  - name: heading
+    type: text
+  - name: subhead
+    type: text
+  - name: stats-label
+    type: text
+  - name: stat-1-value
+    type: text
+  - name: stat-1-label
+    type: text
+  - name: stat-2-value
+    type: text
+  - name: stat-2-label
+    type: text
+  - name: stat-3-value
+    type: text
+  - name: stat-3-label
+    type: text
+  - name: primary-cta-link
+    type: text
+  - name: primary-cta-label
+    type: text
+  - name: secondary-cta-link
+    type: text
+  - name: secondary-cta-label
+    type: text
+  - name: team-visual-label
+    type: text
+  - name: team-image-mobile
+    type: text
+  - name: team-image-alt
+    type: text
+  - name: team-image
+    type: text
+  - name: team-list-label
+    type: text
+  - name: member-1-name
+    type: text
+  - name: member-1-role
+    type: text
+  - name: member-2-name
+    type: text
+  - name: member-2-role
+    type: text
+  - name: member-3-name
+    type: text
+  - name: member-3-role
     type: text
   source: cleaned
 - id: ru-trust-01-guarantees-docs
@@ -4048,9 +7360,7 @@ blocks:
   created: 2026-05-13
   has_bg_image: false
   slots:
-  - max_chars: 60
-    name: headline
-    required: true
+  - name: headline
     type: text
   - max_chars: 40
     name: p1-title
@@ -4117,9 +7427,7 @@ blocks:
     name: section-label
     required: false
     type: text
-  - max_chars: 500
-    name: manifesto-text
-    required: true
+  - name: manifesto-body
     type: text
   - max_chars: 60
     name: sig-text
@@ -4142,9 +7450,7 @@ blocks:
     name: kicker
     required: false
     type: text
-  - max_chars: 80
-    name: headline
-    required: true
+  - name: section-title
     type: text
   - max_chars: 20
     name: tag-1
@@ -4166,6 +7472,12 @@ blocks:
     name: lab-1-type
     required: false
     type: text
+  - name: lab-1-img
+    type: text
+  - max_chars: 10
+    name: lab-1-year
+    required: false
+    type: text
   - max_chars: 50
     name: lab-1-title
     required: true
@@ -4174,12 +7486,14 @@ blocks:
     name: lab-1-desc
     required: true
     type: text
-  - max_chars: 10
-    name: lab-1-year
-    required: false
-    type: text
   - max_chars: 20
     name: lab-2-type
+    required: false
+    type: text
+  - name: lab-2-img
+    type: text
+  - max_chars: 10
+    name: lab-2-year
     required: false
     type: text
   - max_chars: 50
@@ -4190,12 +7504,14 @@ blocks:
     name: lab-2-desc
     required: true
     type: text
-  - max_chars: 10
-    name: lab-2-year
-    required: false
-    type: text
   - max_chars: 20
     name: lab-3-type
+    required: false
+    type: text
+  - name: lab-3-img
+    type: text
+  - max_chars: 10
+    name: lab-3-year
     required: false
     type: text
   - max_chars: 50
@@ -4206,12 +7522,14 @@ blocks:
     name: lab-3-desc
     required: true
     type: text
-  - max_chars: 10
-    name: lab-3-year
-    required: false
-    type: text
   - max_chars: 20
     name: lab-4-type
+    required: false
+    type: text
+  - name: lab-4-img
+    type: text
+  - max_chars: 10
+    name: lab-4-year
     required: false
     type: text
   - max_chars: 50
@@ -4222,12 +7540,14 @@ blocks:
     name: lab-4-desc
     required: true
     type: text
-  - max_chars: 10
-    name: lab-4-year
-    required: false
-    type: text
   - max_chars: 20
     name: lab-5-type
+    required: false
+    type: text
+  - name: lab-5-img
+    type: text
+  - max_chars: 10
+    name: lab-5-year
     required: false
     type: text
   - max_chars: 50
@@ -4238,9 +7558,7 @@ blocks:
     name: lab-5-desc
     required: true
     type: text
-  - max_chars: 10
-    name: lab-5-year
-    required: false
+  - name: h2-1
     type: text
   source: opendesign
 - id: ru-trust-07-partner-logos
@@ -4292,7 +7610,57 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: eyebrow
+    type: text
+  - name: heading
+    type: text
+  - name: subhead
+    type: text
+  - name: stats-label
+    type: text
+  - name: stat-1-value
+    type: text
+  - name: stat-1-label
+    type: text
+  - name: stat-2-value
+    type: text
+  - name: stat-2-label
+    type: text
+  - name: benefits-label
+    type: text
+  - name: benefit-1-title
+    type: text
+  - name: benefit-1-text
+    type: text
+  - name: benefit-2-title
+    type: text
+  - name: benefit-2-text
+    type: text
+  - name: benefit-3-title
+    type: text
+  - name: benefit-3-text
+    type: text
+  - name: benefit-4-title
+    type: text
+  - name: benefit-4-text
+    type: text
+  - name: partners-label
+    type: text
+  - name: partner-1-logo-alt
+    type: text
+  - name: partner-1-logo
+    type: text
+  - name: partner-2-logo-alt
+    type: text
+  - name: partner-2-logo
+    type: text
+  - name: partner-3-logo-alt
+    type: text
+  - name: partner-3-logo
+    type: text
+  - name: partner-4-logo-alt
+    type: text
+  - name: partner-4-logo
     type: text
   source: cleaned
 - id: trust-002
@@ -4307,7 +7675,33 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: trust-eyebrow
+    type: text
+  - name: trust-heading
+    type: text
+  - name: trust-quote
+    type: text
+  - name: trust-author-name
+    type: text
+  - name: trust-author-role
+    type: text
+  - name: trust-aside-label
+    type: text
+  - name: trust-stat-1-value
+    type: text
+  - name: trust-stat-1-label
+    type: text
+  - name: trust-stat-2-value
+    type: text
+  - name: trust-stat-2-label
+    type: text
+  - name: trust-stat-3-value
+    type: text
+  - name: trust-stat-3-label
+    type: text
+  - name: trust-link-url
+    type: text
+  - name: trust-link-label
     type: text
   source: cleaned
 - id: trust-003
@@ -4322,7 +7716,37 @@ blocks:
   created: '2026-06-01'
   has_bg_image: false
   slots:
-  - name: content
+  - name: trust-eyebrow
+    type: text
+  - name: trust-heading
+    type: text
+  - name: trust-subhead
+    type: text
+  - name: trust-logos-label
+    type: text
+  - name: partner-logo-1-alt
+    type: text
+  - name: partner-logo-1
+    type: text
+  - name: partner-logo-2-alt
+    type: text
+  - name: partner-logo-2
+    type: text
+  - name: partner-logo-3-alt
+    type: text
+  - name: partner-logo-3
+    type: text
+  - name: partner-logo-4-alt
+    type: text
+  - name: partner-logo-4
+    type: text
+  - name: partner-logo-5-alt
+    type: text
+  - name: partner-logo-5
+    type: text
+  - name: partner-logo-6-alt
+    type: text
+  - name: partner-logo-6
     type: text
   source: cleaned
 - id: trust-corporate-grid-3-project21993216-tild-12
@@ -4337,8 +7761,47 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: trust-eyebrow
+    type: text
+  - name: trust-title
+    type: text
+  - name: trust-subhead
+    type: text
+  - name: certificate-1-image-alt
+    type: text
+  - name: certificate-1-image
+    type: text
+  - name: certificate-1-title
+    type: text
+  - name: certificate-1-text
+    type: text
+  - name: certificate-1-link
+    type: text
+  - name: certificate-1-link-label
+    type: text
+  - name: certificate-2-image-alt
+    type: text
+  - name: certificate-2-image
+    type: text
+  - name: certificate-2-title
+    type: text
+  - name: certificate-2-text
+    type: text
+  - name: certificate-2-link
+    type: text
+  - name: certificate-2-link-label
+    type: text
+  - name: certificate-3-image-alt
+    type: text
+  - name: certificate-3-image
+    type: text
+  - name: certificate-3-title
+    type: text
+  - name: certificate-3-text
+    type: text
+  - name: certificate-3-link
+    type: text
+  - name: certificate-3-link-label
     type: text
   source: auto-generated
 - id: trust-corporate-grid-4-sskrusgun-ru-11
@@ -4353,8 +7816,46 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: subhead
+    type: text
+  - name: trust-list-label
+    type: text
+  - name: value-1-letter
+    type: text
+  - name: value-1-badge
+    type: text
+  - name: value-1-title
+    type: text
+  - name: value-1-text
+    type: text
+  - name: value-2-letter
+    type: text
+  - name: value-2-badge
+    type: text
+  - name: value-2-title
+    type: text
+  - name: value-2-text
+    type: text
+  - name: value-3-letter
+    type: text
+  - name: value-3-badge
+    type: text
+  - name: value-3-title
+    type: text
+  - name: value-3-text
+    type: text
+  - name: value-4-letter
+    type: text
+  - name: value-4-badge
+    type: text
+  - name: value-4-title
+    type: text
+  - name: value-4-text
     type: text
   source: auto-generated
 - id: trust-editorial-grid-2-romanmelnikov-tilda-11
@@ -4369,8 +7870,66 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: subhead
+    type: text
+  - name: left-column-label
+    type: text
+  - name: criterion-1-badge
+    type: text
+  - name: criterion-1-title
+    type: text
+  - name: criterion-1-text
+    type: text
+  - name: criterion-2-badge
+    type: text
+  - name: criterion-2-title
+    type: text
+  - name: criterion-2-text
+    type: text
+  - name: criterion-3-badge
+    type: text
+  - name: criterion-3-title
+    type: text
+  - name: criterion-3-text
+    type: text
+  - name: right-column-label
+    type: text
+  - name: criterion-4-badge
+    type: text
+  - name: criterion-4-title
+    type: text
+  - name: criterion-4-text
+    type: text
+  - name: criterion-5-badge
+    type: text
+  - name: criterion-5-title
+    type: text
+  - name: criterion-5-text
+    type: text
+  - name: criterion-6-badge
+    type: text
+  - name: criterion-6-title
+    type: text
+  - name: criterion-6-text
+    type: text
+  - name: summary-label
+    type: text
+  - name: stat-1-value
+    type: text
+  - name: stat-1-label
+    type: text
+  - name: stat-2-value
+    type: text
+  - name: stat-2-label
+    type: text
+  - name: stat-3-value
+    type: text
+  - name: stat-3-label
     type: text
   source: auto-generated
 - id: trust-editorial-grid-2-zilant-group-7
@@ -4385,8 +7944,50 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: subhead
+    type: text
+  - name: case-image-1-mobile
+    type: text
+  - name: case-image-1-alt
+    type: text
+  - name: case-image-1
+    type: text
+  - name: case-label-1
+    type: text
+  - name: case-title-1
+    type: text
+  - name: case-text-1
+    type: text
+  - name: case-image-2-mobile
+    type: text
+  - name: case-image-2-alt
+    type: text
+  - name: case-image-2
+    type: text
+  - name: case-label-2
+    type: text
+  - name: case-title-2
+    type: text
+  - name: case-text-2
+    type: text
+  - name: takeaways-label
+    type: text
+  - name: takeaway-value-1
+    type: text
+  - name: takeaway-text-1
+    type: text
+  - name: takeaway-value-2
+    type: text
+  - name: takeaway-text-2
+    type: text
+  - name: takeaway-value-3
+    type: text
+  - name: takeaway-text-3
     type: text
   source: auto-generated
 - id: trust-editorial-grid-3-portfolio-kdm1-ru-4
@@ -4401,8 +8002,43 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: eyebrow
+    type: text
+  - name: title
+    type: text
+  - name: lead
+    type: text
+  - name: list-label
+    type: text
+  - name: principle-1-image-alt
+    type: text
+  - name: principle-1-image
+    type: text
+  - name: principle-1-number
+    type: text
+  - name: principle-1-title
+    type: text
+  - name: principle-1-text
+    type: text
+  - name: principle-2-image-alt
+    type: text
+  - name: principle-2-image
+    type: text
+  - name: principle-2-number
+    type: text
+  - name: principle-2-title
+    type: text
+  - name: principle-2-text
+    type: text
+  - name: principle-3-image-alt
+    type: text
+  - name: principle-3-image
+    type: text
+  - name: principle-3-number
+    type: text
+  - name: principle-3-title
+    type: text
+  - name: principle-3-text
     type: text
   source: auto-generated
 - id: trust-editorial-stacked-portfolio-kdm1-ru-12
@@ -4417,8 +8053,35 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: trust-eyebrow
+    type: text
+  - name: trust-title
+    type: text
+  - name: trust-lead
+    type: text
+  - name: trust-list-label
+    type: text
+  - name: trust-point-1-title
+    type: text
+  - name: trust-point-1-text
+    type: text
+  - name: trust-point-2-title
+    type: text
+  - name: trust-point-2-text
+    type: text
+  - name: trust-point-3-title
+    type: text
+  - name: trust-point-3-text
+    type: text
+  - name: trust-stats-label
+    type: text
+  - name: trust-stat-1-value
+    type: text
+  - name: trust-stat-1-label
+    type: text
+  - name: trust-stat-2-value
+    type: text
+  - name: trust-stat-2-label
     type: text
   source: auto-generated
 - id: trust-luxury-centered-romanmelnikov-tilda-5
@@ -4433,8 +8096,26 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: caption
+    type: text
+  - name: trust-list-label
+    type: text
+  - name: stat-1-value
+    type: text
+  - name: stat-1-label
+    type: text
+  - name: stat-2-value
+    type: text
+  - name: stat-2-label
+    type: text
+  - name: stat-3-value
+    type: text
+  - name: stat-3-label
     type: text
   source: auto-generated
 - id: trust-minimal-grid-4-zilant-group-8
@@ -4449,8 +8130,30 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: subhead
+    type: text
+  - name: logos-list-label
+    type: text
+  - name: logo-1-alt
+    type: text
+  - name: logo-1
+    type: text
+  - name: logo-2-alt
+    type: text
+  - name: logo-2
+    type: text
+  - name: logo-3-alt
+    type: text
+  - name: logo-3
+    type: text
+  - name: logo-4-alt
+    type: text
+  - name: logo-4
     type: text
   source: auto-generated
 - id: trust-playful-stacked-opt-ecowash-ru-4
@@ -4465,8 +8168,37 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
-  - name: heading
-    required: true
+  - name: trust-eyebrow
+    type: text
+  - name: trust-heading
+    type: text
+  - name: trust-subhead
+    type: text
+  - name: trust-visual-image-alt
+    type: text
+  - name: trust-visual-image
+    type: text
+  - name: trust-stats-label
+    type: text
+  - name: trust-stat-1-value
+    type: text
+  - name: trust-stat-1-label
+    type: text
+  - name: trust-stat-2-value
+    type: text
+  - name: trust-stat-2-label
+    type: text
+  - name: trust-stat-3-value
+    type: text
+  - name: trust-stat-3-label
+    type: text
+  - name: trust-badges-label
+    type: text
+  - name: trust-badge-1
+    type: text
+  - name: trust-badge-2
+    type: text
+  - name: trust-badge-3
     type: text
   source: auto-generated
 - id: trust-technical-grid-3-project21993216-tild-9
@@ -4481,7 +8213,31 @@ blocks:
   created: '2026-06-02'
   has_bg_image: false
   slots:
+  - name: eyebrow
+    type: text
   - name: heading
     required: true
+    type: text
+  - name: subhead
+    type: text
+  - name: list-label
+    type: text
+  - name: badge-1-icon
+    type: text
+  - name: badge-1-title
+    type: text
+  - name: badge-1-text
+    type: text
+  - name: badge-2-icon
+    type: text
+  - name: badge-2-title
+    type: text
+  - name: badge-2-text
+    type: text
+  - name: badge-3-icon
+    type: text
+  - name: badge-3-title
+    type: text
+  - name: badge-3-text
     type: text
   source: auto-generated

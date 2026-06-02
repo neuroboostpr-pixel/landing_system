@@ -6,7 +6,37 @@ id: hero-003
 layout_pattern: split
 signature: hero|split|[content]|bg:false
 slots:
-- name: content
+- name: hero-image-mobile
+  type: text
+- name: hero-image-alt
+  type: text
+- name: hero-image
+  type: text
+- name: hero-badge
+  type: text
+- name: hero-title
+  type: text
+- name: hero-subtitle
+  type: text
+- name: form-action
+  type: text
+- name: form-aria-label
+  type: text
+- name: form-title
+  type: text
+- name: form-note
+  type: text
+- name: name-label
+  type: text
+- name: name-placeholder
+  type: text
+- name: phone-label
+  type: text
+- name: phone-placeholder
+  type: text
+- name: primary-cta-label
+  type: text
+- name: privacy-text
   type: text
 source: cleaned
 type: hero

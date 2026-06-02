@@ -122,32 +122,30 @@
   }
 }
 </style>
-<section class="lp-process-minimal-grid-2" aria-labelledby="lp-process-minimal-grid-2-title">
-  <div class="lp-process-minimal-grid-2__inner">
-    <div class="lp-process-minimal-grid-2__header">
-      <p class="lp-process-minimal-grid-2__eyebrow">{{slot:eyebrow}}</p>
-      <h2 class="lp-process-minimal-grid-2__title" id="lp-process-minimal-grid-2-title">{{slot:heading}}</h2>
-      <p class="lp-process-minimal-grid-2__subhead">{{slot:subhead}}</p>
-    </div>
-
-    <ol class="lp-process-minimal-grid-2__list">
-      <li class="lp-process-minimal-grid-2__item">
-        <div class="lp-process-minimal-grid-2__icon" aria-hidden="true">{{slot:step-1-icon}}</div>
-        <div class="lp-process-minimal-grid-2__content">
-          <span class="lp-process-minimal-grid-2__number">{{slot:step-1-label}}</span>
-          <h3 class="lp-process-minimal-grid-2__item-title">{{slot:step-1-title}}</h3>
-          <p class="lp-process-minimal-grid-2__text">{{slot:step-1-text}}</p>
-        </div>
-      </li>
-
-      <li class="lp-process-minimal-grid-2__item">
-        <div class="lp-process-minimal-grid-2__icon" aria-hidden="true">{{slot:step-2-icon}}</div>
-        <div class="lp-process-minimal-grid-2__content">
-          <span class="lp-process-minimal-grid-2__number">{{slot:step-2-label}}</span>
-          <h3 class="lp-process-minimal-grid-2__item-title">{{slot:step-2-title}}</h3>
-          <p class="lp-process-minimal-grid-2__text">{{slot:step-2-text}}</p>
-        </div>
-      </li>
-    </ol>
-  </div>
+<section aria-labelledby="lp-process-minimal-grid-2-title" class="lp-process-minimal-grid-2">
+<div class="lp-process-minimal-grid-2__inner">
+<div class="lp-process-minimal-grid-2__header">
+<p class="lp-process-minimal-grid-2__eyebrow">{{slot:eyebrow}}</p>
+<h2 class="lp-process-minimal-grid-2__title" id="lp-process-minimal-grid-2-title">{{slot:heading}}</h2>
+<p class="lp-process-minimal-grid-2__subhead">{{slot:subhead}}</p>
+</div>
+<ol class="lp-process-minimal-grid-2__list">
+<li class="lp-process-minimal-grid-2__item">
+<div aria-hidden="true" class="lp-process-minimal-grid-2__icon">{{slot:step-1-icon}}</div>
+<div class="lp-process-minimal-grid-2__content">
+<span class="lp-process-minimal-grid-2__number">{{slot:step-1-label}}</span>
+<h3 class="lp-process-minimal-grid-2__item-title">{{slot:step-1-title}}</h3>
+<p class="lp-process-minimal-grid-2__text">{{slot:step-1-text}}</p>
+</div>
+</li>
+<li class="lp-process-minimal-grid-2__item">
+<div aria-hidden="true" class="lp-process-minimal-grid-2__icon">{{slot:step-2-icon}}</div>
+<div class="lp-process-minimal-grid-2__content">
+<span class="lp-process-minimal-grid-2__number">{{slot:step-2-label}}</span>
+<h3 class="lp-process-minimal-grid-2__item-title">{{slot:step-2-title}}</h3>
+<p class="lp-process-minimal-grid-2__text">{{slot:step-2-text}}</p>
+</div>
+</li>
+</ol>
+</div>
 </section>

@@ -1,8 +1,3 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<title>ru-quiz-13-comparison-question — mobile</title>
 <style>
   :root {
     --color-bg: #fff; --color-fg: #111; --color-accent: #333; --color-border: #ccc;
@@ -27,37 +22,33 @@
   .cmp-desc { font-size: 13px; color: #666; line-height: 1.4; }
   .question-comment { margin-top: 18px; font-size: 12px; color: #999; text-align: center; }
 </style>
-</head>
-<body>
-  <div class="step-card" data-block-id="ru-quiz-13-comparison-question">
-    <div class="progress-bar-wrap">
-      <div class="progress-label" data-slot="progress-label">Вопрос 2 из 5</div>
-      <div class="progress-track"><div class="progress-fill"></div></div>
-    </div>
-    <p class="question-text" data-slot="question-text">Что для вас важнее при выборе покрытия?</p>
-    <div class="vs-stack">
-      <div class="cmp-option">
-        <input type="radio" name="comparison" id="m-optA" value="A">
-        <label for="m-optA">
-          <span class="cmp-icon">💰</span>
-          <div class="cmp-content">
-            <div class="cmp-title" data-slot="option-a-title">Низкая цена</div>
-            <div class="cmp-desc" data-slot="option-a-description">Сэкономить сейчас, заменить через 5–7 лет</div>
-          </div>
-        </label>
-      </div>
-      <div class="cmp-option">
-        <input type="radio" name="comparison" id="m-optB" value="B">
-        <label for="m-optB">
-          <span class="cmp-icon">🏆</span>
-          <div class="cmp-content">
-            <div class="cmp-title" data-slot="option-b-title">Высокое качество</div>
-            <div class="cmp-desc" data-slot="option-b-description">Вложить больше, но забыть на 20+ лет</div>
-          </div>
-        </label>
-      </div>
-    </div>
-    <p class="question-comment" data-slot="question-comment">Нет правильного ответа — это поможет подобрать предложение</p>
-  </div>
-</body>
-</html>
+<div class="step-card" data-block-id="ru-quiz-13-comparison-question">
+<div class="progress-bar-wrap">
+<div class="progress-label">{{slot:progress-label}}</div>
+<div class="progress-track"><div class="progress-fill"></div></div>
+</div>
+<p class="question-text">{{slot:question-text}}</p>
+<div class="vs-stack">
+<div class="cmp-option">
+<input id="m-optA" name="comparison" type="radio" value="A"/>
+<label for="m-optA">
+<span class="cmp-icon">💰</span>
+<div class="cmp-content">
+<div class="cmp-title">{{slot:option-a-title}}</div>
+<div class="cmp-desc">{{slot:option-a-description}}</div>
+</div>
+</label>
+</div>
+<div class="cmp-option">
+<input id="m-optB" name="comparison" type="radio" value="B"/>
+<label for="m-optB">
+<span class="cmp-icon">🏆</span>
+<div class="cmp-content">
+<div class="cmp-title">{{slot:option-b-title}}</div>
+<div class="cmp-desc">{{slot:option-b-description}}</div>
+</div>
+</label>
+</div>
+</div>
+<p class="question-comment">{{slot:question-comment}}</p>
+</div>

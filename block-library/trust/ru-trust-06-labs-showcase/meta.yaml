@@ -19,9 +19,7 @@ slots:
   name: kicker
   required: false
   type: text
-- max_chars: 80
-  name: headline
-  required: true
+- name: section-title
   type: text
 - max_chars: 20
   name: tag-1
@@ -43,6 +41,12 @@ slots:
   name: lab-1-type
   required: false
   type: text
+- name: lab-1-img
+  type: text
+- max_chars: 10
+  name: lab-1-year
+  required: false
+  type: text
 - max_chars: 50
   name: lab-1-title
   required: true
@@ -51,12 +55,14 @@ slots:
   name: lab-1-desc
   required: true
   type: text
-- max_chars: 10
-  name: lab-1-year
-  required: false
-  type: text
 - max_chars: 20
   name: lab-2-type
+  required: false
+  type: text
+- name: lab-2-img
+  type: text
+- max_chars: 10
+  name: lab-2-year
   required: false
   type: text
 - max_chars: 50
@@ -67,12 +73,14 @@ slots:
   name: lab-2-desc
   required: true
   type: text
-- max_chars: 10
-  name: lab-2-year
-  required: false
-  type: text
 - max_chars: 20
   name: lab-3-type
+  required: false
+  type: text
+- name: lab-3-img
+  type: text
+- max_chars: 10
+  name: lab-3-year
   required: false
   type: text
 - max_chars: 50
@@ -83,12 +91,14 @@ slots:
   name: lab-3-desc
   required: true
   type: text
-- max_chars: 10
-  name: lab-3-year
-  required: false
-  type: text
 - max_chars: 20
   name: lab-4-type
+  required: false
+  type: text
+- name: lab-4-img
+  type: text
+- max_chars: 10
+  name: lab-4-year
   required: false
   type: text
 - max_chars: 50
@@ -99,12 +109,14 @@ slots:
   name: lab-4-desc
   required: true
   type: text
-- max_chars: 10
-  name: lab-4-year
-  required: false
-  type: text
 - max_chars: 20
   name: lab-5-type
+  required: false
+  type: text
+- name: lab-5-img
+  type: text
+- max_chars: 10
+  name: lab-5-year
   required: false
   type: text
 - max_chars: 50
@@ -115,9 +127,7 @@ slots:
   name: lab-5-desc
   required: true
   type: text
-- max_chars: 10
-  name: lab-5-year
-  required: false
+- name: h2-1
   type: text
 source: opendesign
 source_attribution: 'github.com/nexu-io/open-design: design-templates/open-design-landing

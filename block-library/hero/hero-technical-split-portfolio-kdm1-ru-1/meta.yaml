@@ -15,8 +15,36 @@ niches_suitable:
 - tech
 ru_market: true
 slots:
+- name: eyebrow
+  type: text
 - name: heading
   required: true
+  type: text
+- name: subhead
+  type: text
+- name: primary-cta-url
+  type: text
+- name: primary-cta-label
+  type: text
+- name: secondary-cta-url
+  type: text
+- name: secondary-cta-label
+  type: text
+- name: badges-label
+  type: text
+- name: badge-1
+  type: text
+- name: badge-2
+  type: text
+- name: badge-3
+  type: text
+- name: product-image-mobile
+  type: text
+- name: product-image-alt
+  type: text
+- name: product-image
+  type: text
+- name: image-caption
   type: text
 style_mood: technical
 type: hero

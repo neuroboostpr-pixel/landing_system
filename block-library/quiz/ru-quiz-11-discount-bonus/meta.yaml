@@ -11,12 +11,12 @@ layout_summary_ru: Большой бейдж скидки, описание по
   Переход к лид-форме. Без JS. Всегда перед формой контактов — мощный мотиватор.
 ru_market: true
 slots:
-- max_chars: 80
-  name: headline
-  required: true
-  type: text
 - max_chars: 20
   name: discount-value
+  required: true
+  type: text
+- max_chars: 80
+  name: headline
   required: true
   type: text
 - max_chars: 150

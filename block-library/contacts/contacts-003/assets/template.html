@@ -271,88 +271,79 @@
   }
 }
 </style>
-<section class="lp-contacts-corporate-split" aria-labelledby="lp-contacts-corporate-split-title">
-  <div class="lp-contacts-corporate-split__inner">
-    <div class="lp-contacts-corporate-split__content">
-      <a class="lp-contacts-corporate-split__brand" href="{{slot:brand-link}}" aria-label="{{slot:brand-aria-label}}">
-        <img src="{{slot:brand-logo}}" alt="{{slot:brand-logo-alt}}" loading="lazy">
-      </a>
-
-      <div class="lp-contacts-corporate-split__heading">
-        <p class="lp-contacts-corporate-split__eyebrow">{{slot:eyebrow}}</p>
-        <h2 id="lp-contacts-corporate-split-title">{{slot:heading}}</h2>
-        <p>{{slot:subhead}}</p>
-      </div>
-
-      <ul class="lp-contacts-corporate-split__contacts" aria-label="{{slot:contacts-list-label}}">
-        <li>
-          <span class="lp-contacts-corporate-split__icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" focusable="false">
-              <path d="M7 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L17 13l5 2v4c0 1.1-.9 2-2 2A17 17 0 0 1 3 4c0-1.1.9-2 2-2h2z"></path>
-            </svg>
-          </span>
-          <a href="{{slot:phone-link}}">{{slot:phone}}</a>
-        </li>
-        <li>
-          <span class="lp-contacts-corporate-split__icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" focusable="false">
-              <path d="M4 6h16v12H4z"></path>
-              <path d="m4 7 8 6 8-6"></path>
-            </svg>
-          </span>
-          <a href="{{slot:email-link}}">{{slot:email}}</a>
-        </li>
-        <li>
-          <span class="lp-contacts-corporate-split__icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" focusable="false">
-              <path d="M12 21s7-5.2 7-11a7 7 0 0 0-14 0c0 5.8 7 11 7 11z"></path>
-              <circle cx="12" cy="10" r="2.5"></circle>
-            </svg>
-          </span>
-          <span>{{slot:address}}</span>
-        </li>
-      </ul>
-
-      <div class="lp-contacts-corporate-split__social" aria-label="{{slot:social-list-label}}">
-        <a href="{{slot:social-link-1}}" aria-label="{{slot:social-label-1}}">
-          <span>{{slot:social-icon-1}}</span>
-        </a>
-        <a href="{{slot:social-link-2}}" aria-label="{{slot:social-label-2}}">
-          <span>{{slot:social-icon-2}}</span>
-        </a>
-        <a href="{{slot:social-link-3}}" aria-label="{{slot:social-label-3}}">
-          <span>{{slot:social-icon-3}}</span>
-        </a>
-      </div>
-    </div>
-
-    <form class="lp-contacts-corporate-split__form" action="{{slot:form-action}}" method="post" aria-label="{{slot:form-label}}">
-      <div class="lp-contacts-corporate-split__form-head">
-        <h3>{{slot:form-heading}}</h3>
-        <p>{{slot:form-subhead}}</p>
-      </div>
-
-      <label>
-        <span>{{slot:name-label}}</span>
-        <input type="text" name="{{slot:name-field-name}}" placeholder="{{slot:name-placeholder}}" autocomplete="name">
-      </label>
-
-      <label>
-        <span>{{slot:phone-label}}</span>
-        <input type="tel" name="{{slot:phone-field-name}}" placeholder="{{slot:phone-placeholder}}" autocomplete="tel">
-      </label>
-
-      <label>
-        <span>{{slot:message-label}}</span>
-        <textarea name="{{slot:message-field-name}}" placeholder="{{slot:message-placeholder}}" rows="4"></textarea>
-      </label>
-
-      <label class="lp-contacts-corporate-split__consent">
-        <input type="checkbox" name="{{slot:consent-field-name}}">
-        <span>{{slot:consent-text}}</span>
-      </label>
-
-      <button type="submit">{{slot:submit-label}}</button>
-    </form>
-  </div>
+<section aria-labelledby="lp-contacts-corporate-split-title" class="lp-contacts-corporate-split">
+<div class="lp-contacts-corporate-split__inner">
+<div class="lp-contacts-corporate-split__content">
+<a aria-label="{{slot:brand-aria-label}}" class="lp-contacts-corporate-split__brand" href="{{slot:brand-link}}">
+<img alt="{{slot:brand-logo-alt}}" loading="lazy" src="{{slot:brand-logo}}"/>
+</a>
+<div class="lp-contacts-corporate-split__heading">
+<p class="lp-contacts-corporate-split__eyebrow">{{slot:eyebrow}}</p>
+<h2 id="lp-contacts-corporate-split-title">{{slot:heading}}</h2>
+<p>{{slot:subhead}}</p>
+</div>
+<ul aria-label="{{slot:contacts-list-label}}" class="lp-contacts-corporate-split__contacts">
+<li>
+<span aria-hidden="true" class="lp-contacts-corporate-split__icon">
+<svg focusable="false" viewbox="0 0 24 24">
+<path d="M7 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L17 13l5 2v4c0 1.1-.9 2-2 2A17 17 0 0 1 3 4c0-1.1.9-2 2-2h2z"></path>
+</svg>
+</span>
+<a href="{{slot:phone-link}}">{{slot:phone}}</a>
+</li>
+<li>
+<span aria-hidden="true" class="lp-contacts-corporate-split__icon">
+<svg focusable="false" viewbox="0 0 24 24">
+<path d="M4 6h16v12H4z"></path>
+<path d="m4 7 8 6 8-6"></path>
+</svg>
+</span>
+<a href="{{slot:email-link}}">{{slot:email}}</a>
+</li>
+<li>
+<span aria-hidden="true" class="lp-contacts-corporate-split__icon">
+<svg focusable="false" viewbox="0 0 24 24">
+<path d="M12 21s7-5.2 7-11a7 7 0 0 0-14 0c0 5.8 7 11 7 11z"></path>
+<circle cx="12" cy="10" r="2.5"></circle>
+</svg>
+</span>
+<span>{{slot:address}}</span>
+</li>
+</ul>
+<div aria-label="{{slot:social-list-label}}" class="lp-contacts-corporate-split__social">
+<a aria-label="{{slot:social-label-1}}" href="{{slot:social-link-1}}">
+<span>{{slot:social-icon-1}}</span>
+</a>
+<a aria-label="{{slot:social-label-2}}" href="{{slot:social-link-2}}">
+<span>{{slot:social-icon-2}}</span>
+</a>
+<a aria-label="{{slot:social-label-3}}" href="{{slot:social-link-3}}">
+<span>{{slot:social-icon-3}}</span>
+</a>
+</div>
+</div>
+<form action="{{slot:form-action}}" aria-label="{{slot:form-label}}" class="lp-contacts-corporate-split__form" method="post">
+<div class="lp-contacts-corporate-split__form-head">
+<h3>{{slot:form-heading}}</h3>
+<p>{{slot:form-subhead}}</p>
+</div>
+<label>
+<span>{{slot:name-label}}</span>
+<input autocomplete="name" name="{{slot:name-field-name}}" placeholder="{{slot:name-placeholder}}" type="text"/>
+</label>
+<label>
+<span>{{slot:phone-label}}</span>
+<input autocomplete="tel" name="{{slot:phone-field-name}}" placeholder="{{slot:phone-placeholder}}" type="tel"/>
+</label>
+<label>
+<span>{{slot:message-label}}</span>
+<textarea name="{{slot:message-field-name}}" placeholder="{{slot:message-placeholder}}" rows="4"></textarea>
+</label>
+<label class="lp-contacts-corporate-split__consent">
+<input name="{{slot:consent-field-name}}" type="checkbox"/>
+<span>{{slot:consent-text}}</span>
+</label>
+<button type="submit">{{slot:submit-label}}</button>
+</form>
+</div>
 </section>

@@ -1,8 +1,3 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<title>ru-quiz-12-mini-calculator — mobile</title>
 <style>
   :root {
     --color-bg: #fff; --color-fg: #111; --color-accent: #333; --color-border: #ccc;
@@ -24,30 +19,26 @@
   .result-note { font-size: 11px; color: #999; margin-top: 4px; }
   .cta-button { display: block; background: var(--color-accent); color: #fff; font-size: 16px; font-weight: 700; padding: 16px; border-radius: 10px; text-decoration: none; text-align: center; }
 </style>
-</head>
-<body>
-  <div class="calc-card" data-block-id="ru-quiz-12-mini-calculator">
-    <h2 class="headline" data-slot="headline">📐 Рассчитайте стоимость</h2>
-    <div class="param-group">
-      <span class="param-label" data-slot="param-1-label">Тип помещения</span>
-      <div class="radio-options">
-        <div class="radio-opt"><input type="radio" name="room" id="mr1" value="small" checked><label for="mr1" data-slot="param-1-opt-1">до 50 м²</label></div>
-        <div class="radio-opt"><input type="radio" name="room" id="mr2" value="large"><label for="mr2" data-slot="param-1-opt-2">50–100 м²</label></div>
-      </div>
-    </div>
-    <div class="param-group">
-      <span class="param-label" data-slot="param-2-label">Тип покрытия</span>
-      <div class="radio-options">
-        <div class="radio-opt"><input type="radio" name="cover" id="mc1" value="laminate" checked><label for="mc1" data-slot="param-2-opt-1">Ламинат</label></div>
-        <div class="radio-opt"><input type="radio" name="cover" id="mc2" value="parquet"><label for="mc2" data-slot="param-2-opt-2">Паркет</label></div>
-      </div>
-    </div>
-    <div class="result-box">
-      <div class="result-prefix" data-slot="result-prefix">Ориентировочно:</div>
-      <div class="result-value">от 45 000 ₽</div>
-      <div class="result-note">Точный расчёт — после звонка</div>
-    </div>
-    <a class="cta-button" href="#" data-slot="cta-button">Уточнить точную цену →</a>
-  </div>
-</body>
-</html>
+<div class="calc-card" data-block-id="ru-quiz-12-mini-calculator">
+<h2 class="headline">{{slot:headline}}</h2>
+<div class="param-group">
+<span class="param-label">{{slot:param-1-label}}</span>
+<div class="radio-options">
+<div class="radio-opt"><input checked="" id="mr1" name="room" type="radio" value="small"/><label for="mr1">{{slot:param-1-opt-1}}</label></div>
+<div class="radio-opt"><input id="mr2" name="room" type="radio" value="large"/><label for="mr2">{{slot:param-1-opt-2}}</label></div>
+</div>
+</div>
+<div class="param-group">
+<span class="param-label">{{slot:param-2-label}}</span>
+<div class="radio-options">
+<div class="radio-opt"><input checked="" id="mc1" name="cover" type="radio" value="laminate"/><label for="mc1">{{slot:param-2-opt-1}}</label></div>
+<div class="radio-opt"><input id="mc2" name="cover" type="radio" value="parquet"/><label for="mc2">{{slot:param-2-opt-2}}</label></div>
+</div>
+</div>
+<div class="result-box">
+<div class="result-prefix">{{slot:result-prefix}}</div>
+<div class="result-value">от 45 000 ₽</div>
+<div class="result-note">Точный расчёт — после звонка</div>
+</div>
+<a class="cta-button" href="#">{{slot:cta-button}}</a>
+</div>

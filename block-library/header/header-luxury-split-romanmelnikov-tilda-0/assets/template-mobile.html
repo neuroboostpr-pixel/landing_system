@@ -128,23 +128,21 @@
   body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
 }
 </style>
-<header class="lp-header-luxury-split" aria-label="{{slot:header-aria-label}}">
-  <div class="lp-header-luxury-split__inner">
-    <a class="lp-header-luxury-split__brand" href="{{slot:brand-link}}" aria-label="{{slot:brand-aria-label}}">
-      <span class="lp-header-luxury-split__brand-mark" aria-hidden="true"></span>
-      <span class="lp-header-luxury-split__brand-text">{{slot:brand-name}}</span>
-    </a>
-
-    <nav class="lp-header-luxury-split__nav" aria-label="{{slot:navigation-aria-label}}">
-      <a class="lp-header-luxury-split__link" href="{{slot:nav-link-1}}">{{slot:nav-label-1}}</a>
-      <a class="lp-header-luxury-split__link" href="{{slot:nav-link-2}}">{{slot:nav-label-2}}</a>
-      <a class="lp-header-luxury-split__link" href="{{slot:nav-link-3}}">{{slot:nav-label-3}}</a>
-      <a class="lp-header-luxury-split__link" href="{{slot:nav-link-4}}">{{slot:nav-label-4}}</a>
-    </nav>
-
-    <div class="lp-header-luxury-split__actions">
-      <a class="lp-header-luxury-split__contact" href="{{slot:contact-link}}">{{slot:contact-label}}</a>
-      <a class="lp-header-luxury-split__cta" href="{{slot:cta-link}}">{{slot:cta-label}}</a>
-    </div>
-  </div>
+<header aria-label="{{slot:header-aria-label}}" class="lp-header-luxury-split">
+<div class="lp-header-luxury-split__inner">
+<a aria-label="{{slot:brand-aria-label}}" class="lp-header-luxury-split__brand" href="{{slot:brand-link}}">
+<span aria-hidden="true" class="lp-header-luxury-split__brand-mark"></span>
+<span class="lp-header-luxury-split__brand-text">{{slot:brand-name}}</span>
+</a>
+<nav aria-label="{{slot:navigation-aria-label}}" class="lp-header-luxury-split__nav">
+<a class="lp-header-luxury-split__link" href="{{slot:nav-link-1}}">{{slot:nav-label-1}}</a>
+<a class="lp-header-luxury-split__link" href="{{slot:nav-link-2}}">{{slot:nav-label-2}}</a>
+<a class="lp-header-luxury-split__link" href="{{slot:nav-link-3}}">{{slot:nav-label-3}}</a>
+<a class="lp-header-luxury-split__link" href="{{slot:nav-link-4}}">{{slot:nav-label-4}}</a>
+</nav>
+<div class="lp-header-luxury-split__actions">
+<a class="lp-header-luxury-split__contact" href="{{slot:contact-link}}">{{slot:contact-label}}</a>
+<a class="lp-header-luxury-split__cta" href="{{slot:cta-link}}">{{slot:cta-label}}</a>
+</div>
+</div>
 </header>

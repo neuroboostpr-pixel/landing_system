@@ -1,9 +1,3 @@
-<!DOCTYPE html>
-<!-- Source: /tmp/open-design/skills/digits-fintech-swiss-template/example.html (Apache-2.0, adapted for RU block-library schema) -->
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<title>ru-hero-06-swiss-metrics — desktop</title>
 <style>
   :root {
     --color-bg: #f2f2ed;
@@ -32,37 +26,33 @@
   .metric-value { font-size: 40px; font-weight: 900; letter-spacing: -.03em; line-height: 1; }
   .metric-label { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; opacity: .75; }
 </style>
-</head>
-<body>
-  <section class="hero" data-block-id="ru-hero-06-swiss-metrics">
-    <aside class="hero-rail">
-      <div class="rail-label">Экспертиза / Результат</div>
-      <div class="rail-label" data-slot="metric-1-value">[+N%]</div>
-    </aside>
-    <div class="hero-main">
-      <div class="kicker">Профессиональные решения</div>
-      <h1 class="headline" data-slot="headline">[HEADLINE: краткий и ударный заголовок]</h1>
-      <p class="subhead" data-slot="subhead">[SUBHEAD: что вы делаете, для кого, почему именно вы]</p>
-      <a class="cta-btn" data-slot="primary-cta" href="#contact">[CTA: Начать работу]</a>
-    </div>
-    <div class="hero-metrics">
-      <div class="metric-row">
-        <div class="metric-card">
-          <div class="metric-label" data-slot="metric-1-label">[Метрика 1]</div>
-          <div class="metric-value" data-slot="metric-1-value">[123]</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-label" data-slot="metric-2-label">[Метрика 2]</div>
-          <div class="metric-value" data-slot="metric-2-value">[456]</div>
-        </div>
-      </div>
-      <div class="metric-row">
-        <div class="metric-card accent">
-          <div class="metric-label" data-slot="metric-3-label">[Главная метрика]</div>
-          <div class="metric-value" data-slot="metric-3-value">[789]</div>
-        </div>
-      </div>
-    </div>
-  </section>
-</body>
-</html>
+<section class="hero" data-block-id="ru-hero-06-swiss-metrics">
+<aside class="hero-rail">
+<div class="rail-label">Экспертиза / Результат</div>
+<div class="rail-label">{{slot:metric-1-value}}</div>
+</aside>
+<div class="hero-main">
+<div class="kicker">Профессиональные решения</div>
+<h1 class="headline">{{slot:headline}}</h1>
+<p class="subhead">{{slot:subhead}}</p>
+<a class="cta-btn" href="#contact">{{slot:primary-cta}}</a>
+</div>
+<div class="hero-metrics">
+<div class="metric-row">
+<div class="metric-card">
+<div class="metric-label">{{slot:metric-1-label}}</div>
+<div class="metric-value">{{slot:metric-1-value}}</div>
+</div>
+<div class="metric-card">
+<div class="metric-label">{{slot:metric-2-label}}</div>
+<div class="metric-value">{{slot:metric-2-value}}</div>
+</div>
+</div>
+<div class="metric-row">
+<div class="metric-card accent">
+<div class="metric-label">{{slot:metric-3-label}}</div>
+<div class="metric-value">{{slot:metric-3-value}}</div>
+</div>
+</div>
+</div>
+</section>

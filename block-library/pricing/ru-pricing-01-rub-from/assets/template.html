@@ -1,8 +1,3 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<title>ru-pricing-01-rub-from — desktop</title>
 <style>
   :root {
     --color-bg: #fff;
@@ -29,49 +24,45 @@
   .tier-features li::before { content: "✓ "; color: var(--color-accent); font-weight: 700; }
   .cta { display: block; padding: 14px; background: var(--color-accent); color: #fff; text-align: center; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 15px; margin-top: auto; }
 </style>
-</head>
-<body>
-  <section class="pricing" data-block-id="ru-pricing-01-rub-from">
-    <h2 class="section-headline" data-slot="headline">[HEADLINE: тарифы и цены]</h2>
-    <div class="tiers">
-      <div class="tier">
-        <p class="tier-name" data-slot="tier-1-name">[Базовый]</p>
-        <p class="tier-price" data-slot="tier-1-price">[от 10 000 ₽]</p>
-        <ul class="tier-features" data-slot="tier-1-features">
-          <li>[Пункт 1]</li>
-          <li>[Пункт 2]</li>
-          <li>[Пункт 3]</li>
-          <li>[Пункт 4]</li>
-          <li>[Пункт 5]</li>
-        </ul>
-        <a class="cta" data-slot="tier-1-cta" href="#quiz">[Выбрать]</a>
-      </div>
-      <div class="tier tier--popular">
-        <p class="tier-badge">Популярный</p>
-        <p class="tier-name" data-slot="tier-2-name">[Стандарт]</p>
-        <p class="tier-price" data-slot="tier-2-price">[от 25 000 ₽]</p>
-        <ul class="tier-features" data-slot="tier-2-features">
-          <li>[Пункт 1]</li>
-          <li>[Пункт 2]</li>
-          <li>[Пункт 3]</li>
-          <li>[Пункт 4]</li>
-          <li>[Пункт 5]</li>
-        </ul>
-        <a class="cta" data-slot="tier-2-cta" href="#quiz">[Выбрать]</a>
-      </div>
-      <div class="tier">
-        <p class="tier-name" data-slot="tier-3-name">[Премиум]</p>
-        <p class="tier-price" data-slot="tier-3-price">[от 50 000 ₽]</p>
-        <ul class="tier-features" data-slot="tier-3-features">
-          <li>[Пункт 1]</li>
-          <li>[Пункт 2]</li>
-          <li>[Пункт 3]</li>
-          <li>[Пункт 4]</li>
-          <li>[Пункт 5]</li>
-        </ul>
-        <a class="cta" data-slot="tier-3-cta" href="#quiz">[Выбрать]</a>
-      </div>
-    </div>
-  </section>
-</body>
-</html>
+<section class="pricing" data-block-id="ru-pricing-01-rub-from">
+<h2 class="section-headline">{{slot:headline}}</h2>
+<div class="tiers">
+<div class="tier">
+<p class="tier-name">{{slot:tier-1-name}}</p>
+<p class="tier-price">{{slot:tier-1-price}}</p>
+<ul class="tier-features">
+<li>{{slot:li-1}}</li>
+<li>{{slot:li-2}}</li>
+<li>{{slot:li-3}}</li>
+<li>{{slot:li-4}}</li>
+<li>{{slot:li-5}}</li>
+</ul>
+<a class="cta" href="#quiz">{{slot:tier-1-cta}}</a>
+</div>
+<div class="tier tier--popular">
+<p class="tier-badge">Популярный</p>
+<p class="tier-name">{{slot:tier-2-name}}</p>
+<p class="tier-price">{{slot:tier-2-price}}</p>
+<ul class="tier-features">
+<li>{{slot:li-6}}</li>
+<li>{{slot:li-7}}</li>
+<li>{{slot:li-8}}</li>
+<li>{{slot:li-9}}</li>
+<li>{{slot:li-10}}</li>
+</ul>
+<a class="cta" href="#quiz">{{slot:tier-2-cta}}</a>
+</div>
+<div class="tier">
+<p class="tier-name">{{slot:tier-3-name}}</p>
+<p class="tier-price">{{slot:tier-3-price}}</p>
+<ul class="tier-features">
+<li>{{slot:li-11}}</li>
+<li>{{slot:li-12}}</li>
+<li>{{slot:li-13}}</li>
+<li>{{slot:li-14}}</li>
+<li>{{slot:li-15}}</li>
+</ul>
+<a class="cta" href="#quiz">{{slot:tier-3-cta}}</a>
+</div>
+</div>
+</section>

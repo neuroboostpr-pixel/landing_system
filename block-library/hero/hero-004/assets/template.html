@@ -127,35 +127,31 @@
   }
 }
 </style>
-<section class="lp-hero-editorial-centered" aria-labelledby="lp-hero-editorial-centered-title">
-  <div class="lp-hero-editorial-centered__inner">
-    <div class="lp-hero-editorial-centered__eyebrow">{{slot:eyebrow}}</div>
-
-    <h1 class="lp-hero-editorial-centered__title" id="lp-hero-editorial-centered-title">
+<section aria-labelledby="lp-hero-editorial-centered-title" class="lp-hero-editorial-centered">
+<div class="lp-hero-editorial-centered__inner">
+<div class="lp-hero-editorial-centered__eyebrow">{{slot:eyebrow}}</div>
+<h1 class="lp-hero-editorial-centered__title" id="lp-hero-editorial-centered-title">
       {{slot:heading}}
     </h1>
-
-    <p class="lp-hero-editorial-centered__subhead">
+<p class="lp-hero-editorial-centered__subhead">
       {{slot:subhead}}
     </p>
-
-    <div class="lp-hero-editorial-centered__actions">
-      <a class="lp-hero-editorial-centered__button lp-hero-editorial-centered__button--primary" href="{{slot:primary-cta-url}}">
+<div class="lp-hero-editorial-centered__actions">
+<a class="lp-hero-editorial-centered__button lp-hero-editorial-centered__button--primary" href="{{slot:primary-cta-url}}">
         {{slot:primary-cta-label}}
       </a>
-      <a class="lp-hero-editorial-centered__button lp-hero-editorial-centered__button--secondary" href="{{slot:secondary-cta-url}}">
+<a class="lp-hero-editorial-centered__button lp-hero-editorial-centered__button--secondary" href="{{slot:secondary-cta-url}}">
         {{slot:secondary-cta-label}}
       </a>
-    </div>
-
-    <figure class="lp-hero-editorial-centered__media">
-      <picture>
-        <source media="(max-width: 767px)" srcset="{{slot:hero-image-mobile}}">
-        <img src="{{slot:hero-image}}" alt="{{slot:hero-image-alt}}" loading="lazy">
-      </picture>
-      <figcaption class="lp-hero-editorial-centered__caption">
+</div>
+<figure class="lp-hero-editorial-centered__media">
+<picture>
+<source media="(max-width: 767px)" srcset="{{slot:hero-image-mobile}}"/>
+<img alt="{{slot:hero-image-alt}}" loading="lazy" src="{{slot:hero-image}}"/>
+</picture>
+<figcaption class="lp-hero-editorial-centered__caption">
         {{slot:media-caption}}
       </figcaption>
-    </figure>
-  </div>
+</figure>
+</div>
 </section>

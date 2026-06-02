@@ -1,8 +1,3 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<title>ru-quiz-04-lead-form — desktop</title>
 <style>
   :root {
     --color-bg: #fff; --color-fg: #111; --color-accent: #333;
@@ -22,20 +17,16 @@
   .agreement { display: flex; gap: 8px; font-size: 13px; color: #666; margin-bottom: 16px; }
   .cta { width: 100%; padding: 16px; background: var(--color-accent); color: #fff; border: none; border-radius: 6px; font-weight: 600; font-size: 16px; cursor: pointer; }
 </style>
-</head>
-<body>
-  <section class="lead-form" data-block-id="ru-quiz-04-lead-form">
-    <h2 class="headline" data-slot="headline">[HEADLINE: оставь контакт]</h2>
-    <p class="subhead" data-slot="subhead">[SUBHEAD: что получит пользователь]</p>
-    <div class="field"><input type="text" placeholder="Имя" data-slot="name-input"></div>
-    <div class="field"><input type="tel" placeholder="+7 ___ ___ __ __" data-slot="phone-input" required></div>
-    <fieldset class="channel-choice" data-slot="channel-choice">
-      <label><input type="radio" name="ch" value="tg" checked><span>Telegram</span></label>
-      <label><input type="radio" name="ch" value="max"><span>Max</span></label>
-      <label><input type="radio" name="ch" value="phone"><span>Звонок</span></label>
-    </fieldset>
-    <label class="agreement"><input type="checkbox" required><span data-slot="agreement-text">Согласен на обработку персональных данных (152-ФЗ)</span></label>
-    <button class="cta" data-slot="submit-cta">[Получить расчёт]</button>
-  </section>
-</body>
-</html>
+<section class="lead-form" data-block-id="ru-quiz-04-lead-form">
+<h2 class="headline">{{slot:headline}}</h2>
+<p class="subhead">{{slot:subhead}}</p>
+<div class="field"><input placeholder="Имя" type="text"/>{{slot:name-input}}</div>
+<div class="field"><input placeholder="+7 ___ ___ __ __" required="" type="tel"/>{{slot:phone-input}}</div>
+<fieldset class="channel-choice">
+<label><input checked="" name="ch" type="radio" value="tg"/><span>Telegram</span></label>
+<label><input name="ch" type="radio" value="max"/><span>Max</span></label>
+<label><input name="ch" type="radio" value="phone"/><span>Звонок</span></label>
+</fieldset>
+<label class="agreement"><input required="" type="checkbox"/><span>{{slot:agreement-text}}</span></label>
+<button class="cta">{{slot:submit-cta}}</button>
+</section>

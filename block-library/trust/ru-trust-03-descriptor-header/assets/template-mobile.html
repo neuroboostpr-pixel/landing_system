@@ -1,8 +1,3 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<title>ru-trust-03-descriptor-header — mobile wireframe</title>
 <style>
   /* Wireframe: ч/б, CSS-only, no external deps.
      CSS vars in :root are MANDATORY — block-composition/inject-tokens.py relies on these names. */
@@ -29,15 +24,11 @@
   .city { font-size: 10px; color: #888; }
   .header-cta { background: var(--color-accent); color: #fff; padding: 8px 14px; border-radius: 4px; font-size: 12px; font-weight: 600; text-decoration: none; flex-shrink: 0; }
 </style>
-</head>
-<body>
-  <section class="header-bar" data-block-id="ru-trust-03-descriptor-header">
-    <div class="logo-slot" data-slot="logo">[Лого]</div>
-    <div>
-      <div class="phone" data-slot="phone">+7 000 000-00-00</div>
-      <div class="city" data-slot="city-tag">[Город]</div>
-    </div>
-    <a href="#" class="header-cta" data-slot="header-cta">Связаться</a>
-  </section>
-</body>
-</html>
+<section class="header-bar" data-block-id="ru-trust-03-descriptor-header">
+<div class="logo-slot">{{slot:logo}}</div>
+<div>
+<div class="phone">{{slot:phone}}</div>
+<div class="city">{{slot:city-tag}}</div>
+</div>
+<a class="header-cta" href="#">{{slot:header-cta}}</a>
+</section>

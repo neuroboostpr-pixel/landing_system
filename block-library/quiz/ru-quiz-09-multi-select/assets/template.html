@@ -1,8 +1,3 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<title>ru-quiz-09-multi-select — desktop</title>
 <style>
   :root {
     --color-bg: #fff;
@@ -33,42 +28,38 @@
   .check-option input[type=checkbox]:checked + label .check-box::after { content: '✓'; color: #fff; font-size: 13px; font-weight: 700; }
   .next-btn { display: block; margin: 28px auto 0; background: var(--color-accent); color: #fff; border: none; border-radius: 8px; padding: 14px 48px; font-size: 16px; font-weight: 700; cursor: pointer; text-decoration: none; text-align: center; }
 </style>
-</head>
-<body>
-  <div class="step-card" data-block-id="ru-quiz-09-multi-select">
-    <div class="progress-bar-wrap">
-      <div class="progress-label" data-slot="progress-label">Вопрос 4 из 5 · осталось ~30 сек</div>
-      <div class="progress-track"><div class="progress-fill"></div></div>
-    </div>
-    <p class="question-text" data-slot="question-text">Что важно при выборе покрытия?</p>
-    <p class="question-hint">Выберите все подходящие варианты</p>
-    <div class="options-list">
-      <div class="check-option">
-        <input type="checkbox" id="ch1" name="importance" value="1">
-        <label for="ch1"><span class="check-box"></span><span data-slot="option-1">Долговечность (10+ лет)</span></label>
-      </div>
-      <div class="check-option">
-        <input type="checkbox" id="ch2" name="importance" value="2">
-        <label for="ch2"><span class="check-box"></span><span data-slot="option-2">Лёгкий уход и чистка</span></label>
-      </div>
-      <div class="check-option">
-        <input type="checkbox" id="ch3" name="importance" value="3">
-        <label for="ch3"><span class="check-box"></span><span data-slot="option-3">Водостойкость</span></label>
-      </div>
-      <div class="check-option">
-        <input type="checkbox" id="ch4" name="importance" value="4">
-        <label for="ch4"><span class="check-box"></span><span data-slot="option-4">Тёплое на ощупь</span></label>
-      </div>
-      <div class="check-option">
-        <input type="checkbox" id="ch5" name="importance" value="5">
-        <label for="ch5"><span class="check-box"></span><span data-slot="option-5">Экологически чистое</span></label>
-      </div>
-      <div class="check-option">
-        <input type="checkbox" id="ch6" name="importance" value="6">
-        <label for="ch6"><span class="check-box"></span><span data-slot="option-6">Цена/качество</span></label>
-      </div>
-    </div>
-    <a class="next-btn" href="#" data-slot="next-button">Далее →</a>
-  </div>
-</body>
-</html>
+<div class="step-card" data-block-id="ru-quiz-09-multi-select">
+<div class="progress-bar-wrap">
+<div class="progress-label">{{slot:progress-label}}</div>
+<div class="progress-track"><div class="progress-fill"></div></div>
+</div>
+<p class="question-text">{{slot:question-text}}</p>
+<p class="question-hint">Выберите все подходящие варианты</p>
+<div class="options-list">
+<div class="check-option">
+<input id="ch1" name="importance" type="checkbox" value="1"/>
+<label for="ch1"><span class="check-box"></span><span>{{slot:option-1}}</span></label>
+</div>
+<div class="check-option">
+<input id="ch2" name="importance" type="checkbox" value="2"/>
+<label for="ch2"><span class="check-box"></span><span>{{slot:option-2}}</span></label>
+</div>
+<div class="check-option">
+<input id="ch3" name="importance" type="checkbox" value="3"/>
+<label for="ch3"><span class="check-box"></span><span>{{slot:option-3}}</span></label>
+</div>
+<div class="check-option">
+<input id="ch4" name="importance" type="checkbox" value="4"/>
+<label for="ch4"><span class="check-box"></span><span>{{slot:option-4}}</span></label>
+</div>
+<div class="check-option">
+<input id="ch5" name="importance" type="checkbox" value="5"/>
+<label for="ch5"><span class="check-box"></span><span>{{slot:option-5}}</span></label>
+</div>
+<div class="check-option">
+<input id="ch6" name="importance" type="checkbox" value="6"/>
+<label for="ch6"><span class="check-box"></span><span>{{slot:option-6}}</span></label>
+</div>
+</div>
+<a class="next-btn" href="#">{{slot:next-button}}</a>
+</div>

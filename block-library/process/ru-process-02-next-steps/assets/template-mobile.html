@@ -1,10 +1,3 @@
-<!DOCTYPE html>
-<!-- Source: /tmp/open-design/skills/release-notes-one-pager/example.html (Apache-2.0, adapted for RU block-library schema) -->
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ru-process-02-next-steps — mobile</title>
 <style>
   :root {
     --color-bg: #fafaf7;
@@ -30,26 +23,22 @@
   .step-row.final .step-text { color: #aaa; }
   .cta-btn { display: block; margin-top: 28px; padding: 14px 24px; background: var(--color-accent); color: #fff; text-align: center; text-decoration: none; border-radius: 10px; font-weight: 600; font-size: .95rem; }
 </style>
-</head>
-<body>
-  <section data-block-id="ru-process-02-next-steps">
-    <h2 class="process-headline" data-slot="headline">[Как мы работаем]</h2>
-    <div class="step-row">
-      <span class="step-timing" data-slot="step1-timing">[День 1–2]</span>
-      <div class="step-title" data-slot="step1-title">[Шаг 1: Знакомство]</div>
-      <p class="step-text" data-slot="step1-text">[Описание шага 1]</p>
-    </div>
-    <div class="step-row">
-      <span class="step-timing" data-slot="step2-timing">[День 3–7]</span>
-      <div class="step-title" data-slot="step2-title">[Шаг 2: Подготовка]</div>
-      <p class="step-text" data-slot="step2-text">[Описание шага 2]</p>
-    </div>
-    <div class="step-row final">
-      <span class="step-timing" data-slot="step3-timing">[День 8+]</span>
-      <div class="step-title" data-slot="step3-title">[Шаг 3: Результат]</div>
-      <p class="step-text" data-slot="step3-text">[Итоговый результат]</p>
-    </div>
-    <a class="cta-btn" data-slot="primary-cta" href="#contact">[CTA: Начать]</a>
-  </section>
-</body>
-</html>
+<section data-block-id="ru-process-02-next-steps">
+<h2 class="process-headline">{{slot:headline}}</h2>
+<div class="step-row">
+<span class="step-timing">{{slot:step1-timing}}</span>
+<div class="step-title">{{slot:step1-title}}</div>
+<p class="step-text">{{slot:step1-text}}</p>
+</div>
+<div class="step-row">
+<span class="step-timing">{{slot:step2-timing}}</span>
+<div class="step-title">{{slot:step2-title}}</div>
+<p class="step-text">{{slot:step2-text}}</p>
+</div>
+<div class="step-row final">
+<span class="step-timing">{{slot:step3-timing}}</span>
+<div class="step-title">{{slot:step3-title}}</div>
+<p class="step-text">{{slot:step3-text}}</p>
+</div>
+<a class="cta-btn" href="#contact">{{slot:primary-cta}}</a>
+</section>

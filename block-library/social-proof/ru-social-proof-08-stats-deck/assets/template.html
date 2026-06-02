@@ -1,6 +1,3 @@
-<!DOCTYPE html>
-<!-- Source: github.com/nexu-io/open-design @ main | design-templates/open-design-landing-deck/example.html | License: Apache-2.0 -->
-<html lang="ru"><head><meta charset="UTF-8"><title>ru-social-proof-08-stats-deck — desktop</title>
 <style>
   :root { --color-bg:#efe7d2; --color-fg:#15140f; --color-accent:#ed6f5c; --color-border:rgba(21,20,15,0.16); --color-bone:#f7f1de; --font-display:'Playfair Display',Georgia,serif; --font-body:'Inter Tight',system-ui,sans-serif; }
   @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;1,400&display=swap');
@@ -20,36 +17,34 @@
   .stat-value .accent { color:var(--color-accent); }
   .stat-label { font-size:13px; color:rgba(21,20,15,0.6); line-height:1.4; font-weight:400; }
   .stat-desc { font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(21,20,15,0.35); }
-</style></head>
-<body>
-  <section class="stats-section" data-block-id="ru-social-proof-08-stats-deck">
-    <div class="wrap">
-      <div class="stats-head">
-        <div class="kicker" data-slot="kicker">[Результаты / В цифрах]</div>
-        <h2 class="section-title" data-slot="headline">[Заголовок с <em>акцентом</em> на ключевом результате]</h2>
-      </div>
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-value" data-slot="stat-1-value">[N<span class="accent">+</span>]</div>
-          <div class="stat-label" data-slot="stat-1-label">[Описание метрики]</div>
-          <div class="stat-desc" data-slot="stat-1-desc">[Уточнение]</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" data-slot="stat-2-value">[N<span class="accent">%</span>]</div>
-          <div class="stat-label" data-slot="stat-2-label">[Описание метрики]</div>
-          <div class="stat-desc" data-slot="stat-2-desc">[Уточнение]</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" data-slot="stat-3-value">[N<span class="accent">×</span>]</div>
-          <div class="stat-label" data-slot="stat-3-label">[Описание метрики]</div>
-          <div class="stat-desc" data-slot="stat-3-desc">[Уточнение]</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" data-slot="stat-4-value">[N<span class="accent">k</span>]</div>
-          <div class="stat-label" data-slot="stat-4-label">[Описание метрики]</div>
-          <div class="stat-desc" data-slot="stat-4-desc">[Уточнение]</div>
-        </div>
-      </div>
-    </div>
-  </section>
-</body></html>
+</style>
+<section class="stats-section" data-block-id="ru-social-proof-08-stats-deck">
+<div class="wrap">
+<div class="stats-head">
+<div class="kicker">{{slot:kicker}}</div>
+<h2 class="section-title">{{slot:section-title}}</h2>
+</div>
+<div class="stats-grid">
+<div class="stat-card">
+<div class="stat-value">{{slot:stat-value}}</div>
+<div class="stat-label">{{slot:stat-1-label}}</div>
+<div class="stat-desc">{{slot:stat-1-desc}}</div>
+</div>
+<div class="stat-card">
+<div class="stat-value">{{slot:div-1}}</div>
+<div class="stat-label">{{slot:stat-2-label}}</div>
+<div class="stat-desc">{{slot:stat-2-desc}}</div>
+</div>
+<div class="stat-card">
+<div class="stat-value">{{slot:div-2}}</div>
+<div class="stat-label">{{slot:stat-3-label}}</div>
+<div class="stat-desc">{{slot:stat-3-desc}}</div>
+</div>
+<div class="stat-card">
+<div class="stat-value">{{slot:div-3}}</div>
+<div class="stat-label">{{slot:stat-4-label}}</div>
+<div class="stat-desc">{{slot:stat-4-desc}}</div>
+</div>
+</div>
+</div>
+</section>

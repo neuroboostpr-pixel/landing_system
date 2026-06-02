@@ -184,92 +184,87 @@
   body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
 }
 </style>
-<section class="lp-pricing-minimal-grid-4" aria-labelledby="pricing-minimal-grid-4-title">
-  <div class="lp-pricing-minimal-grid-4__inner">
-    <div class="lp-pricing-minimal-grid-4__header">
-      <p class="lp-pricing-minimal-grid-4__eyebrow">{{slot:pricing-eyebrow}}</p>
-      <h2 class="lp-pricing-minimal-grid-4__title" id="pricing-minimal-grid-4-title">{{slot:pricing-title}}</h2>
-      <p class="lp-pricing-minimal-grid-4__lead">{{slot:pricing-subhead}}</p>
-    </div>
-
-    <div class="lp-pricing-minimal-grid-4__grid" role="list">
-      <article class="lp-pricing-minimal-grid-4__plan" role="listitem">
-        <div class="lp-pricing-minimal-grid-4__plan-head">
-          <h3 class="lp-pricing-minimal-grid-4__plan-title">{{slot:plan-1-title}}</h3>
-          <p class="lp-pricing-minimal-grid-4__plan-note">{{slot:plan-1-note}}</p>
-        </div>
-        <div class="lp-pricing-minimal-grid-4__price">
-          <span class="lp-pricing-minimal-grid-4__price-main">{{slot:plan-1-price}}</span>
-          <span class="lp-pricing-minimal-grid-4__price-caption">{{slot:plan-1-price-caption}}</span>
-        </div>
-        <ul class="lp-pricing-minimal-grid-4__options">
-          <li>{{slot:plan-1-option-1}}</li>
-          <li>{{slot:plan-1-option-2}}</li>
-          <li>{{slot:plan-1-option-3}}</li>
-        </ul>
-        <a class="lp-pricing-minimal-grid-4__link" href="{{slot:plan-1-link}}">{{slot:plan-1-link-label}}</a>
-      </article>
-
-      <article class="lp-pricing-minimal-grid-4__plan" role="listitem">
-        <div class="lp-pricing-minimal-grid-4__plan-head">
-          <h3 class="lp-pricing-minimal-grid-4__plan-title">{{slot:plan-2-title}}</h3>
-          <p class="lp-pricing-minimal-grid-4__plan-note">{{slot:plan-2-note}}</p>
-        </div>
-        <div class="lp-pricing-minimal-grid-4__price">
-          <span class="lp-pricing-minimal-grid-4__price-main">{{slot:plan-2-price}}</span>
-          <span class="lp-pricing-minimal-grid-4__price-caption">{{slot:plan-2-price-caption}}</span>
-        </div>
-        <ul class="lp-pricing-minimal-grid-4__options">
-          <li>{{slot:plan-2-option-1}}</li>
-          <li>{{slot:plan-2-option-2}}</li>
-          <li>{{slot:plan-2-option-3}}</li>
-        </ul>
-        <a class="lp-pricing-minimal-grid-4__link" href="{{slot:plan-2-link}}">{{slot:plan-2-link-label}}</a>
-      </article>
-
-      <article class="lp-pricing-minimal-grid-4__plan" role="listitem">
-        <div class="lp-pricing-minimal-grid-4__plan-head">
-          <h3 class="lp-pricing-minimal-grid-4__plan-title">{{slot:plan-3-title}}</h3>
-          <p class="lp-pricing-minimal-grid-4__plan-note">{{slot:plan-3-note}}</p>
-        </div>
-        <div class="lp-pricing-minimal-grid-4__price">
-          <span class="lp-pricing-minimal-grid-4__price-main">{{slot:plan-3-price}}</span>
-          <span class="lp-pricing-minimal-grid-4__price-caption">{{slot:plan-3-price-caption}}</span>
-        </div>
-        <ul class="lp-pricing-minimal-grid-4__options">
-          <li>{{slot:plan-3-option-1}}</li>
-          <li>{{slot:plan-3-option-2}}</li>
-          <li>{{slot:plan-3-option-3}}</li>
-        </ul>
-        <a class="lp-pricing-minimal-grid-4__link" href="{{slot:plan-3-link}}">{{slot:plan-3-link-label}}</a>
-      </article>
-
-      <article class="lp-pricing-minimal-grid-4__plan" role="listitem">
-        <div class="lp-pricing-minimal-grid-4__plan-head">
-          <h3 class="lp-pricing-minimal-grid-4__plan-title">{{slot:plan-4-title}}</h3>
-          <p class="lp-pricing-minimal-grid-4__plan-note">{{slot:plan-4-note}}</p>
-        </div>
-        <div class="lp-pricing-minimal-grid-4__price">
-          <span class="lp-pricing-minimal-grid-4__price-main">{{slot:plan-4-price}}</span>
-          <span class="lp-pricing-minimal-grid-4__price-caption">{{slot:plan-4-price-caption}}</span>
-        </div>
-        <ul class="lp-pricing-minimal-grid-4__options">
-          <li>{{slot:plan-4-option-1}}</li>
-          <li>{{slot:plan-4-option-2}}</li>
-          <li>{{slot:plan-4-option-3}}</li>
-        </ul>
-        <a class="lp-pricing-minimal-grid-4__link" href="{{slot:plan-4-link}}">{{slot:plan-4-link-label}}</a>
-      </article>
-    </div>
-
-    <div class="lp-pricing-minimal-grid-4__extras" aria-label="{{slot:extras-aria-label}}">
-      <h3 class="lp-pricing-minimal-grid-4__extras-title">{{slot:extras-title}}</h3>
-      <div class="lp-pricing-minimal-grid-4__extras-list">
-        <a href="{{slot:extra-1-link}}">{{slot:extra-1-label}}</a>
-        <a href="{{slot:extra-2-link}}">{{slot:extra-2-label}}</a>
-        <a href="{{slot:extra-3-link}}">{{slot:extra-3-label}}</a>
-        <a href="{{slot:extra-4-link}}">{{slot:extra-4-label}}</a>
-      </div>
-    </div>
-  </div>
+<section aria-labelledby="pricing-minimal-grid-4-title" class="lp-pricing-minimal-grid-4">
+<div class="lp-pricing-minimal-grid-4__inner">
+<div class="lp-pricing-minimal-grid-4__header">
+<p class="lp-pricing-minimal-grid-4__eyebrow">{{slot:pricing-eyebrow}}</p>
+<h2 class="lp-pricing-minimal-grid-4__title" id="pricing-minimal-grid-4-title">{{slot:pricing-title}}</h2>
+<p class="lp-pricing-minimal-grid-4__lead">{{slot:pricing-subhead}}</p>
+</div>
+<div class="lp-pricing-minimal-grid-4__grid" role="list">
+<article class="lp-pricing-minimal-grid-4__plan" role="listitem">
+<div class="lp-pricing-minimal-grid-4__plan-head">
+<h3 class="lp-pricing-minimal-grid-4__plan-title">{{slot:plan-1-title}}</h3>
+<p class="lp-pricing-minimal-grid-4__plan-note">{{slot:plan-1-note}}</p>
+</div>
+<div class="lp-pricing-minimal-grid-4__price">
+<span class="lp-pricing-minimal-grid-4__price-main">{{slot:plan-1-price}}</span>
+<span class="lp-pricing-minimal-grid-4__price-caption">{{slot:plan-1-price-caption}}</span>
+</div>
+<ul class="lp-pricing-minimal-grid-4__options">
+<li>{{slot:plan-1-option-1}}</li>
+<li>{{slot:plan-1-option-2}}</li>
+<li>{{slot:plan-1-option-3}}</li>
+</ul>
+<a class="lp-pricing-minimal-grid-4__link" href="{{slot:plan-1-link}}">{{slot:plan-1-link-label}}</a>
+</article>
+<article class="lp-pricing-minimal-grid-4__plan" role="listitem">
+<div class="lp-pricing-minimal-grid-4__plan-head">
+<h3 class="lp-pricing-minimal-grid-4__plan-title">{{slot:plan-2-title}}</h3>
+<p class="lp-pricing-minimal-grid-4__plan-note">{{slot:plan-2-note}}</p>
+</div>
+<div class="lp-pricing-minimal-grid-4__price">
+<span class="lp-pricing-minimal-grid-4__price-main">{{slot:plan-2-price}}</span>
+<span class="lp-pricing-minimal-grid-4__price-caption">{{slot:plan-2-price-caption}}</span>
+</div>
+<ul class="lp-pricing-minimal-grid-4__options">
+<li>{{slot:plan-2-option-1}}</li>
+<li>{{slot:plan-2-option-2}}</li>
+<li>{{slot:plan-2-option-3}}</li>
+</ul>
+<a class="lp-pricing-minimal-grid-4__link" href="{{slot:plan-2-link}}">{{slot:plan-2-link-label}}</a>
+</article>
+<article class="lp-pricing-minimal-grid-4__plan" role="listitem">
+<div class="lp-pricing-minimal-grid-4__plan-head">
+<h3 class="lp-pricing-minimal-grid-4__plan-title">{{slot:plan-3-title}}</h3>
+<p class="lp-pricing-minimal-grid-4__plan-note">{{slot:plan-3-note}}</p>
+</div>
+<div class="lp-pricing-minimal-grid-4__price">
+<span class="lp-pricing-minimal-grid-4__price-main">{{slot:plan-3-price}}</span>
+<span class="lp-pricing-minimal-grid-4__price-caption">{{slot:plan-3-price-caption}}</span>
+</div>
+<ul class="lp-pricing-minimal-grid-4__options">
+<li>{{slot:plan-3-option-1}}</li>
+<li>{{slot:plan-3-option-2}}</li>
+<li>{{slot:plan-3-option-3}}</li>
+</ul>
+<a class="lp-pricing-minimal-grid-4__link" href="{{slot:plan-3-link}}">{{slot:plan-3-link-label}}</a>
+</article>
+<article class="lp-pricing-minimal-grid-4__plan" role="listitem">
+<div class="lp-pricing-minimal-grid-4__plan-head">
+<h3 class="lp-pricing-minimal-grid-4__plan-title">{{slot:plan-4-title}}</h3>
+<p class="lp-pricing-minimal-grid-4__plan-note">{{slot:plan-4-note}}</p>
+</div>
+<div class="lp-pricing-minimal-grid-4__price">
+<span class="lp-pricing-minimal-grid-4__price-main">{{slot:plan-4-price}}</span>
+<span class="lp-pricing-minimal-grid-4__price-caption">{{slot:plan-4-price-caption}}</span>
+</div>
+<ul class="lp-pricing-minimal-grid-4__options">
+<li>{{slot:plan-4-option-1}}</li>
+<li>{{slot:plan-4-option-2}}</li>
+<li>{{slot:plan-4-option-3}}</li>
+</ul>
+<a class="lp-pricing-minimal-grid-4__link" href="{{slot:plan-4-link}}">{{slot:plan-4-link-label}}</a>
+</article>
+</div>
+<div aria-label="{{slot:extras-aria-label}}" class="lp-pricing-minimal-grid-4__extras">
+<h3 class="lp-pricing-minimal-grid-4__extras-title">{{slot:extras-title}}</h3>
+<div class="lp-pricing-minimal-grid-4__extras-list">
+<a href="{{slot:extra-1-link}}">{{slot:extra-1-label}}</a>
+<a href="{{slot:extra-2-link}}">{{slot:extra-2-label}}</a>
+<a href="{{slot:extra-3-link}}">{{slot:extra-3-label}}</a>
+<a href="{{slot:extra-4-link}}">{{slot:extra-4-label}}</a>
+</div>
+</div>
+</div>
 </section>

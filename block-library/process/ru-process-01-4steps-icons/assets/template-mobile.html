@@ -1,8 +1,3 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<title>ru-process-01-4steps-icons — mobile</title>
 <style>
   :root {
     --color-bg: #fff; --color-fg: #111; --color-accent: #333; --color-border: #ccc;
@@ -20,50 +15,46 @@
   .step-title { font-family: var(--font-display); font-size: 16px; font-weight: 700; margin: 0 0 4px; }
   .step-text { font-size: 13px; color: #555; margin: 0; line-height: 1.5; }
 </style>
-</head>
-<body>
-  <section class="process" data-block-id="ru-process-01-4steps-icons">
-    <h2 class="section-headline" data-slot="headline">[HEADLINE]</h2>
-    <div class="step">
-      <div class="step-left">
-        <div class="step-num">1</div>
-        <div class="step-icon" data-slot="step-1-icon" data-slot-type="icon">icon</div>
-      </div>
-      <div class="step-right">
-        <h3 class="step-title" data-slot="step-1-title">[Шаг 1]</h3>
-        <p class="step-text" data-slot="step-1-text">[Описание 1]</p>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-left">
-        <div class="step-num">2</div>
-        <div class="step-icon" data-slot="step-2-icon" data-slot-type="icon">icon</div>
-      </div>
-      <div class="step-right">
-        <h3 class="step-title" data-slot="step-2-title">[Шаг 2]</h3>
-        <p class="step-text" data-slot="step-2-text">[Описание 2]</p>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-left">
-        <div class="step-num">3</div>
-        <div class="step-icon" data-slot="step-3-icon" data-slot-type="icon">icon</div>
-      </div>
-      <div class="step-right">
-        <h3 class="step-title" data-slot="step-3-title">[Шаг 3]</h3>
-        <p class="step-text" data-slot="step-3-text">[Описание 3]</p>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-left">
-        <div class="step-num">4</div>
-        <div class="step-icon" data-slot="step-4-icon" data-slot-type="icon">icon</div>
-      </div>
-      <div class="step-right">
-        <h3 class="step-title" data-slot="step-4-title">[Шаг 4]</h3>
-        <p class="step-text" data-slot="step-4-text">[Описание 4]</p>
-      </div>
-    </div>
-  </section>
-</body>
-</html>
+<section class="process" data-block-id="ru-process-01-4steps-icons">
+<h2 class="section-headline">{{slot:headline}}</h2>
+<div class="step">
+<div class="step-left">
+<div class="step-num">1</div>
+<div class="step-icon" data-slot-type="icon">{{slot:step-1-icon}}</div>
+</div>
+<div class="step-right">
+<h3 class="step-title">{{slot:step-1-title}}</h3>
+<p class="step-text">{{slot:step-1-text}}</p>
+</div>
+</div>
+<div class="step">
+<div class="step-left">
+<div class="step-num">2</div>
+<div class="step-icon" data-slot-type="icon">{{slot:step-2-icon}}</div>
+</div>
+<div class="step-right">
+<h3 class="step-title">{{slot:step-2-title}}</h3>
+<p class="step-text">{{slot:step-2-text}}</p>
+</div>
+</div>
+<div class="step">
+<div class="step-left">
+<div class="step-num">3</div>
+<div class="step-icon" data-slot-type="icon">{{slot:step-3-icon}}</div>
+</div>
+<div class="step-right">
+<h3 class="step-title">{{slot:step-3-title}}</h3>
+<p class="step-text">{{slot:step-3-text}}</p>
+</div>
+</div>
+<div class="step">
+<div class="step-left">
+<div class="step-num">4</div>
+<div class="step-icon" data-slot-type="icon">{{slot:step-4-icon}}</div>
+</div>
+<div class="step-right">
+<h3 class="step-title">{{slot:step-4-title}}</h3>
+<p class="step-text">{{slot:step-4-text}}</p>
+</div>
+</div>
+</section>

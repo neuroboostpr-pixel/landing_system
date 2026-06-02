@@ -217,77 +217,74 @@
   body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
 }
 </style>
-<section class="lp-pricing-corporate-grid-3" aria-labelledby="pricing-corporate-grid-3-title">
-  <div class="lp-pricing-corporate-grid-3__inner">
-    <div class="lp-pricing-corporate-grid-3__header">
-      <span class="lp-pricing-corporate-grid-3__eyebrow">{{slot:pricing-eyebrow}}</span>
-      <h2 class="lp-pricing-corporate-grid-3__title" id="pricing-corporate-grid-3-title">{{slot:pricing-title}}</h2>
-      <p class="lp-pricing-corporate-grid-3__subtitle">{{slot:pricing-subtitle}}</p>
-    </div>
-
-    <div class="lp-pricing-corporate-grid-3__grid">
-      <article class="lp-pricing-corporate-grid-3__card">
-        <figure class="lp-pricing-corporate-grid-3__media">
-          <img src="{{slot:plan-1-image}}" alt="{{slot:plan-1-image-alt}}" loading="lazy">
-        </figure>
-        <div class="lp-pricing-corporate-grid-3__content">
-          <span class="lp-pricing-corporate-grid-3__badge">{{slot:plan-1-badge}}</span>
-          <h3 class="lp-pricing-corporate-grid-3__plan">{{slot:plan-1-title}}</h3>
-          <p class="lp-pricing-corporate-grid-3__text">{{slot:plan-1-description}}</p>
-          <div class="lp-pricing-corporate-grid-3__price" aria-label="{{slot:plan-1-price-label}}">
-            <span>{{slot:plan-1-price}}</span>
-            <small>{{slot:plan-1-price-note}}</small>
-          </div>
-          <ul class="lp-pricing-corporate-grid-3__list">
-            <li>{{slot:plan-1-feature-1}}</li>
-            <li>{{slot:plan-1-feature-2}}</li>
-            <li>{{slot:plan-1-feature-3}}</li>
-          </ul>
-          <a class="lp-pricing-corporate-grid-3__button" href="{{slot:plan-1-cta-url}}">{{slot:plan-1-cta-label}}</a>
-        </div>
-      </article>
-
-      <article class="lp-pricing-corporate-grid-3__card lp-pricing-corporate-grid-3__card--featured">
-        <figure class="lp-pricing-corporate-grid-3__media">
-          <img src="{{slot:plan-2-image}}" alt="{{slot:plan-2-image-alt}}" loading="lazy">
-        </figure>
-        <div class="lp-pricing-corporate-grid-3__content">
-          <span class="lp-pricing-corporate-grid-3__badge">{{slot:plan-2-badge}}</span>
-          <h3 class="lp-pricing-corporate-grid-3__plan">{{slot:plan-2-title}}</h3>
-          <p class="lp-pricing-corporate-grid-3__text">{{slot:plan-2-description}}</p>
-          <div class="lp-pricing-corporate-grid-3__price" aria-label="{{slot:plan-2-price-label}}">
-            <span>{{slot:plan-2-price}}</span>
-            <small>{{slot:plan-2-price-note}}</small>
-          </div>
-          <ul class="lp-pricing-corporate-grid-3__list">
-            <li>{{slot:plan-2-feature-1}}</li>
-            <li>{{slot:plan-2-feature-2}}</li>
-            <li>{{slot:plan-2-feature-3}}</li>
-          </ul>
-          <a class="lp-pricing-corporate-grid-3__button" href="{{slot:plan-2-cta-url}}">{{slot:plan-2-cta-label}}</a>
-        </div>
-      </article>
-
-      <article class="lp-pricing-corporate-grid-3__card">
-        <figure class="lp-pricing-corporate-grid-3__media">
-          <img src="{{slot:plan-3-image}}" alt="{{slot:plan-3-image-alt}}" loading="lazy">
-        </figure>
-        <div class="lp-pricing-corporate-grid-3__content">
-          <span class="lp-pricing-corporate-grid-3__badge">{{slot:plan-3-badge}}</span>
-          <h3 class="lp-pricing-corporate-grid-3__plan">{{slot:plan-3-title}}</h3>
-          <p class="lp-pricing-corporate-grid-3__text">{{slot:plan-3-description}}</p>
-          <div class="lp-pricing-corporate-grid-3__price" aria-label="{{slot:plan-3-price-label}}">
-            <span>{{slot:plan-3-price}}</span>
-            <small>{{slot:plan-3-price-note}}</small>
-          </div>
-          <ul class="lp-pricing-corporate-grid-3__list">
-            <li>{{slot:plan-3-feature-1}}</li>
-            <li>{{slot:plan-3-feature-2}}</li>
-            <li>{{slot:plan-3-feature-3}}</li>
-          </ul>
-          <a class="lp-pricing-corporate-grid-3__button" href="{{slot:plan-3-cta-url}}">{{slot:plan-3-cta-label}}</a>
-        </div>
-      </article>
-    </div>
-  </div>
+<section aria-labelledby="pricing-corporate-grid-3-title" class="lp-pricing-corporate-grid-3">
+<div class="lp-pricing-corporate-grid-3__inner">
+<div class="lp-pricing-corporate-grid-3__header">
+<span class="lp-pricing-corporate-grid-3__eyebrow">{{slot:pricing-eyebrow}}</span>
+<h2 class="lp-pricing-corporate-grid-3__title" id="pricing-corporate-grid-3-title">{{slot:pricing-title}}</h2>
+<p class="lp-pricing-corporate-grid-3__subtitle">{{slot:pricing-subtitle}}</p>
+</div>
+<div class="lp-pricing-corporate-grid-3__grid">
+<article class="lp-pricing-corporate-grid-3__card">
+<figure class="lp-pricing-corporate-grid-3__media">
+<img alt="{{slot:plan-1-image-alt}}" loading="lazy" src="{{slot:plan-1-image}}"/>
+</figure>
+<div class="lp-pricing-corporate-grid-3__content">
+<span class="lp-pricing-corporate-grid-3__badge">{{slot:plan-1-badge}}</span>
+<h3 class="lp-pricing-corporate-grid-3__plan">{{slot:plan-1-title}}</h3>
+<p class="lp-pricing-corporate-grid-3__text">{{slot:plan-1-description}}</p>
+<div aria-label="{{slot:plan-1-price-label}}" class="lp-pricing-corporate-grid-3__price">
+<span>{{slot:plan-1-price}}</span>
+<small>{{slot:plan-1-price-note}}</small>
+</div>
+<ul class="lp-pricing-corporate-grid-3__list">
+<li>{{slot:plan-1-feature-1}}</li>
+<li>{{slot:plan-1-feature-2}}</li>
+<li>{{slot:plan-1-feature-3}}</li>
+</ul>
+<a class="lp-pricing-corporate-grid-3__button" href="{{slot:plan-1-cta-url}}">{{slot:plan-1-cta-label}}</a>
+</div>
+</article>
+<article class="lp-pricing-corporate-grid-3__card lp-pricing-corporate-grid-3__card--featured">
+<figure class="lp-pricing-corporate-grid-3__media">
+<img alt="{{slot:plan-2-image-alt}}" loading="lazy" src="{{slot:plan-2-image}}"/>
+</figure>
+<div class="lp-pricing-corporate-grid-3__content">
+<span class="lp-pricing-corporate-grid-3__badge">{{slot:plan-2-badge}}</span>
+<h3 class="lp-pricing-corporate-grid-3__plan">{{slot:plan-2-title}}</h3>
+<p class="lp-pricing-corporate-grid-3__text">{{slot:plan-2-description}}</p>
+<div aria-label="{{slot:plan-2-price-label}}" class="lp-pricing-corporate-grid-3__price">
+<span>{{slot:plan-2-price}}</span>
+<small>{{slot:plan-2-price-note}}</small>
+</div>
+<ul class="lp-pricing-corporate-grid-3__list">
+<li>{{slot:plan-2-feature-1}}</li>
+<li>{{slot:plan-2-feature-2}}</li>
+<li>{{slot:plan-2-feature-3}}</li>
+</ul>
+<a class="lp-pricing-corporate-grid-3__button" href="{{slot:plan-2-cta-url}}">{{slot:plan-2-cta-label}}</a>
+</div>
+</article>
+<article class="lp-pricing-corporate-grid-3__card">
+<figure class="lp-pricing-corporate-grid-3__media">
+<img alt="{{slot:plan-3-image-alt}}" loading="lazy" src="{{slot:plan-3-image}}"/>
+</figure>
+<div class="lp-pricing-corporate-grid-3__content">
+<span class="lp-pricing-corporate-grid-3__badge">{{slot:plan-3-badge}}</span>
+<h3 class="lp-pricing-corporate-grid-3__plan">{{slot:plan-3-title}}</h3>
+<p class="lp-pricing-corporate-grid-3__text">{{slot:plan-3-description}}</p>
+<div aria-label="{{slot:plan-3-price-label}}" class="lp-pricing-corporate-grid-3__price">
+<span>{{slot:plan-3-price}}</span>
+<small>{{slot:plan-3-price-note}}</small>
+</div>
+<ul class="lp-pricing-corporate-grid-3__list">
+<li>{{slot:plan-3-feature-1}}</li>
+<li>{{slot:plan-3-feature-2}}</li>
+<li>{{slot:plan-3-feature-3}}</li>
+</ul>
+<a class="lp-pricing-corporate-grid-3__button" href="{{slot:plan-3-cta-url}}">{{slot:plan-3-cta-label}}</a>
+</div>
+</article>
+</div>
+</div>
 </section>

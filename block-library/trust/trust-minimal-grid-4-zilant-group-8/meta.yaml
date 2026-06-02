@@ -15,8 +15,30 @@ niches_suitable:
 - education
 ru_market: true
 slots:
+- name: eyebrow
+  type: text
 - name: heading
   required: true
+  type: text
+- name: subhead
+  type: text
+- name: logos-list-label
+  type: text
+- name: logo-1-alt
+  type: text
+- name: logo-1
+  type: text
+- name: logo-2-alt
+  type: text
+- name: logo-2
+  type: text
+- name: logo-3-alt
+  type: text
+- name: logo-3
+  type: text
+- name: logo-4-alt
+  type: text
+- name: logo-4
   type: text
 style_mood: minimal
 type: guarantees

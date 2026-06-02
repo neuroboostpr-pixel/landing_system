@@ -130,22 +130,20 @@
 }
 </style>
 <header class="lp-header-corporate-split" role="banner">
-  <div class="lp-header-corporate-split__inner">
-    <a class="lp-header-corporate-split__brand" href="{{slot:brand-link}}" aria-label="{{slot:brand-label}}">
-      <img class="lp-header-corporate-split__logo" src="{{slot:logo-image}}" alt="{{slot:logo-image-alt}}" loading="lazy">
-      <span class="lp-header-corporate-split__brand-text">{{slot:brand-name}}</span>
-    </a>
-
-    <nav class="lp-header-corporate-split__nav" aria-label="{{slot:nav-label}}">
-      <a class="lp-header-corporate-split__nav-link" href="{{slot:nav-link-1-url}}">{{slot:nav-link-1-label}}</a>
-      <a class="lp-header-corporate-split__nav-link" href="{{slot:nav-link-2-url}}">{{slot:nav-link-2-label}}</a>
-      <a class="lp-header-corporate-split__nav-link" href="{{slot:nav-link-3-url}}">{{slot:nav-link-3-label}}</a>
-      <a class="lp-header-corporate-split__nav-link" href="{{slot:nav-link-4-url}}">{{slot:nav-link-4-label}}</a>
-    </nav>
-
-    <div class="lp-header-corporate-split__contacts" aria-label="{{slot:contacts-label}}">
-      <a class="lp-header-corporate-split__contact" href="{{slot:contact-link}}">{{slot:contact-label}}</a>
-      <a class="lp-header-corporate-split__cta" href="{{slot:cta-link}}">{{slot:cta-label}}</a>
-    </div>
-  </div>
+<div class="lp-header-corporate-split__inner">
+<a aria-label="{{slot:brand-label}}" class="lp-header-corporate-split__brand" href="{{slot:brand-link}}">
+<img alt="{{slot:logo-image-alt}}" class="lp-header-corporate-split__logo" loading="lazy" src="{{slot:logo-image}}"/>
+<span class="lp-header-corporate-split__brand-text">{{slot:brand-name}}</span>
+</a>
+<nav aria-label="{{slot:nav-label}}" class="lp-header-corporate-split__nav">
+<a class="lp-header-corporate-split__nav-link" href="{{slot:nav-link-1-url}}">{{slot:nav-link-1-label}}</a>
+<a class="lp-header-corporate-split__nav-link" href="{{slot:nav-link-2-url}}">{{slot:nav-link-2-label}}</a>
+<a class="lp-header-corporate-split__nav-link" href="{{slot:nav-link-3-url}}">{{slot:nav-link-3-label}}</a>
+<a class="lp-header-corporate-split__nav-link" href="{{slot:nav-link-4-url}}">{{slot:nav-link-4-label}}</a>
+</nav>
+<div aria-label="{{slot:contacts-label}}" class="lp-header-corporate-split__contacts">
+<a class="lp-header-corporate-split__contact" href="{{slot:contact-link}}">{{slot:contact-label}}</a>
+<a class="lp-header-corporate-split__cta" href="{{slot:cta-link}}">{{slot:cta-label}}</a>
+</div>
+</div>
 </header>

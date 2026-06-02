@@ -1,6 +1,3 @@
-<!DOCTYPE html>
-<!-- Source: github.com/nexu-io/open-design @ main | design-templates/saas-landing/example.html | License: Apache-2.0 -->
-<html lang="ru"><head><meta charset="UTF-8"><title>ru-pricing-03-3tier-saas — mobile</title>
 <style>
   :root { --color-bg:#fafaf9; --color-fg:#1c1b1a; --color-accent:#c96442; --color-border:#e6e4e0; --color-surface:#ffffff; --color-muted:#6b6964; --font-body:system-ui,sans-serif; }
   * { box-sizing:border-box; margin:0; padding:0; }
@@ -19,34 +16,32 @@
   .tier-features li::before { content:"✓"; color:var(--color-accent); font-weight:700; }
   .btn-primary { display:block; width:100%; padding:12px 20px; background:var(--color-accent); color:white; border:none; border-radius:8px; font:inherit; font-weight:500; cursor:pointer; text-align:center; text-decoration:none; }
   .btn-secondary { display:block; width:100%; padding:12px 20px; background:transparent; color:var(--color-fg); border:1px solid var(--color-border); border-radius:8px; font:inherit; font-weight:500; cursor:pointer; text-align:center; text-decoration:none; }
-</style></head>
-<body>
-  <div class="section-head">
-    <h2 data-slot="headline">[Тарифы]</h2>
-    <p data-slot="subhead">[Выберите подходящий тариф]</p>
-  </div>
-  <div class="tier">
-    <div class="tier-name" data-slot="tier-1-name">[Старт]</div>
-    <div class="tier-price" data-slot="tier-1-price">[X ₽<small>/мес</small>]</div>
-    <ul class="tier-features">
-      <li>[Функция 1]</li><li>[Функция 2]</li><li>[Функция 3]</li>
-    </ul>
-    <a class="btn-secondary" data-slot="tier-1-cta" href="#contact">[Начать]</a>
-  </div>
-  <div class="tier featured">
-    <div class="tier-name" data-slot="tier-2-name">[Бизнес]</div>
-    <div class="tier-price" data-slot="tier-2-price">[Y ₽<small>/мес</small>]</div>
-    <ul class="tier-features">
-      <li>[Функция 1]</li><li>[Функция 2]</li><li>[Функция 3]</li><li>[Функция 4]</li>
-    </ul>
-    <a class="btn-primary" data-slot="tier-2-cta" href="#contact">[Выбрать]</a>
-  </div>
-  <div class="tier">
-    <div class="tier-name" data-slot="tier-3-name">[Корпоративный]</div>
-    <div class="tier-price">[Индивидуально]</div>
-    <ul class="tier-features">
-      <li>[SLA]</li><li>[Поддержка]</li><li>[Индивидуально]</li>
-    </ul>
-    <a class="btn-secondary" data-slot="tier-3-cta" href="#contact">[Обсудить]</a>
-  </div>
-</body></html>
+</style>
+<div class="section-head">
+<h2>{{slot:headline}}</h2>
+<p>{{slot:subhead}}</p>
+</div>
+<div class="tier">
+<div class="tier-name">{{slot:tier-1-name}}</div>
+<div class="tier-price">{{slot:tier-price}}</div>
+<ul class="tier-features">
+<li>{{slot:li-1}}</li><li>{{slot:li-2}}</li><li>{{slot:li-3}}</li>
+</ul>
+<a class="btn-secondary" href="#contact">{{slot:tier-1-cta}}</a>
+</div>
+<div class="tier featured">
+<div class="tier-name">{{slot:tier-2-name}}</div>
+<div class="tier-price">{{slot:div-4}}</div>
+<ul class="tier-features">
+<li>{{slot:li-5}}</li><li>{{slot:li-6}}</li><li>{{slot:li-7}}</li><li>{{slot:li-8}}</li>
+</ul>
+<a class="btn-primary" href="#contact">{{slot:tier-2-cta}}</a>
+</div>
+<div class="tier">
+<div class="tier-name">{{slot:tier-3-name}}</div>
+<div class="tier-price">{{slot:div-9}}</div>
+<ul class="tier-features">
+<li>{{slot:li-1}}</li><li>{{slot:li-10}}</li><li>{{slot:li-11}}</li>
+</ul>
+<a class="btn-secondary" href="#contact">{{slot:tier-3-cta}}</a>
+</div>

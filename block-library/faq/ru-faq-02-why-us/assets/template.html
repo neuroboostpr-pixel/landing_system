@@ -1,8 +1,3 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<title>ru-faq-02-why-us — desktop</title>
 <style>
   :root {
     --color-bg: #fff;
@@ -29,31 +24,27 @@
   details[open] summary::after { content: "−"; }
   .faq-answer { padding: 0 0 20px; font-size: 15px; color: #444; line-height: 1.7; }
 </style>
-</head>
-<body>
-  <section class="faq" data-block-id="ru-faq-02-why-us">
-    <h2 class="section-headline" data-slot="headline">[Почему именно мы?]</h2>
-    <p class="section-sub">Отвечаем честно — с цифрами и фактами</p>
-    <details>
-      <summary data-slot="faq-1-q">[Почему вы дороже/дешевле конкурентов?]</summary>
-      <div class="faq-answer" data-slot="faq-1-a">[Ответ с конкретными цифрами о ценообразовании]</div>
-    </details>
-    <details>
-      <summary data-slot="faq-2-q">[Как вы гарантируете качество?]</summary>
-      <div class="faq-answer" data-slot="faq-2-a">[Ответ о гарантиях с указанием сроков и условий]</div>
-    </details>
-    <details>
-      <summary data-slot="faq-3-q">[Сколько времени займёт работа?]</summary>
-      <div class="faq-answer" data-slot="faq-3-a">[Конкретные сроки по этапам]</div>
-    </details>
-    <details>
-      <summary data-slot="faq-4-q">[Чем вы отличаетесь от других?]</summary>
-      <div class="faq-answer" data-slot="faq-4-a">[Уникальное преимущество в цифрах и фактах]</div>
-    </details>
-    <details>
-      <summary data-slot="faq-5-q">[Что будет, если результат не устроит?]</summary>
-      <div class="faq-answer" data-slot="faq-5-a">[Политика возврата / переделки / гарантии]</div>
-    </details>
-  </section>
-</body>
-</html>
+<section class="faq" data-block-id="ru-faq-02-why-us">
+<h2 class="section-headline">{{slot:headline}}</h2>
+<p class="section-sub">Отвечаем честно — с цифрами и фактами</p>
+<details>
+<summary>{{slot:faq-1-q}}</summary>
+<div class="faq-answer">{{slot:faq-1-a}}</div>
+</details>
+<details>
+<summary>{{slot:faq-2-q}}</summary>
+<div class="faq-answer">{{slot:faq-2-a}}</div>
+</details>
+<details>
+<summary>{{slot:faq-3-q}}</summary>
+<div class="faq-answer">{{slot:faq-3-a}}</div>
+</details>
+<details>
+<summary>{{slot:faq-4-q}}</summary>
+<div class="faq-answer">{{slot:faq-4-a}}</div>
+</details>
+<details>
+<summary>{{slot:faq-5-q}}</summary>
+<div class="faq-answer">{{slot:faq-5-a}}</div>
+</details>
+</section>

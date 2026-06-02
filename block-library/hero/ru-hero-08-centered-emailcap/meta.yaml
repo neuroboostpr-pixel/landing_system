@@ -38,9 +38,21 @@ slots:
   name: primary-cta
   required: true
   type: cta
-- max_chars: 60
-  name: ticker-text
-  required: false
+- name: ticker-unit
+  type: text
+- name: span-1
+  type: text
+- name: span-2
+  type: text
+- name: span-3
+  type: text
+- name: span-4
+  type: text
+- name: span-5
+  type: text
+- name: span-6
+  type: text
+- name: span-7
   type: text
 source: opendesign
 source_attribution: 'github.com/nexu-io/open-design: design-templates/waitlist-page

@@ -1,8 +1,3 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<title>ru-testimonials-01-video-circles — desktop</title>
 <style>
   :root {
     --color-bg: #fff;
@@ -23,37 +18,33 @@
   .client-name { font-weight: 700; font-size: 14px; margin: 0; }
   .client-quote { font-size: 13px; color: #555; margin: 0; line-height: 1.4; }
 </style>
-</head>
-<body>
-  <section class="testimonials" data-block-id="ru-testimonials-01-video-circles">
-    <h2 class="section-headline" data-slot="headline">[HEADLINE: что говорят клиенты]</h2>
-    <div class="circles-row">
-      <div class="circle-item">
-        <div class="circle-photo" data-slot="testimonial-1-photo">photo · 1:1</div>
-        <p class="client-name" data-slot="testimonial-1-name">[Имя 1]</p>
-        <p class="client-quote" data-slot="testimonial-1-quote">[Краткий отзыв клиента 1]</p>
-      </div>
-      <div class="circle-item">
-        <div class="circle-photo" data-slot="testimonial-2-photo">photo · 1:1</div>
-        <p class="client-name" data-slot="testimonial-2-name">[Имя 2]</p>
-        <p class="client-quote" data-slot="testimonial-2-quote">[Краткий отзыв клиента 2]</p>
-      </div>
-      <div class="circle-item">
-        <div class="circle-photo" data-slot="testimonial-3-photo">photo · 1:1</div>
-        <p class="client-name" data-slot="testimonial-3-name">[Имя 3]</p>
-        <p class="client-quote" data-slot="testimonial-3-quote">[Краткий отзыв клиента 3]</p>
-      </div>
-      <div class="circle-item">
-        <div class="circle-photo" data-slot="testimonial-4-photo">photo · 1:1</div>
-        <p class="client-name" data-slot="testimonial-4-name">[Имя 4]</p>
-        <p class="client-quote" data-slot="testimonial-4-quote">[Краткий отзыв клиента 4]</p>
-      </div>
-      <div class="circle-item">
-        <div class="circle-photo" data-slot="testimonial-5-photo">photo · 1:1</div>
-        <p class="client-name" data-slot="testimonial-5-name">[Имя 5]</p>
-        <p class="client-quote" data-slot="testimonial-5-quote">[Краткий отзыв клиента 5]</p>
-      </div>
-    </div>
-  </section>
-</body>
-</html>
+<section class="testimonials" data-block-id="ru-testimonials-01-video-circles">
+<h2 class="section-headline">{{slot:headline}}</h2>
+<div class="circles-row">
+<div class="circle-item">
+<div class="circle-photo">{{slot:testimonial-1-photo}}</div>
+<p class="client-name">{{slot:testimonial-1-name}}</p>
+<p class="client-quote">{{slot:testimonial-1-quote}}</p>
+</div>
+<div class="circle-item">
+<div class="circle-photo">{{slot:testimonial-2-photo}}</div>
+<p class="client-name">{{slot:testimonial-2-name}}</p>
+<p class="client-quote">{{slot:testimonial-2-quote}}</p>
+</div>
+<div class="circle-item">
+<div class="circle-photo">{{slot:testimonial-3-photo}}</div>
+<p class="client-name">{{slot:testimonial-3-name}}</p>
+<p class="client-quote">{{slot:testimonial-3-quote}}</p>
+</div>
+<div class="circle-item">
+<div class="circle-photo">{{slot:testimonial-4-photo}}</div>
+<p class="client-name">{{slot:testimonial-4-name}}</p>
+<p class="client-quote">{{slot:testimonial-4-quote}}</p>
+</div>
+<div class="circle-item">
+<div class="circle-photo">{{slot:testimonial-5-photo}}</div>
+<p class="client-name">{{slot:testimonial-5-name}}</p>
+<p class="client-quote">{{slot:testimonial-5-quote}}</p>
+</div>
+</div>
+</section>

@@ -160,53 +160,50 @@
   body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
 }
 </style>
-<section class="lp-trust-corporate-grid-2" aria-labelledby="trust-corporate-grid-2-title">
-  <div class="lp-trust-corporate-grid-2__inner">
-    <div class="lp-trust-corporate-grid-2__content">
-      <p class="lp-trust-corporate-grid-2__eyebrow">{{slot:eyebrow}}</p>
-      <h2 class="lp-trust-corporate-grid-2__title" id="trust-corporate-grid-2-title">{{slot:heading}}</h2>
-      <p class="lp-trust-corporate-grid-2__text">{{slot:subhead}}</p>
-
-      <ul class="lp-trust-corporate-grid-2__stats" aria-label="{{slot:stats-label}}">
-        <li class="lp-trust-corporate-grid-2__stat">
-          <strong>{{slot:stat-1-value}}</strong>
-          <span>{{slot:stat-1-label}}</span>
-        </li>
-        <li class="lp-trust-corporate-grid-2__stat">
-          <strong>{{slot:stat-2-value}}</strong>
-          <span>{{slot:stat-2-label}}</span>
-        </li>
-      </ul>
-    </div>
-
-    <div class="lp-trust-corporate-grid-2__cards" aria-label="{{slot:benefits-label}}">
-      <article class="lp-trust-corporate-grid-2__card">
-        <span class="lp-trust-corporate-grid-2__icon" aria-hidden="true"></span>
-        <h3>{{slot:benefit-1-title}}</h3>
-        <p>{{slot:benefit-1-text}}</p>
-      </article>
-      <article class="lp-trust-corporate-grid-2__card">
-        <span class="lp-trust-corporate-grid-2__icon" aria-hidden="true"></span>
-        <h3>{{slot:benefit-2-title}}</h3>
-        <p>{{slot:benefit-2-text}}</p>
-      </article>
-      <article class="lp-trust-corporate-grid-2__card">
-        <span class="lp-trust-corporate-grid-2__icon" aria-hidden="true"></span>
-        <h3>{{slot:benefit-3-title}}</h3>
-        <p>{{slot:benefit-3-text}}</p>
-      </article>
-      <article class="lp-trust-corporate-grid-2__card">
-        <span class="lp-trust-corporate-grid-2__icon" aria-hidden="true"></span>
-        <h3>{{slot:benefit-4-title}}</h3>
-        <p>{{slot:benefit-4-text}}</p>
-      </article>
-    </div>
-
-    <div class="lp-trust-corporate-grid-2__partners" aria-label="{{slot:partners-label}}">
-      <img src="{{slot:partner-1-logo}}" alt="{{slot:partner-1-logo-alt}}" loading="lazy">
-      <img src="{{slot:partner-2-logo}}" alt="{{slot:partner-2-logo-alt}}" loading="lazy">
-      <img src="{{slot:partner-3-logo}}" alt="{{slot:partner-3-logo-alt}}" loading="lazy">
-      <img src="{{slot:partner-4-logo}}" alt="{{slot:partner-4-logo-alt}}" loading="lazy">
-    </div>
-  </div>
+<section aria-labelledby="trust-corporate-grid-2-title" class="lp-trust-corporate-grid-2">
+<div class="lp-trust-corporate-grid-2__inner">
+<div class="lp-trust-corporate-grid-2__content">
+<p class="lp-trust-corporate-grid-2__eyebrow">{{slot:eyebrow}}</p>
+<h2 class="lp-trust-corporate-grid-2__title" id="trust-corporate-grid-2-title">{{slot:heading}}</h2>
+<p class="lp-trust-corporate-grid-2__text">{{slot:subhead}}</p>
+<ul aria-label="{{slot:stats-label}}" class="lp-trust-corporate-grid-2__stats">
+<li class="lp-trust-corporate-grid-2__stat">
+<strong>{{slot:stat-1-value}}</strong>
+<span>{{slot:stat-1-label}}</span>
+</li>
+<li class="lp-trust-corporate-grid-2__stat">
+<strong>{{slot:stat-2-value}}</strong>
+<span>{{slot:stat-2-label}}</span>
+</li>
+</ul>
+</div>
+<div aria-label="{{slot:benefits-label}}" class="lp-trust-corporate-grid-2__cards">
+<article class="lp-trust-corporate-grid-2__card">
+<span aria-hidden="true" class="lp-trust-corporate-grid-2__icon"></span>
+<h3>{{slot:benefit-1-title}}</h3>
+<p>{{slot:benefit-1-text}}</p>
+</article>
+<article class="lp-trust-corporate-grid-2__card">
+<span aria-hidden="true" class="lp-trust-corporate-grid-2__icon"></span>
+<h3>{{slot:benefit-2-title}}</h3>
+<p>{{slot:benefit-2-text}}</p>
+</article>
+<article class="lp-trust-corporate-grid-2__card">
+<span aria-hidden="true" class="lp-trust-corporate-grid-2__icon"></span>
+<h3>{{slot:benefit-3-title}}</h3>
+<p>{{slot:benefit-3-text}}</p>
+</article>
+<article class="lp-trust-corporate-grid-2__card">
+<span aria-hidden="true" class="lp-trust-corporate-grid-2__icon"></span>
+<h3>{{slot:benefit-4-title}}</h3>
+<p>{{slot:benefit-4-text}}</p>
+</article>
+</div>
+<div aria-label="{{slot:partners-label}}" class="lp-trust-corporate-grid-2__partners">
+<img alt="{{slot:partner-1-logo-alt}}" loading="lazy" src="{{slot:partner-1-logo}}"/>
+<img alt="{{slot:partner-2-logo-alt}}" loading="lazy" src="{{slot:partner-2-logo}}"/>
+<img alt="{{slot:partner-3-logo-alt}}" loading="lazy" src="{{slot:partner-3-logo}}"/>
+<img alt="{{slot:partner-4-logo-alt}}" loading="lazy" src="{{slot:partner-4-logo}}"/>
+</div>
+</div>
 </section>

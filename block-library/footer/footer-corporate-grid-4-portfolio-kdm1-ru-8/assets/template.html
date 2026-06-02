@@ -139,52 +139,48 @@
   }
 }
 </style>
-<footer class="lp-footer-corporate-grid-4" aria-labelledby="lp-footer-corporate-grid-4-title">
-  <div class="lp-footer-corporate-grid-4__inner">
-    <div class="lp-footer-corporate-grid-4__brand">
-      <a class="lp-footer-corporate-grid-4__logo-link" href="{{slot:brand-link}}" aria-label="{{slot:brand-aria-label}}">
-        <img class="lp-footer-corporate-grid-4__logo" src="{{slot:brand-logo}}" alt="{{slot:brand-logo-alt}}" loading="lazy">
-      </a>
-      <h2 class="lp-footer-corporate-grid-4__title" id="lp-footer-corporate-grid-4-title">{{slot:footer-heading}}</h2>
-      <p class="lp-footer-corporate-grid-4__text">{{slot:footer-description}}</p>
-    </div>
-
-    <nav class="lp-footer-corporate-grid-4__column" aria-label="{{slot:nav-primary-label}}">
-      <h3 class="lp-footer-corporate-grid-4__column-title">{{slot:column-1-title}}</h3>
-      <ul class="lp-footer-corporate-grid-4__list">
-        <li><a href="{{slot:column-1-link-1-url}}">{{slot:column-1-link-1-label}}</a></li>
-        <li><a href="{{slot:column-1-link-2-url}}">{{slot:column-1-link-2-label}}</a></li>
-        <li><a href="{{slot:column-1-link-3-url}}">{{slot:column-1-link-3-label}}</a></li>
-        <li><a href="{{slot:column-1-link-4-url}}">{{slot:column-1-link-4-label}}</a></li>
-      </ul>
-    </nav>
-
-    <nav class="lp-footer-corporate-grid-4__column" aria-label="{{slot:nav-secondary-label}}">
-      <h3 class="lp-footer-corporate-grid-4__column-title">{{slot:column-2-title}}</h3>
-      <ul class="lp-footer-corporate-grid-4__list">
-        <li><a href="{{slot:column-2-link-1-url}}">{{slot:column-2-link-1-label}}</a></li>
-        <li><a href="{{slot:column-2-link-2-url}}">{{slot:column-2-link-2-label}}</a></li>
-        <li><a href="{{slot:column-2-link-3-url}}">{{slot:column-2-link-3-label}}</a></li>
-        <li><a href="{{slot:column-2-link-4-url}}">{{slot:column-2-link-4-label}}</a></li>
-      </ul>
-    </nav>
-
-    <address class="lp-footer-corporate-grid-4__column lp-footer-corporate-grid-4__contacts">
-      <h3 class="lp-footer-corporate-grid-4__column-title">{{slot:contacts-title}}</h3>
-      <ul class="lp-footer-corporate-grid-4__list">
-        <li><a href="{{slot:phone-url}}">{{slot:phone-label}}</a></li>
-        <li><a href="{{slot:email-url}}">{{slot:email-label}}</a></li>
-        <li>{{slot:address-line}}</li>
-        <li>{{slot:working-hours}}</li>
-      </ul>
-    </address>
-  </div>
-
-  <div class="lp-footer-corporate-grid-4__bottom">
-    <p class="lp-footer-corporate-grid-4__legal">{{slot:copyright}}</p>
-    <nav class="lp-footer-corporate-grid-4__meta" aria-label="{{slot:legal-nav-label}}">
-      <a href="{{slot:policy-url}}">{{slot:policy-label}}</a>
-      <a href="{{slot:terms-url}}">{{slot:terms-label}}</a>
-    </nav>
-  </div>
+<footer aria-labelledby="lp-footer-corporate-grid-4-title" class="lp-footer-corporate-grid-4">
+<div class="lp-footer-corporate-grid-4__inner">
+<div class="lp-footer-corporate-grid-4__brand">
+<a aria-label="{{slot:brand-aria-label}}" class="lp-footer-corporate-grid-4__logo-link" href="{{slot:brand-link}}">
+<img alt="{{slot:brand-logo-alt}}" class="lp-footer-corporate-grid-4__logo" loading="lazy" src="{{slot:brand-logo}}"/>
+</a>
+<h2 class="lp-footer-corporate-grid-4__title" id="lp-footer-corporate-grid-4-title">{{slot:footer-heading}}</h2>
+<p class="lp-footer-corporate-grid-4__text">{{slot:footer-description}}</p>
+</div>
+<nav aria-label="{{slot:nav-primary-label}}" class="lp-footer-corporate-grid-4__column">
+<h3 class="lp-footer-corporate-grid-4__column-title">{{slot:column-1-title}}</h3>
+<ul class="lp-footer-corporate-grid-4__list">
+<li><a href="{{slot:column-1-link-1-url}}">{{slot:column-1-link-1-label}}</a></li>
+<li><a href="{{slot:column-1-link-2-url}}">{{slot:column-1-link-2-label}}</a></li>
+<li><a href="{{slot:column-1-link-3-url}}">{{slot:column-1-link-3-label}}</a></li>
+<li><a href="{{slot:column-1-link-4-url}}">{{slot:column-1-link-4-label}}</a></li>
+</ul>
+</nav>
+<nav aria-label="{{slot:nav-secondary-label}}" class="lp-footer-corporate-grid-4__column">
+<h3 class="lp-footer-corporate-grid-4__column-title">{{slot:column-2-title}}</h3>
+<ul class="lp-footer-corporate-grid-4__list">
+<li><a href="{{slot:column-2-link-1-url}}">{{slot:column-2-link-1-label}}</a></li>
+<li><a href="{{slot:column-2-link-2-url}}">{{slot:column-2-link-2-label}}</a></li>
+<li><a href="{{slot:column-2-link-3-url}}">{{slot:column-2-link-3-label}}</a></li>
+<li><a href="{{slot:column-2-link-4-url}}">{{slot:column-2-link-4-label}}</a></li>
+</ul>
+</nav>
+<address class="lp-footer-corporate-grid-4__column lp-footer-corporate-grid-4__contacts">
+<h3 class="lp-footer-corporate-grid-4__column-title">{{slot:contacts-title}}</h3>
+<ul class="lp-footer-corporate-grid-4__list">
+<li><a href="{{slot:phone-url}}">{{slot:phone-label}}</a></li>
+<li><a href="{{slot:email-url}}">{{slot:email-label}}</a></li>
+<li>{{slot:address-line}}</li>
+<li>{{slot:working-hours}}</li>
+</ul>
+</address>
+</div>
+<div class="lp-footer-corporate-grid-4__bottom">
+<p class="lp-footer-corporate-grid-4__legal">{{slot:copyright}}</p>
+<nav aria-label="{{slot:legal-nav-label}}" class="lp-footer-corporate-grid-4__meta">
+<a href="{{slot:policy-url}}">{{slot:policy-label}}</a>
+<a href="{{slot:terms-url}}">{{slot:terms-label}}</a>
+</nav>
+</div>
 </footer>

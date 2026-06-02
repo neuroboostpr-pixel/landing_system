@@ -171,50 +171,46 @@
   }
 }
 </style>
-<section class="lp-process-technical-timeline" aria-labelledby="process-technical-timeline-title">
-  <div class="lp-process-technical-timeline__inner">
-    <div class="lp-process-technical-timeline__header">
-      <span class="lp-process-technical-timeline__eyebrow">{{slot:eyebrow}}</span>
-      <h2 class="lp-process-technical-timeline__title" id="process-technical-timeline-title">{{slot:heading}}</h2>
-      <p class="lp-process-technical-timeline__lead">{{slot:subhead}}</p>
-    </div>
-
-    <ol class="lp-process-technical-timeline__steps">
-      <li class="lp-process-technical-timeline__step">
-        <span class="lp-process-technical-timeline__marker" aria-hidden="true">{{slot:step-1-number}}</span>
-        <div class="lp-process-technical-timeline__content">
-          <span class="lp-process-technical-timeline__meta">{{slot:step-1-meta}}</span>
-          <h3 class="lp-process-technical-timeline__step-title">{{slot:step-1-title}}</h3>
-          <p class="lp-process-technical-timeline__text">{{slot:step-1-text}}</p>
-        </div>
-      </li>
-
-      <li class="lp-process-technical-timeline__step">
-        <span class="lp-process-technical-timeline__marker" aria-hidden="true">{{slot:step-2-number}}</span>
-        <div class="lp-process-technical-timeline__content">
-          <span class="lp-process-technical-timeline__meta">{{slot:step-2-meta}}</span>
-          <h3 class="lp-process-technical-timeline__step-title">{{slot:step-2-title}}</h3>
-          <p class="lp-process-technical-timeline__text">{{slot:step-2-text}}</p>
-        </div>
-      </li>
-
-      <li class="lp-process-technical-timeline__step">
-        <span class="lp-process-technical-timeline__marker" aria-hidden="true">{{slot:step-3-number}}</span>
-        <div class="lp-process-technical-timeline__content">
-          <span class="lp-process-technical-timeline__meta">{{slot:step-3-meta}}</span>
-          <h3 class="lp-process-technical-timeline__step-title">{{slot:step-3-title}}</h3>
-          <p class="lp-process-technical-timeline__text">{{slot:step-3-text}}</p>
-        </div>
-      </li>
-
-      <li class="lp-process-technical-timeline__step">
-        <span class="lp-process-technical-timeline__marker" aria-hidden="true">{{slot:step-4-number}}</span>
-        <div class="lp-process-technical-timeline__content">
-          <span class="lp-process-technical-timeline__meta">{{slot:step-4-meta}}</span>
-          <h3 class="lp-process-technical-timeline__step-title">{{slot:step-4-title}}</h3>
-          <p class="lp-process-technical-timeline__text">{{slot:step-4-text}}</p>
-        </div>
-      </li>
-    </ol>
-  </div>
+<section aria-labelledby="process-technical-timeline-title" class="lp-process-technical-timeline">
+<div class="lp-process-technical-timeline__inner">
+<div class="lp-process-technical-timeline__header">
+<span class="lp-process-technical-timeline__eyebrow">{{slot:eyebrow}}</span>
+<h2 class="lp-process-technical-timeline__title" id="process-technical-timeline-title">{{slot:heading}}</h2>
+<p class="lp-process-technical-timeline__lead">{{slot:subhead}}</p>
+</div>
+<ol class="lp-process-technical-timeline__steps">
+<li class="lp-process-technical-timeline__step">
+<span aria-hidden="true" class="lp-process-technical-timeline__marker">{{slot:step-1-number}}</span>
+<div class="lp-process-technical-timeline__content">
+<span class="lp-process-technical-timeline__meta">{{slot:step-1-meta}}</span>
+<h3 class="lp-process-technical-timeline__step-title">{{slot:step-1-title}}</h3>
+<p class="lp-process-technical-timeline__text">{{slot:step-1-text}}</p>
+</div>
+</li>
+<li class="lp-process-technical-timeline__step">
+<span aria-hidden="true" class="lp-process-technical-timeline__marker">{{slot:step-2-number}}</span>
+<div class="lp-process-technical-timeline__content">
+<span class="lp-process-technical-timeline__meta">{{slot:step-2-meta}}</span>
+<h3 class="lp-process-technical-timeline__step-title">{{slot:step-2-title}}</h3>
+<p class="lp-process-technical-timeline__text">{{slot:step-2-text}}</p>
+</div>
+</li>
+<li class="lp-process-technical-timeline__step">
+<span aria-hidden="true" class="lp-process-technical-timeline__marker">{{slot:step-3-number}}</span>
+<div class="lp-process-technical-timeline__content">
+<span class="lp-process-technical-timeline__meta">{{slot:step-3-meta}}</span>
+<h3 class="lp-process-technical-timeline__step-title">{{slot:step-3-title}}</h3>
+<p class="lp-process-technical-timeline__text">{{slot:step-3-text}}</p>
+</div>
+</li>
+<li class="lp-process-technical-timeline__step">
+<span aria-hidden="true" class="lp-process-technical-timeline__marker">{{slot:step-4-number}}</span>
+<div class="lp-process-technical-timeline__content">
+<span class="lp-process-technical-timeline__meta">{{slot:step-4-meta}}</span>
+<h3 class="lp-process-technical-timeline__step-title">{{slot:step-4-title}}</h3>
+<p class="lp-process-technical-timeline__text">{{slot:step-4-text}}</p>
+</div>
+</li>
+</ol>
+</div>
 </section>

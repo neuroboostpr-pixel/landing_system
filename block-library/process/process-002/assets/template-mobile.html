@@ -198,56 +198,53 @@
   body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
 }
 </style>
-<section class="lp-process-corporate-stacked" aria-labelledby="process-corporate-stacked-title">
-  <div class="lp-process-corporate-stacked__inner">
-    <div class="lp-process-corporate-stacked__intro">
-      <p class="lp-process-corporate-stacked__eyebrow">{{slot:process-eyebrow}}</p>
-      <h2 class="lp-process-corporate-stacked__title" id="process-corporate-stacked-title">{{slot:process-heading}}</h2>
-      <p class="lp-process-corporate-stacked__lead">{{slot:process-subhead}}</p>
-    </div>
-
-    <div class="lp-process-corporate-stacked__expert">
-      <figure class="lp-process-corporate-stacked__expert-media">
-        <img src="{{slot:expert-image}}" alt="{{slot:expert-image-alt}}" loading="lazy">
-      </figure>
-      <div class="lp-process-corporate-stacked__expert-body">
-        <p class="lp-process-corporate-stacked__expert-label">{{slot:expert-label}}</p>
-        <h3 class="lp-process-corporate-stacked__expert-name">{{slot:expert-name}}</h3>
-        <p class="lp-process-corporate-stacked__expert-text">{{slot:expert-text}}</p>
-      </div>
-    </div>
-
-    <ol class="lp-process-corporate-stacked__steps">
-      <li class="lp-process-corporate-stacked__step">
-        <span class="lp-process-corporate-stacked__step-number">{{slot:step-1-number}}</span>
-        <div class="lp-process-corporate-stacked__step-content">
-          <h3 class="lp-process-corporate-stacked__step-title">{{slot:step-1-title}}</h3>
-          <p class="lp-process-corporate-stacked__step-text">{{slot:step-1-text}}</p>
-        </div>
-      </li>
-      <li class="lp-process-corporate-stacked__step">
-        <span class="lp-process-corporate-stacked__step-number">{{slot:step-2-number}}</span>
-        <div class="lp-process-corporate-stacked__step-content">
-          <h3 class="lp-process-corporate-stacked__step-title">{{slot:step-2-title}}</h3>
-          <p class="lp-process-corporate-stacked__step-text">{{slot:step-2-text}}</p>
-        </div>
-      </li>
-      <li class="lp-process-corporate-stacked__step">
-        <span class="lp-process-corporate-stacked__step-number">{{slot:step-3-number}}</span>
-        <div class="lp-process-corporate-stacked__step-content">
-          <h3 class="lp-process-corporate-stacked__step-title">{{slot:step-3-title}}</h3>
-          <p class="lp-process-corporate-stacked__step-text">{{slot:step-3-text}}</p>
-        </div>
-      </li>
-    </ol>
-
-    <div class="lp-process-corporate-stacked__team" aria-label="{{slot:team-gallery-label}}">
-      <figure class="lp-process-corporate-stacked__team-figure">
-        <img src="{{slot:team-image-1}}" alt="{{slot:team-image-1-alt}}" loading="lazy">
-      </figure>
-      <figure class="lp-process-corporate-stacked__team-figure">
-        <img src="{{slot:team-image-2}}" alt="{{slot:team-image-2-alt}}" loading="lazy">
-      </figure>
-    </div>
-  </div>
+<section aria-labelledby="process-corporate-stacked-title" class="lp-process-corporate-stacked">
+<div class="lp-process-corporate-stacked__inner">
+<div class="lp-process-corporate-stacked__intro">
+<p class="lp-process-corporate-stacked__eyebrow">{{slot:process-eyebrow}}</p>
+<h2 class="lp-process-corporate-stacked__title" id="process-corporate-stacked-title">{{slot:process-heading}}</h2>
+<p class="lp-process-corporate-stacked__lead">{{slot:process-subhead}}</p>
+</div>
+<div class="lp-process-corporate-stacked__expert">
+<figure class="lp-process-corporate-stacked__expert-media">
+<img alt="{{slot:expert-image-alt}}" loading="lazy" src="{{slot:expert-image}}"/>
+</figure>
+<div class="lp-process-corporate-stacked__expert-body">
+<p class="lp-process-corporate-stacked__expert-label">{{slot:expert-label}}</p>
+<h3 class="lp-process-corporate-stacked__expert-name">{{slot:expert-name}}</h3>
+<p class="lp-process-corporate-stacked__expert-text">{{slot:expert-text}}</p>
+</div>
+</div>
+<ol class="lp-process-corporate-stacked__steps">
+<li class="lp-process-corporate-stacked__step">
+<span class="lp-process-corporate-stacked__step-number">{{slot:step-1-number}}</span>
+<div class="lp-process-corporate-stacked__step-content">
+<h3 class="lp-process-corporate-stacked__step-title">{{slot:step-1-title}}</h3>
+<p class="lp-process-corporate-stacked__step-text">{{slot:step-1-text}}</p>
+</div>
+</li>
+<li class="lp-process-corporate-stacked__step">
+<span class="lp-process-corporate-stacked__step-number">{{slot:step-2-number}}</span>
+<div class="lp-process-corporate-stacked__step-content">
+<h3 class="lp-process-corporate-stacked__step-title">{{slot:step-2-title}}</h3>
+<p class="lp-process-corporate-stacked__step-text">{{slot:step-2-text}}</p>
+</div>
+</li>
+<li class="lp-process-corporate-stacked__step">
+<span class="lp-process-corporate-stacked__step-number">{{slot:step-3-number}}</span>
+<div class="lp-process-corporate-stacked__step-content">
+<h3 class="lp-process-corporate-stacked__step-title">{{slot:step-3-title}}</h3>
+<p class="lp-process-corporate-stacked__step-text">{{slot:step-3-text}}</p>
+</div>
+</li>
+</ol>
+<div aria-label="{{slot:team-gallery-label}}" class="lp-process-corporate-stacked__team">
+<figure class="lp-process-corporate-stacked__team-figure">
+<img alt="{{slot:team-image-1-alt}}" loading="lazy" src="{{slot:team-image-1}}"/>
+</figure>
+<figure class="lp-process-corporate-stacked__team-figure">
+<img alt="{{slot:team-image-2-alt}}" loading="lazy" src="{{slot:team-image-2}}"/>
+</figure>
+</div>
+</div>
 </section>

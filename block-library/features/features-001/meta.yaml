@@ -6,7 +6,53 @@ id: features-001
 layout_pattern: brutalist
 signature: features|brutalist|[content]|bg:false
 slots:
-- name: content
+- name: eyebrow
+  type: text
+- name: heading
+  type: text
+- name: subhead
+  type: text
+- name: portrait-image-alt
+  type: text
+- name: portrait-image
+  type: text
+- name: portrait-caption
+  type: text
+- name: feature-1-badge
+  type: text
+- name: feature-1-title
+  type: text
+- name: feature-1-text
+  type: text
+- name: feature-2-badge
+  type: text
+- name: feature-2-title
+  type: text
+- name: feature-2-text
+  type: text
+- name: feature-3-badge
+  type: text
+- name: feature-3-title
+  type: text
+- name: feature-3-text
+  type: text
+- name: feature-4-badge
+  type: text
+- name: feature-4-title
+  type: text
+- name: feature-4-text
+  type: text
+- name: feature-5-badge
+  type: text
+- name: feature-5-title
+  type: text
+- name: feature-5-text
+  type: text
+- name: feature-6-badge
+  type: text
+- name: feature-6-title
+  type: text
+- name: feature-6-text
   type: text
 source: cleaned
 type: features

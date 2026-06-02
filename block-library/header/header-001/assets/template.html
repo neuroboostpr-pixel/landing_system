@@ -145,40 +145,37 @@
   }
 }
 </style>
-<header class="lp-header-cinematic-split" aria-label="{{slot:header-aria-label}}">
-  <div class="lp-header-cinematic-split__inner">
-    <a class="lp-header-cinematic-split__brand" href="{{slot:brand-link}}" aria-label="{{slot:brand-aria-label}}">
-      <span class="lp-header-cinematic-split__logo-mark" aria-hidden="true"></span>
-      <span class="lp-header-cinematic-split__brand-text">{{slot:brand-name}}</span>
-    </a>
-
-    <nav class="lp-header-cinematic-split__nav" aria-label="{{slot:nav-aria-label}}">
-      <a href="{{slot:nav-link-1}}">{{slot:nav-label-1}}</a>
-      <a href="{{slot:nav-link-2}}">{{slot:nav-label-2}}</a>
-      <a href="{{slot:nav-link-3}}">{{slot:nav-label-3}}</a>
-      <a href="{{slot:nav-link-4}}">{{slot:nav-label-4}}</a>
-    </nav>
-
-    <div class="lp-header-cinematic-split__actions">
-      <a class="lp-header-cinematic-split__contact" href="{{slot:contact-link}}">
-        <span>{{slot:contact-caption}}</span>
-        <strong>{{slot:contact-value}}</strong>
-      </a>
-
-      <div class="lp-header-cinematic-split__socials" aria-label="{{slot:socials-aria-label}}">
-        <a class="lp-header-cinematic-split__icon-link" href="{{slot:social-link-1}}" aria-label="{{slot:social-label-1}}">
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M4 6.5h16v11H4z"></path>
-            <path d="m5 7 7 6 7-6"></path>
-          </svg>
-        </a>
-        <a class="lp-header-cinematic-split__icon-link" href="{{slot:social-link-2}}" aria-label="{{slot:social-label-2}}">
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16z"></path>
-            <path d="M8.5 12.5 11 15l4.5-6"></path>
-          </svg>
-        </a>
-      </div>
-    </div>
-  </div>
+<header aria-label="{{slot:header-aria-label}}" class="lp-header-cinematic-split">
+<div class="lp-header-cinematic-split__inner">
+<a aria-label="{{slot:brand-aria-label}}" class="lp-header-cinematic-split__brand" href="{{slot:brand-link}}">
+<span aria-hidden="true" class="lp-header-cinematic-split__logo-mark"></span>
+<span class="lp-header-cinematic-split__brand-text">{{slot:brand-name}}</span>
+</a>
+<nav aria-label="{{slot:nav-aria-label}}" class="lp-header-cinematic-split__nav">
+<a href="{{slot:nav-link-1}}">{{slot:nav-label-1}}</a>
+<a href="{{slot:nav-link-2}}">{{slot:nav-label-2}}</a>
+<a href="{{slot:nav-link-3}}">{{slot:nav-label-3}}</a>
+<a href="{{slot:nav-link-4}}">{{slot:nav-label-4}}</a>
+</nav>
+<div class="lp-header-cinematic-split__actions">
+<a class="lp-header-cinematic-split__contact" href="{{slot:contact-link}}">
+<span>{{slot:contact-caption}}</span>
+<strong>{{slot:contact-value}}</strong>
+</a>
+<div aria-label="{{slot:socials-aria-label}}" class="lp-header-cinematic-split__socials">
+<a aria-label="{{slot:social-label-1}}" class="lp-header-cinematic-split__icon-link" href="{{slot:social-link-1}}">
+<svg aria-hidden="true" focusable="false" viewbox="0 0 24 24">
+<path d="M4 6.5h16v11H4z"></path>
+<path d="m5 7 7 6 7-6"></path>
+</svg>
+</a>
+<a aria-label="{{slot:social-label-2}}" class="lp-header-cinematic-split__icon-link" href="{{slot:social-link-2}}">
+<svg aria-hidden="true" focusable="false" viewbox="0 0 24 24">
+<path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16z"></path>
+<path d="M8.5 12.5 11 15l4.5-6"></path>
+</svg>
+</a>
+</div>
+</div>
+</div>
 </header>

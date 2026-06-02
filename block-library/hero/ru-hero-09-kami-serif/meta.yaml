@@ -24,14 +24,20 @@ slots:
   name: eyebrow-right
   required: false
   type: text
-- max_chars: 80
-  name: headline
-  required: true
+- name: h1-1
   type: text
 - max_chars: 220
   name: subhead
   required: false
   type: text
+- default_text: Начать сейчас
+  name: primary-cta
+  required: true
+  type: cta
+- default_text: О нас
+  name: secondary-cta
+  required: false
+  type: cta
 - max_chars: 10
   name: metric-1-value
   required: false
@@ -56,14 +62,8 @@ slots:
   name: metric-3-label
   required: false
   type: text
-- default_text: Начать сейчас
-  name: primary-cta
-  required: true
-  type: cta
-- default_text: О нас
-  name: secondary-cta
-  required: false
-  type: cta
+- name: headline
+  type: text
 source: opendesign
 source_attribution: 'github.com/nexu-io/open-design: design-templates/kami-landing
   (Apache-2.0)'

@@ -166,55 +166,49 @@
   }
 }
 </style>
-<section class="lp-contacts-corporate-split" aria-labelledby="contacts-corporate-split-title">
-  <div class="lp-contacts-corporate-split__inner">
-    <div class="lp-contacts-corporate-split__content">
-      <p class="lp-contacts-corporate-split__eyebrow">{{slot:contacts-eyebrow}}</p>
-      <h2 class="lp-contacts-corporate-split__title" id="contacts-corporate-split-title">{{slot:contacts-heading}}</h2>
-      <p class="lp-contacts-corporate-split__text">{{slot:contacts-subhead}}</p>
-
-      <ul class="lp-contacts-corporate-split__list" aria-label="{{slot:contacts-list-label}}">
-        <li class="lp-contacts-corporate-split__item">
-          <span class="lp-contacts-corporate-split__item-label">{{slot:contact-method-one-label}}</span>
-          <a class="lp-contacts-corporate-split__item-link" href="{{slot:contact-method-one-link}}">{{slot:contact-method-one-text}}</a>
-        </li>
-        <li class="lp-contacts-corporate-split__item">
-          <span class="lp-contacts-corporate-split__item-label">{{slot:contact-method-two-label}}</span>
-          <a class="lp-contacts-corporate-split__item-link" href="{{slot:contact-method-two-link}}">{{slot:contact-method-two-text}}</a>
-        </li>
-      </ul>
-    </div>
-
-    <form class="lp-contacts-corporate-split__form" action="{{slot:form-action}}" method="post" aria-label="{{slot:form-label}}">
-      <div class="lp-contacts-corporate-split__field">
-        <label for="contacts-name">{{slot:name-label}}</label>
-        <input id="contacts-name" name="name" type="text" placeholder="{{slot:name-placeholder}}" autocomplete="name">
-      </div>
-
-      <div class="lp-contacts-corporate-split__field">
-        <label for="contacts-contact">{{slot:contact-label}}</label>
-        <input id="contacts-contact" name="contact" type="text" placeholder="{{slot:contact-placeholder}}" autocomplete="email">
-      </div>
-
-      <div class="lp-contacts-corporate-split__grid">
-        <div class="lp-contacts-corporate-split__field">
-          <label for="contacts-date">{{slot:date-label}}</label>
-          <input id="contacts-date" name="date" type="date" aria-label="{{slot:date-aria-label}}">
-        </div>
-
-        <div class="lp-contacts-corporate-split__field">
-          <label for="contacts-time">{{slot:time-label}}</label>
-          <select id="contacts-time" name="time" aria-label="{{slot:time-aria-label}}">
-            <option value="">{{slot:time-option-default}}</option>
-            <option value="{{slot:time-option-one-value}}">{{slot:time-option-one-label}}</option>
-            <option value="{{slot:time-option-two-value}}">{{slot:time-option-two-label}}</option>
-            <option value="{{slot:time-option-three-value}}">{{slot:time-option-three-label}}</option>
-          </select>
-        </div>
-      </div>
-
-      <button class="lp-contacts-corporate-split__button" type="submit">{{slot:primary-cta-label}}</button>
-      <p class="lp-contacts-corporate-split__note">{{slot:form-note}}</p>
-    </form>
-  </div>
+<section aria-labelledby="contacts-corporate-split-title" class="lp-contacts-corporate-split">
+<div class="lp-contacts-corporate-split__inner">
+<div class="lp-contacts-corporate-split__content">
+<p class="lp-contacts-corporate-split__eyebrow">{{slot:contacts-eyebrow}}</p>
+<h2 class="lp-contacts-corporate-split__title" id="contacts-corporate-split-title">{{slot:contacts-heading}}</h2>
+<p class="lp-contacts-corporate-split__text">{{slot:contacts-subhead}}</p>
+<ul aria-label="{{slot:contacts-list-label}}" class="lp-contacts-corporate-split__list">
+<li class="lp-contacts-corporate-split__item">
+<span class="lp-contacts-corporate-split__item-label">{{slot:contact-method-one-label}}</span>
+<a class="lp-contacts-corporate-split__item-link" href="{{slot:contact-method-one-link}}">{{slot:contact-method-one-text}}</a>
+</li>
+<li class="lp-contacts-corporate-split__item">
+<span class="lp-contacts-corporate-split__item-label">{{slot:contact-method-two-label}}</span>
+<a class="lp-contacts-corporate-split__item-link" href="{{slot:contact-method-two-link}}">{{slot:contact-method-two-text}}</a>
+</li>
+</ul>
+</div>
+<form action="{{slot:form-action}}" aria-label="{{slot:form-label}}" class="lp-contacts-corporate-split__form" method="post">
+<div class="lp-contacts-corporate-split__field">
+<label for="contacts-name">{{slot:name-label}}</label>
+<input autocomplete="name" id="contacts-name" name="name" placeholder="{{slot:name-placeholder}}" type="text"/>
+</div>
+<div class="lp-contacts-corporate-split__field">
+<label for="contacts-contact">{{slot:contact-label}}</label>
+<input autocomplete="email" id="contacts-contact" name="contact" placeholder="{{slot:contact-placeholder}}" type="text"/>
+</div>
+<div class="lp-contacts-corporate-split__grid">
+<div class="lp-contacts-corporate-split__field">
+<label for="contacts-date">{{slot:date-label}}</label>
+<input aria-label="{{slot:date-aria-label}}" id="contacts-date" name="date" type="date"/>
+</div>
+<div class="lp-contacts-corporate-split__field">
+<label for="contacts-time">{{slot:time-label}}</label>
+<select aria-label="{{slot:time-aria-label}}" id="contacts-time" name="time">
+<option value="">{{slot:time-option-default}}</option>
+<option value="{{slot:time-option-one-value}}">{{slot:time-option-one-label}}</option>
+<option value="{{slot:time-option-two-value}}">{{slot:time-option-two-label}}</option>
+<option value="{{slot:time-option-three-value}}">{{slot:time-option-three-label}}</option>
+</select>
+</div>
+</div>
+<button class="lp-contacts-corporate-split__button" type="submit">{{slot:primary-cta-label}}</button>
+<p class="lp-contacts-corporate-split__note">{{slot:form-note}}</p>
+</form>
+</div>
 </section>

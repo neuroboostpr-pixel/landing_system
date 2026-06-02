@@ -152,64 +152,59 @@
   }
 }
 </style>
-<section class="lp-faq-minimal-stacked" aria-labelledby="faq-minimal-stacked-title">
-  <div class="lp-faq-minimal-stacked__inner">
-    <div class="lp-faq-minimal-stacked__header">
-      <p class="lp-faq-minimal-stacked__eyebrow">{{slot:eyebrow}}</p>
-      <h2 class="lp-faq-minimal-stacked__title" id="faq-minimal-stacked-title">{{slot:heading}}</h2>
-      <p class="lp-faq-minimal-stacked__subhead">{{slot:subhead}}</p>
-    </div>
-
-    <div class="lp-faq-minimal-stacked__list">
-      <details class="lp-faq-minimal-stacked__item">
-        <summary class="lp-faq-minimal-stacked__question">
-          <span>{{slot:question-1}}</span>
-          <span class="lp-faq-minimal-stacked__icon" aria-hidden="true"></span>
-        </summary>
-        <div class="lp-faq-minimal-stacked__answer">
-          <p>{{slot:answer-1}}</p>
-        </div>
-      </details>
-
-      <details class="lp-faq-minimal-stacked__item">
-        <summary class="lp-faq-minimal-stacked__question">
-          <span>{{slot:question-2}}</span>
-          <span class="lp-faq-minimal-stacked__icon" aria-hidden="true"></span>
-        </summary>
-        <div class="lp-faq-minimal-stacked__answer">
-          <p>{{slot:answer-2}}</p>
-        </div>
-      </details>
-
-      <details class="lp-faq-minimal-stacked__item">
-        <summary class="lp-faq-minimal-stacked__question">
-          <span>{{slot:question-3}}</span>
-          <span class="lp-faq-minimal-stacked__icon" aria-hidden="true"></span>
-        </summary>
-        <div class="lp-faq-minimal-stacked__answer">
-          <p>{{slot:answer-3}}</p>
-        </div>
-      </details>
-
-      <details class="lp-faq-minimal-stacked__item">
-        <summary class="lp-faq-minimal-stacked__question">
-          <span>{{slot:question-4}}</span>
-          <span class="lp-faq-minimal-stacked__icon" aria-hidden="true"></span>
-        </summary>
-        <div class="lp-faq-minimal-stacked__answer">
-          <p>{{slot:answer-4}}</p>
-        </div>
-      </details>
-
-      <details class="lp-faq-minimal-stacked__item">
-        <summary class="lp-faq-minimal-stacked__question">
-          <span>{{slot:question-5}}</span>
-          <span class="lp-faq-minimal-stacked__icon" aria-hidden="true"></span>
-        </summary>
-        <div class="lp-faq-minimal-stacked__answer">
-          <p>{{slot:answer-5}}</p>
-        </div>
-      </details>
-    </div>
-  </div>
+<section aria-labelledby="faq-minimal-stacked-title" class="lp-faq-minimal-stacked">
+<div class="lp-faq-minimal-stacked__inner">
+<div class="lp-faq-minimal-stacked__header">
+<p class="lp-faq-minimal-stacked__eyebrow">{{slot:eyebrow}}</p>
+<h2 class="lp-faq-minimal-stacked__title" id="faq-minimal-stacked-title">{{slot:heading}}</h2>
+<p class="lp-faq-minimal-stacked__subhead">{{slot:subhead}}</p>
+</div>
+<div class="lp-faq-minimal-stacked__list">
+<details class="lp-faq-minimal-stacked__item">
+<summary class="lp-faq-minimal-stacked__question">
+<span>{{slot:question-1}}</span>
+<span aria-hidden="true" class="lp-faq-minimal-stacked__icon"></span>
+</summary>
+<div class="lp-faq-minimal-stacked__answer">
+<p>{{slot:answer-1}}</p>
+</div>
+</details>
+<details class="lp-faq-minimal-stacked__item">
+<summary class="lp-faq-minimal-stacked__question">
+<span>{{slot:question-2}}</span>
+<span aria-hidden="true" class="lp-faq-minimal-stacked__icon"></span>
+</summary>
+<div class="lp-faq-minimal-stacked__answer">
+<p>{{slot:answer-2}}</p>
+</div>
+</details>
+<details class="lp-faq-minimal-stacked__item">
+<summary class="lp-faq-minimal-stacked__question">
+<span>{{slot:question-3}}</span>
+<span aria-hidden="true" class="lp-faq-minimal-stacked__icon"></span>
+</summary>
+<div class="lp-faq-minimal-stacked__answer">
+<p>{{slot:answer-3}}</p>
+</div>
+</details>
+<details class="lp-faq-minimal-stacked__item">
+<summary class="lp-faq-minimal-stacked__question">
+<span>{{slot:question-4}}</span>
+<span aria-hidden="true" class="lp-faq-minimal-stacked__icon"></span>
+</summary>
+<div class="lp-faq-minimal-stacked__answer">
+<p>{{slot:answer-4}}</p>
+</div>
+</details>
+<details class="lp-faq-minimal-stacked__item">
+<summary class="lp-faq-minimal-stacked__question">
+<span>{{slot:question-5}}</span>
+<span aria-hidden="true" class="lp-faq-minimal-stacked__icon"></span>
+</summary>
+<div class="lp-faq-minimal-stacked__answer">
+<p>{{slot:answer-5}}</p>
+</div>
+</details>
+</div>
+</div>
 </section>

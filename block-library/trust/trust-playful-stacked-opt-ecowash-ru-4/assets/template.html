@@ -173,37 +173,34 @@
   }
 }
 </style>
-<section class="lp-trust-playful-stacked" aria-labelledby="trust-playful-stacked-title">
-  <div class="lp-trust-playful-stacked__inner">
-    <div class="lp-trust-playful-stacked__content">
-      <p class="lp-trust-playful-stacked__eyebrow">{{slot:trust-eyebrow}}</p>
-      <h2 class="lp-trust-playful-stacked__title" id="trust-playful-stacked-title">{{slot:trust-heading}}</h2>
-      <p class="lp-trust-playful-stacked__text">{{slot:trust-subhead}}</p>
-    </div>
-
-    <div class="lp-trust-playful-stacked__visual" aria-hidden="true">
-      <img src="{{slot:trust-visual-image}}" alt="{{slot:trust-visual-image-alt}}" loading="lazy">
-    </div>
-
-    <ul class="lp-trust-playful-stacked__stats" aria-label="{{slot:trust-stats-label}}">
-      <li class="lp-trust-playful-stacked__stat">
-        <span class="lp-trust-playful-stacked__value">{{slot:trust-stat-1-value}}</span>
-        <span class="lp-trust-playful-stacked__label">{{slot:trust-stat-1-label}}</span>
-      </li>
-      <li class="lp-trust-playful-stacked__stat">
-        <span class="lp-trust-playful-stacked__value">{{slot:trust-stat-2-value}}</span>
-        <span class="lp-trust-playful-stacked__label">{{slot:trust-stat-2-label}}</span>
-      </li>
-      <li class="lp-trust-playful-stacked__stat">
-        <span class="lp-trust-playful-stacked__value">{{slot:trust-stat-3-value}}</span>
-        <span class="lp-trust-playful-stacked__label">{{slot:trust-stat-3-label}}</span>
-      </li>
-    </ul>
-
-    <ul class="lp-trust-playful-stacked__badges" aria-label="{{slot:trust-badges-label}}">
-      <li class="lp-trust-playful-stacked__badge">{{slot:trust-badge-1}}</li>
-      <li class="lp-trust-playful-stacked__badge">{{slot:trust-badge-2}}</li>
-      <li class="lp-trust-playful-stacked__badge">{{slot:trust-badge-3}}</li>
-    </ul>
-  </div>
+<section aria-labelledby="trust-playful-stacked-title" class="lp-trust-playful-stacked">
+<div class="lp-trust-playful-stacked__inner">
+<div class="lp-trust-playful-stacked__content">
+<p class="lp-trust-playful-stacked__eyebrow">{{slot:trust-eyebrow}}</p>
+<h2 class="lp-trust-playful-stacked__title" id="trust-playful-stacked-title">{{slot:trust-heading}}</h2>
+<p class="lp-trust-playful-stacked__text">{{slot:trust-subhead}}</p>
+</div>
+<div aria-hidden="true" class="lp-trust-playful-stacked__visual">
+<img alt="{{slot:trust-visual-image-alt}}" loading="lazy" src="{{slot:trust-visual-image}}"/>
+</div>
+<ul aria-label="{{slot:trust-stats-label}}" class="lp-trust-playful-stacked__stats">
+<li class="lp-trust-playful-stacked__stat">
+<span class="lp-trust-playful-stacked__value">{{slot:trust-stat-1-value}}</span>
+<span class="lp-trust-playful-stacked__label">{{slot:trust-stat-1-label}}</span>
+</li>
+<li class="lp-trust-playful-stacked__stat">
+<span class="lp-trust-playful-stacked__value">{{slot:trust-stat-2-value}}</span>
+<span class="lp-trust-playful-stacked__label">{{slot:trust-stat-2-label}}</span>
+</li>
+<li class="lp-trust-playful-stacked__stat">
+<span class="lp-trust-playful-stacked__value">{{slot:trust-stat-3-value}}</span>
+<span class="lp-trust-playful-stacked__label">{{slot:trust-stat-3-label}}</span>
+</li>
+</ul>
+<ul aria-label="{{slot:trust-badges-label}}" class="lp-trust-playful-stacked__badges">
+<li class="lp-trust-playful-stacked__badge">{{slot:trust-badge-1}}</li>
+<li class="lp-trust-playful-stacked__badge">{{slot:trust-badge-2}}</li>
+<li class="lp-trust-playful-stacked__badge">{{slot:trust-badge-3}}</li>
+</ul>
+</div>
 </section>

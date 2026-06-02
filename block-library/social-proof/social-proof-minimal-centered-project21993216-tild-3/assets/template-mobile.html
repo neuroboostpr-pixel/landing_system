@@ -175,78 +175,73 @@
   body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
 }
 </style>
-<section class="lp-social-proof-minimal-centered" aria-labelledby="lp-social-proof-minimal-centered-title">
-  <div class="lp-social-proof-minimal-centered__inner">
-    <div class="lp-social-proof-minimal-centered__header">
-      <p class="lp-social-proof-minimal-centered__eyebrow">{{slot:eyebrow}}</p>
-      <h2 class="lp-social-proof-minimal-centered__title" id="lp-social-proof-minimal-centered-title">{{slot:heading}}</h2>
-      <p class="lp-social-proof-minimal-centered__subhead">{{slot:subhead}}</p>
-    </div>
-
-    <div class="lp-social-proof-minimal-centered__controls" aria-label="{{slot:carousel-controls-label}}">
-      <button class="lp-social-proof-minimal-centered__control" type="button" aria-label="{{slot:previous-button-label}}" aria-controls="lp-social-proof-minimal-centered-list">
-        <span aria-hidden="true">&lt;</span>
-      </button>
-      <button class="lp-social-proof-minimal-centered__control" type="button" aria-label="{{slot:next-button-label}}" aria-controls="lp-social-proof-minimal-centered-list">
-        <span aria-hidden="true">&gt;</span>
-      </button>
-    </div>
-
-    <ul class="lp-social-proof-minimal-centered__list" id="lp-social-proof-minimal-centered-list">
-      <li class="lp-social-proof-minimal-centered__card">
-        <div class="lp-social-proof-minimal-centered__rating" aria-label="{{slot:review-1-rating-label}}">
-          <span>{{slot:review-1-rating}}</span>
-        </div>
-        <blockquote class="lp-social-proof-minimal-centered__quote">
-          <p>{{slot:review-1-text}}</p>
-        </blockquote>
-        <div class="lp-social-proof-minimal-centered__person">
-          <img src="{{slot:review-1-image}}" alt="{{slot:review-1-image-alt}}" loading="lazy">
-          <div>
-            <p class="lp-social-proof-minimal-centered__name">{{slot:review-1-name}}</p>
-            <p class="lp-social-proof-minimal-centered__meta">{{slot:review-1-meta}}</p>
-          </div>
-        </div>
-      </li>
-
-      <li class="lp-social-proof-minimal-centered__card">
-        <div class="lp-social-proof-minimal-centered__rating" aria-label="{{slot:review-2-rating-label}}">
-          <span>{{slot:review-2-rating}}</span>
-        </div>
-        <blockquote class="lp-social-proof-minimal-centered__quote">
-          <p>{{slot:review-2-text}}</p>
-        </blockquote>
-        <div class="lp-social-proof-minimal-centered__person">
-          <img src="{{slot:review-2-image}}" alt="{{slot:review-2-image-alt}}" loading="lazy">
-          <div>
-            <p class="lp-social-proof-minimal-centered__name">{{slot:review-2-name}}</p>
-            <p class="lp-social-proof-minimal-centered__meta">{{slot:review-2-meta}}</p>
-          </div>
-        </div>
-      </li>
-
-      <li class="lp-social-proof-minimal-centered__card">
-        <div class="lp-social-proof-minimal-centered__rating" aria-label="{{slot:review-3-rating-label}}">
-          <span>{{slot:review-3-rating}}</span>
-        </div>
-        <blockquote class="lp-social-proof-minimal-centered__quote">
-          <p>{{slot:review-3-text}}</p>
-        </blockquote>
-        <div class="lp-social-proof-minimal-centered__person">
-          <img src="{{slot:review-3-image}}" alt="{{slot:review-3-image-alt}}" loading="lazy">
-          <div>
-            <p class="lp-social-proof-minimal-centered__name">{{slot:review-3-name}}</p>
-            <p class="lp-social-proof-minimal-centered__meta">{{slot:review-3-meta}}</p>
-          </div>
-        </div>
-      </li>
-    </ul>
-
-    <div class="lp-social-proof-minimal-centered__logos" aria-label="{{slot:logos-list-label}}">
-      <img src="{{slot:logo-1-image}}" alt="{{slot:logo-1-image-alt}}" loading="lazy">
-      <img src="{{slot:logo-2-image}}" alt="{{slot:logo-2-image-alt}}" loading="lazy">
-      <img src="{{slot:logo-3-image}}" alt="{{slot:logo-3-image-alt}}" loading="lazy">
-      <img src="{{slot:logo-4-image}}" alt="{{slot:logo-4-image-alt}}" loading="lazy">
-    </div>
-  </div>
+<section aria-labelledby="lp-social-proof-minimal-centered-title" class="lp-social-proof-minimal-centered">
+<div class="lp-social-proof-minimal-centered__inner">
+<div class="lp-social-proof-minimal-centered__header">
+<p class="lp-social-proof-minimal-centered__eyebrow">{{slot:eyebrow}}</p>
+<h2 class="lp-social-proof-minimal-centered__title" id="lp-social-proof-minimal-centered-title">{{slot:heading}}</h2>
+<p class="lp-social-proof-minimal-centered__subhead">{{slot:subhead}}</p>
+</div>
+<div aria-label="{{slot:carousel-controls-label}}" class="lp-social-proof-minimal-centered__controls">
+<button aria-controls="lp-social-proof-minimal-centered-list" aria-label="{{slot:previous-button-label}}" class="lp-social-proof-minimal-centered__control" type="button">
+<span aria-hidden="true">&lt;</span>
+</button>
+<button aria-controls="lp-social-proof-minimal-centered-list" aria-label="{{slot:next-button-label}}" class="lp-social-proof-minimal-centered__control" type="button">
+<span aria-hidden="true">&gt;</span>
+</button>
+</div>
+<ul class="lp-social-proof-minimal-centered__list" id="lp-social-proof-minimal-centered-list">
+<li class="lp-social-proof-minimal-centered__card">
+<div aria-label="{{slot:review-1-rating-label}}" class="lp-social-proof-minimal-centered__rating">
+<span>{{slot:review-1-rating}}</span>
+</div>
+<blockquote class="lp-social-proof-minimal-centered__quote">
+<p>{{slot:review-1-text}}</p>
+</blockquote>
+<div class="lp-social-proof-minimal-centered__person">
+<img alt="{{slot:review-1-image-alt}}" loading="lazy" src="{{slot:review-1-image}}"/>
+<div>
+<p class="lp-social-proof-minimal-centered__name">{{slot:review-1-name}}</p>
+<p class="lp-social-proof-minimal-centered__meta">{{slot:review-1-meta}}</p>
+</div>
+</div>
+</li>
+<li class="lp-social-proof-minimal-centered__card">
+<div aria-label="{{slot:review-2-rating-label}}" class="lp-social-proof-minimal-centered__rating">
+<span>{{slot:review-2-rating}}</span>
+</div>
+<blockquote class="lp-social-proof-minimal-centered__quote">
+<p>{{slot:review-2-text}}</p>
+</blockquote>
+<div class="lp-social-proof-minimal-centered__person">
+<img alt="{{slot:review-2-image-alt}}" loading="lazy" src="{{slot:review-2-image}}"/>
+<div>
+<p class="lp-social-proof-minimal-centered__name">{{slot:review-2-name}}</p>
+<p class="lp-social-proof-minimal-centered__meta">{{slot:review-2-meta}}</p>
+</div>
+</div>
+</li>
+<li class="lp-social-proof-minimal-centered__card">
+<div aria-label="{{slot:review-3-rating-label}}" class="lp-social-proof-minimal-centered__rating">
+<span>{{slot:review-3-rating}}</span>
+</div>
+<blockquote class="lp-social-proof-minimal-centered__quote">
+<p>{{slot:review-3-text}}</p>
+</blockquote>
+<div class="lp-social-proof-minimal-centered__person">
+<img alt="{{slot:review-3-image-alt}}" loading="lazy" src="{{slot:review-3-image}}"/>
+<div>
+<p class="lp-social-proof-minimal-centered__name">{{slot:review-3-name}}</p>
+<p class="lp-social-proof-minimal-centered__meta">{{slot:review-3-meta}}</p>
+</div>
+</div>
+</li>
+</ul>
+<div aria-label="{{slot:logos-list-label}}" class="lp-social-proof-minimal-centered__logos">
+<img alt="{{slot:logo-1-image-alt}}" loading="lazy" src="{{slot:logo-1-image}}"/>
+<img alt="{{slot:logo-2-image-alt}}" loading="lazy" src="{{slot:logo-2-image}}"/>
+<img alt="{{slot:logo-3-image-alt}}" loading="lazy" src="{{slot:logo-3-image}}"/>
+<img alt="{{slot:logo-4-image-alt}}" loading="lazy" src="{{slot:logo-4-image}}"/>
+</div>
+</div>
 </section>

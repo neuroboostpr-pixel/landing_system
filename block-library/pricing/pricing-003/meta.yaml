@@ -6,7 +6,57 @@ id: pricing-003
 layout_pattern: split
 signature: pricing|split|[content]|bg:false
 slots:
-- name: content
+- name: pricing-eyebrow
+  type: text
+- name: pricing-title
+  type: text
+- name: pricing-subhead
+  type: text
+- name: plan-1-title
+  type: text
+- name: plan-1-price
+  type: text
+- name: plan-1-description
+  type: text
+- name: plan-1-feature-1
+  type: text
+- name: plan-1-feature-2
+  type: text
+- name: plan-1-feature-3
+  type: text
+- name: plan-1-link
+  type: text
+- name: plan-1-cta
+  type: text
+- name: plan-2-badge
+  type: text
+- name: plan-2-title
+  type: text
+- name: plan-2-price
+  type: text
+- name: plan-2-description
+  type: text
+- name: plan-2-feature-1
+  type: text
+- name: plan-2-feature-2
+  type: text
+- name: plan-2-feature-3
+  type: text
+- name: plan-2-link
+  type: text
+- name: plan-2-cta
+  type: text
+- name: pricing-media-label
+  type: text
+- name: pricing-portrait-mobile
+  type: text
+- name: pricing-portrait-alt
+  type: text
+- name: pricing-portrait
+  type: text
+- name: pricing-note-kicker
+  type: text
+- name: pricing-note-text
   type: text
 source: cleaned
 type: pricing
