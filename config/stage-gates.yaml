@@ -258,6 +258,12 @@ stages:
         path: "{project}/07_ПРОТОТИП/prototype.yaml"
         required: true
         fix_hint: "auto_fix: /landing-prototype"
+      - id: prototype_fidelity
+        type: script
+        script: "skills/prototype-import/scripts/gate-prototype-fidelity.py"
+        args: ["{project}"]
+        required: true
+        fix_hint: "Парсер потерял >10% текста или выдумал структуру (меню/фейк-цены). Открой 07_ПРОТОТИП/fidelity-report.md — перепарсь docx (extract-docx-text.py) или поправь prototype.yaml вручную, чтобы покрытие было ≥90%."
 
   "07b_wireframe":
     name: "Wireframe"

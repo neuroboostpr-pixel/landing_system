@@ -68,6 +68,10 @@ python -m scripts.wiki.log --type agent_call --agent prototype-importer --stage 
    - Попробуй `python3 skills/prototype-import/scripts/extract-pdf-text.py source/prototype.pdf > /tmp/pdf-text.txt`
    - Если exit code 2 (нет текста — сканированный PDF) — используй `anthropic-skills:pdf` через Skill tool для OCR
    - Если exit code != 0 в принципе — STOP, сообщи пользователю
+2.6. Если `prototype.docx` (B37 — детерминированное извлечение, БЕЗ потерь):
+   - `python3 skills/prototype-import/scripts/extract-docx-text.py --source source/prototype.docx --out 07_ПРОТОТИП/source-extracted`
+   - Это даёт `source-extracted.txt` (ВЕСЬ текст, включая ТАБЛИЦЫ — там лежат
+     цены тарифов!) — это ЭТАЛОН. Структурируй prototype.yaml ТОЛЬКО из него.
 3. Если `prototype.md`:
    - Прочитай напрямую
 4. Из извлечённого текста собери структурированный `prototype.md` по формату:
@@ -91,11 +95,33 @@ python -m scripts.wiki.log --type agent_call --agent prototype-importer --stage 
 8. Запусти валидатор: `python3 skills/prototype-import/scripts/validate-prototype.py prototype.yaml`
 9. Если валидация упала — исправь `prototype.md` и повтори.
 
-## CRITICAL CONSTRAINT — no inventing
+## CRITICAL CONSTRAINT — no inventing, no loss (B37)
 
-Если в прототипе нет нужной информации (например, не указан CTA) — НЕ ВЫДУМЫВАЙ.
-Запиши `cta: ""` и в `import-log.md` отметь: "CTA не найден, использован пустой".
-Это даст пользователю явный сигнал доуточнить.
+**Каждое текстовое значение в prototype.yaml ОБЯЗАНО быть дословной подстрокой
+источника** (`source-extracted.txt`). Не перефразируй, не дополняй маркетингом.
+
+**ЗАПРЕЩЕНО ВЫДУМЫВАТЬ структуру, которой нет в источнике:**
+- ❌ НЕ добавляй навигационное меню `[Home, About, Services, Contact]`, если в
+  тексте нет пунктов меню. Многие лендинги — одностраничные без навигации.
+- ❌ НЕ заменяй реальные цены на `price: "standard"/"premium"/"vip"`. Бери
+  РЕАЛЬНЫЕ цифры (часто они в таблицах docx — extract-docx-text их достаёт).
+- ❌ НЕ выдумывай CTA («Get Started»), бейджи, тарифные опции. Нет данных →
+  `cta: ""` + пометка в `import-log.md`.
+
+**Комментарии клиента разработчику** («Ник, перепроверь…», «этот блок выше»,
+ссылки, дедлайны) — НЕ контент лендинга. Складывай их в top-level секцию
+`client_notes:` (с `relates_to: <section_id>`) и `source_meta:` — они не
+рендерятся в блоки, но сохраняются как рекомендации.
+
+**После конвертации — ОБЯЗАТЕЛЬНАЯ проверка точности (hard gate 07a):**
+```bash
+python3 skills/prototype-import/scripts/verify-prototype-fidelity.py \
+  --source-text 07_ПРОТОТИП/source-extracted.txt \
+  --prototype 07_ПРОТОТИП/prototype.yaml --min-coverage 0.9
+```
+Если покрытие < 90% или есть галлюцинации — `fidelity-report.md` покажет, что
+потеряно/выдумано. Доработай prototype.yaml пока не PASS. НЕ закрывай этап с
+потерей текста.
 
 ## HARD GATE
 

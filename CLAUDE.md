@@ -17,7 +17,7 @@
 
 ## Новые команды PR-A (Прототип + Content + Wireframe + Compose)
 
-- `/landing-prototype` — импорт пользовательского прототипа (PDF/MD) → prototype.{md,yaml}
+- `/landing-prototype` — импорт пользовательского прототипа (DOCX/PDF/MD) → prototype.{md,yaml}. **B37: точность парсинга** — для .docx работает детерминированный `extract-docx-text.py` (весь текст + таблицы с ценами), а hard-gate 07a `prototype_fidelity` не даёт закрыть этап при потере >10% текста или выдуманной структуре (меню Home/About/…, фейк-тарифы). Комментарии клиента → секция `client_notes` (не в визуал). Канон: [`docs/standards/prototype-fidelity.md`](docs/standards/prototype-fidelity.md).
 - `/landing-content` — **NEW (2026-06-01)** — извлечение РЕАЛЬНЫХ текстов из prototype.yaml → content.md (БЕЗ Lorem ipsum)
 - `/landing-wireframe` — интерактивный wireframe.html с 2-3 вариантами на блок
 - `/landing-compose` — composed.html с tokens + текстами, placeholders для визуала

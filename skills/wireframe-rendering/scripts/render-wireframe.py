@@ -752,7 +752,7 @@ def main() -> None:
         try:
             res = subprocess.run(
                 matcher_cmd,
-                capture_output=True, text=True, check=True,
+                capture_output=True, text=True, check=True, encoding="utf-8", errors="replace",
             )
             candidate_ids = json.loads(res.stdout)
         except (subprocess.CalledProcessError, json.JSONDecodeError) as e:
@@ -814,7 +814,7 @@ def main() -> None:
                                 "--position", str(position),
                                 "--output", str(out_path),
                             ],
-                            capture_output=True, text=True, check=True,
+                            capture_output=True, text=True, check=True, encoding="utf-8", errors="replace",
                         )
                     except subprocess.CalledProcessError as e:
                         # Fall back to raw template if injection fails
