@@ -126,6 +126,8 @@ def test_was_wiki_queried_empty_stage_no_query_returns_false(tmp_log):
 import subprocess
 import sys
 
+REPO_ROOT = Path(__file__).resolve().parents[2]
+
 
 def test_cli_log_agent_call(tmp_path):
     """CLI вызов пишет agent_call в лог."""
@@ -137,7 +139,7 @@ def test_cli_log_agent_call(tmp_path):
          "--stage", "04",
          "--session-id", "test-sess"],
         capture_output=True, text=True,
-        cwd="d:/AI_TEAMS/landing_system",
+        cwd=str(REPO_ROOT),
         env={**__import__("os").environ, "WIKI_LOG_PATH": str(log_file)},
     )
     assert result.returncode == 0
@@ -152,7 +154,7 @@ def test_cli_log_stage_start(tmp_path):
          "--project", "test-project",
          "--session-id", "test-sess"],
         capture_output=True, text=True,
-        cwd="d:/AI_TEAMS/landing_system",
+        cwd=str(REPO_ROOT),
     )
     assert result.returncode == 0
 
@@ -162,7 +164,7 @@ def test_cli_missing_required_arg():
     result = subprocess.run(
         [sys.executable, "-m", "scripts.wiki.log", "--agent", "x"],
         capture_output=True, text=True,
-        cwd="d:/AI_TEAMS/landing_system",
+        cwd=str(REPO_ROOT),
     )
     assert result.returncode != 0
 
