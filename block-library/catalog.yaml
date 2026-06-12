@@ -8241,3 +8241,17 @@ blocks:
   - name: badge-3-text
     type: text
   source: auto-generated
+- id: menu-001
+  path: menu\menu-001/
+  category: Navigation
+  type: menu
+  layout_pattern: split
+  signature: menu|split|[category-select,items-count,section-label]|bg:false
+  display_name_ru: 'Меню: section-label + category-select + items-count'
+- id: gallery-001
+  path: gallery\gallery-001/
+  category: Gallery
+  type: gallery
+  layout_pattern: cards
+  signature: gallery|cards|[card-cta,card-id,card-preview,card-tags,card-title]|bg:false
+  display_name_ru: 'Галерея: card-preview + card-title + card-tags + card-id + card-cta'

@@ -169,8 +169,16 @@ def main() -> None:
     cat_variants_json = _json.dumps(cat_variants, ensure_ascii=False)
 
     # CAT_LABELS / VARIANT_LABELS not strictly needed by JS (labels baked into
-    # CAT_VARIANTS), but expose category labels for completeness.
-    cat_labels = {c: tax.category_label(c) for c in categories}
+    # CAT_VARIANTS), but expose category labels for completeness. Невалидную
+    # категорию (не из taxonomy) показываем как есть + warning, не падаем.
+    def _cat_label(c: str) -> str:
+        try:
+            return tax.category_label(c)
+        except KeyError:
+            print(f"WARNING: категория '{c}' не в taxonomy.yaml — показана как есть",
+                  file=sys.stderr)
+            return c
+    cat_labels = {c: _cat_label(c) for c in categories}
     cat_labels_json = _json.dumps(cat_labels, ensure_ascii=False)
 
     total = len(blocks)
