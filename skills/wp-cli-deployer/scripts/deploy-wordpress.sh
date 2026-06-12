@@ -118,6 +118,68 @@ ssh_run "$WP plugin is-active lazy-blocks || $WP plugin activate lazy-blocks"
 echo "▶ Ensure ACF Free (optional, for page-level meta)"
 ssh_run "$WP plugin is-installed advanced-custom-fields 2>/dev/null || $WP plugin install advanced-custom-fields --activate" || true
 
+# ── C4 (спека reference-driven §4.4): деплой забывал плагины проекта ──
+echo "▶ Sync project plugins (08_КОД/plugins/ → wp-content/plugins/)"
+PROJECT_PLUGINS_DIR="$PROJECT/08_КОД/plugins"
+if [ -d "$PROJECT_PLUGINS_DIR" ]; then
+    for plugdir in "$PROJECT_PLUGINS_DIR"/*/; do
+        [ -d "$plugdir" ] || continue
+        plugname="$(basename "$plugdir")"
+        echo "  → $plugname"
+        ssh_run "mkdir -p ${BEGET_PATH}/wp-content/plugins/${plugname}"
+        if command -v rsync >/dev/null 2>&1; then
+            rsync -avz --delete --exclude=".git" \
+                "$plugdir" "${BEGET_USER}@${BEGET_HOST}:${BEGET_PATH}/wp-content/plugins/${plugname}/"
+        else
+            scp -r "$plugdir." "${BEGET_USER}@${BEGET_HOST}:${BEGET_PATH}/wp-content/plugins/${plugname}/"
+        fi
+        ssh_run "$WP plugin activate ${plugname} 2>/dev/null || true"
+    done
+else
+    echo "  (нет $PROJECT_PLUGINS_DIR — пропуск)"
+fi
+
+# ── C4: деплой забывал .htaccess → REST/превью блоков ломались ──
+echo "▶ Ensure .htaccess + rewrite rules"
+ssh_run "test -f ${BEGET_PATH}/.htaccess" || {
+    echo "  .htaccess отсутствует — создаю дефолтный WordPress"
+    ssh_run "cat > ${BEGET_PATH}/.htaccess <<'HTEOF'
+# BEGIN WordPress
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+# END WordPress
+HTEOF"
+}
+ssh_run "$WP rewrite structure '/%postname%/' 2>/dev/null || true"
+ssh_run "$WP rewrite flush --hard" || ssh_run "$WP rewrite flush" || true
+
+# ── C4: favicon / site icon (см. docs/standards/logo-icon-favicon.md) ──
+echo "▶ Site icon (favicon)"
+FAVICON_SRC=""
+for cand in "$PROJECT/04_БРЕНД/favicon/favicon-512.png" \
+            "$PROJECT/04_БРЕНД/favicon/favicon.png" \
+            "$THEME_DIR/assets/img/favicon-512.png"; do
+    [ -f "$cand" ] && { FAVICON_SRC="$cand"; break; }
+done
+if [ -n "$FAVICON_SRC" ]; then
+    scp "$FAVICON_SRC" "${BEGET_USER}@${BEGET_HOST}:/tmp/lp-favicon.png"
+    FAV_ID="$(ssh_run "$WP media import /tmp/lp-favicon.png --porcelain" | tail -n1)"
+    if [ -n "$FAV_ID" ]; then
+        ssh_run "$WP option update site_icon ${FAV_ID}"
+        echo "  site_icon → attachment $FAV_ID"
+    fi
+    ssh_run "rm -f /tmp/lp-favicon.png"
+else
+    echo "  (favicon не найден в 04_БРЕНД/favicon/ — пропуск; см. docs/standards/logo-icon-favicon.md)"
+fi
+
 echo "▶ Import theme images into Media Library"
 declare -A IMG_IDS=()
 if [ -d "$THEME_DIR/assets/img" ]; then
