@@ -31,11 +31,13 @@ setup() {
   grep -q '"01a_niche_analysis":' "$GATES"
 }
 
-@test "stage-gates 02_assets requires 01a_niche_analysis approved" {
+# Prototype-first (e2d5a2c): стадии 00/01/01a/02 = n/a, поэтому 02_assets
+# больше НЕ требует approved 01a — gate стал soft-lock без зависимостей.
+@test "stage-gates 02_assets is soft-lock without 01a dependency (prototype-first)" {
   GATES="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../config" && pwd)/stage-gates.yaml"
   # Convert POSIX path to Windows path for Python on Windows
   WIN_GATES="$(cygpath -w "$GATES" 2>/dev/null || echo "$GATES" | sed 's|^/\([a-z]\)/|\1:/|')"
-  python3 -c "import yaml,sys; d=yaml.safe_load(open(r'$WIN_GATES',encoding='utf-8')); sys.exit(0 if '01a_niche_analysis' in d['stages']['02_assets'].get('require_approved',[]) else 1)"
+  python3 -c "import yaml,sys; s=yaml.safe_load(open(r'$WIN_GATES',encoding='utf-8'))['stages']['02_assets']; sys.exit(0 if s.get('lock')=='soft' and '01a_niche_analysis' not in s.get('require_approved',[]) else 1)"
 }
 
 @test "stage-gates 01a hard checks include three artifacts" {
