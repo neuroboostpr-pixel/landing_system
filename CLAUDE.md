@@ -147,7 +147,13 @@ bash scripts/migrate-template-readmes.sh ~/Lendings/<existing-project>
 | Стандарт | Применяется | Verify-скрипт |
 |---|---|---|
 | [`stage-execution-protocol.md`](docs/standards/stage-execution-protocol.md) | **Все этапы** — обязательный протокол для orchestrator и любых stage-агентов | `scripts/render-pipeline-map.sh` (показывает карту) |
-| [`premium-07b-checklist.md`](docs/standards/premium-07b-checklist.md) | 07b Compose | `scripts/verify-composed-premium.sh` |
+| [`reference-driven-rules.md`](docs/standards/reference-driven-rules.md) | 07c Compose — правило трёх источников, поблочная сверка, composed=канон | гейт `structure_check_md` + `verify-content-preserved.sh` |
+| [`design-elements-rules.md`](docs/standards/design-elements-rules.md) | 07c Compose — декор/иконки/разделители, дерево решений | — |
+| [`premium-07b-checklist.md`](docs/standards/premium-07b-checklist.md) (v2) | 07c Compose | `scripts/verify-composed-premium.sh` |
+| Токенизация цветов (спека §4.3) | 07c + 08 | `scripts/verify_tokens.py` |
+| Болячки сборки (спека §4.2) | 08 Build | `skills/wp-gutenberg-block-builder/scripts/lint-theme-php.py` |
+| [`logo-icon-favicon.md`](docs/standards/logo-icon-favicon.md) | 07d/08/09 — логотипы, favicon | — |
+| [`image-pipeline.md`](docs/standards/image-pipeline.md) | 07d/07e — генерация картинок | — |
 | [`asset-pipeline.md`](docs/asset-pipeline.md) | 08 Build — фото, SVG, фавиконы, логотипы, CSS-фоны | `pytest tests/phase-stage-08/test-fix-page-content-images.py` |
 | [`stage-08-spec-lint.md`](docs/standards/stage-08-spec-lint.md) | 08 Build — composed↔spec соответствие | `python3 skills/wp-gutenberg-block-builder/scripts/lint-composed-vs-spec.py --project <p>` |
 
