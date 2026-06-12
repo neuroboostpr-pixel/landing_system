@@ -11,11 +11,11 @@ setup() {
 }
 
 @test "niche-visual-rules.yaml is valid YAML" {
-  python -c "import yaml; yaml.safe_load(open('$PY_RULES', encoding='utf-8'))"
+  python3 -c "import yaml; yaml.safe_load(open('$PY_RULES', encoding='utf-8'))"
 }
 
 @test "rules has 4 MVP categories plus default" {
-  python <<EOF
+  python3 <<EOF
 import yaml
 d = yaml.safe_load(open('$PY_RULES', encoding='utf-8'))
 required = {'premium_automotive', 'local_services', 'professional_services', 'b2c_consumer', 'default'}
@@ -25,7 +25,7 @@ EOF
 }
 
 @test "every category has minimum required fields" {
-  python <<EOF
+  python3 <<EOF
 import yaml
 d = yaml.safe_load(open('$PY_RULES', encoding='utf-8'))
 required = {'description', 'hero_focal', 'hero_composition', 'photography',
@@ -38,7 +38,7 @@ EOF
 }
 
 @test "every category has at least 3 red flags and 3 preferences" {
-  python <<EOF
+  python3 <<EOF
 import yaml
 d = yaml.safe_load(open('$PY_RULES', encoding='utf-8'))
 for name, cat in d['categories'].items():
@@ -50,11 +50,11 @@ EOF
 }
 
 @test "schema_version is 1" {
-  python -c "import yaml; d=yaml.safe_load(open('$PY_RULES', encoding='utf-8')); assert d.get('schema_version') == 1"
+  python3 -c "import yaml; d=yaml.safe_load(open('$PY_RULES', encoding='utf-8')); assert d.get('schema_version') == 1"
 }
 
 @test "every category has default_positioning_mode" {
-  python <<EOF
+  python3 <<EOF
 import yaml
 d = yaml.safe_load(open('$PY_RULES', encoding='utf-8'))
 valid_modes = {'rational', 'emotional_aspiration', 'trust_authority',

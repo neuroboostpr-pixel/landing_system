@@ -35,7 +35,7 @@ setup() {
   GATES="$(cd "$(dirname "$BATS_TEST_FILENAME")/../../config" && pwd)/stage-gates.yaml"
   # Convert POSIX path to Windows path for Python on Windows
   WIN_GATES="$(cygpath -w "$GATES" 2>/dev/null || echo "$GATES" | sed 's|^/\([a-z]\)/|\1:/|')"
-  python -c "import yaml,sys; d=yaml.safe_load(open(r'$WIN_GATES',encoding='utf-8')); sys.exit(0 if '01a_niche_analysis' in d['stages']['02_assets'].get('require_approved',[]) else 1)"
+  python3 -c "import yaml,sys; d=yaml.safe_load(open(r'$WIN_GATES',encoding='utf-8')); sys.exit(0 if '01a_niche_analysis' in d['stages']['02_assets'].get('require_approved',[]) else 1)"
 }
 
 @test "stage-gates 01a hard checks include three artifacts" {

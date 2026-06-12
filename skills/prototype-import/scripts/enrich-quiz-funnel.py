@@ -37,7 +37,7 @@ def fail(msg: str) -> None:
 
 
 def load_proto(path: Path) -> dict:
-    data = yaml.safe_load(path.read_text())
+    data = yaml.safe_load(path.read_text(encoding="utf-8"))
     if not isinstance(data, dict):
         fail("top-level must be a mapping")
     return data
@@ -46,7 +46,7 @@ def load_proto(path: Path) -> dict:
 def atomic_write(path: Path, data: dict) -> None:
     """Write YAML to a .tmp file then rename (atomic on POSIX)."""
     tmp = path.with_suffix(".yaml.tmp")
-    tmp.write_text(yaml.dump(data, sort_keys=False, allow_unicode=True, default_flow_style=False))
+    tmp.write_text(yaml.dump(data, sort_keys=False, allow_unicode=True, default_flow_style=False), encoding="utf-8")
     os.replace(tmp, path)
 
 
@@ -370,7 +370,7 @@ def main() -> None:
             "**Действие:** Пропущено — квиз-блоки уже содержат `quiz_role` (повторный запуск).\n\n"
             "Idempotency: enricher не дублирует расширение при повторном запуске.\n"
         )
-        log_path.write_text(log_text)
+        log_path.write_text(log_text, encoding="utf-8")
         print(f"OK: already enriched — skipped (idempotent). Output: {output_path}")
         return
 
@@ -381,14 +381,14 @@ def main() -> None:
             "# Отчёт квиз-фаннел обогатителя\n\n"
             "**Действие:** Квиз-блоки не найдены — прототип скопирован без изменений.\n"
         )
-        log_path.write_text(log_text)
+        log_path.write_text(log_text, encoding="utf-8")
         print(f"OK: no quiz blocks found. Output: {output_path}")
         return
 
     if quiz_count == 1:
         updated_proto, log_text = expand_count_1(proto)
         atomic_write(output_path, updated_proto)
-        log_path.write_text(log_text)
+        log_path.write_text(log_text, encoding="utf-8")
         new_quiz_count = sum(1 for b in updated_proto["blocks"] if b.get("type") == "quiz")
         print(f"OK: 1 quiz block expanded to {new_quiz_count} funnel blocks. Output: {output_path}")
         return
@@ -396,7 +396,7 @@ def main() -> None:
     if 2 <= quiz_count <= 4:
         updated_proto, log_text = expand_count_2_4(proto)
         atomic_write(output_path, updated_proto)
-        log_path.write_text(log_text)
+        log_path.write_text(log_text, encoding="utf-8")
         new_quiz_count = sum(1 for b in updated_proto["blocks"] if b.get("type") == "quiz")
         print(f"OK: {quiz_count} quiz blocks enriched with infra → {new_quiz_count} total quiz blocks. Output: {output_path}")
         return
@@ -410,7 +410,7 @@ def main() -> None:
         "Enricher уважает авторское решение. Убедитесь, что у блоков стоит `quiz_role` "
         "для точного матчинга вариантов в wireframe.\n"
     )
-    log_path.write_text(log_text)
+    log_path.write_text(log_text, encoding="utf-8")
     print(f"OK: {quiz_count} quiz blocks — user-designed funnel respected. Output: {output_path}")
 
 

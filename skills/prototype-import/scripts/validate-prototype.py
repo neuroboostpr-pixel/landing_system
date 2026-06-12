@@ -27,7 +27,7 @@ def fail(m: str) -> None:
 
 
 def main(path: str) -> None:
-    data = yaml.safe_load(Path(path).read_text())
+    data = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
     if not isinstance(data, dict):
         fail("top-level must be a mapping")
     if "project" not in data:

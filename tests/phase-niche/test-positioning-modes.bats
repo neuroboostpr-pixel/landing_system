@@ -10,15 +10,15 @@ setup() {
 }
 
 @test "positioning-modes.yaml is valid YAML" {
-  python -c "import yaml; yaml.safe_load(open('$PY_RULES', encoding='utf-8'))"
+  python3 -c "import yaml; yaml.safe_load(open('$PY_RULES', encoding='utf-8'))"
 }
 
 @test "schema_version is 1" {
-  python -c "import yaml; d=yaml.safe_load(open('$PY_RULES', encoding='utf-8')); assert d.get('schema_version') == 1"
+  python3 -c "import yaml; d=yaml.safe_load(open('$PY_RULES', encoding='utf-8')); assert d.get('schema_version') == 1"
 }
 
 @test "all 3 modes defined: rational, emotional_aspiration, trust_authority" {
-  python <<EOF
+  python3 <<EOF
 import yaml
 d = yaml.safe_load(open('$PY_RULES', encoding='utf-8'))
 required = {'rational', 'emotional_aspiration', 'trust_authority'}
@@ -28,7 +28,7 @@ EOF
 }
 
 @test "every mode has template_sections (min 4) and typical_categories" {
-  python <<EOF
+  python3 <<EOF
 import yaml
 d = yaml.safe_load(open('$PY_RULES', encoding='utf-8'))
 for name, mode in d['modes'].items():
@@ -39,7 +39,7 @@ EOF
 }
 
 @test "mode_prediction_matrix has at least 5 rules" {
-  python <<EOF
+  python3 <<EOF
 import yaml
 d = yaml.safe_load(open('$PY_RULES', encoding='utf-8'))
 m = d.get('mode_prediction_matrix', [])
@@ -48,7 +48,7 @@ EOF
 }
 
 @test "brief_indicators has all 3 modes" {
-  python <<EOF
+  python3 <<EOF
 import yaml
 d = yaml.safe_load(open('$PY_RULES', encoding='utf-8'))
 ind = d.get('brief_indicators', {})
@@ -59,7 +59,7 @@ EOF
 }
 
 @test "matrix predicts known cases correctly" {
-  python <<EOF
+  python3 <<EOF
 import yaml
 d = yaml.safe_load(open('$PY_RULES', encoding='utf-8'))
 matrix = d['mode_prediction_matrix']
