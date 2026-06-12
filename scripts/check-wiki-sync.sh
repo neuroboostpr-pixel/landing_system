@@ -19,30 +19,16 @@ if [ ! -f "$CACHE" ]; then
     exit 1
 fi
 
-# Получить список источников (те же что в config.py)
+# Получить список источников — ДОЛЖЕН совпадать с CORE_SOURCES в
+# scripts/wiki/config.py (REFERENCE_SOURCES не компилируются в индекс,
+# поэтому здесь не проверяются).
 SOURCES=(
     "agents/*.md"
     "skills/*/SKILL.md"
     "commands/*.md"
     "template/*/README.md"
     "docs/standards/*.md"
-    "block-library/*/*/meta.yaml"
-    "block-library/_patterns/*/meta.yaml"
-    "block-library/_styles/*/README.md"
-    "config/*.yaml"
-    "docs/SETUP.md"
-    "docs/ПЛАН-ДОРАБОТОК.md"
-    "docs/BACKLOG.md"
-    "docs/photo-selection-guide.md"
-    "docs/superpowers/specs/*.md"
-    "docs/superpowers/plans/*.md"
-    "docs/superpowers/DOKRUTKA-system.md"
-    "tests/*/README.md"
-    "presets/*.md"
-    "presets/*.yaml"
-    "scripts/*.doc.md"
-    "scripts/*/*.doc.md"
-    "scripts/*/*/*.doc.md"
+    "block-library/README.md"
 )
 
 DESYNC=0
