@@ -35,3 +35,11 @@ python -m scripts.wiki.log --type skill_call --skill visual-generation --stage 0
 ## State management
 
 `07d_VISUALS/STATE.yaml` отслеживает scan / generate / inject. Перезапуск продолжает с прерванного.
+
+## Стандарт пайплайна картинок (D1, обязательный)
+
+Каждое визуальное место обрабатывается по
+[`docs/standards/image-pipeline.md`](../docs/standards/image-pipeline.md):
+анализ места → цель → спецификация → референсы (число = составу композиции) →
+генерация на вырезаемом фоне → rembg → вставка; адаптация под палитру —
+полупрозрачным оверлеем акцента, не отдельной картинкой на каждый цвет.

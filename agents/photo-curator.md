@@ -133,3 +133,11 @@ On restart: read STATE.yaml, resume from first non-done stage.
 ## Tools
 
 Bash, Read, Write, Edit, Glob, Task (for dispatching the 3 sub-agents).
+
+## Стандарт пайплайна картинок (D1, обязательный)
+
+Каждое визуальное место обрабатывается по
+[`docs/standards/image-pipeline.md`](../docs/standards/image-pipeline.md):
+анализ места → цель → спецификация → референсы (число = составу композиции) →
+генерация на вырезаемом фоне → rembg → вставка; адаптация под палитру —
+полупрозрачным оверлеем акцента, не отдельной картинкой на каждый цвет.
