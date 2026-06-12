@@ -33,17 +33,18 @@ import yaml
 THIS_DIR = Path(__file__).parent
 PATH_MAP_FILE = THIS_DIR / "_stage_paths.yaml"
 
-PIPELINE_ORDER = [
-    "00_brief", "01_context", "01a_niche_analysis", "02_assets",
-    "03_references", "04_brand", "05_design", "06_stack",
-    "07a_prototype", "07_content", "07c_composed",
-    "07d_photos", "07e_visuals", "07f_composed_final",
-    "08_build", "10_qa", "09_deploy", "11_analytics", "12_seo",
-]
+# Порядок этапов — из config/stages.yaml (E1, single source of truth).
 # Note: 10_qa comes BEFORE 09_deploy because config/stage-gates.yaml declares
 # 09_deploy require_approved: ["08_build", "10_qa"]. The test in
 # tests/gate-check/test_pipeline_order_sync.py enforces this topologically.
-# 08b_style intentionally omitted (sub-phase of 08_build, same folder).
+# 08b_style intentionally omitted (sub-phase of 08_build, same folder —
+# не должен блокировать последующие этапы как «предшественник»).
+_STAGES_YAML = THIS_DIR.parent.parent / "config" / "stages.yaml"
+PIPELINE_ORDER = [
+    s["id"]
+    for s in yaml.safe_load(_STAGES_YAML.read_text(encoding="utf-8"))["stages"]
+    if s["id"] != "08b_style"
+]
 
 
 @functools.lru_cache(maxsize=1)
