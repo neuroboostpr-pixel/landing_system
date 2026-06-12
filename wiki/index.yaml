@@ -1,13 +1,14 @@
 version: 1
-generated_at: '2026-06-12T18:42:17+00:00'
+generated_at: '2026-06-12T18:44:44+00:00'
 counts:
-  total: 112
+  total: 109
   by_type:
     stage: 19
-    agent: 32
-    skill: 26
+    agent: 31
+    skill: 23
     catalog: 3
     command: 27
+    unknown: 1
     rule: 5
 concepts:
 - slug: 00-brif
@@ -1613,45 +1614,10 @@ concepts:
     stage: low
     pre_reqs: low
 - slug: landing-orchestrator
-  type: agent
-  name: Главный дирижёр (Landing Orchestrator)
+  type: unknown
+  name: landing-orchestrator
   card: concepts/agents/landing-orchestrator.md
   source: agents/landing-orchestrator.md
-  tags:
-  - orchestrator
-  - workflow
-  - pipeline
-  - stages
-  - hard-gate
-  triggers:
-  - landing-go
-  - landing-new
-  - landing-build
-  - landing-deploy
-  inputs:
-  - .landing-state.yaml
-  - 07_ПРОТОТИП/source/prototype.pdf
-  - config/stage-gates.yaml
-  outputs:
-  - wiki/pipeline-map.md
-  - 00_БРИФ/brief.md
-  - артефакты каждого этапа
-  pre_reqs:
-  - landing-onboarding-wizard
-  related:
-  - niche-analyst
-  - brand-architect
-  - content-writer
-  - design-system-generator
-  - moodboard-composer
-  - client-assets-collector
-  - photo-curator
-  - block-composer
-  - integrations-engineer
-  - analytics-engineer
-  - lifecycle-keeper
-  confidence:
-    triggers: low
 - slug: landing-photos
   type: command
   name: /landing-photos — Конвейер клиентских фото (stage 07c)
@@ -2135,33 +2101,6 @@ concepts:
   - landing-moodboard
   confidence:
     triggers: low
-- slug: moodboard-creation
-  type: skill
-  name: Рендер мудборда
-  card: concepts/skills/moodboard-creation.md
-  source: skills/moodboard-creation/SKILL.md
-  stage: '03'
-  tags:
-  - moodboard
-  - references
-  - html-render
-  - jinja2
-  triggers:
-  - moodboard-composer
-  inputs:
-  - 03_РЕФЕРЕНСЫ/index.yaml
-  - 03_РЕФЕРЕНСЫ/moodboard.md
-  outputs:
-  - 03_РЕФЕРЕНСЫ/moodboard.html
-  pre_reqs:
-  - references-curator
-  related:
-  - moodboard-composer
-  - references-curator
-  - visual-curator
-  confidence:
-    triggers: low
-    outputs: low
 - slug: niche-analysis
   type: skill
   name: Анализ ниши и конкурентов
@@ -2248,46 +2187,6 @@ concepts:
   - landing-go
   confidence:
     stage: low
-- slug: paralaximus-codex
-  type: skill
-  name: Параллакс-герой Paralaximus Codex
-  card: concepts/skills/paralaximus-codex.md
-  source: skills/paralaximus-codex/SKILL.md
-  stage: 07d
-  tags:
-  - parallax
-  - hero
-  - codex
-  - image-gen
-  - visual
-  - css
-  - js
-  - chroma-key
-  triggers:
-  - landing-visuals
-  - wow-hero-request
-  inputs:
-  - 04_БРЕНД/brand-kit.md
-  - 05_ДИЗАЙН/tokens.json
-  outputs:
-  - assets/background.png
-  - assets/far.png
-  - assets/near.png
-  - assets/subject.png
-  - assets/css/parallax.css
-  - assets/js/parallax.js
-  pre_reqs:
-  - brand-kit-build
-  - design-system-generator
-  related:
-  - icon-generator
-  - infographic-builder
-  - visual-curator
-  - scene-director
-  - block-composer
-  confidence:
-    stage: low
-    triggers: low
 - slug: photo-classifier
   type: agent
   name: Классификатор фото
@@ -3275,45 +3174,6 @@ concepts:
   confidence:
     triggers: low
     inputs: low
-- slug: wp-gutenberg-block-builder
-  type: skill
-  name: WP Gutenberg Block Builder
-  card: concepts/skills/wp-gutenberg-block-builder.md
-  source: skills/wp-gutenberg-block-builder/SKILL.md
-  stage: 08
-  tags:
-  - wordpress
-  - lazy-blocks
-  - gutenberg
-  - theme
-  - stage-08
-  - code-generation
-  triggers:
-  - landing-build
-  inputs:
-  - 05_ДИЗАЙН-СИСТЕМА/tokens.json
-  - 06_СТЕК/design-stack.yaml
-  - 07_КОНТЕНТ/final-copy.md
-  - 08_КОД/block-spec.yaml
-  outputs:
-  - 08_КОД/wp-theme/style.css
-  - 08_КОД/wp-theme/functions.php
-  - 08_КОД/wp-theme/assets/css/main.css
-  - 08_КОД/wp-theme/blocks/lazyblock-<slug>/block.php
-  - 08_КОД/page-content.html
-  pre_reqs:
-  - design-system-generator
-  - stack-planner
-  - content-writer
-  related:
-  - wp-builder
-  - frontend-builder
-  - block-composer
-  - landing-orchestrator
-  - wp-deployer
-  - design-system-generator
-  confidence:
-    triggers: low
 - slug: wp-landing-config
   type: skill
   name: WP Landing Config — mu-plugin для настройки лендинга

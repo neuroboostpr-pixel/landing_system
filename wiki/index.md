@@ -2,8 +2,8 @@
 
 > Авто-сгенерированный индекс. Обновляется при `python -m scripts.wiki.compile --source-mode=system`.
 
-**Концептов всего:** 112
-**Категории:** agent, catalog, command, rule, skill, stage
+**Концептов всего:** 109
+**Категории:** agent, catalog, command, rule, skill, stage, unknown
 
 **Известные ограничения:**
 - Блоки из `block-library/` ещё не в wiki — отдельная задача.
@@ -44,7 +44,6 @@
 - [[infographic-builder]] — Infographic Builder
 - [[integrations-engineer]] — integrations-engineer
 - [[landing-onboarding-wizard]] — Онбординг-визард нового проекта
-- [[landing-orchestrator]] — Главный дирижёр (Landing Orchestrator)
 - [[lifecycle-keeper]] — Lifecycle Keeper — Хранитель версий
 - [[moodboard-composer]] — Moodboard Composer
 - [[niche-analyst]] — Аналитик ниши (Stage 01a)
@@ -77,9 +76,7 @@
 - [[landing-onboarding]] — Онбординг landing-system
 - [[landing-project-init]] — Инициализация нового проекта лендинга
 - [[landing-versioning-and-cloning]] — Версионирование и клонирование лендингов (legacy)
-- [[moodboard-creation]] — Рендер мудборда
 - [[niche-analysis]] — Анализ ниши и конкурентов
-- [[paralaximus-codex]] — Параллакс-герой Paralaximus Codex
 - [[photo-curation]] — Конвейер обработки клиентских фото (Photo Curation)
 - [[photo-styling]] — Стилизация фото
 - [[prototype-import]] — Импорт прототипа
@@ -90,7 +87,6 @@
 - [[visual-qa]] — Visual QA — автоматический визуальный контроль
 - [[wiki-routing-observability]] — Wiki Routing Observability
 - [[wp-cli-deployer]] — WP-CLI Deployer
-- [[wp-gutenberg-block-builder]] — WP Gutenberg Block Builder
 - [[wp-landing-config]] — WP Landing Config — mu-plugin для настройки лендинга
 - [[wp-multisite]] — WP Multisite — управление Multisite-сетью на Beget
 - [[wp-theme-assembler]] — Сборщик WordPress-темы
@@ -132,3 +128,7 @@
 - [[stage-agent-preamble]] — Stage Agent Preamble (канонический блок)
 - [[stage-execution-protocol]] — Протокол выполнения этапов (обязательный)
 - [[wiki-audit-checklist]] — Wiki Audit Checklist
+
+## ❓ Прочее
+
+- [[landing-orchestrator]] — landing-orchestrator
