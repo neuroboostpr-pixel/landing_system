@@ -54,7 +54,7 @@ python -m scripts.wiki.log --type agent_call --agent prototype-importer --stage 
 - `<project>/07_ПРОТОТИП/enrichment-log.md` — отчёт о квиз-фаннел обогащении (создаётся автоматически)
 
 > **Обогащение квиз-фаннела (шаг 6.5 workflow):** после `md-to-yaml.py` агент сам запускает
-> `python3 skills/wireframe-rendering/scripts/enrich-quiz-funnel.py prototype.yaml`. Если прототип
+> `python3 skills/prototype-import/scripts/enrich-quiz-funnel.py prototype.yaml`. Если прототип
 > содержит 1–4 квиз-блока, они расширяются в полный Marquiz-фаннел (welcome → вопросы → лоадер →
 > скидка → лид-форма → спасибо). Это даёт +25–40% CR по RU-рынку. Отчёт пишется в `enrichment-log.md`.
 
@@ -91,7 +91,7 @@ python -m scripts.wiki.log --type agent_call --agent prototype-importer --stage 
 
    Ответы запиши в `import-log.md`.
 6. Запусти конвертер: `python3 skills/prototype-import/scripts/md-to-yaml.py prototype.md prototype.yaml`
-7. **Обогати квиз-фаннел (если есть quiz-блоки):** `python3 skills/wireframe-rendering/scripts/enrich-quiz-funnel.py prototype.yaml` — пишет отчёт в `enrichment-log.md`.
+7. **Обогати квиз-фаннел (если есть quiz-блоки):** `python3 skills/prototype-import/scripts/enrich-quiz-funnel.py prototype.yaml` — пишет отчёт в `enrichment-log.md`.
 8. Запусти валидатор: `python3 skills/prototype-import/scripts/validate-prototype.py prototype.yaml`
 9. Если валидация упала — исправь `prototype.md` и повтори.
 

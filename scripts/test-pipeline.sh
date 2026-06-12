@@ -141,7 +141,7 @@ fi
 # --- Step 3b: Enrich quiz funnel ---
 echo ""
 echo "▸ Step 3b: Quiz-funnel enrichment (Marquiz/Tilda/Skillbox best-practices)"
-$PYTHON_CMD "$LS_ROOT/skills/wireframe-rendering/scripts/enrich-quiz-funnel.py" \
+$PYTHON_CMD "$LS_ROOT/skills/prototype-import/scripts/enrich-quiz-funnel.py" \
   --input "$PROJECT/07_ПРОТОТИП/prototype.yaml" \
   --output "$PROJECT/07_ПРОТОТИП/prototype.yaml" \
   --log "$PROJECT/07_ПРОТОТИП/enrichment-log.md"
