@@ -12175,3 +12175,132 @@
 - skipped docs/standards/stage-execution-protocol.md
 - skipped docs/standards/wiki-audit-checklist.md
 - skipped block-library/README.md
+
+## [2026-06-12] compile --source-mode=system
+- skipped commands/landing-niche.md
+- skipped template/01a_АНАЛИЗ_НИШИ/README.md
+- skipped docs/standards/wiki-audit-checklist.md
+- deferred agents/photo-preview-board.md
+- deferred agents/photo-stylist.md
+- deferred agents/prototype-importer.md
+- deferred agents/qa-auditor.md
+- deferred agents/references-curator.md
+- deferred agents/scene-director.md
+- deferred agents/seo-optimizer.md
+- deferred agents/stack-planner.md
+- deferred agents/style-extractor.md
+- deferred agents/system-setup.md
+- deferred agents/ux-composer.md
+- deferred agents/visual-curator.md
+- deferred agents/visual-strategist.md
+- deferred agents/wp-builder.md
+- deferred agents/wp-deployer.md
+- deferred skills/block-composition/SKILL.md
+- deferred skills/block-library-management/SKILL.md
+- deferred skills/brand-kit-build/SKILL.md
+- deferred skills/client-assets-collection/SKILL.md
+- deferred skills/design-tokens-generation/SKILL.md
+- deferred skills/gpt5-prompting-engine/SKILL.md
+- deferred skills/landing-from-context/SKILL.md
+- deferred skills/landing-import-blocks/SKILL.md
+- deferred skills/landing-onboarding/SKILL.md
+- deferred skills/landing-project-init/SKILL.md
+- deferred skills/landing-versioning-and-cloning/SKILL.md
+- deferred skills/moodboard-creation/SKILL.md
+- deferred skills/niche-analysis/SKILL.md
+- deferred skills/paralaximus-codex/SKILL.md
+- deferred skills/photo-curation/SKILL.md
+- deferred skills/photo-styling/SKILL.md
+- deferred skills/prototype-import/SKILL.md
+- deferred skills/references-collection/SKILL.md
+- deferred skills/seo-tech-audit/SKILL.md
+- deferred skills/style-decomposition/SKILL.md
+- deferred skills/visual-concept-generator/SKILL.md
+- deferred skills/visual-generation/SKILL.md
+- deferred skills/visual-qa/SKILL.md
+- deferred skills/wiki-routing-observability/SKILL.md
+- deferred skills/wireframe-rendering/SKILL.md
+- deferred skills/wp-cli-deployer/SKILL.md
+- deferred skills/wp-gutenberg-block-builder/SKILL.md
+- deferred skills/wp-landing-config/SKILL.md
+- deferred skills/wp-multisite/SKILL.md
+- deferred skills/wp-theme-assembler/SKILL.md
+- deferred commands/landing-brand.md
+- deferred commands/landing-build.md
+- deferred commands/landing-clone.md
+- deferred commands/landing-compose.md
+- deferred commands/landing-content.md
+- deferred commands/landing-deploy.md
+- deferred commands/landing-design.md
+- deferred commands/landing-final-check.md
+- deferred commands/landing-from-context.md
+- deferred commands/landing-go.md
+- deferred commands/landing-help.md
+- deferred commands/landing-import-blocks.md
+- deferred commands/landing-moodboard.md
+- deferred commands/landing-new.md
+- deferred commands/landing-onboarding.md
+- deferred commands/landing-photos.md
+- deferred commands/landing-previews.md
+- deferred commands/landing-prototype.md
+- deferred commands/landing-qa.md
+- deferred commands/landing-references.md
+- deferred commands/landing-rollback.md
+- deferred commands/landing-setup.md
+- deferred commands/landing-stack.md
+- deferred commands/landing-start.md
+- deferred commands/landing-status.md
+- deferred commands/landing-style.md
+- deferred commands/landing-visuals.md
+- deferred commands/landing-wireframe.md
+- deferred template/00_БРИФ/README.md
+- deferred template/01_КОНТЕКСТ/README.md
+- deferred template/02_МАТЕРИАЛЫ_КЛИЕНТА/README.md
+- deferred template/03_РЕФЕРЕНСЫ/README.md
+- deferred template/03b_КОНЦЕПТ/README.md
+- deferred template/04_БРЕНД/README.md
+- deferred template/05_ДИЗАЙН-СИСТЕМА/README.md
+- deferred template/06_СТЕК/README.md
+- deferred template/07_КОНТЕНТ/README.md
+- deferred template/07_ПРОТОТИП/README.md
+- deferred template/07a_WIREFRAME/README.md
+- deferred template/07b_COMPOSED/README.md
+- deferred template/07c_PHOTOS/README.md
+- deferred template/07d_VISUALS/README.md
+- deferred template/08_КОД/README.md
+- deferred template/09_ДЕПЛОЙ/README.md
+- deferred template/10_QA/README.md
+- deferred template/11_АНАЛИТИКА/README.md
+- deferred template/12_SEO/README.md
+- deferred template/13_СЕГМЕНТЫ_ЦА/README.md
+- deferred template/memory/README.md
+- deferred template/wiki/README.md
+- deferred docs/standards/block-lifecycle.md
+- deferred docs/standards/block-template-format.md
+- deferred docs/standards/premium-07b-checklist.md
+- deferred docs/standards/prototype-fidelity.md
+- deferred docs/standards/stage-07-content-correct-flow.md
+- deferred docs/standards/stage-08-spec-lint.md
+- deferred docs/standards/stage-agent-preamble.md
+- deferred docs/standards/stage-execution-protocol.md
+- deferred block-library/README.md
+- error agents/analytics-engineer.md: SDK call failed: Claude Code returned an error result: success
+- error agents/block-composer.md: SDK call failed: Claude Code returned an error result: success
+- error agents/brand-architect.md: SDK call failed: Claude Code returned an error result: success
+- error agents/client-assets-collector.md: SDK call failed: Claude Code returned an error result: success
+- error agents/content-writer.md: SDK call failed: Claude Code returned an error result: success
+- error agents/design-system-generator.md: SDK call failed: Claude Code returned an error result: success
+- error agents/frontend-builder.md: SDK call failed: Claude Code returned an error result: success
+- error agents/icon-generator.md: SDK call failed: Claude Code returned an error result: success
+- error agents/infographic-builder.md: SDK call failed: Claude Code returned an error result: success
+- error agents/integrations-engineer.md: SDK call failed: Claude Code returned an error result: success
+- error agents/landing-onboarding-wizard.md: SDK call failed: Claude Code returned an error result: success
+- error agents/landing-orchestrator.md: SDK call failed: Claude Code returned an error result: success
+- error agents/lifecycle-keeper.md: SDK call failed: Claude Code returned an error result: success
+- error agents/migration-engineer.md: SDK call failed: Claude Code returned an error result: success
+- error agents/moodboard-composer.md: SDK call failed: Claude Code returned an error result: success
+- error agents/niche-analyst.md: SDK call failed: Claude Code returned an error result: success
+- error agents/onboarding-guide.md: SDK call failed: Claude Code returned an error result: success
+- error agents/photo-classifier.md: SDK call failed: Claude Code returned an error result: success
+- error agents/photo-curator.md: SDK call failed: Claude Code returned an error result: success
+- error agents/photo-matcher.md: SDK call failed: Claude Code returned an error result: success
