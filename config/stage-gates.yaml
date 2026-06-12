@@ -299,7 +299,15 @@ stages:
         args: ["{project}"]
         required: true
         fix_hint: "Photo pipeline не пройден. Запусти /landing-photos для обработки фото через codex. Проверь что в composed.html нет SVG placeholder'ов."
+      # A2: поблочная сверка макета с прототипом (reference-driven-rules.md §4)
+      - id: structure_check_md
+        type: file_exists
+        path: "{project}/07b_COMPOSED/structure-check.md"
+        required: true
+        fix_hint: "block-composer обязан поблочно сверить composed.html с prototype.md (порядок/состав/выравнивание) и записать результат в 07b_COMPOSED/structure-check.md — см. docs/standards/reference-driven-rules.md"
     soft_checks:
+      - id: structure_matches_prototype
+        prompt: "structure-check.md: все блоки прототипа на месте, порядок/состав совпадают, выдуманных элементов нет? (yes / no)"
       - id: visual_qa_passed
         prompt: "Запустить Visual QA через /landing-qa? (опционально, не блокирует этап)"
       - id: identity_preserved

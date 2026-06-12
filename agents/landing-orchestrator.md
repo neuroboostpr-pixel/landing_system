@@ -312,6 +312,13 @@ I do **not** approve a stage on the user's behalf. The user must explicitly appr
 4. На `yes` — выполняю команду, re-run gate-check.
 5. Один auto-fix attempt per check_id per `/landing-go` invocation (защита от циклов).
 
+### Правило трёх источников + поблочная сверка (07c, обязательно)
+
+Этап 07c подчиняется [`docs/standards/reference-driven-rules.md`](../docs/standards/reference-driven-rules.md).
+Перед approve спроси у block-composer `07b_COMPOSED/structure-check.md`
+(поблочная сверка макета с prototype.md). Нет сверки или есть расхождения —
+этап не закрывается.
+
 ### Premium 07b quality enforcement (обязательно)
 
 Этапы `07c_composed` и `07f_composed_final` имеют hard_check

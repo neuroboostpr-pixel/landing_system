@@ -26,3 +26,9 @@ description: Stage 07b — assemble composed.html with design-tokens injected an
 
 Автоматически через `/landing-go` (рекомендуется) или вручную этой командой.
 Финальный визуальный контент (фото/иконки/инфографика) добавляют этапы 07c/07d (`/landing-photos`, `/landing-visuals`).
+
+## Стандарты этапа
+
+- [`docs/standards/reference-driven-rules.md`](../docs/standards/reference-driven-rules.md) —
+  правило трёх источников, поблочная сверка, composed.html = единственная правда о виде.
+- Агент РИСУЕТ макет (коллаж, глубина), а не склеивает готовые блоки.

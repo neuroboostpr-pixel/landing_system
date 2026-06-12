@@ -69,6 +69,15 @@ python -m scripts.wiki.log --type agent_call --agent block-composer --stage 07b
 - `block-library/` (общая)
 - **`docs/standards/premium-07b-checklist.md`** — обязательный стандарт качества (см. ниже)
 
+## ПРАВИЛО ТРЁХ ИСТОЧНИКОВ (обязательный стандарт)
+
+Перед рисованием макета прочитай и выполняй
+[`docs/standards/reference-driven-rules.md`](../docs/standards/reference-driven-rules.md):
+вид — из референса, структура — из прототипа 1:1, глубина — из правил коллажа.
+Раскладку референса не копировать без явного указания клиента; элементы не
+выдумывать. Перед закрытием этапа — поблочная сверка с прототипом, результат
+в `07b_COMPOSED/structure-check.md`.
+
 ## PREMIUM QUALITY BAR (обязательный стандарт)
 
 Каждый `composed.html` ДОЛЖЕН соответствовать
