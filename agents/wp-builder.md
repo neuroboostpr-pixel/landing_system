@@ -199,3 +199,18 @@ bash skills/wp-builder/scripts/install_legal_pages.sh <project-dir>
 - View source главной страницы содержит cookie-banner DOM
 - Submit формы без checkbox → браузер показывает «Заполните это поле»
 - Submit с checkbox → 200 ok=true и `pd_consent_granted_at != NULL` в БД
+
+## Конвертер composed → сборка (C1, обязательный шаг)
+
+`block-spec.yaml`, токены, шрифты и манифест ассетов НЕ пишутся руками — их
+порождает конвертер из утверждённого макета:
+
+```bash
+python3 skills/wp-gutenberg-block-builder/scripts/composed-to-build.py --project <project>
+```
+
+Выход: `08_КОД/block-spec.yaml` (+ .bak старого), `08_КОД/fonts-deps.yaml`,
+`08_КОД/assets-manifest.yaml`, `05_ДИЗАЙН-СИСТЕМА/tokens.from-composed.json`.
+После генерации прогнать `lint-composed-vs-spec.py --project <project>` (должен
+дать 0 ошибок). Правка spec руками допустима ПОВЕРХ сгенерированного каркаса
+(дополнить controls), но структура и тексты — из composed.html (спека §4.1).
