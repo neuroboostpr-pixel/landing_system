@@ -129,7 +129,7 @@ python3 skills/prototype-import/scripts/verify-prototype-fidelity.py \
 > ✅ Прототип импортирован.
 > - `prototype.md` — проверь правильность извлечения, при необходимости отредактируй.
 > - После правок MD запусти заново `md-to-yaml.py` (или просто `/landing-prototype` ещё раз).
-> - Когда будешь готов — запускай `/landing-wireframe`.
+> - Когда будешь готов — запускай `/landing-go` (агент нарисует макет по прототипу и референсу).
 
 ## Tools
 

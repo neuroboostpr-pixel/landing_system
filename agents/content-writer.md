@@ -200,7 +200,7 @@ Output format:
 <extracted-text>
 ```
 
-**Правило:** каждая секция = H2, каждый блок в секции = H3. Это позволяет `landing-wireframe` и `landing-compose` автоматически индексировать по структуре.
+**Правило:** каждая секция = H2, каждый блок в секции = H3. Это позволяет `landing-compose` автоматически индексировать по структуре.
 
 ### Step 4: Validation (local)
 Before writing to file:

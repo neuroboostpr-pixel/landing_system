@@ -11,7 +11,10 @@ ROOT = Path(__file__).resolve().parents[2]
 SCAN_DIRS = ["agents", "skills", "scripts", "commands", ".claude/commands",
              "config", "template"]
 SCAN_FILES = ["CLAUDE.md"]
-EXCLUDE_PARTS = {"block-composition", "worktrees", "node_modules", "__pycache__"}
+# wiki: компилятор project-graph парсит артефакты СТАРЫХ проектов
+# (07a_WIREFRAME/selections.yaml и т.п.) — это история, не живой пайплайн.
+EXCLUDE_PARTS = {"block-composition", "worktrees", "node_modules", "__pycache__",
+                 "wiki"}
 
 FORBIDDEN = [
     "skills/wireframe-rendering",

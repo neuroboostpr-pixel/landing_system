@@ -35,7 +35,7 @@ Per [`IDENTITY_SAFE.md`](../skills/photo-curation/IDENTITY_SAFE.md): the matcher
 
 ## Process
 
-1. Build `_slots-input.yaml` from `07_ПРОТОТИП/prototype.yaml` filtered by `07a_WIREFRAME/selections.yaml` (only chosen variants, only `type: photo` slots).
+1. Build `_slots-input.yaml` from `07_ПРОТОТИП/prototype.yaml` (only `type: photo` slots; wireframe-этап удалён — фильтра по selections больше нет).
 2. Run:
    ```bash
    bash skills/photo-curation/scripts/codex-match.sh \

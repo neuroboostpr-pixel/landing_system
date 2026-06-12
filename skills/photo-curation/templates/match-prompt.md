@@ -2,7 +2,7 @@
 
 ## How to use
 
-1. Build context: read `catalog.yaml`, `prototype.yaml` slots, `07a_WIREFRAME/selections.yaml`, `tokens.json`, market-profile, positioning.
+1. Build context: read `catalog.yaml`, `prototype.yaml` slots, `tokens.json`, market-profile, positioning.
 2. Build `[CATALOG_YAML]` (dump catalog photos list) and `[SLOTS_YAML]` (dump active slots with hints).
 3. Substitute via render-prompt.py.
 4. Pass via codex CLI (text-only, no image input).

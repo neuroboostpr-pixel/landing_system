@@ -60,7 +60,6 @@ fi
 | 05 | design | Руками + AI | design-system-generator |
 | 06 | stack | АВТО | stack-planner |
 | 07 | content | АВТО | content-writer |
-| 07b | wireframe | Маркетолог | `/landing-wireframe` |
 | 07c | composed | АВТО | `/landing-compose` |
 | **07d** ⇆ **07e** | photos + visuals | **ПАРАЛЛЕЛЬНО** | `/landing-photos` ‖ `/landing-visuals` |
 | 07f | composed_final | АВТО | `/landing-compose` |
@@ -76,6 +75,6 @@ fi
 
 ## Ручные команды сохраняются
 
-`/landing-photos`, `/landing-visuals`, `/landing-prototype`, `/landing-wireframe`, `/landing-compose` продолжают работать как ручные точки входа.
+`/landing-photos`, `/landing-visuals`, `/landing-prototype`, `/landing-compose` продолжают работать как ручные точки входа.
 
 См. [spec](../docs/superpowers/specs/2026-05-13-pr-d-orchestrator-integration-design.md), [plan](../docs/superpowers/plans/2026-05-13-pr-d-orchestrator-integration-plan.md).

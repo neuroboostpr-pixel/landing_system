@@ -85,7 +85,7 @@ else
 fi
 
 # Make sure the new stage folders exist (older projects predate PR-A)
-mkdir -p "$PROJECT/07_ПРОТОТИП/source" "$PROJECT/07a_WIREFRAME" "$PROJECT/07b_COMPOSED" "$PROJECT/05_ДИЗАЙН-СИСТЕМА"
+mkdir -p "$PROJECT/07_ПРОТОТИП/source" "$PROJECT/07b_COMPOSED" "$PROJECT/05_ДИЗАЙН-СИСТЕМА"
 
 # --- Step 2: Drop prototype into source/ ---
 echo ""

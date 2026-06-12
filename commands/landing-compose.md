@@ -8,7 +8,7 @@ description: Stage 07b — assemble composed.html with design-tokens injected an
 
 ## Что делает
 
-1. Проверяет наличие `07_ПРОТОТИП/prototype.yaml`, `07a_WIREFRAME/selections.yaml`, `05_ДИЗАЙН-СИСТЕМА/tokens.json`.
+1. Проверяет наличие `07_ПРОТОТИП/prototype.yaml` и `05_ДИЗАЙН-СИСТЕМА/tokens.json`.
 2. Передаёт работу агенту `block-composer`.
 3. Сообщает путь к артефакту.
 
@@ -20,7 +20,6 @@ description: Stage 07b — assemble composed.html with design-tokens injected an
 
 ## Условия запуска
 
-- selections.yaml в `07a_WIREFRAME/` существует
 - tokens.json в `05_ДИЗАЙН-СИСТЕМА/` существует
 
 ## Запуск

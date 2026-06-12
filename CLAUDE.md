@@ -15,61 +15,44 @@
 - `/landing-status` — статус системы и текущих проектов
 - `/landing-help` — справка по всем командам
 
-## Новые команды PR-A (Прототип + Content + Wireframe + Compose)
+## Reference-Driven Flow (2026-06-12) — главный флоу производства
 
-- `/landing-prototype` — импорт пользовательского прототипа (DOCX/PDF/MD) → prototype.{md,yaml}. **B37: точность парсинга** — для .docx работает детерминированный `extract-docx-text.py` (весь текст + таблицы с ценами), а hard-gate 07a `prototype_fidelity` не даёт закрыть этап при потере >10% текста или выдуманной структуре (меню Home/About/…, фейк-тарифы). Комментарии клиента → секция `client_notes` (не в визуал). Канон: [`docs/standards/prototype-fidelity.md`](docs/standards/prototype-fidelity.md).
-- `/landing-content` — **NEW (2026-06-01)** — извлечение РЕАЛЬНЫХ текстов из prototype.yaml → content.md (БЕЗ Lorem ipsum)
-- `/landing-wireframe` — интерактивный wireframe.html с 2-3 вариантами на блок
-- `/landing-compose` — composed.html с tokens + текстами, placeholders для визуала
+Система переведена с «блочного» способа (подбор из библиотеки + wireframe) на
+**reference-driven**: агент РИСУЕТ макет composed.html сам по двум материалам клиента —
+**прототипу** (правда о структуре, 1:1) и **референсу-скриншоту** (правда о виде).
+Канон: [`docs/superpowers/specs/2026-06-12-reference-driven-flow-spec.md`](docs/superpowers/specs/2026-06-12-reference-driven-flow-spec.md).
 
-**Workflow PR-A:**
-1. Положи `prototype.pdf` или `.md` в `<project>/07_ПРОТОТИП/source/`
-2. Запусти `/landing-prototype` → генерирует `prototype.yaml` и `prototype.md`
-3. **Запусти `/landing-content`** → читает `prototype.yaml`, извлекает реальные тексты, пишет `content.md` + `extraction-log.md`
-   - ✅ content.md заполнен РЕАЛЬНЫМИ текстами из прототипа (не Lorem ipsum)
-   - ✅ extraction-log.md показывает что было извлечено
-   - ✅ gate-check 07_content проходит validation (нет шаблонных текстов)
-4. Запусти `/landing-wireframe` → открой `07a_WIREFRAME/wireframe.html`, выбери варианты, нажми «Confirm» — скачается `selections.yaml`, положи его в `07a_WIREFRAME/`
-   - **Теперь wireframe покажет РЕАЛЬНЫЙ контент из content.md, не template!**
-   - **Теперь в wireframe есть mood-табы (PR-S):** для каждого блока выбери стиль (brutalist/editorial-warm/swiss-modernist/retro-windows/coral-soft/monochrome-precision) → mood сохранится в selections.yaml
-5. Запусти `/landing-compose` → `07b_COMPOSED/composed.html` готов
-   - **Новое (PR-S):** compose автоматически применит выбранные mood'ы (CSS палитры, шрифты, паттерны)
+**Правило трёх источников (нарушение = дефект):**
+- **Вид** (цвета, шрифты, кнопки, характер) — из референса клиента (скриншот, палитра по пикселям)
+- **Структура** (какие блоки, порядок, тексты, кнопки) — из прототипа 1:1, ничего не выдумывать
+- **Красота/глубина** (блобы, слои, вырезанные фото, крупные цифры) — из правил коллажа (спека §3)
 
-**Что исправилось:** Перед 2026-06-01 этап 07_content генерировал generic template (Lorem ipsum) вместо извлечения из прототипа. Теперь `/landing-content` читает prototype.yaml и пишет настоящие тексты клиента в content.md. Это фиксит [BUG-001](docs/BACKLOG.md).
+Раскладку у референса НЕ брать (если клиент явно не указал). Элементы, которых
+нет в прототипе, НЕ выдумывать.
 
-**NOTE:** PR-A команды вызываются ВРУЧНУЮ, не через `landing-orchestrator`. Интеграция в оркестратор — задача PR-D.
+**Команды этапа 07:**
+- `/landing-prototype` — импорт прототипа (DOCX/PDF/MD) → prototype.{md,yaml}. **B37: точность парсинга** — для .docx работает детерминированный `extract-docx-text.py` (весь текст + таблицы с ценами), а hard-gate 07a `prototype_fidelity` не даёт закрыть этап при потере >10% текста или выдуманной структуре. Комментарии клиента → секция `client_notes`. Канон: [`docs/standards/prototype-fidelity.md`](docs/standards/prototype-fidelity.md).
+- `/landing-content` — извлечение РЕАЛЬНЫХ текстов из prototype.yaml → content.md (БЕЗ Lorem ipsum)
+- `/landing-compose` — composed.html: агент рисует макет с tokens + текстами прототипа, placeholders для визуала
 
-## PR-S: Style Moods System (2026-06-02) ✅
+## Style Moods = переключатель палитры (PR-S, пересмотрено 2026-06-12)
 
-**Что это:** Пользователь теперь может выбирать **style mood** для каждого блока в wireframe и видеть превью в разных mood'ах. Mood это полный набор стилей (цвета, шрифты, паттерны), который меняет визуал без изменения структуры. **6 готовых mood'ов:** brutalist, editorial-warm, swiss-modernist, retro-windows, coral-soft, monochrome-precision.
+6 цветовых наборов в `block-library/_styles/` (brutalist, editorial-warm,
+swiss-modernist, retro-windows, coral-soft, monochrome-precision) работают как
+**переключатель палитры уровня темы/сайта**: дизайн-система проекта берётся из
+референса клиента, а готовые наборы — альтернативные палитры на примерку
+(плагин `lp-preview-panel`, спека §2.5). Переключение меняет ТОЛЬКО цвета — и
+работает только при 100% токенизации (ни одного прямого цвета вне `:root`).
 
-**Workflow PR-S (встроен в PR-A):**
-
-На этапе `/landing-wireframe` (шаг 4 выше):
-- Откроется `wireframe.html` с mood-табами под каждым блоком
-- Выбери layout variant (как обычно) + выбери mood tab (НОВОЕ)
-- Посмотри preview в выбранном mood'е
-- Нажми «Confirm» → скачается `selections.yaml` с `style_mood` полем
-
-На этапе `/landing-compose` (шаг 5 выше):
-- Compose прочитает `style_mood` из selections.yaml
-- Загрузит mood CSS (палитра, типография, анимации)
-- Применит к final composed.html
-
-**Результат:** Each блок может иметь свой mood, colors/fonts меняются автоматически, visual coherence сохраняется.
-
-**Руководство:** 📖 [`docs/MOOD-SELECTION-GUIDE.md`](docs/MOOD-SELECTION-GUIDE.md) — когда использовать какой mood, примеры для каждой ниши, матрица выбора.
-
-**Для опытных:** Если не хочешь выбирать mood, selections.yaml работает и без поля `style_mood` (дефолт к hardcoded mood в блоке). Backward compatible 100%.
-
-**Tech:** wireframe-shell.html + render-wireframe.py (UI) → compose-blocks.py + inject-tokens.py (CSS application). 20 unit-тестов, 100% pass.
+Mood-табы wireframe (старый PR-S UI) удалены вместе с wireframe-этапом.
+Руководство по выбору mood: [`docs/MOOD-SELECTION-GUIDE.md`](docs/MOOD-SELECTION-GUIDE.md).
 
 ## Новые команды PR-B (Photo Pipeline)
 
 - `/landing-photos` — обработка клиентских фоток: AI-classify через codex, matching к слотам, generative fallback для пустых слотов. **Stage 07c.**
 
 **Workflow PR-B:**
-1. Утверди этапы 05 (design-system) и 07a (wireframe).
+1. Утверди этапы 05 (design-system) и 07a (prototype).
 2. Положи фотки клиента в `<project>/07c_PHOTOS/inbox/`. Подсказка: открой `07c_PHOTOS/README.md` — там описаны 7 подпапок по типу фото (`портреты_и_команда/`, `процесс_работы/` и т.д.).
 3. Запусти `/landing-photos`.
 4. Открой `07c_PHOTOS/photo-board.html` — расставь фотки drag-drop, нажми «Подтвердить и скачать selections.yaml».
@@ -116,7 +99,7 @@
    - 07a prototype parse (авто)
    - 03 references → 04 brand → 05 design (user-interactive)
    - 06 stack → 07 content (авто)
-   - 07b wireframe (user picks variants) → 07c composed (авто)
+   - 07c composed (агент рисует макет по прототипу + референсу)
    - **07d photos ⇆ 07e visuals параллельно**
    - 07f composed final → 08 build → 09 deploy → 10-12
 
@@ -196,23 +179,21 @@ bash scripts/migrate-template-readmes.sh ~/Lendings/<existing-project>
 + тест в `tests/phase-stage-08/test-fix-page-content-images.py`. Двойной
 источник правды — баг.
 
-## Block Library
+## Архив блочного трека (reference-driven flow, 2026-06-12)
 
-Общая библиотека wireframe-блоков: `block-library/`. См. `block-library/README.md`.
+Библиотека готовых блоков и wireframe-этап выведены из эксплуатации и лежат в
+`archive/` (история сохранена через git mv). Новый флоу: агент **рисует** макет
+composed.html сам по прототипу и референсу клиента — канон:
+[`docs/superpowers/specs/2026-06-12-reference-driven-flow-spec.md`](docs/superpowers/specs/2026-06-12-reference-driven-flow-spec.md).
 
-**Формат блока (B35) — обязателен:** каждый `template.html` это **фрагмент**
-(не полный HTML-документ), весь редактируемый контент — через текстовые
-плейсхолдеры `{{slot:name}}` (НЕ `data-slot`, НЕ `[русский текст]`), CSS inline
-с префиксом `lp-`, имена слотов синхронны с `meta.yaml::slots`. Канон:
-[`docs/standards/block-template-format.md`](docs/standards/block-template-format.md).
+Переиспользуемое (НЕ удалять): `block-library/_styles/` (палитры-moods),
+`_shapes/` (подсказка для генерации декора), `_patterns/`, `_assets/`,
+slot-формат `{{slot:name}}`, Lazy Blocks, плагин lp-preview-panel.
 
-**Жизненный цикл блока** (добавить/нормализовать/валидировать/регенерировать):
-[`docs/standards/block-lifecycle.md`](docs/standards/block-lifecycle.md).
+Slot-формат `{{slot:name}}` остаётся обязательным для редактируемого контента
+в макете (основа slot→поле в Lazy Blocks, спека §4.5).
 
-- Привести старые блоки к стандарту: `python scripts/normalize-block-templates.py`.
-- Единственный генератор галереи — `scripts/generate-gallery.py` (2 комбобокса
-  category→variant, демо-превью, модалка). Legacy `render-gallery.py/.js` удалены.
-- Валидация: `pytest tests/block-library/` (формат, таксономия, каталог, галерея).
+Guard: `pytest tests/archive/` не даёт живому коду ссылаться на архив.
 
 ## Атрибуция
 
@@ -297,7 +278,6 @@ python -m scripts.wiki.log --type skill_call --skill <slug> --stage <N>
 - `commands/*.md`                       — слеш-команды
 - `template/*/README.md`                — этапы шаблона
 - `docs/standards/*.md`                 — правила (premium checklist)
-- `block-library/*/*/meta.yaml`         — все блоки (200+)
 - `block-library/_patterns/*/meta.yaml` — премиум-эффекты (PR-S)
 - `block-library/_styles/*/README.md`   — style moods (PR-S)
 - `config/*.yaml`                       — stage-gates и др. конфиги (PR-S)

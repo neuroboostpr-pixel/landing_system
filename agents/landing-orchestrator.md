@@ -284,7 +284,6 @@ I do **not** approve a stage on the user's behalf. The user must explicitly appr
 | 05 | Дизайн-система | User-interactive | design-system-generator |
 | 06 | Стек | Авто | stack-planner |
 | 07 | Контент | Авто | content-writer |
-| 07b | Wireframe | User picks variants | `/landing-wireframe` |
 | 07c | Composed (draft) | Авто | `/landing-compose` |
 | 07d ⇆ 07e | Photos + Visuals | **Параллельно** | `/landing-photos` ‖ `/landing-visuals` |
 | 07f | Composed (final) | Авто re-render | `/landing-compose` |
@@ -306,7 +305,7 @@ I do **not** approve a stage on the user's behalf. The user must explicitly appr
 При падении hard_check в gate-check.sh:
 
 1. Парсю `fix_hint` из stage-gates.yaml для упавшего check_id.
-2. Если `fix_hint` начинается с `auto_fix:` → извлекаю команду (`/landing-prototype`, `/landing-wireframe`, etc).
+2. Если `fix_hint` начинается с `auto_fix:` → извлекаю команду (`/landing-prototype`, `/landing-compose`, etc).
 3. Спрашиваю пользователя: «🔧 АВТО-FIX: запустить `{команда}`? (yes/no)».
 4. На `yes` — выполняю команду, re-run gate-check.
 5. Один auto-fix attempt per check_id per `/landing-go` invocation (защита от циклов).
@@ -334,7 +333,6 @@ clamp typography, CSS-переменные в `:root`).
 
 На каждом этапе я говорю **одно действие + одно ожидание**:
 - «🎯 Положи prototype.pdf в 07_ПРОТОТИП/source/. Напиши готово»
-- «🎯 Открой 07a_WIREFRAME/wireframe.html, выбери варианты, скачай selections.yaml. Напиши готово»
 - «🎯 Открой 07c_PHOTOS/photo-preview.html и approve. Напиши ok»
 
 Не сваливаю несколько шагов в одно сообщение — маркетолог должен делать по одному.

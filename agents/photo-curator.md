@@ -90,7 +90,7 @@ If either gate fails: exit 1 with the relevant Russian message.
 
 4. **Classify.** For each photo in `intake/` with `tag_source: pending_ai_classify` — dispatch `photo-classifier` (in batches of 5, sleep 2s between). Update `catalog.yaml` progressively.
 
-5. **Match.** Dispatch `photo-matcher` once over the full catalog + slots derived from `07_ПРОТОТИП/prototype.yaml` filtered by `07a_WIREFRAME/selections.yaml`. Produces `selections.draft.yaml`.
+5. **Match.** Dispatch `photo-matcher` once over the full catalog + slots derived from `07_ПРОТОТИП/prototype.yaml`. Produces `selections.draft.yaml`.
 
 6. **Render gallery.**
    ```bash

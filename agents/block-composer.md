@@ -60,12 +60,11 @@ python -m scripts.wiki.log --type agent_call --agent block-composer --stage 07b
 
 ## Mission
 
-Сборка `<project>/07b_COMPOSED/composed.html` + `composed-mobile.html` из утверждённых `selections.yaml`, `prototype.yaml` и `tokens.json`. На выходе — цветной макет с реальными текстами/CTA и visible placeholders для фото/иконок/инфографики.
+Сборка `<project>/07b_COMPOSED/composed.html` + `composed-mobile.html` по `prototype.yaml` (структура 1:1) и `tokens.json` (вид из референса клиента). Reference-driven flow: агент рисует макет сам, без подбора блоков из библиотеки (спека 2026-06-12). На выходе — цветной макет с реальными текстами/CTA и visible placeholders для фото/иконок/инфографики.
 
 ## Inputs
 
 - `<project>/07_ПРОТОТИП/prototype.yaml`
-- `<project>/07a_WIREFRAME/selections.yaml`
 - `<project>/05_ДИЗАЙН-СИСТЕМА/tokens.json`
 - `block-library/` (общая)
 - **`docs/standards/premium-07b-checklist.md`** — обязательный стандарт качества (см. ниже)
@@ -120,10 +119,7 @@ bash "$LANDING_SYSTEM_ROOT/scripts/verify-composed-premium.sh" \
 
 ## Workflow
 
-1. Валидируй `selections.yaml`:
-   ```bash
-   python3 skills/block-composition/scripts/validate-selections.py 07a_WIREFRAME/selections.yaml
-   ```
+1. Проверь входы: `07_ПРОТОТИП/prototype.yaml` и `05_ДИЗАЙН-СИСТЕМА/tokens.json` существуют.
 2. Запусти end-to-end composer:
    ```bash
    python3 skills/block-composition/scripts/compose-blocks.py \

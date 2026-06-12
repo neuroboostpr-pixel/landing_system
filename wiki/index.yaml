@@ -1,11 +1,11 @@
 version: 1
-generated_at: '2026-06-12T17:23:59+00:00'
+generated_at: '2026-06-12T17:33:54+00:00'
 counts:
-  total: 40
+  total: 59
   by_type:
     stage: 1
     agent: 32
-    skill: 5
+    skill: 24
     command: 1
     rule: 1
 concepts:
@@ -513,6 +513,36 @@ concepts:
   confidence:
     triggers: low
     pre_reqs: low
+- slug: landing-from-context
+  type: skill
+  name: Создание лендинга из контекста агентства
+  card: concepts/skills/landing-from-context.md
+  source: skills/landing-from-context/SKILL.md
+  stage: '02'
+  tags:
+  - init
+  - snapshot
+  - context
+  - onboarding
+  triggers:
+  - landing-from-context
+  inputs:
+  - <cwd>/01_контекст/
+  - <cwd>/05_исследования/
+  - <cwd>/04_документы/прототип-*.md
+  outputs:
+  - <slug>/01_КОНТЕКСТ/
+  - <slug>/07_КОНТЕНТ/prototype.md
+  - <slug>/01_КОНТЕКСТ/source-references.yaml
+  pre_reqs:
+  - system-setup
+  related:
+  - landing-orchestrator
+  - prototype-importer
+  - client-assets-collector
+  confidence:
+    stage: low
+    pre_reqs: low
 - slug: landing-niche
   type: command
   name: Анализ ниши /landing-niche
@@ -543,6 +573,28 @@ concepts:
   - landing-onboarding
   confidence:
     gates: low
+- slug: landing-onboarding
+  type: skill
+  name: Онбординг landing-system
+  card: concepts/skills/landing-onboarding.md
+  source: skills/landing-onboarding/SKILL.md
+  tags:
+  - onboarding
+  - setup
+  - validation
+  - deps
+  - api-keys
+  - mcp
+  triggers:
+  - landing-onboarding
+  outputs:
+  - ~/.landing-system/setup_complete
+  related:
+  - system-setup
+  - landing-orchestrator
+  - onboarding-guide
+  confidence:
+    stage: low
 - slug: landing-onboarding-wizard
   type: agent
   name: Онбординг-визард нового проекта
@@ -610,6 +662,57 @@ concepts:
   - lifecycle-keeper
   confidence:
     triggers: low
+- slug: landing-project-init
+  type: skill
+  name: Инициализация нового проекта лендинга
+  card: concepts/skills/landing-project-init.md
+  source: skills/landing-project-init/SKILL.md
+  stage: '00'
+  tags:
+  - init
+  - project-setup
+  - scaffold
+  - onboarding
+  triggers:
+  - landing-new
+  outputs:
+  - ~/Lendings/<slug>/
+  related:
+  - landing-orchestrator
+  - landing-onboarding-wizard
+  - system-setup
+  confidence:
+    inputs: low
+- slug: landing-versioning-and-cloning
+  type: skill
+  name: Версионирование и клонирование лендингов (legacy)
+  card: concepts/skills/landing-versioning-and-cloning.md
+  source: skills/landing-versioning-and-cloning/SKILL.md
+  tags:
+  - versioning
+  - cloning
+  - rollback
+  - legacy
+  - single-site
+  triggers:
+  - landing-rollback
+  inputs:
+  - <project-dir>
+  - version-label (опц.)
+  - new-slug (опц.)
+  outputs:
+  - 09_ВЕРСИИ/<version>/
+  - <new-project-dir>/
+  pre_reqs:
+  - wp-builder
+  - wp-deployer
+  related:
+  - lifecycle-keeper
+  - wp-deployer
+  - wp-builder
+  confidence:
+    triggers: low
+    stage: low
 - slug: lifecycle-keeper
   type: agent
   name: Lifecycle Keeper — Хранитель версий
@@ -662,6 +765,56 @@ concepts:
   - landing-moodboard
   confidence:
     triggers: low
+- slug: moodboard-creation
+  type: skill
+  name: Рендер мудборда
+  card: concepts/skills/moodboard-creation.md
+  source: skills/moodboard-creation/SKILL.md
+  stage: '03'
+  tags:
+  - moodboard
+  - references
+  - html-render
+  - jinja2
+  triggers:
+  - moodboard-composer
+  inputs:
+  - 03_РЕФЕРЕНСЫ/index.yaml
+  - 03_РЕФЕРЕНСЫ/moodboard.md
+  outputs:
+  - 03_РЕФЕРЕНСЫ/moodboard.html
+  pre_reqs:
+  - references-curator
+  related:
+  - moodboard-composer
+  - references-curator
+  - visual-curator
+  confidence:
+    triggers: low
+    outputs: low
+- slug: niche-analysis
+  type: skill
+  name: Анализ ниши и конкурентов
+  card: concepts/skills/niche-analysis.md
+  source: skills/niche-analysis/SKILL.md
+  stage: 01a
+  tags:
+  - niche
+  - research
+  - competitors
+  - stage-01a
+  - zero-touch
+  triggers:
+  - landing-niche
+  inputs:
+  - .landing-state.yaml
+  outputs:
+  - 01a_АНАЛИЗ_НИШИ/
+  related:
+  - niche-analyst
+  confidence:
+    outputs: low
+    pre_reqs: low
 - slug: niche-analyst
   type: agent
   name: Аналитик ниши (Stage 01a)
@@ -725,6 +878,46 @@ concepts:
   - landing-go
   confidence:
     stage: low
+- slug: paralaximus-codex
+  type: skill
+  name: Параллакс-герой Paralaximus Codex
+  card: concepts/skills/paralaximus-codex.md
+  source: skills/paralaximus-codex/SKILL.md
+  stage: 07d
+  tags:
+  - parallax
+  - hero
+  - codex
+  - image-gen
+  - visual
+  - css
+  - js
+  - chroma-key
+  triggers:
+  - landing-visuals
+  - wow-hero-request
+  inputs:
+  - 04_БРЕНД/brand-kit.md
+  - 05_ДИЗАЙН/tokens.json
+  outputs:
+  - assets/background.png
+  - assets/far.png
+  - assets/near.png
+  - assets/subject.png
+  - assets/css/parallax.css
+  - assets/js/parallax.js
+  pre_reqs:
+  - brand-kit-build
+  - design-system-generator
+  related:
+  - icon-generator
+  - infographic-builder
+  - visual-curator
+  - scene-director
+  - block-composer
+  confidence:
+    stage: low
+    triggers: low
 - slug: photo-classifier
   type: agent
   name: Классификатор фото
@@ -748,6 +941,46 @@ concepts:
   - photo-curator
   confidence:
     pre_reqs: low
+- slug: photo-curation
+  type: skill
+  name: Конвейер обработки клиентских фото (Photo Curation)
+  card: concepts/skills/photo-curation.md
+  source: skills/photo-curation/SKILL.md
+  stage: 07c
+  tags:
+  - photos
+  - pipeline
+  - codex
+  - ai-classification
+  - compose
+  triggers:
+  - landing-photos
+  inputs:
+  - 07c_PHOTOS/inbox/
+  - 05_ДИЗАЙН/design-system (approved)
+  - 07a_WIREFRAME/selections.yaml
+  - prototype.yaml
+  outputs:
+  - 07c_PHOTOS/selections.yaml
+  - 07c_PHOTOS/photo-board.html
+  - 07c_PHOTOS/photo-preview.html
+  - 07b_COMPOSED/composed.html (re-render с реальными фото)
+  - 07c_PHOTOS/manifest.json
+  pre_reqs:
+  - design-system-generator
+  - prototype-importer
+  - ux-composer
+  related:
+  - photo-curator
+  - photo-classifier
+  - photo-matcher
+  - photo-stylist
+  - photo-preview-board
+  - block-composer
+  - visual-curator
+  - prototype-importer
+  confidence:
+    gates: low
 - slug: photo-curator
   type: agent
   name: Куратор фотографий — оркестратор этапа 07c
@@ -840,6 +1073,32 @@ concepts:
   confidence:
     triggers: low
     pre_reqs: low
+- slug: photo-styling
+  type: skill
+  name: Стилизация фото
+  card: concepts/skills/photo-styling.md
+  source: skills/photo-styling/SKILL.md
+  stage: '02'
+  tags:
+  - photo
+  - image-processing
+  - identity-safe
+  - cutout
+  - compositing
+  pre_reqs:
+  - photo-classifier
+  - photo-curator
+  related:
+  - photo-stylist
+  - photo-matcher
+  - photo-preview-board
+  - photo-curator
+  - photo-classifier
+  confidence:
+    stage: low
+    triggers: low
+    inputs: low
+    outputs: low
 - slug: photo-stylist
   type: agent
   name: Photo Stylist
@@ -865,6 +1124,37 @@ concepts:
   - photo-matcher
   confidence:
     triggers: low
+- slug: prototype-import
+  type: skill
+  name: Импорт прототипа
+  card: concepts/skills/prototype-import.md
+  source: skills/prototype-import/SKILL.md
+  stage: '07'
+  tags:
+  - prototype
+  - import
+  - pdf
+  - yaml
+  - parse
+  - ocr
+  triggers:
+  - landing-prototype
+  inputs:
+  - 07_ПРОТОТИП/source/prototype.pdf
+  - 07_ПРОТОТИП/source/prototype.md
+  outputs:
+  - 07_ПРОТОТИП/prototype.md
+  - 07_ПРОТОТИП/prototype.yaml
+  - 07_ПРОТОТИП/import-log.md
+  pre_reqs:
+  - client-assets-collection
+  related:
+  - prototype-importer
+  - landing-orchestrator
+  - block-composer
+  - ux-composer
+  confidence:
+    pre_reqs: low
 - slug: prototype-importer
   type: agent
   name: Импортёр прототипа
@@ -926,6 +1216,29 @@ concepts:
   confidence:
     triggers: low
     gates: low
+- slug: references-collection
+  type: skill
+  name: Управление индексом референсов
+  card: concepts/skills/references-collection.md
+  source: skills/references-collection/SKILL.md
+  stage: '03'
+  tags:
+  - references
+  - yaml
+  - crud
+  - catalog
+  - index
+  inputs:
+  - 03_РЕФЕРЕНСЫ/
+  outputs:
+  - 03_РЕФЕРЕНСЫ/index.yaml
+  related:
+  - references-curator
+  - client-assets-collector
+  - visual-curator
+  - moodboard-composer
+  confidence:
+    triggers: low
 - slug: references-curator
   type: agent
   name: Куратор референсов
@@ -1017,6 +1330,36 @@ concepts:
   - niche-analyst
   confidence:
     triggers: low
+- slug: seo-tech-audit
+  type: skill
+  name: SEO Tech Audit
+  card: concepts/skills/seo-tech-audit.md
+  source: skills/seo-tech-audit/SKILL.md
+  stage: '11'
+  tags:
+  - seo
+  - audit
+  - qa
+  - python
+  - multisite
+  - stage-gate
+  triggers:
+  - landing-audit
+  inputs:
+  - .landing-state.yaml
+  - project-url
+  outputs:
+  - 11_QA/audit-report.md
+  - 11_QA/audit-report.json
+  - 11_QA/per-site/
+  gates:
+  - seo_audit_pass
+  pre_reqs:
+  - wp-deployer
+  related:
+  - qa-auditor
+  - seo-optimizer
+  - landing-orchestrator
 - slug: stack-planner
   type: agent
   name: Планировщик стека (Stack Planner)
@@ -1049,6 +1392,42 @@ concepts:
   - landing-orchestrator
   - block-composer
   - frontend-builder
+  confidence:
+    triggers: low
+    gates: low
+- slug: style-decomposition
+  type: skill
+  name: Декомпозиция стиля (Style Decomposition)
+  card: concepts/skills/style-decomposition.md
+  source: skills/style-decomposition/SKILL.md
+  stage: '04'
+  tags:
+  - brand
+  - palette
+  - fonts
+  - icons
+  - extraction
+  - design-tokens
+  triggers:
+  - landing-brand
+  inputs:
+  - 03_РЕФЕРЕНСЫ/
+  - 04_БРЕНД/logos/
+  outputs:
+  - 04_БРЕНД/extracted/palette.yaml
+  - 04_БРЕНД/extracted/fonts.yaml
+  - 04_БРЕНД/extracted/icons.yaml
+  - 04_БРЕНД/extracted/grid.md
+  - 04_БРЕНД/extracted/motion.md
+  pre_reqs:
+  - references-curator
+  related:
+  - style-extractor
+  - brand-architect
+  - brand-kit-build
+  - design-tokens-generation
+  - design-system-generator
+  - moodboard-composer
   confidence:
     triggers: low
     gates: low
@@ -1147,6 +1526,69 @@ concepts:
   - photo-curator
   confidence:
     stage: low
+- slug: visual-generation
+  type: skill
+  name: Генерация визуалов (иконки и инфографика)
+  card: concepts/skills/visual-generation.md
+  source: skills/visual-generation/SKILL.md
+  stage: 07d
+  tags:
+  - visuals
+  - icons
+  - infographics
+  - codex
+  - image-gen
+  - pr-c
+  triggers:
+  - landing-visuals
+  inputs:
+  - 07b_COMPOSED/composed.html
+  - 05_ДИЗАЙН/tokens.json
+  - market-profile.md
+  outputs:
+  - 07d_VISUALS/_slots.yaml
+  - 07d_VISUALS/*.png
+  - 07d_VISUALS/STATE.yaml
+  pre_reqs:
+  - design-system-generator
+  - block-composer
+  related:
+  - visual-curator
+  - icon-generator
+  - infographic-builder
+  - photo-curator
+  - block-composition
+  confidence:
+    gates: low
+- slug: visual-qa
+  type: skill
+  name: Visual QA — автоматический визуальный контроль
+  card: concepts/skills/visual-qa.md
+  source: skills/visual-qa/SKILL.md
+  stage: 07c
+  tags:
+  - qa
+  - screenshot
+  - playwright
+  - codex
+  - visual
+  - auto-fix
+  triggers:
+  - landing-qa
+  inputs:
+  - 07b_COMPOSED/composed.html
+  outputs:
+  - 10_QA/visual-qa-report.md
+  gates:
+  - visual_qa_passed
+  pre_reqs:
+  - block-composer
+  related:
+  - gpt5-prompting-engine
+  - qa-auditor
+  confidence:
+    stage: low
+    pre_reqs: low
 - slug: wiki-audit-checklist
   type: rule
   name: Wiki Audit Checklist
@@ -1162,6 +1604,30 @@ concepts:
   - landing-orchestrator
   - landing-go
   - seo-tech-audit
+- slug: wiki-routing-observability
+  type: skill
+  name: Wiki Routing Observability
+  card: concepts/skills/wiki-routing-observability.md
+  source: skills/wiki-routing-observability/SKILL.md
+  tags:
+  - wiki
+  - observability
+  - logging
+  - analytics
+  - routing
+  inputs:
+  - wiki/index.yaml
+  - logs/wiki-usage.jsonl
+  outputs:
+  - logs/wiki-usage.jsonl
+  - wiki/routing-report.md
+  pre_reqs:
+  - wiki
+  related:
+  - wiki
+  - wiki-audit-checklist
+  confidence:
+    triggers: low
 - slug: wp-builder
   type: agent
   name: WP-сборщик (Lazy Blocks)
@@ -1208,6 +1674,40 @@ concepts:
   - infographic-builder
   confidence:
     triggers: low
+- slug: wp-cli-deployer
+  type: skill
+  name: WP-CLI Deployer
+  card: concepts/skills/wp-cli-deployer.md
+  source: skills/wp-cli-deployer/SKILL.md
+  stage: 09
+  tags:
+  - deploy
+  - wordpress
+  - beget
+  - rsync
+  - wp-cli
+  - media-import
+  triggers:
+  - landing-deploy
+  inputs:
+  - 08_КОД/wp-theme/
+  - 08_КОД/page-content.html
+  - theme/assets/img/
+  - .env
+  outputs:
+  - deployed-wordpress-theme
+  - media-library-attachments
+  - front-page-seeded
+  pre_reqs:
+  - wp-builder
+  - frontend-builder
+  related:
+  - wp-builder
+  - qa-auditor
+  - landing-orchestrator
+  - frontend-builder
+  confidence:
+    pre_reqs: low
 - slug: wp-deployer
   type: agent
   name: WP Deployer — Деплой-инженер
@@ -1238,3 +1738,73 @@ concepts:
   confidence:
     triggers: low
     inputs: low
+- slug: wp-gutenberg-block-builder
+  type: skill
+  name: WP Gutenberg Block Builder
+  card: concepts/skills/wp-gutenberg-block-builder.md
+  source: skills/wp-gutenberg-block-builder/SKILL.md
+  stage: 08
+  tags:
+  - wordpress
+  - lazy-blocks
+  - gutenberg
+  - theme
+  - stage-08
+  - code-generation
+  triggers:
+  - landing-build
+  inputs:
+  - 05_ДИЗАЙН-СИСТЕМА/tokens.json
+  - 06_СТЕК/design-stack.yaml
+  - 07_КОНТЕНТ/final-copy.md
+  - 08_КОД/block-spec.yaml
+  outputs:
+  - 08_КОД/wp-theme/style.css
+  - 08_КОД/wp-theme/functions.php
+  - 08_КОД/wp-theme/assets/css/main.css
+  - 08_КОД/wp-theme/blocks/lazyblock-<slug>/block.php
+  - 08_КОД/page-content.html
+  pre_reqs:
+  - design-system-generator
+  - stack-planner
+  - content-writer
+  related:
+  - wp-builder
+  - frontend-builder
+  - block-composer
+  - landing-orchestrator
+  - wp-deployer
+  - design-system-generator
+  confidence:
+    triggers: low
+- slug: wp-landing-config
+  type: skill
+  name: WP Landing Config — mu-plugin для настройки лендинга
+  card: concepts/skills/wp-landing-config.md
+  source: skills/wp-landing-config/SKILL.md
+  stage: 08
+  tags:
+  - wordpress
+  - multisite
+  - crm
+  - cta
+  - seo
+  - admin-ui
+  - mu-plugin
+  triggers:
+  - landing-admin-install
+  inputs:
+  - project-dir
+  outputs:
+  - wp-content/mu-plugins/landing-config/
+  pre_reqs:
+  - wp-builder
+  - wp-deployer
+  related:
+  - integrations-engineer
+  - analytics-engineer
+  - frontend-builder
+  - seo-optimizer
+  confidence:
+    stage: low
+    pre_reqs: low

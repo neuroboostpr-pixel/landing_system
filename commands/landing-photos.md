@@ -22,8 +22,8 @@ description: Stage 07c (PR-B) — обработка клиентских фот
 1. `<project>/.landing-state.yaml:stages.05_design.status == approved` — иначе:
    > Сначала утверди дизайн-систему (`05_ДИЗАЙН-СИСТЕМА/DESIGN.md`) — без `tokens.json` промпты codex не могут попасть в стиль.
 
-2. `<project>/07a_WIREFRAME/selections.yaml` существует AND содержит выбранные варианты — иначе:
-   > Сначала выбери варианты блоков в `wireframe.html` — нужно знать какие photo-слоты будут в финальном лендинге.
+2. `<project>/07_ПРОТОТИП/prototype.yaml` существует — иначе:
+   > Сначала импортируй прототип (`/landing-prototype`) — photo-слоты выводятся из прототипа.
 
 ## Что происходит
 

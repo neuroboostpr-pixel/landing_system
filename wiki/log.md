@@ -12552,3 +12552,125 @@
 - error skills/wp-cli-deployer/SKILL.md: SDK call failed: Claude Code returned an error result: success
 - error skills/wp-gutenberg-block-builder/SKILL.md: SDK call failed: Claude Code returned an error result: success
 - error skills/wp-landing-config/SKILL.md: SDK call failed: Claude Code returned an error result: success
+
+## [2026-06-12] compile --source-mode=system
+- skipped agents/analytics-engineer.md
+- skipped agents/block-composer.md
+- skipped agents/brand-architect.md
+- skipped agents/client-assets-collector.md
+- skipped agents/content-writer.md
+- skipped agents/design-system-generator.md
+- skipped agents/frontend-builder.md
+- skipped agents/icon-generator.md
+- skipped agents/infographic-builder.md
+- skipped agents/integrations-engineer.md
+- skipped agents/landing-onboarding-wizard.md
+- skipped agents/landing-orchestrator.md
+- skipped agents/lifecycle-keeper.md
+- skipped agents/migration-engineer.md
+- skipped agents/moodboard-composer.md
+- skipped agents/niche-analyst.md
+- skipped agents/onboarding-guide.md
+- skipped agents/photo-classifier.md
+- skipped agents/photo-curator.md
+- skipped agents/photo-matcher.md
+- skipped agents/photo-preview-board.md
+- skipped agents/photo-stylist.md
+- skipped agents/prototype-importer.md
+- skipped agents/qa-auditor.md
+- skipped agents/references-curator.md
+- skipped agents/scene-director.md
+- skipped agents/seo-optimizer.md
+- skipped agents/stack-planner.md
+- skipped agents/style-extractor.md
+- skipped agents/system-setup.md
+- skipped agents/visual-curator.md
+- skipped agents/visual-strategist.md
+- skipped agents/wp-builder.md
+- skipped agents/wp-deployer.md
+- skipped skills/block-composition/SKILL.md
+- skipped skills/brand-kit-build/SKILL.md
+- skipped skills/client-assets-collection/SKILL.md
+- skipped skills/design-tokens-generation/SKILL.md
+- skipped skills/gpt5-prompting-engine/SKILL.md
+- skipped skills/landing-from-context/SKILL.md
+- skipped skills/landing-onboarding/SKILL.md
+- skipped skills/landing-project-init/SKILL.md
+- skipped skills/landing-versioning-and-cloning/SKILL.md
+- skipped skills/moodboard-creation/SKILL.md
+- skipped skills/niche-analysis/SKILL.md
+- skipped skills/paralaximus-codex/SKILL.md
+- skipped skills/photo-curation/SKILL.md
+- skipped skills/photo-styling/SKILL.md
+- skipped skills/prototype-import/SKILL.md
+- skipped skills/references-collection/SKILL.md
+- skipped skills/seo-tech-audit/SKILL.md
+- skipped skills/style-decomposition/SKILL.md
+- skipped skills/visual-concept-generator/SKILL.md
+- skipped skills/visual-generation/SKILL.md
+- skipped skills/visual-qa/SKILL.md
+- skipped skills/wiki-routing-observability/SKILL.md
+- skipped skills/wp-cli-deployer/SKILL.md
+- skipped skills/wp-gutenberg-block-builder/SKILL.md
+- skipped skills/wp-landing-config/SKILL.md
+- skipped commands/landing-niche.md
+- skipped template/01a_АНАЛИЗ_НИШИ/README.md
+- skipped docs/standards/wiki-audit-checklist.md
+- deferred commands/landing-references.md
+- deferred commands/landing-rollback.md
+- deferred commands/landing-setup.md
+- deferred commands/landing-stack.md
+- deferred commands/landing-start.md
+- deferred commands/landing-status.md
+- deferred commands/landing-style.md
+- deferred commands/landing-visuals.md
+- deferred template/00_БРИФ/README.md
+- deferred template/01_КОНТЕКСТ/README.md
+- deferred template/02_МАТЕРИАЛЫ_КЛИЕНТА/README.md
+- deferred template/03_РЕФЕРЕНСЫ/README.md
+- deferred template/03b_КОНЦЕПТ/README.md
+- deferred template/04_БРЕНД/README.md
+- deferred template/05_ДИЗАЙН-СИСТЕМА/README.md
+- deferred template/06_СТЕК/README.md
+- deferred template/07_КОНТЕНТ/README.md
+- deferred template/07_ПРОТОТИП/README.md
+- deferred template/07b_COMPOSED/README.md
+- deferred template/07c_PHOTOS/README.md
+- deferred template/07d_VISUALS/README.md
+- deferred template/08_КОД/README.md
+- deferred template/09_ДЕПЛОЙ/README.md
+- deferred template/10_QA/README.md
+- deferred template/11_АНАЛИТИКА/README.md
+- deferred template/12_SEO/README.md
+- deferred template/13_СЕГМЕНТЫ_ЦА/README.md
+- deferred template/memory/README.md
+- deferred template/wiki/README.md
+- deferred docs/standards/block-lifecycle.md
+- deferred docs/standards/block-template-format.md
+- deferred docs/standards/premium-07b-checklist.md
+- deferred docs/standards/prototype-fidelity.md
+- deferred docs/standards/stage-07-content-correct-flow.md
+- deferred docs/standards/stage-08-spec-lint.md
+- deferred docs/standards/stage-agent-preamble.md
+- deferred docs/standards/stage-execution-protocol.md
+- deferred block-library/README.md
+- error skills/wp-multisite/SKILL.md: SDK call failed: Claude Code returned an error result: success
+- error skills/wp-theme-assembler/SKILL.md: SDK call failed: Claude Code returned an error result: success
+- error commands/landing-brand.md: SDK call failed: Claude Code returned an error result: success
+- error commands/landing-build.md: SDK call failed: Claude Code returned an error result: success
+- error commands/landing-clone.md: SDK call failed: Claude Code returned an error result: success
+- error commands/landing-compose.md: SDK call failed: Claude Code returned an error result: success
+- error commands/landing-content.md: SDK call failed: Claude Code returned an error result: success
+- error commands/landing-deploy.md: SDK call failed: Claude Code returned an error result: success
+- error commands/landing-design.md: SDK call failed: Claude Code returned an error result: success
+- error commands/landing-final-check.md: SDK call failed: Claude Code returned an error result: success
+- error commands/landing-from-context.md: SDK call failed: Claude Code returned an error result: success
+- error commands/landing-go.md: SDK call failed: Claude Code returned an error result: success
+- error commands/landing-help.md: SDK call failed: Claude Code returned an error result: success
+- error commands/landing-moodboard.md: SDK call failed: Claude Code returned an error result: success
+- error commands/landing-new.md: SDK call failed: Claude Code returned an error result: success
+- error commands/landing-onboarding.md: SDK call failed: Claude Code returned an error result: success
+- error commands/landing-photos.md: SDK call failed: Claude Code returned an error result: success
+- error commands/landing-previews.md: SDK call failed: Claude Code returned an error result: success
+- error commands/landing-prototype.md: SDK call failed: Claude Code returned an error result: success
+- error commands/landing-qa.md: SDK call failed: Claude Code returned an error result: success

@@ -15,7 +15,7 @@ description: Stage 07 — import user-provided prototype (PDF or MD) from <proje
    ```bash
    python3 skills/prototype-import/scripts/validate-prototype.py 07_ПРОТОТИП/prototype.yaml
    ```
-5. Сообщает summary + предлагает запустить `/landing-wireframe`.
+5. Сообщает summary + предлагает запустить `/landing-go`.
 
 ## Артефакты после выполнения
 
@@ -30,7 +30,7 @@ description: Stage 07 — import user-provided prototype (PDF or MD) from <proje
 
 ## После одобрения
 
-Запускай `/landing-wireframe`.
+Запускай `/landing-go`.
 
 ## Запуск
 
