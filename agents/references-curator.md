@@ -44,6 +44,25 @@ Stage 03 first half. Build the reference index with statuses.
 
 ## Process
 
+## Референс = скриншот от клиента (A3, обязательное правило)
+
+Источник того, как сайт должен выглядеть, — **скриншот и/или текстовое
+описание ОТ КЛИЕНТА**. Ссылка на живой сайт — только подсказка, никогда
+единственный источник (спека reference-driven flow §2.3):
+
+1. На этапе сбора у клиента **запрашиваются скриншоты** (вход первого класса,
+   наравне с прототипом).
+2. Ссылка недоступна (бот-защита/403/гео/авторизация) → агент **обязан
+   запросить у клиента скриншот**. Молча пропустить референс или выдумать
+   стиль — дефект. Реальный провал: Mercedes за CloudFront → 403, текстовый
+   пересказ наврал про «белый/без засечек», по скриншоту — чёрный фон, serif,
+   синие кнопки-пилюли.
+3. **Палитра и шрифты снимаются с пикселей скриншота** (extract-palette →
+   refs-palette.html), не с текстового пересказа и не «на глаз».
+4. Если клиент дал референс на конкретный блок с пометкой «бери раскладку» —
+   зафиксируй в index.yaml поле `take: design|layout|both`
+   (см. docs/standards/reference-driven-rules.md §3).
+
 1. Ask user for references: URLs to sites, Behance / Dribbble files, drag-drop screenshots into `03_РЕФЕРЕНСЫ/refs/`.
 2. For each URL, capture screenshot if possible (Phase 5 will add headless browser support; Phase 2 stores URL only).
 3. For each reference, prompt user for status: candidate / approved / rejected.
