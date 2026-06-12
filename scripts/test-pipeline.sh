@@ -2,7 +2,7 @@
 # test-pipeline.sh — Complete PR-A test for ANY project in one command.
 #
 # Creates a new project, drops a prototype, runs the full pipeline:
-#   prototype.md/pdf  →  prototype.yaml  →  wireframe.html  →  composed.html
+#   prototype.md/pdf  →  prototype.yaml  →  composed.html (рисует агент)
 #
 # Usage:
 #   bash scripts/test-pipeline.sh <slug> <path-to-prototype>
@@ -153,13 +153,9 @@ echo "▸ Validating prototype schema..."
 $PYTHON_CMD "$LS_ROOT/skills/prototype-import/scripts/validate-prototype.py" \
   "$PROJECT/07_ПРОТОТИП/prototype.yaml"
 
-# --- Step 4: Render wireframe ---
-echo ""
-echo "▸ Step 4/6: Render interactive wireframe (with ui-ux-pro-max integration)"
-$PYTHON_CMD "$LS_ROOT/skills/wireframe-rendering/scripts/render-wireframe.py" \
-  --project "$PROJECT" \
-  --library "$LS_ROOT/block-library" \
-  --template "$LS_ROOT/skills/wireframe-rendering/templates/wireframe-shell.html"
+# --- Step 4: (removed) wireframe rendering — блочный трек в архиве ---
+# Reference-driven flow: агент рисует composed.html сам по прототипу и референсу.
+# См. docs/superpowers/specs/2026-06-12-reference-driven-flow-spec.md
 
 # --- Step 5: Create tokens.json (stub if missing) ---
 TOKENS_PATH="$PROJECT/05_ДИЗАЙН-СИСТЕМА/tokens.json"
@@ -187,59 +183,24 @@ JSON
   echo "   ✓ Stub tokens.json created (customize colors/fonts later via Stage 05)"
 fi
 
-# Auto-select first variant for each block (user normally does this in browser)
-echo ""
-echo "▸ Auto-selecting first variant per block (replace with real selections later)"
-$PYTHON_CMD - <<PY
-import yaml
-from datetime import datetime, timezone
-
-c = yaml.safe_load(open("$PROJECT/07a_WIREFRAME/candidates.yaml"))
-sel = []
-for b in c["blocks"]:
-    if b["candidates"]:
-        sel.append({"block_position": b["block_position"], "chosen_variant": b["candidates"][0]})
-
-now = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
-out = {"project_slug": "$SLUG", "selections": sel, "confirmed_at": now}
-with open("$PROJECT/07a_WIREFRAME/selections.yaml", "w") as f:
-    yaml.dump(out, f, sort_keys=False, allow_unicode=True)
-print(f"   ✓ Auto-picked {len(sel)} variants. Override in wireframe.html → Confirm.")
-PY
-
-# --- Step 6: Compose final ---
-echo ""
-echo "▸ Step 6/6: Compose final macros (composed.html + composed-mobile.html)"
-$PYTHON_CMD "$LS_ROOT/skills/block-composition/scripts/validate-selections.py" \
-  "$PROJECT/07a_WIREFRAME/selections.yaml"
-$PYTHON_CMD "$LS_ROOT/skills/block-composition/scripts/compose-blocks.py" \
-  --project "$PROJECT" \
-  --library "$LS_ROOT/block-library"
+# --- Step 6: (removed) machine compose из библиотеки — блочный трек в архиве ---
+# composed.html рисует агент (reference-driven flow); машинная склейка блоков
+# из block-library удалена вместе с wireframe-этапом.
 
 # --- Done ---
 echo ""
 echo "╔════════════════════════════════════════════════════════════╗"
-echo "║ ✅ Pipeline complete                                         ║"
+echo "║ ✅ Pipeline complete (prototype parse + validate)            ║"
 echo "╚════════════════════════════════════════════════════════════╝"
 echo ""
 echo "📂 Project folder: $PROJECT"
 echo ""
-echo "🎨 Open these files:"
-echo ""
-echo "   1) Wireframe (interactive — variant picker per block):"
-echo "      open \"$PROJECT/07a_WIREFRAME/wireframe.html\""
-echo ""
-echo "   2) Composed final (with tokens applied):"
-echo "      open \"$PROJECT/07b_COMPOSED/composed.html\""
-echo ""
-echo "   3) Block library gallery (all 35 blocks browsable):"
-echo "      open \"$LS_ROOT/block-library/gallery.html\""
-echo ""
+echo "Дальше: агент рисует макет 07b_COMPOSED/composed.html по правилам"
+echo "reference-driven спеки (структура из прототипа, вид из референса)."
 
 if [ "${SKIP_OPEN:-0}" != "1" ] && command -v open >/dev/null 2>&1; then
-  open "$PROJECT/07a_WIREFRAME/wireframe.html" \
-       "$PROJECT/07b_COMPOSED/composed.html" \
-       "$LS_ROOT/block-library/gallery.html" 2>/dev/null || true
+  [ -f "$PROJECT/07b_COMPOSED/composed.html" ] && \
+    open "$PROJECT/07b_COMPOSED/composed.html" 2>/dev/null || true
 fi
 
 # --- PR-B Photo stage (optional, only if sample photos are available) ---
