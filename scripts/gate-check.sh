@@ -121,12 +121,11 @@ else
 fi
 
 # 1b. Soft-lock warning: для soft-этапов — если предыдущий по pipeline не approved
-PIPELINE_ORDER=(
-    "00_brief" "01_context" "01a_niche_analysis" "02_assets" "03_references"
-    "04_brand" "05_design" "06_stack" "07_content" "07a_prototype"
-    "07b_wireframe" "07c_composed" "07d_photos" "07e_visuals" "07f_composed_final"
-    "08_build" "10_qa" "09_deploy" "11_analytics" "12_seo"
-)
+# Порядок этапов — из config/stages.yaml (E1, single source of truth)
+PIPELINE_ORDER=()
+while IFS= read -r _sid; do
+    PIPELINE_ORDER+=("$_sid")
+done < <("$PYTHON_CMD" "$__SCRIPT_DIR__/stages.py" --order)
 
 stage_lock="$(yq -r ".stages.\"$stage\".lock // \"soft\"" "$GATES_YAML")"
 
