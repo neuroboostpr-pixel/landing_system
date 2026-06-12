@@ -34,7 +34,6 @@
 ## 🤖 Агенты
 
 - [[analytics-engineer]] — Инженер аналитики
-- [[block-composer]] — Block Composer (Сборка composed.html)
 - [[brand-architect]] — Brand Architect
 - [[client-assets-collector]] — Сборщик клиентских материалов
 - [[content-writer]] — Контент-райтер
@@ -127,6 +126,7 @@
 
 ## 📐 Правила (стандарты качества)
 
+- [[premium-07b-checklist]] — PREMIUM 07b — Чек-лист сборки composed.html
 - [[stage-08-spec-lint]] — Stage-08 Composed ↔ block-spec Lint
 - [[stage-agent-preamble]] — Stage Agent Preamble (канонический блок)
 - [[stage-execution-protocol]] — Протокол выполнения этапов (обязательный)

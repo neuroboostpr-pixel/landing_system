@@ -1,14 +1,14 @@
 version: 1
-generated_at: '2026-06-12T18:12:36+00:00'
+generated_at: '2026-06-12T18:12:59+00:00'
 counts:
   total: 111
   by_type:
     stage: 19
-    agent: 32
+    agent: 31
     skill: 26
     catalog: 3
     command: 27
-    rule: 4
+    rule: 5
 concepts:
 - slug: 00-brif
   type: stage
@@ -633,44 +633,6 @@ concepts:
   confidence:
     triggers: low
     gates: low
-- slug: block-composer
-  type: agent
-  name: Block Composer (Сборка composed.html)
-  card: concepts/agents/block-composer.md
-  source: agents/block-composer.md
-  stage: 07b
-  tags:
-  - compose
-  - html
-  - design-tokens
-  - prototype
-  - wireframe
-  - premium
-  triggers:
-  - landing-compose
-  inputs:
-  - 07_ПРОТОТИП/prototype.yaml
-  - 07a_WIREFRAME/selections.yaml
-  - 05_ДИЗАЙН-СИСТЕМА/tokens.json
-  - block-library/
-  outputs:
-  - 07b_COMPOSED/composed.html
-  - 07b_COMPOSED/composed-mobile.html
-  - 07b_COMPOSED/composed-explained.md
-  gates:
-  - verify-composed-premium
-  - content-preserved
-  pre_reqs:
-  - landing-wireframe
-  - landing-design
-  related:
-  - landing-compose
-  - landing-prototype
-  - landing-photos
-  - landing-visuals
-  - landing-build
-  confidence:
-    triggers: low
 - slug: block-composition
   type: skill
   name: Block Composition — сборка composed.html
@@ -2494,6 +2456,52 @@ concepts:
   - photo-matcher
   confidence:
     triggers: low
+- slug: premium-07b-checklist
+  type: rule
+  name: PREMIUM 07b — Чек-лист сборки composed.html
+  card: concepts/rules/premium-07b-checklist.md
+  source: docs/standards/premium-07b-checklist.md
+  stage: 07b
+  tags:
+  - composed
+  - premium
+  - checklist
+  - frontend
+  - css
+  - javascript
+  - accessibility
+  - mobile
+  triggers:
+  - landing-compose
+  inputs:
+  - 00-brif
+  - 04-brend
+  - 05-dizayn-sistema
+  - 07-kontent
+  - 07-prototip
+  outputs:
+  - block-composition
+  gates:
+  - all_inputs_present
+  - file_size_60_150kb
+  - lighthouse_performance_85
+  - lighthouse_accessibility_90
+  - composed_mobile_preview_exists
+  - composed_explained_md_exists
+  - photo_mapping_yaml_exists
+  pre_reqs:
+  - 04-brend
+  - 05-dizayn-sistema
+  - 07-kontent
+  - 07-prototip
+  - landing-wireframe
+  related:
+  - landing-compose
+  - block-composer
+  - block-composition
+  - ux-composer
+  - landing-design
+  - landing-wireframe
 - slug: prototype-import
   type: skill
   name: Импорт прототипа
