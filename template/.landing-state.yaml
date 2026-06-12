@@ -48,10 +48,11 @@ stages:
   # Final re-render after photos + visuals
   "07f_composed_final":   {status: locked, timestamp: ""}
 
-  # Build / style / deploy / qa / analytics / seo (existing)
+  # Build / style / qa / deploy / analytics / seo
+  # 10_qa ПЕРЕД 09_deploy: stage-gates требует approved 10_qa для деплоя
   "08_build":             {status: locked, timestamp: ""}
   "08b_style":            {status: locked, timestamp: ""}
-  "09_deploy":            {status: locked, timestamp: ""}
   "10_qa":                {status: locked, timestamp: ""}
+  "09_deploy":            {status: locked, timestamp: ""}
   "11_analytics":         {status: locked, timestamp: ""}
   "12_seo":               {status: locked, timestamp: ""}
