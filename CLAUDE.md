@@ -157,7 +157,9 @@ bash scripts/migrate-template-readmes.sh ~/Lendings/<existing-project>
 **Правило 07b:** HARD GATE 07b не закрывается, пока `verify-composed-premium.sh` не вернёт exit 0. Если фичи отсутствуют — `block-composer` обязан доработать composed.html, а не предлагать «и так сойдёт».
 
 Эталон-референс — `~/Lendings/dubai-avto-liza/07b_COMPOSED/composed.html`
-(1757 строк, все 13 premium-фич, реальные фото).
+(1757 строк, реальные фото). Обязательный минимум — premium-чеклист v2
+(verify-composed-premium.sh): токены/clamp/движение/головa документа/без эмодзи;
+интерактивные фичи — под потребность места (design-elements-rules.md).
 
 ## Asset Pipeline (Stage-08)
 

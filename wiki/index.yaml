@@ -1,13 +1,13 @@
 version: 1
-generated_at: '2026-06-12T18:06:52+00:00'
+generated_at: '2026-06-12T18:10:28+00:00'
 counts:
-  total: 109
+  total: 112
   by_type:
     stage: 19
-    agent: 30
+    agent: 32
     skill: 26
     catalog: 3
-    command: 26
+    command: 27
     rule: 5
 concepts:
 - slug: 00-brif
@@ -633,6 +633,44 @@ concepts:
   confidence:
     triggers: low
     gates: low
+- slug: block-composer
+  type: agent
+  name: Block Composer (Сборка composed.html)
+  card: concepts/agents/block-composer.md
+  source: agents/block-composer.md
+  stage: 07b
+  tags:
+  - compose
+  - html
+  - design-tokens
+  - prototype
+  - wireframe
+  - premium
+  triggers:
+  - landing-compose
+  inputs:
+  - 07_ПРОТОТИП/prototype.yaml
+  - 07a_WIREFRAME/selections.yaml
+  - 05_ДИЗАЙН-СИСТЕМА/tokens.json
+  - block-library/
+  outputs:
+  - 07b_COMPOSED/composed.html
+  - 07b_COMPOSED/composed-mobile.html
+  - 07b_COMPOSED/composed-explained.md
+  gates:
+  - verify-composed-premium
+  - content-preserved
+  pre_reqs:
+  - landing-wireframe
+  - landing-design
+  related:
+  - landing-compose
+  - landing-prototype
+  - landing-photos
+  - landing-visuals
+  - landing-build
+  confidence:
+    triggers: low
 - slug: block-composition
   type: skill
   name: Block Composition — сборка composed.html
@@ -1153,6 +1191,39 @@ concepts:
   - landing-orchestrator
   confidence:
     stage: low
+- slug: landing-compose
+  type: command
+  name: /landing-compose — Сборка composed.html
+  card: concepts/commands/landing-compose.md
+  source: commands/landing-compose.md
+  stage: 07b
+  tags:
+  - compose
+  - wireframe
+  - tokens
+  - html
+  - stage-07b
+  triggers:
+  - landing-compose
+  inputs:
+  - 07_ПРОТОТИП/prototype.yaml
+  - 07a_WIREFRAME/selections.yaml
+  - 05_ДИЗАЙН-СИСТЕМА/tokens.json
+  outputs:
+  - 07b_COMPOSED/composed.html
+  - 07b_COMPOSED/composed-mobile.html
+  - 07b_COMPOSED/block-injection-log.md
+  pre_reqs:
+  - wireframe-rendering
+  - design-tokens-generation
+  - prototype-import
+  related:
+  - block-composer
+  - block-composition
+  - wireframe-rendering
+  - design-tokens-generation
+  - prototype-import
+  - landing-orchestrator
 - slug: landing-content
   type: command
   name: Контент-адаптация прототипа (Stage 07)
@@ -1541,6 +1612,46 @@ concepts:
   confidence:
     stage: low
     pre_reqs: low
+- slug: landing-orchestrator
+  type: agent
+  name: Главный дирижёр (Landing Orchestrator)
+  card: concepts/agents/landing-orchestrator.md
+  source: agents/landing-orchestrator.md
+  tags:
+  - orchestrator
+  - workflow
+  - pipeline
+  - stages
+  - hard-gate
+  triggers:
+  - landing-go
+  - landing-new
+  - landing-build
+  - landing-deploy
+  inputs:
+  - .landing-state.yaml
+  - 07_ПРОТОТИП/source/prototype.pdf
+  - config/stage-gates.yaml
+  outputs:
+  - wiki/pipeline-map.md
+  - 00_БРИФ/brief.md
+  - артефакты каждого этапа
+  pre_reqs:
+  - landing-onboarding-wizard
+  related:
+  - niche-analyst
+  - brand-architect
+  - content-writer
+  - design-system-generator
+  - moodboard-composer
+  - client-assets-collector
+  - photo-curator
+  - block-composer
+  - integrations-engineer
+  - analytics-engineer
+  - lifecycle-keeper
+  confidence:
+    triggers: low
 - slug: landing-photos
   type: command
   name: /landing-photos — Конвейер клиентских фото (stage 07c)

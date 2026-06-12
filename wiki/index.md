@@ -2,7 +2,7 @@
 
 > Авто-сгенерированный индекс. Обновляется при `python -m scripts.wiki.compile --source-mode=system`.
 
-**Концептов всего:** 109
+**Концептов всего:** 112
 **Категории:** agent, catalog, command, rule, skill, stage
 
 **Известные ограничения:**
@@ -34,6 +34,7 @@
 ## 🤖 Агенты
 
 - [[analytics-engineer]] — Инженер аналитики
+- [[block-composer]] — Block Composer (Сборка composed.html)
 - [[brand-architect]] — Brand Architect
 - [[client-assets-collector]] — Сборщик клиентских материалов
 - [[content-writer]] — Контент-райтер
@@ -43,6 +44,7 @@
 - [[infographic-builder]] — Infographic Builder
 - [[integrations-engineer]] — integrations-engineer
 - [[landing-onboarding-wizard]] — Онбординг-визард нового проекта
+- [[landing-orchestrator]] — Главный дирижёр (Landing Orchestrator)
 - [[lifecycle-keeper]] — Lifecycle Keeper — Хранитель версий
 - [[moodboard-composer]] — Moodboard Composer
 - [[niche-analyst]] — Аналитик ниши (Stage 01a)
@@ -98,6 +100,7 @@
 - [[landing-brand]] — /landing-brand — Построить бренд-кит
 - [[landing-build]] — /landing-build — Сборка WordPress-темы
 - [[landing-clone]] — Клонирование лендинга
+- [[landing-compose]] — /landing-compose — Сборка composed.html
 - [[landing-content]] — Контент-адаптация прототипа (Stage 07)
 - [[landing-deploy]] — Деплой лендинга на Бегет (/landing-deploy)
 - [[landing-design]] — Генерация дизайн-системы (этап 05)
