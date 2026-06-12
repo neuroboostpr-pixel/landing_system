@@ -50,8 +50,41 @@ def _ocr_image(image: Path) -> str | None:
         from PIL import Image  # type: ignore
     except ImportError:
         return None
+    img = Image.open(image)
+    for lang in ("rus+eng", "eng"):
+        try:
+            return pytesseract.image_to_string(img, lang=lang)
+        except Exception:
+            continue
+    return None
+
+
+def _ocr_pdf(pdf: Path) -> str | None:
+    """OCR PDF-скана: растеризация страниц (PyMuPDF) → pytesseract.
+
+    None если PyMuPDF/pytesseract недоступны или OCR упал.
+    """
     try:
-        return pytesseract.image_to_string(Image.open(image), lang="rus+eng")
+        import fitz  # type: ignore  # PyMuPDF
+        import pytesseract  # type: ignore
+        from PIL import Image  # type: ignore
+    except ImportError:
+        return None
+    import io
+    try:
+        doc = fitz.open(str(pdf))
+        parts: list[str] = []
+        for page in doc:
+            pix = page.get_pixmap(dpi=200)
+            img = Image.open(io.BytesIO(pix.tobytes("png")))
+            for lang in ("rus+eng", "eng"):
+                try:
+                    parts.append(pytesseract.image_to_string(img, lang=lang))
+                    break
+                except Exception:
+                    continue
+        text = "\n".join(parts).strip()
+        return text or None
     except Exception:
         return None
 
@@ -112,13 +145,18 @@ def main() -> None:
             capture_output=True, text=True, encoding="utf-8", errors="replace",
         )
         if r1.returncode != 0 or not r1.stdout.strip():
-            # сканированный PDF без текстового слоя — честно сообщаем,
-            # что полнота не проверена (OCR для PDF не настроен).
-            _unverified_pass(
-                proto_dir,
-                "PDF без текстового слоя (скан); OCR для PDF не настроен")
-            return
-        source_text_path.write_text(r1.stdout, encoding="utf-8")
+            # сканированный PDF без текстового слоя — пробуем OCR (PyMuPDF
+            # растеризация + pytesseract); если недоступен — честный N/A.
+            text = _ocr_pdf(source)
+            if not text:
+                _unverified_pass(
+                    proto_dir,
+                    "PDF без текстового слоя (скан); OCR недоступен "
+                    "(установи pymupdf + pytesseract + tesseract)")
+                return
+            source_text_path.write_text(text, encoding="utf-8")
+        else:
+            source_text_path.write_text(r1.stdout, encoding="utf-8")
     elif ext in (".md", ".txt"):
         source_text_path.write_text(
             source.read_text(encoding="utf-8"), encoding="utf-8")
