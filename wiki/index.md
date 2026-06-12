@@ -2,8 +2,8 @@
 
 > Авто-сгенерированный индекс. Обновляется при `python -m scripts.wiki.compile --source-mode=system`.
 
-**Концептов всего:** 22
-**Категории:** agent, command, rule, stage
+**Концептов всего:** 40
+**Категории:** agent, command, rule, skill, stage
 
 **Известные ограничения:**
 - Блоки из `block-library/` ещё не в wiki — отдельная задача.
@@ -34,6 +34,27 @@
 - [[photo-classifier]] — Классификатор фото
 - [[photo-curator]] — Куратор фотографий — оркестратор этапа 07c
 - [[photo-matcher]] — Агент сопоставления фото со слотами
+- [[photo-preview-board]] — Photo Preview Board — обработка слотов и рендер превью
+- [[photo-stylist]] — Photo Stylist
+- [[prototype-importer]] — Импортёр прототипа
+- [[qa-auditor]] — QA-аудитор
+- [[references-curator]] — Куратор референсов
+- [[scene-director]] — Режиссёр сцен (Cinematic Premium)
+- [[seo-optimizer]] — SEO-оптимизатор
+- [[stack-planner]] — Планировщик стека (Stack Planner)
+- [[style-extractor]] — Style Extractor
+- [[system-setup]] — Настройщик системы
+- [[visual-curator]] — Куратор визуалов
+- [[wp-builder]] — WP-сборщик (Lazy Blocks)
+- [[wp-deployer]] — WP Deployer — Деплой-инженер
+
+## 🛠 Скиллы
+
+- [[block-composition]] — Block Composition — сборка composed.html
+- [[brand-kit-build]] — Построение бренд-кита
+- [[client-assets-collection]] — Сбор материалов клиента
+- [[design-tokens-generation]] — Генерация дизайн-токенов
+- [[gpt5-prompting-engine]] — GPT-5 Prompting Engine
 
 ## ⚡ Команды
 
