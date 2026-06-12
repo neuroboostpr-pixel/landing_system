@@ -108,7 +108,7 @@ If either gate fails: exit 1 with the relevant Russian message.
 
 10. **HARD GATE.** Print: `Открой 07c_PHOTOS/photo-preview.html — проверь как фотки лягут в макет. После approve — composed.html будет перерендерен.` Wait for user.
 
-11. **Re-render composed.** Run `python3 skills/block-composition/scripts/compose-blocks.py --project <project>` (existing PR-A; it now reads `07c_PHOTOS/selections.yaml`).
+11. **Re-render composed.** Run `python3 skills/block-composition/scripts/rerender-composed.py --project <project>` — подставляет processed-фото из `07c_PHOTOS/selections.yaml` в data-slot'ы готового composed.html (машинная склейка из библиотеки в архиве).
 
 12. Mark `STATE.yaml:stages.process` done. Print success summary in Russian.
 

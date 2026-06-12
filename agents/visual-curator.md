@@ -68,7 +68,7 @@ If either gate fails: exit 1 with the relevant Russian message.
 
 4. **Inject.**
    ```bash
-   python3 skills/block-composition/scripts/compose-blocks.py --project <project>
+   python3 skills/block-composition/scripts/rerender-composed.py --project <project>
    ```
    This now reads `07d_VISUALS/icons/` and `07d_VISUALS/infographics/`. Backward compatible: if 07d_VISUALS missing, placeholder behavior preserved.
 

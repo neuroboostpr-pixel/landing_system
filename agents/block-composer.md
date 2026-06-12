@@ -137,13 +137,10 @@ bash "$LANDING_SYSTEM_ROOT/scripts/verify-composed-premium.sh" \
 
 ## Workflow
 
-1. Проверь входы: `07_ПРОТОТИП/prototype.yaml` и `05_ДИЗАЙН-СИСТЕМА/tokens.json` существуют.
-2. Запусти end-to-end composer:
-   ```bash
-   python3 skills/block-composition/scripts/compose-blocks.py \
-       --project "$PWD" \
-       --library "$LANDING_SYSTEM_ROOT/block-library"
-   ```
+1. Проверь входы: `07_ПРОТОТИП/prototype.md` (канон) и `05_ДИЗАЙН-СИСТЕМА/tokens.json` существуют.
+2. **НАРИСУЙ макет** `07b_COMPOSED/composed.html` сам (коллаж, глубина) по
+   правилам трёх источников и design-elements-rules. Машинной склейки больше
+   нет. Поблочная сверка → `structure-check.md`.
 3. **Премиум-верификация (обязательно):**
    ```bash
    bash "$LANDING_SYSTEM_ROOT/scripts/verify-composed-premium.sh" \

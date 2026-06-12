@@ -33,7 +33,7 @@ description: Stage 07d (PR-C) — генерация иконок и инфог�
 1. Сканирует `composed.html` на icon и infographic слоты (`slot-scanner.py`).
 2. Для каждого слота — cache lookup по hash(hint+style+brand_color+niche). Если cache hit — copy без вызова codex.
 3. Если cache miss — диспатчит `icon-generator` или `infographic-builder` агента.
-4. После всех генераций — re-render composed.html через PR-A `compose-blocks.py` (он теперь читает `07d_VISUALS/`).
+4. После всех генераций — re-render composed.html через `rerender-composed.py` (читает `07d_VISUALS/`, подставляет `[SLOT: …]`/data-slot placeholders).
 
 См. [`agents/visual-curator.md`](../agents/visual-curator.md) для деталей.
 

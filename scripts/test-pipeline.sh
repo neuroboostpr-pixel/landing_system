@@ -314,7 +314,7 @@ if slots_path.exists():
     fi
 
     # Stage 3: re-render composed.html with visuals
-    $PYTHON_CMD "$LS_ROOT/skills/block-composition/scripts/compose-blocks.py" --project "$PROJECT" 2>/dev/null || true
+    $PYTHON_CMD "$LS_ROOT/skills/block-composition/scripts/rerender-composed.py" --project "$PROJECT" 2>/dev/null || true
 
     echo "  PR-C visual stage smoke test PASSED"
 fi
