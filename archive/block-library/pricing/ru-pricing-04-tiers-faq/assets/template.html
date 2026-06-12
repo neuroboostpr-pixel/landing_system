@@ -1,0 +1,71 @@
+<style>
+  :root { --lp-bg: #f5f5f5; --lp-text: #1a1a1a; --lp-accent: #333; --lp-border: #e0e0e0; --lp-bg-alt: #e8e8e8; --lp-text-muted: #999; --lp-font-body:system-ui,sans-serif; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:var(--lp-font-body); background:var(--lp-bg); color:var(--lp-text); }
+  .section { padding:80px 0; }
+  .wrap { max-width:1080px; margin:0 auto; padding:0 32px; }
+  .tiers-head { text-align:center; margin-bottom:48px; }
+  .tiers-head h2 { font-size:clamp(28px,3.5vw,42px); font-weight:700; letter-spacing:-0.02em; margin-bottom:10px; }
+  .tiers-head p { color:var(--lp-text-muted); font-size:16px; }
+  .tiers { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-bottom:80px; }
+  .tier { border:1px solid var(--lp-border); border-radius:12px; padding:28px; }
+  .tier.featured { border-color:var(--lp-accent); box-shadow:0 0 0 1px var(--lp-accent); }
+  .tier-badge { display:inline-block; background:var(--lp-accent); color:#fff; font-size:11px; font-weight:600; padding:3px 10px; border-radius:999px; margin-bottom:12px; }
+  .tier-name { font-size:17px; font-weight:600; margin-bottom:6px; }
+  .tier-price { font-size:38px; font-weight:700; letter-spacing:-0.02em; margin-bottom:4px; }
+  .tier-price small { font-size:14px; color:var(--lp-text-muted); font-weight:400; }
+  .tier-desc { color:var(--lp-text-muted); font-size:14px; margin-bottom:20px; }
+  .tier-btn { display:block; width:100%; padding:11px 18px; border-radius:8px; font:inherit; font-weight:500; cursor:pointer; text-align:center; text-decoration:none; font-size:15px; }
+  .btn-primary { background:var(--lp-accent); color:#fff; border:none; }
+  .btn-outline { background:transparent; color:var(--lp-text); border:1px solid var(--lp-border); }
+  .faq-head { margin-bottom:32px; }
+  .faq-head h3 { font-size:24px; font-weight:700; letter-spacing:-0.01em; }
+  .faq-item { border-top:1px solid var(--lp-border); padding:18px 0; }
+  .faq-q { font-size:15px; font-weight:600; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
+  .faq-q::after { content:"+"; font-size:20px; font-weight:400; color:var(--lp-text-muted); flex-shrink:0; }
+  .faq-a { font-size:14px; line-height:1.6; color:var(--lp-text-muted); }
+</style>
+<section class="section" data-block-id="ru-pricing-04-tiers-faq">
+<div class="wrap">
+<div class="tiers-head">
+<h2>{{slot:headline}}</h2>
+<p>{{slot:subhead}}</p>
+</div>
+<div class="tiers">
+<div class="tier">
+<div class="tier-name">{{slot:tier-1-name}}</div>
+<div class="tier-price">{{slot:tier-price}}</div>
+<div class="tier-desc">{{slot:tier-1-desc}}</div>
+<a class="tier-btn btn-outline" href="#contact">{{slot:tier-1-cta}}</a>
+</div>
+<div class="tier featured">
+<div class="tier-badge">Популярный</div>
+<div class="tier-name">{{slot:tier-2-name}}</div>
+<div class="tier-price">{{slot:div-1}}</div>
+<div class="tier-desc">{{slot:tier-2-desc}}</div>
+<a class="tier-btn btn-primary" href="#contact">{{slot:tier-2-cta}}</a>
+</div>
+<div class="tier">
+<div class="tier-name">{{slot:tier-3-name}}</div>
+<div class="tier-price">{{slot:tier-3-price}}</div>
+<div class="tier-desc">{{slot:tier-3-desc}}</div>
+<a class="tier-btn btn-outline" href="#contact">{{slot:tier-3-cta}}</a>
+</div>
+</div>
+<div class="faq-head">
+<h3>{{slot:faq-headline}}</h3>
+</div>
+<div class="faq-item">
+<div class="faq-q">{{slot:faq-1-q}}</div>
+<div class="faq-a">{{slot:faq-1-a}}</div>
+</div>
+<div class="faq-item">
+<div class="faq-q">{{slot:faq-2-q}}</div>
+<div class="faq-a">{{slot:faq-2-a}}</div>
+</div>
+<div class="faq-item">
+<div class="faq-q">{{slot:faq-3-q}}</div>
+<div class="faq-a">{{slot:faq-3-a}}</div>
+</div>
+</div>
+</section>

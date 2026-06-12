@@ -93,7 +93,7 @@ EOF
   PMP="$(cygpath -m "$PROJECT/01a_АНАЛИЗ_НИШИ/market-profile.md" 2>/dev/null || echo "$PROJECT/01a_АНАЛИЗ_НИШИ/market-profile.md")"
   PLS="$(cygpath -m "$PROJECT/01a_АНАЛИЗ_НИШИ/landing-structure.md" 2>/dev/null || echo "$PROJECT/01a_АНАЛИЗ_НИШИ/landing-structure.md")"
   PPO="$(cygpath -m "$PROJECT/01a_АНАЛИЗ_НИШИ/positioning.md" 2>/dev/null || echo "$PROJECT/01a_АНАЛИЗ_НИШИ/positioning.md")"
-  python "$ROOT/skills/niche-analysis/scripts/validate-market-profile.py" "$PMP"
-  python "$ROOT/skills/niche-analysis/scripts/validate-landing-structure.py" "$PLS"
-  python "$ROOT/skills/niche-analysis/scripts/validate-positioning.py" "$PPO"
+  python3 "$ROOT/skills/niche-analysis/scripts/validate-market-profile.py" "$PMP"
+  python3 "$ROOT/skills/niche-analysis/scripts/validate-landing-structure.py" "$PLS"
+  python3 "$ROOT/skills/niche-analysis/scripts/validate-positioning.py" "$PPO"
 }

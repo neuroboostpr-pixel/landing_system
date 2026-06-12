@@ -1,0 +1,13 @@
+# deploy-targets.yaml — окружения деплоя (staging / prod)
+# Заполни перед первым запуском /landing-deploy.
+# Используется deploy-wordpress.sh --env staging|prod
+
+staging:
+  beget_user: "TODO_STAGING_USER"        # логин Бегет для staging-аккаунта
+  beget_host: "staging.yourdomain.ru"    # хост staging (поддомен или отдельный хост)
+  beget_path: "/home/TODO/public_html/staging"  # путь к WP на сервере
+
+prod:
+  beget_user: "TODO_PROD_USER"           # логин Бегет для prod-аккаунта
+  beget_host: "yourdomain.ru"            # prod-домен
+  beget_path: "/home/TODO/public_html"   # путь к WP на сервере

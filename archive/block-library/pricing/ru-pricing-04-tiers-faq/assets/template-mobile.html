@@ -1,0 +1,27 @@
+<style>
+  :root { --lp-bg: #f5f5f5; --lp-text: #1a1a1a; --lp-accent: #333; --lp-border: #e0e0e0; --lp-text-muted: #999; --lp-font-body:system-ui,sans-serif; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:var(--lp-font-body); background:var(--lp-bg); color:var(--lp-text); width:375px; padding:40px 20px; display:flex; flex-direction:column; gap:20px; }
+  h2 { font-size:26px; font-weight:700; letter-spacing:-0.02em; text-align:center; }
+  .tier { border:1px solid var(--lp-border); border-radius:12px; padding:22px; }
+  .tier.featured { border-color:var(--lp-accent); }
+  .tier-badge { display:inline-block; background:var(--lp-accent); color:#fff; font-size:11px; font-weight:600; padding:2px 8px; border-radius:999px; margin-bottom:8px; }
+  .tier-name { font-size:16px; font-weight:600; margin-bottom:4px; }
+  .tier-price { font-size:32px; font-weight:700; letter-spacing:-0.02em; margin-bottom:16px; }
+  .tier-price small { font-size:13px; color:var(--lp-text-muted); font-weight:400; }
+  .tier-btn { display:block; width:100%; padding:11px; border-radius:8px; font:inherit; font-weight:500; cursor:pointer; text-align:center; text-decoration:none; }
+  .btn-primary { background:var(--lp-accent); color:#fff; border:none; }
+  .btn-outline { background:transparent; color:var(--lp-text); border:1px solid var(--lp-border); }
+  .faq-head h3 { font-size:20px; font-weight:700; margin-bottom:16px; }
+  .faq-item { border-top:1px solid var(--lp-border); padding:14px 0; }
+  .faq-q { font-size:14px; font-weight:600; margin-bottom:6px; }
+  .faq-a { font-size:13px; line-height:1.6; color:var(--lp-text-muted); }
+</style>
+<h2>{{slot:headline}}</h2>
+<div class="tier"><div class="tier-name">{{slot:tier-name}}</div><div class="tier-price">{{slot:tier-price}}</div><a class="tier-btn btn-outline" href="#contact">{{slot:tier-btn}}</a></div>
+<div class="tier featured"><div class="tier-badge">Популярный</div><div class="tier-name">{{slot:div-1}}</div><div class="tier-price">{{slot:div-2}}</div><a class="tier-btn btn-primary" href="#contact">{{slot:btn-primary}}</a></div>
+<div class="tier"><div class="tier-name">{{slot:tier-name}}</div><div class="tier-price">{{slot:div-3}}</div><a class="tier-btn btn-outline" href="#contact">{{slot:btn-outline}}</a></div>
+<div class="faq-head"><h3>{{slot:faq-headline}}</h3></div>
+<div class="faq-item"><div class="faq-q">{{slot:faq-1-q}}</div><div class="faq-a">{{slot:faq-1-a}}</div></div>
+<div class="faq-item"><div class="faq-q">{{slot:faq-2-q}}</div><div class="faq-a">{{slot:faq-2-a}}</div></div>
+<div class="faq-item"><div class="faq-q">{{slot:faq-3-q}}</div><div class="faq-a">{{slot:faq-3-a}}</div></div>

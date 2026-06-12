@@ -1,0 +1,107 @@
+<style>
+  :root {
+    --lp-bg: #f5f5f5;
+    --lp-text: #1a1a1a;
+    --lp-accent: #333;
+    --lp-border: #e0e0e0;
+    --lp-font-display: system-ui, sans-serif;
+    --lp-font-body: system-ui, sans-serif;
+    --spacing-md: 16px;
+    --spacing-lg: 32px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: var(--lp-font-body); background: var(--lp-bg); color: var(--lp-text); }
+  .faq-wrap { max-width: 800px; margin: 0 auto; padding: 60px 24px 80px; }
+  .faq-header { text-align: center; margin-bottom: 40px; }
+  .faq-header h2 { font-family: var(--lp-font-display); font-size: 2.4rem; font-weight: 700; margin-bottom: 10px; }
+  .faq-header p { color:#666; font-size: 1.1rem; }
+  .search-box { position: relative; margin-bottom: 28px; }
+  .search-box input { width: 100%; padding: 14px 46px 14px 18px; font-size: 1rem; border: 2px solid var(--lp-border); border-radius: 10px; background:#fff; outline: none; transition: border-color .2s; }
+  .search-box input:focus { border-color: var(--lp-accent); }
+  .search-box svg { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); color:#999; }
+  .faq-cats { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 36px; }
+  .faq-cat { padding: 9px 18px; border: 2px solid var(--lp-border); border-radius: 22px; background:#fff; font-size: .9rem; font-weight: 500; cursor: pointer; transition: all .2s; }
+  .faq-cat.active { background: var(--lp-accent); border-color: var(--lp-accent); color:#fff; }
+  .faq-list { display: flex; flex-direction: column; gap: 14px; }
+  .faq-item { background:#fff; border: 1px solid var(--lp-border); border-radius: 12px; overflow: hidden; }
+  .faq-question { width: 100%; padding: 18px 22px; text-align: left; font-size: 1rem; font-weight: 600; background: none; border: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 14px; }
+  .faq-icon { flex-shrink: 0; width: 20px; height: 20px; transition: transform .3s; }
+  .faq-item.open .faq-icon { transform: rotate(180deg); }
+  .faq-answer { max-height: 0; overflow: hidden; transition: max-height .3s ease-out; }
+  .faq-item.open .faq-answer { max-height: 400px; }
+  .faq-answer-content { padding: 0 22px 18px; color:#555; font-size: .95rem; line-height: 1.7; }
+  .footer-cta-block { margin-top: 56px; padding: 28px; background:#fff; border: 1px solid var(--lp-border); border-radius: 12px; text-align: center; }
+  .footer-cta-block h3 { font-size: 1.4rem; margin-bottom: 10px; }
+  .footer-cta-block p { color:#666; margin-bottom: 18px; }
+  .cta-btn { display: inline-block; padding: 12px 30px; background: var(--lp-accent); color:#fff; text-decoration: none; border-radius: 8px; font-weight: 600; }
+</style>
+<section class="faq-wrap" data-block-id="ru-faq-03-searchable">
+<header class="faq-header">
+<h2>{{slot:headline}}</h2>
+<p>{{slot:subhead}}</p>
+</header>
+<div class="search-box">
+<input aria-label="Поиск FAQ" id="faqSearch" placeholder="Поиск по вопросам..." type="text"/>
+<svg fill="none" height="18" viewbox="0 0 20 20" width="18"><path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM18 18l-4-4" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg>
+</div>
+<div class="faq-cats">
+<button class="faq-cat active" data-cat="all">Все</button>
+<button class="faq-cat" data-cat="cat1">{{slot:faq-cat-1}}</button>
+<button class="faq-cat" data-cat="cat2">{{slot:faq-cat-2}}</button>
+<button class="faq-cat" data-cat="cat3">{{slot:faq-cat-3}}</button>
+</div>
+<div class="faq-list" id="faqList">
+<div class="faq-item" data-cat="cat1">
+<button class="faq-question">
+<span>{{slot:faq-1-q}}</span>
+<svg class="faq-icon" fill="none" viewbox="0 0 20 20"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg>
+</button>
+<div class="faq-answer"><div class="faq-answer-content">{{slot:faq-1-a}}</div></div>
+</div>
+<div class="faq-item" data-cat="cat1">
+<button class="faq-question">
+<span>{{slot:faq-2-q}}</span>
+<svg class="faq-icon" fill="none" viewbox="0 0 20 20"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg>
+</button>
+<div class="faq-answer"><div class="faq-answer-content">{{slot:faq-2-a}}</div></div>
+</div>
+<div class="faq-item" data-cat="cat2">
+<button class="faq-question">
+<span>{{slot:faq-3-q}}</span>
+<svg class="faq-icon" fill="none" viewbox="0 0 20 20"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg>
+</button>
+<div class="faq-answer"><div class="faq-answer-content">{{slot:faq-3-a}}</div></div>
+</div>
+</div>
+<div class="footer-cta-block">
+<h3>Не нашли ответ?</h3>
+<p>Наш менеджер ответит в течение часа.</p>
+<a class="cta-btn" href="#contact">{{slot:footer-cta}}</a>
+</div>
+</section>
+<script>
+    const items = document.querySelectorAll('.faq-item');
+    items.forEach(item => {
+      item.querySelector('.faq-question').addEventListener('click', () => {
+        item.classList.toggle('open');
+      });
+    });
+    const search = document.getElementById('faqSearch');
+    search.addEventListener('input', () => {
+      const q = search.value.toLowerCase();
+      items.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = text.includes(q) ? '' : 'none';
+      });
+    });
+    document.querySelectorAll('.faq-cat').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.faq-cat').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const cat = btn.dataset.cat;
+        items.forEach(item => {
+          item.style.display = (cat === 'all' || item.dataset.cat === cat) ? '' : 'none';
+        });
+      });
+    });
+  </script>

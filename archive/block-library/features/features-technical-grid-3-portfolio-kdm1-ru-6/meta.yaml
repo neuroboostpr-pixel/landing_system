@@ -1,0 +1,63 @@
+category: features
+description: Технологический раздел с карточками преимуществ, миниатюрами производства
+  и кнопкой-пояснением.
+display_name_ru: features-technical-grid-3-portfolio-kdm1-ru-6 (grid-3)
+has_animation: false
+id: features-technical-grid-3-portfolio-kdm1-ru-6
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://portfolio.kdm1.ru/upload/iblock/c4c/ejaxky0hmu17f3t0aymzbkm7osq54n8x/Spetsodezhda-Siti.pdf
+layout_pattern: grid-3
+niches_suitable:
+- tech
+- services
+- ecommerce
+ru_market: true
+slots:
+- name: eyebrow
+  type: text
+- name: heading
+  required: true
+  type: text
+- name: subhead
+  type: text
+- name: feature-1-image-alt
+  type: text
+- name: feature-1-image
+  type: text
+- name: feature-1-badge
+  type: text
+- name: feature-1-title
+  type: text
+- name: feature-1-text
+  type: text
+- name: feature-2-image-alt
+  type: text
+- name: feature-2-image
+  type: text
+- name: feature-2-badge
+  type: text
+- name: feature-2-title
+  type: text
+- name: feature-2-text
+  type: text
+- name: feature-3-image-alt
+  type: text
+- name: feature-3-image
+  type: text
+- name: feature-3-badge
+  type: text
+- name: feature-3-title
+  type: text
+- name: feature-3-text
+  type: text
+- name: cta-url
+  type: text
+- name: cta-label
+  type: text
+- name: cta-note
+  type: text
+style_mood: technical
+type: features
+variant: null

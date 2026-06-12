@@ -1,0 +1,50 @@
+category: forms
+conversion_notes: 'Бинарный выбор выявляет ключевой приоритет клиента — цена vs качество,
+  скорость vs надёжность. Источник: Marquiz (подбор по параметрам для дифференциации).'
+created: '2026-05-13'
+description: 'Вопрос-сравнение «что важнее: А или Б»: две большие карточки, пользователь
+  выбирает приоритет.'
+display_name_ru: ru-quiz-13-comparison-question (centered)
+id: ru-quiz-13-comparison-question
+layout_pattern: centered
+layout_summary_ru: 'Два варианта на весь экран: карточка А и карточка Б. Заголовок
+  + иконка + описание. Radio CSS без JS. Помогает выявить приоритеты клиента для точного
+  предложения.'
+ru_market: true
+slots:
+- max_chars: 60
+  name: progress-label
+  required: false
+  type: text
+- max_chars: 120
+  name: question-text
+  required: true
+  type: text
+- max_chars: 50
+  name: option-a-title
+  required: true
+  type: text
+- max_chars: 100
+  name: option-a-description
+  required: false
+  type: text
+- max_chars: 50
+  name: option-b-title
+  required: true
+  type: text
+- max_chars: 100
+  name: option-b-description
+  required: false
+  type: text
+- max_chars: 80
+  name: question-comment
+  required: false
+  type: text
+source: manual
+source_attribution: marquiz.ru/blog/kak-otstroitsya-ot-konkurentov
+type: lead-form
+use_cases:
+- services
+- b2c
+- local
+variant: quiz

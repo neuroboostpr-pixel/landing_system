@@ -1,0 +1,58 @@
+category: social-proof
+conversion_notes: Логотипы известных клиентов — авторитет через ассоциацию. Серые
+  (не цветные) — профессионально и ненавязчиво. Упоминается в книге стр. 28 в контексте
+  социальных доказательств.
+created: '2026-05-13'
+description: Полоса логотипов компаний-клиентов (8 штук) с заголовком 'Нам доверяют'.
+  Серые логотипы создают доверие без акцента на конкретные бренды.
+display_name_ru: ru-social-proof-03-client-logos (grid-4)
+id: ru-social-proof-03-client-logos
+layout_pattern: grid-4
+layout_summary_ru: Горизонтальная полоса с заголовком и 8 логотипами клиентов в ряд.
+  Серые/монохромные логотипы, без цветов бренда. На mobile — 2 ряда по 4.
+ru_market: true
+slots:
+- max_chars: 60
+  name: headline
+  required: true
+  type: text
+- name: logo-1
+  ratio: '3:1'
+  required: true
+  type: photo
+- name: logo-2
+  ratio: '3:1'
+  required: true
+  type: photo
+- name: logo-3
+  ratio: '3:1'
+  required: true
+  type: photo
+- name: logo-4
+  ratio: '3:1'
+  required: true
+  type: photo
+- name: logo-5
+  ratio: '3:1'
+  required: false
+  type: photo
+- name: logo-6
+  ratio: '3:1'
+  required: false
+  type: photo
+- name: logo-7
+  ratio: '3:1'
+  required: false
+  type: photo
+- name: logo-8
+  ratio: '3:1'
+  required: false
+  type: photo
+source: manual
+source_attribution: PDF Как создать сайт-шедевр, страница 28
+type: logos
+use_cases:
+- services
+- b2c
+- local
+variant: clients

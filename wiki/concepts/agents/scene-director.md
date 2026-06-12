@@ -1,51 +1,50 @@
 ---
+slug: scene-director
 type: agent
-name: scene-director
-sources: ["agents/scene-director.md"]
-updated: 2026-05-15
-triggers: []
+name: "Режиссёр сцен (Cinematic Premium)"
 stage: "05"
-uses: ["design-system-generator", "brand-kit-build", "niche-analysis"]
-tags: ["cinematic", "motion", "gsap", "premium", "stage-05"]
+tags: [cinematic, design, motion, gsap, animation, parallax, scrolltrigger]
+triggers: []
+inputs:
+  - 00_БРИФ/brief.md
+  - 04_БРЕНД/brand-kit.md
+  - 05_ДИЗАЙН-СИСТЕМА/DESIGN.md
+outputs:
+  - 05_ДИЗАЙН-СИСТЕМА/scenes.md
+gates: []
+pre_reqs: [design-system-generator]
+related: [brand-architect, design-system-generator, block-composer]
+sources: ["agents/scene-director.md"]
+updated: 2026-05-26
+confidence: {triggers: low}
 ---
 
-# scene-director (Режиссёр сцен — Cinematic Premium)
+# Режиссёр сцен (Cinematic Premium)
 
 ## Что делает
-Проектирует кинематографическую архитектуру лендинга: делит страницу на 6–8 сцен с описанием визуала, анимаций и параллакса. Результат — готовый motion-план, по которому фронтенд-разработчик подключает GSAP и ScrollTrigger.
 
-## Когда вызывать / в каком этапе
-Этап **05 (Дизайн-система)**, только при флаге `--cinematic` при создании проекта или при явном запросе пользователя. Запускается строго **после** того, как `design-system-generator` создал `DESIGN.md` с motion-токенами.
+Проектирует кинематографическую структуру лендинга из 6–8 сцен. На входе — бриф, бренд-кит и motion-токены из DESIGN.md. На выходе — `scenes.md` с детализированной scene grammar: тип сцены, описание визуала, инструкции GSAP/ScrollTrigger/Lenis, parallax-логика и мобильный фоллбек. Соблюдает запреты: без scroll hijack, без particle systems, без monotone fade-up на каждом блоке.
 
-## Что на вход / на выход
+## Когда вызывается
 
-**Вход:**
-- `00_БРИФ/brief.md` — ниша, целевая аудитория, тон
-- `04_БРЕНД/brand-kit.md` — цвета, motion-параметры
-- `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` — motion-токены
+Активируется только при флаге `--cinematic` при создании проекта или при явном вызове пользователя. Работает исключительно в рамках этапа `05_design` — если `current_stage` в `.landing-state.yaml` отличается, агент останавливается и сообщает об ошибке. Обязательна закрытая gate предшественника `design-system-generator`.
 
-**Выход:**
-- `05_ДИЗАЙН-СИСТЕМА/scenes.md` — scene grammar (название, тип, визуал, глубина), GSAP / ScrollTrigger / Lenis-инструкции, parallax-логика, mobile fallback для каждой из 6–8 сцен
+## Вход → выход
 
-**Жёсткие запреты (Motion Rules):**
-- ❌ scroll hijack
-- ❌ particle systems
-- ❌ fade-up на каждом блоке
+**Вход:** `brief.md` (ниша, ЦА, тон), `brand-kit.md` (цвета, motion-настройки), `DESIGN.md` (motion-токены этапа 05). Требуется пройденный stage-gate `05_design` (exit 0 от `gate-check.sh`).
 
-**8 типовых сцен-шаблонов:**
-1. Hero Film Frame — full-height split, слоевый параллакс
-2. Chaos to Clarity — текстовые слои, фоновые орбиты
-3. What You Get — карточки с controlled stagger
-4. The Diagnostic Process — псевдо-таймлайн с параллаксом
-5. About the Expert — портретная сцена, световая глубина
-6. Proof / Trust — цифры, кейсы, сдержанный motion
-7. FAQ — лёгкие взаимодействия
-8. Final Call — кульминация, контрастный сдвиг
+**Выход:** `05_ДИЗАЙН-СИСТЕМА/scenes.md` — полная scene grammar: название и тип каждой из 6–8 сцен, GSAP-план, parallax-инструкции, mobile fallback.
 
-## Связанные концепты
-- [[design-system-generator]] — должен отработать первым и поставить motion-токены в `DESIGN.md`
-- [[brand-kit-build]] — поставляет цвета и motion-параметры через `brand-kit.md`
-- [[niche-analysis]] — через `brief.md` определяет тон и ЦА, которые влияют на выбор сцен
+## Failure modes
 
-## Источник
-- `agents/scene-director.md`
+- Агент запущен без флага `--cinematic` — не активируется, что может быть неочевидно при ручном вызове.
+- `current_stage` в `.landing-state.yaml` не равен `05_design` — жёсткая остановка, пользователю нужно вручную закрыть предшественника.
+- `DESIGN.md` не содержит motion-токенов (этап 05 прошёл без кинематографических настроек) — scenes.md генерируется с неполными или дефолтными параметрами GSAP.
+- Конфликт между motion-токенами brand-kit и выбранным типом сцены — агент не предупреждает, просто перекрывает одно другим.
+- Mobile fallback прописан формально, но не верифицируется скриптом — на реальных устройствах могут появляться тяжёлые анимации.
+
+## Related
+
+- [[design-system-generator]] — обязательный предшественник, создаёт DESIGN.md с motion-токенами
+- [[brand-architect]] — формирует brand-kit.md, из которого берутся цвета и motion-настройки
+- [[block-composer]] — использует scenes.md при сборке composed.html на этапе 07b

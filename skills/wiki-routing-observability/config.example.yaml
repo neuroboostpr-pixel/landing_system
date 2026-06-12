@@ -1,0 +1,15 @@
+# Конфиг wiki-routing-observability для нового проекта.
+# Скопируй в config/wiki-observability.yaml и настрой под свою структуру.
+
+# Паттерны путей которые считаются "source reads" (bypass wiki).
+# Используются transcript_parser.is_source_read().
+source_read_patterns:
+  - "agents/*.md"           # агенты pipeline
+  - "skills/*/SKILL.md"     # скиллы
+  - "commands/*.md"         # slash-команды
+
+# Минимальный свободный диск для логирования (MB).
+min_disk_mb: 50
+
+# Количество дней в stats строке session_start.
+stats_days: 7

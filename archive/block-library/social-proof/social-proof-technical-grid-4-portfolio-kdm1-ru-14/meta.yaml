@@ -1,0 +1,54 @@
+category: social-proof
+description: Статистический блок с крупными процентами, короткими подписями и темной
+  инфографичной подачей.
+display_name_ru: social-proof-technical-grid-4-portfolio-kdm1-ru-14 (grid-4)
+has_animation: false
+id: social-proof-technical-grid-4-portfolio-kdm1-ru-14
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://portfolio.kdm1.ru/upload/iblock/b31/i0qylig13hzo7ow4qcpia0qhtn3i87pk/Onlai_n_shkola-Dmitriya-Vykhodtseva.pdf
+layout_pattern: grid-4
+niches_suitable:
+- services
+- education
+- b2b-saas
+- tech
+ru_market: true
+slots:
+- name: eyebrow
+  type: text
+- name: heading
+  required: true
+  type: text
+- name: subhead
+  type: text
+- name: stats-list-label
+  type: text
+- name: stat-1-index
+  type: text
+- name: stat-1-value
+  type: text
+- name: stat-1-label
+  type: text
+- name: stat-2-index
+  type: text
+- name: stat-2-value
+  type: text
+- name: stat-2-label
+  type: text
+- name: stat-3-index
+  type: text
+- name: stat-3-value
+  type: text
+- name: stat-3-label
+  type: text
+- name: stat-4-index
+  type: text
+- name: stat-4-value
+  type: text
+- name: stat-4-label
+  type: text
+style_mood: technical
+type: logos
+variant: numbers

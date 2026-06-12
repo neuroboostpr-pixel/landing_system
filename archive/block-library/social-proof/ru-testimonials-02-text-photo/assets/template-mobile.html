@@ -1,0 +1,60 @@
+<style>
+  :root {
+    --lp-bg: #f5f5f5; --lp-text: #1a1a1a; --lp-accent: #333; --lp-border: #e0e0e0;
+    --lp-font-display: system-ui, sans-serif; --lp-font-body: system-ui, sans-serif;
+    --spacing-md: 16px; --spacing-lg: 32px;
+  }
+  body { margin: 0; font-family: var(--lp-font-body); background: var(--lp-bg); color: var(--lp-text); width: 375px; }
+  .testimonials { padding: 40px 16px; }
+  .section-headline { font-family: var(--lp-font-display); font-size: 24px; text-align: center; margin: 0 0 28px; }
+  .card { border: 1px solid var(--lp-border); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  .card-top { display: flex; gap: 12px; margin-bottom: 12px; }
+  .client-photo { width: 56px; height: 56px; border-radius: 8px; background:var(--lp-bg); display: flex; align-items: center; justify-content: center; font-size: 8px; color:#888; flex-shrink: 0; }
+  .client-quote { font-size: 14px; color:#333; line-height: 1.5; margin: 0; font-style: italic; }
+  .card-footer { border-top: 1px solid var(--lp-border); padding-top: 10px; }
+  .client-name { font-weight: 700; font-size: 14px; margin: 0 0 2px; }
+  .client-role { font-size: 12px; color:#777; margin: 0; }
+</style>
+<section class="testimonials" data-block-id="ru-testimonials-02-text-photo">
+<h2 class="section-headline">{{slot:headline}}</h2>
+<div class="card">
+<div class="card-top">
+<div class="client-photo">{{slot:testimonial-1-photo}}</div>
+<p class="client-quote">{{slot:testimonial-1-quote}}</p>
+</div>
+<div class="card-footer">
+<p class="client-name">{{slot:testimonial-1-name}}</p>
+<p class="client-role">{{slot:testimonial-1-role}}</p>
+</div>
+</div>
+<div class="card">
+<div class="card-top">
+<div class="client-photo">{{slot:testimonial-2-photo}}</div>
+<p class="client-quote">{{slot:testimonial-2-quote}}</p>
+</div>
+<div class="card-footer">
+<p class="client-name">{{slot:testimonial-2-name}}</p>
+<p class="client-role">{{slot:testimonial-2-role}}</p>
+</div>
+</div>
+<div class="card">
+<div class="card-top">
+<div class="client-photo">{{slot:testimonial-3-photo}}</div>
+<p class="client-quote">{{slot:testimonial-3-quote}}</p>
+</div>
+<div class="card-footer">
+<p class="client-name">{{slot:testimonial-3-name}}</p>
+<p class="client-role">{{slot:testimonial-3-role}}</p>
+</div>
+</div>
+<div class="card">
+<div class="card-top">
+<div class="client-photo">{{slot:testimonial-4-photo}}</div>
+<p class="client-quote">{{slot:testimonial-4-quote}}</p>
+</div>
+<div class="card-footer">
+<p class="client-name">{{slot:testimonial-4-name}}</p>
+<p class="client-role">{{slot:testimonial-4-role}}</p>
+</div>
+</div>
+</section>

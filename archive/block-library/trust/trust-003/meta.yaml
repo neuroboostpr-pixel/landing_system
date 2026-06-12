@@ -1,0 +1,43 @@
+category: social-proof
+created: '2026-06-01'
+display_name_ru: trust-003 (minimal)
+has_bg_image: false
+id: trust-003
+layout_pattern: minimal
+signature: trust|minimal|[content]|bg:false
+slots:
+- name: trust-eyebrow
+  type: text
+- name: trust-heading
+  type: text
+- name: trust-subhead
+  type: text
+- name: trust-logos-label
+  type: text
+- name: partner-logo-1-alt
+  type: text
+- name: partner-logo-1
+  type: text
+- name: partner-logo-2-alt
+  type: text
+- name: partner-logo-2
+  type: text
+- name: partner-logo-3-alt
+  type: text
+- name: partner-logo-3
+  type: text
+- name: partner-logo-4-alt
+  type: text
+- name: partner-logo-4
+  type: text
+- name: partner-logo-5-alt
+  type: text
+- name: partner-logo-5
+  type: text
+- name: partner-logo-6-alt
+  type: text
+- name: partner-logo-6
+  type: text
+source: cleaned
+type: guarantees
+variant: clients

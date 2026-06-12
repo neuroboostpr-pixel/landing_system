@@ -2,7 +2,7 @@
 # test-pipeline.sh — Complete PR-A test for ANY project in one command.
 #
 # Creates a new project, drops a prototype, runs the full pipeline:
-#   prototype.md/pdf  →  prototype.yaml  →  wireframe.html  →  composed.html
+#   prototype.md/pdf  →  prototype.yaml  →  composed.html (рисует агент)
 #
 # Usage:
 #   bash scripts/test-pipeline.sh <slug> <path-to-prototype>
@@ -19,6 +19,11 @@
 
 set -euo pipefail
 
+
+# Cross-platform python detection (sets PYTHON_CMD).
+__SCRIPT_DIR__="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=lib/python-cmd.sh
+. "$__SCRIPT_DIR__/lib/python-cmd.sh"
 SLUG="${1:-}"
 PROTOTYPE="${2:-}"
 
@@ -38,7 +43,9 @@ fi
 # --- Resolve paths ---
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LS_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-PROJECT="$HOME/Lendings/$SLUG"
+# shellcheck source=lib/paths.sh
+source "$SCRIPT_DIR/lib/paths.sh"
+PROJECT="$LANDINGS_ROOT/$SLUG"
 
 # Resolve absolute path of prototype (handle ~ and relative)
 PROTOTYPE_ABS="$(cd "$(dirname "$PROTOTYPE")" 2>/dev/null && pwd)/$(basename "$PROTOTYPE")" || {
@@ -78,7 +85,7 @@ else
 fi
 
 # Make sure the new stage folders exist (older projects predate PR-A)
-mkdir -p "$PROJECT/07_ПРОТОТИП/source" "$PROJECT/07a_WIREFRAME" "$PROJECT/07b_COMPOSED" "$PROJECT/05_ДИЗАЙН-СИСТЕМА"
+mkdir -p "$PROJECT/07_ПРОТОТИП/source" "$PROJECT/07b_COMPOSED" "$PROJECT/05_ДИЗАЙН-СИСТЕМА"
 
 # --- Step 2: Drop prototype into source/ ---
 echo ""
@@ -92,7 +99,7 @@ echo "▸ Step 3/6: Parse prototype into machine-readable YAML"
 
 if [ "$PROTO_KIND" = "pdf" ]; then
   echo "   Trying PDF text extraction..."
-  if python3 "$LS_ROOT/skills/prototype-import/scripts/extract-pdf-text.py" \
+  if $PYTHON_CMD "$LS_ROOT/skills/prototype-import/scripts/extract-pdf-text.py" \
        "$PROJECT/07_ПРОТОТИП/source/prototype.pdf" \
        > "$PROJECT/07_ПРОТОТИП/source/extracted-text.txt" 2>/dev/null; then
     echo "   ✓ Extracted text to source/extracted-text.txt"
@@ -117,7 +124,7 @@ if [ "$PROTO_KIND" = "pdf" ]; then
 else
   # Markdown — convert directly
   cp "$PROJECT/07_ПРОТОТИП/source/prototype.md" "$PROJECT/07_ПРОТОТИП/source/prototype.md.orig" 2>/dev/null || true
-  python3 "$LS_ROOT/skills/prototype-import/scripts/md-to-yaml.py" \
+  $PYTHON_CMD "$LS_ROOT/skills/prototype-import/scripts/md-to-yaml.py" \
     "$PROJECT/07_ПРОТОТИП/source/prototype.md" \
     "$PROJECT/07_ПРОТОТИП/prototype.yaml"
   cp "$PROJECT/07_ПРОТОТИП/source/prototype.md" "$PROJECT/07_ПРОТОТИП/prototype.md"
@@ -134,7 +141,7 @@ fi
 # --- Step 3b: Enrich quiz funnel ---
 echo ""
 echo "▸ Step 3b: Quiz-funnel enrichment (Marquiz/Tilda/Skillbox best-practices)"
-python3 "$LS_ROOT/skills/wireframe-rendering/scripts/enrich-quiz-funnel.py" \
+$PYTHON_CMD "$LS_ROOT/skills/prototype-import/scripts/enrich-quiz-funnel.py" \
   --input "$PROJECT/07_ПРОТОТИП/prototype.yaml" \
   --output "$PROJECT/07_ПРОТОТИП/prototype.yaml" \
   --log "$PROJECT/07_ПРОТОТИП/enrichment-log.md"
@@ -143,16 +150,12 @@ echo "   ✓ Enrichment done (see enrichment-log.md for details)"
 # Validate
 echo ""
 echo "▸ Validating prototype schema..."
-python3 "$LS_ROOT/skills/prototype-import/scripts/validate-prototype.py" \
+$PYTHON_CMD "$LS_ROOT/skills/prototype-import/scripts/validate-prototype.py" \
   "$PROJECT/07_ПРОТОТИП/prototype.yaml"
 
-# --- Step 4: Render wireframe ---
-echo ""
-echo "▸ Step 4/6: Render interactive wireframe (with ui-ux-pro-max integration)"
-python3 "$LS_ROOT/skills/wireframe-rendering/scripts/render-wireframe.py" \
-  --project "$PROJECT" \
-  --library "$LS_ROOT/block-library" \
-  --template "$LS_ROOT/skills/wireframe-rendering/templates/wireframe-shell.html"
+# --- Step 4: (removed) wireframe rendering — блочный трек в архиве ---
+# Reference-driven flow: агент рисует composed.html сам по прототипу и референсу.
+# См. docs/superpowers/specs/2026-06-12-reference-driven-flow-spec.md
 
 # --- Step 5: Create tokens.json (stub if missing) ---
 TOKENS_PATH="$PROJECT/05_ДИЗАЙН-СИСТЕМА/tokens.json"
@@ -180,59 +183,24 @@ JSON
   echo "   ✓ Stub tokens.json created (customize colors/fonts later via Stage 05)"
 fi
 
-# Auto-select first variant for each block (user normally does this in browser)
-echo ""
-echo "▸ Auto-selecting first variant per block (replace with real selections later)"
-python3 - <<PY
-import yaml
-from datetime import datetime, timezone
-
-c = yaml.safe_load(open("$PROJECT/07a_WIREFRAME/candidates.yaml"))
-sel = []
-for b in c["blocks"]:
-    if b["candidates"]:
-        sel.append({"block_position": b["block_position"], "chosen_variant": b["candidates"][0]})
-
-now = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
-out = {"project_slug": "$SLUG", "selections": sel, "confirmed_at": now}
-with open("$PROJECT/07a_WIREFRAME/selections.yaml", "w") as f:
-    yaml.dump(out, f, sort_keys=False, allow_unicode=True)
-print(f"   ✓ Auto-picked {len(sel)} variants. Override in wireframe.html → Confirm.")
-PY
-
-# --- Step 6: Compose final ---
-echo ""
-echo "▸ Step 6/6: Compose final macros (composed.html + composed-mobile.html)"
-python3 "$LS_ROOT/skills/block-composition/scripts/validate-selections.py" \
-  "$PROJECT/07a_WIREFRAME/selections.yaml"
-python3 "$LS_ROOT/skills/block-composition/scripts/compose-blocks.py" \
-  --project "$PROJECT" \
-  --library "$LS_ROOT/block-library"
+# --- Step 6: (removed) machine compose из библиотеки — блочный трек в архиве ---
+# composed.html рисует агент (reference-driven flow); машинная склейка блоков
+# из block-library удалена вместе с wireframe-этапом.
 
 # --- Done ---
 echo ""
 echo "╔════════════════════════════════════════════════════════════╗"
-echo "║ ✅ Pipeline complete                                         ║"
+echo "║ ✅ Pipeline complete (prototype parse + validate)            ║"
 echo "╚════════════════════════════════════════════════════════════╝"
 echo ""
 echo "📂 Project folder: $PROJECT"
 echo ""
-echo "🎨 Open these files:"
-echo ""
-echo "   1) Wireframe (interactive — variant picker per block):"
-echo "      open \"$PROJECT/07a_WIREFRAME/wireframe.html\""
-echo ""
-echo "   2) Composed final (with tokens applied):"
-echo "      open \"$PROJECT/07b_COMPOSED/composed.html\""
-echo ""
-echo "   3) Block library gallery (all 35 blocks browsable):"
-echo "      open \"$LS_ROOT/block-library/gallery.html\""
-echo ""
+echo "Дальше: агент рисует макет 07b_COMPOSED/composed.html по правилам"
+echo "reference-driven спеки (структура из прототипа, вид из референса)."
 
 if [ "${SKIP_OPEN:-0}" != "1" ] && command -v open >/dev/null 2>&1; then
-  open "$PROJECT/07a_WIREFRAME/wireframe.html" \
-       "$PROJECT/07b_COMPOSED/composed.html" \
-       "$LS_ROOT/block-library/gallery.html" 2>/dev/null || true
+  [ -f "$PROJECT/07b_COMPOSED/composed.html" ] && \
+    open "$PROJECT/07b_COMPOSED/composed.html" 2>/dev/null || true
 fi
 
 # --- PR-B Photo stage (optional, only if sample photos are available) ---
@@ -246,7 +214,7 @@ if [ -d "$PHOTO_SAMPLES" ] && [ "$(ls -A "$PHOTO_SAMPLES" 2>/dev/null)" ]; then
   cp "$PHOTO_SAMPLES"/*.jpg "$PROJECT/07c_PHOTOS/inbox/_свалка/" 2>/dev/null || true
 
   # Stage 1: intake
-  python3 "$LS_ROOT/skills/photo-curation/scripts/intake.py" \
+  $PYTHON_CMD "$LS_ROOT/skills/photo-curation/scripts/intake.py" \
     --inbox "$PROJECT/07c_PHOTOS/inbox" \
     --intake "$PROJECT/07c_PHOTOS/intake"
   echo "  ✓ intake done"
@@ -286,13 +254,13 @@ DRAFT_EOF
   echo "  ✓ match stub written"
 
   # Stage 4: render gallery
-  python3 "$LS_ROOT/skills/photo-curation/scripts/gallery-render.py" \
+  $PYTHON_CMD "$LS_ROOT/skills/photo-curation/scripts/gallery-render.py" \
     --catalog "$PROJECT/07c_PHOTOS/catalog.yaml" \
     --draft "$PROJECT/07c_PHOTOS/selections.draft.yaml" \
     --out "$PROJECT/07c_PHOTOS/photo-board.html" || {
     # Fallback: write empty catalog and retry
     printf 'photos: []\n' > "$PROJECT/07c_PHOTOS/catalog.yaml"
-    python3 "$LS_ROOT/skills/photo-curation/scripts/gallery-render.py" \
+    $PYTHON_CMD "$LS_ROOT/skills/photo-curation/scripts/gallery-render.py" \
       --catalog "$PROJECT/07c_PHOTOS/catalog.yaml" \
       --draft "$PROJECT/07c_PHOTOS/selections.draft.yaml" \
       --out "$PROJECT/07c_PHOTOS/photo-board.html"
@@ -316,7 +284,7 @@ if [ -f "$PROJECT/07b_COMPOSED/composed.html" ]; then
     fi
 
     # Stage 1: scan composed.html for visual slots
-    python3 "$LS_ROOT/skills/visual-generation/scripts/slot-scanner.py" \
+    $PYTHON_CMD "$LS_ROOT/skills/visual-generation/scripts/slot-scanner.py" \
         --html "$PROJECT/07b_COMPOSED/composed.html" \
         --out "$PROJECT/07d_VISUALS/_slots.yaml"
     echo "  ✓ visual scan done"
@@ -327,7 +295,7 @@ if [ -f "$PROJECT/07b_COMPOSED/composed.html" ]; then
     fi
 
     if command -v codex >/dev/null 2>&1 || [ -n "${USE_CODEX_MOCK:-}" ]; then
-        python3 -c "
+        $PYTHON_CMD -c "
 import yaml, subprocess
 from pathlib import Path
 slots_path = Path('$PROJECT/07d_VISUALS/_slots.yaml')
@@ -346,7 +314,7 @@ if slots_path.exists():
     fi
 
     # Stage 3: re-render composed.html with visuals
-    python3 "$LS_ROOT/skills/block-composition/scripts/compose-blocks.py" --project "$PROJECT" 2>/dev/null || true
+    $PYTHON_CMD "$LS_ROOT/skills/block-composition/scripts/rerender-composed.py" --project "$PROJECT" 2>/dev/null || true
 
     echo "  PR-C visual stage smoke test PASSED"
 fi

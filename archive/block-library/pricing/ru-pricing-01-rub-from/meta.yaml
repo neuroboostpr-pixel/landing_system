@@ -1,0 +1,91 @@
+category: pricing
+conversion_notes: '''от X ₽'' снижает ценовой барьер. Средний тариф выделен как популярный
+  — якорный эффект.'
+created: 2026-05-12
+description: 3 тарифа в ряд (Базовый/Стандарт/Премиум) с ценой 'от X ₽', 5 пунктов
+  с галочками, CTA 'Выбрать'.
+display_name_ru: ru-pricing-01-rub-from (grid-3)
+id: ru-pricing-01-rub-from
+layout_pattern: grid-3
+layout_summary_ru: 'Три тарифных карточки в ряд: название, цена ''от X ₽'', 5 пунктов
+  с галочками, кнопка ''Выбрать''. Средний тариф подсвечен как популярный.'
+ru_market: true
+slots:
+- max_chars: 60
+  name: headline
+  required: true
+  type: text
+- max_chars: 20
+  name: tier-1-name
+  required: true
+  type: text
+- max_chars: 20
+  name: tier-1-price
+  required: true
+  type: text
+- name: li-1
+  type: text
+- name: li-2
+  type: text
+- name: li-3
+  type: text
+- name: li-4
+  type: text
+- name: li-5
+  type: text
+- default_text: Выбрать
+  name: tier-1-cta
+  required: true
+  type: cta
+- max_chars: 20
+  name: tier-2-name
+  required: true
+  type: text
+- max_chars: 20
+  name: tier-2-price
+  required: true
+  type: text
+- name: li-6
+  type: text
+- name: li-7
+  type: text
+- name: li-8
+  type: text
+- name: li-9
+  type: text
+- name: li-10
+  type: text
+- default_text: Выбрать
+  name: tier-2-cta
+  required: true
+  type: cta
+- max_chars: 20
+  name: tier-3-name
+  required: true
+  type: text
+- max_chars: 20
+  name: tier-3-price
+  required: true
+  type: text
+- name: li-11
+  type: text
+- name: li-12
+  type: text
+- name: li-13
+  type: text
+- name: li-14
+  type: text
+- name: li-15
+  type: text
+- default_text: Выбрать
+  name: tier-3-cta
+  required: true
+  type: cta
+source: manual
+source_attribution: ''
+type: pricing
+use_cases:
+- services
+- b2c
+- local
+variant: cards

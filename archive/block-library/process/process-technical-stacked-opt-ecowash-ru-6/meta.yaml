@@ -1,0 +1,57 @@
+category: content
+description: Производственный блок с текстом, акцентной плашкой, декоративной графикой
+  и большим медиаконтейнером.
+display_name_ru: process-technical-stacked-opt-ecowash-ru-6 (stacked)
+has_animation: false
+id: process-technical-stacked-opt-ecowash-ru-6
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://opt.ecowash.ru/
+layout_pattern: stacked
+niches_suitable:
+- ecommerce
+- services
+- tech
+ru_market: true
+slots:
+- name: eyebrow
+  type: text
+- name: heading
+  required: true
+  type: text
+- name: subhead
+  type: text
+- name: accent-title
+  type: text
+- name: accent-text
+  type: text
+- name: step-1-index
+  type: text
+- name: step-1-title
+  type: text
+- name: step-1-text
+  type: text
+- name: step-2-index
+  type: text
+- name: step-2-title
+  type: text
+- name: step-2-text
+  type: text
+- name: step-3-index
+  type: text
+- name: step-3-title
+  type: text
+- name: step-3-text
+  type: text
+- name: process-image-mobile
+  type: text
+- name: process-image-alt
+  type: text
+- name: process-image
+  type: text
+- name: media-caption
+  type: text
+style_mood: technical
+type: process
+variant: process

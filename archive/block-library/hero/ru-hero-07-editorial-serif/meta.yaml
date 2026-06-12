@@ -1,0 +1,73 @@
+category: hero
+conversion_notes: Курсивный акцент в заголовке создаёт элегантность и доверие. Кольца
+  с цифрами хорошо работают для ниш с измеримыми результатами (лет опыта, проектов,
+  клиентов). Оранжевый CTA на тёплом фоне — контраст достаточный при насыщенном
+created: '2026-05-13'
+description: 'Hero в редакционном стиле: тёплый бежевый фон, крупный заголовок с курсивным
+  акцентом, кольцевые метрики, две кнопки. Стиль Atelier Zero от Open Design.'
+display_name_ru: ru-hero-07-editorial-serif (centered)
+id: ru-hero-07-editorial-serif
+layout_pattern: centered
+layout_summary_ru: 'Двухколоночный: копи слева, фото справа. Заголовок с засечками
+  в курсиве, оранжевый акцент, кольца со статистикой, две кнопки. Mobile — стек.'
+recommended_styles_ru:
+- Editorial & Magazine Style
+- Minimalism & Swiss Style
+ru_market: true
+slots:
+- max_chars: 40
+  name: kicker
+  required: false
+  type: text
+- name: headline
+  type: text
+- max_chars: 180
+  name: subhead
+  required: false
+  type: text
+- max_chars: 8
+  name: stat-1-value
+  required: false
+  type: text
+- max_chars: 20
+  name: stat-1-label
+  required: false
+  type: text
+- max_chars: 8
+  name: stat-2-value
+  required: false
+  type: text
+- max_chars: 20
+  name: stat-2-label
+  required: false
+  type: text
+- max_chars: 8
+  name: stat-3-value
+  required: false
+  type: text
+- max_chars: 20
+  name: stat-3-label
+  required: false
+  type: text
+- default_text: Начать работу
+  name: primary-cta
+  required: true
+  type: cta
+- default_text: Узнать подробнее
+  name: secondary-cta
+  required: false
+  type: cta
+- mobile_ratio: '4:3'
+  name: hero-image
+  ratio: '4:3'
+  required: false
+  type: photo
+source: opendesign
+source_attribution: 'github.com/nexu-io/open-design: design-templates/open-design-landing
+  (Apache-2.0)'
+type: hero
+use_cases:
+- services
+- b2c
+- local
+variant: null

@@ -1,0 +1,14 @@
+<svg viewBox="0 0 1200 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+  <defs>
+    <style>
+      .shape-cloud {
+        fill: var(--lp-shape-color, #FFA500);
+        opacity: var(--lp-shape-opacity, 0.1);
+      }
+    </style>
+  </defs>
+  <g class="shape-cloud">
+    <path d="M100,120 C60,100 40,70 80,50 C100,30 140,25 160,45 C190,20 240,20 270,50 C300,30 350,30 370,60 L370,200 L0,200 Z"/>
+    <path d="M800,130 C770,110 750,80 800,60 C830,40 880,35 910,60 C940,30 1000,30 1030,65 C1060,40 1120,40 1140,75 L1140,200 L700,200 Z"/>
+  </g>
+</svg>

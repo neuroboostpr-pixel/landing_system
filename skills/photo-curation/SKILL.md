@@ -5,6 +5,12 @@ description: Stage 07c (PR-B) photo pipeline — intake, AI-classification via c
 
 # photo-curation
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill photo-curation --stage 07c
+```
+
 Конвейер обработки клиентских фоток для лендинга. Запускается командой `/landing-photos` после approved `05_design` + `07a_wireframe`.
 
 ## Этапы
@@ -41,3 +47,11 @@ Cache: `07c_PHOTOS/.cache/<hash>.jpg`. Повторный прогон с тем
 - `classify-prompt.md` — одна фотка → YAML с тегами
 - `match-prompt.md` — каталог + слоты → ранжированные кандидаты
 - `generate-fallback.md` — генерация под brand-tokens
+
+## Стандарт пайплайна картинок (D1, обязательный)
+
+Каждое визуальное место обрабатывается по
+[`docs/standards/image-pipeline.md`](../docs/standards/image-pipeline.md):
+анализ места → цель → спецификация → референсы (число = составу композиции) →
+генерация на вырезаемом фоне → rembg → вставка; адаптация под палитру —
+полупрозрачным оверлеем акцента, не отдельной картинкой на каждый цвет.

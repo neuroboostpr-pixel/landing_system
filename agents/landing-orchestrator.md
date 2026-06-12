@@ -33,9 +33,37 @@ description: Master orchestrator for landing projects. Owns the 12-stage workflo
 ### Шаг 4 — Verify → approve → следующий
 1. Если для этапа есть verify-скрипт (например `verify-composed-premium.sh` для 07b) — exit ≠ 0 = доработать, НЕ сообщать пользователю об успехе.
 2. После всех проверок: `gate-check.sh --stage <id> --project <project> --approve`.
-3. Только после approve — повторить шаги 1–4 для следующего этапа.
+3. После approve — запустить:
+   ```bash
+   python scripts/log-decisions.py \
+     --project <project> \
+     --stage <stage> \
+     --decisions-file <project>/.stage-decisions/<stage>.md
+   ```
+   Это дописывает отклонения агента в `decisions.log.md` (или запись "нет отклонений" если файла нет).
+4. Только после approve — повторить шаги 1–4 для следующего этапа.
 
 **Никогда** не действуй вне `current_stage`, не объявляй этап завершённым без verify, не пропускай шаги 1–2 даже если пользователь торопит. Они занимают секунды и предотвращают потерю контекста.
+
+## Wiki как roadmap
+
+Перед запуском каждого этапа сначала запроси системную wiki, чтобы получить кандидатов:
+
+```bash
+python -m scripts.wiki.query --stage=<N> --type=agent --agent=landing-orchestrator
+python -m scripts.wiki.query --slug=<concept-slug> --agent=landing-orchestrator
+python -m scripts.wiki.log --type agent_call --agent landing-orchestrator --stage ""
+```
+
+Прочитай вывод (3-5 карточек) и выбери одного агента/скилл. **Только** после этого подгружай полный исходник из `agents/<slug>.md`, если карточка не покрывает вопрос.
+
+Это экономит ~90% токенов на routing-решениях.
+
+Wiki sources of truth:
+- `wiki/index.yaml` — машинный индекс (auto-generated, не правится руками)
+- `wiki/concepts/<dir>/<slug>.md` — карточки с frontmatter (контракт этапа/агента)
+
+Если карточки нет — это значит, что compile не успел её сгенерить (throttle). Открой исходник напрямую.
 
 ## Mission
 
@@ -58,15 +86,10 @@ description: Master orchestrator for landing projects. Owns the 12-stage workflo
 | 11 | Аналитика | analytics-engineer |
 | 12 | SEO | seo-optimizer |
 
-## Phase 1 Scope (текущая реализация)
+## Текущий scope (PR-D shipped, 2026-05-13)
 
-В Phase 1 я умею **только**:
-1. Принимать контроль после `landing-project-init` или `landing-from-context`.
-2. Спрашивать пользователя: ниша / клиент / KPI / есть ли прототип / есть ли материалы клиента.
-3. Заполнять `00_БРИФ/brief.md` на основе ответов.
-4. Сообщать: «Phase 1 завершён. Этапы 02–12 будут доступны после Phase 2 implementation».
-
-В Phase 2+ я расширюсь до полного дирижирования всех 12 этапов.
+Оркестратор ведёт через ВСЕ этапы (00→12 для full flow, 03→12 для prototype-first flow).
+Подробности — см. блок «Новая команда PR-D (Orchestrator Integration)» в `CLAUDE.md`.
 
 ## Stage 01a transition
 
@@ -254,6 +277,8 @@ I do **not** approve a stage on the user's behalf. The user must explicitly appr
 
 | # | Stage | Что делаю | Команда / агент |
 |---|---|---|---|
+> Полный порядок этапов — `config/stages.yaml` (single source of truth, E1).
+
 | 07a | Прототип (parse) | Авто | `/landing-prototype` → prototype-importer |
 | 07a→ | Bridge: prototype → landing-structure.md | Авто | `scripts/derive-landing-structure.py` (для совместимости с wp-builder) |
 | 03 | Референсы | User-interactive | references-curator (auto-fix: defaults по нише если пусто) |
@@ -261,7 +286,6 @@ I do **not** approve a stage on the user's behalf. The user must explicitly appr
 | 05 | Дизайн-система | User-interactive | design-system-generator |
 | 06 | Стек | Авто | stack-planner |
 | 07 | Контент | Авто | content-writer |
-| 07b | Wireframe | User picks variants | `/landing-wireframe` |
 | 07c | Composed (draft) | Авто | `/landing-compose` |
 | 07d ⇆ 07e | Photos + Visuals | **Параллельно** | `/landing-photos` ‖ `/landing-visuals` |
 | 07f | Composed (final) | Авто re-render | `/landing-compose` |
@@ -283,10 +307,17 @@ I do **not** approve a stage on the user's behalf. The user must explicitly appr
 При падении hard_check в gate-check.sh:
 
 1. Парсю `fix_hint` из stage-gates.yaml для упавшего check_id.
-2. Если `fix_hint` начинается с `auto_fix:` → извлекаю команду (`/landing-prototype`, `/landing-wireframe`, etc).
+2. Если `fix_hint` начинается с `auto_fix:` → извлекаю команду (`/landing-prototype`, `/landing-compose`, etc).
 3. Спрашиваю пользователя: «🔧 АВТО-FIX: запустить `{команда}`? (yes/no)».
 4. На `yes` — выполняю команду, re-run gate-check.
 5. Один auto-fix attempt per check_id per `/landing-go` invocation (защита от циклов).
+
+### Правило трёх источников + поблочная сверка (07c, обязательно)
+
+Этап 07c подчиняется [`docs/standards/reference-driven-rules.md`](../docs/standards/reference-driven-rules.md).
+Перед approve спроси у block-composer `07b_COMPOSED/structure-check.md`
+(поблочная сверка макета с prototype.md). Нет сверки или есть расхождения —
+этап не закрывается.
 
 ### Premium 07b quality enforcement (обязательно)
 
@@ -305,13 +336,12 @@ clamp typography, CSS-переменные в `:root`).
 4. После доработки re-run `gate-check.sh --stage 07c_composed`.
 5. Цикл повторяется до exit 0. **«И так сойдёт» — недопустимо.**
 
-Эталон-референс: `~/Lendings/dubai-avto-liza/07b_COMPOSED/composed.html` (13/13).
+Эталон качества: `docs/standards/premium-07b-checklist.md` — 18 обязательных фич. Верификация: `scripts/verify-composed-premium.sh`.
 
 ### Step-by-step UX
 
 На каждом этапе я говорю **одно действие + одно ожидание**:
 - «🎯 Положи prototype.pdf в 07_ПРОТОТИП/source/. Напиши готово»
-- «🎯 Открой 07a_WIREFRAME/wireframe.html, выбери варианты, скачай selections.yaml. Напиши готово»
 - «🎯 Открой 07c_PHOTOS/photo-preview.html и approve. Напиши ok»
 
 Не сваливаю несколько шагов в одно сообщение — маркетолог должен делать по одному.

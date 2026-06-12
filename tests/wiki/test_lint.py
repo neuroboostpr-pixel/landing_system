@@ -61,6 +61,13 @@ def test_exit_code_zero_on_clean(fake_wiki):
 
 
 def test_exit_code_nonzero_on_issues(fake_wiki):
+    """Critical issues (broken_refs, dup_slugs) cause exit 1; warn-only (empty, orphans) do not."""
+    # Warn-only: a tiny concept only produces 'empty' — exit code should be 0.
     (fake_wiki / "concepts" / "tiny.md").write_text("---\ntype: x\n---\n# T")
     result = lint.run_checks(fake_wiki, llm_check=False)
-    assert lint.compute_exit_code(result) != 0
+    assert lint.compute_exit_code(result) == 0  # empty is warn-only
+
+    # Critical: inject a broken_ref issue → exit 1.
+    result_critical = dict(result)
+    result_critical["broken_refs"] = ["some-slug.related → missing-target"]
+    assert lint.compute_exit_code(result_critical) != 0

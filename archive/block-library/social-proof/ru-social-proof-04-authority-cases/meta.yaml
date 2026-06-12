@@ -1,0 +1,73 @@
+category: social-proof
+conversion_notes: Конкретные кейсы с цифрами убедительнее общих слов. Ярлык-теги 'Самый
+  масштабный' / 'Рекорд скорости' добавляют контекст (книга, стр. 19).
+created: '2026-05-13'
+description: '3 карточки авторитетных кейсов: фото объекта + название клиента + краткий
+  результат в цифрах. Самый масштабный, самый быстрый, предмет гордости.'
+display_name_ru: ru-social-proof-04-authority-cases (grid-4)
+id: ru-social-proof-04-authority-cases
+layout_pattern: grid-4
+layout_summary_ru: 'Три карточки кейсов в ряд: фото (16:9) + ярлык типа кейса + название
+  клиента + результат в одной строке с цифрой. На mobile — вертикальный stack.'
+ru_market: true
+slots:
+- max_chars: 60
+  name: headline
+  required: true
+  type: text
+- name: case-1-photo
+  ratio: '16:9'
+  required: true
+  type: photo
+- max_chars: 20
+  name: case-1-tag
+  required: false
+  type: text
+- max_chars: 50
+  name: case-1-name
+  required: true
+  type: text
+- max_chars: 100
+  name: case-1-result
+  required: true
+  type: text
+- name: case-2-photo
+  ratio: '16:9'
+  required: true
+  type: photo
+- max_chars: 20
+  name: case-2-tag
+  required: false
+  type: text
+- max_chars: 50
+  name: case-2-name
+  required: true
+  type: text
+- max_chars: 100
+  name: case-2-result
+  required: true
+  type: text
+- name: case-3-photo
+  ratio: '16:9'
+  required: false
+  type: photo
+- max_chars: 20
+  name: case-3-tag
+  required: false
+  type: text
+- max_chars: 50
+  name: case-3-name
+  required: false
+  type: text
+- max_chars: 100
+  name: case-3-result
+  required: false
+  type: text
+source: manual
+source_attribution: PDF Как создать сайт-шедевр, страница 19
+type: logos
+use_cases:
+- services
+- b2c
+- local
+variant: cases

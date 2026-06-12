@@ -1,0 +1,84 @@
+/* OG card — Facebook/Telegram style */
+.lp-preview-og-card {
+  background: #fff;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  overflow: hidden;
+  max-width: 380px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+.lp-preview-og-image {
+  width: 100%;
+  height: 200px;
+  background: #f0f0f1 center/cover no-repeat;
+  position: relative;
+}
+.lp-preview-og-image:empty::after {
+  content: "Нет изображения";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  font-size: 13px;
+}
+.lp-preview-og-meta { padding: 12px 14px; }
+.lp-preview-og-domain {
+  text-transform: uppercase;
+  color: #6b7280;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+}
+.lp-preview-og-title {
+  margin: 4px 0 4px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.lp-preview-og-desc {
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* SERP — Google style */
+.lp-preview-serp {
+  font-family: arial, sans-serif;
+  max-width: 600px;
+  padding: 12px 14px;
+  background: #fff;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+}
+.lp-preview-serp-breadcrumb {
+  color: #006621;
+  font-size: 12px;
+}
+.lp-preview-serp-title {
+  color: #1a0dab;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.3;
+  margin: 4px 0 4px;
+  cursor: pointer;
+}
+.lp-preview-serp-title:hover { text-decoration: underline; }
+.lp-preview-serp-desc {
+  color: #4d5156;
+  font-size: 14px;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

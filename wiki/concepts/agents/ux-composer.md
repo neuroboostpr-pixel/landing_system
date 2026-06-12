@@ -1,59 +1,60 @@
 ---
+slug: ux-composer
 type: agent
-name: ux-composer
-sources: ["agents/ux-composer.md"]
-updated: 2026-05-15
-triggers: []
+name: "UX Composer — интерактивный wireframe-генератор"
 stage: "07a"
-uses: ["prototype-importer", "block-library-management", "block-composer", "wireframe-rendering", "ui-ux-pro-max", "design-tokens-generation", "brand-kit-build"]
-tags: ["wireframe", "ux", "stage-07a", "block-library"]
+tags: [wireframe, ux, block-library, prototype, stage-07a]
+triggers: [landing-wireframe]
+inputs:
+  - 07_ПРОТОТИП/prototype.yaml
+  - 05_ДИЗАЙН-СИСТЕМА/tokens.json
+  - 04_БРЕНД/brand-kit.md
+  - block-library/catalog.yaml
+outputs:
+  - 07a_WIREFRAME/wireframe.html
+  - 07a_WIREFRAME/candidates.yaml
+  - 07a_WIREFRAME/selections.yaml
+gates: [selections_yaml_exists]
+pre_reqs: []
+related:
+  - block-composer
+  - design-system-generator
+  - landing-orchestrator
+sources: ["agents/ux-composer.md"]
+updated: 2026-05-26
+confidence: {triggers: medium, pre_reqs: low}
 ---
 
-# UX Composer — интерактивный вайрфрейм по прототипу
+# UX Composer — интерактивный wireframe-генератор
 
 ## Что делает
 
-Превращает утверждённый прототип (`prototype.yaml`) в интерактивный `wireframe.html`: для каждого блока страницы предлагает 2–3 варианта компоновки с radio-переключателями. Маркетолог выбирает нужные варианты и скачивает `selections.yaml` для передачи в следующий этап.
+Берёт `prototype.yaml` (список блоков прототипа) и подбирает для каждого блока 2–3 кандидата из `block-library`. Результат — `wireframe.html`: интерактивная HTML-страница с radio-кнопками, где пользователь выбирает вариант на каждый блок. Дополнительно инжектирует в wireframe UX-паттерны, цветовые палитры и типографику из `ui-ux-pro-max` для обоснованного выбора. Агент строго ограничен библиотекой: придумывать несуществующие блоки запрещено — при отсутствии подходящих вариантов он явно сигнализирует о необходимости добавить новый блок через `scaffold-block.py`.
 
-## Когда вызывать / в каком этапе
+## Когда вызывается
 
-Этап **07a (UX Wireframe)**. Вызывается командой `/landing-wireframe` или агентом `landing-orchestrator`. Требует, чтобы были готовы:
-- `07_ПРОТОТИП/prototype.yaml` (этап 07 завершён)
-- `05_ДИЗАЙН-СИСТЕМА/tokens.json` (этап 05 завершён)
-- `04_БРЕНД/brand-kit.md` (этап 04 завершён)
-- Плагин `ui-ux-pro-max` с CSV-файлами UX-паттернов, цветов, шрифтов и стилей
+Запускается командой `/landing-wireframe` когда проект достиг стадии `07b_wireframe` в `.landing-state.yaml`. Предусловие — наличие и валидность `07_ПРОТОТИП/prototype.yaml`; если стадия не совпадает или prototype отсутствует — агент останавливается с диагностическим сообщением.
 
-Если плагин `ui-ux-pro-max` не установлен — агент немедленно останавливается и выводит инструкцию по установке.
+## Вход → выход
 
-## Что на вход / на выход
+**Вход:** валидный `prototype.yaml`, `tokens.json` из дизайн-системы, `brand-kit.md`, каталог блоков `block-library/catalog.yaml`, 6 CSV-файлов из плагина `ui-ux-pro-max` (UX-паттерны, правила, палитры, типографика, стили, цвета).
 
-**Вход:**
-- `07_ПРОТОТИП/prototype.yaml` — структурированный прототип
-- `block-library/catalog.yaml` — каталог доступных блоков
-- `04_БРЕНД/brand-kit.md`, `05_ДИЗАЙН-СИСТЕМА/tokens.json` — бренд и токены
-- 6 CSV-файлов из `ui-ux-pro-max` (UX-паттерны, правила, цвета, шрифты, стили)
-- 2–3 DESIGN.md reference из `vendor/opendesign-extracts/`
+**Выход:** `07a_WIREFRAME/wireframe.html` — интерактивная страница выбора вариантов; `07a_WIREFRAME/candidates.yaml` — список кандидатов по блокам; `07a_WIREFRAME/selections.yaml` — файл, который пользователь скачивает из браузера и кладёт обратно в папку.
 
-**Выход:**
-- `07a_WIREFRAME/wireframe.html` — интерактивный вайрфрейм с вариантами блоков
-- `07a_WIREFRAME/candidates.yaml` — кандидаты блоков с UX-мета
-- `07a_WIREFRAME/selections.yaml` — выбор пользователя (создаётся вручную через UI)
+## Чем закрывается этап (gates)
 
-## Ключевые правила
+- `selections_yaml_exists` — файл `07a_WIREFRAME/selections.yaml` должен существовать в проекте. Пока пользователь не подтвердил выбор вариантов и не положил файл — переход к следующему этапу заблокирован.
 
-1. **Никогда не придумывает блоки**: если в `block-library` нет подходящего блока для секции прототипа — возвращает `needs_new_block: true` и предлагает создать блок через `scaffold-block.py`.
-2. **HARD GATE**: следующий этап (07b Compose) недоступен, пока `selections.yaml` не появится в папке `07a_WIREFRAME/`.
-3. UX-правила из CSV инжектируются в wireframe.html как вкладки (`{{ux_patterns_html}}`, `{{ux_rules_html}}` и т.д.) — маркетолог видит рекомендации прямо в браузере.
+## Failure modes
 
-## Связанные концепты
+- **Отсутствует `ui-ux-pro-max`** — агент останавливается и требует установки плагина; рендер не запустится.
+- **Нет кандидатов для блока** — `candidates.yaml` содержит пустые массивы; агент сообщает об этом, но не переходит к следующему блоку самостоятельно.
+- **Стадия не совпадает** — `current_stage` в `.landing-state.yaml` не равен `07b_wireframe`; hook `enforce_stage_gate.py` блокирует Write/Edit.
+- **`prototype.yaml` невалиден** — `validate-prototype.py` возвращает ошибку; агент останавливается до исправления.
+- **`selections.yaml` не положен обратно** — пользователь скачал файл, но не скопировал в папку; gate не закрывается, `block-composer` не запустится.
 
-- [[prototype-importer]] — создаёт `prototype.yaml`, который является входом для ux-composer
-- [[block-library-management]] — хранит каталог блоков; ux-composer выбирает только из него
-- [[block-composer]] — следующий этап: берёт `selections.yaml` и рендерит `composed.html`
-- [[wireframe-rendering]] — скилл, содержащий скрипт `render-wireframe.py` и шаблон `wireframe-shell.html`
-- ui-ux-pro-max — обязательная зависимость с CSV-данными UX-паттернов и палитр
-- [[landing-orchestrator]] — вызывает ux-composer в рамках общего workflow
+## Related
 
-## Источник
-
-- `agents/ux-composer.md`
+- [[block-composer]] — следующий этап: принимает `selections.yaml` и собирает `composed.html`
+- [[design-system-generator]] — поставляет `tokens.json`, который инжектируется в wireframe-контекст
+- [[landing-orchestrator]] — координирует запуск `ux-composer` в рамках общего pipeline

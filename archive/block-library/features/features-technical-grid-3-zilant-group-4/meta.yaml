@@ -1,0 +1,40 @@
+category: features
+description: Воздушный блок с контрастным заголовком, тремя белыми карточками и декоративной
+  бумажной графикой.
+display_name_ru: features-technical-grid-3-zilant-group-4 (grid-3)
+has_animation: false
+id: features-technical-grid-3-zilant-group-4
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://zilant.group/
+layout_pattern: grid-3
+niches_suitable:
+- b2b-saas
+- services
+- tech
+- education
+ru_market: true
+slots:
+- name: eyebrow
+  type: text
+- name: heading
+  required: true
+  type: text
+- name: subhead
+  type: text
+- name: feature-1-title
+  type: text
+- name: feature-1-text
+  type: text
+- name: feature-2-title
+  type: text
+- name: feature-2-text
+  type: text
+- name: feature-3-title
+  type: text
+- name: feature-3-text
+  type: text
+style_mood: technical
+type: features
+variant: null

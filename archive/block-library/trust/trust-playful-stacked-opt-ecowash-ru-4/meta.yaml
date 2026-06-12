@@ -1,0 +1,51 @@
+category: social-proof
+description: Яркий блок доверия с большим заголовком, несколькими метриками и крупной
+  декоративной графикой.
+display_name_ru: trust-playful-stacked-opt-ecowash-ru-4 (stacked)
+has_animation: false
+id: trust-playful-stacked-opt-ecowash-ru-4
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://opt.ecowash.ru/
+layout_pattern: stacked
+niches_suitable:
+- ecommerce
+- services
+ru_market: true
+slots:
+- name: trust-eyebrow
+  type: text
+- name: trust-heading
+  type: text
+- name: trust-subhead
+  type: text
+- name: trust-visual-image-alt
+  type: text
+- name: trust-visual-image
+  type: text
+- name: trust-stats-label
+  type: text
+- name: trust-stat-1-value
+  type: text
+- name: trust-stat-1-label
+  type: text
+- name: trust-stat-2-value
+  type: text
+- name: trust-stat-2-label
+  type: text
+- name: trust-stat-3-value
+  type: text
+- name: trust-stat-3-label
+  type: text
+- name: trust-badges-label
+  type: text
+- name: trust-badge-1
+  type: text
+- name: trust-badge-2
+  type: text
+- name: trust-badge-3
+  type: text
+style_mood: playful
+type: guarantees
+variant: numbers

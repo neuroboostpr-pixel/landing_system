@@ -6,6 +6,11 @@
 
 set -euo pipefail
 
+
+# Cross-platform python detection (sets PYTHON_CMD).
+__SCRIPT_DIR__="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=../../../scripts/lib/python-cmd.sh
+. "$__SCRIPT_DIR__/../../../scripts/lib/python-cmd.sh"
 PROJECT_DIR="${1:?ERROR: project_dir required}"
 SLOT_NAME="${2:?ERROR: slot_name required}"
 CHART_TYPE="${3:-number}"
@@ -24,7 +29,7 @@ if [ -f "$OUT_PNG" ] && [ "${FORCE:-0}" != "1" ]; then
 fi
 
 PROMPT_FILE="$(mktemp)"
-python3 - "$TEMPLATE" "$PROJECT_DIR" "$CHART_TYPE" "$DATA_JSON" "$PROMPT_FILE" <<'PYEOF'
+$PYTHON_CMD - "$TEMPLATE" "$PROJECT_DIR" "$CHART_TYPE" "$DATA_JSON" "$PROMPT_FILE" <<'PYEOF'
 import sys, re, json
 from pathlib import Path
 

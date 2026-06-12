@@ -1,0 +1,75 @@
+category: faq
+conversion_notes: Static FAQ (без collapse) эффективнее на landing — клиент видит
+  все ответы сразу. Белый фон отличает от других FAQ-блоков (accordion, searchable).
+  Используйте реальные возражения клиентов.
+created: '2026-05-13'
+description: Пять вопросов-ответов в static-режиме (без collapse) с чистым белым фоном
+  и горизонтальными разделителями. Адаптирован из pricing-page (Apache-2.0).
+display_name_ru: ru-faq-04-pricing-faq (stacked)
+id: ru-faq-04-pricing-faq
+layout_pattern: stacked
+layout_summary_ru: Узкая колонка (800px max). Лейбл, заголовок, 5 пар вопрос-ответ
+  с горизонтальными бордерами. Static (всё видно). Mobile аналогичен.
+recommended_styles_ru:
+- Minimalism & Swiss Style
+- Corporate Clean
+- Flat Design 2.0
+ru_market: true
+slots:
+- max_chars: 40
+  name: section-label
+  required: false
+  type: text
+- max_chars: 60
+  name: headline
+  required: true
+  type: text
+- max_chars: 120
+  name: q-1
+  required: true
+  type: text
+- max_chars: 400
+  name: a-1
+  required: true
+  type: text
+- max_chars: 120
+  name: q-2
+  required: true
+  type: text
+- max_chars: 400
+  name: a-2
+  required: true
+  type: text
+- max_chars: 120
+  name: q-3
+  required: true
+  type: text
+- max_chars: 400
+  name: a-3
+  required: true
+  type: text
+- max_chars: 120
+  name: q-4
+  required: false
+  type: text
+- max_chars: 400
+  name: a-4
+  required: false
+  type: text
+- max_chars: 120
+  name: q-5
+  required: false
+  type: text
+- max_chars: 400
+  name: a-5
+  required: false
+  type: text
+source: opendesign
+source_attribution: 'github.com/nexu-io/open-design: design-templates/pricing-page
+  (Apache-2.0)'
+type: faq
+use_cases:
+- services
+- b2c
+- local
+variant: null

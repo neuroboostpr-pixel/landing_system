@@ -1,50 +1,61 @@
 ---
+slug: wireframe-rendering
 type: skill
-name: wireframe-rendering
-sources: ["skills/wireframe-rendering/SKILL.md"]
-updated: 2026-05-15
-triggers: ["/landing-wireframe", "нарисуй wireframe", "покажи варианты блоков", "составь wireframe"]
+name: "Рендеринг интерактивного Wireframe (07a)"
 stage: "07a"
-uses: ["ux-composer", "prototype-import", "block-library-management", "block-composition"]
-tags: ["wireframe", "html", "css-only", "block-library", "preview"]
+tags: [wireframe, block-library, prototype, css-only, ux]
+triggers: [landing-wireframe]
+inputs:
+  - 07_ПРОТОТИП/prototype.yaml
+  - block-library/catalog.yaml
+  - block-library/<category>/<block-id>/assets/template.html
+outputs:
+  - 07a_WIREFRAME/wireframe.html
+  - 07a_WIREFRAME/candidates.yaml
+gates: []
+pre_reqs:
+  - prototype-importer
+  - block-library-management
+related:
+  - ux-composer
+  - block-composer
+  - block-library-management
+  - prototype-importer
+  - design-system-generator
+sources:
+  - skills/wireframe-rendering/SKILL.md
+updated: 2026-05-26
+confidence: {gates: low}
 ---
 
-# Wireframe Rendering — интерактивный прототип блоков
+# Рендеринг интерактивного Wireframe (07a)
 
 ## Что делает
 
-Строит `wireframe.html` — интерактивную страницу-предпросмотр, где для каждого блока прототипа показаны 2–3 варианта композиции из библиотеки блоков. Переключение между вариантами работает на чистом CSS (без JS-фреймворков), а каждый блок отображается сразу в двух видах: desktop и mobile.
+Скилл генерирует `wireframe.html` — интерактивный браузерный preview, в котором каждый блок прототипа отображается в 2–3 вариантах компоновки, подобранных из `block-library/`. Переключение между вариантами реализовано на чистом CSS (`:checked` selector) — без JavaScript-фреймворков и шага сборки. Вдобавок записывает `candidates.yaml` со списком выбранных кандидатов для downstream-скиллов.
 
-## Когда вызывать / в каком этапе
+## Когда вызывается
 
-Этап **07a**. Вызывается командой `/landing-wireframe` или агентом `ux-composer` после того, как импортирован прототип (этап 07 — `prototype-import`). Предшествует команде `/landing-compose` (этап 07b).
+Вызывается вручную командой `/landing-wireframe` после того, как `prototype.yaml` подготовлен скиллом `prototype-importer`. Также может быть вызван агентом `ux-composer` в рамках пайплайна оркестратора (PR-D).
 
-## Что на вход / на выход
+## Вход → выход
 
-**Входные артефакты:**
-- `<project>/07_ПРОТОТИП/prototype.yaml` — машиночитаемый прототип, подготовленный скиллом `prototype-import`
-- `block-library/catalog.yaml` — каталог всех доступных блоков системы
-- `block-library/<category>/<block-id>/assets/template.html` и `template-mobile.html` — HTML-шаблоны блоков для desktop и mobile
+**Вход:** `07_ПРОТОТИП/prototype.yaml` (список блоков прототипа), `block-library/catalog.yaml` (каталог всех блоков), HTML-шаблоны блоков (`template.html` и `template-mobile.html`) из `block-library/`.
 
-**Выходные артефакты:**
-- `<project>/07a_WIREFRAME/wireframe.html` — интерактивный wireframe с CSS-переключением вариантов
-- `<project>/07a_WIREFRAME/candidates.yaml` — список подобранных кандидатов (до 3-х) для каждого слота прототипа
+**Выход:** `07a_WIREFRAME/wireframe.html` — готовый интерактивный файл с radio-кнопками для выбора варианта каждого блока; `07a_WIREFRAME/candidates.yaml` — список отобранных кандидатов с метаданными, который затем используется `/landing-compose`.
 
-**Вспомогательные скрипты:**
-- `scripts/match-candidates.py` — подбирает кандидатов из каталога для каждого блока прототипа
-- `scripts/render-wireframe.py` — собирает `wireframe.html` из оболочки + кандидатов
-- `scripts/serve-preview.sh` — локальный `http.server` на случай, если `file://` ломает iframe sandbox
+## Failure modes
 
-**Шаблоны:**
-- `templates/wireframe-shell.html` — HTML-оболочка с radio-кнопками и CSS-логикой переключения
+- `prototype.yaml` отсутствует или не прошёл валидацию — `match-candidates.py` падает с ошибкой отсутствия входных данных.
+- В `block-library/catalog.yaml` нет подходящего блока для какого-то типа секции — кандидат не найден, блок пропускается без предупреждения.
+- `template.html` или `template-mobile.html` отсутствует у конкретного блока — рендерер генерирует заглушку вместо реального превью.
+- При открытии `wireframe.html` через `file://` iframe sandbox может блокировать ресурсы — нужно запустить `scripts/serve-preview.sh`.
+- `selections.yaml`, скачанный пользователем после подтверждения вариантов, не положен обратно в `07a_WIREFRAME/` — следующий скилл `block-composer` не найдёт выбор.
 
-## Связанные концепты
+## Related
 
-- [[prototype-import]] — поставляет `prototype.yaml`, который служит основным входом
-- [[block-library-management]] — каталог `block-library/catalog.yaml`, из которого подбираются кандидаты
-- [[ux-composer]] — агент, который вызывает этот скилл для рендеринга wireframe
-- [[block-composition]] — следующий этап (07b): принимает выбранные в wireframe варианты и формирует `composed.html`
-
-## Источник
-
-- `skills/wireframe-rendering/SKILL.md`
+- [[prototype-importer]] — подготавливает `prototype.yaml`, который является обязательным входом
+- [[ux-composer]] — агент, способный вызывать этот скилл в рамках оркестратора
+- [[block-composer]] — потребляет `candidates.yaml` и `selections.yaml` на этапе 07b
+- [[block-library-management]] — поддерживает каталог и шаблоны блоков
+- [[design-system-generator]] — поставляет дизайн-токены, используемые в итоговом compose

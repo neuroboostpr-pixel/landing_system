@@ -1,0 +1,146 @@
+<style>
+  :root {
+    --lp-bg: #f5f5f5;
+    --lp-text: #1a1a1a;
+    --lp-accent: #333;
+    --lp-border: #e0e0e0;
+    --lp-accent: #333;
+    --lp-accent: #333;
+    --lp-font-display: 'Syne', 'Inter Tight', system-ui, sans-serif;
+    --lp-font-body: 'DM Sans', system-ui, sans-serif;
+    --spacing-md: 16px;
+    --spacing-lg: 32px;
+  }
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--lp-font-body); background: var(--lp-bg); color: var(--lp-text); min-height: 100vh; display: flex; flex-direction: column; }
+  .hero-upper {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 40px 60px;
+  }
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--lp-accent);
+    margin-bottom: 20px;
+  }
+  .headline {
+    font-family: var(--lp-font-display);
+    font-weight: 800;
+    font-size: clamp(52px, 7vw, 88px);
+    letter-spacing: -0.03em;
+    line-height: 1.0;
+    color: var(--lp-text);
+    max-width: 800px;
+    margin: 0 auto 20px;
+  }
+  .subtext {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--lp-text);
+    max-width: 440px;
+    margin: 0 auto 40px;
+    opacity: 0.8;
+  }
+  .form-row {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    max-width: 560px;
+    justify-content: center;
+  }
+  .form-row input {
+    flex: 1;
+    min-width: 0;
+    padding: 14px 18px;
+    font-family: var(--lp-font-body);
+    font-size: 15px;
+    color: var(--lp-text);
+    background: transparent;
+    border: 1.5px solid var(--lp-border);
+    border-radius: 4px;
+    outline: none;
+  }
+  .form-row input::placeholder { color: rgba(26,20,16,0.4); }
+  .form-row button {
+    flex-shrink: 0;
+    padding: 14px 24px;
+    font-family: var(--lp-font-body);
+    font-size: 15px;
+    font-weight: 500;
+    color:#fff;
+    background: var(--lp-accent);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .hero-deco {
+    flex: 1;
+    background: var(--lp-accent);
+    min-height: 120px;
+    position: relative;
+    overflow: hidden;
+  }
+  .deco-stripe {
+    width: 100%;
+    height: 12px;
+    background: var(--lp-accent);
+  }
+  .ticker-wrap {
+    width: 100%;
+    overflow: hidden;
+    background: rgba(0,0,0,0.85);
+    padding: 10px 0;
+  }
+  .ticker-track {
+    display: flex;
+    gap: 24px;
+    white-space: nowrap;
+    animation: ticker 20s linear infinite;
+  }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .ticker-unit {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.9);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .ticker-star { color: var(--lp-accent); }
+</style>
+<section class="hero-upper" data-block-id="ru-hero-08-centered-emailcap">
+<div class="eyebrow">{{slot:kicker}}</div>
+<h1 class="headline">{{slot:headline}}</h1>
+<p class="subtext">{{slot:subhead}}</p>
+<form class="form-row">
+<input placeholder="Ваш email" type="email"/>{{slot:email-placeholder}}
+<button type="submit">{{slot:primary-cta}}</button>
+</form>
+</section>
+<div aria-hidden="true" class="deco-stripe"></div>
+<div aria-hidden="true" class="ticker-wrap">
+<div class="ticker-track">
+<span class="ticker-unit">{{slot:ticker-unit}} <span class="ticker-star">✳</span></span>
+<span class="ticker-unit">{{slot:span-1}} <span class="ticker-star">✳</span></span>
+<span class="ticker-unit">{{slot:span-2}} <span class="ticker-star">✳</span></span>
+<span class="ticker-unit">{{slot:span-3}} <span class="ticker-star">✳</span></span>
+<span class="ticker-unit">{{slot:span-4}} <span class="ticker-star">✳</span></span>
+<span class="ticker-unit">{{slot:span-5}} <span class="ticker-star">✳</span></span>
+<span class="ticker-unit">{{slot:span-6}} <span class="ticker-star">✳</span></span>
+<span class="ticker-unit">{{slot:span-7}} <span class="ticker-star">✳</span></span>
+</div>
+</div>
+<div aria-hidden="true" class="hero-deco"></div>

@@ -1,0 +1,47 @@
+category: faq
+description: Аккордеон вопросов на светлом фоне с компактными строками и иконками
+  раскрытия.
+display_name_ru: faq-minimal-stacked-sskrusgun-ru-13 (stacked)
+has_animation: false
+id: faq-minimal-stacked-sskrusgun-ru-13
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://sskrusgun.ru/
+layout_pattern: stacked
+niches_suitable:
+- services
+- education
+- ecommerce
+ru_market: true
+slots:
+- name: eyebrow
+  type: text
+- name: heading
+  required: true
+  type: text
+- name: subhead
+  type: text
+- name: question-1
+  type: text
+- name: answer-1
+  type: text
+- name: question-2
+  type: text
+- name: answer-2
+  type: text
+- name: question-3
+  type: text
+- name: answer-3
+  type: text
+- name: question-4
+  type: text
+- name: answer-4
+  type: text
+- name: question-5
+  type: text
+- name: answer-5
+  type: text
+style_mood: minimal
+type: faq
+variant: null

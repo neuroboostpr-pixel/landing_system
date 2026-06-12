@@ -1,64 +1,45 @@
 ---
+slug: landing-help
 type: command
-name: landing-help
+name: "Справка по командам системы"
+tags: [help, commands, reference, entry-point]
+triggers: [/landing-help]
+inputs: []
+outputs: []
+pre_reqs: []
+related: [landing-project-init, landing-from-context, landing-versioning-and-cloning, landing-orchestrator, qa-auditor, wp-cli-deployer]
 sources: ["commands/landing-help.md"]
-updated: 2026-05-15
-triggers:
-  - "покажи все команды системы"
-  - "что умеет landing-system"
-  - "справка по командам"
-  - "какие команды доступны"
-stage: ""
-uses:
-  - landing-new
-  - landing-from-context
-  - landing-clone
-  - landing-references
-  - landing-moodboard
-  - landing-brand
-  - landing-design
-  - landing-stack
-  - landing-content
-  - landing-build
-  - landing-deploy
-  - landing-rollback
-  - landing-qa
-  - landing-status
-tags: ["service", "help", "onboarding"]
+updated: 2026-05-26
 ---
 
-# /landing-help — Справка по командам системы
+# Справка по командам системы
 
 ## Что делает
 
-Выводит полный список всех slash-команд landing-system с кратким описанием каждой. Ничего не создаёт и не изменяет — только справка.
+Выводит полный список slash-команд landing-system с кратким описанием каждой. Команда не запускает никаких агентов и не меняет состояние проекта — только печатает справочный текст. Охватывает все категории: точки входа в проект, поэтапные команды (03–08), операционные команды деплоя и сервисные утилиты.
 
-## Когда вызывать / в каком этапе
+## Когда вызывается
 
-Вызывать в любой момент — нет привязки к этапу. Полезно на старте, когда непонятно с чего начать, или при возврате к проекту после паузы.
+Запускается вручную пользователем в любой момент работы с системой. Типичные поводы: первое знакомство с системой, забытое имя команды для конкретного этапа, быстрая ориентация по доступным операциям. Не зависит от состояния проекта и не требует `.landing-state.yaml`.
 
-## Что на вход / на выход
+## Вход → выход
 
-**Вход:** ничего не требуется.
+**Вход:** ничего не требуется — команда не читает файлы проекта.
 
-**Выход:** фиксированный текстовый блок со всеми командами, разбитый на 4 раздела:
+**Выход:** текстовый блок в чат со сгруппированным списком команд: ENTRY POINTS (new / from-context / clone), PER-STAGE (references → build), OPERATIONS (deploy / rollback / qa), SERVICE (status / help / update). Указывает, что большинство команд за пределами Phase 1 ещё не реализованы.
 
-- **ENTRY POINTS** — точки входа: создать проект, создать из контекста агентства, клонировать A/B-копию.
-- **PER-STAGE** — команды по этапам 03–08: референсы, мудборд, бренд, дизайн, стек, контент, сборка.
-- **OPERATIONS** — деплой, передеплой, откат версии, QA-аудит.
-- **SERVICE** — статус, справка, обновление мастер-системы.
+## Failure modes
 
-## Связанные концепты
+- Пользователь видит команду `/landing-update` как доступную, хотя она явно помечена «еще не реализован» — может вызвать недоумение.
+- Список команд не обновляется автоматически при добавлении новых slash-команд — требует ручного редактирования файла.
+- Команды PR-A/PR-B/PR-C/PR-D (`/landing-prototype`, `/landing-visuals`, `/landing-go` и др.) отсутствуют в выводе — справка устарела относительно реального состояния системы.
+- При использовании вне проектной папки не предупреждает, что часть команд требует контекст проекта.
 
-- [[landing-new]] — создаёт новый проект с нуля (упомянут в ENTRY POINTS)
-- [[landing-from-context]] — создаёт проект из папки агентства (упомянут в ENTRY POINTS)
-- [[landing-clone]] — A/B-клонирование существующего лендинга
-- [[landing-status]] — текущее состояние системы и проектов
-- [[landing-deploy]] — деплой на Бегет
-- [[landing-rollback]] — откат к предыдущей версии
-- [[landing-qa]] — QA-аудит живого сайта
-- [[landing-build]] — сборка WordPress-темы (этап 08)
+## Related
 
-## Источник
-
-- `commands/landing-help.md`
+- [[landing-project-init]] — инициализирует новый проект, описан в справке как `/landing-new`
+- [[landing-from-context]] — создаёт проект из папки агентства, описан в справке
+- [[landing-versioning-and-cloning]] — команда `/landing-clone`, упомянута в ENTRY POINTS
+- [[landing-orchestrator]] — координирует поэтапный процесс, на который ссылаются PER-STAGE команды
+- [[qa-auditor]] — реализует `/landing-qa` из секции OPERATIONS
+- [[wp-cli-deployer]] — реализует `/landing-deploy` из секции OPERATIONS

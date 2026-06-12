@@ -1,0 +1,47 @@
+<style>
+  :root {
+    --lp-bg: #f5f5f5; --lp-text: #1a1a1a; --lp-accent: #333; --lp-border: #e0e0e0;
+    --lp-font-display: system-ui, sans-serif; --lp-font-body: system-ui, sans-serif;
+    --spacing-md: 16px; --spacing-lg: 32px;
+  }
+  body { margin: 0; font-family: var(--lp-font-body); background: var(--lp-bg); color: var(--lp-text); width: 375px; }
+  .pricing { padding: 40px 16px; }
+  .section-headline { font-family: var(--lp-font-display); font-size: 24px; text-align: center; margin: 0 0 28px; }
+  .tier { border: 1px solid var(--lp-border); border-radius: 12px; padding: 20px 16px; margin-bottom: 16px; }
+  .tier--popular { border-color: var(--lp-accent); border-width: 2px; }
+  .tier-badge { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--lp-accent); margin: 0 0 4px; }
+  .tier-name { font-family: var(--lp-font-display); font-size: 18px; font-weight: 700; margin: 0 0 4px; }
+  .tier-price { font-family: var(--lp-font-display); font-size: 28px; font-weight: 900; margin: 0 0 12px; }
+  .tier-features { list-style: none; padding: 0; margin: 0 0 16px; display: flex; flex-direction: column; gap: 6px; }
+  .tier-features li { font-size: 13px; color:#444; }
+  .tier-features li::before { content: "✓ "; color: var(--lp-accent); font-weight: 700; }
+  .cta { display: block; padding: 12px; background: var(--lp-accent); color:#fff; text-align: center; text-decoration: none; border-radius: 6px; font-weight: 600; }
+</style>
+<section class="pricing" data-block-id="ru-pricing-01-rub-from">
+<h2 class="section-headline">{{slot:headline}}</h2>
+<div class="tier">
+<p class="tier-name">{{slot:tier-1-name}}</p>
+<p class="tier-price">{{slot:tier-1-price}}</p>
+<ul class="tier-features">
+<li>{{slot:li-1}}</li><li>{{slot:li-2}}</li><li>{{slot:li-3}}</li><li>{{slot:li-4}}</li><li>{{slot:li-5}}</li>
+</ul>
+<a class="cta" href="#quiz">{{slot:tier-1-cta}}</a>
+</div>
+<div class="tier tier--popular">
+<p class="tier-badge">Популярный</p>
+<p class="tier-name">{{slot:tier-2-name}}</p>
+<p class="tier-price">{{slot:tier-2-price}}</p>
+<ul class="tier-features">
+<li>{{slot:li-6}}</li><li>{{slot:li-7}}</li><li>{{slot:li-8}}</li><li>{{slot:li-9}}</li><li>{{slot:li-10}}</li>
+</ul>
+<a class="cta" href="#quiz">{{slot:tier-2-cta}}</a>
+</div>
+<div class="tier">
+<p class="tier-name">{{slot:tier-3-name}}</p>
+<p class="tier-price">{{slot:tier-3-price}}</p>
+<ul class="tier-features">
+<li>{{slot:li-11}}</li><li>{{slot:li-12}}</li><li>{{slot:li-13}}</li><li>{{slot:li-14}}</li><li>{{slot:li-15}}</li>
+</ul>
+<a class="cta" href="#quiz">{{slot:tier-3-cta}}</a>
+</div>
+</section>

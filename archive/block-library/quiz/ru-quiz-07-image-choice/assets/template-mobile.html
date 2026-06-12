@@ -1,0 +1,59 @@
+<style>
+  :root {
+    --lp-bg: #f5f5f5; --lp-text: #1a1a1a; --lp-accent: #333; --lp-border: #e0e0e0;
+    --lp-font-display: system-ui, sans-serif; --lp-font-body: system-ui, sans-serif;
+    --spacing-md: 16px; --spacing-lg: 32px;
+  }
+  body { margin: 0; font-family: var(--lp-font-body); background:#f5f5f5; color: var(--lp-text); width: 375px; }
+  .step-card { background: var(--lp-bg); min-height: 100vh; padding: 24px 16px 36px; box-sizing: border-box; }
+  .progress-bar-wrap { margin-bottom: 20px; }
+  .progress-label { font-size: 11px; color:#999; margin-bottom: 5px; }
+  .progress-track { background:#eee; border-radius: 4px; height: 5px; }
+  .progress-fill { background: var(--lp-accent); height: 5px; border-radius: 4px; width: 40%; }
+  .question-text { font-family: var(--lp-font-display); font-size: 20px; font-weight: 700; line-height: 1.25; margin: 0 0 20px; text-align: center; }
+  .image-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .image-option input[type=radio] { position: absolute; opacity: 0; width: 0; height: 0; }
+  .image-option label { display: block; border: 2px solid var(--lp-border); border-radius: 8px; overflow: hidden; cursor: pointer; }
+  .image-option input[type=radio]:checked + label { border-color: var(--lp-accent); }
+  .img-placeholder { width: 100%; height: 100px; background:#e8e8e8; display: flex; align-items: center; justify-content: center; font-size: 11px; color:#999; }
+  .img-label { padding: 8px 10px; font-size: 13px; font-weight: 500; text-align: center; background: var(--lp-bg); }
+  .next-btn { display: block; margin: 20px auto 0; background: var(--lp-accent); color:#fff; border: none; border-radius: 8px; padding: 14px; width: 100%; font-size: 16px; font-weight: 700; text-decoration: none; text-align: center; box-sizing: border-box; }
+</style>
+<div class="step-card" data-block-id="ru-quiz-07-image-choice">
+<div class="progress-bar-wrap">
+<div class="progress-label">{{slot:progress-label}}</div>
+<div class="progress-track"><div class="progress-fill"></div></div>
+</div>
+<p class="question-text">{{slot:question-text}}</p>
+<div class="image-grid">
+<div class="image-option">
+<input id="m-opt1" name="img-choice" type="radio" value="1"/>
+<label for="m-opt1">
+<div class="img-placeholder">{{slot:image-1}}</div>
+<div class="img-label">{{slot:label-1}}</div>
+</label>
+</div>
+<div class="image-option">
+<input id="m-opt2" name="img-choice" type="radio" value="2"/>
+<label for="m-opt2">
+<div class="img-placeholder">{{slot:image-2}}</div>
+<div class="img-label">{{slot:label-2}}</div>
+</label>
+</div>
+<div class="image-option">
+<input id="m-opt3" name="img-choice" type="radio" value="3"/>
+<label for="m-opt3">
+<div class="img-placeholder">{{slot:image-3}}</div>
+<div class="img-label">{{slot:label-3}}</div>
+</label>
+</div>
+<div class="image-option">
+<input id="m-opt4" name="img-choice" type="radio" value="4"/>
+<label for="m-opt4">
+<div class="img-placeholder">{{slot:image-4}}</div>
+<div class="img-label">{{slot:label-4}}</div>
+</label>
+</div>
+</div>
+<a class="next-btn" href="#">Далее →</a>
+</div>

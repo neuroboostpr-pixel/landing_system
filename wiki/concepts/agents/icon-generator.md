@@ -1,51 +1,40 @@
 ---
+slug: icon-generator
 type: agent
-name: icon-generator
-sources: ["agents/icon-generator.md"]
-updated: 2026-05-15
-triggers: []
+name: "Генератор иконок"
 stage: "07d"
-uses: ["visual-curator", "visual-generation", "photo-curation"]
-tags: ["visuals", "icons", "codex", "image-gen", "cache"]
+tags: [icons, codex, image-gen, visuals, cache, helper]
+triggers: []
+inputs: ["project_dir", "slot_name", "hint"]
+outputs: ["07d_VISUALS/icons/<slot_name>.png"]
+gates: []
+pre_reqs: []
+related: ["visual-curator", "landing-visuals"]
+sources: ["agents/icon-generator.md"]
+updated: 2026-05-26
+confidence: {triggers: low, pre_reqs: low}
 ---
 
-# icon-generator — генератор одного PNG-иконки
+# Генератор иконок
 
 ## Что делает
+Вспомогательный агент: генерирует один PNG-файл иконки для заданного слота через codex image_gen. Работает в рамках этапа 07d и всегда запускается из-под родительского агента `visual-curator` — самостоятельный прямой вызов не предусмотрен. Перед генерацией проверяет хэш-кэш: если идентичный запрос уже выполнялся, копирует готовый файл без обращения к codex. Stage Execution Protocol контролирует родительский агент.
 
-Генерирует **один** файл иконки в формате PNG для конкретного слота лендинга. Работает через codex image_gen с умным кэшированием: если иконка с такими же параметрами уже была создана ранее — берёт из кэша без повторного запроса к API.
+## Когда вызывается
+Запускается агентом `visual-curator` на этапе 07d для каждого иконочного слота, у которого нет кэшированного результата. Условие вызова — слот типа `*-icon` присутствует в `composed.html`, а файл иконки ещё не сгенерирован или истёк кэш.
 
-## Когда вызывать / в каком этапе
+## Вход → выход
+**Вход:** абсолютный путь к директории проекта (`project_dir`), имя слота (`slot_name`, например `feature-1-icon`), необязательная подсказка для промпта (`hint`, например `shield`).
 
-Вызывается агентом [[visual-curator]] на этапе **07d** (Visual Generation). Не вызывается напрямую пользователем — только как субагент в рамках команды `/landing-visuals`.
+**Выход:** файл `<project>/07d_VISUALS/icons/<slot_name>.png`. Параллельно копия сохраняется в `.cache/<hash>.png` для повторного использования.
 
-## Что на вход / на выход
+## Failure modes
+- **codex API недоступен или упал после retry** — агент откатывается к SVG-placeholder через `skills/photo-curation/scripts/svg-placeholder.py` (механизм из PR-B).
+- **Chroma-key fringe-артефакты** — повторный запуск с флагом `--edge-contract 1` или альтернативным ключом `#ff00ff`.
+- **Кэш-попадание с битым файлом** — если `.cache/<hash>.png` существует, но размер < 1KB, файл считается невалидным и генерация запускается заново.
+- **Некорректный `hint`** — агент использует waterfall: сначала ищет промпт в `icons.csv`, при отсутствии — переходит к generic-шаблону.
+- **Прямой вызов без `visual-curator`** — отсутствует контекст stage-протокола; результат может оказаться не синхронизирован с `composed.html`.
 
-**Входные данные:**
-- `project_dir` — абсолютный путь к папке проекта
-- `slot_name` — имя слота, например `feature-1-icon`
-- `hint` (опционально) — текстовая подсказка для генерации, например `shield`
-
-**Процесс:**
-1. Вычисляет хэш-ключ кэша по параметрам: `hint`, `icon_style`, `brand-color`, `niche` через скрипт `visual-cache.py`.
-2. Если файл с таким хэшем уже есть в `.cache/` (размер ≥ 1 КБ) — копирует его в целевую папку и завершает работу.
-3. Если кэш-промах — запускает `codex-generate-icon.sh` для генерации.
-4. После успешной генерации сохраняет результат в `.cache/<hash>.png` для будущих прогонов.
-
-**Выходной артефакт:**
-- `<project>/07d_VISUALS/icons/<slot_name>.png`
-
-**При ошибках:**
-- Если codex падает после повтора — создаёт SVG-заглушку через `svg-placeholder.py` (из PR-B).
-- При проблемах с цветовой рамкой (chroma-key fringe) — повторяет с флагом `--edge-contract 1`.
-
-## Связанные концепты
-
-- [[visual-curator]] — оркестратор этапа 07d, который диспатчит icon-generator для каждого слота
-- [[visual-generation]] — скилл и набор скриптов (visual-cache.py, codex-generate-icon.sh), на которые опирается агент
-- [[photo-curation]] — предоставляет svg-placeholder.py как fallback при ошибках генерации
-- [[infographic-builder]] — аналогичный агент, но для инфографики (а не иконок)
-
-## Источник
-
-- `agents/icon-generator.md`
+## Related
+- [[visual-curator]] — родительский агент, диспатчит `icon-generator` для каждого слота этапа 07d
+- [[landing-visuals]] — slash-команда, запускающая весь пайплайн визуальной генерации этапа 07d

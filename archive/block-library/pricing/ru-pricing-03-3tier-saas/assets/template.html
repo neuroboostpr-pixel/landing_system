@@ -1,0 +1,67 @@
+<style>
+  :root { --lp-bg: #f5f5f5; --lp-text: #1a1a1a; --lp-accent: #333; --lp-border: #e0e0e0; --lp-bg-alt: #e8e8e8; --lp-text-muted: #999; --lp-font-body:system-ui,sans-serif; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:var(--lp-font-body); background:var(--lp-bg); color:var(--lp-text); }
+  .pricing-section { padding:80px 0; }
+  .wrap { max-width:1080px; margin:0 auto; padding:0 32px; }
+  .section-head { text-align:center; margin-bottom:48px; }
+  .section-head h2 { font-size:clamp(28px,3.5vw,40px); letter-spacing:-0.02em; margin-bottom:12px; font-weight:700; }
+  .section-head p { color:var(--lp-text-muted); font-size:16px; }
+  .tiers { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .tier { background:var(--lp-bg-alt); border:1px solid var(--lp-border); border-radius:14px; padding:32px; position:relative; }
+  .tier.featured { border-color:var(--lp-accent); }
+  .tier.featured::before { content:attr(data-badge); position:absolute; top:-12px; left:24px; background:var(--lp-accent); color:white; padding:3px 12px; border-radius:999px; font-size:11px; font-weight:500; }
+  .tier-name { font-size:18px; font-weight:600; margin-bottom:8px; }
+  .tier-desc { color:var(--lp-text-muted); font-size:14px; margin-bottom:16px; }
+  .tier-price { font-size:42px; letter-spacing:-0.02em; margin-bottom:6px; font-weight:700; }
+  .tier-price small { font-size:15px; color:var(--lp-text-muted); font-weight:400; letter-spacing:0; }
+  .tier-features { list-style:none; padding:0; margin:16px 0 24px; color:var(--lp-text-muted); font-size:14px; border-top:1px solid var(--lp-border); }
+  .tier-features li { padding:7px 0; border-bottom:1px solid var(--lp-border); display:flex; align-items:center; gap:8px; }
+  .tier-features li::before { content:"✓"; color:var(--lp-accent); font-weight:700; flex-shrink:0; }
+  .btn-primary { display:block; width:100%; padding:12px 20px; background:var(--lp-accent); color:white; border:1px solid var(--lp-accent); border-radius:8px; font:inherit; font-weight:500; cursor:pointer; text-align:center; text-decoration:none; }
+  .btn-secondary { display:block; width:100%; padding:12px 20px; background:transparent; color:var(--lp-text); border:1px solid var(--lp-border); border-radius:8px; font:inherit; font-weight:500; cursor:pointer; text-align:center; text-decoration:none; }
+</style>
+<section class="pricing-section" data-block-id="ru-pricing-03-3tier-saas">
+<div class="wrap">
+<div class="section-head">
+<h2>{{slot:headline}}</h2>
+<p>{{slot:subhead}}</p>
+</div>
+<div class="tiers">
+<div class="tier">
+<div class="tier-name">{{slot:tier-1-name}}</div>
+<div class="tier-desc">{{slot:tier-1-desc}}</div>
+<div class="tier-price">{{slot:tier-price}}</div>
+<ul class="tier-features">
+<li>{{slot:tier-1-f1}}</li>
+<li>{{slot:tier-1-f2}}</li>
+<li>{{slot:tier-1-f3}}</li>
+</ul>
+<a class="btn-secondary" href="#contact">{{slot:tier-1-cta}}</a>
+</div>
+<div class="tier featured" data-badge="Рекомендуем">
+<div class="tier-name">{{slot:tier-2-name}}</div>
+<div class="tier-desc">{{slot:tier-2-desc}}</div>
+<div class="tier-price">{{slot:div-1}}</div>
+<ul class="tier-features">
+<li>{{slot:tier-2-f1}}</li>
+<li>{{slot:tier-2-f2}}</li>
+<li>{{slot:tier-2-f3}}</li>
+<li>{{slot:tier-2-f4}}</li>
+</ul>
+<a class="btn-primary" href="#contact">{{slot:tier-2-cta}}</a>
+</div>
+<div class="tier">
+<div class="tier-name">{{slot:tier-3-name}}</div>
+<div class="tier-desc">{{slot:tier-3-desc}}</div>
+<div class="tier-price">{{slot:tier-3-price}}</div>
+<ul class="tier-features">
+<li>{{slot:tier-3-f1}}</li>
+<li>{{slot:tier-3-f2}}</li>
+<li>{{slot:tier-3-f3}}</li>
+</ul>
+<a class="btn-secondary" href="#contact">{{slot:tier-3-cta}}</a>
+</div>
+</div>
+</div>
+</section>

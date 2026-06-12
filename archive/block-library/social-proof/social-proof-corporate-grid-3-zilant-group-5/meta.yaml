@@ -1,0 +1,52 @@
+category: social-proof
+description: Статистический блок с крупными красными числами, краткими подписями и
+  широким видеопревью ниже.
+display_name_ru: social-proof-corporate-grid-3-zilant-group-5 (grid-3)
+has_animation: false
+id: social-proof-corporate-grid-3-zilant-group-5
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://zilant.group/
+layout_pattern: grid-3
+niches_suitable:
+- services
+- b2b-saas
+- premium-auto
+- tech
+ru_market: true
+slots:
+- name: eyebrow
+  type: text
+- name: heading
+  required: true
+  type: text
+- name: subhead
+  type: text
+- name: stats-list-label
+  type: text
+- name: stat-1-number
+  type: text
+- name: stat-1-caption
+  type: text
+- name: stat-2-number
+  type: text
+- name: stat-2-caption
+  type: text
+- name: stat-3-number
+  type: text
+- name: stat-3-caption
+  type: text
+- name: video-preview-mobile
+  type: text
+- name: video-preview-alt
+  type: text
+- name: video-preview
+  type: text
+- name: video-play-label
+  type: text
+- name: video-caption
+  type: text
+style_mood: corporate
+type: logos
+variant: numbers

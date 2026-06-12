@@ -1,0 +1,35 @@
+category: features
+created: '2026-06-01'
+display_name_ru: features-005 (default)
+has_bg_image: false
+id: features-005
+layout_pattern: default
+signature: features|default|[content]|bg:false
+slots:
+- name: features-eyebrow
+  type: text
+- name: features-title
+  type: text
+- name: features-lead
+  type: text
+- name: feature-1-index
+  type: text
+- name: feature-1-title
+  type: text
+- name: feature-1-text
+  type: text
+- name: feature-2-index
+  type: text
+- name: feature-2-title
+  type: text
+- name: feature-2-text
+  type: text
+- name: feature-3-index
+  type: text
+- name: feature-3-title
+  type: text
+- name: feature-3-text
+  type: text
+source: cleaned
+type: features
+variant: null

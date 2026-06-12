@@ -1,86 +1,51 @@
 ---
+slug: landing-go
 type: command
-name: landing-go
+name: "/landing-go — Главная команда оркестратора"
+tags: [orchestrator, entry-point, pipeline, dispatch, prototype-first]
+triggers: [landing-go]
+inputs: ["07_ПРОТОТИП/source/prototype.pdf", "07_ПРОТОТИП/source/prototype.md", ".landing-state.yaml"]
+outputs: [".landing-state.yaml"]
+pre_reqs: [landing-project-init, landing-onboarding-wizard]
+related: [landing-orchestrator, prototype-importer, brand-architect, design-system-generator, stack-planner, content-writer, block-composer, photo-curator, visual-curator, wp-builder, wp-deployer, seo-tech-audit, wireframe-rendering]
 sources: ["commands/landing-go.md"]
-updated: 2026-05-15
-triggers:
-  - "запустить лендинг с нуля"
-  - "поехали по этапам"
-  - "продолжить конвейер"
-  - "следующий этап проекта"
-  - "провести через все этапы"
-stage: ""
-uses:
-  - landing-orchestrator
-  - prototype-importer
-  - references-curator
-  - brand-architect
-  - design-system-generator
-  - stack-planner
-  - content-writer
-  - ux-composer
-  - block-composer
-  - photo-curator
-  - visual-curator
-  - wp-builder
-  - wp-deployer
-  - qa-auditor
-  - analytics-engineer
-  - seo-optimizer
-tags: ["orchestrator", "entry-point", "pipeline", "auto-fix"]
+updated: 2026-05-26
+confidence: {stage: low}
 ---
 
-# /landing-go — Главная команда конвейера
+# /landing-go — Главная команда оркестратора
 
 ## Что делает
 
-Единая точка входа для всего производства лендинга. Запускаешь один раз — команда сама читает статус проекта, находит следующий этап и ведёт тебя от прототипа до живого сайта на Бегете, не давая пропустить ни один шаг.
+Единая точка входа в производственный конвейер лендинга. Читает `.landing-state.yaml`, определяет текущий статус проекта и диспатчит следующий этап через `landing-orchestrator`. В режиме prototype-first автоматически помечает upstream-этапы (00, 01, 01a, 02) как `n/a`, чтобы не проваливать gate-check по ненужным шагам. На этапах 07d/07e запускает субагентов фото и визуалов параллельно. При падении гейта предлагает авто-фикс из `config/stage-gates.yaml` и автоматически перезапускает проверку после исправления.
 
-## Когда вызывать / в каком этапе
+## Когда вызывается
 
-Вызывать после того, как прототип (`prototype.pdf` или `prototype.md`) положен в `<project>/07_ПРОТОТИП/source/`. Подходит и для старта с нуля, и для возобновления застрявшего проекта — команда читает `.landing-state.yaml` и подхватывает с нужного места. Этапы 00–02 (бриф, контекст, ниша, материалы клиента) считаются сделанными до системы и помечаются `n/a` автоматически.
+Пользователь запускает `/landing-go` вручную — один раз в начале или после каждого шага, требующего ручного подтверждения (выбор вариантов в wireframe, утверждение brand-kit). Повторный запуск безопасен: оркестратор сам находит незакрытый этап и продолжает с него.
 
-**Синтаксис:**
-```
-/landing-go [--project <slug>] [--auto-fix yes|no] [--skip-gate <id>]
-```
+## Вход → выход
 
-## Что на вход / на выход
+**Вход:** Папка проекта с файлом `prototype.pdf` или `prototype.md` в `07_ПРОТОТИП/source/`. Файл `.landing-state.yaml` должен существовать (создаётся командой `/landing-new` или `/landing-start`).
 
-**Вход:**
-- `<project>/.landing-state.yaml` — текущий статус этапов проекта
-- `<project>/07_ПРОТОТИП/source/prototype.pdf` (или `.md`) — исходный прототип
-- Опциональные флаги: `--project`, `--auto-fix yes`, `--skip-gate <id>`
+**Выход:** Последовательно закрытые этапы конвейера: prototype → references → brand → design → stack → content → wireframe → composed → photos + visuals → composed_final → build → deploy → QA → SEO. На каждом шаге обновляется `.landing-state.yaml`, появляются артефакты соответствующего этапа.
 
-**Выход:**
-- Последовательный проход через все 13+ этапов конвейера с HTML-превью на каждом gate
-- Финальный результат: задеплоенный WordPress-сайт на Бегете + QA + аналитика + SEO
-- При падении гейта — `fix_hint` из `config/stage-gates.yaml` и авто-фикс на `yes`
+## Failure modes
 
-**Особый режим:** на этапах 07d (фото) и 07e (визуалы) оркестратор диспатчит оба субагента **параллельно**, сокращая время сборки.
+- **Prototype не найден** — скрипт `landing-go-next-stage.py` не может определить флоу, оркестратор останавливается с ошибкой «нет источника прототипа».
+- **Upstream-этапы не помечены `n/a`** — `gate-check.sh` пытается валидировать бриф и анализ ниши, которых нет в prototype-first потоке, и падает с ложными hard-check ошибками.
+- **Гейт упал без `fix_hint`** — авто-фикс не предлагается, пользователь видит ошибку без инструкций по устранению.
+- **Параллельный запуск 07d/07e** — если один субагент зависает, второй завершится, а оркестратор ждёт оба; тайм-аут не определён явно.
+- **Флаг `--skip-gate` в продакшне** — позволяет обойти hard-check, что нарушает контракт stage-gates и может привести к деплою недоделанного проекта.
 
-## Ключевые этапы
+## Related
 
-| Этап | Режим | Агент |
-|---|---|---|
-| 07a prototype | авто | `prototype-importer` |
-| 03–05 бренд | руками + AI | `brand-architect`, `design-system-generator` |
-| 06–07 стек + контент | авто | `stack-planner`, `content-writer` |
-| 07b–07c wireframe + compose | маркетолог утверждает | `ux-composer`, `block-composer` |
-| **07d ⇆ 07e** фото + визуалы | **параллельно** | `photo-curator` ‖ `visual-curator` |
-| 08–12 build → QA → SEO | авто | `wp-builder`, `wp-deployer`, QA, SEO |
-
-Ручные команды `/landing-photos`, `/landing-visuals`, `/landing-prototype`, `/landing-wireframe`, `/landing-compose` продолжают работать независимо.
-
-## Связанные концепты
-
-- [[landing-orchestrator]] — агент, которого вызывает команда для диспетчеризации этапов
-- [[prototype-importer]] — первый автоматический шаг: парсит `prototype.pdf` → `prototype.yaml`
-- [[photo-curator]] — параллельный этап 07d: классификация и matching клиентских фото
-- [[visual-curator]] — параллельный этап 07e: AI-генерация иконок и инфографики
-- [[wp-builder]] — этап 08: генерация WordPress-темы из собранных артефактов
-- [[landing-start]] — точка входа для новых проектов (wizard перед `/landing-go`)
-
-## Источник
-
-- `commands/landing-go.md`
+- [[landing-orchestrator]] — агент, которого диспатчит эта команда; выполняет реальную работу по этапам
+- [[prototype-importer]] — первый авто-этап (07a), вызываемый оркестратором
+- [[brand-architect]] — этап 04, интерактивный, требует ручного подтверждения
+- [[design-system-generator]] — этап 05, генерирует токены и палитру
+- [[photo-curator]] — этап 07d, параллельный с 07e
+- [[visual-curator]] — этап 07e, параллельный с 07d
+- [[wp-builder]] — этап 08, сборка WordPress-темы
+- [[wp-deployer]] — этап 09, деплой на Бегет
+- [[landing-onboarding-wizard]] — создаёт проект и `.landing-state.yaml` до первого вызова `/landing-go`
+- [[wireframe-rendering]] — этап 07b, пользователь выбирает варианты блоков вручную

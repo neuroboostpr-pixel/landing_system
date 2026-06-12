@@ -1,66 +1,55 @@
 ---
+slug: 07c-photos
 type: stage
-name: 07c-photos
-sources: ["template/07c_PHOTOS/README.md"]
-updated: 2026-05-15
-triggers: []
+name: "07c — Фото клиента и Photo Pipeline"
 stage: "07c"
-uses: ["photo-curator", "photo-classifier", "photo-matcher", "photo-preview-board", "landing-photos"]
-tags: ["photos", "pr-b", "pipeline", "identity-safe"]
+tags: [photo-pipeline, pr-b, client-assets, stage]
+triggers: [landing-photos, landing-go]
+inputs: [05-dizayn-sistema, 07-prototip, 02-materialy-klienta]
+outputs: [catalog.yaml, selections.yaml, photo-board.html, photo-preview.html, processed/]
+gates: [photo-board-approved]
+pre_reqs: [05-dizayn-sistema, 07-prototip]
+related: [landing-photos, photo-classifier, photo-curation, photo-curator, photo-matcher, photo-preview-board, photo-styling, photo-stylist]
+sources: ["template/07c_PHOTOS/README.md"]
+updated: 2026-05-26
+confidence: {gates: low}
 ---
 
-# 07c Photos — фото клиента и фотоконвейер
+# 07c — Фото клиента и Photo Pipeline
 
 ## Что делает
 
-Папка `07c_PHOTOS` — рабочее место для всех клиентских фотографий. Здесь фотки принимаются, автоматически сортируются по типу, расставляются по слотам прототипа и обрабатываются под нужды лендинга — без ручной работы с Photoshop и без риска испортить лица людей.
+Этап принимает сырые фотографии клиента (любых форматов, включая HEIC с iPhone), автоматически классифицирует их по типам, сопоставляет со слотами прототипа и готовит финальную обрезку под нужные пропорции. Для незаполненных слотов генерирует фото под брендинг проекта. Результат — полный набор обработанных изображений, привязанных к конкретным местам в макете, с визуальным HTML-превью для проверки вёрстки до начала сборки темы.
 
-## Когда вызывать / в каком этапе
+## Когда вызывается
 
-Этап 07c (PR-B Photo Pipeline). Активируется командой `/landing-photos` после того как:
-- утверждены этапы 05 (design-system) и 07a (wireframe),
-- клиент положил фотки в `inbox/` (в любую из 7 подпапок или в `_свалка/`).
+Запускается вручную командой `/landing-photos` после того, как утверждены этапы 05 (design-system) и 07a (wireframe). Также вызывается оркестратором через `/landing-go` в prototype-first workflow, параллельно с этапом 07e (visuals).
 
-Подпапки `inbox/`:
+## Вход → выход
 
-| Подпапка | Тип фото |
-|---|---|
-| `_свалка/` | Неизвестно куда — AI разберётся |
-| `портреты_и_команда/` | Люди: эксперт, команда, клиенты |
-| `процесс_работы/` | Работа в действии |
-| `объекты_и_продукты/` | Готовые работы и товары |
-| `интерьер_экстерьер/` | Офис, цех, фасад |
-| `до_после/` | Пары «было → стало» |
-| `документы_сертификаты/` | Дипломы, лицензии |
+**Вход:** утверждённый design-system (`05-dizayn-sistema`), прототип со слотами (`07-prototip`), фотки клиента в подпапках `inbox/` (7 категорий: портреты, процесс, объекты, интерьер, до/после, документы, `_свалка/`).
 
-## Что на вход / на выход
+**Выход:** `catalog.yaml` — каталог фоток с тегами; `selections.yaml` — раскладка фото по слотам (заполняется пользователем через `photo-board.html`); `processed/` — финальные JPEG с обрезкой; `photo-board.html` — drag-drop UI для утверждения; `photo-preview.html` — превью фото в позициях макета; `STATE.yaml` — статусы под-этапов pipeline.
 
-**Вход:**
-- Фотки клиента в `inbox/` (любой формат, включая HEIC с iPhone)
-- `composed.html` из этапа 07b (для считывания слотов прототипа)
-- `tokens.json` из этапа 05 (для brand-цветов при AI-генерации фоллбэков)
+## Чем закрывается этап (gates)
 
-**Выход (создаётся автоматически):**
-- `intake/` — конвертированные JPEG + миниатюры
-- `catalog.yaml` — каталог с AI-тегами (портрет / объект / процесс / …)
-- `selections.yaml` — финальная раскладка: какое фото в какой слот
-- `processed/` — обрезанные под нужные пропорции финальные фото
-- `photo-board.html` — UI для drag-drop корректировки расстановки
-- `photo-preview.html` — превью «фото в местах макета»
-- `STATE.yaml` — статусы этапов pipeline
-- `.logs/` — логи AI-вызовов для аудита
+- **photo-board-approved** — пользователь сделал выбор в `photo-board.html`, скачал и положил `selections.yaml` обратно в `07c_PHOTOS/`. После этого `composed.html` перерендерится с реальными фото вместо placeholders.
 
-После approve пользователя — `composed.html` перерендерится с реальными фото (placeholders → `<img>` / `<picture>`).
+## Failure modes
 
-## Связанные концепты
+- Фотки в корне `inbox/` вместо подпапок — AI не может определить категорию без папки-подсказки; классификация через `_свалка/` работает медленнее и хуже.
+- HEIC-конвертация падает если не установлен `imagemagick` или `pillow` — pipeline зависает на шаге `classify`.
+- Пустые слоты без AI-генерации (если не выставлен флаг `ai_approved_by_user`) — `selections.yaml` будет неполным, `composed.html` останется с placeholders.
+- Попытка ретуши лиц клиентов — система блокирует (identity-safe правило); генерация новых лиц для testimonial/team слотов требует явного разрешения пользователя.
+- Перезапуск без `--force-stage` после частичного прогона — pipeline продолжит с последнего пройденного шага; если нужно с начала — передавать флаг явно.
 
-- [[photo-curator]] — оркестратор этапа 07c, управляет STATE.yaml и запускает субагентов
-- [[photo-classifier]] — тегирует одно фото через codex, пишет запись в catalog.yaml
-- [[photo-matcher]] — подбирает топ-3 кандидата на каждый слот wireframe
-- [[photo-preview-board]] — обрезает фото / генерирует AI-фоллбэк / рендерит photo-preview.html
-- [[landing-photos]] — slash-команда, запускающая весь конвейер PR-B
-- [[block-composer]] — upstream: его `composed.html` содержит слоты, куда встают фото
+## Related
 
-## Источник
-
-- `template/07c_PHOTOS/README.md`
+- [[landing-photos]] — команда, запускающая весь этап
+- [[photo-classifier]] — под-агент классификации фото по категориям
+- [[photo-curator]] — под-агент подбора фото к слотам прототипа
+- [[photo-matcher]] — сопоставление фото ↔ слот по метаданным и теге
+- [[photo-preview-board]] — генерация `photo-board.html` и `photo-preview.html`
+- [[photo-stylist]] — финальная обрезка и цветокоррекция под brand-kit
+- [[05-dizayn-sistema]] — нужен для пропорций кадрирования и brand-токенов
+- [[07-prototip]] — источник слотов для раскладки фото

@@ -1,0 +1,58 @@
+category: content
+description: Линейная схема этапов с мелкими подписями и горизонтальным акцентом прогресса.
+display_name_ru: process-technical-timeline-romanmelnikov-tilda-10 (timeline)
+has_animation: false
+id: process-technical-timeline-romanmelnikov-tilda-10
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://romanmelnikov.tilda.ws/
+layout_pattern: timeline
+niches_suitable:
+- services
+- b2b-saas
+- tech
+ru_market: true
+slots:
+- name: eyebrow
+  type: text
+- name: heading
+  required: true
+  type: text
+- name: subhead
+  type: text
+- name: step-1-number
+  type: text
+- name: step-1-meta
+  type: text
+- name: step-1-title
+  type: text
+- name: step-1-text
+  type: text
+- name: step-2-number
+  type: text
+- name: step-2-meta
+  type: text
+- name: step-2-title
+  type: text
+- name: step-2-text
+  type: text
+- name: step-3-number
+  type: text
+- name: step-3-meta
+  type: text
+- name: step-3-title
+  type: text
+- name: step-3-text
+  type: text
+- name: step-4-number
+  type: text
+- name: step-4-meta
+  type: text
+- name: step-4-title
+  type: text
+- name: step-4-text
+  type: text
+style_mood: technical
+type: process
+variant: process

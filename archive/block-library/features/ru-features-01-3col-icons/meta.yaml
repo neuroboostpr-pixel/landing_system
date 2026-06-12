@@ -1,0 +1,61 @@
+category: features
+conversion_notes: 3 конкретных преимущества с иконками. Заголовки с цифрами и фактами
+  конвертируют лучше.
+created: 2026-05-12
+description: 3 колонки преимуществ с иконками, заголовками и текстом. Универсальный
+  для всех ниш.
+display_name_ru: ru-features-01-3col-icons (grid-3)
+id: ru-features-01-3col-icons
+layout_pattern: grid-3
+layout_summary_ru: 'Три колонки в ряд: иконка вверху, жирный заголовок, описание 80
+  символов. Универсальный блок для любой ниши. На mobile — 1 колонка стек.'
+recommended_styles_ru:
+- Flat Design 2.0
+- Minimalism & Swiss Style
+ru_market: true
+slots:
+- max_chars: 60
+  name: headline
+  required: true
+  type: text
+- name: feature-1-icon
+  required: false
+  type: icon
+- max_chars: 30
+  name: feature-1-title
+  required: true
+  type: text
+- max_chars: 80
+  name: feature-1-text
+  required: true
+  type: text
+- name: feature-2-icon
+  required: false
+  type: icon
+- max_chars: 30
+  name: feature-2-title
+  required: true
+  type: text
+- max_chars: 80
+  name: feature-2-text
+  required: true
+  type: text
+- name: feature-3-icon
+  required: false
+  type: icon
+- max_chars: 30
+  name: feature-3-title
+  required: true
+  type: text
+- max_chars: 80
+  name: feature-3-text
+  required: true
+  type: text
+source: manual
+source_attribution: ''
+type: features
+use_cases:
+- services
+- b2c
+- local
+variant: null

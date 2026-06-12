@@ -1,0 +1,42 @@
+category: footer
+description: Низкая темная нижняя панель с мелкими юридическими ссылками и служебными
+  данными.
+display_name_ru: footer-minimal-split-antidiler-karpov-ru-8 (split)
+has_animation: false
+id: footer-minimal-split-antidiler-karpov-ru-8
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://antidiler-karpov.ru/
+layout_pattern: split
+niches_suitable:
+- premium-auto
+- services
+- b2b-saas
+ru_market: true
+slots:
+- name: brand-label
+  type: text
+- name: brand-url
+  type: text
+- name: brand-name
+  type: text
+- name: company-meta
+  type: text
+- name: footer-nav-label
+  type: text
+- name: legal-link-1-url
+  type: text
+- name: legal-link-1-label
+  type: text
+- name: legal-link-2-url
+  type: text
+- name: legal-link-2-label
+  type: text
+- name: legal-link-3-url
+  type: text
+- name: legal-link-3-label
+  type: text
+style_mood: minimal
+type: footer
+variant: null

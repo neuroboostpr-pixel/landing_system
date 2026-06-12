@@ -1,0 +1,32 @@
+category: forms
+conversion_notes: Промежуточный экран снижает abandon rate на 15-25%. Эмодзи создаёт
+  эмоциональный момент.
+created: 2026-05-12
+description: 'Промежуточный мотивационный экран квиза: большое эмодзи + поощрительный
+  текст + CTA ''Продолжить''.'
+display_name_ru: ru-quiz-03-intermediate (centered)
+id: ru-quiz-03-intermediate
+layout_pattern: centered
+layout_summary_ru: Большое эмодзи + поощрительный текст + кнопка 'Продолжить'. Появляется
+  между шагами квиза — снижает abandon rate на 15–25%.
+ru_market: true
+slots:
+- name: emoji-icon
+  required: true
+  type: text
+- max_chars: 100
+  name: motivation-text
+  required: true
+  type: text
+- default_text: Продолжить
+  name: continue-cta
+  required: true
+  type: cta
+source: manual
+source_attribution: ''
+type: lead-form
+use_cases:
+- services
+- b2c
+- local
+variant: quiz

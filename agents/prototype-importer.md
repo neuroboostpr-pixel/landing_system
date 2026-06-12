@@ -5,6 +5,47 @@ description: Use during stage 07 (Прототип) to import a user-provided pr
 
 # prototype-importer
 
+
+## Pre-flight
+
+Перед любым действием — wiki-запрос для маршрутизации:
+
+```bash
+python -m scripts.wiki.query --slug=prototype-importer --agent=prototype-importer
+python -m scripts.wiki.log --type agent_call --agent prototype-importer --stage 07a
+```
+
+## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)
+
+**Полная версия:** [`docs/standards/stage-execution-protocol.md`](../docs/standards/stage-execution-protocol.md).
+
+Перед ЛЮБЫМ Write/Edit действием:
+
+1. Прочитай `<project>/.landing-state.yaml`. Подтверди, что `current_stage == 07a_prototype`. Если нет — STOP, сообщи пользователю.
+2. Запусти:
+   ```bash
+   bash scripts/render-pipeline-map.sh <project>/.landing-state.yaml --write-wiki
+   ```
+   Покажи Mermaid-карту пользователю.
+3. Создай TodoWrite-список со всеми оставшимися этапами от `07a_prototype` до конца pipeline.
+4. Запусти `bash scripts/gate-check.sh --stage 07a_prototype --project <project>`. Если exit != 0 — STOP, реши проблемы и повтори.
+5. Если есть `docs/standards/stage-07a_prototype-checklist.md` — прочитай и создай sub-todos.
+6. Только после exit 0 от gate-check переходи к выполнению этапа.
+7. По завершении этапа: запусти `bash scripts/verify-07a_prototype.sh` (если есть) → если PASS, отметь `approved` через `bash scripts/gate-state.sh approve <project> 07a_prototype`.
+
+**ВАЖНО:** harness `PreToolUse` hook (`scripts/hooks/enforce_stage_gate.py`)
+физически блокирует Write/Edit к файлам этапа, у которого не закрыты предшественники.
+Если ты увидишь stderr с «Stage gate enforcement» — это правильное поведение.
+Не пытайся обходить — иди и закрывай предшественника.
+
+## Канон этапа (A1, reference-driven flow)
+
+**prototype.md — единственный канон этапа**: дословный перенос источника 1:1
+(каждый текст, кнопка, комментарий клиента). `prototype.yaml` — производный
+артефакт для downstream-скриптов; если машинный разбор теряет данные —
+канон страдать не должен. Гейт `prototype_fidelity` сверяет prototype.md
+с источником на ВСЕХ форматах (docx/pdf/md/картинки-OCR).
+
 ## Mission
 
 Импорт пользовательского прототипа из `<project>/07_ПРОТОТИП/source/` → нормализованные артефакты `prototype.md` + `prototype.yaml` + `import-log.md`.
@@ -20,10 +61,10 @@ description: Use during stage 07 (Прототип) to import a user-provided pr
 - `<project>/07_ПРОТОТИП/import-log.md` — что понял агент, какие вопросы задавал
 - `<project>/07_ПРОТОТИП/enrichment-log.md` — отчёт о квиз-фаннел обогащении (создаётся автоматически)
 
-> **Автоматическое обогащение квиз-фаннела:** после конвертации md→yaml конвейер автоматически
-> запускает `enrich-quiz-funnel.py`. Если прототип содержит 1–4 квиз-блока, они расширяются
-> в полный Marquiz-фаннел (welcome → вопросы → лоадер → скидка → лид-форма → спасибо).
-> Это даёт +25–40% CR по RU-рынку. Подробнее в `enrichment-log.md`.
+> **Обогащение квиз-фаннела (шаг 6.5 workflow):** после `md-to-yaml.py` агент сам запускает
+> `python3 skills/prototype-import/scripts/enrich-quiz-funnel.py prototype.yaml`. Если прототип
+> содержит 1–4 квиз-блока, они расширяются в полный Marquiz-фаннел (welcome → вопросы → лоадер →
+> скидка → лид-форма → спасибо). Это даёт +25–40% CR по RU-рынку. Отчёт пишется в `enrichment-log.md`.
 
 ## Workflow
 
@@ -35,6 +76,10 @@ description: Use during stage 07 (Прототип) to import a user-provided pr
    - Попробуй `python3 skills/prototype-import/scripts/extract-pdf-text.py source/prototype.pdf > /tmp/pdf-text.txt`
    - Если exit code 2 (нет текста — сканированный PDF) — используй `anthropic-skills:pdf` через Skill tool для OCR
    - Если exit code != 0 в принципе — STOP, сообщи пользователю
+2.6. Если `prototype.docx` (B37 — детерминированное извлечение, БЕЗ потерь):
+   - `python3 skills/prototype-import/scripts/extract-docx-text.py --source source/prototype.docx --out 07_ПРОТОТИП/source-extracted`
+   - Это даёт `source-extracted.txt` (ВЕСЬ текст, включая ТАБЛИЦЫ — там лежат
+     цены тарифов!) — это ЭТАЛОН. Структурируй prototype.yaml ТОЛЬКО из него.
 3. Если `prototype.md`:
    - Прочитай напрямую
 4. Из извлечённого текста собери структурированный `prototype.md` по формату:
@@ -54,14 +99,37 @@ description: Use during stage 07 (Прототип) to import a user-provided pr
 
    Ответы запиши в `import-log.md`.
 6. Запусти конвертер: `python3 skills/prototype-import/scripts/md-to-yaml.py prototype.md prototype.yaml`
-7. Запусти валидатор: `python3 skills/prototype-import/scripts/validate-prototype.py prototype.yaml`
-8. Если валидация упала — исправь `prototype.md` и повтори.
+7. **Обогати квиз-фаннел (если есть quiz-блоки):** `python3 skills/prototype-import/scripts/enrich-quiz-funnel.py prototype.yaml` — пишет отчёт в `enrichment-log.md`.
+8. Запусти валидатор: `python3 skills/prototype-import/scripts/validate-prototype.py prototype.yaml`
+9. Если валидация упала — исправь `prototype.md` и повтори.
 
-## CRITICAL CONSTRAINT — no inventing
+## CRITICAL CONSTRAINT — no inventing, no loss (B37)
 
-Если в прототипе нет нужной информации (например, не указан CTA) — НЕ ВЫДУМЫВАЙ.
-Запиши `cta: ""` и в `import-log.md` отметь: "CTA не найден, использован пустой".
-Это даст пользователю явный сигнал доуточнить.
+**Каждое текстовое значение в prototype.yaml ОБЯЗАНО быть дословной подстрокой
+источника** (`source-extracted.txt`). Не перефразируй, не дополняй маркетингом.
+
+**ЗАПРЕЩЕНО ВЫДУМЫВАТЬ структуру, которой нет в источнике:**
+- ❌ НЕ добавляй навигационное меню `[Home, About, Services, Contact]`, если в
+  тексте нет пунктов меню. Многие лендинги — одностраничные без навигации.
+- ❌ НЕ заменяй реальные цены на `price: "standard"/"premium"/"vip"`. Бери
+  РЕАЛЬНЫЕ цифры (часто они в таблицах docx — extract-docx-text их достаёт).
+- ❌ НЕ выдумывай CTA («Get Started»), бейджи, тарифные опции. Нет данных →
+  `cta: ""` + пометка в `import-log.md`.
+
+**Комментарии клиента разработчику** («Ник, перепроверь…», «этот блок выше»,
+ссылки, дедлайны) — НЕ контент лендинга. Складывай их в top-level секцию
+`client_notes:` (с `relates_to: <section_id>`) и `source_meta:` — они не
+рендерятся в блоки, но сохраняются как рекомендации.
+
+**После конвертации — ОБЯЗАТЕЛЬНАЯ проверка точности (hard gate 07a):**
+```bash
+python3 skills/prototype-import/scripts/verify-prototype-fidelity.py \
+  --source-text 07_ПРОТОТИП/source-extracted.txt \
+  --prototype 07_ПРОТОТИП/prototype.yaml --min-coverage 0.9
+```
+Если покрытие < 90% или есть галлюцинации — `fidelity-report.md` покажет, что
+потеряно/выдумано. Доработай prototype.yaml пока не PASS. НЕ закрывай этап с
+потерей текста.
 
 ## HARD GATE
 
@@ -69,7 +137,7 @@ description: Use during stage 07 (Прототип) to import a user-provided pr
 > ✅ Прототип импортирован.
 > - `prototype.md` — проверь правильность извлечения, при необходимости отредактируй.
 > - После правок MD запусти заново `md-to-yaml.py` (или просто `/landing-prototype` ещё раз).
-> - Когда будешь готов — запускай `/landing-wireframe`.
+> - Когда будешь готов — запускай `/landing-go` (агент нарисует макет по прототипу и референсу).
 
 ## Tools
 

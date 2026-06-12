@@ -1,0 +1,52 @@
+category: features
+description: Двухколоночный блок для корпоративного предложения с чек-листом преимуществ
+  и интерьерным фото.
+display_name_ru: features-corporate-split-sskrusgun-ru-8 (split)
+has_animation: false
+id: features-corporate-split-sskrusgun-ru-8
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://sskrusgun.ru/
+layout_pattern: split
+niches_suitable:
+- services
+- education
+- b2b-saas
+ru_market: true
+slots:
+- name: eyebrow
+  type: text
+- name: title
+  type: text
+- name: lead
+  type: text
+- name: features-list-label
+  type: text
+- name: feature-1-title
+  type: text
+- name: feature-1-text
+  type: text
+- name: feature-2-title
+  type: text
+- name: feature-2-text
+  type: text
+- name: feature-3-title
+  type: text
+- name: feature-3-text
+  type: text
+- name: feature-4-title
+  type: text
+- name: feature-4-text
+  type: text
+- name: image-mobile
+  type: text
+- name: image-alt
+  type: text
+- name: image
+  type: text
+- name: image-caption
+  type: text
+style_mood: corporate
+type: features
+variant: null

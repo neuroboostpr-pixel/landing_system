@@ -1,0 +1,227 @@
+<style>.lp-features-technical-grid-3 {
+  position: relative;
+  overflow: hidden;
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md);
+  color: var(--lp-text);
+  background: var(--lp-bg-alt);
+  font-family: var(--lp-font-body);
+}
+
+.lp-features-technical-grid-3__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.lp-features-technical-grid-3__header {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  max-width: 760px;
+  margin-bottom: var(--lp-spacing-lg);
+}
+
+.lp-features-technical-grid-3__eyebrow {
+  margin: 0;
+  color: var(--lp-accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.3;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.lp-features-technical-grid-3__title {
+  margin: 0;
+  color: var(--lp-primary);
+  font-family: var(--lp-font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: 0;
+}
+
+.lp-features-technical-grid-3__subhead {
+  margin: 0;
+  max-width: 620px;
+  color: var(--lp-text-muted);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.lp-features-technical-grid-3__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--lp-spacing-md);
+}
+
+.lp-features-technical-grid-3__card {
+  display: flex;
+  min-height: 220px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--lp-spacing-sm);
+  padding: var(--lp-spacing-lg);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+  background: white;
+  box-shadow: 0 18px 44px transparent;
+}
+
+.lp-features-technical-grid-3__icon {
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  place-items: center;
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+  background: var(--lp-bg-alt);
+  color: var(--lp-accent);
+}
+
+.lp-features-technical-grid-3__icon span {
+  display: block;
+  width: 1.35rem;
+  height: 1.35rem;
+  border: 2px solid currentColor;
+  border-radius: var(--lp-radius);
+  box-shadow: 0.38rem 0.38rem 0 var(--lp-primary);
+}
+
+.lp-features-technical-grid-3__card-title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 1.2rem;
+  font-weight: 750;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+.lp-features-technical-grid-3__card-text {
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+
+.lp-features-technical-grid-3__paper {
+  position: absolute;
+  right: 0;
+  bottom: calc(var(--lp-spacing-xl) * -1);
+  z-index: -1;
+  width: min(42vw, 28rem);
+  aspect-ratio: 4 / 3;
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+  background: white;
+  transform: rotate(-8deg);
+}
+
+.lp-features-technical-grid-3__paper::before {
+  position: absolute;
+  top: var(--lp-spacing-md);
+  left: var(--lp-spacing-md);
+  width: 34%;
+  height: 30%;
+  border: 1px solid var(--lp-accent);
+  border-radius: var(--lp-radius);
+  content: "";
+}
+
+.lp-features-technical-grid-3__paper::after {
+  position: absolute;
+  right: var(--lp-spacing-md);
+  bottom: var(--lp-spacing-md);
+  width: 38%;
+  height: 38%;
+  border: 1px solid var(--lp-primary);
+  border-radius: 50%;
+  content: "";
+}
+
+.lp-features-technical-grid-3__paper-line {
+  position: absolute;
+  left: var(--lp-spacing-md);
+  right: var(--lp-spacing-md);
+  height: 1px;
+  background: var(--lp-border);
+}
+
+.lp-features-technical-grid-3__paper-line:nth-child(1) {
+  top: 54%;
+}
+
+.lp-features-technical-grid-3__paper-line:nth-child(2) {
+  top: 64%;
+}
+
+.lp-features-technical-grid-3__paper-line:nth-child(3) {
+  top: 74%;
+}
+
+@media (min-width: 768px) {
+  .lp-features-technical-grid-3 {
+    padding: var(--lp-spacing-xl) var(--lp-spacing-lg);
+  }
+
+  .lp-features-technical-grid-3__title {
+    font-size: 3.25rem;
+  }
+
+  .lp-features-technical-grid-3__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .lp-features-technical-grid-3__card {
+    min-height: 260px;
+  }
+
+  .lp-features-technical-grid-3__paper {
+    right: var(--lp-spacing-lg);
+    bottom: calc(var(--lp-spacing-lg) * -1);
+  }
+}
+
+/* Forced mobile viewport for preview */
+@media (min-width: 0) {
+  body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
+}
+</style>
+<section aria-labelledby="lp-features-technical-grid-3-title" class="lp-features-technical-grid-3">
+<div class="lp-features-technical-grid-3__inner">
+<div class="lp-features-technical-grid-3__header">
+<p class="lp-features-technical-grid-3__eyebrow">{{slot:eyebrow}}</p>
+<h2 class="lp-features-technical-grid-3__title" id="lp-features-technical-grid-3-title">{{slot:heading}}</h2>
+<p class="lp-features-technical-grid-3__subhead">{{slot:subhead}}</p>
+</div>
+<div class="lp-features-technical-grid-3__grid" role="list">
+<article class="lp-features-technical-grid-3__card" role="listitem">
+<div aria-hidden="true" class="lp-features-technical-grid-3__icon">
+<span></span>
+</div>
+<h3 class="lp-features-technical-grid-3__card-title">{{slot:feature-1-title}}</h3>
+<p class="lp-features-technical-grid-3__card-text">{{slot:feature-1-text}}</p>
+</article>
+<article class="lp-features-technical-grid-3__card" role="listitem">
+<div aria-hidden="true" class="lp-features-technical-grid-3__icon">
+<span></span>
+</div>
+<h3 class="lp-features-technical-grid-3__card-title">{{slot:feature-2-title}}</h3>
+<p class="lp-features-technical-grid-3__card-text">{{slot:feature-2-text}}</p>
+</article>
+<article class="lp-features-technical-grid-3__card" role="listitem">
+<div aria-hidden="true" class="lp-features-technical-grid-3__icon">
+<span></span>
+</div>
+<h3 class="lp-features-technical-grid-3__card-title">{{slot:feature-3-title}}</h3>
+<p class="lp-features-technical-grid-3__card-text">{{slot:feature-3-text}}</p>
+</article>
+</div>
+<div aria-hidden="true" class="lp-features-technical-grid-3__paper">
+<span class="lp-features-technical-grid-3__paper-line"></span>
+<span class="lp-features-technical-grid-3__paper-line"></span>
+<span class="lp-features-technical-grid-3__paper-line"></span>
+</div>
+</div>
+</section>

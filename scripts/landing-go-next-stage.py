@@ -10,13 +10,13 @@ from pathlib import Path
 import yaml
 
 
-# Canonical stage order (matches template/.landing-state.yaml)
+# Canonical stage order — single source of truth (E1): config/stages.yaml
+_ROOT = Path(__file__).resolve().parent.parent
 STAGE_ORDER = [
-    "00_brief", "01_context", "01a_niche_analysis", "02_assets",
-    "03_references", "04_brand", "05_design", "06_stack", "07_content",
-    "07a_prototype", "07b_wireframe", "07c_composed",
-    "07d_photos", "07e_visuals", "07f_composed_final",
-    "08_build", "09_deploy", "10_qa", "11_analytics", "12_seo",
+    s["id"]
+    for s in yaml.safe_load(
+        (_ROOT / "config" / "stages.yaml").read_text(encoding="utf-8")
+    )["stages"]
 ]
 
 

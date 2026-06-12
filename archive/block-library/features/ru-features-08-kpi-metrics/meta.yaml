@@ -1,0 +1,54 @@
+category: social-proof
+conversion_notes: KPI-блок повышает доверие. Числа должны быть честными — проверь
+  с клиентом.
+created: 2026-05-13
+description: '4 KPI-метрики с инфографикой: % успеха, лет на рынке, клиентов, проектов'
+display_name_ru: ru-features-08-kpi-metrics (grid-3)
+id: ru-features-08-kpi-metrics
+layout_pattern: grid-3
+layout_summary_ru: Четыре крупные метрики в одной линии, каждая с infographic-визуалом
+  сверху и подписью снизу. Mobile — 2x2 grid.
+recommended_styles_ru:
+- Minimalism & Swiss Style
+- Flat Design 2.0
+ru_market: true
+slots:
+- chart_type: number
+  data:
+    caption: успешных проектов
+    label: '%'
+    value: 87
+  name: kpi-1
+  required: true
+  type: infographic
+- chart_type: number
+  data:
+    caption: на рынке
+    label: лет
+    value: 12
+  name: kpi-2
+  required: true
+  type: infographic
+- chart_type: number
+  data:
+    caption: клиентов
+    label: +
+    value: 1000
+  name: kpi-3
+  required: true
+  type: infographic
+- chart_type: number
+  data:
+    caption: завершённых проектов
+    label: +
+    value: 500
+  name: kpi-4
+  required: false
+  type: infographic
+source: manual
+source_attribution: ''
+type: features
+use_cases:
+- services
+- b2c
+variant: numbers

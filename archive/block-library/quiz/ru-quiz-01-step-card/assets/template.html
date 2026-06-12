@@ -1,0 +1,29 @@
+<style>
+  :root {
+    --lp-bg: #f5f5f5;
+    --lp-text: #1a1a1a;
+    --lp-accent: #333;
+    --lp-border: #e0e0e0;
+    --lp-font-display: system-ui, sans-serif;
+    --lp-font-body: system-ui, sans-serif;
+    --spacing-md: 16px;
+    --spacing-lg: 32px;
+  }
+  body { margin: 0; font-family: var(--lp-font-body); background:#f5f5f5; color: var(--lp-text); display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+  .step-card { background: var(--lp-bg); border-radius: 16px; padding: 48px 40px; max-width: 560px; width: 100%; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+  .question-text { font-family: var(--lp-font-display); font-size: 26px; line-height: 1.2; margin: 0 0 32px; text-align: center; }
+  .answers { display: flex; flex-direction: column; gap: 12px; }
+  .answer-btn { display: block; padding: 16px 20px; border: 2px solid var(--lp-border); border-radius: 8px; font-size: 16px; text-align: left; cursor: pointer; background: var(--lp-bg); color: var(--lp-text); text-decoration: none; transition: border-color 0.15s; }
+  .answer-btn:hover { border-color: var(--lp-accent); }
+  .question-comment { margin-top: 24px; font-size: 13px; color:#999; text-align: center; }
+</style>
+<div class="step-card" data-block-id="ru-quiz-01-step-card">
+<p class="question-text">{{slot:question-text}}</p>
+<div class="answers">
+<a class="answer-btn" href="#">{{slot:answer-1-text}}</a>
+<a class="answer-btn" href="#">{{slot:answer-2-text}}</a>
+<a class="answer-btn" href="#">{{slot:answer-3-text}}</a>
+<a class="answer-btn" href="#">{{slot:answer-4-text}}</a>
+</div>
+<p class="question-comment">{{slot:question-comment}}</p>
+</div>

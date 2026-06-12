@@ -1,6 +1,11 @@
 # Source of truth for landing-system stage gates.
 # Read by scripts/gate-check.sh.
 
+# Legacy bypass allowlist. Stages here can use `legacy: true` in state-file
+# IF they also provide `legacy_reason:` field. Without both — gate fails.
+# Reviewed by Code-Owner before adding to this list.
+legacy_allowed: []  # Empty by default. Add entries explicitly when needed.
+
 stages:
   "00_brief":
     name: "Brief"
@@ -115,15 +120,36 @@ stages:
         path: "{project}/03_РЕФЕРЕНСЫ/index.yaml"
         required: true
         fix_hint: "references-curator agent creates this"
+      - id: refs_no_unresolved
+        type: file_exists
+        path: "{project}/03_РЕФЕРЕНСЫ/refs-palette.html"
+        required: true
+        fix_hint: "auto_fix: run extract-palette script; or: provide screenshot/description for each blocked URL"
     soft_checks:
-      - id: min_5_approved_refs
-        prompt: "В 03_РЕФЕРЕНСЫ/index.yaml минимум 5 референсов со статусом approved? (yes / no)"
+      - id: min_3_approved_refs
+        prompt: "В 03_РЕФЕРЕНСЫ/index.yaml минимум 3 референса со статусом approved? (yes / no)"
+
+  "03b_visual_concept":
+    name: "Visual concept"
+    lock: hard
+    require_approved: ["03_references"]
+    hard_checks:
+      - id: visual_concept_exists
+        type: file_exists
+        path: "{project}/03b_КОНЦЕПТ/visual-concept.yaml"
+        required: true
+        fix_hint: "visual-strategist agent creates this after manager approves a concept"
 
   "04_brand":
     name: "Brand kit"
     lock: soft
-    require_approved: []
+    require_approved: ["03b_visual_concept"]
     hard_checks:
+      - id: visual_concept_approved
+        type: file_exists
+        path: "{project}/03b_КОНЦЕПТ/visual-concept.yaml"
+        required: true
+        fix_hint: "Run stage 03b: /landing-visual-concept to generate and approve visual concept"
       - id: brand_kit_exists
         type: file_exists
         path: "{project}/04_БРЕНД/brand-kit.md"
@@ -135,6 +161,11 @@ stages:
     lock: soft
     require_approved: []
     hard_checks:
+      - id: mockup_approved
+        type: file_exists
+        path: "{project}/05_ДИЗАЙН-СИСТЕМА/mockup-preview.html"
+        required: true
+        fix_hint: "design-system-generator creates mockup-preview.html at start of stage 05"
       - id: design_md
         type: file_exists
         path: "{project}/05_ДИЗАЙН-СИСТЕМА/DESIGN.md"
@@ -173,12 +204,44 @@ stages:
   "07_content":
     name: "Content"
     lock: soft
-    require_approved: []
+    require_approved: ["07a_prototype"]
     hard_checks:
-      - id: final_copy
+      - id: content_md_exists
         type: file_exists
-        path: "{project}/07_КОНТЕНТ/final-copy.md"
+        path: "{project}/07_КОНТЕНТ/content.md"
         required: true
+        fix_hint: "auto_fix: /landing-content"
+
+      - id: content_no_lorem
+        type: script
+        script: "skills/landing-system/scripts/validate-content-extraction.py"
+        args: ["{project}/07_КОНТЕНТ/content.md", "--check-no-lorem"]
+        required: true
+        fix_hint: "content.md содержит шаблонный текст (Lorem, template phrases). Запусти /landing-content с флагом --regenerate"
+
+      - id: content_sections_match
+        type: script
+        script: "skills/landing-system/scripts/validate-content-extraction.py"
+        args: ["{project}/07_КОНТЕНТ/content.md", "{project}/07_ПРОТОТИП/prototype.yaml", "--check-sections-match"]
+        required: true
+        fix_hint: "Кол-во секций в prototype.yaml не совпадает с content.md. Проверь extraction-log.md"
+
+      - id: extraction_log_exists
+        type: file_exists
+        path: "{project}/07_КОНТЕНТ/extraction-log.md"
+        required: true
+        fix_hint: "auto_fix: /landing-content"
+
+      - id: extraction_log_passed
+        type: script
+        script: "skills/landing-system/scripts/validate-content-extraction.py"
+        args: ["{project}/07_КОНТЕНТ/extraction-log.md", "--check-log-passed"]
+        required: true
+        fix_hint: "extraction-log.md показывает failures. Проверь логи и запусти /landing-content --debug"
+
+    soft_checks:
+      - id: content_sections_count
+        prompt: "Количество текстовых блоков в content.md адекватно (не менее 10)? (yes / no)"
 
   "07a_prototype":
     name: "Прототип (parse)"
@@ -190,32 +253,28 @@ stages:
         path: "{project}/07_ПРОТОТИП/source"
         required: true
         fix_hint: "Положи prototype.pdf или prototype.md в 07_ПРОТОТИП/source/"
-      - id: prototype_yaml_exists
+      # A1: канон этапа — prototype.md (дословный, без потерь).
+      # prototype.yaml — производный артефакт для downstream-скриптов,
+      # обязательным НЕ является (машинный разбор терял данные — спека §2.1).
+      - id: prototype_md_exists
         type: file_exists
-        path: "{project}/07_ПРОТОТИП/prototype.yaml"
+        path: "{project}/07_ПРОТОТИП/prototype.md"
         required: true
         fix_hint: "auto_fix: /landing-prototype"
+      - id: prototype_fidelity
+        type: script
+        script: "skills/prototype-import/scripts/gate-prototype-fidelity.py"
+        args: ["{project}"]
+        required: true
+        fix_hint: "Парсер потерял >10% текста или выдумал структуру (меню/фейк-цены). Открой 07_ПРОТОТИП/fidelity-report.md — перепарсь docx (extract-docx-text.py) или поправь prototype.yaml вручную, чтобы покрытие было ≥90%."
 
-  "07b_wireframe":
-    name: "Wireframe"
-    lock: hard
-    require_approved: ["04_brand", "05_design", "07a_prototype"]
-    hard_checks:
-      - id: wireframe_html_exists
-        type: file_exists
-        path: "{project}/07a_WIREFRAME/wireframe.html"
-        required: true
-        fix_hint: "auto_fix: /landing-wireframe"
-      - id: wireframe_selections
-        type: file_exists
-        path: "{project}/07a_WIREFRAME/selections.yaml"
-        required: true
-        fix_hint: "Открой wireframe.html в браузере, выбери варианты блоков, нажми Confirm. Скачается selections.yaml — положи его в 07a_WIREFRAME/"
+  # Этап wireframe удалён: блочный трек в архиве (reference-driven flow, спека §6).
+  # Макет composed.html рисует агент по прототипу + референсу клиента.
 
   "07c_composed":
     name: "Composed (draft)"
     lock: hard
-    require_approved: ["05_design", "07a_prototype", "07b_wireframe"]
+    require_approved: ["05_design", "07a_prototype"]
     hard_checks:
       - id: composed_html
         type: file_exists
@@ -240,7 +299,22 @@ stages:
         args: ["{project}"]
         required: true
         fix_hint: "Photo pipeline не пройден. Запусти /landing-photos для обработки фото через codex. Проверь что в composed.html нет SVG placeholder'ов."
+      # C3: все цвета через токены — иначе переключатель палитры «течёт»
+      - id: tokens_only_colors
+        type: script
+        script: "scripts/verify_tokens.py"
+        args: ["{project}/07b_COMPOSED/composed.html"]
+        required: true
+        fix_hint: "В composed.html прямые цвета вне :root. Замени на var(--…); легальные исключения — бренд-цвета мессенджеров и /* token-exempt */ (спека reference-driven §4.3)."
+      # A2: поблочная сверка макета с прототипом (reference-driven-rules.md §4)
+      - id: structure_check_md
+        type: file_exists
+        path: "{project}/07b_COMPOSED/structure-check.md"
+        required: true
+        fix_hint: "block-composer обязан поблочно сверить composed.html с prototype.md (порядок/состав/выравнивание) и записать результат в 07b_COMPOSED/structure-check.md — см. docs/standards/reference-driven-rules.md"
     soft_checks:
+      - id: structure_matches_prototype
+        prompt: "structure-check.md: все блоки прототипа на месте, порядок/состав совпадают, выдуманных элементов нет? (yes / no)"
       - id: visual_qa_passed
         prompt: "Запустить Visual QA через /landing-qa? (опционально, не блокирует этап)"
       - id: identity_preserved
@@ -316,6 +390,21 @@ stages:
         type: file_exists
         path: "{project}/05_ДИЗАЙН-СИСТЕМА/DESIGN.md"
         required: true
+      # C2: болячки сборки — script-в-блоке, повторные функции, дефолты WP,
+      # ширина обёрток, img-geometry (спека reference-driven §4.2)
+      - id: theme_build_lint
+        type: script
+        script: "skills/wp-gutenberg-block-builder/scripts/lint-theme-php.py"
+        args: ["{project}/08_КОД/wp-theme"]
+        required: true
+        fix_hint: "Сборка темы содержит известные болячки (§4.2). Вывод линтера показывает что чинить: <script> из block.php → в assets/js; функции → function_exists; убрать wp-block-styles; добавить wrapper-width/img-geometry CSS."
+      # C3: токенизация темы синхронно с макетом
+      - id: theme_tokens_only_colors
+        type: script
+        script: "scripts/verify_tokens.py"
+        args: ["{project}/08_КОД/wp-theme/assets/css"]
+        required: true
+        fix_hint: "В CSS темы прямые цвета вне :root — замени на var(--…) (спека §4.3); исключения: бренд-цвета мессенджеров, /* token-exempt */."
       - id: final_copy
         type: file_exists
         path: "{project}/07_КОНТЕНТ/final-copy.md"
@@ -347,9 +436,16 @@ stages:
         script: "scripts/lib/stage_08_helper.py"
         args: ["{project}"]
         fix_hint: "Run: python scripts/generate-wp-blocks.py --project {project}"
+      - id: composed_vs_spec_lint
+        type: script
+        script: "skills/wp-gutenberg-block-builder/scripts/lint-composed-vs-spec.py"
+        args: ["--project", "{project}"]
+        fix_hint: "Run: python3 skills/wp-gutenberg-block-builder/scripts/lint-composed-vs-spec.py --project {project} --fix"
     soft_checks:
-      - id: legal_blocks
-        prompt: "152-ФЗ блок и cookie-баннер присутствуют в HTML? (yes / no / partial)"
+      - id: legal_blocks_present
+        title: "Cookie-banner, consent-init, legal-block присутствуют в теме"
+        command: "bash scripts/checks/check_legal_blocks.sh {project_dir}"
+        blocking: false
 
   "08b_style":
     name: "Frontend style"
@@ -418,6 +514,13 @@ stages:
     name: "QA"
     lock: hard
     require_approved: ["08_build"]
+    hard_checks:
+      - id: seo_audit_pass
+        type: script
+        script: "skills/seo-tech-audit/scripts/run-audit.py"
+        args: ["--project", "{project}", "--json"]
+        required: true
+        fix_hint: "Открой 11_QA/audit-report.md — список failed checks с описанием. Чтобы запустить руками: python skills/seo-tech-audit/scripts/run-audit.py --project <path>"
     soft_checks:
       - id: site_live
         prompt: "Сайт открывается по HTTPS? (yes / no)"

@@ -1,0 +1,58 @@
+category: hero
+description: Большой светло-бирюзовый первый экран с крупным заголовком, CTA и деловой
+  фотокомпозицией справа.
+display_name_ru: hero-corporate-split-zilant-group-1 (split)
+has_animation: false
+id: hero-corporate-split-zilant-group-1
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://zilant.group/
+layout_pattern: split
+niches_suitable:
+- services
+- premium-auto
+- luxury
+- education
+ru_market: true
+slots:
+- name: eyebrow
+  type: text
+- name: heading
+  required: true
+  type: text
+- name: subhead
+  type: text
+- name: actions-label
+  type: text
+- name: primary-cta-url
+  type: text
+- name: primary-cta-label
+  type: text
+- name: secondary-cta-url
+  type: text
+- name: secondary-cta-label
+  type: text
+- name: badges-label
+  type: text
+- name: badge-1
+  type: text
+- name: badge-2
+  type: text
+- name: badge-3
+  type: text
+- name: media-label
+  type: text
+- name: hero-image-mobile
+  type: text
+- name: hero-image-alt
+  type: text
+- name: hero-image
+  type: text
+- name: stat-value
+  type: text
+- name: stat-label
+  type: text
+style_mood: corporate
+type: hero
+variant: null

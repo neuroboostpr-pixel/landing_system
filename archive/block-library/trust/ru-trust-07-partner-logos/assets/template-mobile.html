@@ -1,0 +1,18 @@
+<style>
+  :root { --lp-bg: #f5f5f5; --lp-text: #1a1a1a; --lp-border: #e0e0e0; --lp-text-muted: #999; --lp-font-body:system-ui,sans-serif; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:var(--lp-font-body); background:var(--lp-bg); color:var(--lp-text); width:375px; padding:40px 20px; text-align:center; border-top:1px solid var(--lp-border); border-bottom:1px solid var(--lp-border); }
+  .proof-label { font-size:12px; text-transform:uppercase; letter-spacing:0.1em; color:var(--lp-text-muted); margin-bottom:24px; font-weight:500; }
+  .logos { display:flex; justify-content:center; align-items:center; gap:24px; flex-wrap:wrap; opacity:0.55; }
+  .logo-item { font-size:16px; font-weight:700; letter-spacing:-0.01em; color:var(--lp-text); }
+</style>
+<section data-block-id="ru-trust-07-partner-logos">
+<p class="proof-label">{{slot:section-label}}</p>
+<div class="logos">
+<span class="logo-item">{{slot:logo-1}}</span>
+<span class="logo-item">{{slot:logo-2}}</span>
+<span class="logo-item">{{slot:logo-3}}</span>
+<span class="logo-item">{{slot:logo-4}}</span>
+<span class="logo-item">{{slot:logo-5}}</span>
+</div>
+</section>

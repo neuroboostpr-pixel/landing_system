@@ -1,0 +1,37 @@
+category: forms
+conversion_notes: 'Welcome screen увеличивает конверсию: пользователь видит выгоду
+  ДО начала опроса. Лид-магнит снижает барьер. Источники: Tilda Education, Skillbox.'
+created: '2026-05-13'
+description: 'Стартовый экран квиза: заголовок с обещанием пользы + кнопка «Начать
+  тест». Разминает аудиторию перед вопросами.'
+display_name_ru: ru-quiz-06-welcome-screen (centered)
+id: ru-quiz-06-welcome-screen
+layout_pattern: centered
+layout_summary_ru: 'Центрированный экран: крупный заголовок, подзаголовок с выгодой,
+  лид-магнит (подарок за прохождение), большая кнопка CTA. Без вопросов — только мотивация.'
+ru_market: true
+slots:
+- max_chars: 80
+  name: headline
+  required: true
+  type: text
+- max_chars: 150
+  name: subheadline
+  required: true
+  type: text
+- max_chars: 40
+  name: cta-button
+  required: true
+  type: text
+- max_chars: 80
+  name: trust-note
+  required: false
+  type: text
+source: manual
+source_attribution: tilda.education/how-to-create-marketing-quiz; skillbox.ru/media/marketing/chto-takoe-kvizy
+type: lead-form
+use_cases:
+- services
+- b2c
+- local
+variant: quiz

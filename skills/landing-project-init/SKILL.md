@@ -5,6 +5,12 @@ description: Use when user wants to create a new landing project from scratch. C
 
 # landing-project-init
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill landing-project-init --stage ""
+```
+
 ## Когда использовать
 
 - Пользователь сказал «создай новый лендинг», `/landing-new <slug>`, или эквивалент.

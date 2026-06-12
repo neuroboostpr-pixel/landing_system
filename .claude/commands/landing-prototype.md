@@ -15,7 +15,7 @@ description: Stage 07 — import user-provided prototype (PDF or MD) from <proje
    ```bash
    python3 skills/prototype-import/scripts/validate-prototype.py 07_ПРОТОТИП/prototype.yaml
    ```
-5. Сообщает summary + предлагает запустить `/landing-wireframe`.
+5. Сообщает summary + предлагает запустить `/landing-go`.
 
 ## Артефакты после выполнения
 
@@ -30,10 +30,8 @@ description: Stage 07 — import user-provided prototype (PDF or MD) from <proje
 
 ## После одобрения
 
-Запускай `/landing-wireframe`.
+Запускай `/landing-go`.
 
-## NOTE (PR-A scope)
+## Запуск
 
-Эта команда **не** интегрирована со `scripts/gate-check.sh` и `.landing-state.yaml`.
-Интеграция в орекстратор и enforce порядка этапов — задача PR-D.
-До PR-D — команды вызываются вручную, пользователь сам решает что делать дальше.
+Автоматически через `/landing-go` (рекомендуется) или вручную этой командой. Этап интегрирован со `scripts/gate-check.sh` и `.landing-state.yaml`; порядок этапов enforce'ит `landing-orchestrator`.

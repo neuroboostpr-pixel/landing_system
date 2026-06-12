@@ -57,13 +57,24 @@
     ]
   },
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/scripts/hooks/run-stage-gate.sh\""
+          }
+        ]
+      }
+    ],
     "SessionStart": [
       {
         "matcher": "*",
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"/Users/kirillbezikov/Desktop/Обучение вайбкодинг Кодекс/02_projects - проекты/Агентство лидогенерации/landing-system/scripts/wiki/hooks/session_start.py\""
+            "command": "bash \"$CLAUDE_PROJECT_DIR/scripts/wiki/hooks/run-hook.sh\" session_start"
           }
         ]
       }
@@ -74,7 +85,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"/Users/kirillbezikov/Desktop/Обучение вайбкодинг Кодекс/02_projects - проекты/Агентство лидогенерации/landing-system/scripts/wiki/hooks/session_end.py\""
+            "command": "bash \"$CLAUDE_PROJECT_DIR/scripts/wiki/hooks/run-hook.sh\" session_end"
           }
         ]
       }
@@ -85,7 +96,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"/Users/kirillbezikov/Desktop/Обучение вайбкодинг Кодекс/02_projects - проекты/Агентство лидогенерации/landing-system/scripts/wiki/hooks/pre_compact.py\""
+            "command": "bash \"$CLAUDE_PROJECT_DIR/scripts/wiki/hooks/run-hook.sh\" pre_compact"
           }
         ]
       }

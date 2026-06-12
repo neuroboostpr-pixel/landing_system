@@ -1,0 +1,54 @@
+category: footer
+description: Низ страницы с мелкими юридическими ссылками и приглушенной контактной
+  информацией.
+display_name_ru: footer-minimal-split-romanmelnikov-tilda-14 (split)
+has_animation: false
+id: footer-minimal-split-romanmelnikov-tilda-14
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://romanmelnikov.tilda.ws/
+layout_pattern: split
+niches_suitable:
+- services
+- education
+- b2b-saas
+ru_market: true
+slots:
+- name: brand-aria-label
+  type: text
+- name: brand-url
+  type: text
+- name: brand-name
+  type: text
+- name: footer-summary
+  type: text
+- name: phone-url
+  type: text
+- name: phone-label
+  type: text
+- name: email-url
+  type: text
+- name: email-label
+  type: text
+- name: address-line
+  type: text
+- name: legal-nav-label
+  type: text
+- name: privacy-url
+  type: text
+- name: privacy-label
+  type: text
+- name: terms-url
+  type: text
+- name: terms-label
+  type: text
+- name: cookies-url
+  type: text
+- name: cookies-label
+  type: text
+- name: copyright
+  type: text
+style_mood: minimal
+type: footer
+variant: null

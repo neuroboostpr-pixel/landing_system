@@ -1,0 +1,42 @@
+category: faq
+description: Аккордеон частых вопросов в белых строках с иконками раскрытия справа.
+display_name_ru: faq-minimal-stacked-project21993216-tild-11 (stacked)
+has_animation: false
+id: faq-minimal-stacked-project21993216-tild-11
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://project21993216.tilda.ws/
+layout_pattern: stacked
+niches_suitable:
+- services
+- ecommerce
+- education
+- medical
+ru_market: true
+slots:
+- name: faq-eyebrow
+  type: text
+- name: faq-title
+  type: text
+- name: faq-subhead
+  type: text
+- name: faq-question-1
+  type: text
+- name: faq-answer-1
+  type: text
+- name: faq-question-2
+  type: text
+- name: faq-answer-2
+  type: text
+- name: faq-question-3
+  type: text
+- name: faq-answer-3
+  type: text
+- name: faq-question-4
+  type: text
+- name: faq-answer-4
+  type: text
+style_mood: minimal
+type: faq
+variant: null

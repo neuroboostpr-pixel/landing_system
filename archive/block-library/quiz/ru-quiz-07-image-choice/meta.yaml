@@ -1,0 +1,60 @@
+category: forms
+conversion_notes: 'Визуальный выбор снижает когнитивную нагрузку, увеличивает вовлечённость.
+  Люди чаще выбирают картинку, чем читают текст. Источник: Tilda Education.'
+created: '2026-05-13'
+description: 'Вопрос квиза с вариантами-картинками: пользователь кликает на фото покрытия/материала/стиля.'
+display_name_ru: ru-quiz-07-image-choice (centered)
+id: ru-quiz-07-image-choice
+layout_pattern: centered
+layout_summary_ru: 'Сетка 2×2 карточек: изображение + подпись. Клик на карточку =
+  выбор (CSS :checked). Прогресс-бар сверху. Для подбора материала, стиля, цвета покрытия.'
+ru_market: true
+slots:
+- max_chars: 60
+  name: progress-label
+  required: false
+  type: text
+- max_chars: 120
+  name: question-text
+  required: true
+  type: text
+- max_chars: 0
+  name: image-1
+  required: true
+  type: photo
+- max_chars: 40
+  name: label-1
+  required: true
+  type: text
+- max_chars: 0
+  name: image-2
+  required: true
+  type: photo
+- max_chars: 40
+  name: label-2
+  required: true
+  type: text
+- max_chars: 0
+  name: image-3
+  required: false
+  type: photo
+- max_chars: 40
+  name: label-3
+  required: false
+  type: text
+- max_chars: 0
+  name: image-4
+  required: false
+  type: photo
+- max_chars: 40
+  name: label-4
+  required: false
+  type: text
+source: manual
+source_attribution: tilda.education/how-to-create-marketing-quiz
+type: lead-form
+use_cases:
+- services
+- b2c
+- local
+variant: quiz

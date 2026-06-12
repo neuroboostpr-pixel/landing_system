@@ -1,0 +1,61 @@
+category: content
+description: Секция ценностей с четырьмя текстовыми колонками и крупными фоновыми
+  буквенными формами.
+display_name_ru: trust-corporate-grid-4-sskrusgun-ru-11 (grid-4)
+has_animation: false
+id: trust-corporate-grid-4-sskrusgun-ru-11
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://sskrusgun.ru/
+layout_pattern: grid-4
+niches_suitable:
+- services
+- education
+- b2b-saas
+ru_market: true
+slots:
+- name: eyebrow
+  type: text
+- name: heading
+  required: true
+  type: text
+- name: subhead
+  type: text
+- name: trust-list-label
+  type: text
+- name: value-1-letter
+  type: text
+- name: value-1-badge
+  type: text
+- name: value-1-title
+  type: text
+- name: value-1-text
+  type: text
+- name: value-2-letter
+  type: text
+- name: value-2-badge
+  type: text
+- name: value-2-title
+  type: text
+- name: value-2-text
+  type: text
+- name: value-3-letter
+  type: text
+- name: value-3-badge
+  type: text
+- name: value-3-title
+  type: text
+- name: value-3-text
+  type: text
+- name: value-4-letter
+  type: text
+- name: value-4-badge
+  type: text
+- name: value-4-title
+  type: text
+- name: value-4-text
+  type: text
+style_mood: corporate
+type: guarantees
+variant: about

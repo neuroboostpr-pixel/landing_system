@@ -1,0 +1,2 @@
+{"parentUuid": null, "sessionId": "test-string", "message": {"role": "assistant", "content": "plain string content, not a list"}, "type": "assistant", "uuid": "uuid-s1", "timestamp": "2026-05-27T10:00:01.000Z"}
+{"parentUuid": "uuid-s1", "sessionId": "test-string", "message": {"role": "user", "content": "user message"}, "type": "user", "uuid": "uuid-s2", "timestamp": "2026-05-27T10:00:02.000Z"}

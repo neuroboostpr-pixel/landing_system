@@ -1,0 +1,48 @@
+category: trust
+description: Блок гарантий и поддержки в виде сетки карточек с иконками и короткими
+  пояснениями.
+display_name_ru: trust-technical-grid-3-project21993216-tild-9 (grid-3)
+has_animation: false
+id: trust-technical-grid-3-project21993216-tild-9
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://project21993216.tilda.ws/
+layout_pattern: grid-3
+niches_suitable:
+- tech
+- b2b-saas
+- services
+- ecommerce
+ru_market: true
+slots:
+- name: eyebrow
+  type: text
+- name: heading
+  required: true
+  type: text
+- name: subhead
+  type: text
+- name: list-label
+  type: text
+- name: badge-1-icon
+  type: text
+- name: badge-1-title
+  type: text
+- name: badge-1-text
+  type: text
+- name: badge-2-icon
+  type: text
+- name: badge-2-title
+  type: text
+- name: badge-2-text
+  type: text
+- name: badge-3-icon
+  type: text
+- name: badge-3-title
+  type: text
+- name: badge-3-text
+  type: text
+style_mood: technical
+type: guarantees
+variant: guarantees

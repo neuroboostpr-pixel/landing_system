@@ -1,0 +1,32 @@
+<style>
+  :root {
+    --lp-bg: #f5f5f5;
+    --lp-text: #1a1a1a;
+    --lp-accent: #333;
+    --lp-border: #e0e0e0;
+    --lp-font-display: system-ui, sans-serif;
+    --lp-font-body: system-ui, sans-serif;
+    --spacing-md: 16px;
+    --spacing-lg: 32px;
+  }
+  body { margin: 0; font-family: var(--lp-font-body); background: var(--lp-bg); color: var(--lp-text); }
+  .hero { display: grid; grid-template-columns: 1fr 1fr; min-height: 600px; }
+  .hero-text { padding: var(--spacing-lg); display: flex; flex-direction: column; justify-content: center; }
+  .hero-photo { background:var(--lp-bg); position: relative; }
+  .hero-photo .slot-label { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 11px; color:#666; text-transform: uppercase; letter-spacing: 0.05em; }
+  .headline { font-family: var(--lp-font-display); font-size: 42px; line-height: 1.1; margin: 0 0 16px; }
+  .subhead { font-size: 18px; color:#444; margin: 0 0 24px; }
+  .price-tag { position: absolute; top: 24px; right: 24px; background: rgba(255,255,255,0.95); padding: 8px 16px; border-radius: 4px; font-weight: 600; }
+  .cta { display: inline-block; padding: 16px 32px; background: var(--lp-accent); color:#fff; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px; }
+</style>
+<section class="hero" data-block-id="ru-hero-01-services-calc">
+<div class="hero-text">
+<h1 class="headline">{{slot:headline}}</h1>
+<p class="subhead">{{slot:subhead}}</p>
+<a class="cta" href="#quiz">{{slot:primary-cta}}</a>
+</div>
+<div class="hero-photo">
+<div class="slot-label">photo · 16:9 · hero-bg</div>
+<div class="price-tag">{{slot:price-tag}}</div>
+</div>
+</section>

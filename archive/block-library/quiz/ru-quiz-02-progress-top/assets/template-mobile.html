@@ -1,0 +1,18 @@
+<style>
+  :root {
+    --lp-bg: #f5f5f5; --lp-text: #1a1a1a; --lp-accent: #333; --lp-border: #e0e0e0;
+    --lp-font-display: system-ui, sans-serif; --lp-font-body: system-ui, sans-serif;
+    --spacing-md: 16px; --spacing-lg: 32px;
+  }
+  body { margin: 0; font-family: var(--lp-font-body); background: var(--lp-bg); color: var(--lp-text); width: 375px; }
+  .progress-bar { position: sticky; top: 0; z-index: 100; background: var(--lp-bg); border-bottom: 1px solid var(--lp-border); padding: 10px 16px; display: flex; align-items: center; gap: 12px; }
+  .progress-text { font-size: 13px; color:#777; white-space: nowrap; flex-shrink: 0; }
+  .progress-track { flex: 1; height: 5px; background:#e8e8e8; border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--lp-accent); border-radius: 3px; width: 40%; }
+</style>
+<header class="progress-bar" data-block-id="ru-quiz-02-progress-top">
+<span class="progress-text">{{slot:progress-text}}</span>
+<div class="progress-track">
+<div class="progress-fill" style="width: 40%;">{{slot:progress-bar}}</div>
+</div>
+</header>

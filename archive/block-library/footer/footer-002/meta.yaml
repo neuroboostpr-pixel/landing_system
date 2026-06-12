@@ -1,0 +1,61 @@
+category: footer
+created: '2026-06-01'
+display_name_ru: footer-002 (split)
+has_bg_image: false
+id: footer-002
+layout_pattern: split
+signature: footer|split|[content]|bg:false
+slots:
+- name: brand-aria-label
+  type: text
+- name: brand-link
+  type: text
+- name: logo-image-alt
+  type: text
+- name: logo-image
+  type: text
+- name: footer-heading
+  type: text
+- name: footer-description
+  type: text
+- name: contact-area-label
+  type: text
+- name: primary-cta-link
+  type: text
+- name: primary-cta-label
+  type: text
+- name: contact-note
+  type: text
+- name: footer-nav-label
+  type: text
+- name: nav-link-1-url
+  type: text
+- name: nav-link-1-label
+  type: text
+- name: nav-link-2-url
+  type: text
+- name: nav-link-2-label
+  type: text
+- name: nav-link-3-url
+  type: text
+- name: nav-link-3-label
+  type: text
+- name: nav-link-4-url
+  type: text
+- name: nav-link-4-label
+  type: text
+- name: legal-text
+  type: text
+- name: legal-nav-label
+  type: text
+- name: legal-link-1-url
+  type: text
+- name: legal-link-1-label
+  type: text
+- name: legal-link-2-url
+  type: text
+- name: legal-link-2-label
+  type: text
+source: cleaned
+type: footer
+variant: null

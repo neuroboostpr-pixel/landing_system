@@ -1,0 +1,95 @@
+<style>.lp-footer-minimal-split {
+  background: var(--lp-text);
+  color: var(--lp-bg);
+  font-family: var(--lp-font-body);
+  border-top: 1px solid var(--lp-border);
+}
+
+.lp-footer-minimal-split__inner {
+  display: grid;
+  gap: var(--lp-spacing-md);
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--lp-spacing-md) var(--lp-spacing-lg);
+}
+
+.lp-footer-minimal-split__brand {
+  display: grid;
+  gap: var(--lp-spacing-xs);
+}
+
+.lp-footer-minimal-split__brand-link {
+  width: fit-content;
+  color: currentColor;
+  text-decoration: none;
+}
+
+.lp-footer-minimal-split__brand-name {
+  display: block;
+  font-family: var(--lp-font-display);
+  font-size: 0.95rem;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.lp-footer-minimal-split__meta {
+  max-width: 42rem;
+  margin: 0;
+  color: var(--lp-bg-alt);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.lp-footer-minimal-split__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lp-spacing-xs) var(--lp-spacing-md);
+  align-items: center;
+}
+
+.lp-footer-minimal-split__link {
+  color: var(--lp-bg-alt);
+  font-size: 0.78rem;
+  line-height: 1.4;
+  text-decoration: none;
+}
+
+.lp-footer-minimal-split__link:hover,
+.lp-footer-minimal-split__link:focus-visible {
+  color: var(--lp-accent);
+  outline: none;
+}
+
+.lp-footer-minimal-split__brand-link:focus-visible {
+  outline: 2px solid var(--lp-accent);
+  outline-offset: var(--lp-spacing-xs);
+  border-radius: var(--lp-radius);
+}
+
+@media (min-width: 768px) {
+  .lp-footer-minimal-split__inner {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .lp-footer-minimal-split__nav {
+    justify-content: flex-end;
+  }
+}
+</style>
+<footer aria-labelledby="lp-footer-minimal-split-title" class="lp-footer-minimal-split">
+<div class="lp-footer-minimal-split__inner">
+<div class="lp-footer-minimal-split__brand">
+<a aria-label="{{slot:brand-label}}" class="lp-footer-minimal-split__brand-link" href="{{slot:brand-url}}">
+<span class="lp-footer-minimal-split__brand-name" id="lp-footer-minimal-split-title">{{slot:brand-name}}</span>
+</a>
+<p class="lp-footer-minimal-split__meta">{{slot:company-meta}}</p>
+</div>
+<nav aria-label="{{slot:footer-nav-label}}" class="lp-footer-minimal-split__nav">
+<a class="lp-footer-minimal-split__link" href="{{slot:legal-link-1-url}}">{{slot:legal-link-1-label}}</a>
+<a class="lp-footer-minimal-split__link" href="{{slot:legal-link-2-url}}">{{slot:legal-link-2-label}}</a>
+<a class="lp-footer-minimal-split__link" href="{{slot:legal-link-3-url}}">{{slot:legal-link-3-label}}</a>
+</nav>
+</div>
+</footer>

@@ -1,0 +1,56 @@
+# Default thresholds for E1 (HTML + Network + Schema)
+# Each check: hard (boolean) + value (constraint) + optional justification override
+
+# === HTML on-page (H1-H25) ===
+H1:  { hard: true,  desc: "HTTP-код = 200" }
+H2:  { hard: false, value: { ttfb_max_ms: 800 }, desc: "TTFB" }
+H3:  { hard: false, value: { size_max_kb: 150 }, desc: "Размер HTML KB" }
+H4:  { hard: true,  desc: "<title> присутствует" }
+H5:  { hard: true,  value: { len_min: 30, len_max: 80 }, desc: "<title> длина 30-80" }
+H6:  { hard: true,  desc: "<meta description> присутствует" }
+H7:  { hard: true,  value: { len_min: 70, len_max: 320 }, desc: "<meta description> длина" }
+H8:  { hard: true,  value: { count: 1 }, desc: "Ровно 1× <h1>" }
+H9:  { hard: false, desc: "Иерархия H2-H6 (нет скачков уровней)" }
+H10: { hard: true,  desc: "<html lang=...> присутствует" }
+H11: { hard: true,  desc: "UTF-8 declaration" }
+H12: { hard: true,  desc: "<link rel=canonical> валидный" }
+H13: { hard: false, desc: "hreflang (если мультиязычно)" }
+H14: { hard: true,  desc: "Нет неожиданного meta robots noindex" }
+H15: { hard: true,  value: { min_ratio: 0.95 }, desc: "<img alt> ≥95% картинок" }
+H16: { hard: false, value: { min_ratio: 0.8 }, desc: "<img loading=lazy> ≥80% below-fold" }
+H17: { hard: false, value: { min_ratio: 0.9 }, desc: "<img width/height> для CLS" }
+H18: { hard: false, value: { min_ratio: 0.5 }, desc: "WebP/AVIF ≥50% картинок" }
+H19: { hard: false, value: { size_max_kb: 10 }, desc: "Inline-CSS ≤10KB" }
+H20: { hard: false, value: { max_count: 3 }, desc: "Render-blocking resources ≤3" }
+H21: { hard: false, value: { min_count: 5 }, desc: "Внутренних ссылок ≥5" }
+H22: { hard: true,  desc: "Внешние ссылки имеют rel=noopener" }
+H23: { hard: false, value: { max_ratio: 0.05 }, desc: "Анкоры «click here»/«тут» <5%" }
+H24: { hard: false, desc: "tel: links присутствуют" }
+H25: { hard: false, desc: "mailto: links если email в тексте" }
+
+# === Network/Infra (N1-N13) ===
+N1:  { hard: true,  desc: "SSL валиден" }
+N2:  { hard: false, value: { min_days: 30 }, desc: "SSL ≥30 дней" }
+N3:  { hard: true,  value: { min_days: 7 }, desc: "SSL ≥7 дней — критично" }
+N4:  { hard: false, desc: "HTTP/2 или HTTP/3" }
+N5:  { hard: false, value: { min_count: 3 }, desc: "Security headers ≥3 из 4 (HSTS/CSP/XFO/XCTO)" }
+N6:  { hard: false, desc: "Server header не раскрывает версию" }
+N7:  { hard: true,  desc: "www/non-www → 301 на канонический" }
+N8:  { hard: true,  desc: "robots.txt присутствует и валиден" }
+N9:  { hard: true,  desc: "sitemap.xml присутствует, валидный XML, упомянут в robots" }
+N10: { hard: false, desc: "llms.txt присутствует (AI standard)" }
+N11: { hard: true,  desc: "404-страница возвращает 404 (не 200)" }
+N12: { hard: false, desc: "404 содержит навигацию (ссылка на главную)" }
+N13: { hard: false, desc: "Whois: info-only — возраст/expiry/registrar" }
+
+# === Schema/Microdata (S1-S5) ===
+S1: { hard: true,  desc: "Open Graph: og:title/description/image/type/url — все 5" }
+S2: { hard: false, value: { width: 1200, height: 630 }, desc: "og:image ≥1200×630 и 200 OK" }
+S3: { hard: false, desc: "Twitter Card: card/title/image" }
+S4: { hard: false, desc: "Schema.org JSON-LD присутствует и парсится" }
+S5: { hard: true,  desc: "Favicon присутствует (32 или 180px)" }
+
+# === AI Readiness (AI1-AI3) ===
+AI1: { hard: false, desc: "llms.txt валиден (llmstxt.org spec)" }
+AI2: { hard: false, desc: "JSON-LD Organization/LocalBusiness/Product/FAQPage" }
+AI3: { hard: false, desc: "Body содержит ≥1KB текста без JS execution" }

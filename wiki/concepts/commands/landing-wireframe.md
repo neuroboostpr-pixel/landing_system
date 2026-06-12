@@ -1,61 +1,51 @@
 ---
+slug: landing-wireframe
 type: command
-name: landing-wireframe
-sources: ["commands/landing-wireframe.md"]
-updated: 2026-05-15
-triggers:
-  - "запусти wireframe"
-  - "сделай wireframe для лендинга"
-  - "хочу выбрать блоки для лендинга"
-  - "интерактивный wireframe"
-  - "этап 07a"
+name: "/landing-wireframe — Интерактивный Wireframe"
 stage: "07a"
-uses:
-  - ux-composer
-  - prototype-import
-  - landing-compose
-  - wireframe-rendering
-tags: ["wireframe", "stage-07a", "ux", "block-selection"]
+tags: [wireframe, ux, prototype, block-library, interactive]
+triggers: [landing-wireframe]
+inputs: [07_ПРОТОТИП/prototype.yaml]
+outputs: [07a_WIREFRAME/wireframe.html, 07a_WIREFRAME/candidates.yaml, 07a_WIREFRAME/selections.yaml]
+pre_reqs: [landing-prototype, prototype-import]
+related: [ux-composer, wireframe-rendering, landing-compose, landing-go, block-composition, landing-orchestrator]
+sources: ["commands/landing-wireframe.md"]
+updated: 2026-05-26
+confidence: {gates: low}
 ---
 
-# /landing-wireframe — Интерактивный wireframe с вариантами блоков
+# /landing-wireframe — Интерактивный Wireframe
 
 ## Что делает
 
-Генерирует интерактивный HTML-файл, в котором каждый блок лендинга представлен в 2–3 вариантах оформления из библиотеки блоков. Маркетолог открывает файл в браузере, выбирает понравившийся вариант для каждого раздела и нажимает «Confirm» — система сохраняет выбор.
+Запускает этап 07a — генерацию интерактивного wireframe-превью. Для каждого блока из `prototype.yaml` агент `ux-composer` подбирает 2–3 кандидата из библиотеки блоков и рендерит `wireframe.html` с радио-кнопками для выбора. Пользователь открывает файл в браузере, выбирает понравившиеся варианты и нажимает «Confirm» — браузер скачивает `selections.yaml`. Этот файл нужно положить в папку `07a_WIREFRAME/` вручную. После одобрения цепочка продолжается командой `/landing-compose`.
 
-## Когда вызывать / в каком этапе
+## Когда вызывается
 
-Вызывается **после** завершения этапа 07 (импорт прототипа). Обязательное условие: файл `07_ПРОТОТИП/prototype.yaml` должен существовать и быть валидным. Типичный триггер — после того как `/landing-prototype` завершил работу и пользователь проверил `prototype.md`.
+Вызывается вручную командой `/landing-wireframe` либо автоматически оркестратором через `/landing-go`. Предварительное условие — наличие валидного `07_ПРОТОТИП/prototype.yaml`, сгенерированного командой `/landing-prototype`.
 
-Команда вызывается **вручную**; в `landing-orchestrator` и `.landing-state.yaml` пока не интегрирована (задача PR-D).
+## Вход → выход
 
-## Что на вход / на выход
-
-**Вход:**
-- `07_ПРОТОТИП/prototype.yaml` — машиночитаемый прототип, подготовленный командой `/landing-prototype`
+**Вход:** `07_ПРОТОТИП/prototype.yaml` — распарсенный прототип со списком блоков и их параметрами.
 
 **Выход:**
-- `07a_WIREFRAME/wireframe.html` — интерактивный preview с radio-переключателями между вариантами блоков (desktop + mobile)
-- `07a_WIREFRAME/candidates.yaml` — список кандидатов из block-library для каждого блока прототипа
-- `07a_WIREFRAME/selections.yaml` — создаётся самим пользователем через кнопку «Confirm» в браузере; содержит финальный выбор вариантов
+- `07a_WIREFRAME/wireframe.html` — интерактивный HTML с вариантами блоков и радио-кнопками;
+- `07a_WIREFRAME/candidates.yaml` — машино-читаемый список кандидатов по каждому блоку;
+- `07a_WIREFRAME/selections.yaml` — файл выбора пользователя (создаётся через кнопку Confirm в браузере, затем кладётся вручную).
 
-## Как использовать
+## Failure modes
 
-1. Открой `07a_WIREFRAME/wireframe.html` в браузере.
-2. Для каждого раздела выбери подходящий вариант блока через radio-кнопки.
-3. Нажми «Confirm» — скачается `selections.yaml`.
-4. Положи скачанный файл обратно в `07a_WIREFRAME/`.
-5. Запусти `/landing-compose` для следующего этапа.
+- `prototype.yaml` отсутствует или невалиден — команда падает на старте; нужно перезапустить `/landing-prototype`.
+- Кандидаты не найдены для какого-то блока — `ux-composer` не может заполнить секцию wireframe; проверь соответствие типов блоков каталогу `block-library/`.
+- `selections.yaml` не положен в папку — `/landing-compose` не стартует; пользователь должен вручную переместить скачанный файл.
+- Пользователь нажал Confirm, но выбрал не все блоки — `selections.yaml` будет неполным, `block-composer` на этапе 07b может упасть с ошибкой пропущенного слота.
+- Файл `wireframe.html` не открывается в браузере локально — проблема прав или кодировки пути; открывай через `file://` или локальный сервер.
 
-## Связанные концепты
+## Related
 
-- [[ux-composer]] — агент, который непосредственно рендерит `wireframe.html` и `candidates.yaml`
-- [[prototype-import]] — предшествующий этап; формирует входной `prototype.yaml`
-- [[landing-compose]] — следующий этап (07b): вставляет токены дизайна и тексты в выбранные блоки
-- [[wireframe-rendering]] — скилл, описывающий логику рендера wireframe
-- [[block-composition]] — скилл этапа 07b, следует после одобрения wireframe
-
-## Источник
-
-- `commands/landing-wireframe.md`
+- [[ux-composer]] — агент, выполняющий подбор кандидатов и рендер wireframe.html
+- [[wireframe-rendering]] — концепт процесса рендера wireframe
+- [[landing-compose]] — следующий этап после одобрения wireframe (07b)
+- [[landing-go]] — рекомендуемая точка входа, автоматически диспатчит 07a
+- [[block-composition]] — процесс сборки блоков, использующий selections.yaml
+- [[landing-orchestrator]] — оркестратор, интегрирующий команду в общий pipeline

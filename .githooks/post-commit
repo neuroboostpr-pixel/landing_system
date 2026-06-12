@@ -2,16 +2,33 @@
 # PR-G: Авто-пересборка системной wiki при изменениях источников.
 # Триггер: коммит затронул agents/skills/commands/template/standards.
 
-set -uo pipefail
+set -Eeuo pipefail
+trap 'echo "post-commit failed at line $LINENO" >&2; exit 0' ERR
 
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 cd "$REPO_ROOT"
 
-# Защита от рекурсии — если последний коммит уже chore(wiki) — выходим
+# Защита от рекурсии — если последний коммит уже chore(wiki|commands) — выходим
 LAST_MSG="$(git log -1 --pretty=%B 2>/dev/null | head -1)"
 case "$LAST_MSG" in
     chore\(wiki\)*) exit 0 ;;
+    chore\(commands\)*) exit 0 ;;
 esac
+
+# Защита от запуска во время merge/rebase/cherry-pick/bisect.
+# Auto-commit поверх полу-merge'а порождает грязную историю и конфликты.
+GIT_DIR="$(git rev-parse --git-dir)"
+for marker in MERGE_HEAD REBASE_HEAD CHERRY_PICK_HEAD BISECT_LOG; do
+    if [ -e "$GIT_DIR/$marker" ] || [ -d "$GIT_DIR/rebase-merge" ] || [ -d "$GIT_DIR/rebase-apply" ]; then
+        echo "ℹ️  post-commit: skip wiki rebuild (in $marker / rebase state)"
+        exit 0
+    fi
+done
+
+# Защита от запуска вне репозитория (на всякий случай).
+if [ -z "${REPO_ROOT:-}" ] || [ ! -d "$REPO_ROOT/.git" ]; then
+    exit 0
+fi
 
 SOURCE_PATTERN='^(agents/|skills/.*/SKILL\.md|commands/|template/.*/README\.md|docs/standards/|block-library/|config/.*\.yaml|docs/SETUP\.md|docs/ПЛАН-ДОРАБОТОК\.md|docs/BACKLOG\.md|docs/photo-selection-guide\.md|docs/superpowers/(specs|plans)/.*\.md|docs/superpowers/(DOKRUTKA-system|dokrutka).*\.md|tests/.*/README\.md|presets/.*\.(md|yaml)|scripts/.*\.doc\.md)'
 
@@ -28,9 +45,30 @@ if ! python3 -m scripts.wiki.compile --source-mode=system 2>&1 | tail -3; then
 fi
 
 if [ -n "$(git status wiki/ --short 2>/dev/null)" ]; then
-    git add wiki/
-    git commit -m "chore(wiki): авто-обновление после изменений системы" --no-verify
-    echo "✅ wiki/ авто-закоммичено"
+    # Точечный add (а не папка целиком) — снижает риск зацепить секреты.
+    git add wiki/index.md wiki/log.md wiki/concepts/ wiki/preview.html wiki/.cache.json 2>/dev/null || true
+    # Без --no-verify: если pre-commit secret-scanner упал — это сигнал,
+    # а не повод обходить. Если у репо нет pre-commit hooks — git это просто молча пропустит.
+    if git commit -m "chore(wiki): авто-обновление после изменений системы" 2>&1; then
+        echo "✅ wiki/ авто-закоммичено"
+    else
+        echo "⚠️  wiki/ commit заблокирован (pre-commit hook?). Запусти руками."
+    fi
+fi
+
+# Sync commands/ → .claude/commands/ if commands/ changed in this commit.
+# commands/ — source of truth (humans edit). .claude/commands/ — runtime copy.
+if echo "$CHANGED" | grep -qE "^commands/"; then
+    echo "📋 commands/ изменилось, синхронизирую .claude/commands/..."
+    bash scripts/sync-commands.sh 2>&1 | tail -10 || true
+    if [ -n "$(git status .claude/commands/ --short 2>/dev/null)" ]; then
+        git add .claude/commands/ 2>/dev/null || true
+        if git commit -m "chore(commands): авто-синхронизация .claude/commands/ из commands/" 2>&1; then
+            echo "✅ .claude/commands/ авто-закоммичено"
+        else
+            echo "⚠️  .claude/commands/ commit заблокирован. Запусти руками."
+        fi
+    fi
 fi
 
 exit 0

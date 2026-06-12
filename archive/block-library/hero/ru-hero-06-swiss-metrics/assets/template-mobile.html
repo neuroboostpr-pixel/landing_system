@@ -1,0 +1,46 @@
+<style>
+  :root {
+    --lp-bg: #f5f5f5;
+    --lp-text: #1a1a1a;
+    --lp-accent: #333;
+    --lp-border: #e0e0e0;
+    --lp-font-display: system-ui, sans-serif;
+    --lp-font-body: system-ui, sans-serif;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--lp-font-body); background: var(--lp-bg); color: var(--lp-text); width: 375px; }
+  .hero-top { background: var(--lp-accent); padding: 14px 16px; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; font-weight: 700; }
+  .hero-main { padding: 28px 16px 24px; }
+  .headline { font-family: var(--lp-font-display); font-size: 2.2rem; line-height: .95; letter-spacing: -.03em; text-transform: uppercase; margin-bottom: 14px; }
+  .subhead { font-size: .9rem; line-height: 1.5; opacity: .85; margin-bottom: 22px; }
+  .cta-btn { display: block; padding: 14px 24px; background: var(--lp-text); color: var(--lp-bg); font-weight: 700; font-size: .875rem; text-align: center; text-decoration: none; text-transform: uppercase; }
+  .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 16px; border-top: 1px solid var(--lp-border); }
+  .metric-card { border: 1px solid var(--lp-border); background:#fff; padding: 14px; }
+  .metric-card.accent { background: var(--lp-accent); }
+  .metric-value { font-size: 2rem; font-weight: 900; letter-spacing: -.03em; line-height: 1; }
+  .metric-label { font-size: 9px; letter-spacing: .12em; text-transform: uppercase; opacity: .75; margin-top: 4px; }
+</style>
+<section data-block-id="ru-hero-06-swiss-metrics">
+<div class="hero-top">Профессиональные решения</div>
+<div class="hero-main">
+<h1 class="headline">{{slot:headline}}</h1>
+<p class="subhead">{{slot:subhead}}</p>
+<a class="cta-btn" href="#contact">{{slot:primary-cta}}</a>
+</div>
+<div class="metrics-grid">
+<div class="metric-card">
+<div class="metric-value">{{slot:metric-1-value}}</div>
+<div class="metric-label">{{slot:metric-1-label}}</div>
+</div>
+<div class="metric-card">
+<div class="metric-value">{{slot:metric-2-value}}</div>
+<div class="metric-label">{{slot:metric-2-label}}</div>
+</div>
+<div class="metric-card accent" style="grid-column: 1/-1;">
+<div class="metric-value">{{slot:metric-3-value}}</div>
+<div class="metric-label">{{slot:metric-3-label}}</div>
+</div>
+</div>
+</section>

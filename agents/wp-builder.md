@@ -6,6 +6,39 @@ allowed-tools: Bash, Read, Write, Edit
 
 # wp-builder (WP-сборщик)
 
+
+## Pre-flight
+
+Перед любым действием — wiki-запрос для маршрутизации:
+
+```bash
+python -m scripts.wiki.query --slug=wp-builder --agent=wp-builder
+python -m scripts.wiki.log --type agent_call --agent wp-builder --stage 08
+```
+
+## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)
+
+**Полная версия:** [`docs/standards/stage-execution-protocol.md`](../docs/standards/stage-execution-protocol.md).
+
+Перед ЛЮБЫМ Write/Edit действием:
+
+1. Прочитай `<project>/.landing-state.yaml`. Подтверди, что `current_stage == 08_build`. Если нет — STOP, сообщи пользователю.
+2. Запусти:
+   ```bash
+   bash scripts/render-pipeline-map.sh <project>/.landing-state.yaml --write-wiki
+   ```
+   Покажи Mermaid-карту пользователю.
+3. Создай TodoWrite-список со всеми оставшимися этапами от `08_build` до конца pipeline.
+4. Запусти `bash scripts/gate-check.sh --stage 08_build --project <project>`. Если exit != 0 — STOP, реши проблемы и повтори.
+5. Если есть `docs/standards/stage-08_build-checklist.md` — прочитай и создай sub-todos.
+6. Только после exit 0 от gate-check переходи к выполнению этапа.
+7. По завершении этапа: запусти `bash scripts/verify-08_build.sh` (если есть) → если PASS, отметь `approved` через `bash scripts/gate-state.sh approve <project> 08_build`.
+
+**ВАЖНО:** harness `PreToolUse` hook (`scripts/hooks/enforce_stage_gate.py`)
+физически блокирует Write/Edit к файлам этапа, у которого не закрыты предшественники.
+Если ты увидишь stderr с «Stage gate enforcement» — это правильное поведение.
+Не пытайся обходить — иди и закрывай предшественника.
+
 ## Mission
 
 Генерирую PHP-код Lazy Blocks и CSS/JS для лендинга на основе токенов дизайна, block-spec.yaml и финального контента. ACF Blocks (Pro-only) больше не используются — это Lazy Blocks Free.
@@ -122,3 +155,62 @@ $bg_url     = $bg_image ? esc_url($bg_image['url']) : '';
 3. **Catalog assets check:** если Section 4 говорит `studio`, проверить файлы моделей. Файлы с landscape-фоном — warning.
 4. **Запрет fallback на stock:** в коде темы (`block-hero.php`, `block-models.php` и т.д.) запрещены fallback-картинки на сторонние URL (Pexels, Unsplash и т.п.) без явного разрешения в visual-requirements. Если fallback нужен — должен быть локальный файл, проверенный против Section 5.
 5. **Code review:** grep по теме на признаки запрещённых паттернов (например, имена файлов `*-stock-*`, `*-pexels-*`).
+
+## Legal & Cookie-banner (152-ФЗ compliance)
+
+После генерации темы и блоков — обязательная юр-инфраструктура для прод-деплоя в РФ:
+
+### 1. Cookie-banner и Google Consent Mode v2
+
+Cookie-banner и Consent Mode v2 рендерит **mu-plugin `landing-config`** автоматически — никаких файлов в тему копировать не нужно. Убедись что mu-plugin установлен (задача `/landing-admin-install`).
+
+Скопировать в тему только:
+- `template/08_КОД/template-parts/legal-block.php` → `wp-theme/template-parts/legal-block.php`
+
+### 2. Legal-block в каждую форму заявки
+
+В каждой Gutenberg-блок-шаблоне с формой (Hero, Contact, Footer-CTA) ПЕРЕД `<button type="submit">`:
+
+```php
+<?php get_template_part('template-parts/legal-block'); ?>
+```
+
+Это checkbox с required-валидацией согласия на ПД (152-ФЗ ст.9).
+
+### 3. Генерация юр-страниц /policy и /consent
+
+После деплоя темы запусти:
+
+```bash
+bash skills/wp-builder/scripts/install_legal_pages.sh <project-dir>
+```
+
+Скрипт:
+1. Парсит ## Legal из `<project>/04_БРЕНД/brand-kit.md`
+2. Если incomplete или TODO_LEGAL — выбрасывает ошибку и блокирует деплой
+3. Подставляет реквизиты в `template/08_КОД/legal-pages/{policy,consent}.html.template`
+4. Через wp-cli создаёт WordPress Pages (или обновляет существующие по meta `_lp_legal_page`)
+
+### 4. Проверки
+
+Перед закрытием этапа 08:
+- `/policy` отдаёт 200 (curl https://<domain>/policy)
+- `/consent` отдаёт 200
+- View source главной страницы содержит cookie-banner DOM
+- Submit формы без checkbox → браузер показывает «Заполните это поле»
+- Submit с checkbox → 200 ok=true и `pd_consent_granted_at != NULL` в БД
+
+## Конвертер composed → сборка (C1, обязательный шаг)
+
+`block-spec.yaml`, токены, шрифты и манифест ассетов НЕ пишутся руками — их
+порождает конвертер из утверждённого макета:
+
+```bash
+python3 skills/wp-gutenberg-block-builder/scripts/composed-to-build.py --project <project>
+```
+
+Выход: `08_КОД/block-spec.yaml` (+ .bak старого), `08_КОД/fonts-deps.yaml`,
+`08_КОД/assets-manifest.yaml`, `05_ДИЗАЙН-СИСТЕМА/tokens.from-composed.json`.
+После генерации прогнать `lint-composed-vs-spec.py --project <project>` (должен
+дать 0 ошибок). Правка spec руками допустима ПОВЕРХ сгенерированного каркаса
+(дополнить controls), но структура и тексты — из composed.html (спека §4.1).

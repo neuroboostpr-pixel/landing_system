@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 """Inject prototype.yaml content into a template.html via data-slot attributes
 AND/OR ``{{slot:NAME}}`` text placeholders (new block format).
 
@@ -32,6 +34,7 @@ import argparse
 import json
 import re
 import sys
+from functools import lru_cache
 from pathlib import Path
 
 import yaml
@@ -54,16 +57,19 @@ def fail(m: str) -> None:
 # Item-aware slots are handled by a separate regex (item-N-FIELD).
 SLOT_MAPPING: dict[str, list[str]] = {
     # --- titles / headings ---
-    "title": ["title", "headline", "heading"],
-    "heading": ["title", "headline", "heading"],
-    "headline": ["headline", "title", "heading"],
-    "eyebrow": ["eyebrow", "subtype", "category"],
-    "section-title": ["title", "headline"],
+    # prototype.yaml часто кладёт главный заголовок секции в `text` — добавляем
+    # его как кандидат после явных headline/title.
+    "title": ["title", "headline", "heading", "text"],
+    "heading": ["title", "headline", "heading", "text"],
+    "headline": ["headline", "title", "heading", "text"],
+    "eyebrow": ["eyebrow", "subtype", "category", "label"],
+    "section-title": ["title", "headline", "text"],
     # --- subtitles / intros ---
-    "subhead": ["subhead", "subtitle", "intro"],
-    "subtitle": ["subtitle", "subhead", "intro"],
-    "lead": ["intro", "subhead", "subtitle"],
-    "intro": ["intro", "subhead", "subtitle", "description"],
+    # `highlight` в прототипе — подзаголовок/акцентная строка hero.
+    "subhead": ["subhead", "subtitle", "intro", "highlight"],
+    "subtitle": ["subtitle", "subhead", "intro", "highlight"],
+    "lead": ["intro", "subhead", "subtitle", "highlight"],
+    "intro": ["intro", "subhead", "subtitle", "description", "highlight"],
     "description": ["description", "intro", "body", "text"],
     "body": ["body", "intro", "description", "text"],
     "text": ["text", "body", "description"],
@@ -90,6 +96,16 @@ SLOT_MAPPING: dict[str, list[str]] = {
     # --- counts / proof ---
     "count": ["count", "value"],
     "value": ["value", "count"],
+    # --- header: brand / logo (B35 granular slots) ---
+    "brand-name": ["brand", "logo", "text", "title", "name"],
+    "brand-text": ["brand", "logo", "text", "title"],
+    "brand-link": ["brand_url", "logo_url", "url"],
+    "brand-link-url": ["brand_url", "logo_url", "url"],
+    "logo": ["logo", "brand", "text"],
+    "logo-text": ["logo", "brand", "text"],
+    # --- nav links (single, non-numbered) ---
+    "nav-link": ["url"],
+    "nav-label": ["text", "label"],
 }
 
 
@@ -180,6 +196,83 @@ def _resolve_item_slot(block: dict, idx: int, field: str) -> str:
 _ITEM_SLOT_RE = re.compile(r"^item[-_]?(\d+)(?:[-_](.+))?$")
 
 
+# sub-block.type → семантическое поле блока для resolve_slot/SLOT_MAPPING.
+_SUBTYPE_TO_FIELD = {
+    "heading": "title", "title": "title", "headline": "title",
+    "paragraph": "subhead", "subtitle": "subhead", "lead": "subhead",
+    "text": "subhead",
+    "button": "cta", "cta_button": "cta", "cta": "cta",
+}
+_SINGULAR_SUBTYPES = set(_SUBTYPE_TO_FIELD) | {
+    "logo", "menu", "info_badge", "scrolling_list",
+}
+
+
+def merge_section_blocks(section: dict) -> dict:
+    """Собрать данные sub-блоков секции прототипа БЕЗ потери при коллизии.
+
+    - Повторяющиеся sub-блоки (module/feature/card/tariff/step/…) → items[]
+      (для слотов feature-N-*, card-N-*, tier-N-*).
+    - heading/paragraph/button → семантические поля title/subhead/cta.
+    - info_badge → badges[] + badge-N.
+    Общая для render-wireframe и inject-content (одна логика, без дублей).
+    """
+    merged: dict = {}
+    items: list = []
+    badges: list = []
+    secondary_cta_seen = False
+
+    for sub in section.get("blocks", []):
+        if not isinstance(sub, dict):
+            continue
+        stype = (sub.get("type") or "").lower()
+
+        if stype not in _SINGULAR_SUBTYPES:
+            items.append(dict(sub))
+            continue
+
+        if stype == "info_badge":
+            label = sub.get("label") or sub.get("text") or ""
+            value = sub.get("value") or ""
+            text = (f"{label} {value}".strip() or label or value)
+            # info_badge — это надзаголовок-плашка (напр. «Старт 27 июня»).
+            # Первый идёт в eyebrow; последующие — в badges[].
+            if "eyebrow" not in merged:
+                merged["eyebrow"] = text
+            else:
+                badges.append(text)
+            continue
+
+        if stype in ("button", "cta_button", "cta"):
+            txt = sub.get("text") or sub.get("label") or ""
+            if "cta" not in merged:
+                merged["cta"] = {"text": txt, "href": sub.get("href", "#")}
+            elif not secondary_cta_seen:
+                merged["cta_secondary"] = txt
+                secondary_cta_seen = True
+            continue
+
+        field = _SUBTYPE_TO_FIELD.get(stype)
+        if field and field not in merged:
+            merged[field] = sub.get("text") or sub.get("highlight") or ""
+            for k, v in sub.items():
+                if k not in ("type", "text") and k not in merged:
+                    merged[k] = v
+            continue
+
+        for k, v in sub.items():
+            if k not in merged:
+                merged[k] = v
+
+    if items:
+        merged["items"] = items
+    if badges:
+        merged.setdefault("badges", badges)
+        for i, b in enumerate(badges, 1):
+            merged.setdefault(f"badge-{i}", b)
+    return merged
+
+
 def resolve_slot(block: dict, slot_name: str) -> str:
     """Universal slot resolver — returns a string value or '' if not found."""
     slot_name = slot_name.strip()
@@ -195,7 +288,7 @@ def resolve_slot(block: dict, slot_name: str) -> str:
     prefix_match = re.match(
         r"^(feature|step|stage|faq|item|tier|plan|card|metric|stat|fact|"
         r"benefit|advantage|service|testimonial|review|logo|model|tab|"
-        r"point|reason)[-_](\d+)(?:[-_](.+))?$",
+        r"point|reason|nav-link|nav-label|nav|menu|link)[-_](\d+)(?:[-_](.+))?$",
         slot_name,
     )
     if prefix_match:
@@ -231,18 +324,124 @@ def resolve_slot(block: dict, slot_name: str) -> str:
 
 _SLOT_PLACEHOLDER_RE = re.compile(r"\{\{slot:([^}]+)\}\}")
 
+# Плейсхолдер для незаполненных image/icon слотов (wireframe-превью).
+# Предпочитаем SVG (широкий viewBox с серым фоном): при object-fit:cover/contain
+# он выглядит аккуратным фоном в любом контейнере и не пикселизуется, в отличие
+# от маленького PNG. Встраиваем как data-URI — wireframe самодостаточен.
+_ASSETS_DIR = Path(__file__).resolve().parents[3] / "block-library" / "_assets"
+_PLACEHOLDER_SVG_PATH = _ASSETS_DIR / "placeholder-image.svg"
+_PLACEHOLDER_IMG_PATH = _ASSETS_DIR / "placeholder-image.png"
+
+
+@lru_cache(maxsize=1)
+def _placeholder_img_datauri() -> str:
+    # 1) SVG как URL-encoded data-URI (компактно, масштабируется без потерь)
+    try:
+        from urllib.parse import quote
+        svg = _PLACEHOLDER_SVG_PATH.read_text(encoding="utf-8")
+        # минимизируем переносы строк
+        svg = " ".join(svg.split())
+        return "data:image/svg+xml," + quote(svg, safe="")
+    except Exception:
+        pass
+    # 2) fallback на PNG
+    try:
+        import base64
+        data = _PLACEHOLDER_IMG_PATH.read_bytes()
+        return "data:image/png;base64," + base64.b64encode(data).decode("ascii")
+    except Exception:
+        return ""
+
+
+# image/icon слот по имени: содержит один из корней, но НЕ -alt/-url/-mobile
+# (это текст/ссылки, не сам визуал).
+_IMG_SLOT_ROOTS = ("image", "img", "icon", "photo", "logo", "mark", "avatar",
+                   "picture", "marker", "visual", "illustration")
+# текст/ссылки рядом с картинкой — НЕ сам визуал. ВАЖНО: -mobile это вариант
+# картинки (srcset), а не текст, поэтому он НЕ исключается.
+_IMG_SLOT_EXCLUDE = ("-alt", "-url", "-href", "-caption", "-label", "-text", "-title")
+
+
+def _is_image_slot(name: str) -> bool:
+    low = name.lower()
+    if any(low.endswith(suf) for suf in _IMG_SLOT_EXCLUDE):
+        return False
+    parts = set(low.replace("_", "-").split("-"))
+    return any(root in parts for root in _IMG_SLOT_ROOTS)
+
+
+def _attr_slot_value(block: dict, name: str, is_media: bool = False) -> str:
+    """Plain-текст для {{slot}} ВНУТРИ HTML-атрибута (href/aria-label/...).
+
+    Никакого HTML: иначе ломается разметка. url/href/link → '#'.
+    is_media=True (слот в src/srcset) → незаполненный слот всегда даёт data-URI
+    картинки-плейсхолдера (иначе пустой src даёт битую картинку), даже если имя
+    слота не похоже на «картинку» (напр. pricing-portrait).
+    """
+    low = name.lower()
+    if low.endswith(("url", "href")) or "link" in low.split("-"):
+        val = resolve_slot(block, name)
+        return val if (val and val not in ("#",)) else "#"
+    val = resolve_slot(block, name)
+    if val:
+        return val
+    # незаполненный image/icon-слот → картинка-плейсхолдер. is_media=True, когда
+    # слот стоит в src/srcset (тогда это картинка по определению, имя не важно).
+    if is_media or _is_image_slot(name):
+        uri = _placeholder_img_datauri()
+        if uri:
+            return uri
+    return ""
+
 
 def substitute_text_placeholders(html_str: str, block: dict) -> str:
     """Replace all {{slot:NAME}} occurrences using universal resolver.
 
-    Unfilled slots become a small inline gray italic placeholder so the
-    wireframe renders cleanly instead of leaking template syntax.
+    Контекст важен: {{slot}} внутри значения атрибута заменяется ТОЛЬКО на
+    plain-текст (HTML-заглушка сломала бы атрибут). В текстовых узлах
+    незаполненный слот становится маленькой серой заглушкой [name].
     """
+    # 1. Сначала слоты ВНУТРИ атрибутов: attr="...{{slot:x}}..." (одинарные/двойные).
+    def _attr_repl(m: re.Match) -> str:
+        prefix, name = m.group(1), m.group(2).strip()
+        return f"{prefix}{_attr_slot_value(block, name)}"
+
+    # attr="<...{{slot:NAME}}...>" — заменяем каждый slot внутри значения атрибута
+    def _attr_block(m: re.Match) -> str:
+        attr_full = m.group(0)
+        attr_name = attr_full.split("=", 1)[0].strip().lower()
+        is_media = attr_name in ("src", "srcset", "data-src", "poster")
+        return _SLOT_PLACEHOLDER_RE.sub(
+            lambda sm: _attr_slot_value(block, sm.group(1).strip(), is_media), attr_full
+        )
+
+    html_str = re.sub(
+        r'[a-zA-Z_:][\w:-]*\s*=\s*"[^"]*\{\{slot:[^}]+\}\}[^"]*"',
+        _attr_block, html_str,
+    )
+    html_str = re.sub(
+        r"[a-zA-Z_:][\w:-]*\s*=\s*'[^']*\{\{slot:[^}]+\}\}[^']*'",
+        _attr_block, html_str,
+    )
+
+    # 2. Оставшиеся слоты — в текстовых узлах.
     def _repl(m: re.Match) -> str:
         name = m.group(1).strip()
         val = resolve_slot(block, name)
         if val:
             return val
+        # image/icon слот без значения → картинка-плейсхолдер (для превью).
+        # В текстовом узле это обычно иконка — даём её фиксированным компактным
+        # размером, чтобы не распирать контейнер (object-fit:contain).
+        if _is_image_slot(name):
+            uri = _placeholder_img_datauri()
+            if uri:
+                return (
+                    f'<img src="{uri}" alt="{name}" '
+                    f'style="display:inline-block;width:100%;height:100%;'
+                    f'max-width:64px;max-height:64px;object-fit:contain;'
+                    f'vertical-align:middle" loading="lazy">'
+                )
         # Inline placeholder — keep it visible but unobtrusive.
         return (
             f'<span style="color:#bbb;font-style:italic;font-size:11px">'
@@ -395,9 +594,25 @@ def main() -> None:
     )
     args = p.parse_args()
 
-    proto = yaml.safe_load(Path(args.prototype).read_text())
+    proto = yaml.safe_load(Path(args.prototype).read_text(encoding="utf-8"))
+
+    # Support both legacy proto["blocks"] and sections-based formats
+    if "blocks" in proto and isinstance(proto.get("blocks"), list):
+        flat_blocks = proto["blocks"]
+    else:
+        # Sections format — build flat list with positions. Используем общий
+        # merge_section_blocks (НЕ теряет данные sub-блоков: cta/badges/items).
+        flat_blocks = []
+        pos = 1
+        for section in proto.get("sections", []):
+            merged = merge_section_blocks(section)
+            merged.update({"position": pos, "id": section.get("id", ""),
+                           "type": section.get("id", "")})
+            flat_blocks.append(merged)
+            pos += 1
+
     block = next(
-        (b for b in proto["blocks"] if b["position"] == args.position),
+        (b for b in flat_blocks if b["position"] == args.position),
         None,
     )
     if block is None:
@@ -407,14 +622,14 @@ def main() -> None:
     if args.selections:
         sel_path = Path(args.selections)
         if sel_path.exists():
-            photo_selections = yaml.safe_load(sel_path.read_text())
+            photo_selections = yaml.safe_load(sel_path.read_text(encoding="utf-8"))
 
     visuals_dir = Path(args.visuals_dir) if args.visuals_dir else None
 
-    html_str = Path(args.template).read_text()
+    html_str = Path(args.template).read_text(encoding="utf-8")
     result = inject_block(html_str, block, {}, photo_selections=photo_selections, visuals_dir=visuals_dir)
 
-    Path(args.output).write_text(result)
+    Path(args.output).write_text(result, encoding="utf-8")
     print(f"OK: wrote {args.output}")
 
 

@@ -5,6 +5,12 @@ description: Extract palette, fonts, and icons from reference images and URLs. O
 
 # style-decomposition
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill style-decomposition --stage 04
+```
+
 ## What I do
 
 - Extract dominant color palette from reference images (colorthief + Pillow).

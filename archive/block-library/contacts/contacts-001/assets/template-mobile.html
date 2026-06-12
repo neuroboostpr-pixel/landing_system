@@ -1,0 +1,129 @@
+<style>.lp-contacts-brutalist-split {
+  display: grid;
+  gap: var(--lp-spacing-lg);
+  padding: var(--lp-spacing-xl);
+  color: var(--lp-text);
+  background: var(--lp-bg);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+  font-family: var(--lp-font-body);
+}
+
+.lp-contacts-brutalist-split__content,
+.lp-contacts-brutalist-split__action {
+  min-width: 0;
+}
+
+.lp-contacts-brutalist-split__eyebrow {
+  margin: 0 0 var(--lp-spacing-sm);
+  color: var(--lp-accent);
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.lp-contacts-brutalist-split__title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: clamp(2rem, 10vw, 5rem);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.lp-contacts-brutalist-split__caption {
+  max-width: 42rem;
+  margin: var(--lp-spacing-md) 0 0;
+  color: var(--lp-text-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.lp-contacts-brutalist-split__action {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: end;
+  gap: var(--lp-spacing-sm);
+  padding-top: var(--lp-spacing-lg);
+  border-top: 1px solid var(--lp-border);
+}
+
+.lp-contacts-brutalist-split__phone {
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: clamp(2rem, 12vw, 6rem);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: 0;
+  text-decoration: none;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.lp-contacts-brutalist-split__phone:focus-visible,
+.lp-contacts-brutalist-split__link:focus-visible {
+  outline: 2px solid var(--lp-accent);
+  outline-offset: var(--lp-spacing-xs);
+}
+
+.lp-contacts-brutalist-split__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  color: var(--lp-accent);
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1.2;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.lp-contacts-brutalist-split__link::after {
+  content: "";
+  display: inline-block;
+  width: 0.65em;
+  height: 0.65em;
+  margin-left: var(--lp-spacing-xs);
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  transform: rotate(45deg);
+}
+
+@media (min-width: 768px) {
+  .lp-contacts-brutalist-split {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: end;
+  }
+
+  .lp-contacts-brutalist-split__action {
+    align-items: flex-end;
+    padding-top: 0;
+    padding-left: var(--lp-spacing-xl);
+    border-top: 0;
+    border-left: 1px solid var(--lp-border);
+    text-align: right;
+  }
+}
+
+/* Forced mobile viewport for preview */
+@media (min-width: 0) {
+  body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
+}
+</style>
+<section aria-labelledby="lp-contacts-brutalist-split-title" class="lp-contacts-brutalist-split">
+<div class="lp-contacts-brutalist-split__content">
+<p class="lp-contacts-brutalist-split__eyebrow">{{slot:contacts-eyebrow}}</p>
+<h2 class="lp-contacts-brutalist-split__title" id="lp-contacts-brutalist-split-title">{{slot:contacts-title}}</h2>
+<p class="lp-contacts-brutalist-split__caption">{{slot:contacts-caption}}</p>
+</div>
+<div aria-label="{{slot:contacts-action-label}}" class="lp-contacts-brutalist-split__action">
+<a class="lp-contacts-brutalist-split__phone" href="{{slot:phone-link}}">{{slot:phone}}</a>
+<a class="lp-contacts-brutalist-split__link" href="{{slot:secondary-link-url}}">{{slot:secondary-link-label}}</a>
+</div>
+</section>

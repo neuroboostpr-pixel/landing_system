@@ -1,0 +1,86 @@
+category: pricing
+conversion_notes: 'Средний тариф (tier-2) выделен акцентным фоном — якорный эффект.
+  ✓/✗ матрица hardcoded в шаблоне, кастомизируется под проект. Mobile: горизонтальный
+  скролл таблицы (overflow-x: auto), JS не нужен.'
+created: '2026-05-13'
+description: 'Таблица сравнения тарифов 3×6: три тарифа в колонках, 6 строк функций,
+  премиум-колонка с акцентным фоном. CTA-строка снизу.'
+display_name_ru: ru-pricing-02-comparison-table (grid-3)
+id: ru-pricing-02-comparison-table
+layout_pattern: grid-3
+layout_summary_ru: '3 тарифа в колонках × 6 строк функций, премиум-колонка подсвечена
+  акцентом. ✓/✗ матрица для быстрого сравнения. Mobile: горизонтальный скролл.'
+ru_market: true
+slots:
+- max_chars: 60
+  name: headline
+  required: true
+  type: text
+- max_chars: 20
+  name: tier-1-name
+  required: true
+  type: text
+- max_chars: 20
+  name: tier-1-price
+  required: true
+  type: text
+- max_chars: 20
+  name: tier-2-name
+  required: true
+  type: text
+- max_chars: 20
+  name: tier-2-price
+  required: true
+  type: text
+- max_chars: 20
+  name: tier-3-name
+  required: true
+  type: text
+- max_chars: 20
+  name: tier-3-price
+  required: true
+  type: text
+- max_chars: 60
+  name: feature-row-1
+  required: true
+  type: text
+- max_chars: 60
+  name: feature-row-2
+  required: true
+  type: text
+- max_chars: 60
+  name: feature-row-3
+  required: true
+  type: text
+- max_chars: 60
+  name: feature-row-4
+  required: true
+  type: text
+- max_chars: 60
+  name: feature-row-5
+  required: true
+  type: text
+- max_chars: 60
+  name: feature-row-6
+  required: true
+  type: text
+- default_text: Выбрать
+  name: tier-1-cta
+  required: true
+  type: cta
+- default_text: Выбрать
+  name: tier-2-cta
+  required: true
+  type: cta
+- default_text: Выбрать
+  name: tier-3-cta
+  required: true
+  type: cta
+source: manual
+source_attribution: ''
+type: pricing
+use_cases:
+- services
+- b2c
+- local
+variant: comparison

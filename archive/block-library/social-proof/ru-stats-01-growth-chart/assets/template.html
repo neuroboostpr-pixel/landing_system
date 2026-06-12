@@ -1,0 +1,17 @@
+<section class="lp-growth-chart" data-block-id="ru-stats-01-growth-chart">
+<div class="growth-grid">
+<div class="growth-visual" data-chart-type="line" data-slot-type="infographic">{{slot:growth-chart-main}}</div>
+<div class="growth-text">
+<h2>{{slot:headline}}</h2>
+<p>{{slot:subhead}}</p>
+</div>
+</div>
+</section>
+<style>
+.lp-growth-chart { padding: 80px 24px; }
+.growth-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px; max-width: 1200px; margin: 0 auto; align-items: center; }
+.growth-visual { width: 100%; aspect-ratio: 16/10; }
+.growth-visual img { width: 100%; height: 100%; object-fit: contain; }
+.growth-text h2 { font-size: 32px; margin: 0 0 16px; color:var(--lp-accent, var(--lp-accent)); }
+.growth-text p { font-size: 16px; color:var(--text-secondary, var(--lp-text)); }
+</style>

@@ -1,76 +1,48 @@
 ---
+slug: paralaximus-codex
 type: skill
-name: paralaximus-codex
+name: "Параллакс-герой Paralaximus Codex"
+stage: "07d"
+tags: [parallax, hero, codex, image-gen, visual, css, js, chroma-key]
+triggers: [landing-visuals, wow-hero-request]
+inputs: [04_БРЕНД/brand-kit.md, 05_ДИЗАЙН/tokens.json]
+outputs: [assets/background.png, assets/far.png, assets/near.png, assets/subject.png, assets/css/parallax.css, assets/js/parallax.js]
+gates: []
+pre_reqs: [brand-kit-build, design-system-generator]
+related: [icon-generator, infographic-builder, visual-curator, scene-director, block-composer]
 sources: ["skills/paralaximus-codex/SKILL.md"]
-updated: 2026-05-15
-triggers:
-  - "сделай wow-эффект на герое"
-  - "параллакс hero-блок с глубиной"
-  - "анимированный герой с несколькими слоями"
-  - "эффект параллакса при скролле"
-stage: "07b"
-uses:
-  - block-composition
-  - visual-generation
-  - landing-content
-tags:
-  - parallax
-  - hero
-  - codex
-  - image-generation
-  - visual
+updated: 2026-05-26
+confidence: {stage: low, triggers: low}
 ---
 
-# paralaximus-codex — параллакс-герой с 4 слоями
+# Параллакс-герой Paralaximus Codex
 
 ## Что делает
 
-Создаёт hero-блок с эффектом глубины: одна 2K-картинка нарезается на 4 слоя (фон, дальний план, ближний план, главный объект), фоны снимаются через chroma-key, и всё оборачивается CSS+JS-движком — слои плавно расходятся при скролле и движении мыши.
+Генерирует эффектный hero-блок с многослойным параллаксом из одного 2K-атласа. Через Codex CLI рисует единое изображение 2048×1152, где четыре квадранта — фон, дальний план, ближний план и главный объект. Затем нарезает атлас на четыре PNG, снимает chroma-key фон с трёх слоёв через `remove_chroma_key.py` (из системного навыка `imagegen`), после чего подключает готовые CSS+JS-файлы параллакса: слои двигаются по скроллу и мыши с разными скоростями, создавая иллюзию глубины.
 
-## Когда вызывать / в каком этапе
+## Когда вызывается
 
-Используется на этапе **07b (compose)** или позже, когда нужен «вау»-герой с ощущением пространства. Активировать только если:
-- визуальная тема и главный объект ясны (продукт, персонаж, объект);
-- клиент не запрещал иллюстрацию в hero (не «type-only»).
+Запускается вручную, когда проект запрашивает «вау-эффект» для hero-блока: продукт, персонаж или метафора с ощущением пространства. Не используется, если клиент потребовал «только типографика, без иллюстраций», или если тема визуала ещё не определена.
 
-Если тема не определена — сначала уточнить у пользователя.
+## Вход → выход
 
-## Что на вход / на выход
+**Вход:** папка проекта с `brand-kit.md` и `tokens.json`; готовый промпт-шаблон из `templates/atlas-prompt.md` с заполненными плейсхолдерами (визуальный стиль, свет, расположение subject, цвет chroma-key, объекты дальнего и ближнего плана).
 
-**Вход:**
-- путь к проекту (`/path/to/project`)
-- описание визуальной темы: стиль, освещение, главный объект, цветокор под бренд-кит
-- chroma-key цвет (`#00ff00` по умолчанию; `#ff00ff` если subject содержит зелёный)
+**Выход:** четыре PNG-слоя в `assets/` (один opaque + три RGBA без фона), `parallax.css`, `parallax.js` и `hero.html` как markup-референс. Для WordPress `hero.html` переписывается в `template-parts/block-hero.php` с энqueue в `functions.php`.
 
-**Выход:**
-- `assets/atlas.png` — оригинальный 2K атлас (2048×1152, 4 квадранта)
-- `assets/background.png` — opaque фон (верхний левый квадрант)
-- `assets/far.png`, `near.png`, `subject.png` — RGBA-слои с прозрачным фоном
-- `assets/layers-report.json` — отчёт по альфе
-- `assets/css/parallax.css`, `assets/js/parallax.js` — CSS+JS движок
-- `boilerplate/hero.html` — markup-референс (для WP переписывается в `block-hero.php`)
+## Failure modes
 
-**Рабочий пайплайн (8 шагов):**
-1. Уточнить тему и subject
-2. Зафиксировать composition contract (стиль/свет/позиция/foreground/far/chroma-key)
-3. Собрать промпт через шаблон `templates/atlas-prompt.md`
-4. Запустить `generate-atlas.sh` → атлас появляется в `~/.codex/generated_images/` и копируется в проект
-5. Нарезать `prepare-layers.py`
-6. Снять chroma-key `remove-bg.sh` (внутри — `remove_chroma_key.py` из системного скилла `imagegen`)
-7. Подключить boilerplate CSS/JS
-8. Проверить локально: скролл, мышь, чистые края, subject не закрыт foreground
+- **Silent fail Codex:** генерация прошла, но stdout пуст — картинка обычно есть в `~/.codex/generated_images/`; скрипт копирует её сам.
+- **Зелёный fringe на краях:** освещение дало rim glow вокруг subject — повторить шаг 6 с флагом `--edge-contract 1`.
+- **Неправильные квадранты:** промпт не зафиксировал «Each quadrant occupies exactly one quarter of the 2048×1152 atlas» — атлас рисуется общей сценой.
+- **Foreground закрывает лицо subject:** промпт не ограничил foreground нижней рамкой («lower 20–35 % only»).
+- **`remove_chroma_key.py` не найден:** системный навык `imagegen` не установлен — восстановить `${CODEX_HOME}/skills/.system/imagegen/`.
 
-**Жёсткие ограничения:**
-- Один запрос к `image_gen` (атлас), никогда не 4 отдельных
-- Background removal только через `remove_chroma_key.py` из `imagegen`
-- Foreground — рамка/обрамление, не главный объект
+## Related
 
-## Связанные концепты
-
-- [[block-composition]] — скил compose (07b), в котором hero-блок встраивается в composed.html
-- [[visual-generation]] — параллельный скил для иконок и инфографики (07d)
-- [[landing-content]] — этап текстового наполнения, после которого верстается hero
-
-## Источник
-
-- `skills/paralaximus-codex/SKILL.md`
+- [[icon-generator]] — аналогичный visual-этап, генерирует SVG-иконки; часто идёт параллельно
+- [[infographic-builder]] — генерирует инфографику; тот же stage 07d
+- [[visual-curator]] — курирует итоговые ассеты перед сборкой
+- [[scene-director]] — определяет визуальную концепцию и стиль сцены до генерации атласа
+- [[block-composer]] — встраивает готовый hero-блок в `composed.html` на этапе 07b

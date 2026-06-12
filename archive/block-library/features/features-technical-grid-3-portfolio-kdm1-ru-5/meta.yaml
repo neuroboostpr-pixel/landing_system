@@ -1,0 +1,57 @@
+category: features
+description: Информационный блок с темным фоном, большим заголовком и тремя карточками
+  содержания.
+display_name_ru: features-technical-grid-3-portfolio-kdm1-ru-5 (grid-3)
+has_animation: false
+id: features-technical-grid-3-portfolio-kdm1-ru-5
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://portfolio.kdm1.ru/upload/iblock/b31/i0qylig13hzo7ow4qcpia0qhtn3i87pk/Onlai_n_shkola-Dmitriya-Vykhodtseva.pdf
+layout_pattern: grid-3
+niches_suitable:
+- education
+- services
+- b2b-saas
+- tech
+ru_market: true
+slots:
+- name: features-eyebrow
+  type: text
+- name: features-title
+  type: text
+- name: features-subhead
+  type: text
+- name: feature-1-image-alt
+  type: text
+- name: feature-1-image
+  type: text
+- name: feature-1-badge
+  type: text
+- name: feature-1-title
+  type: text
+- name: feature-1-text
+  type: text
+- name: feature-2-image-alt
+  type: text
+- name: feature-2-image
+  type: text
+- name: feature-2-badge
+  type: text
+- name: feature-2-title
+  type: text
+- name: feature-2-text
+  type: text
+- name: feature-3-image-alt
+  type: text
+- name: feature-3-image
+  type: text
+- name: feature-3-badge
+  type: text
+- name: feature-3-title
+  type: text
+- name: feature-3-text
+  type: text
+style_mood: technical
+type: features
+variant: null

@@ -5,6 +5,12 @@ description: Use during stage 02 to scaffold client materials folder, parse exte
 
 # client-assets-collection
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill client-assets-collection --stage 02
+```
+
 ## What I do
 
 - Initialize `02_МАТЕРИАЛЫ_КЛИЕНТА/` subfolders if not present.

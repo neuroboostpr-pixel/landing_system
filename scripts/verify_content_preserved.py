@@ -50,25 +50,52 @@ def extract_yaml_strings(node) -> list[str]:
     return []
 
 
+def _md_strings(md_path: Path) -> list[str]:
+    """Значимые строки prototype.md (A1: канон этапа — md, yaml опционален).
+
+    Содержательные строки без markdown-заголовков; «Ключ: Значение» → значение.
+    """
+    out: list[str] = []
+    for raw in md_path.read_text(encoding="utf-8").splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        line = line.lstrip("-*").strip()
+        if ":" in line:
+            _, _, value = line.partition(":")
+            if value.strip():
+                line = value.strip()
+        # «Заголовок — Текст» в одной строке прототипа = два отдельных поля
+        for part in re.split(r"\s+[—–]\s+", line):
+            part = part.strip()
+            if len(part) >= MIN_LEN and not is_placeholder(part):
+                out.append(part)
+    return out
+
+
 def main(project_dir: Path) -> int:
-    proto_path = project_dir / "07_ПРОТОТИП" / "prototype.yaml"
+    proto_yaml = project_dir / "07_ПРОТОТИП" / "prototype.yaml"
+    proto_md = project_dir / "07_ПРОТОТИП" / "prototype.md"
     composed_path = project_dir / "07b_COMPOSED" / "composed.html"
 
-    if not proto_path.exists():
-        print(f"ERROR: {proto_path} не найден", file=sys.stderr)
+    if not proto_yaml.exists() and not proto_md.exists():
+        print(f"ERROR: нет ни prototype.yaml, ни prototype.md в "
+              f"{project_dir / '07_ПРОТОТИП'}", file=sys.stderr)
         return 2
     if not composed_path.exists():
         print(f"ERROR: {composed_path} не найден", file=sys.stderr)
         return 2
 
-    proto_data = yaml.safe_load(proto_path.read_text(encoding="utf-8")) or {}
+    proto_data = (yaml.safe_load(proto_yaml.read_text(encoding="utf-8")) or {}) \
+        if proto_yaml.exists() else {}
     html_raw = composed_path.read_text(encoding="utf-8")
     soup = BeautifulSoup(html_raw, "html.parser")
     html_text = normalize(soup.get_text(separator=" "))
 
-    # 1. Substring match для всех значимых строк
+    # 1. Substring match для всех значимых строк (yaml если есть, иначе канон-md)
     blocks = proto_data.get("blocks", [])
-    all_strings = extract_yaml_strings(blocks)
+    all_strings = extract_yaml_strings(blocks) if blocks else (
+        _md_strings(proto_md) if proto_md.exists() else [])
     missing = []
     for s in all_strings:
         norm = normalize(s)

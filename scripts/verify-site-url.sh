@@ -16,7 +16,7 @@ STATE="${1:?ERROR: state.yaml path required}"
     exit 2
 }
 
-URL="$(python3 - "$STATE" <<'PYEOF'
+URL="$(python - "$STATE" <<'PYEOF'
 import yaml, sys
 data = yaml.safe_load(open(sys.argv[1]).read())
 stage = data.get('stages', {}).get('09_deploy', {})

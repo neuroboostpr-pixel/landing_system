@@ -1,0 +1,210 @@
+{
+  "H1": {
+    "label": "Открыть страницу в браузере",
+    "type": "raw_url",
+    "url": ""
+  },
+  "H2": {
+    "label": "Оптимизировать TTFB — проверить хостинг/кэш",
+    "type": "suggestion"
+  },
+  "H3": {
+    "label": "Уменьшить размер HTML — code minify",
+    "type": "suggestion"
+  },
+  "H4": {
+    "label": "Заполнить Title (в редакторе главной)",
+    "type": "post_edit",
+    "use_homepage_id": true
+  },
+  "H5": {
+    "label": "Title длина 30-80 символов — изменить в редакторе",
+    "type": "post_edit",
+    "use_homepage_id": true
+  },
+  "H6": {
+    "label": "Заполнить Description",
+    "type": "admin_page",
+    "page": "landing-config-head-seo"
+  },
+  "H7": {
+    "label": "Description длина 70-320 — изменить в Head & SEO",
+    "type": "admin_page",
+    "page": "landing-config-head-seo"
+  },
+  "H8": {
+    "label": "Открыть редактор главной (исправить число H1)",
+    "type": "post_edit",
+    "use_homepage_id": true
+  },
+  "H9": {
+    "label": "Иерархия заголовков — изменить в редакторе",
+    "type": "post_edit",
+    "use_homepage_id": true
+  },
+  "H10": {
+    "label": "Установить язык сайта в Settings → General",
+    "type": "raw_url",
+    "url": "options-general.php"
+  },
+  "H11": {
+    "label": "UTF-8 declaration — обычно настройка темы",
+    "type": "suggestion"
+  },
+  "H12": {
+    "label": "Canonical URL — обычно WP делает автоматически",
+    "type": "raw_url",
+    "url": "options-general.php"
+  },
+  "H13": {
+    "label": "Hreflang — если сайт многоязычный, нужен плагин",
+    "type": "suggestion"
+  },
+  "H14": {
+    "label": "Поиск разрешён — Settings → Reading",
+    "type": "raw_url",
+    "url": "options-reading.php"
+  },
+  "H15": {
+    "label": "Добавить alt-теги ко всем картинкам",
+    "type": "post_edit",
+    "use_homepage_id": true
+  },
+  "H16": {
+    "label": "loading=\"lazy\" для below-fold картинок",
+    "type": "suggestion"
+  },
+  "H17": {
+    "label": "Задать width/height для картинок (CLS)",
+    "type": "suggestion"
+  },
+  "H18": {
+    "label": "Конвертировать картинки в WebP/AVIF — плагин ShortPixel",
+    "type": "suggestion"
+  },
+  "H19": {
+    "label": "Inline CSS превышает 10KB — внешний файл",
+    "type": "suggestion"
+  },
+  "H20": {
+    "label": "Уменьшить render-blocking resources",
+    "type": "suggestion"
+  },
+  "H21": {
+    "label": "Добавить внутренние ссылки в текст страницы",
+    "type": "post_edit",
+    "use_homepage_id": true
+  },
+  "H22": {
+    "label": "Добавить rel=\"noopener\" к внешним ссылкам",
+    "type": "post_edit",
+    "use_homepage_id": true
+  },
+  "H23": {
+    "label": "Замени «click here»/«тут» на осмысленные анкоры",
+    "type": "post_edit",
+    "use_homepage_id": true
+  },
+  "H24": {
+    "label": "Добавить tel: ссылку для мобильных",
+    "type": "post_edit",
+    "use_homepage_id": true
+  },
+  "H25": {
+    "label": "Добавить mailto: для email-контактов",
+    "type": "post_edit",
+    "use_homepage_id": true
+  },
+  "N1": {
+    "label": "SSL невалиден — проверить сертификат у хостера",
+    "type": "suggestion"
+  },
+  "N2": {
+    "label": "SSL истекает <30 дней — renew",
+    "type": "suggestion"
+  },
+  "N3": {
+    "label": "SSL истекает <7 дней — СРОЧНО renew",
+    "type": "suggestion"
+  },
+  "N4": {
+    "label": "HTTP/2 — включить у хостера или CDN",
+    "type": "suggestion"
+  },
+  "N5": {
+    "label": "Security headers — настроить в .htaccess / nginx",
+    "type": "suggestion"
+  },
+  "N6": {
+    "label": "Server header раскрывает версию — скрыть в конфиге",
+    "type": "suggestion"
+  },
+  "N7": {
+    "label": "www/non-www редирект — настроить в .htaccess",
+    "type": "suggestion"
+  },
+  "N8": {
+    "label": "Settings → Reading: разрешить индексацию",
+    "type": "raw_url",
+    "url": "options-reading.php"
+  },
+  "N9": {
+    "label": "Sitemap WP делает автоматически /wp-sitemap.xml — проверь permalinks",
+    "type": "raw_url",
+    "url": "options-permalink.php"
+  },
+  "N10": {
+    "label": "Создать llms.txt в Head & SEO",
+    "type": "admin_page",
+    "page": "landing-config-head-seo"
+  },
+  "N11": {
+    "label": "404 страница возвращает 200 — нужен фикс в теме",
+    "type": "suggestion"
+  },
+  "N12": {
+    "label": "Добавить навигацию в 404.php темы",
+    "type": "suggestion"
+  },
+  "N13": {
+    "label": "Whois — info only, не блокирующее",
+    "type": "suggestion"
+  },
+  "S1": {
+    "label": "Заполнить Open Graph теги",
+    "type": "admin_page",
+    "page": "landing-config-head-seo"
+  },
+  "S2": {
+    "label": "og:image должен быть 1200×630 — изменить в Head & SEO",
+    "type": "admin_page",
+    "page": "landing-config-head-seo"
+  },
+  "S3": {
+    "label": "Twitter Card — заполнить в Head & SEO",
+    "type": "admin_page",
+    "page": "landing-config-head-seo"
+  },
+  "S4": {
+    "label": "Добавить Schema.org JSON-LD — нужен функцiональный код или плагин",
+    "type": "suggestion"
+  },
+  "S5": {
+    "label": "Установить Site Icon (favicon)",
+    "type": "raw_url",
+    "url": "customize.php?autofocus[control]=site_icon"
+  },
+  "AI1": {
+    "label": "Создать llms.txt в Head & SEO",
+    "type": "admin_page",
+    "page": "landing-config-head-seo"
+  },
+  "AI2": {
+    "label": "Добавить JSON-LD Organization (functions.php темы)",
+    "type": "suggestion"
+  },
+  "AI3": {
+    "label": "Сайт пустой без JS — server-side render обязателен",
+    "type": "suggestion"
+  }
+}

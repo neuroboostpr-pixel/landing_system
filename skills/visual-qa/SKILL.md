@@ -5,6 +5,12 @@ description: Стадия пост-композа QA через Playwright + cod
 
 # visual-qa
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill visual-qa --stage ""
+```
+
 Финальный визуальный контроль качества лендинга через автоматизированный QA-цикл.
 
 ## Использование

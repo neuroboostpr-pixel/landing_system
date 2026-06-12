@@ -1,61 +1,59 @@
 ---
+slug: landing-compose
 type: command
-name: landing-compose
-sources: ["commands/landing-compose.md"]
-updated: 2026-05-15
-triggers:
-  - "собери composed.html"
-  - "запусти compose"
-  - "этап 07b"
-  - "сборка блоков с токенами"
+name: "/landing-compose — Сборка composed.html"
 stage: "07b"
-uses:
+tags: [compose, wireframe, tokens, html, stage-07b]
+triggers: [landing-compose]
+inputs:
+  - 07_ПРОТОТИП/prototype.yaml
+  - 07a_WIREFRAME/selections.yaml
+  - 05_ДИЗАЙН-СИСТЕМА/tokens.json
+outputs:
+  - 07b_COMPOSED/composed.html
+  - 07b_COMPOSED/composed-mobile.html
+  - 07b_COMPOSED/block-injection-log.md
+pre_reqs: [wireframe-rendering, design-tokens-generation, prototype-import]
+related:
   - block-composer
-  - prototype-import
+  - block-composition
   - wireframe-rendering
   - design-tokens-generation
-tags:
-  - compose
-  - stage-07b
-  - html
-  - design-tokens
+  - prototype-import
+  - landing-orchestrator
+sources: ["commands/landing-compose.md"]
+updated: 2026-05-26
 ---
 
-# /landing-compose — сборка composed.html
+# /landing-compose — Сборка composed.html
 
 ## Что делает
 
-Собирает финальный HTML-файл лендинга с подставленными дизайн-токенами и текстами из прототипа. Визуальный контент (фото, иконки, инфографика) пока остаётся в виде именованных placeholder-ов — они заполняются на этапах PR-B и PR-C.
+Команда запускает этап **07b_COMPOSED**: собирает финальный HTML-файл лендинга, подставляя в него токены дизайн-системы (`tokens.json`) и контент из выбранных wireframe-блоков (`selections.yaml`). Передаёт основную работу агенту `block-composer`, который инжектирует шрифты, цвета, отступы и текстовый контент из прототипа. Визуальные плейсхолдеры (фото, иконки, инфографика) на этом этапе **не заменяются** — они остаются как `[SLOT: ...]` до прохождения этапов 07c и 07d.
 
-## Когда вызывать / в каком этапе
+## Когда вызывается
 
-Вызывается вручную на **этапе 07b** после того, как:
-- пользователь выбрал варианты блоков в `wireframe.html` и сохранил `selections.yaml` в папку `07a_WIREFRAME/`;
-- в папке `05_ДИЗАЙН-СИСТЕМА/` лежит готовый `tokens.json`.
+Вызывается вручную командой `/landing-compose` или автоматически через `/landing-go`. Условие запуска: в папке `07a_WIREFRAME/` должен лежать `selections.yaml` (результат утверждения вариантов в wireframe.html), а в `05_ДИЗАЙН-СИСТЕМА/` — `tokens.json`. Без этих файлов команда завершится с ошибкой.
 
-Команда **не интегрирована в `landing-orchestrator`** — это задача PR-D. До выхода PR-D запускается вручную через `/landing-compose`.
+## Вход → выход
 
-## Что на вход / на выход
+**Вход:** `prototype.yaml` (структура блоков и тексты), `selections.yaml` (выбранные варианты wireframe-блоков), `tokens.json` (цвета, типографика, отступы дизайн-системы).
 
-**Вход:**
-- `07_ПРОТОТИП/prototype.yaml` — машинное представление прототипа с текстами блоков
-- `07a_WIREFRAME/selections.yaml` — выбор вариантов блоков, сделанный пользователем в wireframe.html
-- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — дизайн-токены (цвета, шрифты, отступы)
+**Выход:** `07b_COMPOSED/composed.html` — полная страница лендинга с токенами и текстами, но с визуальными плейсхолдерами; `composed-mobile.html` — мобильная версия; `block-injection-log.md` — лог того, какие блоки были инжектированы и с каким результатом.
 
-**Выход:**
-- `07b_COMPOSED/composed.html` — основной файл: блоки со стилями и реальными текстами, визуальные слоты — placeholder-ы
-- `07b_COMPOSED/composed-mobile.html` — мобильная версия
-- `07b_COMPOSED/block-injection-log.md` — лог подстановки блоков
+## Failure modes
 
-## Связанные концепты
+- `selections.yaml` отсутствует или не скачан из `wireframe.html` — команда останавливается с требованием пройти этап 07a.
+- `tokens.json` не найден или повреждён — блоки собираются без CSS-переменных, визуальный результат неверный.
+- `prototype.yaml` содержит блоки без соответствий в `selections.yaml` — `block-composer` логирует пропущенные блоки, плейсхолдер остаётся пустым.
+- `verify-composed-premium.sh` возвращает ненулевой exit-код — этап 07b не закрывается (HARD GATE), нужна доработка `composed.html`.
+- Команда запущена вручную при незавершённых предыдущих этапах — `landing-orchestrator` может перезаписать артефакты при следующем `/landing-go`.
 
-- [[block-composer]] — агент, выполняющий фактическую сборку; команда делегирует работу ему
-- [[prototype-import]] — поставляет `prototype.yaml`, без которого команда не запустится
-- [[wireframe-rendering]] — поставляет `selections.yaml` с выбором вариантов блоков
-- [[design-tokens-generation]] — поставляет `tokens.json` с брендовыми переменными
-- [[landing-photos]] — этап PR-B, заменяет фото-placeholder-ы реальными снимками
-- [[landing-visuals]] — этап PR-C, заменяет icon/infographic-placeholder-ы сгенерированными PNG
+## Related
 
-## Источник
-
-- `commands/landing-compose.md`
+- [[block-composer]] — агент, выполняющий сборку блоков
+- [[block-composition]] — скилл сборки composed.html
+- [[wireframe-rendering]] — предыдущий этап (07a), поставляет selections.yaml
+- [[design-tokens-generation]] — поставляет tokens.json
+- [[prototype-import]] — поставляет prototype.yaml
+- [[landing-orchestrator]] — вызывает команду автоматически в рамках полного pipeline

@@ -1,0 +1,83 @@
+category: hero
+description: Первый экран с крупным оффером, продуктовой 3D-визуализацией, буллетами
+  и формой заявки справа.
+display_name_ru: hero-playful-split-opt-ecowash-ru-1 (split)
+has_animation: false
+id: hero-playful-split-opt-ecowash-ru-1
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://opt.ecowash.ru/
+layout_pattern: split
+niches_suitable:
+- ecommerce
+- services
+ru_market: true
+slots:
+- name: hero-badge
+  type: text
+- name: hero-title
+  type: text
+- name: hero-subhead
+  type: text
+- name: hero-bullets-label
+  type: text
+- name: hero-bullet-1
+  type: text
+- name: hero-bullet-2
+  type: text
+- name: hero-bullet-3
+  type: text
+- name: primary-cta-url
+  type: text
+- name: primary-cta-label
+  type: text
+- name: secondary-cta-url
+  type: text
+- name: secondary-cta-label
+  type: text
+- name: trust-label
+  type: text
+- name: trust-item-1
+  type: text
+- name: trust-item-2
+  type: text
+- name: hero-image-mobile
+  type: text
+- name: hero-image-alt
+  type: text
+- name: hero-image
+  type: text
+- name: hero-image-caption
+  type: text
+- name: form-action
+  type: text
+- name: form-label
+  type: text
+- name: form-title
+  type: text
+- name: name-label
+  type: text
+- name: name-field-name
+  type: text
+- name: name-placeholder
+  type: text
+- name: phone-label
+  type: text
+- name: phone-field-name
+  type: text
+- name: phone-placeholder
+  type: text
+- name: message-label
+  type: text
+- name: message-field-name
+  type: text
+- name: message-placeholder
+  type: text
+- name: form-submit-label
+  type: text
+- name: form-notice
+  type: text
+style_mood: playful
+type: hero
+variant: null

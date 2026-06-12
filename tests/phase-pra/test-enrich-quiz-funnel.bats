@@ -2,7 +2,7 @@
 
 setup() {
   ROOT="$(cd "$(dirname "$BATS_TEST_FILENAME")/../.." && pwd)"
-  ENRICHER="$ROOT/skills/wireframe-rendering/scripts/enrich-quiz-funnel.py"
+  ENRICHER="$ROOT/skills/prototype-import/scripts/enrich-quiz-funnel.py"
   VALIDATOR="$ROOT/skills/prototype-import/scripts/validate-prototype.py"
   TMPDIR_TEST="$BATS_TMPDIR/enrich-$$"
   mkdir -p "$TMPDIR_TEST"

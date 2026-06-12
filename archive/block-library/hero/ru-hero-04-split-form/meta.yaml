@@ -1,0 +1,53 @@
+category: hero
+conversion_notes: Форма на первом экране без скролла — максимальная видимость. Радио-группа
+  Telegram/Max/Звонок (без мессенджеров под запретом). Буллеты с ✓ усиливают доверие
+  перед заполнением формы.
+created: '2026-05-13'
+description: 'Hero 60/40: текст + буллеты слева, форма захвата лида справа (телефон
+  + Telegram/Max/звонок). Без фото.'
+display_name_ru: ru-hero-04-split-form (centered)
+id: ru-hero-04-split-form
+layout_pattern: centered
+layout_summary_ru: '60/40 split: оффер с 3 буллетами слева, форма захвата (телефон
+  + Telegram/Max/звонок) справа. Без фото — форма и есть визуал. На mobile — форма
+  под текстом.'
+recommended_styles_ru:
+- Minimalism & Swiss Style
+- Corporate Professional
+ru_market: true
+slots:
+- max_chars: 60
+  name: headline
+  required: true
+  type: text
+- max_chars: 80
+  name: bullet-1-text
+  required: true
+  type: text
+- max_chars: 80
+  name: bullet-2-text
+  required: true
+  type: text
+- max_chars: 80
+  name: bullet-3-text
+  required: false
+  type: text
+- default_text: Узнать стоимость
+  name: primary-cta
+  required: true
+  type: cta
+- max_chars: 20
+  name: lead-phone-input
+  required: true
+  type: text
+- default_text: Отправить заявку
+  name: lead-submit-cta
+  required: true
+  type: cta
+source: manual
+source_attribution: ''
+type: hero
+use_cases:
+- services
+- b2c
+variant: null

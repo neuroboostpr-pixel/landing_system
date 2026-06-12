@@ -1,57 +1,65 @@
 ---
+slug: niche-analyst
 type: agent
-name: niche-analyst
-sources: ["agents/niche-analyst.md"]
-updated: 2026-05-15
-triggers: []
+name: "Аналитик ниши (Stage 01a)"
 stage: "01a"
-uses:
+tags: [niche, analysis, competitors, positioning, market-profile, zero-touch]
+triggers: [landing-orchestrator]
+inputs:
+  - 00_БРИФ/brief.md
+  - 01_КОНТЕКСТ/context.md
+outputs:
+  - 01a_АНАЛИЗ_НИШИ/niche-analysis.md
+  - 01a_АНАЛИЗ_НИШИ/competitors.yaml
+  - 01a_АНАЛИЗ_НИШИ/market-profile.md
+  - 01a_АНАЛИЗ_НИШИ/positioning.md
+  - 01a_АНАЛИЗ_НИШИ/landing-structure.md
+  - 01a_АНАЛИЗ_НИШИ/visual-requirements.md
+gates: [gate-check-01a-niche-analysis]
+pre_reqs: []
+related:
   - landing-orchestrator
   - brand-architect
   - content-writer
   - wp-builder
-  - niche-analysis
-tags: ["research", "positioning", "competitors", "market-profile", "zero-touch"]
+sources: ["agents/niche-analyst.md"]
+updated: 2026-05-26
+confidence:
+  triggers: low
+  pre_reqs: low
 ---
 
-# niche-analyst — Автоматический анализ ниши
+# Аналитик ниши (Stage 01a)
 
 ## Что делает
 
-Исследует нишу, конкурентов и рынок полностью в автоматическом режиме — без единого вопроса к пользователю. По итогам выдаёт 6 структурированных артефактов, которые используют все последующие этапы: от бренд-кита до генерации блоков WordPress.
+Автоматически исследует нишу клиента и формирует **6 артефактов** для downstream-этапов (бренд, контент, вёрстка). Классифицирует бренд по типу (1 — глобальный, 2 — региональный, 3 — локальный), рассчитывает доступность продукта по доходам региона, собирает 15–25 конкурентов в 7 ролях, выбирает один из трёх режимов позиционирования (rational / emotional_aspiration / trust_authority или гибрид) и прописывает карту блоков лендинга под конкретный тип × режим. Работает полностью без вопросов к пользователю — пробелы помечает `[ДОПУЩЕНИЕ]`.
 
-## Когда вызывать / в каком этапе
+## Когда вызывается
 
-Активируется на этапе **01a** — после того как готов `00_БРИФ/brief.md` и (опционально) `01_КОНТЕКСТ/context.md`. Запускается через `landing-orchestrator` автоматически или вручную. После завершения оркестратор вызывает `scripts/gate-check.sh 01a_niche_analysis` и ждёт подтверждения пользователя для перехода к этапу 02.
+Запускается `landing-orchestrator`-ом автоматически, когда `.landing-state.yaml` переходит в `current_stage == 01a_niche_analysis`. Условие — `00_БРИФ/brief.md` существует и gate-check предыдущего этапа вернул exit 0.
 
-## Что на вход / на выход
+## Вход → выход
 
-**Вход:**
-- `00_БРИФ/brief.md` — обязательно
-- `01_КОНТЕКСТ/context.md` — если есть
+**Вход:** `00_БРИФ/brief.md` (обязательно) и `01_КОНТЕКСТ/context.md` (если есть). Из брифа извлекаются: название, категория, регион, целевой рынок, цена/чек.
 
-**Выход** (6 артефактов в `01a_АНАЛИЗ_НИШИ/`):
-1. `niche-analysis.md` — обзор 400–800 слов: тип бренда, ниша, допущения
-2. `competitors.yaml` — 15–25 конкурентов в 7 ролях
-3. `market-profile.md` — 8 секций: accessibility tier, consideration cycle, emotional load, cultural context и др.
-4. `positioning.md` — шаблон одного из трёх режимов: `rational`, `emotional_aspiration`, `trust_authority` (или `hybrid`)
-5. `landing-structure.md` — карта блоков лендинга по типу бренда × режиму
-6. `visual-requirements.md` — визуальные правила: focal, photography, people, red flags
+**Выход:** шесть файлов в `01a_АНАЛИЗ_НИШИ/` — обзорный `niche-analysis.md`, `competitors.yaml` (15–25 записей, схема валидируется), `market-profile.md` (8 секций с tier-расчётом), `positioning.md` (шаблон по режиму), `landing-structure.md` (таблица блоков лендинга с контрактом для wp-builder), `visual-requirements.md` (правила из `config/niche-visual-rules.yaml` + дериваты из конкурентов). Все четыре Python-валидатора должны вернуть exit 0.
 
-Все артефакты проходят валидацию через Python-скрипты в `skills/niche-analysis/scripts/`.
+## Чем закрывается этап (gates)
 
-## Алгоритм (кратко)
+- `gate-check-01a-niche-analysis` — все 6 артефактов записаны, все валидаторы (`validate-competitors.py`, `validate-market-profile.py`, `validate-positioning.py`, `validate-landing-structure.py`, `validate-visual-requirements.py`) возвращают exit 0, обязательные блоки Hero/CTA/Footer присутствуют в landing-structure.
 
-12 шагов: парсинг брифа → определение региона и языка → классификация бренда (Тип 1/2/3) → сбор конкурентов через WebSearch + Firecrawl → скрейп каждого конкурента → построение market-profile (с расчётом `ratio = цена / медианный доход` для определения accessibility tier) → синтез positioning mode через матрицу + override-индикаторы из брифа → генерация landing-structure по таблице Тип × Mode → визуальные требования → итоговый `niche-analysis.md`. При нехватке данных ставит `[ДОПУЩЕНИЕ]` вместо вопроса.
+## Failure modes
 
-## Связанные концепты
+- **Недостаточно конкурентов** — WebSearch или Firecrawl не нашли 15 записей; агент вынужден дублировать роли, валидатор падает по `min_competitors`.
+- **Неверный tier** — медианный доход региона недоступен, расчёт ratio делается по ВВП-прокси; реальный tier может быть завышен/занижен; confidence: low не проставлен.
+- **Конфликт brief_indicators** — бриф содержит смешанные сигналы, агент выбирает dominant-маркер без уточнения, что ведёт к неверному режиму позиционирования.
+- **Отсутствие `context.md`** — агент пропускает конкурентный анализ выше уровня поиска и опирается только на бриф; итоговый список конкурентов беднее.
+- **Harness-блокировка** — `enforce_stage_gate.py` не даёт записать файлы, если предшественник не закрыт; агент STOP'ится и ожидает закрытия предыдущего gate.
 
-- [[landing-orchestrator]] — запускает агента и проверяет gate после завершения
-- [[brand-architect]] — потребляет `positioning.md` и `niche-analysis.md` как вход
-- [[content-writer]] — использует `landing-structure.md` для адаптации текстов
-- [[wp-builder]] — использует `landing-structure.md` для генерации block.php
-- [[niche-analysis]] — скилл, содержащий валидаторы и конфиги (`positioning-modes.yaml`, `niche-visual-rules.yaml`)
+## Related
 
-## Источник
-
-- `agents/niche-analyst.md`
+- [[landing-orchestrator]] — диспатчит агента и принимает hand-off после gate-check
+- [[brand-architect]] — потребляет `positioning.md` и `market-profile.md` на этапе 04
+- [[content-writer]] — опирается на `landing-structure.md` при написании текстов (этап 07)
+- [[wp-builder]] — использует контракт template-parts из `landing-structure.md` на этапе 08

@@ -1,0 +1,17 @@
+.lp-cb--bottom-bar {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-top: 1px solid var(--cb-border);
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
+    padding: 16px 24px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+}
+.lp-cb--bottom-bar .lp-cb__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}

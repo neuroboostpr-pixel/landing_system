@@ -51,9 +51,41 @@ def _control_element(c: Control) -> str:
     return c.element if c.element else _DEFAULT_ELEMENT.get(c.type, "div")
 
 
+# Attribute names that carry raw SVG / inline HTML markup, URL-encoded on
+# disk by fix-page-content-images.py. See docs/asset-pipeline.md.
+_SVG_ATTR_NAMES = {
+    "icon_svg", "svg", "background_svg", "decoration_svg", "logo_svg",
+}
+
+# wp_kses allowlist for inline SVG echoed from URL-encoded textarea attrs.
+_SVG_KSES_PHP = (
+    "[\n"
+    "        'svg'    => ['viewbox' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true, 'stroke-linecap' => true, 'stroke-linejoin' => true, 'width' => true, 'height' => true, 'class' => true, 'aria-hidden' => true],\n"
+    "        'path'   => ['d' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true],\n"
+    "        'rect'   => ['x' => true, 'y' => true, 'width' => true, 'height' => true, 'rx' => true, 'ry' => true, 'fill' => true, 'stroke' => true],\n"
+    "        'circle' => ['cx' => true, 'cy' => true, 'r' => true, 'fill' => true, 'stroke' => true],\n"
+    "        'line'   => ['x1' => true, 'y1' => true, 'x2' => true, 'y2' => true, 'stroke' => true],\n"
+    "        'polygon'=> ['points' => true, 'fill' => true, 'stroke' => true],\n"
+    "        'polyline'=>['points' => true, 'fill' => true, 'stroke' => true],\n"
+    "        'g'      => ['fill' => true, 'stroke' => true, 'transform' => true],\n"
+    "        'defs'   => [],\n"
+    "        'use'    => ['href' => true, 'xlink:href' => true],\n"
+    "    ]"
+)
+
+
 def _render_text_like(c: Control, key: str, tag: str, cls: str) -> str:
     if c.type == "textarea":
-        echo = f"<?php echo nl2br(esc_html($attributes['{key}'] ?? '')); ?>"
+        if c.name in _SVG_ATTR_NAMES:
+            # SVG/HTML textarea attrs are URL-encoded on disk to survive the
+            # Gutenberg block-attribute JSON parser. Decode + kses on output.
+            echo = (
+                f"<?php echo wp_kses("
+                f"rawurldecode((string)($attributes['{key}'] ?? '')), "
+                f"{_SVG_KSES_PHP}); ?>"
+            )
+        else:
+            echo = f"<?php echo nl2br(esc_html($attributes['{key}'] ?? '')); ?>"
     elif c.type in ("rich-text", "classic-editor"):
         echo = f"<?php echo wp_kses_post($attributes['{key}'] ?? ''); ?>"
     else:  # text, email, etc.
@@ -91,8 +123,17 @@ def _render_control_output(c: Control) -> str:
         return f'    <a class="{cls}" href="<?php echo esc_url($attributes[\'{key}\'] ?? \'#\'); ?>"></a>'
 
     if c.type == "image":
+        # LZB image control attr is either an array (Gutenberg-parsed) or a
+        # URL-encoded JSON string (produced by fix-page-content-images.py for
+        # imports). Normalise to array, then render. See docs/asset-pipeline.md.
         return (
-            f'    <?php $img_{key} = $attributes[\'{key}\'] ?? null; ?>\n'
+            f'    <?php\n'
+            f'    $img_{key} = $attributes[\'{key}\'] ?? null;\n'
+            f'    if (is_string($img_{key})) {{\n'
+            f'        $decoded_{key} = json_decode(rawurldecode($img_{key}), true);\n'
+            f'        $img_{key} = is_array($decoded_{key}) ? $decoded_{key} : null;\n'
+            f'    }}\n'
+            f'    ?>\n'
             f'    <?php if (!empty($img_{key}[\'id\'])): ?>\n'
             f'        <?php echo wp_get_attachment_image($img_{key}[\'id\'], \'large\', false, [\'class\' => \'{cls}\']); ?>\n'
             f'    <?php elseif (!empty($img_{key}[\'url\'])): ?>\n'

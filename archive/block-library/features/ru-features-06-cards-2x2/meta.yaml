@@ -1,0 +1,85 @@
+category: features
+conversion_notes: Сетка 2×2 предпочтительна для 4+ равноважных услуг. Тег в правом
+  верхнем углу карточки помогает категоризации. Hover-эффект (translateY) добавляет
+  живости без JS.
+created: '2026-05-13'
+description: Четыре карточки в сетке 2×2 (тёплый bone-фон, тени, скруглённые углы)
+  рядом с заголовком и описанием. Стиль capabilities-grid от open-design-landing.
+display_name_ru: ru-features-06-cards-2x2 (grid-3)
+id: ru-features-06-cards-2x2
+layout_pattern: grid-3
+layout_summary_ru: Левая колонка — kicker, заголовок, подзаголовок. Правая — сетка
+  2×2 из карточек с числами 01–04 и тегом. Bone-фон карточек контрастирует с тёплым
+  bg. Mobile — заголовок сверху, сетка 2×2 снизу.
+recommended_styles_ru:
+- Editorial & Magazine Style
+- Minimalism & Swiss Style
+ru_market: true
+slots:
+- max_chars: 50
+  name: kicker
+  required: false
+  type: text
+- name: section-title
+  type: text
+- max_chars: 200
+  name: subhead
+  required: false
+  type: text
+- max_chars: 20
+  name: card-1-tag
+  required: false
+  type: text
+- max_chars: 40
+  name: card-1-title
+  required: true
+  type: text
+- max_chars: 140
+  name: card-1-desc
+  required: true
+  type: text
+- max_chars: 20
+  name: card-2-tag
+  required: false
+  type: text
+- max_chars: 40
+  name: card-2-title
+  required: true
+  type: text
+- max_chars: 140
+  name: card-2-desc
+  required: true
+  type: text
+- max_chars: 20
+  name: card-3-tag
+  required: false
+  type: text
+- max_chars: 40
+  name: card-3-title
+  required: true
+  type: text
+- max_chars: 140
+  name: card-3-desc
+  required: true
+  type: text
+- max_chars: 20
+  name: card-4-tag
+  required: false
+  type: text
+- max_chars: 40
+  name: card-4-title
+  required: true
+  type: text
+- max_chars: 140
+  name: card-4-desc
+  required: true
+  type: text
+source: opendesign
+source_attribution: 'github.com/nexu-io/open-design: design-templates/open-design-landing
+  (Apache-2.0)'
+type: features
+use_cases:
+- services
+- b2c
+- local
+variant: null

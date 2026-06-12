@@ -1,0 +1,50 @@
+<style>
+  :root {
+    --lp-bg: #f5f5f5;
+    --lp-text: #1a1a1a;
+    --lp-accent: #333;
+    --lp-border: #e0e0e0;
+    --lp-font-display: system-ui, sans-serif;
+    --lp-font-body: system-ui, sans-serif;
+    --spacing-md: 16px;
+    --spacing-lg: 32px;
+  }
+  body { margin: 0; font-family: var(--lp-font-body); background: var(--lp-bg); color: var(--lp-text); width: 375px; }
+  .faq { padding: 40px 16px; }
+  .section-headline { font-family: var(--lp-font-display); font-size: 24px; text-align: center; margin: 0 0 6px; }
+  .section-sub { text-align: center; color:#666; font-size: 14px; margin: 0 0 32px; }
+  details { border-bottom: 1px solid var(--lp-border); }
+  details:first-of-type { border-top: 1px solid var(--lp-border); }
+  summary {
+    padding: 16px 0; font-weight: 600; font-size: 15px; cursor: pointer;
+    list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; font-size: 20px; color: var(--lp-accent); flex-shrink: 0; }
+  details[open] summary::after { content: "−"; }
+  .faq-answer { padding: 0 0 16px; font-size: 14px; color:#444; line-height: 1.6; }
+</style>
+<section class="faq" data-block-id="ru-faq-02-why-us">
+<h2 class="section-headline">{{slot:headline}}</h2>
+<p class="section-sub">С цифрами и фактами</p>
+<details>
+<summary>{{slot:faq-1-q}}</summary>
+<div class="faq-answer">{{slot:faq-1-a}}</div>
+</details>
+<details>
+<summary>{{slot:faq-2-q}}</summary>
+<div class="faq-answer">{{slot:faq-2-a}}</div>
+</details>
+<details>
+<summary>{{slot:faq-3-q}}</summary>
+<div class="faq-answer">{{slot:faq-3-a}}</div>
+</details>
+<details>
+<summary>{{slot:faq-4-q}}</summary>
+<div class="faq-answer">{{slot:faq-4-a}}</div>
+</details>
+<details>
+<summary>{{slot:faq-5-q}}</summary>
+<div class="faq-answer">{{slot:faq-5-a}}</div>
+</details>
+</section>

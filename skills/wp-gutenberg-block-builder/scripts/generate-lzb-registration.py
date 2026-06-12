@@ -58,7 +58,15 @@ def _render_controls(controls: list) -> str:
     return "\n".join(lines)
 
 
-def _render_block(slug: str, title: str, icon: str, category: str, controls: list) -> str:
+def _render_block(slug: str, title: str, icon: str, category: str, controls: list,
+                  has_inner_blocks: bool = False) -> str:
+    # section-card parents need 'supports.inner_blocks' so the block editor
+    # accepts nested LZB cards and frontend rendering inserts the InnerBlocks
+    # wrapper. Without this, child blocks (cards) are parsed in page-content
+    # but never reach the parent's <InnerBlocks /> placeholder.
+    supports_line = ""
+    if has_inner_blocks:
+        supports_line = "        'supports' => array('inner_blocks' => true),\n"
     return (
         "    lazyblocks()->add_block(array(\n"
         f"        'slug' => {_php_str('lazyblock/' + slug)},\n"
@@ -67,6 +75,7 @@ def _render_block(slug: str, title: str, icon: str, category: str, controls: lis
         f"        'category' => {_php_str(category)},\n"
         f"        'controls' => {_render_controls(controls)},\n"
         "        'code' => array('output_method' => 'template'),\n"
+        f"{supports_line}"
         "    ));\n"
     )
 
@@ -74,7 +83,12 @@ def _render_block(slug: str, title: str, icon: str, category: str, controls: lis
 def _render_section(spec: BlockSpec) -> str:
     body_parts: list = []
     for b in spec.blocks:
-        body_parts.append(_render_block(b.slug, b.title, b.icon, b.category, b.controls))
+        # section-card parents have a `card` definition → нуждаются в inner_blocks
+        is_section_card = b.card is not None
+        body_parts.append(_render_block(
+            b.slug, b.title, b.icon, b.category, b.controls,
+            has_inner_blocks=is_section_card,
+        ))
         if b.card is not None:
             # Card inherits icon/category from parent section block
             body_parts.append(_render_block(b.card.slug, b.card.title, b.icon, b.category, b.card.controls))

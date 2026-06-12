@@ -41,9 +41,11 @@
 <h2>Icons — {{ brand.icons.library }}</h2>
 <div class="icon-grid">
   {% for icon in brand.icons.selected %}
+  {% set icon_id = icon.id if icon is mapping else icon %}
+  {% set icon_name = icon.name if icon is mapping else icon %}
   <div class="icon-item">
-    <img class="icon-img" src="https://api.iconify.design/{{ icon.id }}.svg" alt="{{ icon.name }}" />
-    <span>{{ icon.id }}</span>
+    <img class="icon-img" src="https://api.iconify.design/lucide/{{ icon_id }}.svg" alt="{{ icon_name }}" />
+    <span>{{ icon_id }}</span>
   </div>
   {% endfor %}
 </div>

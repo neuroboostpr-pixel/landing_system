@@ -1,0 +1,39 @@
+category: hero
+created: '2026-06-01'
+display_name_ru: hero-001 (brutalist)
+has_bg_image: false
+id: hero-001
+layout_pattern: brutalist
+signature: hero|brutalist|[content]|bg:false
+slots:
+- name: eyebrow
+  type: text
+- name: title
+  type: text
+- name: subhead
+  type: text
+- name: primary-cta-link
+  type: text
+- name: primary-cta-label
+  type: text
+- name: secondary-cta-link
+  type: text
+- name: secondary-cta-label
+  type: text
+- name: badges-label
+  type: text
+- name: badge-1
+  type: text
+- name: badge-2
+  type: text
+- name: badge-3
+  type: text
+- name: hero-image-mobile
+  type: text
+- name: hero-image-alt
+  type: text
+- name: hero-image
+  type: text
+source: cleaned
+type: hero
+variant: null

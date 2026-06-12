@@ -1,13 +1,20 @@
 #!/bin/bash
 # scripts/migrate-add-wiki.sh
 # Добавляет wiki/ и memory/ к существующему проекту-лендингу.
-# Использование: bash scripts/migrate-add-wiki.sh ~/Lendings/<slug>
+# Использование: bash scripts/migrate-add-wiki.sh <путь к проекту>
 
 set -euo pipefail
+# shellcheck source=lib/paths.sh
+
+# Cross-platform python detection (sets PYTHON_CMD).
+__SCRIPT_DIR__="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=lib/python-cmd.sh
+. "$__SCRIPT_DIR__/lib/python-cmd.sh"
+source "$(dirname "$0")/lib/paths.sh"
 
 if [ $# -ne 1 ]; then
     echo "Использование: $0 <путь к проекту>"
-    echo "Пример: $0 ~/Lendings/dubai-avto-liza"
+    echo "Пример: $0 $LANDINGS_ROOT/dubai-avto-liza"
     exit 1
 fi
 
@@ -42,7 +49,7 @@ fi
 SLUG=$(basename "$PROJECT_DIR")
 
 echo "▶️ Запускаю project-graph compile для '$SLUG'..."
-cd "$LANDING_SYSTEM_DIR" && python3 -m scripts.wiki.compile --source-mode=project-graph --project="$SLUG"
+cd "$LANDING_SYSTEM_DIR" && $PYTHON_CMD -m scripts.wiki.compile --source-mode=project-graph --project="$SLUG"
 
 echo ""
 echo "✅ Готово. Открой $PROJECT_DIR/wiki/index.md"

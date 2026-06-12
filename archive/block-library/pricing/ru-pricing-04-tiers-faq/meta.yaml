@@ -1,0 +1,118 @@
+category: pricing
+conversion_notes: Встроенный FAQ снимает страхи по оплате прямо в секции pricing.
+  FAQ без collapse (всё видно) работает лучше на landing-страницах. Задавайте типичные
+  возражения клиентов по оплате.
+created: '2026-05-13'
+description: Pricing-блок с тремя тирами и секцией FAQ по оплате на одной странице.
+  Синий акцент, featured-бейдж, встроенные FAQ без collapse. Адаптирован из pricing-page
+  (Apache-2.0).
+display_name_ru: ru-pricing-04-tiers-faq (grid-3)
+id: ru-pricing-04-tiers-faq
+layout_pattern: grid-3
+layout_summary_ru: Три тарифные карточки вверху (featured с border-highlight), затем
+  заголовок FAQ и три вопроса-ответа в static-режиме (без accordion). Mobile — стек.
+recommended_styles_ru:
+- Minimalism & Swiss Style
+- Corporate Clean
+ru_market: true
+slots:
+- max_chars: 60
+  name: headline
+  required: true
+  type: text
+- max_chars: 160
+  name: subhead
+  required: false
+  type: text
+- max_chars: 30
+  name: tier-1-name
+  required: true
+  type: text
+- name: tier-price
+  type: text
+- max_chars: 80
+  name: tier-1-desc
+  required: false
+  type: text
+- default_text: Начать
+  name: tier-1-cta
+  required: true
+  type: cta
+- max_chars: 30
+  name: tier-2-name
+  required: true
+  type: text
+- name: div-1
+  type: text
+- max_chars: 80
+  name: tier-2-desc
+  required: false
+  type: text
+- default_text: Выбрать Профи
+  name: tier-2-cta
+  required: true
+  type: cta
+- max_chars: 30
+  name: tier-3-name
+  required: true
+  type: text
+- max_chars: 30
+  name: tier-3-price
+  required: true
+  type: text
+- max_chars: 80
+  name: tier-3-desc
+  required: false
+  type: text
+- default_text: Связаться
+  name: tier-3-cta
+  required: true
+  type: cta
+- max_chars: 60
+  name: faq-headline
+  required: false
+  type: text
+- max_chars: 100
+  name: faq-1-q
+  required: true
+  type: text
+- max_chars: 300
+  name: faq-1-a
+  required: true
+  type: text
+- max_chars: 100
+  name: faq-2-q
+  required: true
+  type: text
+- max_chars: 300
+  name: faq-2-a
+  required: true
+  type: text
+- max_chars: 100
+  name: faq-3-q
+  required: true
+  type: text
+- max_chars: 300
+  name: faq-3-a
+  required: true
+  type: text
+- name: tier-name
+  type: text
+- name: tier-btn
+  type: text
+- name: div-2
+  type: text
+- name: btn-primary
+  type: text
+- name: div-3
+  type: text
+- name: btn-outline
+  type: text
+source: opendesign
+source_attribution: 'github.com/nexu-io/open-design: design-templates/pricing-page
+  (Apache-2.0)'
+type: pricing
+use_cases:
+- services
+- b2c
+variant: cards

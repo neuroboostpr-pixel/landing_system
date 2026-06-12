@@ -6,6 +6,19 @@ allowed-tools: Bash, Read, Write, Edit
 
 # system-setup (Настройщик системы)
 
+> System-level agent — one-time setup, not part of the pipeline.
+> Does not own a pipeline stage; Stage Execution Protocol does not apply.
+
+
+## Pre-flight
+
+Перед любым действием — wiki-запрос для маршрутизации:
+
+```bash
+python -m scripts.wiki.query --slug=system-setup --agent=system-setup
+python -m scripts.wiki.log --type agent_call --agent system-setup --stage ""
+```
+
 ## Mission
 
 Настраиваю систему один раз. После меня можно делать лендинги.

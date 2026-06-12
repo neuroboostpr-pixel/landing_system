@@ -1,0 +1,78 @@
+category: forms
+description: Финальный контактный экран с крупным заголовком, формой выбора времени
+  и яркой кнопкой.
+display_name_ru: contacts-corporate-split-portfolio-kdm1-ru-16 (split)
+has_animation: false
+id: contacts-corporate-split-portfolio-kdm1-ru-16
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://portfolio.kdm1.ru/upload/iblock/b31/i0qylig13hzo7ow4qcpia0qhtn3i87pk/Onlai_n_shkola-Dmitriya-Vykhodtseva.pdf
+layout_pattern: split
+niches_suitable:
+- services
+- education
+- b2b-saas
+ru_market: true
+slots:
+- name: contacts-eyebrow
+  type: text
+- name: contacts-heading
+  type: text
+- name: contacts-subhead
+  type: text
+- name: contacts-list-label
+  type: text
+- name: contact-method-one-label
+  type: text
+- name: contact-method-one-link
+  type: text
+- name: contact-method-one-text
+  type: text
+- name: contact-method-two-label
+  type: text
+- name: contact-method-two-link
+  type: text
+- name: contact-method-two-text
+  type: text
+- name: form-action
+  type: text
+- name: form-label
+  type: text
+- name: name-label
+  type: text
+- name: name-placeholder
+  type: text
+- name: contact-label
+  type: text
+- name: contact-placeholder
+  type: text
+- name: date-label
+  type: text
+- name: date-aria-label
+  type: text
+- name: time-label
+  type: text
+- name: time-aria-label
+  type: text
+- name: time-option-default
+  type: text
+- name: time-option-one-value
+  type: text
+- name: time-option-one-label
+  type: text
+- name: time-option-two-value
+  type: text
+- name: time-option-two-label
+  type: text
+- name: time-option-three-value
+  type: text
+- name: time-option-three-label
+  type: text
+- name: primary-cta-label
+  type: text
+- name: form-note
+  type: text
+style_mood: corporate
+type: contacts
+variant: booking

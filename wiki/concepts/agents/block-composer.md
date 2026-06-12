@@ -1,52 +1,73 @@
 ---
+slug: block-composer
 type: agent
-name: block-composer
-sources: ["agents/block-composer.md"]
-updated: 2026-05-15
-triggers: []
+name: "Block Composer (Сборка composed.html)"
 stage: "07b"
-uses: ["prototype-importer", "ux-composer", "design-system-generator", "photo-curator", "visual-curator", "block-composition"]
-tags: ["compose", "html", "design-tokens", "premium", "07b"]
+tags: [compose, html, design-tokens, prototype, wireframe, premium]
+triggers: [landing-compose]
+inputs:
+  - 07_ПРОТОТИП/prototype.yaml
+  - 07a_WIREFRAME/selections.yaml
+  - 05_ДИЗАЙН-СИСТЕМА/tokens.json
+  - block-library/
+outputs:
+  - 07b_COMPOSED/composed.html
+  - 07b_COMPOSED/composed-mobile.html
+  - 07b_COMPOSED/composed-explained.md
+gates:
+  - verify-composed-premium
+  - content-preserved
+pre_reqs:
+  - landing-wireframe
+  - landing-design
+related:
+  - landing-compose
+  - landing-prototype
+  - landing-photos
+  - landing-visuals
+  - landing-build
+sources:
+  - agents/block-composer.md
+  - docs/standards/premium-07b-checklist.md
+updated: 2026-05-26
+confidence:
+  triggers: low
 ---
 
-# block-composer — Сборка цветного макета лендинга
+# Block Composer (Сборка composed.html)
 
 ## Что делает
 
-Берёт утверждённые блоки из wireframe, подставляет в них реальные тексты из прототипа и цвета/шрифты из дизайн-системы — и собирает финальный цветной HTML-макет (`composed.html`). Фото, иконки и инфографика пока остаются текстовыми плейсхолдерами — их заполнят агенты PR-B и PR-C на следующих этапах.
+Собирает финальный HTML-макет лендинга из трёх утверждённых артефактов: варианты блоков из `selections.yaml`, тексты из `prototype.yaml` и дизайн-токены из `tokens.json`. Подставляет реальные заголовки, CTA и параграфы в выбранные wireframe-блоки, инъектирует CSS-переменные бренда. Визуальный контент (фото, иконки, инфографика) остаётся visible-placeholder'ами — их заполнят PR-B и PR-C. Дополнительно проверяет соответствие 13 обязательным премиум-фичам (glassmorphism, parallax, слайдеры, lightbox, count-up и др.) через `verify-composed-premium.sh`.
 
-## Когда вызывать / в каком этапе
+## Когда вызывается
 
-Этап **07b (Block Compose)**. Вызывается после того, как пользователь утвердил wireframe и в папке `07a_WIREFRAME/` появился `selections.yaml`. Запускается командой `/landing-compose` или через `landing-orchestrator`.
+Запускается командой `/landing-compose` (скилл `landing-compose`), когда `.landing-state.yaml` фиксирует `current_stage == 07c_composed`. Предусловие: этапы 05 (design-system, наличие `tokens.json`) и 07a (wireframe, наличие `selections.yaml`) должны быть закрыты. Harness-хук `enforce_stage_gate.py` физически блокирует Write/Edit, если предшественники не approved.
 
-## Что на вход / на выход
+## Вход → выход
 
-**Входные артефакты:**
-- `07_ПРОТОТИП/prototype.yaml` — финальные тексты и CTA (неприкосновенны)
-- `07a_WIREFRAME/selections.yaml` — выбранные пользователем варианты блоков
-- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — цвета, шрифты, отступы
-- `block-library/` — общая библиотека шаблонов блоков
+**Вход:** `prototype.yaml` с дословными текстами всех блоков, `selections.yaml` с выбранными вариантами из wireframe, `tokens.json` с дизайн-токенами (цвета, шрифты, тени), блоки из общей `block-library/`.
 
-**Выходные артефакты:**
-- `07b_COMPOSED/composed.html` — цветной макет с реальными текстами и плейсхолдерами для визуала
-- `07b_COMPOSED/composed-mobile-preview.html` — превью для iPhone/iPad
-- `07b_COMPOSED/composed-explained.md` — текстовый отчёт о собранных фичах (RU)
+**Выход:** `07b_COMPOSED/composed.html` — полноцветный макет с токенами и текстами; `composed-mobile.html` — iframe-превью для iPhone/iPad; `composed-explained.md` — RU-описание что собрано и какие премиум-фичи добавлены.
 
-## Ключевые правила
+## Чем закрывается этап (gates)
 
-**Контент прототипа — неприкосновенен (PR-H).** Заголовки, CTA и абзацы переносятся дословно. Любое изменение текста — только с явного разрешения пользователя после открытого вопроса. HARD GATE 07c проверяет это скриптом `verify-content-preserve.sh`.
+- **verify-composed-premium** — `verify-composed-premium.sh` возвращает exit 0: все 13 премиум-фич присутствуют (CSS-переменные, clamp(), sticky nav, parallax, IntersectionObserver, градиентный текст, hover-lift, слайдер, lightbox, count-up, smooth scroll, pulse-dot, reveal-классы).
+- **content-preserved** — `verify-content-preserved.sh` подтверждает: тексты в composed.html совпадают с `prototype.yaml` дословно, порядок блоков не нарушен.
 
-**Премиум-стандарт обязателен.** Каждый `composed.html` должен содержать 13 обязательных фич: CSS-переменные в `:root`, `clamp()` для типографики, glassmorphism nav, parallax hero, IntersectionObserver, `.reveal`-классы, gradient text, hover lift на карточках, слайдер, lightbox с keyboard navigation, count-up анимация, smooth scroll, pulse-dot на бейджах. Проверяется скриптом `verify-composed-premium.sh` — HARD GATE 07b не закрывается при exit code ≠ 0.
+## Failure modes
 
-## Связанные концепты
+- `selections.yaml` ссылается на блок, отсутствующий в `catalog.yaml` — агент останавливается, сообщает пользователю.
+- `current_stage` в `.landing-state.yaml` не равен `07c_composed` — агент останавливается до устранения.
+- Premim-verify возвращает ненулевой код — этап не закрывается, агент дорабатывает `composed.html` и прогоняет снова.
+- Тексты в HTML расходятся с `prototype.yaml` (тихое «улучшение») — HARD GATE content-preserved блокирует закрытие этапа.
+- `tokens.json` содержит неполный набор переменных — CSS-переменные в `:root` будут неполными, визуал деградирует.
 
-- [[prototype-importer]] — поставляет `prototype.yaml` с неизменяемыми текстами
-- [[ux-composer]] — поставляет `selections.yaml` из wireframe-этапа
-- [[design-system-generator]] — поставляет `tokens.json` с цветами и шрифтами
-- [[block-composition]] — скилл с Python-скриптами `compose-blocks.py` и `validate-selections.py`
-- [[photo-curator]] — PR-B: заменяет фото-плейсхолдеры реальными изображениями
-- [[visual-curator]] — PR-C: заменяет icon/infographic-плейсхолдеры PNG-файлами
+## Related
 
-## Источник
-
-- `agents/block-composer.md`
+- [[landing-compose]] — скилл/команда, которая вызывает этого агента
+- [[landing-prototype]] — создаёт `prototype.yaml`, который агент читает дословно
+- [[landing-wireframe]] — создаёт `selections.yaml` с выбранными вариантами блоков
+- [[landing-photos]] — PR-B, заполняет фото-placeholder'ы после compose
+- [[landing-visuals]] — PR-C, заполняет иконки и инфографику после compose
+- [[landing-build]] — следующий этап: сборка WP-темы из готового composed.html

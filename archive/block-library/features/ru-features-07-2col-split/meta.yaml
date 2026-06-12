@@ -1,0 +1,51 @@
+category: content
+conversion_notes: Используйте для "О нас" или манифеста компании. Доверительный тон
+  важнее продажного. Кнопка ghost не должна быть главным CTA — она вспомогательная.
+created: '2026-05-13'
+description: 'Двухколоночный split-блок: текст с манифестом или историей компании
+  слева, изображение справа. Стиль about-section от open-design-landing.'
+display_name_ru: ru-features-07-2col-split (grid-3)
+id: ru-features-07-2col-split
+layout_pattern: grid-3
+layout_summary_ru: Сетка 1.05fr / 1fr. Слева kicker, заголовок с засечным курсивом,
+  подзаголовок, ghost-кнопка, footnote. Справа изображение с border. Mobile — фото
+  сверху, текст снизу.
+recommended_styles_ru:
+- Editorial & Magazine Style
+- Minimalism & Swiss Style
+ru_market: true
+slots:
+- max_chars: 50
+  name: kicker
+  required: false
+  type: text
+- name: section-title
+  type: text
+- max_chars: 300
+  name: subhead
+  required: true
+  type: text
+- default_text: Узнать больше о нас
+  name: cta
+  required: false
+  type: cta
+- max_chars: 80
+  name: footnote
+  required: false
+  type: text
+- mobile_ratio: '4:3'
+  name: art-image
+  ratio: '1:1'
+  required: false
+  type: photo
+- name: h2-1
+  type: text
+source: opendesign
+source_attribution: 'github.com/nexu-io/open-design: design-templates/open-design-landing
+  (Apache-2.0)'
+type: features
+use_cases:
+- services
+- b2c
+- local
+variant: about

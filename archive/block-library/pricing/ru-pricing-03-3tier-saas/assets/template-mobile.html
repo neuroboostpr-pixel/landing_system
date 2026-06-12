@@ -1,0 +1,47 @@
+<style>
+  :root { --lp-bg: #f5f5f5; --lp-text: #1a1a1a; --lp-accent: #333; --lp-border: #e0e0e0; --lp-bg-alt: #e8e8e8; --lp-text-muted: #999; --lp-font-body:system-ui,sans-serif; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:var(--lp-font-body); background:var(--lp-bg); color:var(--lp-text); width:375px; padding:40px 20px; display:flex; flex-direction:column; gap:24px; }
+  .section-head { text-align:center; }
+  .section-head h2 { font-size:28px; letter-spacing:-0.02em; margin-bottom:10px; font-weight:700; }
+  .section-head p { color:var(--lp-text-muted); font-size:15px; }
+  .tier { background:var(--lp-bg-alt); border:1px solid var(--lp-border); border-radius:14px; padding:24px; position:relative; }
+  .tier.featured { border-color:var(--lp-accent); }
+  .tier.featured::before { content:"Рекомендуем"; position:absolute; top:-12px; left:20px; background:var(--lp-accent); color:white; padding:3px 10px; border-radius:999px; font-size:11px; font-weight:500; }
+  .tier-name { font-size:17px; font-weight:600; margin-bottom:6px; }
+  .tier-price { font-size:36px; letter-spacing:-0.02em; font-weight:700; margin-bottom:16px; }
+  .tier-price small { font-size:14px; color:var(--lp-text-muted); font-weight:400; }
+  .tier-features { list-style:none; padding:0; margin:0 0 20px; color:var(--lp-text-muted); font-size:13px; border-top:1px solid var(--lp-border); }
+  .tier-features li { padding:6px 0; border-bottom:1px solid var(--lp-border); display:flex; align-items:center; gap:6px; }
+  .tier-features li::before { content:"✓"; color:var(--lp-accent); font-weight:700; }
+  .btn-primary { display:block; width:100%; padding:12px 20px; background:var(--lp-accent); color:white; border:none; border-radius:8px; font:inherit; font-weight:500; cursor:pointer; text-align:center; text-decoration:none; }
+  .btn-secondary { display:block; width:100%; padding:12px 20px; background:transparent; color:var(--lp-text); border:1px solid var(--lp-border); border-radius:8px; font:inherit; font-weight:500; cursor:pointer; text-align:center; text-decoration:none; }
+</style>
+<div class="section-head">
+<h2>{{slot:headline}}</h2>
+<p>{{slot:subhead}}</p>
+</div>
+<div class="tier">
+<div class="tier-name">{{slot:tier-1-name}}</div>
+<div class="tier-price">{{slot:tier-price}}</div>
+<ul class="tier-features">
+<li>{{slot:li-1}}</li><li>{{slot:li-2}}</li><li>{{slot:li-3}}</li>
+</ul>
+<a class="btn-secondary" href="#contact">{{slot:tier-1-cta}}</a>
+</div>
+<div class="tier featured">
+<div class="tier-name">{{slot:tier-2-name}}</div>
+<div class="tier-price">{{slot:div-4}}</div>
+<ul class="tier-features">
+<li>{{slot:li-5}}</li><li>{{slot:li-6}}</li><li>{{slot:li-7}}</li><li>{{slot:li-8}}</li>
+</ul>
+<a class="btn-primary" href="#contact">{{slot:tier-2-cta}}</a>
+</div>
+<div class="tier">
+<div class="tier-name">{{slot:tier-3-name}}</div>
+<div class="tier-price">{{slot:div-9}}</div>
+<ul class="tier-features">
+<li>{{slot:li-1}}</li><li>{{slot:li-10}}</li><li>{{slot:li-11}}</li>
+</ul>
+<a class="btn-secondary" href="#contact">{{slot:tier-3-cta}}</a>
+</div>

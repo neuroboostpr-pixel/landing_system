@@ -7,16 +7,21 @@
 
 set -euo pipefail
 
+
+# Cross-platform python detection (sets PYTHON_CMD).
+__SCRIPT_DIR__="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=lib/python-cmd.sh
+. "$__SCRIPT_DIR__/lib/python-cmd.sh"
 STATE="${1:?ERROR: state.yaml path required}"
 [ -f "$STATE" ] || { echo "ERROR: $STATE not found" >&2; exit 2; }
 
-python3 - "$STATE" <<'PYEOF'
+$PYTHON_CMD - "$STATE" <<'PYEOF'
 import sys
 import re
 from pathlib import Path
 
 NEW_STAGES = [
-    "07a_prototype", "07b_wireframe", "07c_composed",
+    "07a_prototype", "07c_composed",
     "07d_photos", "07e_visuals", "07f_composed_final",
 ]
 

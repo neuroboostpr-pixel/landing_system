@@ -9,6 +9,7 @@
 """
 from __future__ import annotations
 
+import os
 from datetime import date
 from pathlib import Path
 from typing import Any
@@ -16,6 +17,8 @@ from typing import Any
 from scripts.wiki import hash_cache, sdk_client, utils
 
 PROMPTS_DIR = Path(__file__).parent / "prompts"
+
+DEFAULT_MAX_SDK_CALLS = 20
 
 
 def _load_prompt(name: str) -> str:
@@ -37,12 +40,22 @@ def _slug_for_source(path: Path) -> str:
 
 
 def _compile_concept(
-    source_path: Path, repo_root: Path
+    source_path: Path,
+    repo_root: Path,
+    known_slugs: list[str] | None = None,
 ) -> str:
     """Зовёт SDK для одного исходника, возвращает markdown концепта."""
     system_prompt = _load_prompt("system_concept.md")
     rel = source_path.relative_to(repo_root).as_posix()
-    user_msg = f"Источник: `{rel}`\n\n---\n\n{source_path.read_text(encoding='utf-8')}"
+    slugs_block = ""
+    if known_slugs:
+        slugs_list = ", ".join(sorted(set(known_slugs)))
+        slugs_block = f"\n\n## Known slugs (для related/pre_reqs)\n{slugs_list}\n"
+    user_msg = (
+        f"Источник: `{rel}`\n\n---\n\n"
+        f"{source_path.read_text(encoding='utf-8')}"
+        f"{slugs_block}"
+    )
     return sdk_client.generate(system=system_prompt, user=user_msg)
 
 
@@ -98,13 +111,86 @@ def _build_index(concepts: list[dict[str, Any]]) -> str:
             continue
         lines.append(title)
         lines.append("")
-        for c in sorted(groups[type_], key=lambda x: x.get("file_stem", "")):
-            stem = c.get("file_stem", "?")
+        for c in sorted(groups[type_], key=lambda x: x.get("slug", x.get("file_stem", ""))):
+            stem = c.get("slug") or c.get("file_stem", "?")
             name = c.get("name") or stem
             lines.append(f"- [[{stem}]] — {name}")
         lines.append("")
 
     return "\n".join(lines)
+
+
+INDEX_SCHEMA_VERSION = 1
+
+_YAML_OPTIONAL_FIELDS = (
+    "stage", "tags", "triggers", "inputs", "outputs",
+    "gates", "pre_reqs", "related", "invoked_by", "uses_skills",
+    "confidence", "incomplete",
+)
+
+_YAML_REQUIRED_FIELDS = ("slug", "type", "name", "card", "source")
+
+
+def _build_yaml_index(concepts: list[dict[str, Any]]) -> str:
+    """Детерминированно строит YAML-индекс для orchestrator routing.
+
+    Без SDK. Сортирует концепты по slug. Опциональные поля с None/пустыми
+    значениями пропускаются, чтобы YAML был компактным.
+    """
+    from datetime import datetime, timezone
+    import yaml as _yaml
+
+    by_type: dict[str, int] = {}
+    cleaned: list[dict[str, Any]] = []
+    for c in sorted(concepts, key=lambda x: x.get("slug", "")):
+        entry: dict[str, Any] = {}
+        for field in _YAML_REQUIRED_FIELDS:
+            value = c.get(field)
+            if value is not None:
+                entry[field] = value
+        for field in _YAML_OPTIONAL_FIELDS:
+            value = c.get(field)
+            if value is None:
+                continue
+            if isinstance(value, (list, dict)) and len(value) == 0:
+                continue
+            entry[field] = value
+        cleaned.append(entry)
+        type_ = c.get("type", "unknown")
+        by_type[type_] = by_type.get(type_, 0) + 1
+
+    doc = {
+        "version": INDEX_SCHEMA_VERSION,
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "counts": {"total": len(cleaned), "by_type": by_type},
+        "concepts": cleaned,
+    }
+    return _yaml.safe_dump(doc, allow_unicode=True, sort_keys=False)
+
+
+def _summary_entry_from_meta(
+    slug: str, meta: dict[str, Any], rel_key: str, concept_dir: str
+) -> dict[str, Any]:
+    """Превращает frontmatter карточки в запись для index.yaml."""
+    return {
+        "slug": slug,
+        "type": meta.get("type", "unknown"),
+        "stage": meta.get("stage"),
+        "name": meta.get("name", slug),
+        "tags": meta.get("tags"),
+        "triggers": meta.get("triggers"),
+        "inputs": meta.get("inputs"),
+        "outputs": meta.get("outputs"),
+        "gates": meta.get("gates"),
+        "pre_reqs": meta.get("pre_reqs"),
+        "related": meta.get("related"),
+        "invoked_by": meta.get("invoked_by"),
+        "uses_skills": meta.get("uses_skills"),
+        "confidence": meta.get("confidence"),
+        "incomplete": meta.get("incomplete"),
+        "card": f"concepts/{concept_dir}/{slug}.md",
+        "source": rel_key,
+    }
 
 
 def _append_log(log_path: Path, entries: list[str]) -> None:
@@ -146,15 +232,42 @@ def compile_system(
                     cache[rel_key] = hash_cache.compute_hash(source_path)
         hash_cache.save_cache(cache_path, cache)
 
+    existing_slugs: list[str] = []
+    concepts_root = wiki_dir / "concepts"
+    if concepts_root.exists():
+        existing_slugs = [p.stem for p in concepts_root.rglob("*.md")]
+
     concepts_summary: list[dict[str, Any]] = []
     compiled: list[str] = []
     skipped: list[str] = []
     errors: list[str] = []
+    deferred: list[str] = []
+
+    # Throttle: ограничивает число SDK-вызовов за один прогон, чтобы первый
+    # bootstrap на свежем кэше не выжигал всю квоту подписки за раз
+    # (каждый вызов claude-agent-sdk = отдельная сессия в истории).
+    # Изменённые источники сверх лимита возвращаются как `deferred` и
+    # подхватятся в следующий прогон (их hash в кэш не пишется).
+    try:
+        max_calls = int(os.environ.get("WIKI_MAX_SDK_CALLS", DEFAULT_MAX_SDK_CALLS))
+    except ValueError:
+        max_calls = DEFAULT_MAX_SDK_CALLS
+    sdk_calls_used = 0
+
+    # Count total upfront so progress lines can show [N/total].
+    all_sources = [
+        (sd, sp)
+        for sd in sources
+        for sp in sorted(repo_root.glob(sd["path"]))
+    ]
+    total_sources = len(all_sources)
+    idx = 0
 
     for source_def in sources:
         pattern = source_def["path"]
         concept_dir = source_def["concept_dir"]
         for source_path in sorted(repo_root.glob(pattern)):
+            idx += 1
             rel_key = source_path.relative_to(repo_root).as_posix()
             slug = _slug_for_source(source_path)
             concept_path = wiki_dir / "concepts" / concept_dir / f"{slug}.md"
@@ -167,37 +280,57 @@ def compile_system(
                         concept_path.read_text(encoding="utf-8")
                     )
                     concepts_summary.append(
-                        {
-                            "file_stem": slug,
-                            "type": meta.get("type", "unknown"),
-                            "name": meta.get("name", slug),
-                            "source": rel_key,
-                        }
+                        _summary_entry_from_meta(slug, meta, rel_key, concept_dir)
                     )
                 continue
 
+            if sdk_calls_used >= max_calls:
+                deferred.append(rel_key)
+                print(
+                    f"[{idx}/{total_sources}] deferred {rel_key} "
+                    f"(WIKI_MAX_SDK_CALLS={max_calls} reached)",
+                    flush=True,
+                )
+                continue
+
+            print(
+                f"[{idx}/{total_sources}] compiling {rel_key} ...",
+                flush=True,
+            )
+            sdk_calls_used += 1
             try:
-                content = _compile_concept(source_path, repo_root)
+                content = _compile_concept(source_path, repo_root, known_slugs=existing_slugs)
             except sdk_client.SDKError as e:
+                print(f"  ! SDK error: {e}", flush=True)
                 errors.append(f"{rel_key}: {e}")
+                # Кэшируем hash даже при ошибке — иначе post-commit будет
+                # звать SDK на этот файл КАЖДЫЙ раз. Пользователь увидит
+                # ошибку в errors[], кэш починится при следующем коммите
+                # с обновлённым source-файлом.
+                cache[rel_key] = hash_cache.compute_hash(source_path)
                 continue
 
             meta, _ = utils.parse_frontmatter(content)
             concepts_summary.append(
-                {
-                    "file_stem": slug,
-                    "type": meta.get("type", "unknown"),
-                    "name": meta.get("name", slug),
-                    "source": rel_key,
-                }
+                _summary_entry_from_meta(slug, meta, rel_key, concept_dir)
             )
             if not dry_run:
                 utils.atomic_write(concept_path, content)
                 cache[rel_key] = hash_cache.compute_hash(source_path)
-                hash_cache.save_cache(cache_path, cache)
             compiled.append(rel_key)
 
-    # Индекс
+    # Финальный save кэша — один раз за прогон, не в цикле (O(N²) → O(N)).
+    # Сохраняем и при ошибках: hash «сломанных» источников остаётся в кэше,
+    # чтобы post-commit не звал SDK на них каждый раз.
+    if not dry_run and (compiled or errors):
+        hash_cache.save_cache(cache_path, cache)
+
+    # YAML index — машинный, всегда детерминирован
+    if not dry_run and concepts_summary:
+        yaml_index_content = _build_yaml_index(concepts_summary)
+        utils.atomic_write(wiki_dir / "index.yaml", yaml_index_content)
+
+    # Markdown index — для людей
     if concepts_summary:
         try:
             index_content = _build_index(concepts_summary)
@@ -206,14 +339,26 @@ def compile_system(
         except sdk_client.SDKError as e:
             errors.append(f"index: {e}")
 
-    # Лог + кэш
+    # Лог
     if not dry_run:
         _append_log(
             wiki_dir / "log.md",
             entries=[f"compiled {p}" for p in compiled]
             + [f"skipped {p}" for p in skipped]
+            + [f"deferred {p}" for p in deferred]
             + [f"error {e}" for e in errors],
         )
-        hash_cache.save_cache(cache_path, cache)
 
-    return {"compiled": compiled, "skipped": skipped, "errors": errors}
+    if deferred:
+        print(
+            f"⚠️  {len(deferred)} source(s) deferred — re-run compile to finish them "
+            f"(WIKI_MAX_SDK_CALLS={max_calls}).",
+            flush=True,
+        )
+
+    return {
+        "compiled": compiled,
+        "skipped": skipped,
+        "deferred": deferred,
+        "errors": errors,
+    }

@@ -32,7 +32,7 @@ def fail(m: str) -> None:
 
 
 def main(in_path: str, out_path: str) -> None:
-    lines = Path(in_path).read_text().splitlines()
+    lines = Path(in_path).read_text(encoding="utf-8").splitlines()
 
     project: dict = {}
     blocks: list = []
@@ -104,7 +104,7 @@ def main(in_path: str, out_path: str) -> None:
 
     project["source_file"] = Path(in_path).name
     out = {"project": project, "blocks": blocks}
-    Path(out_path).write_text(yaml.dump(out, sort_keys=False, allow_unicode=True))
+    Path(out_path).write_text(yaml.dump(out, sort_keys=False, allow_unicode=True), encoding="utf-8")
     print(f"OK: wrote {out_path}")
 
 

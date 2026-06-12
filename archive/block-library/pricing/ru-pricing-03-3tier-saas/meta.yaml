@@ -1,0 +1,140 @@
+category: pricing
+conversion_notes: Выделение среднего тарифа border+badge увеличивает его выбор. Всегда
+  показывать цену в ₽. "Индивидуально" для верхнего тарифа работает лучше чем конкретная
+  цена.
+created: '2026-05-13'
+description: Три тарифа с выделенным recommended-тиром, чеклистом функций и кнопками.
+  Чистый white-surface стиль от saas-landing (Apache-2.0). Цены в рублях.
+display_name_ru: ru-pricing-03-3tier-saas (grid-3)
+id: ru-pricing-03-3tier-saas
+layout_pattern: grid-3
+layout_summary_ru: Три колонки, средняя с border-highlight и бейджем. Цена крупно,
+  список функций с галочками. Mobile — вертикальный стек карточек.
+recommended_styles_ru:
+- Minimalism & Swiss Style
+- Corporate Clean
+- Flat Design 2.0
+ru_market: true
+slots:
+- max_chars: 60
+  name: headline
+  required: true
+  type: text
+- max_chars: 160
+  name: subhead
+  required: false
+  type: text
+- max_chars: 30
+  name: tier-1-name
+  required: true
+  type: text
+- max_chars: 60
+  name: tier-1-desc
+  required: false
+  type: text
+- name: tier-price
+  type: text
+- max_chars: 60
+  name: tier-1-f1
+  required: false
+  type: text
+- max_chars: 60
+  name: tier-1-f2
+  required: false
+  type: text
+- max_chars: 60
+  name: tier-1-f3
+  required: false
+  type: text
+- default_text: Начать
+  name: tier-1-cta
+  required: true
+  type: cta
+- max_chars: 30
+  name: tier-2-name
+  required: true
+  type: text
+- max_chars: 60
+  name: tier-2-desc
+  required: false
+  type: text
+- name: div-1
+  type: text
+- max_chars: 60
+  name: tier-2-f1
+  required: false
+  type: text
+- max_chars: 60
+  name: tier-2-f2
+  required: false
+  type: text
+- max_chars: 60
+  name: tier-2-f3
+  required: false
+  type: text
+- max_chars: 60
+  name: tier-2-f4
+  required: false
+  type: text
+- default_text: Выбрать Бизнес
+  name: tier-2-cta
+  required: true
+  type: cta
+- max_chars: 30
+  name: tier-3-name
+  required: true
+  type: text
+- max_chars: 60
+  name: tier-3-desc
+  required: false
+  type: text
+- max_chars: 30
+  name: tier-3-price
+  required: true
+  type: text
+- max_chars: 60
+  name: tier-3-f1
+  required: false
+  type: text
+- max_chars: 60
+  name: tier-3-f2
+  required: false
+  type: text
+- max_chars: 60
+  name: tier-3-f3
+  required: false
+  type: text
+- default_text: Обсудить условия
+  name: tier-3-cta
+  required: true
+  type: cta
+- name: li-1
+  type: text
+- name: li-2
+  type: text
+- name: li-3
+  type: text
+- name: div-4
+  type: text
+- name: li-5
+  type: text
+- name: li-6
+  type: text
+- name: li-7
+  type: text
+- name: li-8
+  type: text
+- name: div-9
+  type: text
+- name: li-10
+  type: text
+- name: li-11
+  type: text
+source: opendesign
+source_attribution: 'github.com/nexu-io/open-design: design-templates/saas-landing
+  (Apache-2.0)'
+type: pricing
+use_cases:
+- services
+- b2c
+variant: cards

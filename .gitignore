@@ -33,6 +33,18 @@ build/
 # Logs
 *.log
 wiki/.obsidian/
+logs/wiki-usage.jsonl
+wiki/routing-report.md
+
+# Wiki run tracking
+.wiki-run-id
 
 # PR-O block-import work cache
 .import-blocks-work/
+audit/
+.claude/worktrees/
+
+.cleanup-staging/
+
+# Claude Code scheduler lock (local)
+.claude/scheduled_tasks.lock

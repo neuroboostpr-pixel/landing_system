@@ -1,0 +1,23 @@
+id: menu-001
+type: menu
+category: Navigation
+display_name_ru: 'Меню: section-label + category-select + items-count'
+description: ''
+layout_pattern: split
+has_bg_image: false
+signature: menu|split|[category-select,items-count,section-label]|bg:false
+style_mood: minimal
+ru_market: true
+has_animation: false
+niches_suitable:
+- generic
+slots:
+- name: section-label
+  type: text
+- name: category-select
+  type: text
+- name: items-count
+  type: text
+source: import
+source_url: C:\Users\esper21\AppData\Local\Temp\claude\import-blocks-6fn2da8v\screenshots\import-01.png
+created: '2026-06-03'

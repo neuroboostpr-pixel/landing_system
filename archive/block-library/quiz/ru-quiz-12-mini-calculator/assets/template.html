@@ -1,0 +1,63 @@
+<style>
+  :root {
+    --lp-bg: #f5f5f5;
+    --lp-text: #1a1a1a;
+    --lp-accent: #333;
+    --lp-border: #e0e0e0;
+    --lp-font-display: system-ui, sans-serif;
+    --lp-font-body: system-ui, sans-serif;
+    --spacing-md: 16px;
+    --spacing-lg: 32px;
+  }
+  body { margin: 0; font-family: var(--lp-font-body); background:#f5f5f5; color: var(--lp-text); display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+  .calc-card { background: var(--lp-bg); border-radius: 16px; padding: 44px 44px 52px; max-width: 580px; width: 100%; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+  .headline { font-family: var(--lp-font-display); font-size: 24px; font-weight: 700; margin: 0 0 28px; text-align: center; }
+  .param-group { margin-bottom: 24px; }
+  .param-label { font-size: 15px; font-weight: 600; margin-bottom: 10px; display: block; }
+  .radio-options { display: flex; gap: 10px; flex-wrap: wrap; }
+  /* CSS-only radio selection for calculator */
+  .radio-opt input[type=radio] { position: absolute; opacity: 0; width: 0; height: 0; }
+  .radio-opt label { display: block; padding: 10px 18px; border: 2px solid var(--lp-border); border-radius: 8px; cursor: pointer; font-size: 14px; transition: border-color 0.15s; }
+  .radio-opt input[type=radio]:checked + label { border-color: var(--lp-accent); background:var(--lp-bg); font-weight: 600; }
+  .radio-opt label:hover { border-color:#888; }
+  .result-box { border: 2px dashed var(--lp-accent); border-radius: 12px; padding: 20px 24px; margin: 28px 0; text-align: center; }
+  .result-prefix { font-size: 14px; color:#666; margin-bottom: 4px; }
+  .result-value { font-family: var(--lp-font-display); font-size: 32px; font-weight: 900; color: var(--lp-accent); }
+  .result-note { font-size: 12px; color:#999; margin-top: 4px; }
+  .cta-button { display: block; background: var(--lp-accent); color:#fff; font-size: 17px; font-weight: 700; padding: 16px; border-radius: 10px; text-decoration: none; text-align: center; }
+</style>
+<div class="calc-card" data-block-id="ru-quiz-12-mini-calculator">
+<h2 class="headline">{{slot:headline}}</h2>
+<div class="param-group">
+<span class="param-label">{{slot:param-1-label}}</span>
+<div class="radio-options">
+<div class="radio-opt">
+<input checked="" id="r1" name="room" type="radio" value="small"/>
+<label for="r1">{{slot:param-1-opt-1}}</label>
+</div>
+<div class="radio-opt">
+<input id="r2" name="room" type="radio" value="large"/>
+<label for="r2">{{slot:param-1-opt-2}}</label>
+</div>
+</div>
+</div>
+<div class="param-group">
+<span class="param-label">{{slot:param-2-label}}</span>
+<div class="radio-options">
+<div class="radio-opt">
+<input checked="" id="c1" name="cover" type="radio" value="laminate"/>
+<label for="c1">{{slot:param-2-opt-1}}</label>
+</div>
+<div class="radio-opt">
+<input id="c2" name="cover" type="radio" value="parquet"/>
+<label for="c2">{{slot:param-2-opt-2}}</label>
+</div>
+</div>
+</div>
+<div class="result-box">
+<div class="result-prefix">{{slot:result-prefix}}</div>
+<div class="result-value">от 45 000 ₽</div>
+<div class="result-note">Точный расчёт — после звонка менеджера</div>
+</div>
+<a class="cta-button" href="#">{{slot:cta-button}}</a>
+</div>

@@ -35,6 +35,11 @@ class Control:
     # emits ``<a href="<value-of-href_from>">text</a>`` and skips the referenced
     # url control. Replaces the old name-based heuristic.
     href_from: Optional[str] = None
+    # Lint hint: CSS selector that scopes heuristics to a specific sub-element
+    # of the matched DOM block. E.g. textarea `description` with
+    # target_selector=".model-description" makes multi-paragraph count only
+    # the <p> tags inside .model-description, not the whole card.
+    target_selector: Optional[str] = None
 
 
 @dataclass
@@ -63,6 +68,18 @@ class Block:
     element: Optional[str] = None
     wrapper_open_html: Optional[str] = None
     wrapper_close_html: Optional[str] = None
+    probe_selector: Optional[str] = None
+    probe_kind: str = "single"  # "single" | "card-collection"
+    # For probe_kind="card-collection": selector that picks individual cards
+    # inside the matched section. Used so card-level heuristics
+    # (multi-paragraph, slider-images, inline-svg-icon) iterate per card,
+    # not over the entire section soup.
+    card_probe_selector: Optional[str] = None
+    # Exclude DOM elements matching this selector from the per-card pass.
+    # Use when the section contains a decorative card (e.g. `.feature-statement`)
+    # that shares the card_probe_selector class but is rendered by the parent
+    # block, not by a card-template entry.
+    card_skip_selector: Optional[str] = None
 
 
 @dataclass
@@ -90,6 +107,7 @@ def _control_from(raw: dict) -> Control:
         css_class=raw.get("css_class"),
         element=raw.get("element"),
         href_from=raw.get("href_from"),
+        target_selector=raw.get("target_selector"),
     )
 
 
@@ -137,6 +155,10 @@ def load(path: Path | str) -> BlockSpec:
             element=b.get("element"),
             wrapper_open_html=b.get("wrapper_open_html"),
             wrapper_close_html=b.get("wrapper_close_html"),
+            probe_selector=b.get("probe_selector"),
+            probe_kind=b.get("probe_kind", "single"),
+            card_probe_selector=b.get("card_probe_selector"),
+            card_skip_selector=b.get("card_skip_selector"),
         ))
     return BlockSpec(
         version=int(data.get("version", 0)),
@@ -193,6 +215,10 @@ def validate(spec: BlockSpec) -> None:
                 raise BlockSpecError(f"block '{b.slug}': type=single must not have 'card:' sub-object")
             if b.section_grid_class is not None:
                 raise BlockSpecError(f"block '{b.slug}': type=single must not have section_grid_class")
+        if b.probe_kind not in ("single", "card-collection"):
+            raise BlockSpecError(
+                f"block {b.slug}: probe_kind must be 'single' or 'card-collection', got {b.probe_kind!r}"
+            )
         _validate_controls(f"block '{b.slug}'", b.controls)
         if b.card is not None:
             _validate_controls(f"block '{b.slug}'.card", b.card.controls)

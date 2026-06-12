@@ -5,6 +5,12 @@ description: Stage 07d (PR-C) — generate icons + infographics via codex image_
 
 # visual-generation
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill visual-generation --stage 07e
+```
+
 Конвейер генерации визуалов (иконки, инфографика) для лендинга. Запускается командой `/landing-visuals` после approved `05_design` + существующего `07b_COMPOSED/composed.html`.
 
 ## Этапы
@@ -29,3 +35,11 @@ description: Stage 07d (PR-C) — generate icons + infographics via codex image_
 ## State management
 
 `07d_VISUALS/STATE.yaml` отслеживает scan / generate / inject. Перезапуск продолжает с прерванного.
+
+## Стандарт пайплайна картинок (D1, обязательный)
+
+Каждое визуальное место обрабатывается по
+[`docs/standards/image-pipeline.md`](../docs/standards/image-pipeline.md):
+анализ места → цель → спецификация → референсы (число = составу композиции) →
+генерация на вырезаемом фоне → rembg → вставка; адаптация под палитру —
+полупрозрачным оверлеем акцента, не отдельной картинкой на каждый цвет.

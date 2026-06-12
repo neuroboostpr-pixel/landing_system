@@ -1,0 +1,8 @@
+id: waves
+name_ru: Волны
+category: organic
+description_ru: Плавная волнистая линия, создаёт ощущение спокойствия и движения
+svg_vars: ["{color}", "{opacity}"]
+recommended_colors: [primary, secondary, accent]
+viewBox: "0 0 1200 200"
+created: "2026-06-02"

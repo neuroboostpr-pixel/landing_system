@@ -1,0 +1,67 @@
+category: social-proof
+description: Раздел отзывов с крупным заголовком и сеткой пустых белых карточек для
+  отзывов клиентов.
+display_name_ru: social-proof-playful-grid-2-opt-ecowash-ru-9 (grid-2)
+has_animation: false
+id: social-proof-playful-grid-2-opt-ecowash-ru-9
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://opt.ecowash.ru/
+layout_pattern: grid-2
+niches_suitable:
+- ecommerce
+- services
+- education
+ru_market: true
+slots:
+- name: eyebrow
+  type: text
+- name: heading
+  required: true
+  type: text
+- name: subhead
+  type: text
+- name: review-1-rating-label
+  type: text
+- name: review-1-rating
+  type: text
+- name: review-1-text
+  type: text
+- name: review-1-author-name
+  type: text
+- name: review-1-author-meta
+  type: text
+- name: review-2-rating-label
+  type: text
+- name: review-2-rating
+  type: text
+- name: review-2-text
+  type: text
+- name: review-2-author-name
+  type: text
+- name: review-2-author-meta
+  type: text
+- name: review-3-rating-label
+  type: text
+- name: review-3-rating
+  type: text
+- name: review-3-text
+  type: text
+- name: review-3-author-name
+  type: text
+- name: review-3-author-meta
+  type: text
+- name: review-4-rating-label
+  type: text
+- name: review-4-rating
+  type: text
+- name: review-4-text
+  type: text
+- name: review-4-author-name
+  type: text
+- name: review-4-author-meta
+  type: text
+style_mood: playful
+type: logos
+variant: testimonials

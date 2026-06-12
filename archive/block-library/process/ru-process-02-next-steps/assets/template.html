@@ -1,0 +1,61 @@
+<style>
+  :root {
+    --lp-bg: #f5f5f5;
+    --lp-text: #1a1a1a;
+    --lp-accent: #333;
+    --lp-border: #e0e0e0;
+    --lp-font-display: Georgia, 'Times New Roman', serif;
+    --lp-font-body: system-ui, sans-serif;
+    --font-mono: ui-monospace, 'SF Mono', monospace;
+    --spacing-md: 16px;
+    --spacing-lg: 32px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--lp-font-body); background: var(--lp-bg); color: var(--lp-text); }
+  .process-wrap { padding: 60px var(--spacing-lg); max-width: 1100px; margin: 0 auto; }
+  .process-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid var(--lp-border); }
+  .process-header h2 { font: 600 clamp(28px, 3.5vw, 42px)/1.1 var(--lp-font-display); letter-spacing: -.015em; }
+  .step-row { display: grid; grid-template-columns: 120px 1fr 160px; gap: 24px; align-items: baseline; padding: 20px 0; border-top: 1px solid var(--lp-border); }
+  .step-row:last-of-type { border-bottom: 1px solid var(--lp-border); }
+  .step-timing { font: 12px/1.4 var(--font-mono); color:#888; }
+  .step-content h3 { font-size: 1.25rem; letter-spacing: -.005em; margin-bottom: 6px; }
+  .step-content p { font-size: .9rem; color:#666; line-height: 1.6; }
+  .step-badge { text-align: right; font: 12px/1 var(--font-mono); color: var(--lp-accent); }
+  .process-cta { margin-top: 40px; text-align: center; }
+  .cta-btn { display: inline-block; padding: 14px 32px; background: var(--lp-accent); color:#fff; text-decoration: none; border-radius: 10px; font-weight: 600; font-size: 1rem; }
+  .step-row.final { background: var(--lp-text); border-radius: 8px; padding: 20px 20px; }
+  .step-row.final .step-timing, .step-row.final .step-content h3, .step-row.final .step-content p, .step-row.final .step-badge { color:var(--lp-text-muted); }
+  .step-row.final .step-content p { color:#aaa; }
+</style>
+<section class="process-wrap" data-block-id="ru-process-02-next-steps">
+<div class="process-header">
+<h2>{{slot:headline}}</h2>
+</div>
+<div class="step-row">
+<span class="step-timing">{{slot:step1-timing}}</span>
+<div class="step-content">
+<h3>{{slot:step1-title}}</h3>
+<p>{{slot:step1-text}}</p>
+</div>
+<span class="step-badge">{{slot:step1-timing}}</span>
+</div>
+<div class="step-row">
+<span class="step-timing">{{slot:step2-timing}}</span>
+<div class="step-content">
+<h3>{{slot:step2-title}}</h3>
+<p>{{slot:step2-text}}</p>
+</div>
+<span class="step-badge">{{slot:step-badge}}</span>
+</div>
+<div class="step-row final">
+<span class="step-timing">{{slot:step3-timing}}</span>
+<div class="step-content">
+<h3>{{slot:step3-title}}</h3>
+<p>{{slot:step3-text}}</p>
+</div>
+<span class="step-badge">→</span>
+</div>
+<div class="process-cta">
+<a class="cta-btn" href="#contact">{{slot:primary-cta}}</a>
+</div>
+</section>

@@ -6,6 +6,19 @@ allowed-tools: Bash, Read
 
 # lifecycle-keeper (Хранитель версий)
 
+> System-level agent — ops/lifecycle (versions, rollbacks, clones), runs outside the pipeline.
+> Does not own a pipeline stage; Stage Execution Protocol does not apply.
+
+
+## Pre-flight
+
+Перед любым действием — wiki-запрос для маршрутизации:
+
+```bash
+python -m scripts.wiki.query --slug=lifecycle-keeper --agent=lifecycle-keeper
+python -m scripts.wiki.log --type agent_call --agent lifecycle-keeper --stage ""
+```
+
 ## Mission
 
 Версионирую лендинги, откатываю, создаю A/B-клоны.

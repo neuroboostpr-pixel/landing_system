@@ -1,0 +1,73 @@
+category: features
+created: '2026-06-01'
+display_name_ru: features-003 (grid)
+has_bg_image: false
+id: features-003
+layout_pattern: grid
+signature: features|grid|[content]|bg:false
+slots:
+- name: features-eyebrow
+  type: text
+- name: features-title
+  type: text
+- name: features-subtitle
+  type: text
+- name: feature-1-image-alt
+  type: text
+- name: feature-1-image
+  type: text
+- name: feature-1-label
+  type: text
+- name: feature-1-title
+  type: text
+- name: feature-1-text
+  type: text
+- name: feature-1-link
+  type: text
+- name: feature-1-cta
+  type: text
+- name: feature-2-image-alt
+  type: text
+- name: feature-2-image
+  type: text
+- name: feature-2-label
+  type: text
+- name: feature-2-title
+  type: text
+- name: feature-2-text
+  type: text
+- name: feature-2-link
+  type: text
+- name: feature-2-cta
+  type: text
+- name: feature-3-image-alt
+  type: text
+- name: feature-3-image
+  type: text
+- name: feature-3-label
+  type: text
+- name: feature-3-title
+  type: text
+- name: feature-3-text
+  type: text
+- name: feature-3-link
+  type: text
+- name: feature-3-cta
+  type: text
+- name: feature-4-image-alt
+  type: text
+- name: feature-4-image
+  type: text
+- name: feature-4-label
+  type: text
+- name: feature-4-title
+  type: text
+- name: feature-4-text
+  type: text
+- name: feature-4-link
+  type: text
+- name: feature-4-cta
+  type: text
+source: cleaned
+type: features
+variant: null

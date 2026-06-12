@@ -1,0 +1,28 @@
+category: forms
+conversion_notes: Progress bar снижает отказы на 20-35%. Sticky — всегда виден. CSS-only
+  ширина через inline style.
+created: 2026-05-12
+description: 'Sticky progress bar для квиза: текст ''Вопрос N из M'' + CSS progress
+  bar. Без JavaScript.'
+display_name_ru: ru-quiz-02-progress-top (centered)
+id: ru-quiz-02-progress-top
+layout_pattern: centered
+layout_summary_ru: Шаг квиза с прогресс-баром вверху, вопрос по центру, варианты ответа
+  в 2 колонки. Подсчёт шагов 'Шаг 2 из 5' снижает отток.
+ru_market: true
+slots:
+- max_chars: 20
+  name: progress-text
+  required: true
+  type: text
+- name: progress-bar
+  required: false
+  type: text
+source: manual
+source_attribution: ''
+type: lead-form
+use_cases:
+- services
+- b2c
+- local
+variant: quiz

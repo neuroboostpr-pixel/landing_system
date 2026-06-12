@@ -8,6 +8,11 @@
 #   link-N.css       — каждый внешний stylesheet
 set -uo pipefail
 
+
+# Cross-platform python detection (sets PYTHON_CMD).
+__SCRIPT_DIR__="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=../lib/python-cmd.sh
+. "$__SCRIPT_DIR__/../lib/python-cmd.sh"
 URL="${1:?ERROR: URL required}"
 OUT_DIR="${2:?ERROR: out dir required}"
 
@@ -18,7 +23,7 @@ curl -sL -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
     "$URL" -o "$OUT_DIR/page.html"
 
 # 2. Извлекаем все <link rel="stylesheet" href="..."> + inline <style>
-URL="$URL" OUT_DIR="$OUT_DIR" python3 << 'PY'
+URL="$URL" OUT_DIR="$OUT_DIR" $PYTHON_CMD << 'PY'
 from pathlib import Path
 from urllib.parse import urljoin
 import re, os, subprocess

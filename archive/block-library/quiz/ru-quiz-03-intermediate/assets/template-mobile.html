@@ -1,0 +1,17 @@
+<style>
+  :root {
+    --lp-bg: #f5f5f5; --lp-text: #1a1a1a; --lp-accent: #333; --lp-border: #e0e0e0;
+    --lp-font-display: system-ui, sans-serif; --lp-font-body: system-ui, sans-serif;
+    --spacing-md: 16px; --spacing-lg: 32px;
+  }
+  body { margin: 0; font-family: var(--lp-font-body); background: var(--lp-bg); color: var(--lp-text); width: 375px; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+  .intermediate { text-align: center; padding: 40px 20px; }
+  .emoji-icon { font-size: 80px; line-height: 1; margin: 0 0 20px; display: block; }
+  .motivation-text { font-family: var(--lp-font-display); font-size: 22px; line-height: 1.25; margin: 0 0 32px; }
+  .cta { display: block; padding: 14px 32px; background: var(--lp-accent); color:#fff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; }
+</style>
+<div class="intermediate" data-block-id="ru-quiz-03-intermediate">
+<span class="emoji-icon">{{slot:emoji-icon}}</span>
+<p class="motivation-text">{{slot:motivation-text}}</p>
+<a class="cta" href="#next">{{slot:continue-cta}}</a>
+</div>

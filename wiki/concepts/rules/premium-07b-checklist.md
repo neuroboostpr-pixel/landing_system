@@ -1,58 +1,71 @@
 ---
+slug: premium-07b-checklist
 type: rule
-name: premium-07b-checklist
-sources: ["docs/standards/premium-07b-checklist.md"]
-updated: 2026-05-16
-triggers: []
+name: "PREMIUM 07b — Чек-лист сборки composed.html"
 stage: "07b"
-uses: ["block-composer", "design-system-generator", "content-writer", "ux-composer", "photo-curator"]
-tags: ["quality", "checklist", "composed", "frontend", "premium"]
+tags: [composed, premium, checklist, frontend, css, javascript, accessibility, mobile]
+triggers: [landing-compose]
+inputs: [00-brif, 04-brend, 05-dizayn-sistema, 07-kontent, 07-prototip]
+outputs: [block-composition]
+gates:
+  - all_inputs_present
+  - file_size_60_150kb
+  - lighthouse_performance_85
+  - lighthouse_accessibility_90
+  - composed_mobile_preview_exists
+  - composed_explained_md_exists
+  - photo_mapping_yaml_exists
+pre_reqs: [04-brend, 05-dizayn-sistema, 07-kontent, 07-prototip, landing-wireframe]
+related:
+  - landing-compose
+  - block-composer
+  - block-composition
+  - ux-composer
+  - landing-design
+  - landing-wireframe
+sources: ["docs/standards/premium-07b-checklist.md"]
+updated: 2026-05-26
 ---
 
-# Premium 07b Checklist — стандарт сборки composed.html
+# PREMIUM 07b — Чек-лист сборки composed.html
 
 ## Что делает
-Обязательный чек-лист из 20 разделов, который задаёт планку качества для этапа **07b_COMPOSED**: если хоть один пункт не выполнен, HARD GATE не закрывается и агент не переходит к следующему этапу.
 
-## Когда вызывать / в каком этапе
-Применяется на этапе **07b** — перед тем как [[block-composer]] начинает сборку `composed.html`. Передаётся агенту на вход явно. Финальная проверка — через скрипт `scripts/verify-composed-premium.sh` (exit 0 = ОК).
+Задаёт обязательные стандарты качества для этапа **07b_COMPOSED**: архитектуру файла, CSS-переменные, типографику с `clamp()`, набор блоков, правила сетки, 10 интерактивных эффектов (parallax, glassmorphism, count-up, слайдер, lightbox и др.) и финальный набор gate-проверок. Эталон — `dubai-avto-liza/07b_COMPOSED/composed.html` (1757 строк, ~130 KB, 20 premium-фич). Правило жёстко запрещает сборку если хотя бы одного входного артефакта нет.
 
-## Что на вход / на выход
+## Когда вызывается
 
-**Входные артефакты (все обязательны — иначе сборка не стартует):**
-- `00_БРИФ/brief.md` — ниша, ЦА, тон голоса
-- `04_БРЕНД/brand-kit.md` — палитра и типографика
-- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — CSS-переменные
-- `07_КОНТЕНТ/final-copy.md` — реальные тексты
-- `07a_WIREFRAME/selections.yaml` — выбранные блоки
-- `02_МАТЕРИАЛЫ_КЛИЕНТА/inbox/` — минимум 15 реальных фото
-- `07c_PHOTOS/photo-mapping.yaml` — маппинг фото к слотам
+Агент `block-composer` или скилл `landing-compose` обязан загрузить этот файл **перед началом сборки** 07b. Также передаётся вручную пользователем если нужно переделать или доработать `composed.html` до прохождения HARD GATE (`verify-composed-premium.sh` exit 0).
 
-**Что проверяет чек-лист (13 секций + 7 PR-P):**
-1. Архитектура — один HTML-файл 60–150 KB, без фреймворков
-2. CSS-переменные (`:root`) — полный набор токенов цвета, теней, радиусов, анимаций
-3. Типографика — `clamp()` на всех заголовках, Inter 300–900
-4. Минимальный набор блоков — 11 секций (nav, hero, social proof, products, features, why us, process, testimonials, FAQ, CTA-form, footer)
-5. Сетка — Grid + Flexbox с указанными пропорциями для каждого блока
-6. Интерактивность — 10 обязательных эффектов: glassmorphism nav, parallax, reveal-on-scroll, count-up, per-product slider, lightbox, hover lift, scroll-to-top, smooth scroll, pulse-dot
-7. Премиум-типографика — gradient text, eyebrow, font-weight 900
-8. Hero — 9 обязательных элементов включая savings-строку и 2 CTA
-9. Кнопки — gold gradient + translateY на hover
-10. Mobile — breakpoints 768px и 1024px, все grid → 1 column
-11. Семантика и accessibility — `<nav>`, aria-label, alt, контраст 4.5:1
-12. Запреты — никаких эмодзи-иконок, inline-стилей, хардкод-цветов, jQuery/Swiper/AOS
-13. Финальная проверка — Lighthouse Performance > 85, Accessibility > 90
-14–20. PR-P (2026-05-16) — scroll-driven анимации, hover на всех интерактивах, backdrop-filter, mesh-gradient, mix-blend-mode, prefers-reduced-motion, clip-path
+## Вход → выход
 
-**Эталон-референс:** `~/Lendings/dubai-avto-liza/07b_COMPOSED/composed.html` — 1757 строк, 15 premium-фич.
+**Вход:** `brief.md`, `brand-kit.md`, `tokens.json`, `final-copy.md`, `selections.yaml` (wireframe), минимум 15 фото клиента в `inbox/`, `photo-mapping.yaml`.
 
-## Связанные концепты
-- [[block-composer]] — агент, который собирает `composed.html` по этому чек-листу
-- [[design-system-generator]] — поставляет `tokens.json` (вход п.2)
-- [[content-writer]] — поставляет `final-copy.md` (вход п.4)
-- [[ux-composer]] — поставляет `selections.yaml` (вход п.5)
-- [[photo-curator]] — поставляет `photo-mapping.yaml` (вход п.7)
-- [[07b-composed]] — этап, к которому относится этот стандарт
+**Выход:** `composed.html` (один файл, inline CSS+JS, 60–150 KB), `composed-mobile-preview.html`, `composed-explained.md`, обновлённый `photo-mapping.yaml`.
 
-## Источник
-- `docs/standards/premium-07b-checklist.md`
+## Чем закрывается этап (gates)
+
+- `all_inputs_present` — все 7 входных артефактов существуют, иначе сборка не начинается
+- `file_size_60_150kb` — итоговый HTML в пределах 60–150 KB
+- `lighthouse_performance_85` — Performance ≥ 85
+- `lighthouse_accessibility_90` — Accessibility ≥ 90
+- `composed_mobile_preview_exists` — файл `composed-mobile-preview.html` создан
+- `composed_explained_md_exists` — файл `composed-explained.md` создан
+- `photo_mapping_yaml_exists` — `07c_PHOTOS/photo-mapping.yaml` актуален
+
+## Failure modes
+
+- **Пропуск входных артефактов** — агент начинает сборку без `selections.yaml` или `photo-mapping.yaml`, получается шаблонный HTML без реального контента и фото.
+- **Хардкод цветов** — цвета прописываются напрямую (`#fff`, `rgba(...)`) вместо CSS-переменных, при смене бренда рассыпается всё оформление.
+- **Отсутствие `clamp()`** — шрифты фиксированные, на мобильном либо слишком крупные, либо слишком мелкие; нет плавного масштабирования.
+- **Сторонние библиотеки** — подключается jQuery, Swiper или AOS, файл раздувается, Lighthouse падает ниже порога.
+- **Недостаток premium-эффектов** — нет parallax или count-up, визуал «средний AI-лендинг»; HARD GATE (`verify-composed-premium.sh`) возвращает exit 1 и блокирует переход к этапу 08.
+
+## Related
+
+- [[landing-compose]] — скилл, который непосредственно запускает сборку 07b и использует этот чек-лист
+- [[block-composer]] — агент-исполнитель сборки composed.html; обязан следовать всем пунктам правила
+- [[block-composition]] — выходной артефакт этапа 07b, описание структуры блоков
+- [[ux-composer]] — отвечает за логику wireframe и передаёт selections.yaml в 07b
+- [[landing-wireframe]] — предшествующий этап: без его outputs нельзя начать 07b
+- [[landing-design]] — поставляет tokens.json и brand-kit, на которых строится вся CSS-система

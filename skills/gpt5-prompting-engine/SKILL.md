@@ -7,6 +7,12 @@ metadata:
 
 # GPT-5 Prompting Engine
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill gpt5-prompting-engine --stage ""
+```
+
 Use this skill to create, migrate, debug, and validate GPT-5 prompts from a brief, old prompt, or requested agent behavior.
 
 ## Core Rule

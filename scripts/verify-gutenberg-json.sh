@@ -9,16 +9,23 @@
 
 set -euo pipefail
 
+
+# Cross-platform python detection (sets PYTHON_CMD).
+__SCRIPT_DIR__="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=lib/python-cmd.sh
+. "$__SCRIPT_DIR__/lib/python-cmd.sh"
 DIR="${1:?ERROR: directory required}"
 
 [ -d "$DIR" ] || {
-    echo "ERROR: dir not found: $DIR" >&2
-    exit 2
+    # Lazy Blocks-трек (текущий) не генерирует block.json вообще —
+    # папка gutenberg-blocks существует только у legacy ACF-сборок.
+    echo "N/A: $DIR отсутствует (Lazy Blocks-трек без block.json) — проверка пропущена"
+    exit 0
 }
 
 errors=0
 while IFS= read -r -d '' f; do
-    if ! python3 -c "import json,sys; json.load(open(sys.argv[1]))" "$f" 2>/dev/null; then
+    if ! $PYTHON_CMD -c "import json,sys; json.load(open(sys.argv[1]))" "$f" 2>/dev/null; then
         echo "✗ Invalid JSON: $f" >&2
         errors=$((errors+1))
     fi

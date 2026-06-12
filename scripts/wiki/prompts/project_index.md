@@ -16,7 +16,7 @@ Markdown БЕЗ frontmatter, БЕЗ обрамляющих ```. Структур
 
 ## Этапы
 - ✅ 07a_prototype — approved (2026-05-15)
-- ✅ 07b_wireframe — approved
+- ✅ 07c_composed — approved
 - 🔄 07c_composed — in_progress
 - 🔒 07d_photos — locked
 

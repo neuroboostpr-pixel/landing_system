@@ -5,6 +5,35 @@ from pathlib import Path
 from scripts.wiki import config
 
 
+def test_core_sources_exist():
+    assert hasattr(config, "CORE_SOURCES")
+    assert isinstance(config.CORE_SOURCES, list)
+    assert len(config.CORE_SOURCES) >= 5
+
+
+def test_core_sources_include_5_categories_plus_catalog():
+    paths = {s["path"] for s in config.CORE_SOURCES}
+    assert "agents/*.md" in paths
+    assert "skills/*/SKILL.md" in paths
+    assert "commands/*.md" in paths
+    assert "template/*/README.md" in paths
+    assert "docs/standards/*.md" in paths
+    assert "block-library/README.md" in paths
+
+
+def test_reference_sources_exist_but_not_used_by_default():
+    """REFERENCE_SOURCES определён для будущего, но не входит в CORE."""
+    assert hasattr(config, "REFERENCE_SOURCES")
+    core_paths = {s["path"] for s in config.CORE_SOURCES}
+    ref_paths = {s["path"] for s in config.REFERENCE_SOURCES}
+    assert core_paths.isdisjoint(ref_paths)
+
+
+def test_system_sources_aliased_to_core_for_back_compat():
+    """SYSTEM_SOURCES alias = CORE_SOURCES — старый код не ломается."""
+    assert config.SYSTEM_SOURCES is config.CORE_SOURCES
+
+
 def test_source_modes_defined():
     """Должны быть определены три режима: system, project-graph, conversations."""
     assert "system" in config.SOURCE_MODES

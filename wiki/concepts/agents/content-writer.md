@@ -1,69 +1,61 @@
 ---
+slug: content-writer
 type: agent
-name: content-writer
-sources: ["agents/content-writer.md"]
-updated: 2026-05-15
-triggers: []
+name: "Контент-райтер"
 stage: "07"
-uses: ["niche-analyst", "prototype-importer", "design-system-generator", "stack-planner", "client-assets-collector"]
-tags: ["content", "copywriting", "seo", "stage-07"]
+tags: [copywriting, content, seo, stage-07]
+triggers: [landing-content]
+inputs:
+  - 01a_АНАЛИЗ_НИШИ/positioning.md
+  - 01a_АНАЛИЗ_НИШИ/landing-structure.md
+  - 01a_АНАЛИЗ_НИШИ/market-profile.md
+  - 07_ПРОТОТИП/prototype.md
+  - 05_ДИЗАЙН-СИСТЕМА/DESIGN.md
+  - 06_СТЕК/design-stack.yaml
+  - 02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/
+  - 02_МАТЕРИАЛЫ_КЛИЕНТА/assets-manifest.yaml
+outputs:
+  - 07_КОНТЕНТ/final-copy.md
+  - 07_КОНТЕНТ/seo-copy.md
+gates: [user-approve-final-copy]
+pre_reqs: [landing-niche, landing-prototype, landing-design, landing-stack]
+related: [landing-content, landing-orchestrator, landing-wireframe, landing-compose]
+sources: ["agents/content-writer.md"]
+updated: 2026-05-26
+confidence: {triggers: low, pre_reqs: low}
 ---
 
-# Content Writer — Контент-райтер
+# Контент-райтер
 
 ## Что делает
 
-Берёт черновой прототип текста лендинга и превращает его в готовый копирайт, разложенный по конкретным блокам страницы. Параллельно пишет SEO-копию с мета-заголовками и вариантами h1.
+Адаптирует исходный прототип текста под конкретные блоки лендинга. Читает `landing-structure.md` как единственный источник истины по порядку блоков, извлекает из `positioning.md` режим коммуникации (`rational`, `emotional_aspiration`, `trust_authority` и др.) и перекладывает тексты из `prototype.md` в итоговые файлы. Регистр и структура копирайта строго подчиняются выбранному Mode: без аспирации для `rational`, StoryBrand-нарратив для `emotional_aspiration`, доказательства на каждый claim для `trust_authority`. Параллельно пишет SEO-тексты и мета-данные. Завершается жёсткой паузой на утверждение пользователем.
 
-## Когда вызывать / в каком этапе
+## Когда вызывается
 
-Запускается на **этапе 07** после того, как завершены: анализ ниши (01a), дизайн-система (05), подбор стека (06) и импорт прототипа (07). Агент не переходит дальше без явного одобрения пользователем итогового `final-copy.md`.
+Вызывается командой `/landing-content` или диспетчируется `landing-orchestrator` при переходе к этапу `07_content`. Условие: этап `07_content` должен быть активным в `.landing-state.yaml`, а все предшественники (01a, 02, 05, 06, prototype) — закрыты. `PreToolUse`-хук физически блокирует запись, если gate не пройден.
 
-## Что на вход / на выход
+## Вход → выход
 
-**Входные артефакты:**
+**Вход:** `positioning.md` с Mode, `landing-structure.md` с картой блоков, `prototype.md` с исходными текстами, `DESIGN.md` с деталями секций, `design-stack.yaml`, реальные отзывы из `testimonials/` и `assets-manifest.yaml`.
 
-| Файл | Зачем |
-|------|-------|
-| `01a_АНАЛИЗ_НИШИ/positioning.md` | Режим позиционирования (`rational` / `emotional_aspiration` / `trust_authority` / `hybrid`) |
-| `01a_АНАЛИЗ_НИШИ/landing-structure.md` | Эталонный список и порядок блоков лендинга |
-| `01a_АНАЛИЗ_НИШИ/market-profile.md` | Тон: `accessibility_tier` и `cultural_context` |
-| `01a_АНАЛИЗ_НИШИ/competitors.yaml` | Поле `key_messages` — что НЕ повторять |
-| `07_КОНТЕНТ/prototype.md` | Исходный прототип текста |
-| `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` | Детали секций, типографика |
-| `06_СТЕК/design-stack.yaml` | Компонентная библиотека |
-| `02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/` | Реальные отзывы клиентов |
-| `02_МАТЕРИАЛЫ_КЛИЕНТА/assets-manifest.yaml` | Список доступных фото/иконок |
+**Выход:** `07_КОНТЕНТ/final-copy.md` — тексты всех блоков без Lorem ipsum, каждый блок помечен заголовком из landing-structure; `07_КОНТЕНТ/seo-copy.md` — SEO-заголовки, description, варианты h1.
 
-**Выходные артефакты:**
+## Чем закрывается этап (gates)
 
-- `07_КОНТЕНТ/final-copy.md` — копирайт, разложенный по блокам из `landing-structure.md`
-- `07_КОНТЕНТ/seo-copy.md` — SEO-заголовки, description, варианты h1
+- `user-approve-final-copy` — пользователь явно утверждает `final-copy.md`; агент показывает файл и ждёт подтверждения перед переходом к следующему этапу.
 
-**Жёсткие правила:**
+## Failure modes
 
-- Запрещён Lorem ipsum — только реальные данные из `prototype.md` и `testimonials/`
-- Каждый блок содержит явную ссылку на иконку/фото из `assets-manifest`
-- HARD GATE: показывает `final-copy.md` пользователю и ждёт подтверждения
+- **Блоки взяты из DESIGN.md, а не из landing-structure.md** — несоответствие порядка блоков, потеря секций или дублирование.
+- **Mode не считан из positioning.md** — тексты идут в нейтральном регистре вместо требуемого, Hero получает неправильный акцент.
+- **Реальные отзывы не подключены** — testimonials-блок содержит заглушки вместо данных из `testimonials/`.
+- **Gate-check не пройден** — `enforce_stage_gate.py` блокирует запись, агент не сообщает причину и зависает.
+- **assets-manifest не прочитан** — копирайт ссылается на несуществующие иконки или фото, что ломает верстку на этапе 08.
 
-## Режимы тона (mode-aware)
+## Related
 
-Агент адаптирует регистр копирайта под режим позиционирования:
-
-- **rational** — факты, цифры, без аспирации
-- **emotional_aspiration** — эмоциональный крюк, структура StoryBrand
-- **trust_authority** — каждый claim с доказательством (имя, число, дата)
-- **hybrid:X+Y** — основной тон + поддержка 1–2 блоками вторичного
-- **legacy_v1** — без mode-аугментации (старые проекты до 2026-05-06)
-
-## Связанные концепты
-
-- [[niche-analyst]] — поставляет `positioning.md`, `landing-structure.md`, `competitors.yaml`
-- [[prototype-importer]] — поставляет `prototype.md` как сырой входной текст
-- [[design-system-generator]] — поставляет `DESIGN.md` с деталями секций
-- [[stack-planner]] — поставляет `design-stack.yaml` с компонентной библиотекой
-- [[client-assets-collector]] — поставляет `testimonials/` и `assets-manifest.yaml`
-
-## Источник
-
-- `agents/content-writer.md`
+- [[landing-content]] — slash-команда / skill, которая запускает этого агента
+- [[landing-orchestrator]] — диспетчер; вызывает агента в рамках общего pipeline
+- [[landing-wireframe]] — следующий этап (07a); работает с текстами из final-copy.md
+- [[landing-compose]] — этап 07b; вставляет тексты из final-copy.md в composed.html

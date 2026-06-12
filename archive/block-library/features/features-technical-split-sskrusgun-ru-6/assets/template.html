@@ -1,0 +1,206 @@
+<style>.lp-features-technical-split {
+  color: var(--lp-text);
+  background: var(--lp-bg);
+  font-family: var(--lp-font-body);
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md);
+}
+
+.lp-features-technical-split__inner {
+  display: grid;
+  gap: var(--lp-spacing-lg);
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.lp-features-technical-split__promo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--lp-spacing-md);
+  padding: var(--lp-spacing-lg);
+  background: var(--lp-bg-alt);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+}
+
+.lp-features-technical-split__kicker {
+  color: var(--lp-accent);
+  font-family: var(--lp-font-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.lp-features-technical-split__title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: clamp(2rem, 7vw, 4.25rem);
+  line-height: 0.95;
+  letter-spacing: 0;
+}
+
+.lp-features-technical-split__lead {
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.lp-features-technical-split__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: var(--lp-spacing-sm) var(--lp-spacing-lg);
+  color: var(--lp-bg);
+  background: var(--lp-primary);
+  border: 1px solid var(--lp-primary);
+  border-radius: var(--lp-radius);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.lp-features-technical-split__button:focus-visible,
+.lp-features-technical-split__link:focus-visible,
+.lp-features-technical-split__formats a:focus-visible {
+  outline: 2px solid var(--lp-accent);
+  outline-offset: 3px;
+}
+
+.lp-features-technical-split__content {
+  display: grid;
+  gap: var(--lp-spacing-md);
+}
+
+.lp-features-technical-split__grid {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.lp-features-technical-split__card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--lp-spacing-xs) var(--lp-spacing-sm);
+  padding: var(--lp-spacing-md);
+  background: var(--lp-bg);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+}
+
+.lp-features-technical-split__marker {
+  width: 0.75rem;
+  height: 0.75rem;
+  margin-top: 0.35rem;
+  background: var(--lp-accent);
+  border-radius: var(--lp-radius);
+}
+
+.lp-features-technical-split__card-title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 1.1rem;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+.lp-features-technical-split__card-text {
+  grid-column: 2;
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.lp-features-technical-split__link {
+  grid-column: 2;
+  color: var(--lp-primary);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.lp-features-technical-split__formats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lp-spacing-xs);
+}
+
+.lp-features-technical-split__formats a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.5rem;
+  padding: var(--lp-spacing-xs) var(--lp-spacing-sm);
+  color: var(--lp-text);
+  background: var(--lp-bg-alt);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+@media (min-width: 768px) {
+  .lp-features-technical-split__inner {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr);
+    align-items: stretch;
+  }
+
+  .lp-features-technical-split__promo {
+    justify-content: space-between;
+    min-height: 100%;
+  }
+
+  .lp-features-technical-split__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+</style>
+<section aria-labelledby="lp-features-technical-split-title" class="lp-features-technical-split">
+<div class="lp-features-technical-split__inner">
+<article class="lp-features-technical-split__promo">
+<div class="lp-features-technical-split__kicker">{{slot:promo-kicker}}</div>
+<h2 class="lp-features-technical-split__title" id="lp-features-technical-split-title">{{slot:heading}}</h2>
+<p class="lp-features-technical-split__lead">{{slot:subhead}}</p>
+<a class="lp-features-technical-split__button" href="{{slot:primary-cta-link}}">
+        {{slot:primary-cta-label}}
+      </a>
+</article>
+<div class="lp-features-technical-split__content">
+<ul aria-label="{{slot:features-list-label}}" class="lp-features-technical-split__grid">
+<li class="lp-features-technical-split__card">
+<span aria-hidden="true" class="lp-features-technical-split__marker"></span>
+<h3 class="lp-features-technical-split__card-title">{{slot:feature-1-title}}</h3>
+<p class="lp-features-technical-split__card-text">{{slot:feature-1-text}}</p>
+<a class="lp-features-technical-split__link" href="{{slot:feature-1-link}}">{{slot:feature-1-link-label}}</a>
+</li>
+<li class="lp-features-technical-split__card">
+<span aria-hidden="true" class="lp-features-technical-split__marker"></span>
+<h3 class="lp-features-technical-split__card-title">{{slot:feature-2-title}}</h3>
+<p class="lp-features-technical-split__card-text">{{slot:feature-2-text}}</p>
+<a class="lp-features-technical-split__link" href="{{slot:feature-2-link}}">{{slot:feature-2-link-label}}</a>
+</li>
+<li class="lp-features-technical-split__card">
+<span aria-hidden="true" class="lp-features-technical-split__marker"></span>
+<h3 class="lp-features-technical-split__card-title">{{slot:feature-3-title}}</h3>
+<p class="lp-features-technical-split__card-text">{{slot:feature-3-text}}</p>
+<a class="lp-features-technical-split__link" href="{{slot:feature-3-link}}">{{slot:feature-3-link-label}}</a>
+</li>
+<li class="lp-features-technical-split__card">
+<span aria-hidden="true" class="lp-features-technical-split__marker"></span>
+<h3 class="lp-features-technical-split__card-title">{{slot:feature-4-title}}</h3>
+<p class="lp-features-technical-split__card-text">{{slot:feature-4-text}}</p>
+<a class="lp-features-technical-split__link" href="{{slot:feature-4-link}}">{{slot:feature-4-link-label}}</a>
+</li>
+</ul>
+<nav aria-label="{{slot:formats-nav-label}}" class="lp-features-technical-split__formats">
+<a href="{{slot:format-1-link}}">{{slot:format-1-label}}</a>
+<a href="{{slot:format-2-link}}">{{slot:format-2-label}}</a>
+<a href="{{slot:format-3-link}}">{{slot:format-3-label}}</a>
+</nav>
+</div>
+</div>
+</section>

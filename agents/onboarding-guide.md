@@ -6,6 +6,19 @@ allowed-tools: Bash, Read, Write, Edit
 
 # onboarding-guide (Проводник по онбордингу)
 
+> System-level agent — first-time onboarding wizard, runs before any project.
+> Does not own a pipeline stage; Stage Execution Protocol does not apply.
+
+
+## Pre-flight
+
+Перед любым действием — wiki-запрос для маршрутизации:
+
+```bash
+python -m scripts.wiki.query --slug=onboarding-guide --agent=onboarding-guide
+python -m scripts.wiki.log --type agent_call --agent onboarding-guide --stage ""
+```
+
 ## Mission
 
 Провожу пользователя через первичную настройку landing-system. Объясняю что такое система, проверяю зависимости и API.

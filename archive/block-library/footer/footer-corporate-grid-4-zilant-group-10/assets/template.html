@@ -1,0 +1,173 @@
+<style>.lp-footer-corporate-grid-4 {
+  background: var(--lp-bg-alt);
+  color: var(--lp-text);
+  font-family: var(--lp-font-body);
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md) var(--lp-spacing-lg);
+}
+
+.lp-footer-corporate-grid-4__inner {
+  display: grid;
+  gap: var(--lp-spacing-lg);
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.lp-footer-corporate-grid-4__brand {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lp-spacing-sm);
+}
+
+.lp-footer-corporate-grid-4__logo {
+  display: inline-flex;
+  width: fit-content;
+  color: var(--lp-primary);
+}
+
+.lp-footer-corporate-grid-4__logo img {
+  display: block;
+  max-width: 10rem;
+  height: auto;
+}
+
+.lp-footer-corporate-grid-4__title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 1.75rem;
+  line-height: 1.15;
+}
+
+.lp-footer-corporate-grid-4__text {
+  max-width: 28rem;
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.lp-footer-corporate-grid-4__column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lp-spacing-sm);
+}
+
+.lp-footer-corporate-grid-4__heading {
+  margin: 0;
+  color: var(--lp-primary);
+  font-family: var(--lp-font-display);
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.lp-footer-corporate-grid-4__links,
+.lp-footer-corporate-grid-4__legal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lp-spacing-xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lp-footer-corporate-grid-4__links a,
+.lp-footer-corporate-grid-4__legal a {
+  color: var(--lp-text-muted);
+  text-decoration: none;
+}
+
+.lp-footer-corporate-grid-4__links a:hover,
+.lp-footer-corporate-grid-4__links a:focus-visible,
+.lp-footer-corporate-grid-4__legal a:hover,
+.lp-footer-corporate-grid-4__legal a:focus-visible {
+  color: var(--lp-accent);
+  outline-color: var(--lp-accent);
+}
+
+.lp-footer-corporate-grid-4__contacts {
+  color: var(--lp-text-muted);
+  font-style: normal;
+}
+
+.lp-footer-corporate-grid-4__bottom {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lp-spacing-sm);
+  max-width: 1280px;
+  margin: var(--lp-spacing-lg) auto 0;
+  padding-top: var(--lp-spacing-md);
+  border-top: 1px solid var(--lp-border);
+  color: var(--lp-text-muted);
+  font-size: 0.875rem;
+}
+
+.lp-footer-corporate-grid-4__bottom p {
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .lp-footer-corporate-grid-4 {
+    padding: var(--lp-spacing-xl) var(--lp-spacing-lg) var(--lp-spacing-lg);
+  }
+
+  .lp-footer-corporate-grid-4__inner {
+    grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr));
+    align-items: start;
+  }
+
+  .lp-footer-corporate-grid-4__bottom {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .lp-footer-corporate-grid-4__legal {
+    flex-direction: row;
+    gap: var(--lp-spacing-md);
+  }
+}
+</style>
+<footer aria-labelledby="lp-footer-corporate-grid-4-title" class="lp-footer-corporate-grid-4">
+<div class="lp-footer-corporate-grid-4__inner">
+<div class="lp-footer-corporate-grid-4__brand">
+<a aria-label="{{slot:brand-aria-label}}" class="lp-footer-corporate-grid-4__logo" href="{{slot:brand-url}}">
+<img alt="{{slot:brand-logo-alt}}" loading="lazy" src="{{slot:brand-logo}}"/>
+</a>
+<h2 class="lp-footer-corporate-grid-4__title" id="lp-footer-corporate-grid-4-title">{{slot:footer-heading}}</h2>
+<p class="lp-footer-corporate-grid-4__text">{{slot:footer-description}}</p>
+</div>
+<nav aria-label="{{slot:nav-column-1-label}}" class="lp-footer-corporate-grid-4__column">
+<h3 class="lp-footer-corporate-grid-4__heading">{{slot:nav-column-1-heading}}</h3>
+<ul class="lp-footer-corporate-grid-4__links">
+<li><a href="{{slot:nav-1-link-1-url}}">{{slot:nav-1-link-1-label}}</a></li>
+<li><a href="{{slot:nav-1-link-2-url}}">{{slot:nav-1-link-2-label}}</a></li>
+<li><a href="{{slot:nav-1-link-3-url}}">{{slot:nav-1-link-3-label}}</a></li>
+</ul>
+</nav>
+<nav aria-label="{{slot:nav-column-2-label}}" class="lp-footer-corporate-grid-4__column">
+<h3 class="lp-footer-corporate-grid-4__heading">{{slot:nav-column-2-heading}}</h3>
+<ul class="lp-footer-corporate-grid-4__links">
+<li><a href="{{slot:nav-2-link-1-url}}">{{slot:nav-2-link-1-label}}</a></li>
+<li><a href="{{slot:nav-2-link-2-url}}">{{slot:nav-2-link-2-label}}</a></li>
+<li><a href="{{slot:nav-2-link-3-url}}">{{slot:nav-2-link-3-label}}</a></li>
+</ul>
+</nav>
+<address class="lp-footer-corporate-grid-4__column lp-footer-corporate-grid-4__contacts">
+<h3 class="lp-footer-corporate-grid-4__heading">{{slot:contacts-heading}}</h3>
+<ul class="lp-footer-corporate-grid-4__links">
+<li><a href="{{slot:contact-phone-url}}">{{slot:contact-phone-label}}</a></li>
+<li><a href="{{slot:contact-email-url}}">{{slot:contact-email-label}}</a></li>
+<li>{{slot:contact-address}}</li>
+</ul>
+</address>
+</div>
+<div class="lp-footer-corporate-grid-4__bottom">
+<p>{{slot:copyright}}</p>
+<nav aria-label="{{slot:legal-nav-label}}">
+<ul class="lp-footer-corporate-grid-4__legal">
+<li><a href="{{slot:legal-link-1-url}}">{{slot:legal-link-1-label}}</a></li>
+<li><a href="{{slot:legal-link-2-url}}">{{slot:legal-link-2-label}}</a></li>
+</ul>
+</nav>
+</div>
+</footer>

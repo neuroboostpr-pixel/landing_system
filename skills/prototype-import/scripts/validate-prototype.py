@@ -6,8 +6,14 @@ from pathlib import Path
 
 VALID_NICHES = {"services", "b2c", "local"}
 VALID_BLOCK_TYPES = {
+    # Старые (обратная совместимость)
     "hero", "features", "social-proof", "process",
     "pricing", "trust", "cta", "faq", "quiz",
+    # Новые
+    "header", "menu", "characteristics", "about", "problem-solution",
+    "demo", "testimonials", "logos", "stats", "case-study", "media-mentions",
+    "guarantees", "comparison", "integrations", "banner", "urgency",
+    "lead-form", "gallery", "team", "footer", "contacts",
 }
 VALID_QUIZ_ROLES = {
     "welcome", "question", "intermediate", "progress",
@@ -21,7 +27,7 @@ def fail(m: str) -> None:
 
 
 def main(path: str) -> None:
-    data = yaml.safe_load(Path(path).read_text())
+    data = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
     if not isinstance(data, dict):
         fail("top-level must be a mapping")
     if "project" not in data:

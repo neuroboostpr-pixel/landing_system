@@ -121,3 +121,18 @@ Show path to `08_КОД/build-preview.html`. Wait for user approval before proce
 - `08_КОД/build-preview.html` — static preview for approval
 - `11_АНАЛИТИКА/metrika-config.md`, `goals-and-events.json`, `utm-templates.md`
 - `12_SEO/meta-tags.yaml`, `structured-data.json`, `robots.txt`, `keywords.md`
+
+## Конвертер composed → сборка (C1, обязательный шаг)
+
+`block-spec.yaml`, токены, шрифты и манифест ассетов НЕ пишутся руками — их
+порождает конвертер из утверждённого макета:
+
+```bash
+python3 skills/wp-gutenberg-block-builder/scripts/composed-to-build.py --project <project>
+```
+
+Выход: `08_КОД/block-spec.yaml` (+ .bak старого), `08_КОД/fonts-deps.yaml`,
+`08_КОД/assets-manifest.yaml`, `05_ДИЗАЙН-СИСТЕМА/tokens.from-composed.json`.
+После генерации прогнать `lint-composed-vs-spec.py --project <project>` (должен
+дать 0 ошибок). Правка spec руками допустима ПОВЕРХ сгенерированного каркаса
+(дополнить controls), но структура и тексты — из composed.html (спека §4.1).

@@ -1,0 +1,81 @@
+category: features
+description: Длинный блок критериев с большим пустым пространством и двумя плотными
+  текстовыми колонками.
+display_name_ru: trust-editorial-grid-2-romanmelnikov-tilda-11 (grid-2)
+has_animation: false
+id: trust-editorial-grid-2-romanmelnikov-tilda-11
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://romanmelnikov.tilda.ws/
+layout_pattern: grid-2
+niches_suitable:
+- services
+- education
+- b2b-saas
+ru_market: true
+slots:
+- name: eyebrow
+  type: text
+- name: heading
+  required: true
+  type: text
+- name: subhead
+  type: text
+- name: left-column-label
+  type: text
+- name: criterion-1-badge
+  type: text
+- name: criterion-1-title
+  type: text
+- name: criterion-1-text
+  type: text
+- name: criterion-2-badge
+  type: text
+- name: criterion-2-title
+  type: text
+- name: criterion-2-text
+  type: text
+- name: criterion-3-badge
+  type: text
+- name: criterion-3-title
+  type: text
+- name: criterion-3-text
+  type: text
+- name: right-column-label
+  type: text
+- name: criterion-4-badge
+  type: text
+- name: criterion-4-title
+  type: text
+- name: criterion-4-text
+  type: text
+- name: criterion-5-badge
+  type: text
+- name: criterion-5-title
+  type: text
+- name: criterion-5-text
+  type: text
+- name: criterion-6-badge
+  type: text
+- name: criterion-6-title
+  type: text
+- name: criterion-6-text
+  type: text
+- name: summary-label
+  type: text
+- name: stat-1-value
+  type: text
+- name: stat-1-label
+  type: text
+- name: stat-2-value
+  type: text
+- name: stat-2-label
+  type: text
+- name: stat-3-value
+  type: text
+- name: stat-3-label
+  type: text
+style_mood: editorial
+type: guarantees
+variant: null

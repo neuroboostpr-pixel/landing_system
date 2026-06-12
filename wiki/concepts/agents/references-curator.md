@@ -1,47 +1,55 @@
 ---
+slug: references-curator
 type: agent
-name: references-curator
-sources: ["agents/references-curator.md"]
-updated: 2026-05-15
-triggers: []
+name: "Куратор референсов"
 stage: "03"
-uses: ["moodboard-composer", "niche-analyst", "references-collection"]
-tags: ["references", "stage-03", "visual", "index"]
+tags: [references, visual, stage-03, curator]
+triggers: [landing-orchestrator]
+inputs:
+  - 01a_АНАЛИЗ_НИШИ/competitors.yaml
+  - 01a_АНАЛИЗ_НИШИ/visual-requirements.md
+outputs:
+  - 03_РЕФЕРЕНСЫ/index.yaml
+  - 03_РЕФЕРЕНСЫ/refs/
+gates:
+  - min_3_approved_refs
+pre_reqs: [niche-analyst]
+related: [moodboard-composer, landing-orchestrator, niche-analyst]
+sources: ["agents/references-curator.md"]
+updated: 2026-05-26
+confidence: {triggers: low}
 ---
 
-# references-curator — сборщик визуальных референсов
+# Куратор референсов
 
 ## Что делает
-Собирает визуальные референсы (URL-сайтов, Behance/Dribbble, скриншоты), присваивает каждому статус и ведёт реестр в `03_РЕФЕРЕНСЫ/index.yaml`. Работает в первой половине этапа 03 — до передачи управления в `moodboard-composer`.
 
-## Когда вызывать / в каком этапе
-Этап **03** (сбор референсов). Запускается после того, как завершён анализ ниши (этап 01a) и у проекта есть `competitors.yaml` с визуальными заметками конкурентов. Агент активен до тех пор, пока не наберётся минимум 3 референса со статусом `approved`.
+Первая половина этапа 03. Принимает от пользователя ссылки на сайты, файлы Behance/Dribbble и скриншоты, складывает их в `03_РЕФЕРЕНСЫ/refs/`, присваивает каждому статус (candidate / approved / rejected) и ведёт реестр через `index.yaml`. Перед оценкой любого референса сверяется с `visual-requirements.md` конкурентного анализа: визуальные паттерны лидеров ниши и «красные флаги» раздела 6 служат фильтром — клонировать визуал конкурентов нельзя, нужно искать незанятые ниши. После накопления минимум трёх approved-референсов передаёт управление `moodboard-composer`.
 
-## Что на вход / на выход
+## Когда вызывается
 
-**Вход:**
-- URL-ссылки, файлы с Behance/Dribbble, скриншоты, перетащенные в `03_РЕФЕРЕНСЫ/refs/`
-- `01a_АНАЛИЗ_НИШИ/competitors.yaml` — поле `visual_notes` каждого конкурента обязательно к прочтению перед поиском
-- `01a_АНАЛИЗ_НИШИ/visual-requirements.md` — раздел 6 (red flags) проверяется при оценке каждого референса
+Запускается `landing-orchestrator` при переходе проекта в состояние `current_stage == 03_references`. До запуска агент проверяет это состояние в `.landing-state.yaml` и отказывается работать, если этап не совпадает. `PreToolUse`-хук физически блокирует Write/Edit к файлам этапа, если предшественники не закрыты.
 
-**Выход:**
-- `03_РЕФЕРЕНСЫ/index.yaml` — реестр всех референсов со статусами `candidate` / `approved` / `rejected`
-- Передача управления агенту `moodboard-composer` после прохождения HARD GATE
+## Вход → выход
 
-## HARD GATE
-Агент **не передаёт управление** `moodboard-composer`, пока количество референсов со статусом `approved` не достигнет **минимум 3**. Референсы, попадающие в запреты из `visual-requirements.md`, отвергаются автоматически со ссылкой на конкретный пункт.
+**Вход:** `01a_АНАЛИЗ_НИШИ/competitors.yaml` (поле `visual_notes` каждого конкурента) и `01a_АНАЛИЗ_НИШИ/visual-requirements.md` (секция 6 с запретами); пользовательские ссылки и скриншоты.
 
-## Процесс работы
-1. Запрашивает у пользователя референсы (URL / файлы / скриншоты).
-2. Для каждого URL по возможности захватывает скриншот (Phase 2 — хранит только URL).
-3. Предлагает пользователю присвоить статус: `candidate`, `approved` или `rejected`.
-4. Управляет `index.yaml` через скрипт `python3 skills/references-collection/scripts/index.py add|update|list`.
-5. Перед оценкой нового референса сверяется с `visual_notes` конкурентов — не клонировать визуал лидеров категории, искать визуальные gaps.
+**Выход:** заполненный `03_РЕФЕРЕНСЫ/index.yaml` — реестр референсов со статусами; сохранённые файлы в `03_РЕФЕРЕНСЫ/refs/`. При наборе ≥3 approved записей — готовность к передаче в `moodboard-composer`.
 
-## Связанные концепты
-- [[moodboard-composer]] — принимает управление после HARD GATE; строит мудборд из approved-референсов
-- [[niche-analyst]] — поставляет `competitors.yaml` и `visual-requirements.md`, которые агент обязан прочитать перед работой
-- [[references-collection]] — скилл, содержащий скрипт `index.py` для управления реестром
+## Чем закрывается этап (gates)
 
-## Источник
-- `agents/references-curator.md`
+- min_3_approved_refs — в `index.yaml` должно быть не менее трёх записей со статусом `approved`; иначе мудборд не стартует.
+
+## Failure modes
+
+- Пользователь предоставляет менее трёх ссылок — агент зависает на HARD GATE и не может передать управление `moodboard-composer`.
+- Референс попадает под «красный флаг» из `visual-requirements.md`, но агент не сверился с файлом — в мудборд проходит запрещённый визуальный паттерн.
+- `01a_АНАЛИЗ_НИШИ/competitors.yaml` отсутствует или не содержит `visual_notes` — агент работает без контекста конкурентов и рискует рекомендовать клонирование.
+- `scripts/hooks/enforce_stage_gate.py` блокирует запись, если предшественник (нише-анализ) не закрыт — пользователь видит ошибку «Stage gate enforcement» и не понимает причину.
+- `index.py` завершается с ошибкой (Python-окружение не настроено) — индекс не обновляется, состояние этапа рассинхронизируется.
+
+## Related
+
+- [[moodboard-composer]] — принимает управление после набора ≥3 approved референсов
+- [[landing-orchestrator]] — вызывает агента и отслеживает закрытие этапа
+- [[niche-analyst]] — производит обязательные входные артефакты этапа 01a

@@ -1,0 +1,41 @@
+category: social-proof
+description: Имиджевый блок с большим словом-заголовком, декоративной подписью и спокойной
+  темной композицией.
+display_name_ru: trust-luxury-centered-romanmelnikov-tilda-5 (centered)
+has_animation: false
+id: trust-luxury-centered-romanmelnikov-tilda-5
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://romanmelnikov.tilda.ws/
+layout_pattern: centered
+niches_suitable:
+- luxury
+- services
+- education
+ru_market: true
+slots:
+- name: eyebrow
+  type: text
+- name: heading
+  required: true
+  type: text
+- name: caption
+  type: text
+- name: trust-list-label
+  type: text
+- name: stat-1-value
+  type: text
+- name: stat-1-label
+  type: text
+- name: stat-2-value
+  type: text
+- name: stat-2-label
+  type: text
+- name: stat-3-value
+  type: text
+- name: stat-3-label
+  type: text
+style_mood: luxury
+type: guarantees
+variant: numbers

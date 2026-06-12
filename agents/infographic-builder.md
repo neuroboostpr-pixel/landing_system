@@ -5,6 +5,20 @@ description: Generates ONE infographic PNG via codex image_gen. Uses prompt-pick
 
 # infographic-builder
 
+> Helper agent — dispatched by `visual-curator`. Stage Execution Protocol is
+> enforced by the parent agent; this helper does not own a stage and should
+> not be invoked directly.
+
+
+## Pre-flight
+
+Перед любым действием — wiki-запрос для маршрутизации:
+
+```bash
+python -m scripts.wiki.query --slug=infographic-builder --agent=infographic-builder
+python -m scripts.wiki.log --type agent_call --agent infographic-builder --stage 07e
+```
+
 ## Mission
 
 Generate ONE infographic PNG for one slot_name. Used by visual-curator in stage 07d.
@@ -40,3 +54,11 @@ Generate ONE infographic PNG for one slot_name. Used by visual-curator in stage 
 ## Tools
 
 Bash, Read.
+
+## Стандарт пайплайна картинок (D1, обязательный)
+
+Каждое визуальное место обрабатывается по
+[`docs/standards/image-pipeline.md`](../docs/standards/image-pipeline.md):
+анализ места → цель → спецификация → референсы (число = составу композиции) →
+генерация на вырезаемом фоне → rembg → вставка; адаптация под палитру —
+полупрозрачным оверлеем акцента, не отдельной картинкой на каждый цвет.

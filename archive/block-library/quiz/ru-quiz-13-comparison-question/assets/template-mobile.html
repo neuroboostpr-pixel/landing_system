@@ -1,0 +1,54 @@
+<style>
+  :root {
+    --lp-bg: #f5f5f5; --lp-text: #1a1a1a; --lp-accent: #333; --lp-border: #e0e0e0;
+    --lp-font-display: system-ui, sans-serif; --lp-font-body: system-ui, sans-serif;
+    --spacing-md: 16px; --spacing-lg: 32px;
+  }
+  body { margin: 0; font-family: var(--lp-font-body); background:#f5f5f5; color: var(--lp-text); width: 375px; }
+  .step-card { background: var(--lp-bg); min-height: 100vh; padding: 28px 16px 40px; box-sizing: border-box; }
+  .progress-bar-wrap { margin-bottom: 20px; }
+  .progress-label { font-size: 11px; color:#999; margin-bottom: 5px; }
+  .progress-track { background:#eee; border-radius: 4px; height: 5px; }
+  .progress-fill { background: var(--lp-accent); height: 5px; border-radius: 4px; width: 50%; }
+  .question-text { font-family: var(--lp-font-display); font-size: 20px; font-weight: 700; line-height: 1.25; margin: 0 0 24px; text-align: center; }
+  /* On mobile: stack A/B vertically instead of side by side */
+  .vs-stack { display: flex; flex-direction: column; gap: 14px; }
+  .cmp-option input[type=radio] { position: absolute; opacity: 0; width: 0; height: 0; }
+  .cmp-option label { display: flex; align-items: center; gap: 14px; padding: 20px 16px; border: 2px solid var(--lp-border); border-radius: 12px; cursor: pointer; text-align: left; }
+  .cmp-option input[type=radio]:checked + label { border-color: var(--lp-accent); background:var(--lp-bg); }
+  .cmp-icon { font-size: 32px; flex-shrink: 0; }
+  .cmp-content {}
+  .cmp-title { font-family: var(--lp-font-display); font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .cmp-desc { font-size: 13px; color:#666; line-height: 1.4; }
+  .question-comment { margin-top: 18px; font-size: 12px; color:#999; text-align: center; }
+</style>
+<div class="step-card" data-block-id="ru-quiz-13-comparison-question">
+<div class="progress-bar-wrap">
+<div class="progress-label">{{slot:progress-label}}</div>
+<div class="progress-track"><div class="progress-fill"></div></div>
+</div>
+<p class="question-text">{{slot:question-text}}</p>
+<div class="vs-stack">
+<div class="cmp-option">
+<input id="m-optA" name="comparison" type="radio" value="A"/>
+<label for="m-optA">
+<span class="cmp-icon">💰</span>
+<div class="cmp-content">
+<div class="cmp-title">{{slot:option-a-title}}</div>
+<div class="cmp-desc">{{slot:option-a-description}}</div>
+</div>
+</label>
+</div>
+<div class="cmp-option">
+<input id="m-optB" name="comparison" type="radio" value="B"/>
+<label for="m-optB">
+<span class="cmp-icon">🏆</span>
+<div class="cmp-content">
+<div class="cmp-title">{{slot:option-b-title}}</div>
+<div class="cmp-desc">{{slot:option-b-description}}</div>
+</div>
+</label>
+</div>
+</div>
+<p class="question-comment">{{slot:question-comment}}</p>
+</div>

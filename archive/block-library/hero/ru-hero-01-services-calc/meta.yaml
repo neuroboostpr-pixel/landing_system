@@ -1,0 +1,38 @@
+category: hero
+conversion_notes: CTA контраст 7:1. Плашка 'от X ₽' в углу desktop, под subhead на
+  mobile. Sticky CTA после скролла за hero.
+created: 2026-05-12
+description: 'RU hero для услуг: фоновое фото объекта, оффер слева, кнопка ''Рассчитать
+  стоимость'', плашка ''от X ₽'''
+display_name_ru: ru-hero-01-services-calc (centered)
+id: ru-hero-01-services-calc
+layout_pattern: centered
+layout_summary_ru: Полноэкранное фото объекта на фоне, оффер с подзаголовком слева,
+  плашка 'от X ₽' и кнопка 'Рассчитать стоимость'. На mobile — вертикальный stack.
+recommended_styles_ru:
+- Minimalism & Swiss Style
+- Flat Design 2.0
+ru_market: true
+slots:
+- max_chars: 60
+  name: headline
+  required: true
+  type: text
+- max_chars: 120
+  name: subhead
+  required: false
+  type: text
+- default_text: Рассчитать стоимость
+  name: primary-cta
+  required: true
+  type: cta
+- max_chars: 12
+  name: price-tag
+  required: false
+  type: text
+source: manual
+source_attribution: ''
+type: hero
+use_cases:
+- services
+variant: null

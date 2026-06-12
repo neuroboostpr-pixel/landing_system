@@ -1,73 +1,67 @@
 ---
+slug: landing-visuals
 type: command
-name: landing-visuals
-sources: ["commands/landing-visuals.md"]
-updated: 2026-05-15
-triggers:
-  - "сгенерировать иконки и инфографику"
-  - "запустить генерацию визуалов"
-  - "заполнить слоты иконок в лендинге"
-  - "/landing-visuals"
+name: "/landing-visuals — Генерация визуальных ассетов"
 stage: "07d"
-uses:
+tags: [visuals, icons, infographics, codex, image-gen, pr-c]
+triggers: [landing-visuals]
+inputs:
+  - 07b_COMPOSED/composed.html
+  - 05_ДИЗАЙН-СИСТЕМА/tokens.json
+  - .landing-state.yaml
+outputs:
+  - 07d_VISUALS/_slots.yaml
+  - 07d_VISUALS/icons/
+  - 07d_VISUALS/infographics/
+  - 07d_VISUALS/.cache/
+  - 07d_VISUALS/prompts.yaml
+  - 07d_VISUALS/STATE.yaml
+  - 07b_COMPOSED/composed.html
+gates: []
+pre_reqs:
+  - landing-compose
+  - landing-design
+related:
   - visual-curator
   - icon-generator
   - infographic-builder
-  - block-composition
-  - design-tokens-generation
-tags:
-  - pr-c
+  - landing-compose
+  - landing-go
+  - landing-photos
   - visual-generation
-  - codex
-  - icons
-  - infographics
+sources: ["commands/landing-visuals.md"]
+updated: 2026-05-26
 ---
 
-# /landing-visuals — генерация иконок и инфографики
+# /landing-visuals — Генерация визуальных ассетов
 
 ## Что делает
 
-Автоматически генерирует PNG-иконки и инфографику для лендинга через codex image_gen, встраивает их в `composed.html` вместо текстовых плейсхолдеров. Стиль генерации согласован с брендом: цвета берутся из `tokens.json`, тематика — из профиля ниши.
+Команда запускает генерацию PNG-иконок и инфографики для всех `data-slot` плейсхолдеров в `composed.html`. Ассеты стилизованы под брендинг проекта: цвета берутся из `tokens.json`, контекст — из `market-profile.md` (ниша). Используется кэш по хешу входных параметров, что позволяет экономить вызовы к codex API при повторных прогонах. После генерации `composed.html` перерендерится — плейсхолдеры `[SLOT: …]` и `[INFOGRAPHIC: …]` заменятся на реальные теги `<img>`.
 
-## Когда вызывать / в каком этапе
+## Когда вызывается
 
-**Stage 07d (PR-C).** Вызывается вручную после того, как:
+Вызывается вручную командой `/landing-visuals` или автоматически через `/landing-go` на этапе 07d. Необходимые условия: этап 05 (design-system) должен быть в статусе `approved`, а файл `07b_COMPOSED/composed.html` — существовать.
 
-1. Дизайн-система утверждена (`05_ДИЗАЙН-СИСТЕМА/DESIGN.md`, статус `approved` в `.landing-state.yaml`).
-2. Файл `07b_COMPOSED/composed.html` существует (создаётся командой `/landing-compose`).
+## Вход → выход
 
-До PR-D команда **не встроена** в `landing-orchestrator` — запускается отдельно.
+**Вход:** `composed.html` со слотами типа `icon` и `infographic`; `tokens.json` с дизайн-токенами; `market-profile.md` с описанием ниши; `.landing-state.yaml` для проверки статуса этапов.
 
-Поддерживает флаги:
-- `--type icons` / `--type infographics` — частичный прогон;
-- `--force` — сброс кэша;
-- `--slot <name>` — один слот.
+**Выход:** PNG-файлы в `07d_VISUALS/icons/` и `07d_VISUALS/infographics/`; обновлённый `07b_COMPOSED/composed.html` с подставленными `<img>`; лог промптов `prompts.yaml`; кэш `.cache/`.
 
-## Что на вход / на выход
+## Failure modes
 
-**Вход:**
-- `07b_COMPOSED/composed.html` с data-слотами `type="icon"` и `type="infographic"`.
-- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — цвета бренда для промптов.
-- `01a_АНАЛИЗ_НИШИ/market-profile.md` — тематика ниши.
-- Опционально: `07d_VISUALS/.cache/` — хэш-кэш предыдущих генераций.
+- **Этап 05 не утверждён** — команда падает с требованием сначала закрыть `05_ДИЗАЙН-СИСТЕМА/DESIGN.md`; без `tokens.json` нет стилизации.
+- **`composed.html` не существует** — блокировка с подсказкой запустить `/landing-compose`.
+- **Cache miss + API недоступен** — codex не отвечает, слоты остаются незаполненными; повтор через `--force` не помогает до восстановления API.
+- **Слот не найден по `--slot <name>`** — тихий пропуск или ошибка, если `_slots.yaml` устарел и не содержит нужного имени.
+- **Инфографика не вписывается в макет** — `compose-blocks.py` подставляет PNG без проверки размеров; визуальные артефакты заметны только в браузере.
 
-**Выход (в `07d_VISUALS/`):**
-- `_slots.yaml` — список найденных слотов.
-- `icons/<slot>.png` — сгенерированные иконки.
-- `infographics/<slot>.png` — сгенерированная инфографика.
-- `.cache/<hash>.png` — кэш по hash(hint + style + brand_color + niche).
-- `prompts.yaml` — лог промптов с attribution.
-- `STATE.yaml` — статусы этапов.
-- Обновлённый `07b_COMPOSED/composed.html` — плейсхолдеры `[SLOT: ...]` и `[INFOGRAPHIC: ...]` заменены на `<img class="lp-icon">` / `<img class="lp-infographic">`.
+## Related
 
-## Связанные концепты
-
-- [[visual-curator]] — агент-оркестратор, сканирует слоты, управляет кэшем, диспатчит субагентов.
-- [[icon-generator]] — генерирует один PNG-иконки через codex.
-- [[infographic-builder]] — генерирует одну инфографику через codex.
-- [[block-composition]] — re-render composed.html после замены плейсхолдеров.
-- [[design-tokens-generation]] — поставляет `tokens.json` с цветами бренда.
-
-## Источник
-
-- `commands/landing-visuals.md`
+- [[visual-curator]] — агент, оркестрирующий весь процесс генерации
+- [[icon-generator]] — субагент для иконок
+- [[infographic-builder]] — субагент для инфографики
+- [[landing-compose]] — предыдущий этап (07b), создаёт `composed.html`
+- [[landing-go]] — рекомендуемый способ запуска через оркестратор
+- [[visual-generation]] — концепт всего процесса генерации визуалов

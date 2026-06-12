@@ -6,6 +6,11 @@
 
 set -euo pipefail
 
+
+# Cross-platform python detection (sets PYTHON_CMD).
+__SCRIPT_DIR__="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=../../../scripts/lib/python-cmd.sh
+. "$__SCRIPT_DIR__/../../../scripts/lib/python-cmd.sh"
 PROJECT_DIR="${1:?ERROR: project_dir required}"
 PHOTO="${2:?ERROR: photo path required}"
 
@@ -14,7 +19,7 @@ TEMPLATE="$SCRIPT_DIR/../templates/classify-prompt.md"
 
 # Extract Prompt body from template, write to temp file
 RAW_FILE="$(mktemp)"
-python3 - "$TEMPLATE" "$RAW_FILE" <<'PYEOF'
+$PYTHON_CMD - "$TEMPLATE" "$RAW_FILE" <<'PYEOF'
 import re, sys
 template_path, raw_out = sys.argv[1], sys.argv[2]
 text = open(template_path).read()
@@ -27,7 +32,7 @@ PYEOF
 
 # Render placeholders (NICHE, AUDIENCE, VISUAL_STYLE, BRAND_PRIMARY, etc.)
 PROMPT_FILE="$(mktemp)"
-python3 "$SCRIPT_DIR/render-prompt.py" "$RAW_FILE" "$PROJECT_DIR" > "$PROMPT_FILE"
+$PYTHON_CMD "$SCRIPT_DIR/render-prompt.py" "$RAW_FILE" "$PROJECT_DIR" > "$PROMPT_FILE"
 rm -f "$RAW_FILE"
 
 # Call codex with image input; capture response to temp file
@@ -39,7 +44,7 @@ rm -f "$PROMPT_FILE"
 PHOTO_ID=$(basename "$PHOTO" | sed 's/\.[^.]*$//')
 CATALOG="$PROJECT_DIR/07c_PHOTOS/catalog.yaml"
 
-python3 - "$RESPONSE_FILE" "$CATALOG" "$PHOTO_ID" <<'PYEOF'
+$PYTHON_CMD - "$RESPONSE_FILE" "$CATALOG" "$PHOTO_ID" <<'PYEOF'
 import sys, yaml
 from pathlib import Path
 

@@ -22,8 +22,8 @@ description: Stage 07c (PR-B) — обработка клиентских фот
 1. `<project>/.landing-state.yaml:stages.05_design.status == approved` — иначе:
    > Сначала утверди дизайн-систему (`05_ДИЗАЙН-СИСТЕМА/DESIGN.md`) — без `tokens.json` промпты codex не могут попасть в стиль.
 
-2. `<project>/07a_WIREFRAME/selections.yaml` существует AND содержит выбранные варианты — иначе:
-   > Сначала выбери варианты блоков в `wireframe.html` — нужно знать какие photo-слоты будут в финальном лендинге.
+2. `<project>/07_ПРОТОТИП/prototype.yaml` существует — иначе:
+   > Сначала импортируй прототип (`/landing-prototype`) — photo-слоты выводятся из прототипа.
 
 ## Что происходит
 
@@ -61,8 +61,24 @@ description: Stage 07c (PR-B) — обработка клиентских фот
 
 `07b_COMPOSED/composed.html` перерендерится — placeholders `[photo slot: ...]` заменятся на реальные `<img>` (или `<picture>` с mobile-вариантом, если у блока есть `mobile_ratio`).
 
-## NOTE (PR-B scope)
+## Запуск
 
-PR-B команда вызывается **вручную**, не через `landing-orchestrator`. Полная интеграция в orchestrator + `config/stage-gates.yaml` — задача PR-D.
+Автоматически через `/landing-go` (рекомендуется) или вручную этой командой. Этап интегрирован в `landing-orchestrator` и `config/stage-gates.yaml`.
 
 См. [spec](../docs/superpowers/specs/2026-05-13-photo-pipeline-design.md) и [plan](../docs/superpowers/plans/2026-05-13-photo-pipeline-plan.md).
+
+## Интерактивный режим (PR-I.a)
+
+```
+/landing-photos --interactive
+```
+
+Агент по очереди спрашивает у пользователя что положить в каждый
+photo-слот, показывает подсказку (что должно быть на фото в этом
+контексте, какой ratio), потом пропускает фото через pipeline:
+codex обработка + resize + identity check.
+
+Альтернатива — drag-drop UI в `07c_PHOTOS/photo-board.html`
+(остаётся из PR-B). Если предпочитаешь визуально расставить —
+открой HTML, drag фото в слоты, скачай selections.yaml, положи
+обратно в проект.

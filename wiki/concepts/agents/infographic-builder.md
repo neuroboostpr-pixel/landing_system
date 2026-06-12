@@ -1,53 +1,44 @@
 ---
+slug: infographic-builder
 type: agent
-name: infographic-builder
-sources: ["agents/infographic-builder.md"]
-updated: 2026-05-15
-triggers: []
+name: "Infographic Builder"
 stage: "07d"
-uses: ["visual-curator", "visual-generation"]
-tags: ["visuals", "infographics", "codex", "image-gen", "stage-07d"]
+tags: [visuals, infographic, codex, image-gen, cache, helper-agent]
+triggers: []
+inputs: [07d_VISUALS, brand-kit, market-profile]
+outputs: [07d_VISUALS/infographics]
+gates: []
+pre_reqs: [landing-visuals]
+related: [landing-visuals]
+sources: ["agents/infographic-builder.md"]
+updated: 2026-05-26
+confidence: {triggers: low, pre_reqs: low}
 ---
 
-# infographic-builder — генератор одного инфографика
+# Infographic Builder
 
 ## Что делает
 
-Генерирует **один PNG-файл инфографики** для конкретного слота в лендинге через codex image_gen. Работает с числовыми, столбчатыми, линейными и кольцевыми диаграммами. Чтобы не тратить API-запросы повторно — кэширует результат по хэшу параметров.
+Вспомогательный агент, который генерирует **один** PNG-инфографик для одного слота визуала на этапе 07d. Принимает тип графика и JSON с данными, проверяет хэш-кэш и либо возвращает закэшированный результат, либо вызывает `codex image_gen` через shell-скрипт. Если в базе OpenDesign есть подходящий промпт — использует его; иначе применяет generic-промпт. Фиксирует атрибуцию источника в `prompts.yaml`.
 
-## Когда вызывать / в каком этапе
+## Когда вызывается
 
-Вызывается **только агентом [[visual-curator]]** на этапе **07d (Visual Generation)**. Пользователь напрямую не запускает этот агент — он запускает `/landing-visuals`, а `visual-curator` диспатчит `infographic-builder` для каждого инфографического слота по очереди.
+Диспатчится родительским агентом `landing-visuals` (visual-curator) в ходе этапа 07d — **не вызывается напрямую пользователем**. Получает управление однократно на каждый незакрытый слот инфографики.
 
-## Что на вход / на выход
+## Вход → выход
 
-**Вход:**
-- `<project_dir>` — путь к папке проекта
-- `<slot_name>` — имя слота, например `kpi-clients`
-- `<chart_type>` — тип диаграммы: `number`, `bar`, `line`, `donut`
-- `<data_json>` — JSON-строка с данными для инфографики
+**Вход:** путь к папке проекта, имя слота (`slot_name`, например `kpi-clients`), тип графика (`number`, `bar`, `line`, `donut`) и JSON-спецификация данных (`data_json`).
 
-**Выход:**
-- PNG-файл `<project>/07d_VISUALS/infographics/<slot_name>.png`
-- Запись атрибуции в `07d_VISUALS/prompts.yaml` (если источник — OpenDesign)
-- Обновление `STATE.yaml` при ошибках
+**Выход:** готовый PNG по пути `<project>/07d_VISUALS/infographics/<slot_name>.png`; запись кэша `.cache/<hash>.png`; строка атрибуции в `07d_VISUALS/prompts.yaml` (если источник — OpenDesign).
 
-**Логика исполнения:**
-1. Вычислить хэш-ключ из `(hint, chart_type, brand_accent, niche)`.
-2. Если кэш-хит — скопировать из `.cache/<hash>.png`, выйти.
-3. Если кэш-мисс — запустить `codex-generate-infographic.sh`.
-4. После генерации — сохранить в `.cache/<hash>.png`.
+## Failure modes
 
-**Fallback-логика:**
-- Если codex падает после повтора → SVG-плейсхолдер вместо PNG.
-- Если `data_json` невалиден → использовать заглушку-данные, предупреждение в `STATE.yaml`.
+- **Codex API недоступен или исчерпаны ретраи** — агент создаёт SVG-заглушку вместо PNG; слот остаётся помечен в `STATE.yaml` как fallback.
+- **Некорректный `data_json`** — агент подставляет generic-данные-шаблон и продолжает, выводит предупреждение в `STATE.yaml`.
+- **Кэш повреждён или устарел** — без флага `--force` агент отдаст старый файл; обновление только через принудительный прогон.
+- **Неизвестный `chart_type`** — промпт-пикер не найдёт шаблон в OpenDesign и упадёт в generic, итоговый PNG может не совпадать с ожиданием.
+- **Прямой вызов в обход visual-curator** — Stage Execution Protocol не применяется, состояние проекта не обновляется, слот не будет зарегистрирован корректно.
 
-## Связанные концепты
+## Related
 
-- [[visual-curator]] — оркестратор этапа 07d, вызывает этого агента для каждого слота
-- [[icon-generator]] — аналогичный агент, но для иконок (не инфографики)
-- [[visual-generation]] — скилл, содержащий скрипты генерации, в том числе `codex-generate-infographic.sh`
-
-## Источник
-
-- `agents/infographic-builder.md`
+- [[landing-visuals]] — родительский агент (visual-curator), который диспатчит infographic-builder для каждого слота инфографики

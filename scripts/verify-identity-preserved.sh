@@ -2,6 +2,11 @@
 # scripts/verify-identity-preserved.sh — для stage-gates 07f hard_check
 set -uo pipefail
 
+
+# Cross-platform python detection (sets PYTHON_CMD).
+__SCRIPT_DIR__="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=lib/python-cmd.sh
+. "$__SCRIPT_DIR__/lib/python-cmd.sh"
 PROJECT="${1:?ERROR: project required}"
 MANIFEST="$PROJECT/07c_PHOTOS/processed/manifest.json"
 
@@ -10,7 +15,7 @@ if [ ! -f "$MANIFEST" ]; then
     exit 0
 fi
 
-python3 - <<PYTHON
+$PYTHON_CMD - <<PYTHON
 import json, sys
 data = json.load(open("$MANIFEST"))
 violations = [(k, v) for k, v in data.items() if isinstance(v, dict) and v.get("identity_violation")]

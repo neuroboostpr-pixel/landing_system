@@ -1,0 +1,214 @@
+<style>
+  :root {
+    --lp-bg: #f5f5f5;
+    --lp-text: #1a1a1a;
+    --lp-accent: #333;
+    --lp-border: #e0e0e0;
+    --lp-font-display: 'Playfair Display', 'Times New Roman', serif;
+    --lp-font-body: 'Inter', system-ui, sans-serif;
+    --spacing-md: 16px;
+    --spacing-lg: 32px;
+  }
+  @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,400;1,500;1,600;1,700&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--lp-font-body); background: var(--lp-bg); color: var(--lp-text); }
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
+    min-height: 580px;
+    border-bottom: 1px solid var(--lp-border);
+    padding: 0 64px;
+    max-width: 1360px;
+    margin: 0 auto;
+    align-items: stretch;
+    gap: 36px;
+  }
+  .hero-copy {
+    padding: 60px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .kicker {
+    font-family: 'Inter Tight', system-ui, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--lp-accent);
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .kicker::before {
+    content: '';
+    width: 18px;
+    height: 1px;
+    background: var(--lp-accent);
+    display: inline-block;
+  }
+  .headline {
+    font-family: 'Inter Tight', system-ui, sans-serif;
+    font-weight: 800;
+    font-size: clamp(44px, 5vw, 78px);
+    line-height: 1.0;
+    letter-spacing: -0.028em;
+    margin-bottom: 24px;
+  }
+  .headline em {
+    font-family: var(--lp-font-display);
+    font-style: italic;
+    font-weight: 500;
+    letter-spacing: -0.018em;
+  }
+  .subhead {
+    font-size: 16px;
+    line-height: 1.55;
+    color: rgba(21,20,15,0.7);
+    max-width: 40ch;
+    margin-bottom: 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 22px;
+    margin-bottom: 32px;
+  }
+  .stat {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+  }
+  .stat-ring {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--lp-text);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter Tight', system-ui, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .stat-ring.accent { border-color: var(--lp-accent); color: var(--lp-accent); }
+  .stat-label {
+    font-family: 'Inter Tight', system-ui, sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    line-height: 1.25;
+  }
+  .stat-label b { display: block; font-weight: 700; }
+  .hero-actions {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 36px;
+  }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 24px;
+    border-radius: 999px;
+    background: var(--lp-accent);
+    color:#fff;
+    font-family: 'Inter Tight', system-ui, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+  }
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 24px;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--lp-text);
+    font-family: 'Inter Tight', system-ui, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    border: 1px solid var(--lp-border);
+    cursor: pointer;
+  }
+  .hero-art {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-left: 1px solid var(--lp-border);
+    padding: 40px;
+  }
+  .art-placeholder {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: rgba(21,20,15,0.06);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter Tight', system-ui, sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(21,20,15,0.35);
+  }
+  .sec-rule {
+    border-top: 1px solid var(--lp-border);
+    padding: 14px 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Inter Tight', system-ui, sans-serif;
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(21,20,15,0.5);
+    max-width: 1360px;
+    margin: 0 auto;
+  }
+  .sec-rule .roman {
+    font-family: var(--lp-font-display);
+    font-style: italic;
+    color: var(--lp-accent);
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    text-transform: none;
+  }
+</style>
+<div class="sec-rule">
+<span class="roman">I.</span>
+<span>Hero / Редакционный</span>
+<span>001</span>
+</div>
+<section class="hero" data-block-id="ru-hero-07-editorial-serif">
+<div class="hero-copy">
+<span class="kicker">{{slot:kicker}}</span>
+<h1 class="headline">{{slot:headline}}</h1>
+<p class="subhead">{{slot:subhead}}</p>
+<div class="hero-stats">
+<div class="stat">
+<span class="stat-ring accent">{{slot:stat-1-value}}</span>
+<span class="stat-label"><b>{{slot:stat-1-label}}</b></span>
+</div>
+<div class="stat">
+<span class="stat-ring">{{slot:stat-2-value}}</span>
+<span class="stat-label"><b>{{slot:stat-2-label}}</b></span>
+</div>
+<div class="stat">
+<span class="stat-ring">{{slot:stat-3-value}}</span>
+<span class="stat-label"><b>{{slot:stat-3-label}}</b></span>
+</div>
+</div>
+<div class="hero-actions">
+<a class="btn-primary" href="#contact">{{slot:primary-cta}}</a>
+<a class="btn-ghost" href="#about">{{slot:secondary-cta}}</a>
+</div>
+</div>
+<div class="hero-art">
+<div class="art-placeholder">{{slot:hero-image}}</div>
+</div>
+</section>

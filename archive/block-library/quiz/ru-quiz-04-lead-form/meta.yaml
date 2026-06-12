@@ -1,0 +1,47 @@
+category: forms
+conversion_notes: Только разрешённые мессенджеры в РФ. Max Messenger обязателен. 152-ФЗ
+  checkbox НЕ pre-checked.
+created: 2026-05-12
+description: Финальный экран квиза. Telegram + Max + звонок. Только разрешённые в
+  РФ мессенджеры. Согласие на ПД.
+display_name_ru: ru-quiz-04-lead-form (centered)
+id: ru-quiz-04-lead-form
+layout_pattern: centered
+layout_summary_ru: 'Последний экран квиза: заголовок, поле телефона, выбор мессенджера
+  (Telegram / Max / Звонок), кнопка ''Получить расчёт''. Согласие на ПД (152-ФЗ).'
+ru_market: true
+slots:
+- max_chars: 80
+  name: headline
+  required: true
+  type: text
+- max_chars: 140
+  name: subhead
+  required: false
+  type: text
+- max_chars: 50
+  name: name-input
+  required: false
+  type: text
+- max_chars: 20
+  name: phone-input
+  required: true
+  type: text
+- max_chars: 200
+  name: agreement-text
+  required: true
+  type: text
+- default_text: Получить расчёт
+  name: submit-cta
+  required: true
+  type: cta
+- name: cta
+  type: text
+source: manual
+source_attribution: ''
+type: lead-form
+use_cases:
+- services
+- b2c
+- local
+variant: email

@@ -1,0 +1,103 @@
+category: pricing
+description: Раздел с карточками специализированных программ, фотофоном, ценовым маркером
+  и кнопками.
+display_name_ru: pricing-corporate-grid-3-sskrusgun-ru-5 (grid-3)
+has_animation: false
+id: pricing-corporate-grid-3-sskrusgun-ru-5
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://sskrusgun.ru/
+layout_pattern: grid-3
+niches_suitable:
+- services
+- education
+ru_market: true
+slots:
+- name: pricing-eyebrow
+  type: text
+- name: pricing-title
+  type: text
+- name: pricing-subtitle
+  type: text
+- name: plan-1-image-alt
+  type: text
+- name: plan-1-image
+  type: text
+- name: plan-1-badge
+  type: text
+- name: plan-1-title
+  type: text
+- name: plan-1-description
+  type: text
+- name: plan-1-price-label
+  type: text
+- name: plan-1-price
+  type: text
+- name: plan-1-price-note
+  type: text
+- name: plan-1-feature-1
+  type: text
+- name: plan-1-feature-2
+  type: text
+- name: plan-1-feature-3
+  type: text
+- name: plan-1-cta-url
+  type: text
+- name: plan-1-cta-label
+  type: text
+- name: plan-2-image-alt
+  type: text
+- name: plan-2-image
+  type: text
+- name: plan-2-badge
+  type: text
+- name: plan-2-title
+  type: text
+- name: plan-2-description
+  type: text
+- name: plan-2-price-label
+  type: text
+- name: plan-2-price
+  type: text
+- name: plan-2-price-note
+  type: text
+- name: plan-2-feature-1
+  type: text
+- name: plan-2-feature-2
+  type: text
+- name: plan-2-feature-3
+  type: text
+- name: plan-2-cta-url
+  type: text
+- name: plan-2-cta-label
+  type: text
+- name: plan-3-image-alt
+  type: text
+- name: plan-3-image
+  type: text
+- name: plan-3-badge
+  type: text
+- name: plan-3-title
+  type: text
+- name: plan-3-description
+  type: text
+- name: plan-3-price-label
+  type: text
+- name: plan-3-price
+  type: text
+- name: plan-3-price-note
+  type: text
+- name: plan-3-feature-1
+  type: text
+- name: plan-3-feature-2
+  type: text
+- name: plan-3-feature-3
+  type: text
+- name: plan-3-cta-url
+  type: text
+- name: plan-3-cta-label
+  type: text
+style_mood: corporate
+type: pricing
+variant: cards

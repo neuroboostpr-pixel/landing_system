@@ -1,0 +1,70 @@
+category: content
+conversion_notes: Временные метки снимают тревогу 'сколько ждать'. Финальный шаг с
+  акцентом = итоговая выгода. Inline CTA после процесса.
+created: 2026-05-13
+description: '3-шаговый процесс в стиле editorial: временная шкала, чёрная/акцентная
+  карточка для последнего шага. Вдохновлён release-notes one-pager.'
+display_name_ru: ru-process-02-next-steps (centered)
+id: ru-process-02-next-steps
+layout_pattern: centered
+layout_summary_ru: 3 горизонтальные карточки-строки с временной меткой, заголовком
+  и описанием. Каждый шаг — срок + действие. Финальный шаг тёмный-акцентный.
+recommended_styles_ru:
+- Minimalism & Swiss Style
+- Editorial
+ru_market: true
+slots:
+- max_chars: 60
+  name: headline
+  required: true
+  type: text
+- max_chars: 20
+  name: step1-timing
+  required: true
+  type: text
+- max_chars: 50
+  name: step1-title
+  required: true
+  type: text
+- max_chars: 200
+  name: step1-text
+  required: true
+  type: text
+- max_chars: 20
+  name: step2-timing
+  required: true
+  type: text
+- max_chars: 50
+  name: step2-title
+  required: true
+  type: text
+- max_chars: 200
+  name: step2-text
+  required: true
+  type: text
+- name: step-badge
+  type: text
+- max_chars: 20
+  name: step3-timing
+  required: true
+  type: text
+- max_chars: 50
+  name: step3-title
+  required: true
+  type: text
+- max_chars: 200
+  name: step3-text
+  required: true
+  type: text
+- default_text: Начать
+  name: primary-cta
+  required: true
+  type: cta
+source: opendesign
+source_attribution: /tmp/open-design/skills/release-notes-one-pager/example.html
+type: process
+use_cases:
+- services
+- b2c
+- local
+variant: process

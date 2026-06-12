@@ -1,28 +1,20 @@
 ---
 name: block-composition
-description: Stage 07b — compose chosen blocks with design-tokens injected and prototype content substituted. Used by /landing-compose command and block-composer agent.
+description: Stage 07b/07f — re-render готового composed.html (подстановка фото/иконок/инфографики в placeholders) и инъекция mood-палитр. Машинная склейка блоков из библиотеки — в архиве (reference-driven flow).
 ---
 
-# block-composition
+# block-composition (reference-driven)
 
-Сборка composed.html из утверждённых блоков и tokens.json.
+Макет `composed.html` РИСУЕТ агент block-composer (правила:
+`docs/standards/reference-driven-rules.md`, `design-elements-rules.md`).
+Этот скилл оставляет только пост-обработку готового макета:
 
-## Scripts
+- `scripts/rerender-composed.py --project <dir>` — заменяет `[SLOT: name]`
+  и `data-slot="name"` placeholders на реальные фото (07c_PHOTOS/selections.yaml,
+  processed) и визуалы (07d_VISUALS/icons|infographics). Бэкап в composed.html.bak.
+- `scripts/inject-tokens.py` — инъекция mood-палитры из `block-library/_styles/`
+  (переключатель палитры, спека §2.5).
+- `scripts/inject-content.py` — библиотека inject_block() для photo/visual
+  пайплайнов (PR-B/PR-C тесты).
 
-- `scripts/validate-selections.py` — проверить `selections.yaml`
-- `scripts/inject-tokens.py` — заменить CSS-переменные в template.html на значения из tokens.json
-- `scripts/inject-content.py` — подставить тексты/заголовки/CTA из prototype.yaml
-- `scripts/compose-blocks.py` — собрать composed.html (desktop) + composed-mobile.html
-
-## Inputs
-
-- `<project>/07_ПРОТОТИП/prototype.yaml`
-- `<project>/07a_WIREFRAME/selections.yaml`
-- `<project>/05_ДИЗАЙН-СИСТЕМА/tokens.json`
-- `block-library/` (общая)
-
-## Outputs
-
-- `<project>/07b_COMPOSED/composed.html`
-- `<project>/07b_COMPOSED/composed-mobile.html`
-- `<project>/07b_COMPOSED/block-injection-log.md`
+Архив: compose-blocks.py, validate-selections.py → archive/skills/block-composition/.

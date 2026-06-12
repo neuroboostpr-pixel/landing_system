@@ -1,4 +1,5 @@
 import subprocess
+import sys
 from pathlib import Path
 
 SCRIPT = Path(__file__).resolve().parents[2] / "skills" / "niche-analysis" / "scripts" / "validate-competitors.py"
@@ -7,7 +8,7 @@ FIXTURES = Path(__file__).parent / "fixtures"
 
 def run(fixture_name):
     return subprocess.run(
-        ["python", str(SCRIPT), str(FIXTURES / fixture_name)],
+        [sys.executable, str(SCRIPT), str(FIXTURES / fixture_name)],
         capture_output=True, text=True
     )
 

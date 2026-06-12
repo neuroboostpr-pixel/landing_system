@@ -1,67 +1,47 @@
 ---
+slug: landing-niche
 type: command
-name: landing-niche
-sources: ["commands/landing-niche.md"]
-updated: 2026-05-15
-triggers:
-  - "запустить анализ ниши"
-  - "исследовать рынок для лендинга"
-  - "провести анализ конкурентов"
-  - "этап 01a нишевой анализ"
+name: "Анализ ниши /landing-niche"
 stage: "01a"
-uses:
-  - niche-analyst
-  - gate-check
-  - niche-analysis
-tags:
-  - niche
-  - analysis
-  - competitors
-  - positioning
-  - stage-01a
+tags: [niche, analysis, competitors, positioning, stage-01a]
+triggers: ["/landing-niche"]
+inputs: ["00_БРИФ/.landing-state.yaml"]
+outputs: ["01a_АНАЛИЗ_НИШИ/niche-analysis.md", "01a_АНАЛИЗ_НИШИ/competitors.yaml", "01a_АНАЛИЗ_НИШИ/positioning.md"]
+gates: []
+pre_reqs: [landing-onboarding, niche-analysis]
+related: [niche-analyst, niche-analysis, landing-orchestrator, landing-onboarding]
+sources: ["commands/landing-niche.md"]
+updated: 2026-05-26
+confidence: {gates: low}
 ---
 
-# /landing-niche — Анализ ниши (этап 01a)
+# Анализ ниши /landing-niche
 
 ## Что делает
 
-Запускает автоматический анализ рыночной ниши для текущего проекта-лендинга: изучает конкурентов, формирует профиль рынка и выбирает стратегию позиционирования. Агент работает без уточняющих вопросов — недостающие данные помечаются `[ДОПУЩЕНИЕ]`.
+Команда запускает этап `01a_АНАЛИЗ_НИШИ` для текущего проекта-лендинга. Она проверяет, что этап `00_brief` одобрен, затем передаёт управление агенту `niche-analyst`, который в режиме zero-touch анализирует нишу, собирает конкурентов и формирует позиционирование. После записи артефактов автоматически запускается валидация конкурентов и gate-check. Если все hard-проверки пройдены, команда предлагает пользователю подтвердить переход на этап 02.
 
-## Когда вызывать / в каком этапе
+## Когда вызывается
 
-Вызывается на этапе **01a** — после того, как этап `00_brief` переведён в статус `approved`. Запускается вручную командой `/landing-niche` из папки проекта. Если анализ уже был выполнен и одобрен, команда запросит подтверждение перезапуска перед перезаписью артефактов.
+Вызывается вручную командой `/landing-niche` из папки проекта. Условия: onboarding завершён (`~/.landing-system/setup_complete`), в папке есть `.landing-state.yaml`, этап `00_brief` имеет статус `approved`. Если этап `01a` уже одобрен — команда уточнит, нужен ли перезапуск.
 
-**Предусловия:**
-- Пройден onboarding (`~/.landing-system/setup_complete`)
-- В текущей папке есть `.landing-state.yaml`
-- Этап `00_brief` имеет статус `approved`
+## Вход → выход
 
-## Что на вход / на выход
+**Вход:** файл `.landing-state.yaml` с этапом `00_brief` в статусе `approved`; бриф и контекст проекта, собранные на этапе 00.
 
-**Вход:**
-- `00_БРИФ/brief.md` — бриф проекта
-- `01_КОНТЕКСТ/context.md` — контекст (если присутствует)
+**Выход:** три артефакта в папке `01a_АНАЛИЗ_НИШИ/` — `niche-analysis.md` (анализ ниши), `competitors.yaml` (список конкурентов), `positioning.md` (позиционирование). Статус этапа `01a_niche_analysis` обновляется до `approved` при успехе.
 
-**Выход:**
-- `01a_АНАЛИЗ_НИШИ/niche-analysis.md` — полный анализ ниши
-- `01a_АНАЛИЗ_НИШИ/competitors.yaml` — список конкурентов с характеристиками
-- `01a_АНАЛИЗ_НИШИ/positioning.md` — выбранный режим позиционирования
+## Failure modes
 
-**Внутренние шаги:**
-1. Gate-check этапа `00_brief`
-2. Пометка `01a_niche_analysis` → `in_progress`
-3. Диспатч агента `niche-analyst`
-4. Валидация: `python skills/niche-analysis/scripts/validate-competitors.py`
-5. Gate-check `01a_niche_analysis` (`bash scripts/gate-check.sh`)
-6. Summary + запрос approval для перехода на этап 02
+- Этап `00_brief` не одобрен — команда завершается с ошибкой до передачи агенту.
+- `validate-competitors.py` падает из-за невалидного YAML в `competitors.yaml` — нужно ручное исправление файла.
+- `gate-check.sh` возвращает ненулевой exit code — hard-check провален, этап не переходит в `approved`.
+- Нет файла `.landing-state.yaml` в текущей папке — команда не запускается.
+- Агент `niche-analyst` помечает критически важные данные как `[ДОПУЩЕНИЕ]` без реальных источников — требуется ревью перед утверждением.
 
-## Связанные концепты
+## Related
 
-- [[niche-analyst]] — специализированный агент, выполняющий фактическую работу анализа ниши zero-touch
-- [[niche-analysis]] — скилл с логикой анализа и скриптом валидации конкурентов
-- [[landing-go]] — мастер-команда, которая вызывает `/landing-niche` автоматически через оркестратор
-- [[landing-orchestrator]] — управляет последовательностью этапов и HARD GATE между ними
-
-## Источник
-
-- `commands/landing-niche.md`
+- [[niche-analyst]] — агент, выполняющий основную работу анализа
+- [[niche-analysis]] — скилл/концепт, описывающий логику анализа ниши
+- [[landing-orchestrator]] — оркестратор, в контекст которого вписывается этот этап
+- [[landing-onboarding]] — onboarding, который должен быть пройден до запуска

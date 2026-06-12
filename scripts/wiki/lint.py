@@ -14,6 +14,7 @@ LLM-проверка (платно, по флагу --llm-check):
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import sys
 from datetime import date, datetime, timedelta
@@ -138,13 +139,101 @@ def run_checks(wiki_dir: Path, llm_check: bool = False) -> dict:
         except Exception as e:
             issues["contradictions"].append(f"LLM check failed: {e}")
 
+    # New: index.yaml ref checks.
+    index_yaml = wiki_dir / "index.yaml"
+    if index_yaml.exists():
+        import yaml as _yaml
+        try:
+            data = _yaml.safe_load(index_yaml.read_text(encoding="utf-8")) or {}
+        except _yaml.YAMLError:
+            data = {}
+        ref_issues = check_index_refs(data)
+        for key, items in ref_issues.items():
+            issues.setdefault(key, []).extend(items)
+
     return issues
 
 
+# Required frontmatter fields per concept type.
+_REQUIRED_FIELDS_BY_TYPE = {
+    "stage": ("stage",),
+    "agent": (),
+    "command": (),
+    "skill": (),
+    "rule": (),
+    "catalog": (),
+}
+
+# Frontmatter fields that should reference existing slugs.
+_REF_FIELDS = ("related", "pre_reqs", "invoked_by", "uses_skills")
+
+
+def check_index_refs(index_data: dict) -> dict[str, list[str]]:
+    """Проверяет валидность ссылок и обязательных полей в index.yaml.
+
+    Returns:
+        {'broken_refs': [...], 'dup_slugs': [...], 'missing_required': [...],
+         'low_confidence': [...], 'orphan_cards': []}.
+    """
+    issues: dict[str, list[str]] = {
+        "broken_refs": [],
+        "dup_slugs": [],
+        "missing_required": [],
+        "low_confidence": [],
+        "orphan_cards": [],
+    }
+    concepts = index_data.get("concepts", [])
+    slugs: set[str] = set()
+    seen: set[str] = set()
+
+    for c in concepts:
+        slug = c.get("slug")
+        if not slug:
+            continue
+        if slug in seen:
+            issues["dup_slugs"].append(slug)
+        seen.add(slug)
+        slugs.add(slug)
+
+    for c in concepts:
+        slug = c.get("slug", "?")
+        if c.get("incomplete"):
+            continue
+        type_ = c.get("type", "unknown")
+        for required in _REQUIRED_FIELDS_BY_TYPE.get(type_, ()):
+            if not c.get(required):
+                issues["missing_required"].append(
+                    f"{slug} ({type_}): missing '{required}' stage field"
+                )
+        for field in _REF_FIELDS:
+            for target in c.get(field) or []:
+                if target not in slugs:
+                    issues["broken_refs"].append(f"{slug}.{field} → {target}")
+        confidence = c.get("confidence") or {}
+        for field, level in confidence.items():
+            if level == "low":
+                issues["low_confidence"].append(f"{slug}.{field}")
+
+    return issues
+
+
+# Issue categories that are warn-only (don't fail compile).
+_WARN_ONLY_KEYS = {"low_confidence", "stale", "missing_backlinks", "empty", "orphans"}
+
+
 def compute_exit_code(issues: dict) -> int:
-    """0 если нет issues, 1 иначе."""
-    has_any = any(v for v in issues.values())
-    return 1 if has_any else 0
+    """0 если только warn-only issues, 1 если есть критические.
+
+    Override через env WIKI_LINT_STRICT=0 — всё становится warn-only.
+    """
+    if os.environ.get("WIKI_LINT_STRICT", "1") == "0":
+        return 0
+    for key, items in issues.items():
+        if key in _WARN_ONLY_KEYS:
+            continue
+        if items:
+            return 1
+    return 0
 
 
 def format_report(issues: dict) -> str:

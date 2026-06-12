@@ -1,0 +1,45 @@
+category: social-proof
+description: Горизонтальная полоса небольших логотипов на большом белом поле усиливает
+  доверие к услуге.
+display_name_ru: trust-minimal-grid-4-zilant-group-8 (grid-4)
+has_animation: false
+id: trust-minimal-grid-4-zilant-group-8
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://zilant.group/
+layout_pattern: grid-4
+niches_suitable:
+- services
+- b2b-saas
+- education
+ru_market: true
+slots:
+- name: eyebrow
+  type: text
+- name: heading
+  required: true
+  type: text
+- name: subhead
+  type: text
+- name: logos-list-label
+  type: text
+- name: logo-1-alt
+  type: text
+- name: logo-1
+  type: text
+- name: logo-2-alt
+  type: text
+- name: logo-2
+  type: text
+- name: logo-3-alt
+  type: text
+- name: logo-3
+  type: text
+- name: logo-4-alt
+  type: text
+- name: logo-4
+  type: text
+style_mood: minimal
+type: guarantees
+variant: clients

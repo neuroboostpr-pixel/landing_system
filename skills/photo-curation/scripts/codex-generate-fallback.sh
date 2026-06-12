@@ -11,6 +11,11 @@
 
 set -euo pipefail
 
+
+# Cross-platform python detection (sets PYTHON_CMD).
+__SCRIPT_DIR__="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=../../../scripts/lib/python-cmd.sh
+. "$__SCRIPT_DIR__/../../../scripts/lib/python-cmd.sh"
 PROJECT_DIR="${1:?ERROR: project_dir required}"
 SLOT_ID="${2:?ERROR: slot_id required}"
 WIDTH="${3:?ERROR: width required}"
@@ -33,7 +38,7 @@ fi
 
 # Extract prompt body and substitute positional placeholders
 RAW_FILE="$(mktemp)"
-python3 - "$TEMPLATE" "$WIDTH" "$HEIGHT" "$RATIO" "$SLOT_HINT" "$RAW_FILE" <<'PYEOF'
+$PYTHON_CMD - "$TEMPLATE" "$WIDTH" "$HEIGHT" "$RATIO" "$SLOT_HINT" "$RAW_FILE" <<'PYEOF'
 import re, sys
 template, width, height, ratio, slot_hint, raw_out = sys.argv[1:7]
 text = open(template).read()
@@ -49,7 +54,7 @@ PYEOF
 
 # Render remaining brand/design placeholders (VISUAL_STYLE, BRAND_MOOD, etc.)
 PROMPT_FILE="$(mktemp)"
-python3 "$SCRIPT_DIR/render-prompt.py" "$RAW_FILE" "$PROJECT_DIR" > "$PROMPT_FILE"
+$PYTHON_CMD "$SCRIPT_DIR/render-prompt.py" "$RAW_FILE" "$PROJECT_DIR" > "$PROMPT_FILE"
 rm -f "$RAW_FILE"
 
 # Save the rendered prompt for reference
@@ -87,7 +92,7 @@ SRC_PNG="$(ls -1t "$HOME/.codex/generated_images/$NEW_DIR"/*.png 2>/dev/null | h
 [ -n "$SRC_PNG" ] || { echo "ERROR: no PNG produced in $HOME/.codex/generated_images/$NEW_DIR" >&2; exit 4; }
 
 # Convert PNG → JPG via Pillow
-python3 -c "
+$PYTHON_CMD -c "
 from PIL import Image
 img = Image.open('$SRC_PNG').convert('RGB')
 img.save('$OUT_JPG', 'JPEG', quality=88)

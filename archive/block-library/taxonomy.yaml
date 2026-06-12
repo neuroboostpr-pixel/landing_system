@@ -1,0 +1,80 @@
+# B34 — двухуровневая семантическая таксономия блоков.
+# Уровень 2 = категория (роль блока на странице).
+# Уровень 3 = variant (семантический подтип по РОЛИ, не по вёрстке).
+# layout_pattern (split/grid-3/...) живёт в meta.yaml блока, НЕ здесь.
+# Единственный источник истины для слагов и русских меток UI.
+version: 2
+
+categories:
+  header:
+    label_ru: "Шапка / Навигация"
+    order: 1
+    variants: {}
+
+  hero:
+    label_ru: "Первый экран"
+    order: 2
+    variants: {}
+
+  marquee:
+    label_ru: "Бегущая строка"
+    order: 3
+    variants: {}
+
+  features:
+    label_ru: "Преимущества"
+    order: 4
+    variants: {}
+
+  content:
+    label_ru: "Контент"
+    order: 5
+    variants:
+      about:            { label_ru: "о продукте" }
+      problem-solution: { label_ru: "проблема → решение" }
+      process:          { label_ru: "как это работает" }
+
+  social-proof:
+    label_ru: "Соц. доказательства"
+    order: 6
+    variants:
+      testimonials: { label_ru: "отзывы" }
+      clients:      { label_ru: "наши клиенты" }
+      ratings:      { label_ru: "рейтинги" }
+      numbers:      { label_ru: "цифры" }
+      cases:        { label_ru: "кейсы" }
+      media:        { label_ru: "упоминания в медиа" }
+
+  trust:
+    label_ru: "Доверие"
+    order: 7
+    variants:
+      certificates: { label_ru: "сертификаты" }
+      guarantees:   { label_ru: "гарантии" }
+      security:     { label_ru: "безопасность" }
+
+  pricing:
+    label_ru: "Цены"
+    order: 8
+    variants:
+      cards:      { label_ru: "карточки тарифов" }
+      comparison: { label_ru: "сравнительные таблицы" }
+
+  forms:
+    label_ru: "Формы"
+    order: 9
+    variants:
+      email:      { label_ru: "сбор email" }
+      multi-step: { label_ru: "многошаговая" }
+      quiz:       { label_ru: "квиз" }
+      booking:    { label_ru: "бронирование" }
+
+  faq:
+    label_ru: "FAQ"
+    order: 10
+    variants: {}
+
+  footer:
+    label_ru: "Подвал"
+    order: 11
+    variants: {}

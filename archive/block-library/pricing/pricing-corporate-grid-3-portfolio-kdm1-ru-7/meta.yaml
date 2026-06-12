@@ -1,0 +1,97 @@
+category: pricing
+description: Блок выбора пакетов с тремя тарифными карточками, списками преимуществ
+  и яркими кнопками.
+display_name_ru: pricing-corporate-grid-3-portfolio-kdm1-ru-7 (grid-3)
+has_animation: false
+id: pricing-corporate-grid-3-portfolio-kdm1-ru-7
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://portfolio.kdm1.ru/upload/iblock/b31/i0qylig13hzo7ow4qcpia0qhtn3i87pk/Onlai_n_shkola-Dmitriya-Vykhodtseva.pdf
+layout_pattern: grid-3
+niches_suitable:
+- education
+- services
+- b2b-saas
+- tech
+ru_market: true
+slots:
+- name: pricing-eyebrow
+  type: text
+- name: pricing-title
+  type: text
+- name: pricing-subtitle
+  type: text
+- name: plan-1-title
+  type: text
+- name: plan-1-description
+  type: text
+- name: plan-1-price
+  type: text
+- name: plan-1-period
+  type: text
+- name: plan-1-features-label
+  type: text
+- name: plan-1-feature-1
+  type: text
+- name: plan-1-feature-2
+  type: text
+- name: plan-1-feature-3
+  type: text
+- name: plan-1-feature-4
+  type: text
+- name: plan-1-link
+  type: text
+- name: plan-1-cta
+  type: text
+- name: plan-2-badge
+  type: text
+- name: plan-2-title
+  type: text
+- name: plan-2-description
+  type: text
+- name: plan-2-price
+  type: text
+- name: plan-2-period
+  type: text
+- name: plan-2-features-label
+  type: text
+- name: plan-2-feature-1
+  type: text
+- name: plan-2-feature-2
+  type: text
+- name: plan-2-feature-3
+  type: text
+- name: plan-2-feature-4
+  type: text
+- name: plan-2-link
+  type: text
+- name: plan-2-cta
+  type: text
+- name: plan-3-title
+  type: text
+- name: plan-3-description
+  type: text
+- name: plan-3-price
+  type: text
+- name: plan-3-period
+  type: text
+- name: plan-3-features-label
+  type: text
+- name: plan-3-feature-1
+  type: text
+- name: plan-3-feature-2
+  type: text
+- name: plan-3-feature-3
+  type: text
+- name: plan-3-feature-4
+  type: text
+- name: plan-3-link
+  type: text
+- name: plan-3-cta
+  type: text
+- name: pricing-note
+  type: text
+style_mood: corporate
+type: pricing
+variant: cards

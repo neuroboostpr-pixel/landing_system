@@ -1,51 +1,65 @@
 ---
+slug: 07d-visuals
 type: stage
-name: 07d-visuals
-sources: ["template/07d_VISUALS/README.md"]
-updated: 2026-05-15
-triggers: []
+name: "07d — Иконки и инфографика"
 stage: "07d"
-uses: ["visual-curator", "visual-generation", "landing-visuals", "block-composer", "landing-compose"]
-tags: ["icons", "infographics", "codex", "image-gen", "visual", "ai-generation"]
+tags: [visuals, icons, infographics, ai-generation, codex, image-gen]
+triggers: [landing-visuals]
+inputs:
+  - landing-compose
+  - 05-dizayn-sistema
+outputs:
+  - 07d-visuals
+gates: [visuals_slots_filled]
+pre_reqs:
+  - 05-dizayn-sistema
+  - landing-compose
+related:
+  - landing-visuals
+  - visual-generation
+  - icon-generator
+  - infographic-builder
+  - landing-compose
+  - gpt5-prompting-engine
+sources: ["template/07d_VISUALS/README.md"]
+updated: 2026-05-26
+confidence:
+  gates: low
 ---
 
-# 07d VISUALS — AI-генерация иконок и инфографики
+# 07d — Иконки и инфографика
 
 ## Что делает
-Генерирует PNG-иконки и инфографику для лендинга через codex (gpt-image-2), вставляет их в `composed.html` вместо текстовых плейсхолдеров. Брендинг берётся автоматически из `tokens.json` и `market-profile.md` проекта.
 
-## Когда вызывать / в каком этапе
-Этап 07d — после того как утверждён этап 05 (design-system) и сформирован `07b_COMPOSED/composed.html` (этап 07b/07c). Запускается командой `/landing-visuals`. Повторный запуск использует кэш и не тратит API-токены на уже сгенерированные слоты.
+На этом этапе система автоматически генерирует PNG-иконки и инфографику для лендинга через codex (gpt-image-2). Скилл сканирует `07b_COMPOSED/composed.html`, находит слоты с `data-slot-type="icon"` и `data-slot-type="infographic"`, и для каждого создаёт изображение под брендинг проекта — с учётом цветов из `tokens.json` и ниши из `market-profile.md`. После генерации `composed.html` перерендерится: placeholder `[SLOT: ...]` заменяется на тег `<img>`. Результаты кэшируются по хэшу (hint + style + brand_color + niche) — повторный запуск не тратит API-кредиты на уже сгенерированные слоты.
 
-## Что на вход / на выход
+## Когда вызывается
 
-**Вход:**
-- `07b_COMPOSED/composed.html` — скомпонованный лендинг с плейсхолдерами `[SLOT: ...]` типа `data-slot-type="icon"` и `data-slot-type="infographic"`
-- `tokens.json` — цвета и стиль проекта
-- `01a_АНАЛИЗ_НИШИ/market-profile.md` — ниша для подбора визуального стиля
+Вызывается вручную командой `/landing-visuals` после того, как утверждены этап 05 (design-system) и этап 07b (composed.html существует и содержит визуальные слоты). В оркестраторе — параллельно с этапом 07c (photos).
 
-**Выход:**
-- `icons/<slot-name>.png` — сгенерированные иконки
-- `infographics/<slot-name>.png` — сгенерированная инфографика
-- `_slots.yaml` — реестр найденных слотов (авто)
-- `prompts.yaml` — аудит: промпт → PNG (attribution)
-- `STATE.yaml` — статус каждого слота
-- `.cache/<hash>.png` — локальный кэш по `hash(hint + style + brand_color + niche)`
-- `.logs/` — лог запросов codex
-- Обновлённый `composed.html` — плейсхолдеры заменены на `<img>`
+## Вход → выход
 
-**Кэш:** повторный вызов без `--force` пропускает уже сгенерированные слоты. Опции: `--force`, `--type icons|infographics`, `--slot <name>`.
+**Вход:** `07b_COMPOSED/composed.html` со слотами `data-slot-type="icon"/"infographic"`, `tokens.json` с цветами бренда, `market-profile.md` с нишей проекта.
 
-**Ограничение:** PNG в `icons/` и `infographics/` не редактировать вручную — `--force` перезапишет. Папку `.cache/` не коммитить в git.
+**Выход:** `icons/<slot>.png` и `infographics/<slot>.png` — сгенерированные PNG; `_slots.yaml` — список найденных слотов; `prompts.yaml` — аудит-лог (какой промпт дал какой PNG); `STATE.yaml` — статус этапа; `.cache/<hash>.png` — локальный кэш.
 
-## Связанные концепты
-- [[visual-curator]] — агент-оркестратор этапа 07d: сканирует слоты, диспатчит генераторы, управляет STATE.yaml
-- [[visual-generation]] — скилл AI-генерации: промпт-пикер, хэш-кэш, вызов codex image_gen
-- [[landing-visuals]] — slash-команда запуска этапа 07d
-- [[block-composer]] — создаёт `composed.html` на этапе 07b (входной артефакт для 07d)
-- [[landing-compose]] — команда этапа 07b, предшествующая 07d
-- [[icon-generator]] — субагент генерации одной иконки
-- [[infographic-builder]] — субагент генерации одной инфографики
+## Чем закрывается этап (gates)
 
-## Источник
-- `template/07d_VISUALS/README.md`
+- visuals_slots_filled — все слоты в composed.html закрыты реальными `<img>`, ни одного оставшегося placeholder `[SLOT: ...]` типа icon/infographic.
+
+## Failure modes
+
+- Слоты не найдены в composed.html — этап 07b не завершён или атрибуты `data-slot-type` отсутствуют в разметке.
+- codex API недоступен или кончился лимит — генерация падает, кэш пуст; нужен `--force` после пополнения.
+- Некорректный `tokens.json` — codex получает неверный brand_color, иконки выходят не в брендинге.
+- Ручная правка PNG в `icons/` или `infographics/` — будет перезаписана при следующем `--force`.
+- `.cache/` случайно попал в git — замедляет репозиторий; должен быть в `.gitignore`.
+
+## Related
+
+- [[landing-visuals]] — slash-команда, запускающая этот этап
+- [[visual-generation]] — скилл-реализация pipeline генерации
+- [[icon-generator]] — субагент генерации иконок
+- [[infographic-builder]] — субагент генерации инфографики
+- [[landing-compose]] — предшествующий этап, создающий composed.html со слотами
+- [[gpt5-prompting-engine]] — движок промптов для codex image_gen

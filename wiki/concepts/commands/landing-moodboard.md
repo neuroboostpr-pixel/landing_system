@@ -1,56 +1,51 @@
 ---
+slug: landing-moodboard
 type: command
-name: landing-moodboard
-sources: ["commands/landing-moodboard.md"]
-updated: 2026-05-15
-triggers:
-  - "сгенерировать мудборд"
-  - "создать визуальный мудборд"
-  - "мудборд для лендинга"
-  - "запустить мудборд"
+name: "Команда /landing-moodboard"
 stage: "03"
-uses:
-  - moodboard-composer
-  - landing-references
-  - landing-style
-tags:
-  - moodboard
-  - stage-03
-  - references
-  - visual
+tags: [moodboard, references, visual, stage-03]
+triggers: [landing-moodboard]
+inputs: [03_РЕФЕРЕНСЫ/index.yaml]
+outputs: [03_РЕФЕРЕНСЫ/moodboard.html]
+gates: [user-approval-moodboard]
+pre_reqs: [references-collection, landing-onboarding]
+related: [moodboard-composer, moodboard-creation, references-curator, style-extractor, brand-architect]
+sources: ["commands/landing-moodboard.md"]
+updated: 2026-05-26
 ---
 
-# /landing-moodboard — Генерация визуального мудборда
+# /landing-moodboard
 
 ## Что делает
 
-Создаёт визуальный мудборд лендинга из одобренных референсов: запускает агента `moodboard-composer`, который рендерит HTML-превью с настроением и визуальным направлением проекта. Результат — файл `moodboard.html`, который маркетолог смотрит и утверждает перед извлечением стилей.
+Команда генерирует (или перегенерирует) визуальный мудборд для текущего лендинг-проекта на этапе 03. Она вызывает агента `moodboard-composer`, который считывает одобренные референсы из `03_РЕФЕРЕНСЫ/index.yaml` и рендерит итоговый HTML-файл `moodboard.html`. После генерации предъявляет путь к превью и ждёт явного подтверждения пользователя — без апрува дальнейшая работа (style extraction → brand-kit) не начинается.
 
-## Когда вызывать / в каком этапе
+## Когда вызывается
 
-Этап **03 (мудборд)**. Вызывается вручную командой `/landing-moodboard` после того, как в файле `03_РЕФЕРЕНСЫ/index.yaml` хотя бы один референс имеет статус `approved` (через команду `/landing-references`).
+Запускается вручную командой `/landing-moodboard` внутри папки проекта после того, как референсы утверждены через `/landing-references` (поле `status: approved` в `index.yaml`). Предусловия: пройден онбординг (`setup_complete`), и gate-check по этапу `03_references` возвращает exit 0.
 
-Перед запуском система автоматически проверяет:
-1. Пройден ли онбординг (`~/.landing-system/setup_complete`) — если нет, просит запустить `/landing-onboarding`.
-2. Закрыт ли gate этапа `03_references` — если нет, сообщает, какой предыдущий этап не завершён.
+## Вход → выход
 
-## Что на вход / на выход
+**Вход:** файл `03_РЕФЕРЕНСЫ/index.yaml` с хотя бы одним референсом в статусе `approved`; корректная установка системы (флаг onboarding).
 
-**Вход:**
-- `03_РЕФЕРЕНСЫ/index.yaml` — файл с одобренными референсами (status: `approved`)
+**Выход:** `03_РЕФЕРЕНСЫ/moodboard.html` — визуальный HTML-мудборд, собранный из одобренных референсов и готовый к просмотру в браузере.
 
-**Выход:**
-- `03_РЕФЕРЕНСЫ/moodboard.html` — интерактивный HTML-превью мудборда
+## Чем закрывается этап (gates)
 
-**HARD GATE:** после генерации команда показывает путь к файлу и ждёт явного подтверждения пользователя. Только после approve запускается gate-check (`--approve`) и система переходит к извлечению стилей (`/landing-style`).
+- user-approval-moodboard — пользователь явно подтверждает мудборд перед переходом к style extraction; без этого апрува команда не вызывает следующий этап.
 
-## Связанные концепты
+## Failure modes
 
-- [[moodboard-composer]] — агент, который читает `index.yaml` и рендерит `moodboard.html`
-- [[landing-references]] — предыдущий этап: сбор и одобрение референсов, без него мудборд не запустится
-- landing-style — следующий этап: извлечение палитры, шрифтов и иконографики из мудборда
-- [[references-collection]] — скилл, на котором базируется работа с референсами
+- Онбординг не пройден (`setup_complete` отсутствует) — команда останавливается с сообщением «Запусти /landing-onboarding».
+- Gate-check этапа `03_references` падает — в `index.yaml` нет ни одного референса со статусом `approved`, либо предыдущий этап не завершён.
+- `moodboard-composer` не может найти проектную папку — аргумент `<project>` не передан и `landing.project` не настроен.
+- Файл `moodboard.html` не обновляется при повторном запуске — агент кэшировал старые данные; решение: обновить статусы в `index.yaml` и перезапустить.
+- Пользователь не даёт approve — pipeline зависает; следующий этап (04 brand-kit) недоступен до явного подтверждения.
 
-## Источник
+## Related
 
-- `commands/landing-moodboard.md`
+- [[moodboard-composer]] — агент, непосредственно рендерящий мудборд
+- [[moodboard-creation]] — концепт процесса создания мудборда
+- [[references-curator]] — управляет статусами референсов, от которых зависит вход
+- [[style-extractor]] — следующий этап после апрува мудборда
+- [[brand-architect]] — использует результат мудборда при формировании brand-kit

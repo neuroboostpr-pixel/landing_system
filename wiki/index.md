@@ -2,8 +2,8 @@
 
 > Авто-сгенерированный индекс. Обновляется при `python -m scripts.wiki.compile --source-mode=system`.
 
-**Концептов всего:** 473
-**Категории:** agent, block, command, rule, script, skill, stage, unknown
+**Концептов всего:** 112
+**Категории:** agent, catalog, command, rule, skill, stage
 
 **Известные ограничения:**
 - Блоки из `block-library/` ещё не в wiki — отдельная задача.
@@ -11,497 +11,124 @@
 
 ## 📋 Этапы pipeline
 
-- [[00-brif]] — 00-brief
-- [[01-kontekst]] — 01-context
-- [[01a-analiz-nishi]] — 01a-niche-analysis
-- [[02-materialy-klienta]] — 02-materialy-klienta
-- [[03-referensy]] — 03-references
-- [[04-brend]] — 04-brand
-- [[05-dizayn-sistema]] — design-system
-- [[06-stek]] — 06-stack
-- [[07-kontent]] — 07-content
-- [[07-prototip]] — 07-прототип
-- [[07a-wireframe]] — 07a-wireframe
-- [[07b-composed]] — 07b-composed
-- [[07c-photos]] — 07c-photos
-- [[07d-visuals]] — 07d-visuals
-- [[08-kod]] — 08-kod
-- [[09-deploy]] — 09-deploy
-- [[10-qa]] — 10-qa
-- [[11-analitika]] — 11-analytics
-- [[12-seo]] — stage-12-seo
-- [[2026-05-03-phase-1-skeleton]] — phase-1-skeleton
-- [[2026-05-04-phase-3-design-pipeline]] — phase-3-design-pipeline
-- [[2026-05-04-phase-4-wp-build-pipeline]] — phase-4-wp-build-pipeline
-- [[2026-05-04-phase-5-deploy-operations]] — phase-5-deploy-operations
-- [[2026-05-06-niche-analysis-design]] — 01a-analiz-nishi
-- [[2026-05-06-niche-analysis-implementation-plan]] — niche-analysis-implementation-plan
-- [[2026-05-06-niche-analysis-v2-design]] — niche-analysis-v2
-- [[2026-05-12-stage-08-acf-gutenberg-design]] — stage-08-acf-gutenberg
-- [[2026-05-12-stage-08-acf-gutenberg-plan]] — stage-08-acf-gutenberg-plan
-- [[2026-05-13-photo-pipeline-design]] — 07c-photos
-- [[2026-05-13-photo-pipeline-plan]] — photo-pipeline-plan
-- [[2026-05-13-stage08-lazy-blocks-migration]] — stage08-lazy-blocks-migration
-- [[2026-05-13-visual-generation-design]] — stage-07d-visuals
-- [[2026-05-13-visual-generation-plan]] — pr-c-visual-generation-plan
-- [[2026-05-14-pr-e-onboarding-wizard-plan]] — pr-e-onboarding-wizard-plan
-- [[2026-05-15-pr-i-a-photo-pipeline-design]] — pr-i-a-photo-pipeline
-- [[2026-05-15-pr-i-a-photo-pipeline-plan]] — pr-i-a-photo-pipeline-plan
-- [[2026-05-15-wiki-graph-pr-f3-plan]] — wiki-graph-pr-f3-plan
-- [[2026-05-15-wiki-graph-pr-f5-plan]] — pr-f5-lint-query-preview
+- [[00-brif]] — 00 — Бриф проекта
+- [[01-kontekst]] — 01 — Контекст проекта
+- [[01a-analiz-nishi]] — 01a. Анализ ниши
+- [[02-materialy-klienta]] — Сбор материалов клиента (02)
+- [[03-referensy]] — Этап 03: Референсы
+- [[04-brend]] — 04 — Сборка бренд-кита
+- [[05-dizayn-sistema]] — Этап 05: Генерация дизайн-системы
+- [[06-stek]] — Стек технологий
+- [[07-kontent]] — 07 — Написание контента
+- [[07-prototip]] — 07 Прототип — импорт источника правды
+- [[07b-composed]] — 07b — Composed HTML
+- [[07c-photos]] — 07c — Фото клиента и Photo Pipeline
+- [[07d-visuals]] — 07d — Иконки и инфографика
+- [[08-kod]] — 08_КОД — WordPress-код лендинга
+- [[09-deploy]] — 09 Деплой
+- [[10-qa]] — QA-аудит
+- [[11-analitika]] — 11 — Аналитика
+- [[12-seo]] — 12_SEO — SEO-финализация
+- [[13-segmenty-tsa]] — 13_СЕГМЕНТЫ_ЦА — Сегменты целевой аудитории
 
 ## 🤖 Агенты
 
-- [[2026-05-13-frontend-builder-design]] — frontend-builder
-- [[2026-05-13-frontend-builder-implementation]] — frontend-builder
-- [[2026-05-13-frontend-builder-task-brief]] — frontend-builder
-- [[analytics-engineer]] — analytics-engineer
-- [[block-composer]] — block-composer
-- [[brand-architect]] — brand-architect
-- [[client-assets-collector]] — client-assets-collector
-- [[content-writer]] — content-writer
-- [[design-system-generator]] — design-system-generator
-- [[frontend-builder]] — frontend-builder
-- [[icon-generator]] — icon-generator
-- [[infographic-builder]] — infographic-builder
+- [[analytics-engineer]] — Инженер аналитики
+- [[block-composer]] — Block Composer (Сборка composed.html)
+- [[brand-architect]] — Brand Architect
+- [[client-assets-collector]] — Сборщик клиентских материалов
+- [[content-writer]] — Контент-райтер
+- [[design-system-generator]] — Генератор дизайн-системы
+- [[frontend-builder]] — Frontend Builder — CSS и PHP шаблоны блоков
+- [[icon-generator]] — Генератор иконок
+- [[infographic-builder]] — Infographic Builder
 - [[integrations-engineer]] — integrations-engineer
-- [[landing-onboarding-wizard]] — landing-onboarding-wizard
-- [[landing-orchestrator]] — landing-orchestrator
-- [[lifecycle-keeper]] — lifecycle-keeper
-- [[moodboard-composer]] — moodboard-composer
-- [[niche-analyst]] — niche-analyst
-- [[onboarding-guide]] — onboarding-guide
-- [[photo-classifier]] — photo-classifier
-- [[photo-curator]] — photo-curator
-- [[photo-matcher]] — photo-matcher
-- [[photo-preview-board]] — photo-preview-board
-- [[photo-stylist]] — photo-stylist
-- [[prototype-importer]] — prototype-importer
-- [[qa-auditor]] — qa-auditor
-- [[references-curator]] — references-curator
-- [[scene-director]] — scene-director
-- [[seo-optimizer]] — seo-optimizer
-- [[stack-planner]] — stack-planner
-- [[style-extractor]] — style-extractor
-- [[system-setup]] — system-setup
-- [[ux-composer]] — ux-composer
-- [[visual-curator]] — visual-curator
-- [[wp-builder]] — wp-builder
-- [[wp-deployer]] — wp-deployer
+- [[landing-onboarding-wizard]] — Онбординг-визард нового проекта
+- [[landing-orchestrator]] — Главный дирижёр (Landing Orchestrator)
+- [[lifecycle-keeper]] — Lifecycle Keeper — Хранитель версий
+- [[moodboard-composer]] — Moodboard Composer
+- [[niche-analyst]] — Аналитик ниши (Stage 01a)
+- [[onboarding-guide]] — Проводник по онбордингу
+- [[photo-classifier]] — Классификатор фото
+- [[photo-curator]] — Куратор фотографий — оркестратор этапа 07c
+- [[photo-matcher]] — Агент сопоставления фото со слотами
+- [[photo-preview-board]] — Photo Preview Board — обработка слотов и рендер превью
+- [[photo-stylist]] — Photo Stylist
+- [[prototype-importer]] — Импортёр прототипа
+- [[qa-auditor]] — QA-аудитор
+- [[references-curator]] — Куратор референсов
+- [[scene-director]] — Режиссёр сцен (Cinematic Premium)
+- [[seo-optimizer]] — SEO-оптимизатор
+- [[stack-planner]] — Планировщик стека (Stack Planner)
+- [[style-extractor]] — Style Extractor
+- [[system-setup]] — Настройщик системы
+- [[visual-curator]] — Куратор визуалов
+- [[wp-builder]] — WP-сборщик (Lazy Blocks)
+- [[wp-deployer]] — WP Deployer — Деплой-инженер
 
 ## 🛠 Скиллы
 
-- [[2026-05-16-pr-i-b-visual-qa-design]] — visual-qa
-- [[2026-05-16-pr-i-b-visual-qa-plan]] — visual-qa
-- [[2026-05-16-pr-i-b-visual-qa-plan-2]] — visual-qa
-- [[block-composition]] — block-composition
-- [[block-library-management]] — block-library-management
-- [[brand-kit-build]] — brand-kit-build
-- [[client-assets-collection]] — client-assets-collection
-- [[design-tokens-generation]] — design-tokens-generation
+- [[block-composition]] — Block Composition — сборка composed.html
+- [[brand-kit-build]] — Построение бренд-кита
+- [[client-assets-collection]] — Сбор материалов клиента
+- [[design-tokens-generation]] — Генерация дизайн-токенов
+- [[gpt5-prompting-engine]] — GPT-5 Prompting Engine
+- [[landing-from-context]] — Создание лендинга из контекста агентства
+- [[landing-onboarding]] — Онбординг landing-system
+- [[landing-project-init]] — Инициализация нового проекта лендинга
+- [[landing-versioning-and-cloning]] — Версионирование и клонирование лендингов (legacy)
+- [[moodboard-creation]] — Рендер мудборда
+- [[niche-analysis]] — Анализ ниши и конкурентов
+- [[paralaximus-codex]] — Параллакс-герой Paralaximus Codex
+- [[photo-curation]] — Конвейер обработки клиентских фото (Photo Curation)
+- [[photo-styling]] — Стилизация фото
+- [[prototype-import]] — Импорт прототипа
+- [[references-collection]] — Управление индексом референсов
+- [[seo-tech-audit]] — SEO Tech Audit
+- [[style-decomposition]] — Декомпозиция стиля (Style Decomposition)
+- [[visual-generation]] — Генерация визуалов (иконки и инфографика)
+- [[visual-qa]] — Visual QA — автоматический визуальный контроль
+- [[wiki-routing-observability]] — Wiki Routing Observability
+- [[wp-cli-deployer]] — WP-CLI Deployer
+- [[wp-gutenberg-block-builder]] — WP Gutenberg Block Builder
+- [[wp-landing-config]] — WP Landing Config — mu-plugin для настройки лендинга
+- [[wp-multisite]] — WP Multisite — управление Multisite-сетью на Beget
+- [[wp-theme-assembler]] — Сборщик WordPress-темы
 
 ## ⚡ Команды
 
-- [[2026-05-13-pr-d-orchestrator-integration-design]] — landing-go
-- [[2026-05-14-pr-e-onboarding-wizard-design]] — landing-start
-- [[import-from-url-sh-doc]] — import-from-url
-- [[landing-brand]] — landing-brand
-- [[landing-build]] — landing-build
-- [[landing-clone]] — landing-clone
-- [[landing-compose]] — landing-compose
-- [[landing-content]] — landing-content
-- [[landing-deploy]] — landing-deploy
-- [[landing-design]] — landing-design
-- [[landing-final-check-2]] — landing-final-check
-- [[landing-from-context]] — landing-from-context
-- [[landing-go]] — landing-go
-- [[landing-help]] — landing-help
-- [[landing-moodboard]] — landing-moodboard
-- [[landing-new]] — landing-new
-- [[landing-niche]] — landing-niche
-- [[landing-onboarding]] — landing-onboarding
-- [[landing-photos]] — landing-photos
-- [[landing-previews-2]] — landing-previews
-- [[landing-prototype]] — landing-prototype
-- [[landing-qa]] — landing-qa
-- [[landing-references]] — landing-references
-- [[landing-rollback]] — landing-rollback
-- [[landing-setup]] — landing-setup
-- [[landing-stack]] — landing-stack
-- [[landing-start]] — landing-start
-- [[landing-status]] — landing-status
-- [[landing-visuals]] — landing-visuals
-- [[landing-wireframe]] — landing-wireframe
-- [[migrate-state-add-01a-sh-doc]] — migrate-state-add-01a
-- [[migrate-state-for-prd-sh-doc]] — migrate-state-for-prd
-- [[migrate-template-readmes-sh-doc]] — migrate-template-readmes
-- [[test-pipeline-sh-doc]] — test-pipeline
+- [[landing-brand]] — /landing-brand — Построить бренд-кит
+- [[landing-build]] — /landing-build — Сборка WordPress-темы
+- [[landing-clone]] — Клонирование лендинга
+- [[landing-compose]] — /landing-compose — Сборка composed.html
+- [[landing-content]] — Контент-адаптация прототипа (Stage 07)
+- [[landing-deploy]] — Деплой лендинга на Бегет (/landing-deploy)
+- [[landing-design]] — Генерация дизайн-системы (этап 05)
+- [[landing-final-check]] — Финальная проверка лендинга
+- [[landing-from-context]] — Создать лендинг из контекста агентства
+- [[landing-go]] — /landing-go — Главная команда оркестратора
+- [[landing-help]] — Справка по командам системы
+- [[landing-moodboard]] — Команда /landing-moodboard
+- [[landing-new]] — /landing-new — создать новый проект лендинга
+- [[landing-niche]] — Анализ ниши /landing-niche
+- [[landing-onboarding]] — Команда первичной настройки /landing-onboarding
+- [[landing-photos]] — /landing-photos — Конвейер клиентских фото (stage 07c)
+- [[landing-previews]] — /landing-previews — Превью на устройствах
+- [[landing-prototype]] — /landing-prototype — Импорт прототипа
+- [[landing-qa]] — /landing-qa — Визуальный QA лендинга
+- [[landing-references]] — Сбор визуальных референсов
+- [[landing-rollback]] — Откат лендинга к предыдущей версии
+- [[landing-setup]] — Инициализация системы (/landing-setup)
+- [[landing-stack]] — Планирование стека WordPress (этап 06)
+- [[landing-start]] — /landing-start — Онбординг-визард
+- [[landing-status]] — Статус системы и проекта
+- [[landing-style]] — /landing-style — CSS и block.php для этапа 08b
+- [[landing-visuals]] — /landing-visuals — Генерация визуальных ассетов
 
 ## 📐 Правила (стандарты качества)
 
-- [[2026-05-03-landing-system-design]] — landing-system-design-spec
-- [[2026-05-03-landing-system-master-plan]] — landing-system-master-plan
-- [[2026-05-03-phase-2-brainstorming-pipeline]] — phase-2-brainstorming-pipeline
-- [[2026-05-04-stage-gates-onboarding-implementation-plan]] — stage-gates-onboarding-implementation-plan
-- [[2026-05-04-stage-gates-onboarding-mcp-design]] — stage-gates-onboarding-design
-- [[2026-05-06-niche-analysis-v2-implementation-plan]] — niche-analysis-v2-plan
-- [[2026-05-06-visual-requirements-design]] — visual-requirements
-- [[2026-05-06-visual-requirements-implementation-plan]] — visual-requirements-implementation-plan
-- [[2026-05-12-acf-block-rendering-research-needed]] — acf-block-rendering-research
-- [[2026-05-12-preview-panel-and-palette-library-design]] — preview-panel-and-palette-library
-- [[2026-05-12-preview-panel-and-palette-library-plan]] — preview-panel-and-palette-library-plan
-- [[2026-05-12-prototype-block-library-ux-composer-design]] — pr-a-prototype-block-library-ux-composer-design
-- [[2026-05-12-prototype-block-library-ux-composer-plan]] — pr-a-prototype-block-library-plan
-- [[2026-05-13-block-spec-format]] — block-spec-format
-- [[2026-05-13-pr-d-orchestrator-integration-plan]] — pr-d-orchestrator-integration-plan
-- [[2026-05-15-pr-g-stage-lock-auto-wiki-design]] — pr-g-stage-lock-auto-wiki
-- [[2026-05-15-pr-g-stage-lock-plan]] — pr-g-stage-lock-plan
-- [[2026-05-15-pr-g-stage-lock-plan-2]] — pr-g-stage-lock-auto-wiki
-- [[2026-05-15-pr-h-content-preserve-design]] — content-preserve
-- [[2026-05-15-pr-h-content-preserve-plan]] — pr-h-content-preserve
-- [[2026-05-15-wiki-graph-markup-design]] — wiki-graph-markup-design
-- [[2026-05-15-wiki-graph-pr-f1-plan]] — pr-f1-wiki-infrastructure-plan
-- [[2026-05-15-wiki-graph-pr-f2-plan]] — pr-f2-wiki-compilation-plan
-- [[2026-05-15-wiki-graph-pr-f4-plan]] — wiki-pr-f4-hooks-conversation-memory
-- [[2026-05-16-pr-j-static-prompts-identity-design]] — pr-j-static-prompts-identity
-- [[api-validators]] — api-validators-tests
-- [[backlog]] — backlog
-- [[backport-acf-to-legacy-sh-doc]] — backport-acf-to-legacy
-- [[block-loader-py-doc]] — block-loader
-- [[build-patterns-library-py-doc]] — build-patterns-library
-- [[build-zip-sh-doc]] — build-zip
-- [[check-block-registration-sh-doc]] — check-block-registration
-- [[check-deps-sh-doc]] — check-deps
-- [[check-wiki-sync-sh-doc]] — check-wiki-sync
-- [[cleanup-broken-links-py-doc]] — cleanup-broken-links
-- [[codex-analyze-structure-sh-doc]] — codex-analyze-structure
-- [[config-py-doc]] — config-wiki-compiler
-- [[conversations-compiler-py-doc]] — conversations-compiler
-- [[deploy]] — tests-deploy
-- [[dokrutka-system]] — dokrutka-system
-- [[e2e]] — e2e-tests
-- [[gate-check-sh-doc]] — gate-check
-- [[gate-state-sh-doc]] — gate-state
-- [[generate-previews-sh-doc]] — generate-previews
-- [[hash-cache-py-doc]] — hash-cache
-- [[install-codex-sh-doc]] — install-codex
-- [[install-git-hooks-sh-doc]] — install-git-hooks
-- [[integration]] — integration-tests
-- [[landing-go-next-stage-py-doc]] — landing-go-next-stage
-- [[lint-py-doc]] — wiki-lint
-- [[mark-legacy-projects-sh-doc]] — mark-legacy-projects
-- [[memory]] — project-memory-folder
-- [[migrate-add-wiki-sh-doc]] — migrate-add-wiki
-- [[migrate-blocks-to-wireframe-format-py-doc]] — migrate-blocks-to-wireframe-format
-- [[niche-visual-rules]] — niche-visual-rules
-- [[onboarding]] — tests-onboarding
-- [[palettes]] — palettes
-- [[phase-1]] — phase-1-tests
-- [[phase-4]] — phase-4-tests
-- [[phase-5]] — phase-5-tests
-- [[phase-prc]] — phase-prc-tests
-- [[phase-prd]] — phase-prd-tests
-- [[phase-stage-08]] — phase-stage-08
-- [[photo-selection-guide]] — photo-selection-guide
-- [[plan-dorabotok]] — plan-dorabotok
-- [[positioning-modes]] — positioning-modes
-- [[pr-g]] — pr-g-tests
-- [[pr-o]] — pr-o-tests
-- [[pre-compact-py-doc]] — pre-compact-hook
-- [[preflight-sh-doc]] — preflight
-- [[premium-07b-checklist]] — premium-07b-checklist
-- [[selections-yaml-py-doc]] — selections-yaml-parser
-- [[session-end-py-doc]] — session-end-hook
-- [[session-start-py-doc]] — session-start-hook
-- [[setup]] — setup-guide
-- [[setup-flag-sh-doc]] — setup-flag
-- [[stage-08-helper-py-doc]] — stage-08-helper
-- [[stage-execution-protocol]] — stage-execution-protocol
-- [[stage-gates]] — stage-gates
-- [[state-yaml-py-doc]] — state-yaml-parser
-- [[system-compiler-py-doc]] — system-compiler
-- [[take-page-screenshot-py-doc]] — take-page-screenshot
-- [[update-catalog-py-doc]] — update-catalog
-- [[utils-py-doc]] — wiki-utils
-- [[validate-all-sh-doc]] — validate-all
-- [[validate-palettes-py-doc]] — validate-palettes
-- [[verify-composed-has-visuals-sh-doc]] — verify-composed-has-visuals
-- [[verify-composed-premium-sh-doc]] — verify-composed-premium
-- [[verify-content-preserved-py-doc]] — verify-content-preserved
-- [[verify-content-preserved-sh-doc]] — verify-content-preserved
-- [[verify-gutenberg-json-sh-doc]] — verify-gutenberg-json
-- [[verify-identity-preserved-sh-doc]] — verify-identity-preserved
-- [[verify-photo-pipeline-py-doc]] — verify-photo-pipeline
-- [[verify-photo-pipeline-sh-doc]] — verify-photo-pipeline
-- [[verify-php-syntax-sh-doc]] — verify-php-syntax
-- [[verify-site-url-sh-doc]] — verify-site-url
-- [[verify-visual-qa-py-doc]] — verify-visual-qa
-- [[verify-visual-qa-sh-doc]] — verify-visual-qa
-- [[wiki]] — project-wiki-folder
-
-## 🧱 Блоки
-
-- [[animation-00-button-icon-fade-in]] — animation-00-button-icon-fade-in
-- [[animation-01-checkicondraw]] — animation-01-checkicondraw
-- [[animation-02-checkiconopacity]] — animation-02-checkiconopacity
-- [[animation-03-checkiconscale]] — animation-03-checkiconscale
-- [[animation-04-fade-in]] — animation-04-fade-in
-- [[animation-05-fade-out]] — animation-05-fade-out
-- [[animation-06-fadeout]] — animation-06-fadeout
-- [[animation-07-iconbackgroundopacity]] — animation-07-iconbackgroundopacity
-- [[animation-08-iconbackgroundtransform]] — animation-08-iconbackgroundtransform
-- [[animation-09-move-down]] — animation-09-move-down
-- [[contacts-brutalist-split-antidiler-karpov-ru-7]] — contacts-brutalist-split-antidiler-karpov-ru-7
-- [[contacts-corporate-grid-2-opt-ecowash-ru-11]] — contacts-corporate-grid-2-opt-ecowash-ru-11
-- [[contacts-corporate-split-medregistrant-ru-9]] — contacts-corporate-split-medregistrant-ru-9
-- [[contacts-corporate-split-portfolio-kdm1-ru-16]] — contacts-corporate-split-portfolio-kdm1-ru-16
-- [[cta-brutalist-split-sskrusgun-ru-3]] — cta-brutalist-split-sskrusgun-ru-3
-- [[cta-brutalist-split-sskrusgun-ru-9]] — cta-brutalist-split-sskrusgun-ru-9
-- [[cta-cinematic-split-portfolio-kdm1-ru-3]] — cta-cinematic-split-portfolio-kdm1-ru-3
-- [[cta-cinematic-split-portfolio-kdm1-ru-9]] — cta-cinematic-split-portfolio-kdm1-ru-9
-- [[cta-corporate-centered-portfolio-kdm1-ru-7]] — cta-corporate-centered-portfolio-kdm1-ru-7
-- [[cta-corporate-centered-zilant-group-9]] — cta-corporate-centered-zilant-group-9
-- [[cta-corporate-grid-3-medregistrant-ru-5]] — cta-corporate-grid-3-medregistrant-ru-5
-- [[cta-corporate-split-project21993216-tild-13]] — cta-corporate-split-project21993216-tild-13
-- [[cta-corporate-split-project21993216-tild-6]] — cta-corporate-split-project21993216-tild-6
-- [[cta-corporate-stacked-romanmelnikov-tilda-13]] — cta-corporate-stacked-romanmelnikov-tilda-13
-- [[cta-minimal-centered-opt-ecowash-ru-3]] — cta-minimal-centered-opt-ecowash-ru-3
-- [[cta-minimal-split-portfolio-kdm1-ru-8]] — cta-minimal-split-portfolio-kdm1-ru-8
-- [[cta-minimal-split-project21993216-tild-8]] — cta-minimal-split-project21993216-tild-8
-- [[cta-technical-centered-antidiler-karpov-ru-5]] — cta-technical-centered-antidiler-karpov-ru-5
-- [[cta-technical-split-medregistrant-ru-7]] — cta-technical-split-medregistrant-ru-7
-- [[faq-corporate-stacked-portfolio-kdm1-ru-15]] — faq-corporate-stacked-portfolio-kdm1-ru-15
-- [[faq-minimal-stacked-project21993216-tild-11]] — faq-minimal-stacked-project21993216-tild-11
-- [[faq-minimal-stacked-sskrusgun-ru-13]] — faq-minimal-stacked-sskrusgun-ru-13
-- [[features-brutalist-grid-3-portfolio-kdm1-ru-3]] — features-brutalist-grid-3-portfolio-kdm1-ru-3
-- [[features-brutalist-split-antidiler-karpov-ru-2]] — features-brutalist-split-antidiler-karpov-ru-2
-- [[features-cinematic-stacked-portfolio-kdm1-ru-6]] — features-cinematic-stacked-portfolio-kdm1-ru-6
-- [[features-corporate-grid-2-portfolio-kdm1-ru-3]] — features-corporate-grid-2-portfolio-kdm1-ru-3
-- [[features-corporate-grid-3-opt-ecowash-ru-8]] — features-corporate-grid-3-opt-ecowash-ru-8
-- [[features-corporate-split-romanmelnikov-tilda-7]] — features-corporate-split-romanmelnikov-tilda-7
-- [[features-corporate-split-sskrusgun-ru-8]] — features-corporate-split-sskrusgun-ru-8
-- [[features-editorial-cards-romanmelnikov-tilda-6]] — features-editorial-cards-romanmelnikov-tilda-6
-- [[features-editorial-grid-2-romanmelnikov-tilda-9]] — features-editorial-grid-2-romanmelnikov-tilda-9
-- [[features-editorial-split-project21993216-tild-7]] — features-editorial-split-project21993216-tild-7
-- [[features-editorial-stacked-romanmelnikov-tilda-2]] — features-editorial-stacked-romanmelnikov-tilda-2
-- [[features-minimal-centered-opt-ecowash-ru-10]] — features-minimal-centered-opt-ecowash-ru-10
-- [[features-minimal-grid-2-sskrusgun-ru-10]] — features-minimal-grid-2-sskrusgun-ru-10
-- [[features-minimal-grid-2-sskrusgun-ru-4]] — features-minimal-grid-2-sskrusgun-ru-4
-- [[features-minimal-grid-2-zilant-group-6]] — features-minimal-grid-2-zilant-group-6
-- [[features-minimal-grid-4-zilant-group-2]] — features-minimal-grid-4-zilant-group-2
-- [[features-playful-cards-opt-ecowash-ru-2]] — features-playful-cards-opt-ecowash-ru-2
-- [[features-playful-centered-medregistrant-ru-2]] — features-playful-centered-medregistrant-ru-2
-- [[features-technical-centered-medregistrant-ru-4]] — features-technical-centered-medregistrant-ru-4
-- [[features-technical-centered-portfolio-kdm1-ru-5]] — features-technical-centered-portfolio-kdm1-ru-5
-- [[features-technical-grid-2-portfolio-kdm1-ru-8]] — features-technical-grid-2-portfolio-kdm1-ru-8
-- [[features-technical-grid-2-romanmelnikov-tilda-3]] — features-technical-grid-2-romanmelnikov-tilda-3
-- [[features-technical-grid-3-portfolio-kdm1-ru-2]] — features-technical-grid-3-portfolio-kdm1-ru-2
-- [[features-technical-grid-3-portfolio-kdm1-ru-5]] — features-technical-grid-3-portfolio-kdm1-ru-5
-- [[features-technical-grid-3-portfolio-kdm1-ru-6]] — features-technical-grid-3-portfolio-kdm1-ru-6
-- [[features-technical-grid-3-zilant-group-4]] — features-technical-grid-3-zilant-group-4
-- [[features-technical-grid-4-project21993216-tild-2]] — features-technical-grid-4-project21993216-tild-2
-- [[features-technical-split-sskrusgun-ru-6]] — features-technical-split-sskrusgun-ru-6
-- [[footer-corporate-grid-3-sskrusgun-ru-14]] — footer-corporate-grid-3-sskrusgun-ru-14
-- [[footer-corporate-grid-4-portfolio-kdm1-ru-8]] — footer-corporate-grid-4-portfolio-kdm1-ru-8
-- [[footer-corporate-grid-4-zilant-group-10]] — footer-corporate-grid-4-zilant-group-10
-- [[footer-corporate-split-opt-ecowash-ru-12]] — footer-corporate-split-opt-ecowash-ru-12
-- [[footer-corporate-split-portfolio-kdm1-ru-9]] — footer-corporate-split-portfolio-kdm1-ru-9
-- [[footer-minimal-grid-3-project21993216-tild-14]] — footer-minimal-grid-3
-- [[footer-minimal-split-antidiler-karpov-ru-8]] — footer-minimal-split-antidiler-karpov-ru-8
-- [[footer-minimal-split-portfolio-kdm1-ru-17]] — footer-minimal-split-portfolio-kdm1-ru-17
-- [[footer-minimal-split-romanmelnikov-tilda-14]] — footer-minimal-split-romanmelnikov-tilda-14
-- [[gallery-cinematic-cards-zilant-group-3]] — gallery-cinematic-cards-zilant-group-3
-- [[gallery-cinematic-grid-4-sskrusgun-ru-12]] — gallery-cinematic-grid-4-sskrusgun-ru-12
-- [[gallery-corporate-cards-portfolio-kdm1-ru-4]] — gallery-corporate-cards-portfolio-kdm1-ru-4
-- [[gallery-editorial-grid-3-portfolio-kdm1-ru-6]] — gallery-editorial-grid-3-portfolio-kdm1-ru-6
-- [[gallery-minimal-grid-3-project21993216-tild-5]] — gallery-minimal-grid-3-project21993216-tild-5
-- [[gallery-minimal-stacked-portfolio-kdm1-ru-2]] — gallery-minimal-stacked-portfolio-kdm1-ru-2
-- [[gallery-playful-grid-4-project21993216-tild-4]] — gallery-playful-grid-4-project21993216-tild-4
-- [[glass-01]] — glass-01
-- [[header-cinematic-split-antidiler-karpov-ru-0]] — header-cinematic-split-antidiler-karpov-ru-0
-- [[header-cinematic-split-portfolio-kdm1-ru-0]] — header-cinematic-split-portfolio-kdm1-ru-0
-- [[header-corporate-split-portfolio-kdm1-ru-0]] — header-corporate-split-portfolio-kdm1-ru-0
-- [[header-corporate-split-zilant-group-0]] — header-corporate-split-zilant-group-0
-- [[header-luxury-split-romanmelnikov-tilda-0]] — header-luxury-split-romanmelnikov-tilda-0
-- [[header-minimal-split-medregistrant-ru-0]] — header-minimal-split-medregistrant-ru-0
-- [[header-minimal-split-portfolio-kdm1-ru-0]] — header-minimal-split-portfolio-kdm1-ru-0
-- [[header-minimal-split-project21993216-tild-0]] — header-minimal-split-project21993216-tild-0
-- [[header-playful-split-opt-ecowash-ru-0]] — header-playful-split-opt-ecowash-ru-0
-- [[header-technical-split-sskrusgun-ru-0]] — header-technical-split-sskrusgun-ru-0
-- [[hero-brutalist-split-sskrusgun-ru-1]] — hero-brutalist-split-sskrusgun-ru-1
-- [[hero-cinematic-centered-portfolio-kdm1-ru-1]] — hero-cinematic-centered-portfolio-kdm1-ru-1
-- [[hero-cinematic-split-antidiler-karpov-ru-1]] — hero-cinematic-split-antidiler-karpov-ru-1
-- [[hero-cinematic-split-portfolio-kdm1-ru-2]] — hero-cinematic-split-portfolio-kdm1-ru-2
-- [[hero-cinematic-split-romanmelnikov-tilda-1]] — hero-cinematic-split-romanmelnikov-tilda-1
-- [[hero-corporate-split-project21993216-tild-1]] — hero-corporate-split-project21993216-tild-1
-- [[hero-corporate-split-zilant-group-1]] — hero-corporate-split-zilant-group-1
-- [[hero-editorial-centered-medregistrant-ru-1]] — hero-editorial-centered-medregistrant-ru-1
-- [[hero-minimal-split-portfolio-kdm1-ru-1]] — hero-minimal-split-portfolio-kdm1-ru-1
-- [[hero-playful-split-opt-ecowash-ru-1]] — hero-playful-split-opt-ecowash-ru-1
-- [[hero-technical-split-portfolio-kdm1-ru-1]] — hero-technical-split-portfolio-kdm1-ru-1
-- [[hover-effect-00-item-0]] — hover-effect-00-item-0
-- [[hover-effect-01-item-1]] — hover-effect-01-item-1
-- [[hover-effect-02-item-2]] — hover-effect-02-item-2
-- [[hover-effect-03-item-3]] — hover-effect-03-item-3
-- [[hover-effect-04-item-4]] — hover-effect-04-item-4
-- [[hover-effect-05-item-5]] — hover-effect-05-item-5
-- [[hover-effect-06-item-6]] — hover-effect-06-item-6
-- [[hover-effect-07-item-7]] — hover-effect-07-item-7
-- [[hover-effect-08-item-8]] — hover-effect-08-item-8
-- [[hover-effect-09-item-9]] — hover-effect-09-item-9
-- [[pricing-corporate-cards-opt-ecowash-ru-5]] — pricing-corporate-cards-opt-ecowash-ru-5
-- [[pricing-corporate-grid-2-portfolio-kdm1-ru-10]] — pricing-corporate-grid-2-portfolio-kdm1-ru-10
-- [[pricing-corporate-grid-3-portfolio-kdm1-ru-7]] — pricing-corporate-grid-3-portfolio-kdm1-ru-7
-- [[pricing-corporate-grid-3-sskrusgun-ru-5]] — pricing-corporate-grid-3-sskrusgun-ru-5
-- [[pricing-luxury-split-romanmelnikov-tilda-8]] — pricing-luxury-split-romanmelnikov-tilda-8
-- [[pricing-minimal-grid-4-sskrusgun-ru-7]] — pricing-minimal-grid-4-sskrusgun-ru-7
-- [[pricing-technical-grid-3-sskrusgun-ru-2]] — pricing-technical-grid-3-sskrusgun-ru-2
-- [[process-cinematic-timeline-portfolio-kdm1-ru-5]] — process-cinematic-timeline-portfolio-kdm1-ru-5
-- [[process-corporate-stacked-portfolio-kdm1-ru-13]] — process-corporate-stacked-portfolio-kdm1-ru-13
-- [[process-corporate-timeline-project21993216-tild-10]] — process-corporate-timeline
-- [[process-editorial-grid-2-romanmelnikov-tilda-4]] — process-editorial-grid-2-romanmelnikov-tilda-4
-- [[process-minimal-grid-2-opt-ecowash-ru-7]] — process-minimal-grid-2-opt-ecowash-ru-7
-- [[process-minimal-grid-2-portfolio-kdm1-ru-4]] — process-minimal-grid-2-portfolio-kdm1-ru-4
-- [[process-technical-cards-medregistrant-ru-3]] — process-technical-cards-medregistrant-ru-3
-- [[process-technical-stacked-opt-ecowash-ru-6]] — process-technical-stacked-opt-ecowash-ru-6
-- [[process-technical-timeline-romanmelnikov-tilda-10]] — process-technical-timeline-romanmelnikov-tilda-10
-- [[ru-cta-01-callback-tg-max]] — ru-cta-01-callback-tg-max
-- [[ru-cta-02-banner-stripe]] — ru-cta-02-banner-stripe
-- [[ru-cta-03-urgency-scarcity]] — ru-cta-03-urgency-scarcity
-- [[ru-cta-04-lead-magnet]] — ru-cta-04-lead-magnet
-- [[ru-cta-05-login-cta]] — ru-cta-05-login-cta
-- [[ru-cta-06-editorial-paper]] — ru-cta-06-editorial-paper
-- [[ru-cta-07-accent-bg]] — ru-cta-07-accent-bg
-- [[ru-faq-01-accordion]] — ru-faq-01-accordion
-- [[ru-faq-02-why-us]] — ru-faq-02-why-us
-- [[ru-faq-03-searchable]] — ru-faq-03-searchable
-- [[ru-faq-04-pricing-faq]] — ru-faq-04-pricing-faq
-- [[ru-features-01-3col-icons]] — ru-features-01-3col-icons
-- [[ru-features-02-bento-grid]] — ru-features-02-bento-grid
-- [[ru-features-03-swiss-cards]] — ru-features-03-swiss-cards
-- [[ru-features-04-numbered-list]] — ru-features-04-numbered-list
-- [[ru-features-05-method-steps]] — ru-features-05-method-steps
-- [[ru-features-06-cards-2x2]] — ru-features-06-cards-2x2
-- [[ru-features-07-2col-split]] — ru-features-07-2col-split
-- [[ru-features-08-kpi-metrics]] — ru-features-08-kpi-metrics
-- [[ru-hero-01-services-calc]] — ru-hero-01-services-calc
-- [[ru-hero-02-b2c-expert]] — ru-hero-02-b2c-expert
-- [[ru-hero-03-local-interior]] — ru-hero-03-local-interior
-- [[ru-hero-04-split-form]] — ru-hero-04-split-form
-- [[ru-hero-05-centered-bold]] — ru-hero-05-centered-bold
-- [[ru-hero-06-swiss-metrics]] — ru-hero-06-swiss-metrics
-- [[ru-hero-07-editorial-serif]] — ru-hero-07-editorial-serif
-- [[ru-hero-08-centered-emailcap]] — ru-hero-08-centered-emailcap
-- [[ru-hero-09-kami-serif]] — ru-hero-09-kami-serif
-- [[ru-hero-10-deck-cover]] — ru-hero-10-deck-cover
-- [[ru-pricing-01-rub-from]] — ru-pricing-01-rub-from
-- [[ru-pricing-02-comparison-table]] — ru-pricing-02-comparison-table
-- [[ru-pricing-03-3tier-saas]] — ru-pricing-03-3tier-saas
-- [[ru-pricing-04-tiers-faq]] — ru-pricing-04-tiers-faq
-- [[ru-process-01-4steps-icons]] — ru-process-01-4steps-icons
-- [[ru-process-02-next-steps]] — ru-process-02-next-steps
-- [[ru-process-03-4steps-numbered]] — ru-process-03-4steps-numbered
-- [[ru-quiz-01-step-card]] — ru-quiz-01-step-card
-- [[ru-quiz-02-progress-top]] — ru-quiz-02-progress-top
-- [[ru-quiz-03-intermediate]] — ru-quiz-03-intermediate
-- [[ru-quiz-04-lead-form]] — ru-quiz-04-lead-form
-- [[ru-quiz-05-thankyou]] — ru-quiz-05-thankyou
-- [[ru-quiz-06-welcome-screen]] — ru-quiz-06-welcome-screen
-- [[ru-quiz-07-image-choice]] — ru-quiz-07-image-choice
-- [[ru-quiz-08-slider-range]] — ru-quiz-08-slider-range
-- [[ru-quiz-09-multi-select]] — ru-quiz-09-multi-select
-- [[ru-quiz-10-loader-analyzing]] — ru-quiz-10-loader-analyzing
-- [[ru-quiz-11-discount-bonus]] — ru-quiz-11-discount-bonus
-- [[ru-quiz-12-mini-calculator]] — ru-quiz-12-mini-calculator
-- [[ru-quiz-13-comparison-question]] — ru-quiz-13-comparison-question
-- [[ru-social-proof-03-client-logos]] — ru-social-proof-03-client-logos
-- [[ru-social-proof-04-authority-cases]] — ru-social-proof-04-authority-cases
-- [[ru-social-proof-05-metrics-editorial]] — ru-social-proof-05-metrics-editorial
-- [[ru-social-proof-06-editorial-quote]] — ru-social-proof-06-editorial-quote
-- [[ru-social-proof-07-logo-ticker]] — ru-social-proof-07-logo-ticker
-- [[ru-social-proof-08-stats-deck]] — ru-social-proof-08-stats-deck
-- [[ru-stats-01-growth-chart]] — ru-stats-01-growth-chart
-- [[ru-testimonials-01-video-circles]] — ru-testimonials-01-video-circles
-- [[ru-testimonials-02-text-photo]] — ru-testimonials-02-text-photo
-- [[ru-trust-01-guarantees-docs]] — ru-trust-01-guarantees-docs
-- [[ru-trust-02-numbers-row]] — ru-trust-02-numbers-row
-- [[ru-trust-03-descriptor-header]] — ru-trust-03-descriptor-header
-- [[ru-trust-04-principles-grid]] — ru-trust-04-principles-grid
-- [[ru-trust-05-manifesto-text]] — ru-trust-05-manifesto-text
-- [[ru-trust-06-labs-showcase]] — ru-trust-06-labs-showcase
-- [[ru-trust-07-partner-logos]] — ru-trust-07-partner-logos
-- [[social-proof-cinematic-split-antidiler-karpov-ru-3]] — social-proof-cinematic-split-antidiler-karpov-ru-3
-- [[social-proof-corporate-cards-medregistrant-ru-6]] — social-proof-corporate-cards-medregistrant-ru-6
-- [[social-proof-corporate-grid-3-zilant-group-5]] — social-proof-corporate-grid-3-zilant-group-5
-- [[social-proof-luxury-cards-romanmelnikov-tilda-12]] — social-proof-luxury-cards-romanmelnikov-tilda-12
-- [[social-proof-minimal-centered-project21993216-tild-3]] — social-proof-minimal-centered-project21993216-tild-3
-- [[social-proof-minimal-stacked-antidiler-karpov-ru-4]] — social-proof-minimal-stacked-antidiler-karpov-ru-4
-- [[social-proof-playful-grid-2-opt-ecowash-ru-9]] — social-proof-playful-grid-2-opt-ecowash-ru-9
-- [[social-proof-technical-grid-4-portfolio-kdm1-ru-14]] — social-proof-technical-grid-4-portfolio-kdm1-ru-14
-- [[team-cinematic-split-portfolio-kdm1-ru-11]] — team-cinematic-split-portfolio-kdm1-ru-11
-- [[trust-corporate-grid-2-portfolio-kdm1-ru-7]] — trust-corporate-grid-2-portfolio-kdm1-ru-7
-- [[trust-corporate-grid-3-project21993216-tild-12]] — trust-corporate-grid-3-project21993216-tild-12
-- [[trust-corporate-grid-4-sskrusgun-ru-11]] — trust-corporate-grid-4-sskrusgun-ru-11
-- [[trust-editorial-grid-2-romanmelnikov-tilda-11]] — trust-editorial-grid-2-romanmelnikov-tilda-11
-- [[trust-editorial-grid-2-zilant-group-7]] — trust-editorial-grid-2-zilant-group-7
-- [[trust-editorial-grid-3-portfolio-kdm1-ru-4]] — trust-editorial-grid-3-portfolio-kdm1-ru-4
-- [[trust-editorial-stacked-medregistrant-ru-8]] — trust-editorial-stacked-medregistrant-ru-8
-- [[trust-editorial-stacked-portfolio-kdm1-ru-12]] — trust-editorial-stacked-portfolio-kdm1-ru-12
-- [[trust-luxury-centered-romanmelnikov-tilda-5]] — trust-luxury-centered-romanmelnikov-tilda-5
-- [[trust-minimal-centered-antidiler-karpov-ru-6]] — trust-minimal-centered-antidiler-karpov-ru-6
-- [[trust-minimal-grid-4-zilant-group-8]] — trust-minimal-grid-4-zilant-group-8
-- [[trust-playful-stacked-opt-ecowash-ru-4]] — trust-playful-stacked-opt-ecowash-ru-4
-- [[trust-technical-grid-3-project21993216-tild-9]] — trust-technical-grid-3-project21993216-tild-9
-
-## 🛠 Скрипты
-
-- [[deploy-sh-doc]] — deploy
-- [[flush-py-doc]] — flush
-- [[generate-blocks-py-doc]] — generate-blocks
-- [[generate-wp-blocks-py-doc]] — generate-wp-blocks
-- [[migrate-niche-to-v2-sh-doc]] — migrate-niche-to-v2
-- [[migrate-to-preview-panel-sh-doc]] — migrate-to-preview-panel
-- [[preview-blocks-library-py-doc]] — preview-blocks-library
-- [[project-graph-compiler-py-doc]] — project-graph-compiler
-- [[render-pipeline-map-sh-doc]] — render-pipeline-map
-- [[scrape-css-sh-doc]] — scrape-css
-- [[sdk-client-py-doc]] — sdk-client
-- [[wizard-sh-doc]] — wizard
-
-## ❓ Прочее
-
-- [[2026-05-16-pr-j-static-prompts-identity-plan]] — pr-j-static-prompts-identity-plan
-- [[compile-py-doc]] — compile-py
-- [[composed-html-py-doc]] — composed-html-py-doc
-- [[content-parser-py-doc]] — content-parser
-- [[derive-landing-structure-py-doc]] — derive-landing-structure
-- [[export-palettes-to-library-py-doc]] — export-palettes-to-library
-- [[extract-patterns-py-doc]] — extract-patterns
-- [[gate-check]] — gate-check
-- [[generate-axes-filter-py-doc]] — generate-axes-filter
-- [[generate-palette-css-py-doc]] — generate-palette-css
-- [[glass-00]] — glass-00
-- [[landing-final-check-sh-doc]] — landing-final-check-sh-doc
-- [[phase-2]] — phase-2
-- [[phase-3]] — phase-3
-- [[phase-niche]] — phase-niche
-- [[phase-pra]] — phase-pra-tests
-- [[phase-prb]] — phase-prb
-- [[phase-pre]] — phase-pre-tests
-- [[phase-preview-panel]] — phase-preview-panel
-- [[pr-h]] — pr-h-tests
-- [[pr-i-a]] — pr-i-a
-- [[pr-i-b]] — pr-i-b
-- [[pr-j]] — pr-j
-- [[pr-k]] — pr-k
-- [[pr-l]] — pr-l-tests
-- [[pr-m]] — pr-m
-- [[pr-n]] — pr-n
-- [[pr-p]] — pr-p
-- [[preflight]] — preflight
-- [[preview-py-doc]] — preview-py
-- [[query-py-doc]] — wiki-query
-- [[refresh-catalog-py-doc]] — refresh-catalog
-- [[snapshot-palettes-to-project-py-doc]] — snapshot-palettes-to-project-py-doc
-- [[tokens-json-py-doc]] — tokens-json-py-doc
-- [[wizard-check-materials-py-doc]] — wizard-check-materials
+- [[premium-07b-checklist]] — PREMIUM 07b — Чек-лист сборки composed.html
+- [[stage-08-spec-lint]] — Stage-08 Composed ↔ block-spec Lint
+- [[stage-agent-preamble]] — Stage Agent Preamble (канонический блок)
+- [[stage-execution-protocol]] — Протокол выполнения этапов (обязательный)
+- [[wiki-audit-checklist]] — Wiki Audit Checklist

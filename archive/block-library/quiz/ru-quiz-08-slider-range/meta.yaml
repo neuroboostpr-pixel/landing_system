@@ -1,0 +1,45 @@
+category: forms
+conversion_notes: 'Слайдер сегментирует аудиторию по бюджету без ввода с клавиатуры.
+  Снижает трение. Источники: Tilda Education, Skillbox (calculator quiz).'
+created: '2026-05-13'
+description: 'Вопрос квиза со слайдером: пользователь задаёт бюджет, площадь или другой
+  числовой параметр.'
+display_name_ru: ru-quiz-08-slider-range (centered)
+id: ru-quiz-08-slider-range
+layout_pattern: centered
+layout_summary_ru: Нативный input[type=range] без JS. Текущее значение и единица измерения
+  под слайдером. Прогресс-бар сверху. Для бюджета, площади, срока.
+ru_market: true
+slots:
+- max_chars: 60
+  name: progress-label
+  required: false
+  type: text
+- max_chars: 120
+  name: question-text
+  required: true
+  type: text
+- max_chars: 20
+  name: unit-label
+  required: true
+  type: text
+- max_chars: 30
+  name: min-label
+  required: true
+  type: text
+- max_chars: 30
+  name: max-label
+  required: true
+  type: text
+- max_chars: 100
+  name: question-comment
+  required: false
+  type: text
+source: manual
+source_attribution: tilda.education/how-to-create-marketing-quiz; skillbox.ru/media/marketing/chto-takoe-kvizy
+type: lead-form
+use_cases:
+- services
+- b2c
+- local
+variant: quiz

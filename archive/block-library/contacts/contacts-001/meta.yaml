@@ -1,0 +1,27 @@
+category: footer
+created: '2026-06-01'
+display_name_ru: contacts-001 (brutalist)
+has_bg_image: false
+id: contacts-001
+layout_pattern: brutalist
+signature: contacts|brutalist|[content]|bg:false
+slots:
+- name: contacts-eyebrow
+  type: text
+- name: contacts-title
+  type: text
+- name: contacts-caption
+  type: text
+- name: contacts-action-label
+  type: text
+- name: phone-link
+  type: text
+- name: phone
+  type: text
+- name: secondary-link-url
+  type: text
+- name: secondary-link-label
+  type: text
+source: cleaned
+type: contacts
+variant: null

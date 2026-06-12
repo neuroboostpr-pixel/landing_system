@@ -58,13 +58,118 @@ def _count_approved_refs(index_path: Path) -> int:
     return sum(1 for r in refs if isinstance(r, dict) and r.get("status") == "approved")
 
 
+def load_legal_input(project_dir):
+    """Load legal: input from 04_БРЕНД/extracted/legal.yaml if exists."""
+    legal_path = Path(project_dir) / '04_БРЕНД' / 'extracted' / 'legal.yaml'
+    if not legal_path.exists():
+        return None
+    try:
+        with open(legal_path, encoding='utf-8') as f:
+            return yaml.safe_load(f)
+    except (yaml.YAMLError, IOError):
+        return None
+
+
+def build_legal_section(legal_input):
+    """Build the ## Legal section from input dict.
+
+    If legal_input is None or missing — emits TODO_LEGAL placeholders.
+
+    Args:
+        legal_input: dict with 7 keys (company_name, entity_type, inn, ogrn,
+                     legal_address, contact_email, dpo_email) or None.
+
+    Returns:
+        Markdown string with '## Legal' header and YAML block.
+    """
+    if not legal_input:
+        legal_input = {
+            'company_name': 'TODO_LEGAL',
+            'entity_type': 'TODO_LEGAL',
+            'inn': 'TODO_LEGAL',
+            'ogrn': 'TODO_LEGAL',
+            'legal_address': 'TODO_LEGAL',
+            'contact_email': 'TODO_LEGAL',
+            'dpo_email': 'TODO_LEGAL',
+        }
+
+    lines = ['## Legal', '', '```yaml']
+    if any(v == 'TODO_LEGAL' for v in legal_input.values()):
+        lines.append('# TODO_LEGAL: заполнить до прод-деплоя — без этого лендинг не может запускаться в РФ')
+
+    for key in ['company_name', 'entity_type', 'inn', 'ogrn',
+                'legal_address', 'contact_email', 'dpo_email']:
+        val = legal_input.get(key, 'TODO_LEGAL')
+        # Quote string values to preserve special chars
+        lines.append(f"{key}: '{val}'")
+
+    lines.append('```')
+    lines.append('')
+    return '\n'.join(lines)
+
+
+def _load_visual_concept(base: Path) -> dict:
+    """Load 03b_КОНЦЕПТ/visual-concept.yaml if present."""
+    concept_path = base / "03b_КОНЦЕПТ" / "visual-concept.yaml"
+    if not concept_path.exists():
+        return {}
+    result = yaml.safe_load(concept_path.read_text(encoding="utf-8"))
+    return result if isinstance(result, dict) else {}
+
+
+def _apply_concept_to_palette(palette_data: dict, concept: dict) -> dict:
+    """Override palette with visual-concept.yaml values when extracted has no real data."""
+    if not concept:
+        return palette_data
+    palette_list = palette_data.get("palette", [])
+    # Consider palette "empty/default" when all hexes are #000000 or list is short
+    all_black = all(e.get("hex", "#000000") == "#000000" for e in palette_list) if palette_list else True
+    if not (len(palette_list) < 3 or all_black):
+        return palette_data  # extracted data is real — don't override
+
+    cp = concept.get("palette", {})
+    entries = [
+        {"hex": cp.get("bg", "#F5F7FA"), "role": "primary", "source_pixel": []},
+        {"hex": cp.get("text", "#111111"), "role": "secondary", "source_pixel": []},
+        {"hex": cp.get("accent", "#0066CC"), "role": "accent", "source_pixel": []},
+    ]
+    source = f"visual-concept.yaml ({concept.get('name', 'concept')})"
+    warn(f"extracted/palette.yaml has no real data — using visual-concept.yaml palette")
+    return {"palette": entries, "source_image": source}
+
+
+def _apply_concept_to_fonts(fonts_data: dict, concept: dict) -> dict:
+    """Override fonts with visual-concept.yaml direction when extracted has no real data."""
+    if not concept:
+        return fonts_data
+    candidates = fonts_data.get("candidates", [])
+    all_default = all(c.get("confidence", 0) == 0.0 for c in candidates) if candidates else True
+    if not (not candidates or all_default):
+        return fonts_data
+
+    direction = concept.get("typography_direction", "")
+    if not direction:
+        return fonts_data
+
+    # Parse "Archivo Black / Inter Black для заголовков (900), Inter Regular для тела"
+    parts = [p.strip() for p in direction.replace("для заголовков", "").replace("для тела текста", "").split(",")]
+    display_family = parts[0].split("/")[0].strip() if parts else "sans-serif"
+    body_family = parts[1].strip() if len(parts) > 1 else "sans-serif"
+    warn(f"extracted/fonts.yaml has no real data — using visual-concept.yaml typography")
+    return {"candidates": [
+        {"family": display_family, "role": "display", "confidence": 0.9, "source": "visual-concept.yaml"},
+        {"family": body_family, "role": "body", "confidence": 0.9, "source": "visual-concept.yaml"},
+    ]}
+
+
 def build_brand_kit(project_dir: str) -> Path:
     base = Path(project_dir)
     extracted = base / "04_БРЕНД" / "extracted"
 
     # --- Load inputs ---
-    palette_data = _load_yaml(extracted / "palette.yaml")
-    fonts_data = _load_yaml(extracted / "fonts.yaml")
+    concept = _load_visual_concept(base)
+    palette_data = _apply_concept_to_palette(_load_yaml(extracted / "palette.yaml"), concept)
+    fonts_data = _apply_concept_to_fonts(_load_yaml(extracted / "fonts.yaml"), concept)
     icons_data = _load_yaml(extracted / "icons.yaml")
     motion_note = _load_text_first_line(extracted / "motion.md", "Subtle transitions, 200-400ms")
     grid_note = _load_text_first_line(extracted / "grid.md", "12-column, 24px gap")
@@ -194,7 +299,8 @@ Selected: {icon_ids}
 {grid_note}
 """
 
-    content = f"---\n{yaml_block}---\n\n{md_body}"
+    legal_section = build_legal_section(load_legal_input(project_dir))
+    content = f"---\n{yaml_block}---\n\n{md_body}\n{legal_section}"
 
     out = base / "04_БРЕНД" / "brand-kit.md"
     out.parent.mkdir(parents=True, exist_ok=True)

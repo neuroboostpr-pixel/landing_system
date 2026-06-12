@@ -1,0 +1,51 @@
+category: features
+description: Раздел с сильным заголовком, текстовым списком слева и крупным предметным
+  фото справа.
+display_name_ru: features-editorial-split-project21993216-tild-7 (split)
+has_animation: false
+id: features-editorial-split-project21993216-tild-7
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://project21993216.tilda.ws/
+layout_pattern: split
+niches_suitable:
+- ecommerce
+- tech
+- services
+ru_market: true
+slots:
+- name: eyebrow
+  type: text
+- name: heading
+  required: true
+  type: text
+- name: subhead
+  type: text
+- name: feature-1-title
+  type: text
+- name: feature-1-text
+  type: text
+- name: feature-2-title
+  type: text
+- name: feature-2-text
+  type: text
+- name: feature-3-title
+  type: text
+- name: feature-3-text
+  type: text
+- name: cta-url
+  type: text
+- name: cta-label
+  type: text
+- name: image-mobile
+  type: text
+- name: image-alt
+  type: text
+- name: image
+  type: text
+- name: image-caption
+  type: text
+style_mood: editorial
+type: features
+variant: null

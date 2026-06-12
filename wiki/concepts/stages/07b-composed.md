@@ -1,59 +1,50 @@
 ---
+slug: 07b-composed
 type: stage
-name: 07b-composed
-sources: ["template/07b_COMPOSED/README.md"]
-updated: 2026-05-15
-triggers: []
+name: "07b — Composed HTML"
 stage: "07b"
-uses: ["block-composer", "block-composition", "design-tokens-generation", "photo-curation", "visual-generation", "prototype-import"]
-tags: ["compose", "html", "tokens", "premium", "wireframe", "placeholder"]
+tags: [compose, html, design-tokens, premium, placeholder, wireframe]
+inputs: [05-dizayn-sistema, 07-prototip, landing-wireframe]
+outputs: [07b_COMPOSED/composed.html, 07b_COMPOSED/composed-mobile-preview.html, 07b_COMPOSED/composed-explained.md, 07b_COMPOSED/block-injection-log.md]
+gates: [verify-composed-premium]
+pre_reqs: [05-dizayn-sistema, 07-prototip, landing-wireframe]
+related: [landing-compose, block-composer, landing-photos, landing-visuals, landing-build]
+sources: ["template/07b_COMPOSED/README.md"]
+updated: 2026-05-26
 ---
 
-# 07b Composed — цветной макет с токенами и текстами
+# 07b — Composed HTML
 
 ## Что делает
-Собирает финальный HTML-макет лендинга: накладывает дизайн-систему (цвета, шрифты, отступы из `tokens.json`) и реальные тексты/CTA из прототипа на выбранные wireframe-блоки. Места для фотографий, иконок и инфографики остаются явными placeholders — они заполняются позже (PR-B и PR-C).
 
-## Когда вызывать / в каком этапе
-Запускается командой `/landing-compose` или агентом `block-composer` после того, как:
-- пройден этап `07a` (wireframe с выбором вариантов блоков, файл `selections.yaml` сохранён),
-- утверждена дизайн-система (этап `05`),
-- импортирован прототип (этап `07`).
+Этап собирает предфинальный цветной макет лендинга: берёт дизайн-токены из этапа 05, тексты и CTA из прототипа и wireframe, подставляет их в блоки через `block-composition`. Там, где будут реальные фото, иконки и инфографика, остаются явные слот-заглушки с описанием. Результат — `composed.html` — это практически финальный лендинг, которому не хватает только визуальных ассетов.
 
-HARD GATE этапа 07b не закрывается до прохождения скрипта верификации с exit 0.
+## Когда вызывается
 
-## Что на вход / на выход
+Запускается командой `/landing-compose` (или через `landing-orchestrator`) после того, как пользователь утвердил дизайн-систему (этап 05) и выбрал варианты блоков в wireframe (07a). Без `selections.yaml` из wireframe и без готового прототипа этап не стартует.
 
-**Вход:**
-- `07a_WIREFRAME/selections.yaml` — выбор блоков пользователем
-- `05_ДИЗАЙН/tokens.json` — дизайн-токены (цвета, типографика)
-- `07_ПРОТОТИП/prototype.yaml` — структурированные тексты и CTA
-- `04_БРЕНД/brand-kit.md` — бренд-стиль
+## Вход → выход
 
-**Выход:**
-- `07b_COMPOSED/composed.html` — десктопная сборка (~130 KB, 13 premium-фич)
-- `07b_COMPOSED/composed-mobile-preview.html` — iframe-превью для iPhone + iPad
-- `07b_COMPOSED/composed-explained.md` — пояснение что и почему собрано
-- `07b_COMPOSED/block-injection-log.md` — лог подстановок блоков
+**Вход:** утверждённая дизайн-система (`tokens.json`, CSS), результат wireframe (`selections.yaml`), тексты из `prototype.md` и `07-kontent`.
 
-## Premium quality bar — обязательные требования
-Каждый `composed.html` должен содержать 13 обязательных интерактивных фич: parallax, glassmorphism, slider, lightbox, count-up, reveal-on-scroll, gradient text и другие. Полный чеклист в `docs/standards/premium-07b-checklist.md`.
+**Выход:** `composed.html` (desktop-макет с токенами и текстами), `composed-mobile-preview.html` (iframe iPhone/iPad), `composed-explained.md` (объяснение решений), `block-injection-log.md` (лог подстановок).
 
-Верификация перед гейтом:
-```bash
-bash "$LANDING_SYSTEM_ROOT/scripts/verify-composed-premium.sh" \
-     "$PWD/07b_COMPOSED/composed.html"
-```
+## Чем закрывается этап (gates)
 
-Эталон-референс для сравнения: `~/Lendings/dubai-avto-liza/07b_COMPOSED/composed.html`.
+- **verify-composed-premium** — скрипт `scripts/verify-composed-premium.sh` проверяет наличие всех 13 обязательных интерактивных фич (parallax, glassmorphism, slider, lightbox, count-up, reveal-on-scroll, gradient-text и др.) по чеклисту `docs/standards/premium-07b-checklist.md`. HARD GATE: exit code ≠ 0 блокирует переход к этапу 08.
 
-## Связанные концепты
-- [[block-composer]] — агент, который рендерит `composed.html` из tokens + прототип
-- [[block-composition]] — скилл, реализующий логику сборки блоков
-- [[design-tokens-generation]] — поставляет `tokens.json` для стилизации
-- [[prototype-import]] — поставляет тексты и CTA из прототипа
-- [[photo-curation]] — PR-B: заменяет photo-placeholders реальными фото
-- [[visual-generation]] — PR-C: заменяет icon/infographic-placeholders PNG-файлами
+## Failure modes
 
-## Источник
-- `template/07b_COMPOSED/README.md`
+- Скрипт `verify-composed-premium.sh` возвращает ненулевой код — одна или несколько из 13 фич отсутствуют или реализованы формально; нужна доработка `composed.html`.
+- `selections.yaml` из wireframe не найден или не положен в `07a_WIREFRAME/` — compose не может определить выбранные варианты блоков.
+- Дизайн-токены не импортированы: `tokens.json` отсутствует или CSS-переменные не применены — макет рендерится без брендинга.
+- Слоты для фото/иконок не размечены явно — PR-B (photos) и PR-C (visuals) не смогут заменить заглушки автоматически.
+- Мобильный preview (`composed-mobile-preview.html`) не создан — нет возможности визуально проверить адаптив до этапа 08.
+
+## Related
+
+- [[landing-compose]] — slash-команда, которая запускает этот этап
+- [[block-composer]] — агент, собирающий блоки и инжектирующий токены
+- [[landing-photos]] — PR-B: заменяет photo-слоты реальными изображениями
+- [[landing-visuals]] — PR-C: заменяет icon/infographic-слоты сгенерированными ассетами
+- [[landing-build]] — следующий этап после approve 07b

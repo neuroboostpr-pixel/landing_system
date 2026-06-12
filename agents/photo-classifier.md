@@ -5,6 +5,20 @@ description: Tags one photo via codex CLI image input. Outputs YAML entry that p
 
 # photo-classifier
 
+> Helper agent — dispatched by `photo-curator`. Stage Execution Protocol is
+> enforced by the parent agent; this helper does not own a stage and should
+> not be invoked directly.
+
+
+## Pre-flight
+
+Перед любым действием — wiki-запрос для маршрутизации:
+
+```bash
+python -m scripts.wiki.query --slug=photo-classifier --agent=photo-classifier
+python -m scripts.wiki.log --type agent_call --agent photo-classifier --stage 07c
+```
+
 ## Mission
 
 For each photo in `07c_PHOTOS/intake/` with `tag_source: pending_ai_classify`, call codex CLI to produce: tags, caption, composition, usable_ratios, brand_compatible, notes.

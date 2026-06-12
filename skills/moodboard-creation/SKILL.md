@@ -5,6 +5,12 @@ description: Render moodboard.html from approved references in 03_РЕФЕРЕН
 
 # moodboard-creation
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill moodboard-creation --stage 03
+```
+
 ## What I do
 
 - Read `index.yaml`, split refs into approved / rejected.

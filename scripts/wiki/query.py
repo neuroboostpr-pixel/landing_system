@@ -1,76 +1,220 @@
-"""Запросы к wiki из CLI.
+"""Pure-Python filter over wiki/index.yaml.
 
-Использование:
-  python -m scripts.wiki.query "что делает landing-orchestrator"
-  python -m scripts.wiki.query "..." --project=dubai-avto-liza
-  python -m scripts.wiki.query "..." --file-back  # сохраняет ответ в memory/qa/
+CLI:
+    python -m scripts.wiki.query --stage=08 --type=agent
+    python -m scripts.wiki.query --tag=wordpress
+    python -m scripts.wiki.query --slug=block-composer
+    python -m scripts.wiki.query --trigger=landing-build
+    python -m scripts.wiki.query --grep=gutenberg
+    python -m scripts.wiki.query --slug=X --format=cards
+
+Formats: compact (default), cards, slugs, json.
+No SDK calls. <100ms for any query.
 """
 from __future__ import annotations
 
 import argparse
+import json
 import sys
-from datetime import date
 from pathlib import Path
+from typing import Any
 
-from scripts.wiki import config, sdk_client, utils
+import yaml
 
-PROMPTS_DIR = Path(__file__).parent / "prompts"
-MAX_INDEX_CHARS = 6000
-MAX_CONCEPT_CHARS = 4000
-
-
-def _gather_indexes(wiki_dirs: list[Path]) -> str:
-    parts = []
-    for w in wiki_dirs:
-        idx = w / "index.md"
-        if idx.exists():
-            text = idx.read_text(encoding="utf-8")
-            if len(text) > MAX_INDEX_CHARS:
-                text = text[:MAX_INDEX_CHARS] + "\n[...обрезано]"
-            parts.append(f"# Index of {w}\n\n{text}")
-    return "\n\n---\n\n".join(parts)
+from scripts.wiki import config
 
 
-def ask(wiki_dirs: list[Path], question: str) -> str:
-    """Главная функция."""
-    indexes = _gather_indexes(wiki_dirs)
-    user = f"{indexes}\n\n---\n\n**Вопрос:** {question}"
-    prompt = (PROMPTS_DIR / "query.md").read_text(encoding="utf-8")
+def _detect_model_from_session(session_id: str) -> str:
+    """Читает модель из последней записи session jsonl в ~/.claude/projects/."""
+    import os
+    if session_id == "unknown":
+        return ""
+    home = Path(os.path.expanduser("~"))
+    # Ищем файл сессии во всех project-папках
+    for project_dir in (home / ".claude" / "projects").iterdir():
+        candidate = project_dir / f"{session_id}.jsonl"
+        if candidate.exists():
+            # Читаем с конца — ищем первую запись с "model"
+            try:
+                lines = candidate.read_text(encoding="utf-8").splitlines()
+                for line in reversed(lines):
+                    if '"model"' not in line:
+                        continue
+                    obj = json.loads(line)
+                    msg = obj.get("message", {})
+                    model = msg.get("model", "")
+                    if model:
+                        return model
+            except (OSError, json.JSONDecodeError):
+                pass
+    return ""
+
+
+def _load_index(wiki_dir: Path) -> dict[str, Any]:
+    index_yaml = wiki_dir / "index.yaml"
+    if not index_yaml.exists():
+        return {"version": 1, "concepts": []}
     try:
-        return sdk_client.generate(system=prompt, user=user)
-    except sdk_client.SDKError as e:
-        return f"_(ошибка SDK: {e})_"
+        return yaml.safe_load(index_yaml.read_text(encoding="utf-8")) or {}
+    except yaml.YAMLError:
+        return {"version": 1, "concepts": []}
+
+
+def filter_concepts(
+    wiki_dir: Path,
+    *,
+    stage: str | None = None,
+    type_: str | None = None,
+    tag: str | None = None,
+    trigger: str | None = None,
+    slug: str | None = None,
+    grep: str | None = None,
+) -> list[dict[str, Any]]:
+    """Возвращает список концептов из index.yaml, удовлетворяющих фильтрам."""
+    data = _load_index(wiki_dir)
+    result: list[dict[str, Any]] = []
+    for c in data.get("concepts", []):
+        if slug is not None and c.get("slug") != slug:
+            continue
+        if stage is not None and c.get("stage") != stage:
+            continue
+        if type_ is not None and c.get("type") != type_:
+            continue
+        if tag is not None and tag not in (c.get("tags") or []):
+            continue
+        if trigger is not None and trigger not in (c.get("triggers") or []):
+            continue
+        if grep is not None:
+            haystack = " ".join(
+                str(c.get(k, "")) for k in ("slug", "name", "tags", "triggers")
+            ).lower()
+            if grep.lower() not in haystack:
+                continue
+        result.append(c)
+    return result
+
+
+def _format_compact(concepts: list[dict[str, Any]]) -> str:
+    lines: list[str] = []
+    for c in concepts:
+        tags = ",".join(c.get("tags") or [])
+        triggers = ",".join(c.get("triggers") or [])
+        head = f"[[{c.get('slug', '?')}]]"
+        if tags:
+            head += f" | tags: {tags}"
+        if triggers:
+            head += f" | triggers: {triggers}"
+        lines.append(head)
+        name = c.get("name", c.get("slug", ""))
+        if name and name != c.get("slug"):
+            lines.append(f"  {name}")
+        if c.get("card"):
+            lines.append(f"  card: {c['card']}")
+        lines.append("")
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def _format_slugs(concepts: list[dict[str, Any]]) -> str:
+    return "\n".join(c.get("slug", "") for c in concepts) + "\n"
+
+
+def _format_json(concepts: list[dict[str, Any]]) -> str:
+    return json.dumps(concepts, ensure_ascii=False, indent=2)
+
+
+def _format_cards(wiki_dir: Path, concepts: list[dict[str, Any]]) -> str:
+    chunks: list[str] = []
+    for c in concepts:
+        card_rel = c.get("card")
+        if not card_rel:
+            continue
+        card_path = wiki_dir / card_rel
+        if card_path.exists():
+            chunks.append(card_path.read_text(encoding="utf-8"))
+    return "\n\n---\n\n".join(chunks) + "\n"
+
+
+def format_output(
+    wiki_dir: Path, concepts: list[dict[str, Any]], fmt: str = "compact"
+) -> str:
+    if fmt == "compact":
+        return _format_compact(concepts)
+    if fmt == "slugs":
+        return _format_slugs(concepts)
+    if fmt == "json":
+        return _format_json(concepts)
+    if fmt == "cards":
+        return _format_cards(wiki_dir, concepts)
+    raise ValueError(f"Unknown format: {fmt}")
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("question", help="Вопрос к wiki")
-    parser.add_argument("--project", help="Slug проекта (включит его wiki + memory)")
-    parser.add_argument("--file-back", action="store_true", help="Сохранить ответ в memory/qa/")
+    parser = argparse.ArgumentParser(
+        description="Query wiki/index.yaml — pure-Python filter, no SDK."
+    )
+    parser.add_argument("--wiki", default=str(config.WIKI_DIR), help="wiki/ dir")
+    parser.add_argument("--stage", help="Filter by stage (e.g. 08)")
+    parser.add_argument("--type", dest="type_", help="Filter by type")
+    parser.add_argument("--tag", help="Filter by tag")
+    parser.add_argument("--trigger", help="Filter by trigger")
+    parser.add_argument("--slug", help="Filter by exact slug")
+    parser.add_argument("--grep", help="Substring search across slug/name/tags/triggers")
+    parser.add_argument(
+        "--format", dest="fmt", default="compact",
+        choices=("compact", "cards", "slugs", "json"),
+    )
+    parser.add_argument("--agent", default="", help="Agent/skill name making this query (for logging)")
     args = parser.parse_args()
+    wiki_dir = Path(args.wiki).resolve()
 
-    wiki_dirs = [config.WIKI_DIR]
-    if args.project:
-        project_root = Path.home() / "Lendings" / args.project
-        if (project_root / "wiki").exists():
-            wiki_dirs.append(project_root / "wiki")
-        if (project_root / "memory" / "compiled").exists():
-            wiki_dirs.append(project_root / "memory" / "compiled")
-
-    answer = ask(wiki_dirs=wiki_dirs, question=args.question)
-    print(answer)
-
-    if args.file_back and args.project:
-        qa_dir = Path.home() / "Lendings" / args.project / "memory" / "compiled" / "qa"
-        qa_dir.mkdir(parents=True, exist_ok=True)
-        slug = utils.slugify(args.question)[:60]
-        out = qa_dir / f"{date.today().isoformat()}-{slug}.md"
-        utils.atomic_write(
-            out,
-            f"# {args.question}\n\n{answer}\n",
+    concepts = filter_concepts(
+        wiki_dir,
+        stage=args.stage,
+        type_=args.type_,
+        tag=args.tag,
+        trigger=args.trigger,
+        slug=args.slug,
+        grep=args.grep,
+    )
+    # Логируем wiki query (silent если routing_log недоступен)
+    try:
+        import os
+        from scripts.wiki import routing_log
+        from scripts.wiki import run_id as _run_id
+        session_id = _run_id.get_or_create()
+        model = _detect_model_from_session(os.environ.get("CLAUDE_CODE_SESSION_ID", "unknown"))
+        filters_dict = {
+            "stage": args.stage,
+            "type": args.type_,
+            "tag": args.tag,
+            "trigger": args.trigger,
+            "slug": args.slug,
+            "grep": args.grep,
+        }
+        # Обогащаем фильтры из первого хита если они не заданы явно
+        if concepts:
+            first = concepts[0]
+            if not filters_dict["type"]:
+                filters_dict["type"] = first.get("type", "")
+            if not filters_dict["stage"]:
+                filters_dict["stage"] = first.get("stage", "")
+        # Дедупликация: не пишем если точно такой же slug уже залогирован в этой сессии
+        existing = routing_log.read_events(since_days=1)
+        hit_slugs = [c["slug"] for c in concepts]
+        already_logged = any(
+            e.get("session_id") == session_id
+            and e.get("type") == "wiki_query"
+            and e.get("hits") == hit_slugs
+            and e.get("filters", {}).get("slug") == args.slug
+            for e in existing
         )
-        print(f"\n💾 Сохранено: {out}")
+        if not already_logged:
+            est_saved = routing_log.estimate_tokens_saved(wiki_dir, concepts)
+            routing_log.log_query(session_id, filters_dict, hit_slugs, est_saved, model=model, agent=args.agent)
+    except Exception as e:
+        print(f"[wiki routing_log] failed to log: {e}", file=sys.stderr)
 
+    sys.stdout.write(format_output(wiki_dir, concepts, fmt=args.fmt))
     return 0
 
 

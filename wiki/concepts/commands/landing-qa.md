@@ -1,66 +1,47 @@
 ---
+slug: landing-qa
 type: command
-name: landing-qa
-sources: ["commands/landing-qa.md"]
-updated: 2026-05-16
-triggers:
-  - "запустить визуальный контроль лендинга"
-  - "проверить composed.html перед деплоем"
-  - "сделать скриншоты и QA-анализ"
-  - "найти визуальные проблемы в макете"
+name: "/landing-qa — Визуальный QA лендинга"
 stage: "10"
-uses:
-  - visual-qa
-tags:
-  - qa
-  - visual
-  - codex
-  - playwright
-  - screenshot
+tags: [qa, visual, playwright, codex, screenshot, auto-fix]
+triggers: [landing-qa]
+inputs: []
+outputs: ["<project>/10_QA/screenshots/iter-N/desktop.png", "<project>/10_QA/screenshots/iter-N/mobile.png", "<project>/10_QA/screenshots/iter-N/desktop-review.json", "<project>/10_QA/screenshots/iter-N/mobile-review.json", "<project>/10_QA/visual-qa-report.md"]
+gates: []
+pre_reqs: [landing-compose]
+related: [visual-qa, landing-deploy, landing-final-check, landing-build]
+sources: ["commands/landing-qa.md"]
+updated: 2026-05-26
+confidence: {stage: low, gates: low}
 ---
 
-# /landing-qa — Визуальный контроль перед деплоем
+# /landing-qa — Визуальный QA лендинга
 
 ## Что делает
 
-Делает скриншоты текущего макета (desktop + mobile), отправляет их на анализ через codex CLI и выдаёт читаемый отчёт со списком визуальных проблем. Помогает поймать баги вёрстки до того, как они уйдут на живой сайт.
+Запускает финальный визуальный контроль лендинга перед деплоем. Открывает `composed.html` через Playwright, снимает скриншоты в desktop (1280×800) и mobile (375×812) разрешениях, затем анализирует каждый через codex CLI с промптом QA-инженера. Формирует структурированный JSON с найденными issues и сводный читаемый отчёт. В режиме `--iterate` пытается автоматически исправить проблемы (до трёх циклов).
 
-## Когда вызывать / в каком этапе
+## Когда вызывается
 
-Этап **10 QA**. Вызывать вручную:
+Вызывается вручную оператором перед закрытием этапа 07b/07f или перед деплоем (этап 09). Также применяется после любых ручных правок в HTML/CSS, чтобы убедиться, что правки не сломали визуал. При флаге `--strict` возвращает ошибку, если найдены критические issues — это позволяет встроить команду в автоматизированный pipeline с жёсткими гейтами.
 
-- перед закрытием этапа `07b_COMPOSED` или `07f_COMPOSED_FINAL`;
-- перед деплоем (этап 09);
-- после любых ручных правок в HTML/CSS.
+## Вход → выход
 
-Три режима запуска:
+**Вход:** файл `<project>/07b_COMPOSED/composed.html` (или `07f_COMPOSED_FINAL/`), установленный Playwright и доступный codex CLI.
 
-```
-/landing-qa <project>            # диагностика, только отчёт
-/landing-qa <project> --strict   # падает с ошибкой при critical issues
-/landing-qa <project> --iterate  # auto-fix цикл, максимум 3 итерации
-```
+**Выход:** скриншоты desktop и mobile по итерациям, JSON-отчёты с перечнем visual issues, итоговый `visual-qa-report.md` с читаемой сводкой. При `--iterate` — дополнительно патченный HTML после auto-fix попыток.
 
-## Что на вход / на выход
+## Failure modes
 
-**Вход:**
-- `<project>/07b_COMPOSED/composed.html` или `07f_COMPOSED_FINAL/` — финальный макет лендинга.
+- **Playwright не установлен или браузер не запускается** — команда падает на шаге скриншотов; нужна установка `npx playwright install`.
+- **codex CLI недоступен или квота исчерпана** — анализ не выполняется, отчёт не формируется; стоимость ~$0.20–0.40 за прогон.
+- **composed.html не найден** — команда не знает, какой файл брать, если оба пути `07b_COMPOSED/` и `07f_COMPOSED_FINAL/` отсутствуют.
+- **Auto-fix цикл не сходится** — за 3 итерации issues не исчезают; скрипт `apply-fix.py` может применить регрессионные правки.
+- **Мобильный скриншот не отражает реальный рендер** — Playwright эмулирует viewport, но не все CSS медиа-фичи работают идентично реальным устройствам.
 
-**Выход:**
-- `10_QA/screenshots/iter-N/desktop.png` + `mobile.png` — скриншоты (1280×800 и 375×812).
-- `10_QA/screenshots/iter-N/desktop-review.json` + `mobile-review.json` — JSON с issues от codex.
-- `10_QA/visual-qa-report.md` — читаемый отчёт со списком всех найденных проблем и summary.
+## Related
 
-При флаге `--iterate` — дополнительно: попытка авто-исправления через `apply-fix.py` с повтором цикла (до 3 раз).
-
-**Стоимость:** ~$0.10 за один скриншот, ~$0.20–0.40 за полный прогон (desktop + mobile).
-
-## Связанные концепты
-
-- [[visual-qa]] — скилл, реализующий логику Playwright + codex-анализа
-- [[block-composer]] — генерирует `composed.html`, который QA проверяет
-- [[wp-deployer]] — следующий этап после прохождения QA
-
-## Источник
-
-- `commands/landing-qa.md`
+- [[visual-qa]] — скилл, реализующий логику Playwright + codex анализа
+- [[landing-deploy]] — следующий этап после прохождения QA
+- [[landing-final-check]] — смежный финальный контроль перед деплоем
+- [[landing-build]] — этап сборки WordPress-темы, предшествует QA

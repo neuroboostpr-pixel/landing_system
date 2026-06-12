@@ -1,0 +1,206 @@
+<style>.lp-features-corporate-split {
+  display: grid;
+  gap: var(--lp-spacing-lg);
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md);
+  background: var(--lp-bg);
+  color: var(--lp-text);
+  font-family: var(--lp-font-body);
+}
+
+.lp-features-corporate-split__content {
+  display: grid;
+  gap: var(--lp-spacing-lg);
+}
+
+.lp-features-corporate-split__header {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+}
+
+.lp-features-corporate-split__eyebrow {
+  color: var(--lp-accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.lp-features-corporate-split__title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 1.05;
+  letter-spacing: 0;
+}
+
+.lp-features-corporate-split__lead {
+  max-width: 46rem;
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.lp-features-corporate-split__list {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lp-features-corporate-split__item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--lp-spacing-sm);
+  padding: var(--lp-spacing-md);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+  background: var(--lp-bg-alt);
+}
+
+.lp-features-corporate-split__mark {
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-top: 0.2rem;
+  border: 2px solid var(--lp-accent);
+  border-radius: var(--lp-radius);
+  background: transparent;
+  position: relative;
+}
+
+.lp-features-corporate-split__mark::after {
+  content: "";
+  position: absolute;
+  left: 0.25rem;
+  top: 0.08rem;
+  width: 0.32rem;
+  height: 0.58rem;
+  border-right: 2px solid var(--lp-accent);
+  border-bottom: 2px solid var(--lp-accent);
+  transform: rotate(45deg);
+}
+
+.lp-features-corporate-split__item-body {
+  display: grid;
+  gap: var(--lp-spacing-xs);
+}
+
+.lp-features-corporate-split__item-title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 1.05rem;
+  line-height: 1.3;
+  letter-spacing: 0;
+}
+
+.lp-features-corporate-split__item-text {
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.lp-features-corporate-split__media {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  margin: 0;
+}
+
+.lp-features-corporate-split__media picture {
+  display: block;
+  overflow: hidden;
+  min-height: 18rem;
+  border-radius: var(--lp-radius-lg);
+  background: var(--lp-bg-alt);
+}
+
+.lp-features-corporate-split__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 18rem;
+  object-fit: cover;
+}
+
+.lp-features-corporate-split__caption {
+  color: var(--lp-text-muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+@media (min-width: 768px) {
+  .lp-features-corporate-split {
+    grid-template-columns: minmax(0, 1fr) minmax(20rem, 0.86fr);
+    align-items: center;
+    gap: var(--lp-spacing-xl);
+    padding: var(--lp-spacing-xl);
+  }
+
+  .lp-features-corporate-split__list {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .lp-features-corporate-split__media {
+    align-self: stretch;
+  }
+
+  .lp-features-corporate-split__media picture,
+  .lp-features-corporate-split__media img {
+    min-height: 100%;
+  }
+}
+
+/* Forced mobile viewport for preview */
+@media (min-width: 0) {
+  body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
+}
+</style>
+<section aria-labelledby="features-corporate-split-title" class="lp-features-corporate-split">
+<div class="lp-features-corporate-split__content">
+<div class="lp-features-corporate-split__header">
+<span class="lp-features-corporate-split__eyebrow">{{slot:eyebrow}}</span>
+<h2 class="lp-features-corporate-split__title" id="features-corporate-split-title">{{slot:title}}</h2>
+<p class="lp-features-corporate-split__lead">{{slot:lead}}</p>
+</div>
+<ul aria-label="{{slot:features-list-label}}" class="lp-features-corporate-split__list">
+<li class="lp-features-corporate-split__item">
+<span aria-hidden="true" class="lp-features-corporate-split__mark"></span>
+<div class="lp-features-corporate-split__item-body">
+<h3 class="lp-features-corporate-split__item-title">{{slot:feature-1-title}}</h3>
+<p class="lp-features-corporate-split__item-text">{{slot:feature-1-text}}</p>
+</div>
+</li>
+<li class="lp-features-corporate-split__item">
+<span aria-hidden="true" class="lp-features-corporate-split__mark"></span>
+<div class="lp-features-corporate-split__item-body">
+<h3 class="lp-features-corporate-split__item-title">{{slot:feature-2-title}}</h3>
+<p class="lp-features-corporate-split__item-text">{{slot:feature-2-text}}</p>
+</div>
+</li>
+<li class="lp-features-corporate-split__item">
+<span aria-hidden="true" class="lp-features-corporate-split__mark"></span>
+<div class="lp-features-corporate-split__item-body">
+<h3 class="lp-features-corporate-split__item-title">{{slot:feature-3-title}}</h3>
+<p class="lp-features-corporate-split__item-text">{{slot:feature-3-text}}</p>
+</div>
+</li>
+<li class="lp-features-corporate-split__item">
+<span aria-hidden="true" class="lp-features-corporate-split__mark"></span>
+<div class="lp-features-corporate-split__item-body">
+<h3 class="lp-features-corporate-split__item-title">{{slot:feature-4-title}}</h3>
+<p class="lp-features-corporate-split__item-text">{{slot:feature-4-text}}</p>
+</div>
+</li>
+</ul>
+</div>
+<figure class="lp-features-corporate-split__media">
+<picture>
+<source media="(max-width: 767px)" srcset="{{slot:image-mobile}}"/>
+<img alt="{{slot:image-alt}}" loading="lazy" src="{{slot:image}}"/>
+</picture>
+<figcaption class="lp-features-corporate-split__caption">{{slot:image-caption}}</figcaption>
+</figure>
+</section>

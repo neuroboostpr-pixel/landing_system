@@ -1,0 +1,66 @@
+category: header
+description: Тонкая верхняя панель с логотипом, навигацией, контактами и компактными
+  иконками действий.
+display_name_ru: header-minimal-split-portfolio-kdm1-ru-0 (split)
+has_animation: false
+id: header-minimal-split-portfolio-kdm1-ru-0
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://portfolio.kdm1.ru/upload/iblock/f94/slk0g7ub4mnpodwty9jl8iyrq4zk33uv/LCase.pdf
+layout_pattern: split
+niches_suitable:
+- ecommerce
+- services
+- b2b-saas
+ru_market: true
+slots:
+- name: brand-aria-label
+  type: text
+- name: brand-link
+  type: text
+- name: logo-image-alt
+  type: text
+- name: logo-image
+  type: text
+- name: brand-name
+  type: text
+- name: navigation-aria-label
+  type: text
+- name: nav-link-1-url
+  type: text
+- name: nav-link-1-label
+  type: text
+- name: nav-link-2-url
+  type: text
+- name: nav-link-2-label
+  type: text
+- name: nav-link-3-url
+  type: text
+- name: nav-link-3-label
+  type: text
+- name: nav-link-4-url
+  type: text
+- name: nav-link-4-label
+  type: text
+- name: contact-link
+  type: text
+- name: contact-label
+  type: text
+- name: contact-value
+  type: text
+- name: action-1-aria-label
+  type: text
+- name: action-1-url
+  type: text
+- name: action-2-aria-label
+  type: text
+- name: action-2-url
+  type: text
+- name: cta-url
+  type: text
+- name: cta-label
+  type: text
+style_mood: minimal
+type: header
+variant: null

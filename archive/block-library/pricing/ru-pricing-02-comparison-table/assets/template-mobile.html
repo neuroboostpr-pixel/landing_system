@@ -1,0 +1,182 @@
+<style>
+  :root {
+    --lp-bg: #f5f5f5;
+    --lp-text: #1a1a1a;
+    --lp-accent: #333;
+    --lp-border: #e0e0e0;
+    --lp-font-display: system-ui, sans-serif;
+    --lp-font-body: system-ui, sans-serif;
+    --spacing-md: 16px;
+    --spacing-lg: 32px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--lp-font-body); background: var(--lp-bg); color: var(--lp-text); width: 375px; }
+
+  .pricing-table-section {
+    padding: var(--spacing-lg) 20px;
+    text-align: center;
+  }
+
+  .section-headline {
+    font-family: var(--lp-font-display);
+    font-size: 26px;
+    font-weight: 800;
+    margin: 0 0 var(--spacing-lg);
+    line-height: 1.2;
+    text-align: left;
+  }
+
+  /* Horizontal scroll on mobile for the table */
+  .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 480px;
+    font-size: 14px;
+  }
+
+  thead th {
+    padding: 14px 10px;
+    font-family: var(--lp-font-display);
+    font-weight: 700;
+    border-bottom: 2px solid var(--lp-border);
+    vertical-align: bottom;
+  }
+  thead th:first-child {
+    text-align: left;
+    font-size: 12px;
+    color:#888;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+    min-width: 120px;
+  }
+
+  .tier-name {
+    display: block;
+    font-size: 14px;
+    color: var(--lp-text);
+    margin-bottom: 2px;
+  }
+  .tier-price {
+    display: block;
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--lp-text);
+  }
+
+  tbody tr { border-bottom: 1px solid var(--lp-border); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody td {
+    padding: 10px;
+    vertical-align: middle;
+    text-align: center;
+  }
+  tbody td:first-child { text-align: left; color:#444; }
+
+  thead th.col-premium,
+  tbody td.col-premium {
+    background:var(--lp-bg);
+    border-left: 2px solid var(--lp-accent);
+    border-right: 2px solid var(--lp-accent);
+  }
+  thead th.col-premium {
+    border-top: 2px solid var(--lp-accent);
+    border-radius: 8px 8px 0 0;
+  }
+  tbody tr:last-child td.col-premium {
+    border-bottom: 2px solid var(--lp-accent);
+    border-radius: 0 0 8px 8px;
+  }
+
+  .check { color:var(--lp-accent); font-weight: 700; }
+  .cross { color:var(--lp-text-muted); }
+
+  .cta-row td { padding: 14px 10px; border-bottom: none; }
+  .tier-cta-btn {
+    display: inline-block;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 13px;
+    text-decoration: none;
+    background: var(--lp-border);
+    color: var(--lp-text);
+  }
+  .tier-cta-btn.accent {
+    background: var(--lp-accent);
+    color:#fff;
+  }
+</style>
+<section class="pricing-table-section" data-block-id="ru-pricing-02-comparison-table">
+<h2 class="section-headline">{{slot:headline}}</h2>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Функции</th>
+<th>
+<span class="tier-name">{{slot:tier-1-name}}</span>
+<span class="tier-price">{{slot:tier-1-price}}</span>
+</th>
+<th class="col-premium">
+<span class="tier-name">{{slot:tier-2-name}}</span>
+<span class="tier-price">{{slot:tier-2-price}}</span>
+</th>
+<th>
+<span class="tier-name">{{slot:tier-3-name}}</span>
+<span class="tier-price">{{slot:tier-3-price}}</span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>{{slot:feature-row-1}}</td>
+<td><span class="check">✓</span></td>
+<td class="col-premium"><span class="check">✓</span></td>
+<td><span class="check">✓</span></td>
+</tr>
+<tr>
+<td>{{slot:feature-row-2}}</td>
+<td><span class="cross">✗</span></td>
+<td class="col-premium"><span class="check">✓</span></td>
+<td><span class="check">✓</span></td>
+</tr>
+<tr>
+<td>{{slot:feature-row-3}}</td>
+<td><span class="cross">✗</span></td>
+<td class="col-premium"><span class="check">✓</span></td>
+<td><span class="check">✓</span></td>
+</tr>
+<tr>
+<td>{{slot:feature-row-4}}</td>
+<td><span class="cross">✗</span></td>
+<td class="col-premium"><span class="cross">✗</span></td>
+<td><span class="check">✓</span></td>
+</tr>
+<tr>
+<td>{{slot:feature-row-5}}</td>
+<td><span class="cross">✗</span></td>
+<td class="col-premium"><span class="cross">✗</span></td>
+<td><span class="check">✓</span></td>
+</tr>
+<tr>
+<td>{{slot:feature-row-6}}</td>
+<td>Базовая</td>
+<td class="col-premium">Расширенная</td>
+<td>Приоритетная</td>
+</tr>
+<tr class="cta-row">
+<td></td>
+<td><a class="tier-cta-btn" href="#order-1">{{slot:tier-1-cta}}</a></td>
+<td class="col-premium"><a class="tier-cta-btn accent" href="#order-2">{{slot:tier-2-cta}}</a></td>
+<td><a class="tier-cta-btn" href="#order-3">{{slot:tier-3-cta}}</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>

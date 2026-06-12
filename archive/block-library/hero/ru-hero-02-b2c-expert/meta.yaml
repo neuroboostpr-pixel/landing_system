@@ -1,0 +1,46 @@
+category: hero
+conversion_notes: Фото эксперта в круге создаёт доверие. Регалии — социальное доказательство.
+  CTA ведёт на квиз.
+created: 2026-05-12
+description: 'RU hero B2C: фото эксперта в круге, имя, регалии, оффер, CTA ''Подобрать
+  программу'''
+display_name_ru: ru-hero-02-b2c-expert (centered)
+id: ru-hero-02-b2c-expert
+layout_pattern: centered
+layout_summary_ru: Фото эксперта в круге слева, имя и регалии под фото, оффер с подзаголовком
+  и CTA 'Подобрать программу' справа. На mobile — эксперт над оффером.
+recommended_styles_ru:
+- Neumorphism
+- Glassmorphism
+ru_market: true
+slots:
+- name: expert-photo
+  ratio: '1:1'
+  required: true
+  type: photo
+- max_chars: 30
+  name: expert-name
+  required: true
+  type: text
+- max_chars: 80
+  name: expert-credentials
+  required: false
+  type: text
+- max_chars: 60
+  name: headline
+  required: true
+  type: text
+- max_chars: 120
+  name: subhead
+  required: false
+  type: text
+- default_text: Подобрать программу
+  name: primary-cta
+  required: true
+  type: cta
+source: manual
+source_attribution: ''
+type: hero
+use_cases:
+- b2c
+variant: null

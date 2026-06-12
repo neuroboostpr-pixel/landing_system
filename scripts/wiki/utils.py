@@ -44,6 +44,16 @@ def parse_frontmatter(text: str) -> tuple[dict[str, Any], str]:
     return meta, parts[2]
 
 
+def parse_frontmatter_full(text: str) -> dict[str, Any]:
+    """Извлекает полный YAML frontmatter как dict без отделения body.
+
+    Returns:
+        dict с полным набором полей. Если frontmatter нет или повреждён — {}.
+    """
+    meta, _ = parse_frontmatter(text)
+    return meta
+
+
 def write_with_frontmatter(
     path: Path, metadata: dict[str, Any], body: str
 ) -> None:

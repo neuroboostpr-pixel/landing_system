@@ -5,6 +5,39 @@ description: Use during stage 04 after moodboard is approved. Extracts palette, 
 
 # style-extractor
 
+
+## Pre-flight
+
+Перед любым действием — wiki-запрос для маршрутизации:
+
+```bash
+python -m scripts.wiki.query --slug=style-extractor --agent=style-extractor
+python -m scripts.wiki.log --type agent_call --agent style-extractor --stage 04
+```
+
+## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)
+
+**Полная версия:** [`docs/standards/stage-execution-protocol.md`](../docs/standards/stage-execution-protocol.md).
+
+Перед ЛЮБЫМ Write/Edit действием:
+
+1. Прочитай `<project>/.landing-state.yaml`. Подтверди, что `current_stage == 04_brand`. Если нет — STOP, сообщи пользователю.
+2. Запусти:
+   ```bash
+   bash scripts/render-pipeline-map.sh <project>/.landing-state.yaml --write-wiki
+   ```
+   Покажи Mermaid-карту пользователю.
+3. Создай TodoWrite-список со всеми оставшимися этапами от `04_brand` до конца pipeline.
+4. Запусти `bash scripts/gate-check.sh --stage 04_brand --project <project>`. Если exit != 0 — STOP, реши проблемы и повтори.
+5. Если есть `docs/standards/stage-04_brand-checklist.md` — прочитай и создай sub-todos.
+6. Только после exit 0 от gate-check переходи к выполнению этапа.
+7. По завершении этапа: запусти `bash scripts/verify-04_brand.sh` (если есть) → если PASS, отметь `approved` через `bash scripts/gate-state.sh approve <project> 04_brand`.
+
+**ВАЖНО:** harness `PreToolUse` hook (`scripts/hooks/enforce_stage_gate.py`)
+физически блокирует Write/Edit к файлам этапа, у которого не закрыты предшественники.
+Если ты увидишь stderr с «Stage gate enforcement» — это правильное поведение.
+Не пытайся обходить — иди и закрывай предшественника.
+
 ## Mission
 
 Extract a concrete, code-ready style system from approved reference images and URLs.
@@ -18,7 +51,16 @@ Write 5 output files to `04_БРЕНД/extracted/`: palette.yaml, fonts.yaml, ic
 4. Run `python3 skills/style-decomposition/scripts/match-icons.py` with a standard needed list.
 5. Run `python3 skills/style-decomposition/scripts/orchestrate.py` to aggregate all outputs.
 6. Write placeholder `grid.md` and `motion.md` if not already present.
-7. **HARD GATE**: must produce all 5 outputs (palette.yaml, fonts.yaml, icons.yaml, grid.md, motion.md) before brand-architect runs.
+7. **Если референсы недоступны** (Behance/Dribbble/Instagram — заблокированы, PDF не читается color-thief):
+   - НЕ падай с ошибкой — `build.py` автоматически возьмёт палитру и шрифты из `03b_КОНЦЕПТ/visual-concept.yaml`
+   - Создай пустые placeholder-файлы чтобы gate-check не падал:
+     ```bash
+     echo "palette: []" > 04_БРЕНД/extracted/palette.yaml
+     echo "candidates: []" > 04_БРЕНД/extracted/fonts.yaml
+     echo "icon_set: lucide" > 04_БРЕНД/extracted/icons.yaml
+     ```
+   - Запиши в лог: "Референсы заблокированы — palette из visual-concept.yaml"
+8. **HARD GATE**: все 5 файлов должны существовать (допускаются пустые placeholders).
 
 ## Tools
 

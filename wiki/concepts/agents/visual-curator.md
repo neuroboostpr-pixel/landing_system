@@ -1,57 +1,54 @@
 ---
+slug: visual-curator
 type: agent
-name: visual-curator
+name: "Куратор визуалов"
+stage: "07e"
+tags: [visuals, icons, infographics, pr-c, codex, generation]
+triggers: [landing-visuals]
+inputs:
+  - 07b_COMPOSED/composed.html
+  - .landing-state.yaml
+  - tokens.json
+outputs:
+  - 07d_VISUALS/_slots.yaml
+  - 07d_VISUALS/icons/
+  - 07d_VISUALS/infographics/
+  - 07d_VISUALS/STATE.yaml
+pre_reqs: [design-system-generator, block-composer]
+related: [icon-generator, infographic-builder, block-composer, design-system-generator, photo-curator]
 sources: ["agents/visual-curator.md"]
-updated: 2026-05-15
-triggers: ["/landing-visuals", "сгенерировать иконки", "создать инфографику", "заполнить визуальные слоты"]
-stage: "07d"
-uses: ["icon-generator", "infographic-builder", "block-composition", "landing-visuals"]
-tags: ["visual", "icons", "infographics", "codex", "stage-07d", "pr-c"]
+updated: 2026-05-26
+confidence: {stage: low}
 ---
 
-# Visual Curator — оркестратор визуальной генерации (этап 07d)
+# Куратор визуалов
 
 ## Что делает
 
-Сканирует `composed.html` на наличие слотов для иконок и инфографики, запускает AI-генерацию через codex, кэширует результаты и вставляет готовые PNG обратно в сборку. После работы агента все плейсхолдеры вида `[SLOT: feature-1-icon]` заменяются реальными изображениями.
+Оркестрирует этап генерации визуальных ассетов (07e). Сканирует `composed.html` в поисках слотов-плейсхолдеров вида `[SLOT: feature-1-icon]`, диспатчит суб-агентов `icon-generator` и `infographic-builder` для каждого слота, управляет кэшем по хэшу (hint + стиль + бренд-цвет + ниша) и, после генерации, инжектирует PNG обратно в `composed.html`. Люди в создаваемых ассетах не фигурируют — identity-safe правила не применяются.
 
-## Когда вызывать / в каком этапе
+## Когда вызывается
 
-Этап **07d**, запускается командой `/landing-visuals` после того, как выполнены:
-- Этап 05 (дизайн-система) утверждён — `stages.05_design.status == approved`
-- Файл `07b_COMPOSED/composed.html` существует (этап PR-A выполнен)
+Запускается командой `/landing-visuals` — вручную или через `landing-orchestrator` на этапе 07e. Перед стартом проверяет два hard gate: этап 05 (дизайн-система) в статусе `approved` и наличие `07b_COMPOSED/composed.html`. При провале любого условия немедленно завершается с сообщением на русском.
 
-Если одно из условий не выполнено, агент завершает работу с русским сообщением об ошибке и не идёт дальше.
+## Вход → выход
 
-Поддерживаются флаги:
-- `--type icons` / `--type infographics` — частичный прогон
-- `--force` — игнорировать кэш
-- `--slot <name>` — обработать один конкретный слот
+**Вход:** `07b_COMPOSED/composed.html` со слотами-плейсхолдерами; `tokens.json` с бренд-цветами; `market-profile.md` с данными ниши; `.landing-state.yaml` для проверки статусов этапов.
 
-## Что на вход / на выход
+**Выход:** `07d_VISUALS/icons/*.png` и `07d_VISUALS/infographics/*.png`; обновлённый `composed.html` с тегами `<img class="lp-icon">` вместо плейсхолдеров; `07d_VISUALS/_slots.yaml` с каталогом всех найденных слотов; `07d_VISUALS/STATE.yaml` с прогрессом, ошибками и предупреждениями по каждому суб-этапу (scan / generate / inject).
 
-**Вход:**
-- `07b_COMPOSED/composed.html` — сборка с плейсхолдерами иконок и инфографики
-- `tokens.json` — цвета бренда (используются при генерации)
-- `01a_АНАЛИЗ_НИШИ/market-profile.md` — ниша проекта (контекст для промптов)
-- `.cache/` — кэш по hash(hint + style + brand_color + niche)
+## Failure modes
 
-**Выход:**
-- `07d_VISUALS/icons/*.png` — сгенерированные иконки
-- `07d_VISUALS/infographics/*.png` — сгенерированная инфографика
-- `07d_VISUALS/_slots.yaml` — список обнаруженных слотов
-- `07d_VISUALS/STATE.yaml` — статус каждой стадии (scan / generate / inject)
-- Обновлённый `07b_COMPOSED/composed.html` с вставленными `<img class="lp-icon">`
+- Этап 05 не в статусе `approved` или отсутствует `composed.html` — агент останавливается на hard gate до устранения причины.
+- `slot-scanner.py` не обнаруживает ни одного слота — генерация не запускается, composed остаётся без изменений.
+- Ошибка codex API на конкретном слоте — слот сохраняется как плейсхолдер, ошибка фиксируется в `STATE.yaml::errors`, остальные слоты генерируются в штатном режиме.
+- Инжекция через `compose-blocks.py` не находит директорию `07d_VISUALS/` — fallback на исходное поведение с плейсхолдерами без аварийного завершения.
+- Повторный запуск без `--force` пропускает уже кэшированные слоты; изменение hint или бренд-цвета порождает новый хэш и требует явного `--force` для перегенерации.
 
-## Связанные концепты
+## Related
 
-- [[icon-generator]] — субагент для генерации одной иконки PNG через codex image_gen
-- [[infographic-builder]] — субагент для генерации одной инфографики PNG через codex image_gen
-- [[block-composition]] — скилл, чей `compose-blocks.py` выполняет финальную инъекцию PNG в composed.html
-- [[landing-visuals]] — slash-команда, триггерящая этот агент
-- [[ux-composer]] — создаёт wireframe с исходными слотами (этап 07a)
-- [[block-composer]] — создаёт composed.html с плейсхолдерами (этап 07b)
-
-## Источник
-
-- `agents/visual-curator.md`
+- [[icon-generator]] — суб-агент, генерирует PNG-иконки для соответствующих слотов
+- [[infographic-builder]] — суб-агент, генерирует PNG-инфографику
+- [[block-composer]] — создаёт `composed.html`, который служит входом для visual-curator
+- [[design-system-generator]] — hard prerequisite: этап 05 должен быть в статусе approved
+- [[photo-curator]] — параллельный этап 07d (фото клиента), выполняется одновременно с визуалами

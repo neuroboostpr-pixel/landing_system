@@ -1,0 +1,89 @@
+category: social-proof
+conversion_notes: Конкретные цифры в цитатах повышают доверие. Фото слева создаёт
+  личное впечатление.
+created: 2026-05-12
+description: '4 карточки отзывов 2x2: фото клиента + цитата + имя + роль. Конкретные
+  результаты в цитатах.'
+display_name_ru: ru-testimonials-02-text-photo (cards)
+id: ru-testimonials-02-text-photo
+layout_pattern: cards
+layout_summary_ru: 'Сетка 2×2: фото клиента + длинная цитата (200 символов) + имя
+  + роль. Конкретные результаты в цитатах повышают доверие. На mobile — 1 колонка.'
+ru_market: true
+slots:
+- max_chars: 60
+  name: headline
+  required: true
+  type: text
+- name: testimonial-1-photo
+  ratio: '1:1'
+  required: true
+  type: photo
+- max_chars: 200
+  name: testimonial-1-quote
+  required: true
+  type: text
+- max_chars: 30
+  name: testimonial-1-name
+  required: true
+  type: text
+- max_chars: 50
+  name: testimonial-1-role
+  required: false
+  type: text
+- name: testimonial-2-photo
+  ratio: '1:1'
+  required: true
+  type: photo
+- max_chars: 200
+  name: testimonial-2-quote
+  required: true
+  type: text
+- max_chars: 30
+  name: testimonial-2-name
+  required: true
+  type: text
+- max_chars: 50
+  name: testimonial-2-role
+  required: false
+  type: text
+- name: testimonial-3-photo
+  ratio: '1:1'
+  required: false
+  type: photo
+- max_chars: 200
+  name: testimonial-3-quote
+  required: false
+  type: text
+- max_chars: 30
+  name: testimonial-3-name
+  required: false
+  type: text
+- max_chars: 50
+  name: testimonial-3-role
+  required: false
+  type: text
+- name: testimonial-4-photo
+  ratio: '1:1'
+  required: false
+  type: photo
+- max_chars: 200
+  name: testimonial-4-quote
+  required: false
+  type: text
+- max_chars: 30
+  name: testimonial-4-name
+  required: false
+  type: text
+- max_chars: 50
+  name: testimonial-4-role
+  required: false
+  type: text
+source: manual
+source_attribution: ''
+type: testimonials
+use_cases:
+- services
+- b2c
+- local
+variant: testimonials

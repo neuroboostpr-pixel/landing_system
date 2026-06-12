@@ -1,0 +1,8 @@
+# Example Site
+
+> Short tagline describing the site for LLM consumption.
+
+## Resources
+
+- [Privacy Policy](https://example.com/policy): Our data handling.
+- [About Us](https://example.com/about): Who we are.

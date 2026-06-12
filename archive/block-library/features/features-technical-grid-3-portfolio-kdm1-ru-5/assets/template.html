@@ -1,0 +1,175 @@
+<style>.lp-features-technical-grid-3 {
+  color: var(--lp-text);
+  background: var(--lp-bg);
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md);
+  font-family: var(--lp-font-body);
+}
+
+.lp-features-technical-grid-3__inner {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.lp-features-technical-grid-3__header {
+  display: grid;
+  gap: var(--lp-spacing-md);
+  max-width: 820px;
+  margin-bottom: var(--lp-spacing-xl);
+}
+
+.lp-features-technical-grid-3__eyebrow {
+  margin: 0;
+  color: var(--lp-accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.lp-features-technical-grid-3__title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 2.4rem;
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: 0;
+}
+
+.lp-features-technical-grid-3__lead {
+  margin: 0;
+  max-width: 680px;
+  color: var(--lp-text-muted);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.lp-features-technical-grid-3__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--lp-spacing-md);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lp-features-technical-grid-3__card {
+  display: grid;
+  overflow: hidden;
+  min-height: 100%;
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+  background: var(--lp-bg-alt);
+}
+
+.lp-features-technical-grid-3__media {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  background: var(--lp-border);
+}
+
+.lp-features-technical-grid-3__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lp-features-technical-grid-3__content {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  padding: var(--lp-spacing-lg);
+}
+
+.lp-features-technical-grid-3__index {
+  width: fit-content;
+  margin: 0;
+  padding: var(--lp-spacing-xs) var(--lp-spacing-sm);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+  color: var(--lp-accent);
+  background: transparent;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.lp-features-technical-grid-3__card-title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 1.25rem;
+  font-weight: 750;
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+
+.lp-features-technical-grid-3__text {
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 0.96rem;
+  line-height: 1.6;
+}
+
+@media (min-width: 768px) {
+  .lp-features-technical-grid-3 {
+    padding: var(--lp-spacing-xl) var(--lp-spacing-lg);
+  }
+
+  .lp-features-technical-grid-3__title {
+    font-size: 4rem;
+  }
+
+  .lp-features-technical-grid-3__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .lp-features-technical-grid-3__card {
+    grid-template-rows: auto 1fr;
+  }
+}
+</style>
+<section aria-labelledby="features-technical-grid-3-title" class="lp-features-technical-grid-3">
+<div class="lp-features-technical-grid-3__inner">
+<div class="lp-features-technical-grid-3__header">
+<p class="lp-features-technical-grid-3__eyebrow">{{slot:features-eyebrow}}</p>
+<h2 class="lp-features-technical-grid-3__title" id="features-technical-grid-3-title">{{slot:features-title}}</h2>
+<p class="lp-features-technical-grid-3__lead">{{slot:features-subhead}}</p>
+</div>
+<ul class="lp-features-technical-grid-3__grid" role="list">
+<li class="lp-features-technical-grid-3__card">
+<div class="lp-features-technical-grid-3__media">
+<img alt="{{slot:feature-1-image-alt}}" loading="lazy" src="{{slot:feature-1-image}}"/>
+</div>
+<div class="lp-features-technical-grid-3__content">
+<p class="lp-features-technical-grid-3__index">{{slot:feature-1-badge}}</p>
+<h3 class="lp-features-technical-grid-3__card-title">{{slot:feature-1-title}}</h3>
+<p class="lp-features-technical-grid-3__text">{{slot:feature-1-text}}</p>
+</div>
+</li>
+<li class="lp-features-technical-grid-3__card">
+<div class="lp-features-technical-grid-3__media">
+<img alt="{{slot:feature-2-image-alt}}" loading="lazy" src="{{slot:feature-2-image}}"/>
+</div>
+<div class="lp-features-technical-grid-3__content">
+<p class="lp-features-technical-grid-3__index">{{slot:feature-2-badge}}</p>
+<h3 class="lp-features-technical-grid-3__card-title">{{slot:feature-2-title}}</h3>
+<p class="lp-features-technical-grid-3__text">{{slot:feature-2-text}}</p>
+</div>
+</li>
+<li class="lp-features-technical-grid-3__card">
+<div class="lp-features-technical-grid-3__media">
+<img alt="{{slot:feature-3-image-alt}}" loading="lazy" src="{{slot:feature-3-image}}"/>
+</div>
+<div class="lp-features-technical-grid-3__content">
+<p class="lp-features-technical-grid-3__index">{{slot:feature-3-badge}}</p>
+<h3 class="lp-features-technical-grid-3__card-title">{{slot:feature-3-title}}</h3>
+<p class="lp-features-technical-grid-3__text">{{slot:feature-3-text}}</p>
+</div>
+</li>
+</ul>
+</div>
+</section>

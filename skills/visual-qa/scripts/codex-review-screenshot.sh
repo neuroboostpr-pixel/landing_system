@@ -10,6 +10,11 @@
 
 set -euo pipefail
 
+
+# Cross-platform python detection (sets PYTHON_CMD).
+__SCRIPT_DIR__="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=../../../scripts/lib/python-cmd.sh
+. "$__SCRIPT_DIR__/../../../scripts/lib/python-cmd.sh"
 SCREENSHOT="${1:?ERROR: screenshot path required}"
 [ -f "$SCREENSHOT" ] || { echo "ERROR: $SCREENSHOT not found" >&2; exit 2; }
 
@@ -37,7 +42,7 @@ if [ -z "$JSON" ]; then
 fi
 
 # Валидация что это JSON
-if ! echo "$JSON" | python3 -c "import sys,json; json.load(sys.stdin)" 2>/dev/null; then
+if ! echo "$JSON" | $PYTHON_CMD -c "import sys,json; json.load(sys.stdin)" 2>/dev/null; then
     echo "ERROR: codex вернул не-JSON ответ" >&2
     echo "Raw response:" >&2
     echo "$RESPONSE" >&2

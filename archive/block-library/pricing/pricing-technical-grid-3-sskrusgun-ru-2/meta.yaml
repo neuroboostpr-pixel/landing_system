@@ -1,0 +1,110 @@
+category: pricing
+description: Сетка карточек программ с фото, краткими параметрами, ценовым акцентом
+  и кнопками покупки.
+display_name_ru: pricing-technical-grid-3-sskrusgun-ru-2 (grid-3)
+has_animation: false
+id: pricing-technical-grid-3-sskrusgun-ru-2
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://sskrusgun.ru/
+layout_pattern: grid-3
+niches_suitable:
+- services
+- education
+- ecommerce
+ru_market: true
+slots:
+- name: pricing-eyebrow
+  type: text
+- name: pricing-title
+  type: text
+- name: pricing-subtitle
+  type: text
+- name: plan-1-image-alt
+  type: text
+- name: plan-1-image
+  type: text
+- name: plan-1-badge
+  type: text
+- name: plan-1-title
+  type: text
+- name: plan-1-description
+  type: text
+- name: plan-1-param-1-label
+  type: text
+- name: plan-1-param-1-value
+  type: text
+- name: plan-1-param-2-label
+  type: text
+- name: plan-1-param-2-value
+  type: text
+- name: plan-1-param-3-label
+  type: text
+- name: plan-1-param-3-value
+  type: text
+- name: plan-1-price
+  type: text
+- name: plan-1-cta-url
+  type: text
+- name: plan-1-cta-label
+  type: text
+- name: plan-2-image-alt
+  type: text
+- name: plan-2-image
+  type: text
+- name: plan-2-badge
+  type: text
+- name: plan-2-title
+  type: text
+- name: plan-2-description
+  type: text
+- name: plan-2-param-1-label
+  type: text
+- name: plan-2-param-1-value
+  type: text
+- name: plan-2-param-2-label
+  type: text
+- name: plan-2-param-2-value
+  type: text
+- name: plan-2-param-3-label
+  type: text
+- name: plan-2-param-3-value
+  type: text
+- name: plan-2-price
+  type: text
+- name: plan-2-cta-url
+  type: text
+- name: plan-2-cta-label
+  type: text
+- name: plan-3-image-alt
+  type: text
+- name: plan-3-image
+  type: text
+- name: plan-3-badge
+  type: text
+- name: plan-3-title
+  type: text
+- name: plan-3-description
+  type: text
+- name: plan-3-param-1-label
+  type: text
+- name: plan-3-param-1-value
+  type: text
+- name: plan-3-param-2-label
+  type: text
+- name: plan-3-param-2-value
+  type: text
+- name: plan-3-param-3-label
+  type: text
+- name: plan-3-param-3-value
+  type: text
+- name: plan-3-price
+  type: text
+- name: plan-3-cta-url
+  type: text
+- name: plan-3-cta-label
+  type: text
+style_mood: technical
+type: pricing
+variant: cards

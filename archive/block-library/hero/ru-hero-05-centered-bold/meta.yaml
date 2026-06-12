@@ -1,0 +1,41 @@
+category: hero
+conversion_notes: 'Apple/Stripe-стиль: минимализм + сила слова. Единственная CTA не
+  конкурирует ни с чем. Tagline (uppercase, мелкий) добавляет контекст без загрязления.
+  Декоративные линии создают ритм без графики.'
+created: '2026-05-13'
+description: Центрированный hero с гигантской типографикой (64px desktop, 36px mobile),
+  декоративными линиями и одной CTA. Без фото — типографика IS the design.
+display_name_ru: ru-hero-05-centered-bold (centered)
+id: ru-hero-05-centered-bold
+layout_pattern: centered
+layout_summary_ru: Гигантский заголовок 64px по центру, декоративные линии сверху/снизу,
+  tagline мелко сверху, одна CTA внизу. Без фото — типографика это дизайн.
+recommended_styles_ru:
+- Brutalism
+- Bold Typography
+ru_market: true
+slots:
+- max_chars: 30
+  name: tagline
+  required: false
+  type: text
+- max_chars: 80
+  name: headline
+  required: true
+  type: text
+- max_chars: 160
+  name: subhead
+  required: false
+  type: text
+- default_text: Начать сотрудничество
+  name: primary-cta
+  required: true
+  type: cta
+source: manual
+source_attribution: ''
+type: hero
+use_cases:
+- services
+- b2c
+- local
+variant: null

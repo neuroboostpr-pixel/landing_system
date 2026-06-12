@@ -1,0 +1,184 @@
+<style>.lp-social-proof-luxury-cards {
+  background: var(--lp-bg);
+  color: var(--lp-text);
+  font-family: var(--lp-font-body);
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md);
+}
+
+.lp-social-proof-luxury-cards__inner {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.lp-social-proof-luxury-cards__header {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  max-width: 760px;
+  margin-bottom: var(--lp-spacing-lg);
+}
+
+.lp-social-proof-luxury-cards__eyebrow {
+  margin: 0;
+  color: var(--lp-accent);
+  font-size: 0.78rem;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.lp-social-proof-luxury-cards__title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: clamp(2rem, 6vw, 4.5rem);
+  line-height: 1.02;
+  letter-spacing: 0;
+}
+
+.lp-social-proof-luxury-cards__lead {
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 1rem;
+  line-height: 1.65;
+  max-width: 620px;
+}
+
+.lp-social-proof-luxury-cards__grid {
+  display: grid;
+  gap: var(--lp-spacing-md);
+}
+
+.lp-social-proof-luxury-cards__card {
+  position: relative;
+  display: grid;
+  gap: var(--lp-spacing-lg);
+  min-height: 100%;
+  padding: var(--lp-spacing-lg);
+  background: var(--lp-bg-alt);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+}
+
+.lp-social-proof-luxury-cards__card::before {
+  content: "";
+  position: absolute;
+  inset: var(--lp-spacing-sm);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+  pointer-events: none;
+}
+
+.lp-social-proof-luxury-cards__mark {
+  width: 2.25rem;
+  height: 0.18rem;
+  background: var(--lp-accent);
+  border-radius: var(--lp-radius);
+}
+
+.lp-social-proof-luxury-cards__quote {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 1.15rem;
+  line-height: 1.55;
+}
+
+.lp-social-proof-luxury-cards__person {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--lp-spacing-sm);
+  padding-top: var(--lp-spacing-md);
+  border-top: 1px solid var(--lp-border);
+}
+
+.lp-social-proof-luxury-cards__avatar {
+  width: 3.25rem;
+  height: 3.25rem;
+  flex: 0 0 3.25rem;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1px solid var(--lp-accent);
+  background: var(--lp-bg);
+}
+
+.lp-social-proof-luxury-cards__name {
+  margin: 0;
+  color: var(--lp-text);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.lp-social-proof-luxury-cards__meta {
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+@media (min-width: 768px) {
+  .lp-social-proof-luxury-cards {
+    padding: var(--lp-spacing-xl) var(--lp-spacing-lg);
+  }
+
+  .lp-social-proof-luxury-cards__header {
+    margin-bottom: var(--lp-spacing-xl);
+  }
+
+  .lp-social-proof-luxury-cards__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: stretch;
+  }
+
+  .lp-social-proof-luxury-cards__card {
+    padding: var(--lp-spacing-xl);
+  }
+}
+</style>
+<section aria-labelledby="lp-social-proof-luxury-cards-title" class="lp-social-proof-luxury-cards">
+<div class="lp-social-proof-luxury-cards__inner">
+<div class="lp-social-proof-luxury-cards__header">
+<p class="lp-social-proof-luxury-cards__eyebrow">{{slot:eyebrow}}</p>
+<h2 class="lp-social-proof-luxury-cards__title" id="lp-social-proof-luxury-cards-title">{{slot:heading}}</h2>
+<p class="lp-social-proof-luxury-cards__lead">{{slot:subhead}}</p>
+</div>
+<div class="lp-social-proof-luxury-cards__grid">
+<article class="lp-social-proof-luxury-cards__card">
+<div aria-hidden="true" class="lp-social-proof-luxury-cards__mark"></div>
+<p class="lp-social-proof-luxury-cards__quote">{{slot:testimonial-1-text}}</p>
+<div class="lp-social-proof-luxury-cards__person">
+<img alt="{{slot:testimonial-1-avatar-alt}}" class="lp-social-proof-luxury-cards__avatar" loading="lazy" src="{{slot:testimonial-1-avatar}}"/>
+<div>
+<p class="lp-social-proof-luxury-cards__name">{{slot:testimonial-1-name}}</p>
+<p class="lp-social-proof-luxury-cards__meta">{{slot:testimonial-1-meta}}</p>
+</div>
+</div>
+</article>
+<article class="lp-social-proof-luxury-cards__card">
+<div aria-hidden="true" class="lp-social-proof-luxury-cards__mark"></div>
+<p class="lp-social-proof-luxury-cards__quote">{{slot:testimonial-2-text}}</p>
+<div class="lp-social-proof-luxury-cards__person">
+<img alt="{{slot:testimonial-2-avatar-alt}}" class="lp-social-proof-luxury-cards__avatar" loading="lazy" src="{{slot:testimonial-2-avatar}}"/>
+<div>
+<p class="lp-social-proof-luxury-cards__name">{{slot:testimonial-2-name}}</p>
+<p class="lp-social-proof-luxury-cards__meta">{{slot:testimonial-2-meta}}</p>
+</div>
+</div>
+</article>
+<article class="lp-social-proof-luxury-cards__card">
+<div aria-hidden="true" class="lp-social-proof-luxury-cards__mark"></div>
+<p class="lp-social-proof-luxury-cards__quote">{{slot:testimonial-3-text}}</p>
+<div class="lp-social-proof-luxury-cards__person">
+<img alt="{{slot:testimonial-3-avatar-alt}}" class="lp-social-proof-luxury-cards__avatar" loading="lazy" src="{{slot:testimonial-3-avatar}}"/>
+<div>
+<p class="lp-social-proof-luxury-cards__name">{{slot:testimonial-3-name}}</p>
+<p class="lp-social-proof-luxury-cards__meta">{{slot:testimonial-3-meta}}</p>
+</div>
+</div>
+</article>
+</div>
+</div>
+</section>

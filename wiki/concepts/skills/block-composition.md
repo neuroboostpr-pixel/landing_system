@@ -1,62 +1,51 @@
 ---
+slug: block-composition
 type: skill
-name: block-composition
-sources: ["skills/block-composition/SKILL.md"]
-updated: 2026-05-15
-triggers: ["/landing-compose", "собрать composed.html", "скомпоновать лендинг", "этап 07b"]
+name: "Block Composition — сборка composed.html"
 stage: "07b"
-uses: ["block-composer", "prototype-import", "wireframe-rendering", "design-tokens-generation", "landing-compose"]
-tags: ["compose", "blocks", "tokens", "html", "07b", "assembly"]
+tags: [compose, tokens, blocks, html, wireframe, prototype]
+triggers: [landing-compose]
+inputs:
+  - "<project>/07_ПРОТОТИП/prototype.yaml"
+  - "<project>/07a_WIREFRAME/selections.yaml"
+  - "<project>/05_ДИЗАЙН-СИСТЕМА/tokens.json"
+  - "block-library/"
+outputs:
+  - "<project>/07b_COMPOSED/composed.html"
+  - "<project>/07b_COMPOSED/composed-mobile.html"
+  - "<project>/07b_COMPOSED/block-injection-log.md"
+pre_reqs: [design-system-generator]
+related: [block-composer, design-system-generator]
+sources: ["skills/block-composition/SKILL.md"]
+updated: 2026-05-26
+confidence: {triggers: low, pre_reqs: low}
 ---
 
-# Block Composition — сборка итогового HTML лендинга
+# Block Composition — сборка composed.html
 
 ## Что делает
 
-Берёт утверждённые блоки из wireframe, дизайн-токены и тексты из прототипа — и собирает из них единый HTML-файл лендинга (`composed.html`). Это финальная сборка перед тем, как добавить реальные фото и иконки.
+Скилл собирает финальный `composed.html` (и мобильную версию) из блоков, которые пользователь выбрал на этапе wireframe. Последовательно валидирует `selections.yaml`, подставляет CSS-переменные из `tokens.json` в шаблоны блоков, затем заменяет визуальные плейсхолдеры реальными текстами и CTA из `prototype.yaml`. На выходе — готовый к ревью HTML-файл с правильной дизайн-системой и прототипными текстами; реальные фото и иконки на этом этапе ещё не вставлены.
 
-## Когда вызывать / в каком этапе
+## Когда вызывается
 
-Этап **07b**. Запускается командой `/landing-compose` после того, как:
-1. Пользователь выбрал варианты блоков в `wireframe.html` и сохранил `selections.yaml` в `07a_WIREFRAME/`.
-2. Готовы дизайн-токены (`tokens.json`) из этапа 05.
-3. Импортирован прототип (`prototype.yaml`) из этапа 07.
+Вызывается вручную командой `/landing-compose` после того как пользователь выбрал варианты блоков в `wireframe.html` и положил скачанный `selections.yaml` в папку `07a_WIREFRAME/`. Также используется агентом `block-composer` внутри оркестратора (этап PR-D).
 
-Выполняется агентом **block-composer**. HARD GATE 07b не закрывается, пока скрипт `scripts/verify-composed-premium.sh` не вернёт exit 0 (13 premium-фич обязательны).
+## Вход → выход
 
-## Что на вход / на выход
+**Вход:** `prototype.yaml` с контентом, `selections.yaml` с выбранными вариантами блоков, `tokens.json` дизайн-системы, исходные HTML-шаблоны из общего `block-library/`.
 
-**Вход:**
-- `<project>/07_ПРОТОТИП/prototype.yaml` — структура и тексты лендинга
-- `<project>/07a_WIREFRAME/selections.yaml` — выбранные варианты блоков
-- `<project>/05_ДИЗАЙН-СИСТЕМА/tokens.json` — цвета, шрифты, отступы
-- `block-library/` — общая библиотека HTML-шаблонов блоков
+**Выход:** `composed.html` (десктоп) и `composed-mobile.html` — полноценная сборка с применёнными токенами и прототипными текстами; `block-injection-log.md` — лог подстановок для отладки.
 
-**Выход:**
-- `<project>/07b_COMPOSED/composed.html` — desktop-версия лендинга
-- `<project>/07b_COMPOSED/composed-mobile.html` — мобильная версия
-- `<project>/07b_COMPOSED/block-injection-log.md` — лог подстановок
+## Failure modes
 
-Визуальный контент (фото, иконки, инфографика) на этом этапе остаётся в виде подписанных плейсхолдеров — они заполняются на этапах 07c (PR-B) и 07d (PR-C).
+- `selections.yaml` не прошёл валидацию (`validate-selections.py` → exit non-0) — сборка прерывается, нужно перепровести wireframe или исправить файл руками.
+- Отсутствует или повреждён `tokens.json` — `inject-tokens.py` не может подставить CSS-переменные, composed.html генерируется без брендинга.
+- Блок из `selections.yaml` не найден в `block-library/` — `compose-blocks.py` выбрасывает ошибку, итоговый файл не создаётся.
+- Поле из `prototype.yaml` не совпадает с плейсхолдером в шаблоне блока — текст остаётся как плейсхолдер, ошибка не всегда заметна без проверки `block-injection-log.md`.
+- Hard gate 07b не закрывается, если `verify-composed-premium.sh` возвращает exit non-0 — 13 premium-фич должны присутствовать в `composed.html`.
 
-## Скрипты
+## Related
 
-Скилл использует четыре вспомогательных скрипта:
-- `scripts/validate-selections.py` — проверить корректность `selections.yaml`
-- `scripts/inject-tokens.py` — подставить CSS-переменные из `tokens.json`
-- `scripts/inject-content.py` — вставить заголовки, тексты и CTA из `prototype.yaml`
-- `scripts/compose-blocks.py` — собрать финальный `composed.html`
-
-## Связанные концепты
-
-- [[block-composer]] — агент, выполняющий сборку на этапе 07b
-- [[prototype-import]] — поставляет `prototype.yaml` со структурой и текстами
-- [[wireframe-rendering]] — этап 07a, производит `selections.yaml` с выбранными блоками
-- [[design-tokens-generation]] — этап 05, производит `tokens.json` с дизайн-токенами
-- [[landing-compose]] — slash-команда, запускающая этот скилл
-- [[photo-curation]] — этап 07c, заполняет фото-плейсхолдеры в `composed.html`
-- [[visual-generation]] — этап 07d, заполняет иконки и инфографику
-
-## Источник
-
-- `skills/block-composition/SKILL.md`
+- [[block-composer]] — агент, который вызывает скилл в контексте оркестратора и доводит composed.html до соответствия premium-чеклисту
+- [[design-system-generator]] — генерирует `tokens.json`, без которого невозможна токен-подстановка на этом этапе

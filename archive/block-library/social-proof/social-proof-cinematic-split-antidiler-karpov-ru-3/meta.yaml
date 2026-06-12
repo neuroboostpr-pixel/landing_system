@@ -1,0 +1,57 @@
+category: social-proof
+description: Крупный кейс с фото клиента у автомобиля, диагональной типографикой,
+  текстом отзыва и CTA.
+display_name_ru: social-proof-cinematic-split-antidiler-karpov-ru-3 (split)
+has_animation: false
+id: social-proof-cinematic-split-antidiler-karpov-ru-3
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://antidiler-karpov.ru/
+layout_pattern: split
+niches_suitable:
+- premium-auto
+- services
+- luxury
+ru_market: true
+slots:
+- name: case-image-mobile
+  type: text
+- name: case-image-alt
+  type: text
+- name: case-image
+  type: text
+- name: case-badge
+  type: text
+- name: eyebrow
+  type: text
+- name: heading
+  required: true
+  type: text
+- name: testimonial-text
+  type: text
+- name: author-name
+  type: text
+- name: author-meta
+  type: text
+- name: stats-label
+  type: text
+- name: stat-1-value
+  type: text
+- name: stat-1-label
+  type: text
+- name: stat-2-value
+  type: text
+- name: stat-2-label
+  type: text
+- name: primary-cta-link
+  type: text
+- name: primary-cta-label
+  type: text
+- name: secondary-cta-link
+  type: text
+- name: secondary-cta-label
+  type: text
+style_mood: cinematic
+type: logos
+variant: cases

@@ -1,0 +1,13 @@
+project:
+  slug: ailexi
+  primary_domain: ailexi.ru
+multisite: true
+audience_segments:
+  - slug: russian
+    host: russian.ailexi.ru
+    blog_id: 2
+  - slug: dubai-avto-liza
+    host: dubai-avto-liza.ailexi.ru
+    blog_id: 3
+stages:
+  09_deploy: {status: approved}

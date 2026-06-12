@@ -1,56 +1,66 @@
 ---
+slug: brand-architect
 type: agent
-name: brand-architect
-sources: ["agents/brand-architect.md"]
-updated: 2026-05-15
-triggers: []
+name: "Brand Architect"
 stage: "04"
-uses: ["style-extractor", "niche-analyst", "references-curator", "design-system-generator", "brand-kit-build"]
-tags: ["brand", "palette", "fonts", "icons", "provenance", "stage-04"]
+tags: [brand-kit, style, provenance, legal, 152-fz, palette, fonts, icons]
+triggers: [landing-brand]
+inputs:
+  - 04_БРЕНД/extracted/palette.yaml
+  - 04_БРЕНД/extracted/fonts.yaml
+  - 04_БРЕНД/extracted/icons.yaml
+  - 04_БРЕНД/extracted/grid.md
+  - 04_БРЕНД/extracted/motion.md
+  - 03_РЕФЕРЕНСЫ/index.yaml
+  - 01a_АНАЛИЗ_НИШИ/positioning.md
+  - 01a_АНАЛИЗ_НИШИ/market-profile.md
+  - 01a_АНАЛИЗ_НИШИ/landing-structure.md
+outputs:
+  - 04_БРЕНД/brand-kit.md
+  - 04_БРЕНД/brand-kit.html
+  - 04_БРЕНД/extracted/legal.yaml
+gates: [brand-kit-approved]
+pre_reqs: [style-extractor]
+related:
+  - landing-brand
+  - landing-design
+  - landing-niche
+sources: ["agents/brand-architect.md"]
+updated: 2026-05-26
+confidence:
+  triggers: low
 ---
 
-# brand-architect — Архитектор бренд-кита
+# Brand Architect
 
 ## Что делает
 
-Берёт все извлечённые стилевые данные (цвета, шрифты, иконки, сетку, анимации) и собирает из них единый бренд-кит с полной «родословной» каждого элемента — откуда взят каждый цвет, шрифт и иконка. Дополнительно отрисовывает HTML-превью для утверждения заказчиком.
+Агент этапа 04. Синтезирует все извлечённые стилевые данные (палитра, шрифты, иконки, сетка, анимации) в единый `brand-kit.md` с полным указанием источника для каждого токена. Параллельно собирает legal-реквизиты Оператора ПД (для 152-ФЗ compliance) и записывает их в `legal.yaml`. На выходе рендерит HTML-превью `brand-kit.html` со свотчами, образцами шрифтов и иконками для визуального утверждения командой.
 
-## Когда вызывать / в каком этапе
+## Когда вызывается
 
-**Этап 04.** Запускается строго после того, как агент `style-extractor` завершил работу и в папке `04_БРЕНД/extracted/` появились все пять файлов: `palette.yaml`, `fonts.yaml`, `icons.yaml`, `grid.md`, `motion.md`. До следующего этапа (05 — design-system) не идти, пока пользователь не одобрит `brand-kit.html`.
+Запускается командой `/landing-brand` после того, как `style-extractor` отработал и все пять файлов в `04_БРЕНД/extracted/` присутствуют. Агент читает `.landing-state.yaml` и убеждается, что `current_stage == 04_brand`; иначе отказывается действовать.
 
-## Что на вход / на выход
+## Вход → выход
 
-**Вход:**
-- `04_БРЕНД/extracted/palette.yaml` — извлечённые цвета
-- `04_БРЕНД/extracted/fonts.yaml` — идентифицированные шрифты
-- `04_БРЕНД/extracted/icons.yaml` — подобранные иконки
-- `04_БРЕНД/extracted/grid.md` — сетка и отступы
-- `04_БРЕНД/extracted/motion.md` — токены анимации
-- `03_РЕФЕРЕНСЫ/index.yaml` — список одобренных референсов
-- `01a_АНАЛИЗ_НИШИ/positioning.md` — позиционирование (mode: rational / emotional_aspiration / trust_authority)
-- `01a_АНАЛИЗ_НИШИ/market-profile.md` — профиль рынка (accessibility_tier, cultural_context)
-- `01a_АНАЛИЗ_НИШИ/landing-structure.md` — контракт с wp-builder, список блоков
+**Вход:** пять YAML/MD-артефактов от `style-extractor` (`palette.yaml`, `fonts.yaml`, `icons.yaml`, `grid.md`, `motion.md`) + одобренный список референсов `03_РЕФЕРЕНСЫ/index.yaml` + три обязательных документа ниши (`positioning.md`, `market-profile.md`, `landing-structure.md`).
 
-**Выход:**
-- `04_БРЕНД/brand-kit.md` — канонический бренд-кит с полной провенансом
-- `04_БРЕНД/brand-kit.html` — визуальный превью (свотчи палитры, образцы шрифтов, миниатюры иконок)
+**Выход:** `04_БРЕНД/brand-kit.md` — канонический бренд-кит с провенансом; `04_БРЕНД/brand-kit.html` — визуальный превью; `04_БРЕНД/extracted/legal.yaml` — реквизиты Оператора ПД (или заглушки `TODO_LEGAL`).
 
-**Процесс:**
-1. `python3 skills/brand-kit-build/scripts/build.py <project-dir>` → `brand-kit.md`
-2. `python3 skills/brand-kit-build/scripts/render-html.py <project-dir>` → `brand-kit.html`
-3. Открыть HTML на ревью пользователю → HARD GATE
+## Чем закрывается этап (gates)
 
-**HARD GATE:** все 5 extracted-файлов обязательны; продолжение без одобрения `brand-kit.html` заблокировано.
+- `brand-kit-approved` — пользователь явно утвердил `brand-kit.html` перед переходом на этап 05 (Design System).
 
-## Связанные концепты
+## Failure modes
 
-- [[style-extractor]] — обязательный предшественник: создаёт все 5 extracted/*.yaml файлов
-- [[niche-analyst]] — поставляет positioning.md и market-profile.md, определяющие стиль палитры и типографики
-- [[references-curator]] — поставляет одобренные референсы (index.yaml)
-- [[brand-kit-build]] — скилл, которому принадлежит этот агент; содержит Python-скрипты build.py и render-html.py
-- [[design-system-generator]] — следующий этап (05): читает brand-kit.md и генерирует DESIGN.md + tokens.json
+- Один из пяти `extracted/*.yaml` файлов отсутствует — агент останавливается с ошибкой hard gate; решение: перезапустить `style-extractor`.
+- Файл `01a_АНАЛИЗ_НИШИ/positioning.md` не содержит поля `**Mode:**` — бренд-кит генерируется без mode-аугментации, тон и палитра могут не соответствовать нише.
+- Пользователь пропускает сбор legal-данных — поля заполняются `TODO_LEGAL`; `landing-deploy` будет заблокирован до заполнения.
+- `scripts/gate-check.sh --stage 04_brand` возвращает exit != 0 — `PreToolUse` hook блокирует все Write/Edit, нужно закрыть предшественника.
+- `brand-kit.html` утверждён без проверки соответствия блокам из `landing-structure.md` — design-system на этапе 05 не покроет все `template-parts`.
 
-## Источник
+## Related
 
-- `agents/brand-architect.md`
+- [[landing-brand]] — slash-команда, которая запускает этого агента
+- [[landing-design]] — следующий этап (05), потребляет `brand-kit.md` как основной вход
+- [[landing-niche]] — поставляет `positioning.md` и `market-profile.md` с описанием ниши и accessibility-tier

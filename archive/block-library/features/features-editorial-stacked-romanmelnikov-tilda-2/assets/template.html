@@ -1,0 +1,180 @@
+<style>.lp-features-editorial-stacked {
+  background: var(--lp-bg);
+  color: var(--lp-text);
+  font-family: var(--lp-font-body);
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md);
+}
+
+.lp-features-editorial-stacked__intro {
+  display: grid;
+  gap: var(--lp-spacing-md);
+  max-width: 72rem;
+  margin: 0 auto var(--lp-spacing-lg);
+}
+
+.lp-features-editorial-stacked__eyebrow {
+  margin: 0;
+  color: var(--lp-accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.lp-features-editorial-stacked__title {
+  margin: 0;
+  max-width: 12em;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: clamp(2rem, 8vw, 5rem);
+  line-height: 0.98;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.lp-features-editorial-stacked__lead {
+  margin: 0;
+  max-width: 42rem;
+  color: var(--lp-text-muted);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.lp-features-editorial-stacked__panel {
+  display: grid;
+  gap: var(--lp-spacing-lg);
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: var(--lp-spacing-lg);
+  background: var(--lp-bg-alt);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+}
+
+.lp-features-editorial-stacked__statement {
+  padding-bottom: var(--lp-spacing-lg);
+  border-bottom: 1px solid var(--lp-border);
+}
+
+.lp-features-editorial-stacked__statement p {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: clamp(1.45rem, 5vw, 3rem);
+  line-height: 1.08;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.lp-features-editorial-stacked__list {
+  display: grid;
+  gap: var(--lp-spacing-md);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lp-features-editorial-stacked__item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--lp-spacing-sm) var(--lp-spacing-md);
+  padding-top: var(--lp-spacing-md);
+  border-top: 1px solid var(--lp-border);
+}
+
+.lp-features-editorial-stacked__item:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.lp-features-editorial-stacked__marker {
+  width: 0.55rem;
+  height: 0.55rem;
+  margin-top: 0.45rem;
+  background: var(--lp-accent);
+  border-radius: var(--lp-radius);
+}
+
+.lp-features-editorial-stacked__item-title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 1.15rem;
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.lp-features-editorial-stacked__item-text {
+  grid-column: 2;
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 0.98rem;
+  line-height: 1.65;
+}
+
+@media (min-width: 768px) {
+  .lp-features-editorial-stacked {
+    padding: var(--lp-spacing-xl) var(--lp-spacing-lg);
+  }
+
+  .lp-features-editorial-stacked__intro {
+    grid-template-columns: 1.15fr 0.85fr;
+    align-items: end;
+  }
+
+  .lp-features-editorial-stacked__eyebrow {
+    grid-column: 1 / -1;
+  }
+
+  .lp-features-editorial-stacked__lead {
+    justify-self: end;
+  }
+
+  .lp-features-editorial-stacked__panel {
+    padding: var(--lp-spacing-xl);
+  }
+
+  .lp-features-editorial-stacked__list {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--lp-spacing-lg);
+  }
+
+  .lp-features-editorial-stacked__item {
+    align-content: start;
+    padding-top: 0;
+    padding-left: var(--lp-spacing-md);
+    border-top: 0;
+    border-left: 1px solid var(--lp-border);
+  }
+}
+</style>
+<section aria-labelledby="lp-features-editorial-stacked-title" class="lp-features-editorial-stacked">
+<div class="lp-features-editorial-stacked__intro">
+<p class="lp-features-editorial-stacked__eyebrow">{{slot:eyebrow}}</p>
+<h2 class="lp-features-editorial-stacked__title" id="lp-features-editorial-stacked-title">{{slot:heading}}</h2>
+<p class="lp-features-editorial-stacked__lead">{{slot:subhead}}</p>
+</div>
+<div class="lp-features-editorial-stacked__panel">
+<div class="lp-features-editorial-stacked__statement">
+<p>{{slot:statement}}</p>
+</div>
+<ul class="lp-features-editorial-stacked__list">
+<li class="lp-features-editorial-stacked__item">
+<span aria-hidden="true" class="lp-features-editorial-stacked__marker"></span>
+<h3 class="lp-features-editorial-stacked__item-title">{{slot:feature-1-title}}</h3>
+<p class="lp-features-editorial-stacked__item-text">{{slot:feature-1-text}}</p>
+</li>
+<li class="lp-features-editorial-stacked__item">
+<span aria-hidden="true" class="lp-features-editorial-stacked__marker"></span>
+<h3 class="lp-features-editorial-stacked__item-title">{{slot:feature-2-title}}</h3>
+<p class="lp-features-editorial-stacked__item-text">{{slot:feature-2-text}}</p>
+</li>
+<li class="lp-features-editorial-stacked__item">
+<span aria-hidden="true" class="lp-features-editorial-stacked__marker"></span>
+<h3 class="lp-features-editorial-stacked__item-title">{{slot:feature-3-title}}</h3>
+<p class="lp-features-editorial-stacked__item-text">{{slot:feature-3-text}}</p>
+</li>
+</ul>
+</div>
+</section>

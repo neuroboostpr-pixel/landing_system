@@ -1,0 +1,49 @@
+category: faq
+description: Компактный блок вопросов с аккордеонными строками на темном фоне.
+display_name_ru: faq-corporate-stacked-portfolio-kdm1-ru-15 (stacked)
+has_animation: false
+id: faq-corporate-stacked-portfolio-kdm1-ru-15
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://portfolio.kdm1.ru/upload/iblock/b31/i0qylig13hzo7ow4qcpia0qhtn3i87pk/Onlai_n_shkola-Dmitriya-Vykhodtseva.pdf
+layout_pattern: stacked
+niches_suitable:
+- services
+- education
+- b2b-saas
+- ecommerce
+ru_market: true
+slots:
+- name: eyebrow
+  type: text
+- name: heading
+  required: true
+  type: text
+- name: subhead
+  type: text
+- name: question-1
+  type: text
+- name: answer-1
+  type: text
+- name: question-2
+  type: text
+- name: answer-2
+  type: text
+- name: question-3
+  type: text
+- name: answer-3
+  type: text
+- name: question-4
+  type: text
+- name: answer-4
+  type: text
+- name: note
+  type: text
+- name: cta-link
+  type: text
+- name: cta-label
+  type: text
+style_mood: corporate
+type: faq
+variant: null

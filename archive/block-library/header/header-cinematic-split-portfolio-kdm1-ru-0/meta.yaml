@@ -1,0 +1,56 @@
+category: header
+description: Узкая верхняя навигация на светлом фоне с компактными ссылками и контрастной
+  кнопкой.
+display_name_ru: header-cinematic-split-portfolio-kdm1-ru-0 (split)
+has_animation: false
+id: header-cinematic-split-portfolio-kdm1-ru-0
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://portfolio.kdm1.ru/upload/iblock/b31/i0qylig13hzo7ow4qcpia0qhtn3i87pk/Onlai_n_shkola-Dmitriya-Vykhodtseva.pdf
+layout_pattern: split
+niches_suitable:
+- services
+- education
+- b2b-saas
+ru_market: true
+slots:
+- name: header-aria-label
+  type: text
+- name: brand-aria-label
+  type: text
+- name: brand-link
+  type: text
+- name: brand-mark
+  type: text
+- name: brand-name
+  type: text
+- name: nav-aria-label
+  type: text
+- name: nav-link-1-url
+  type: text
+- name: nav-link-1-label
+  type: text
+- name: nav-link-2-url
+  type: text
+- name: nav-link-2-label
+  type: text
+- name: nav-link-3-url
+  type: text
+- name: nav-link-3-label
+  type: text
+- name: nav-link-4-url
+  type: text
+- name: nav-link-4-label
+  type: text
+- name: secondary-cta-url
+  type: text
+- name: secondary-cta-label
+  type: text
+- name: primary-cta-url
+  type: text
+- name: primary-cta-label
+  type: text
+style_mood: cinematic
+type: header
+variant: null

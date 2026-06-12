@@ -1,0 +1,38 @@
+category: hero
+conversion_notes: Full-width фото с overlay. Часы работы снижают барьер. CTA на форму
+  записи.
+created: 2026-05-12
+description: 'RU hero локальный: full-width фото интерьера, overlay, заголовок, плашка
+  часов работы, CTA ''Записаться'''
+display_name_ru: ru-hero-03-local-interior (centered)
+id: ru-hero-03-local-interior
+layout_pattern: centered
+layout_summary_ru: Полноширинное фото интерьера с тёмным overlay, заголовок и плашка
+  часов работы по центру, кнопка 'Записаться' внизу. Один чёткий призыв.
+recommended_styles_ru:
+- Photography-Forward
+- Minimalism & Swiss Style
+ru_market: true
+slots:
+- name: interior-bg
+  ratio: '16:9'
+  required: true
+  type: photo
+- max_chars: 60
+  name: headline
+  required: true
+  type: text
+- max_chars: 20
+  name: hours-tag
+  required: false
+  type: text
+- default_text: Записаться
+  name: primary-cta
+  required: true
+  type: cta
+source: manual
+source_attribution: ''
+type: hero
+use_cases:
+- local
+variant: null

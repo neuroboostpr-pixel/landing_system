@@ -1,0 +1,47 @@
+id: gallery-001
+type: gallery
+category: Gallery
+display_name_ru: 'Галерея: card-preview + card-title + card-tags + card-id + card-cta'
+description: ''
+layout_pattern: cards
+has_bg_image: false
+signature: gallery|cards|[card-cta,card-id,card-preview,card-tags,card-title]|bg:false
+style_mood: minimal
+ru_market: true
+has_animation: false
+niches_suitable:
+- generic
+slots:
+- name: card-1-preview
+  type: text
+- name: card-1-title
+  type: text
+- name: card-1-tags
+  type: text
+- name: card-1-id
+  type: text
+- name: card-1-cta
+  type: text
+- name: card-2-preview
+  type: text
+- name: card-2-title
+  type: text
+- name: card-2-tags
+  type: text
+- name: card-2-id
+  type: text
+- name: card-2-cta
+  type: text
+- name: card-3-preview
+  type: text
+- name: card-3-title
+  type: text
+- name: card-3-tags
+  type: text
+- name: card-3-id
+  type: text
+- name: card-3-cta
+  type: text
+source: import
+source_url: C:\Users\esper21\AppData\Local\Temp\claude\import-blocks-6fn2da8v\screenshots\import-01.png
+created: '2026-06-03'

@@ -1,0 +1,54 @@
+category: header
+description: Узкая навигационная шапка на темном фоне с мелкими ссылками и теплым
+  акцентом.
+display_name_ru: header-luxury-split-romanmelnikov-tilda-0 (split)
+has_animation: false
+id: header-luxury-split-romanmelnikov-tilda-0
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://romanmelnikov.tilda.ws/
+layout_pattern: split
+niches_suitable:
+- services
+- luxury
+- education
+ru_market: true
+slots:
+- name: header-aria-label
+  type: text
+- name: brand-aria-label
+  type: text
+- name: brand-link
+  type: text
+- name: brand-name
+  type: text
+- name: navigation-aria-label
+  type: text
+- name: nav-link-1
+  type: text
+- name: nav-label-1
+  type: text
+- name: nav-link-2
+  type: text
+- name: nav-label-2
+  type: text
+- name: nav-link-3
+  type: text
+- name: nav-label-3
+  type: text
+- name: nav-link-4
+  type: text
+- name: nav-label-4
+  type: text
+- name: contact-link
+  type: text
+- name: contact-label
+  type: text
+- name: cta-link
+  type: text
+- name: cta-label
+  type: text
+style_mood: luxury
+type: header
+variant: null

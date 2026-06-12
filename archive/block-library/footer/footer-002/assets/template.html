@@ -1,0 +1,184 @@
+<style>.lp-footer-corporate-split {
+  color: var(--lp-bg);
+  background: var(--lp-text);
+  font-family: var(--lp-font-body);
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md) var(--lp-spacing-md);
+}
+
+.lp-footer-corporate-split__inner {
+  display: grid;
+  gap: var(--lp-spacing-lg);
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.lp-footer-corporate-split__brand {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+}
+
+.lp-footer-corporate-split__brand-link {
+  display: inline-flex;
+  align-items: center;
+  color: currentColor;
+  text-decoration: none;
+}
+
+.lp-footer-corporate-split__logo {
+  display: block;
+  width: auto;
+  max-width: 11rem;
+  height: 3rem;
+  object-fit: contain;
+}
+
+.lp-footer-corporate-split__title {
+  max-width: 34rem;
+  margin: var(--lp-spacing-sm) 0 0;
+  color: var(--lp-bg);
+  font-family: var(--lp-font-display);
+  font-size: 1.75rem;
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+
+.lp-footer-corporate-split__text,
+.lp-footer-corporate-split__note,
+.lp-footer-corporate-split__legal {
+  margin: 0;
+  color: var(--lp-border);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.lp-footer-corporate-split__text {
+  max-width: 32rem;
+}
+
+.lp-footer-corporate-split__action {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--lp-spacing-sm);
+}
+
+.lp-footer-corporate-split__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: var(--lp-spacing-sm) var(--lp-spacing-lg);
+  border-radius: var(--lp-radius);
+  color: var(--lp-text);
+  background: var(--lp-accent);
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+}
+
+.lp-footer-corporate-split__button:focus-visible,
+.lp-footer-corporate-split__link:focus-visible,
+.lp-footer-corporate-split__legal-link:focus-visible,
+.lp-footer-corporate-split__brand-link:focus-visible {
+  outline: 2px solid var(--lp-accent);
+  outline-offset: var(--lp-spacing-xs);
+}
+
+.lp-footer-corporate-split__nav {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+}
+
+.lp-footer-corporate-split__link,
+.lp-footer-corporate-split__legal-link {
+  color: var(--lp-bg);
+  text-decoration: none;
+  line-height: 1.4;
+}
+
+.lp-footer-corporate-split__link {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.lp-footer-corporate-split__legal-link {
+  color: var(--lp-border);
+  font-size: 0.9rem;
+}
+
+.lp-footer-corporate-split__bottom {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  max-width: 1280px;
+  margin: var(--lp-spacing-xl) auto 0;
+  padding-top: var(--lp-spacing-md);
+  border-top: 1px solid var(--lp-border);
+}
+
+.lp-footer-corporate-split__legal-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lp-spacing-sm) var(--lp-spacing-md);
+}
+
+@media (min-width: 768px) {
+  .lp-footer-corporate-split {
+    padding: var(--lp-spacing-xl) var(--lp-spacing-lg) var(--lp-spacing-lg);
+  }
+
+  .lp-footer-corporate-split__inner {
+    grid-template-columns: minmax(0, 1.3fr) minmax(14rem, 0.8fr) minmax(12rem, 0.7fr);
+    align-items: start;
+  }
+
+  .lp-footer-corporate-split__action {
+    align-items: center;
+    text-align: center;
+  }
+
+  .lp-footer-corporate-split__nav {
+    justify-items: end;
+    text-align: right;
+  }
+
+  .lp-footer-corporate-split__bottom {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+
+  .lp-footer-corporate-split__legal-nav {
+    justify-content: flex-end;
+  }
+}
+</style>
+<footer aria-labelledby="lp-footer-corporate-split-title" class="lp-footer-corporate-split">
+<div class="lp-footer-corporate-split__inner">
+<div class="lp-footer-corporate-split__brand">
+<a aria-label="{{slot:brand-aria-label}}" class="lp-footer-corporate-split__brand-link" href="{{slot:brand-link}}">
+<img alt="{{slot:logo-image-alt}}" class="lp-footer-corporate-split__logo" loading="lazy" src="{{slot:logo-image}}"/>
+</a>
+<h2 class="lp-footer-corporate-split__title" id="lp-footer-corporate-split-title">{{slot:footer-heading}}</h2>
+<p class="lp-footer-corporate-split__text">{{slot:footer-description}}</p>
+</div>
+<div aria-label="{{slot:contact-area-label}}" class="lp-footer-corporate-split__action">
+<a class="lp-footer-corporate-split__button" href="{{slot:primary-cta-link}}">
+        {{slot:primary-cta-label}}
+      </a>
+<p class="lp-footer-corporate-split__note">{{slot:contact-note}}</p>
+</div>
+<nav aria-label="{{slot:footer-nav-label}}" class="lp-footer-corporate-split__nav">
+<a class="lp-footer-corporate-split__link" href="{{slot:nav-link-1-url}}">{{slot:nav-link-1-label}}</a>
+<a class="lp-footer-corporate-split__link" href="{{slot:nav-link-2-url}}">{{slot:nav-link-2-label}}</a>
+<a class="lp-footer-corporate-split__link" href="{{slot:nav-link-3-url}}">{{slot:nav-link-3-label}}</a>
+<a class="lp-footer-corporate-split__link" href="{{slot:nav-link-4-url}}">{{slot:nav-link-4-label}}</a>
+</nav>
+</div>
+<div class="lp-footer-corporate-split__bottom">
+<p class="lp-footer-corporate-split__legal">{{slot:legal-text}}</p>
+<nav aria-label="{{slot:legal-nav-label}}" class="lp-footer-corporate-split__legal-nav">
+<a class="lp-footer-corporate-split__legal-link" href="{{slot:legal-link-1-url}}">{{slot:legal-link-1-label}}</a>
+<a class="lp-footer-corporate-split__legal-link" href="{{slot:legal-link-2-url}}">{{slot:legal-link-2-label}}</a>
+</nav>
+</div>
+</footer>

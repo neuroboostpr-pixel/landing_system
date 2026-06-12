@@ -1,0 +1,229 @@
+<style>.lp-process-corporate-timeline {
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md);
+  color: var(--lp-text);
+  background: var(--lp-bg);
+  font-family: var(--lp-font-body);
+}
+
+.lp-process-corporate-timeline__inner {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.lp-process-corporate-timeline__header {
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  max-width: 760px;
+  margin-bottom: var(--lp-spacing-lg);
+}
+
+.lp-process-corporate-timeline__eyebrow {
+  color: var(--lp-primary);
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.lp-process-corporate-timeline__title {
+  margin: 0;
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 2rem;
+  line-height: 1.12;
+  letter-spacing: 0;
+}
+
+.lp-process-corporate-timeline__lead {
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.lp-process-corporate-timeline__list {
+  position: relative;
+  display: grid;
+  gap: var(--lp-spacing-md);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lp-process-corporate-timeline__item {
+  position: relative;
+}
+
+.lp-process-corporate-timeline__card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--lp-spacing-md);
+  align-items: start;
+  height: 100%;
+  padding: var(--lp-spacing-md);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+  background: var(--lp-bg-alt);
+}
+
+.lp-process-corporate-timeline__card--final {
+  background: var(--lp-primary);
+  color: white;
+  border-color: transparent;
+}
+
+.lp-process-corporate-timeline__number {
+  display: inline-grid;
+  place-items: center;
+  min-width: 2.75rem;
+  height: 2.75rem;
+  padding: 0 var(--lp-spacing-xs);
+  border-radius: var(--lp-radius);
+  background: var(--lp-accent);
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.lp-process-corporate-timeline__card--final .lp-process-corporate-timeline__number {
+  background: white;
+  color: var(--lp-primary);
+}
+
+.lp-process-corporate-timeline__content {
+  display: grid;
+  gap: var(--lp-spacing-xs);
+}
+
+.lp-process-corporate-timeline__step-title {
+  margin: 0;
+  color: inherit;
+  font-family: var(--lp-font-display);
+  font-size: 1.125rem;
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+
+.lp-process-corporate-timeline__text {
+  margin: 0;
+  color: var(--lp-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.lp-process-corporate-timeline__card--final .lp-process-corporate-timeline__text {
+  color: white;
+}
+
+.lp-process-corporate-timeline__button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  min-height: 2.75rem;
+  margin-top: var(--lp-spacing-sm);
+  padding: var(--lp-spacing-xs) var(--lp-spacing-md);
+  border-radius: var(--lp-radius);
+  background: white;
+  color: var(--lp-primary);
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.lp-process-corporate-timeline__button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+@media (min-width: 768px) {
+  .lp-process-corporate-timeline {
+    padding: var(--lp-spacing-xl) var(--lp-spacing-lg);
+  }
+
+  .lp-process-corporate-timeline__header {
+    margin-bottom: var(--lp-spacing-xl);
+  }
+
+  .lp-process-corporate-timeline__title {
+    font-size: 3rem;
+  }
+
+  .lp-process-corporate-timeline__list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--lp-spacing-lg);
+  }
+
+  .lp-process-corporate-timeline__list::before {
+    content: "";
+    position: absolute;
+    top: 1.375rem;
+    left: var(--lp-spacing-lg);
+    right: var(--lp-spacing-lg);
+    height: 1px;
+    background: var(--lp-border);
+  }
+
+  .lp-process-corporate-timeline__card {
+    position: relative;
+    grid-template-columns: 1fr;
+    padding: var(--lp-spacing-lg);
+  }
+
+  .lp-process-corporate-timeline__number {
+    position: relative;
+    z-index: 1;
+  }
+}
+</style>
+<section aria-labelledby="process-corporate-timeline-title" class="lp-process-corporate-timeline">
+<div class="lp-process-corporate-timeline__inner">
+<div class="lp-process-corporate-timeline__header">
+<span class="lp-process-corporate-timeline__eyebrow">{{slot:process-eyebrow}}</span>
+<h2 class="lp-process-corporate-timeline__title" id="process-corporate-timeline-title">{{slot:process-title}}</h2>
+<p class="lp-process-corporate-timeline__lead">{{slot:process-lead}}</p>
+</div>
+<ol class="lp-process-corporate-timeline__list">
+<li class="lp-process-corporate-timeline__item">
+<article class="lp-process-corporate-timeline__card">
+<span class="lp-process-corporate-timeline__number">{{slot:step-1-number}}</span>
+<div class="lp-process-corporate-timeline__content">
+<h3 class="lp-process-corporate-timeline__step-title">{{slot:step-1-title}}</h3>
+<p class="lp-process-corporate-timeline__text">{{slot:step-1-text}}</p>
+</div>
+</article>
+</li>
+<li class="lp-process-corporate-timeline__item">
+<article class="lp-process-corporate-timeline__card">
+<span class="lp-process-corporate-timeline__number">{{slot:step-2-number}}</span>
+<div class="lp-process-corporate-timeline__content">
+<h3 class="lp-process-corporate-timeline__step-title">{{slot:step-2-title}}</h3>
+<p class="lp-process-corporate-timeline__text">{{slot:step-2-text}}</p>
+</div>
+</article>
+</li>
+<li class="lp-process-corporate-timeline__item">
+<article class="lp-process-corporate-timeline__card">
+<span class="lp-process-corporate-timeline__number">{{slot:step-3-number}}</span>
+<div class="lp-process-corporate-timeline__content">
+<h3 class="lp-process-corporate-timeline__step-title">{{slot:step-3-title}}</h3>
+<p class="lp-process-corporate-timeline__text">{{slot:step-3-text}}</p>
+</div>
+</article>
+</li>
+<li class="lp-process-corporate-timeline__item lp-process-corporate-timeline__item--final">
+<article class="lp-process-corporate-timeline__card lp-process-corporate-timeline__card--final">
+<span class="lp-process-corporate-timeline__number">{{slot:final-step-number}}</span>
+<div class="lp-process-corporate-timeline__content">
+<h3 class="lp-process-corporate-timeline__step-title">{{slot:final-step-title}}</h3>
+<p class="lp-process-corporate-timeline__text">{{slot:final-step-text}}</p>
+<a class="lp-process-corporate-timeline__button" href="{{slot:final-cta-link}}">
+              {{slot:final-cta-label}}
+            </a>
+</div>
+</article>
+</li>
+</ol>
+</div>
+</section>

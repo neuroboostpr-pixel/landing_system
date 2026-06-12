@@ -1,57 +1,50 @@
 ---
+slug: design-system-generator
 type: agent
-name: design-system-generator
-sources: ["agents/design-system-generator.md"]
-updated: 2026-05-15
-triggers: []
+name: "Генератор дизайн-системы"
 stage: "05"
-uses:
-  - brand-architect
-  - brand-kit-build
-  - design-tokens-generation
-  - stack-planner
-  - scene-director
-tags:
-  - дизайн-система
-  - токены
-  - этап-05
+tags: [design, tokens, css, brand, preview]
+triggers: [landing-design]
+inputs: [04_БРЕНД/brand-kit.md]
+outputs: [05_ДИЗАЙН-СИСТЕМА/DESIGN.md, 05_ДИЗАЙН-СИСТЕМА/tokens.json, 05_ДИЗАЙН-СИСТЕМА/design-preview.html]
+gates: [design_approved]
+pre_reqs: [brand-architect]
+related: [design-tokens-generation, brand-architect, landing-orchestrator]
+sources: ["agents/design-system-generator.md"]
+updated: 2026-05-26
+confidence: {triggers: low}
 ---
 
-# design-system-generator (Генератор дизайн-системы)
+# Генератор дизайн-системы
 
 ## Что делает
 
-Берёт готовый бренд-кит и превращает его в полноценную дизайн-систему: файл с токенами, машиночитаемый JSON и живой HTML-превью с компонентами. Это «единый источник истины» для всех следующих этапов: цвета, шрифты, отступы, тени, сетка и анимации — всё в одном месте с указанием откуда взялось каждое значение (провенанс).
+Принимает утверждённый `brand-kit.md` со этапа 04 и строит полную дизайн-систему проекта с провенансом токенов. Запускает скрипт `build-tokens.py`, извлекающий цвета, шрифты, отступы, grid, радиусы, тени, брейкпоинты и motion из бренд-кита. Затем генерирует живой HTML-превью через `render-preview.py`, чтобы пользователь мог визуально проверить систему до старта кодинга. Этап не закрывается без явного человеческого утверждения.
 
-## Когда вызывать / в каком этапе
+## Когда вызывается
 
-Этап **05 — Дизайн-система**. Запускается строго после того, как агент [[brand-architect]] завершил работу и файл `04_БРЕНД/brand-kit.md` существует. До этого запускать нельзя — нечего будет читать. Переход к этапу 06 ([[stack-planner]]) возможен только после явного подтверждения пользователя (`утверждаю`, `ok`, `дальше`) — это **HARD GATE**.
+Запускается командой `/landing-design` после того, как `brand-architect` завершил этап 04 и `brand-kit.md` утверждён. Оркестратор передаёт управление агенту, когда `.landing-state.yaml` показывает `current_stage == 05_design`. Gate-check должен вернуть exit 0 — иначе агент останавливается до решения проблем предшественника.
 
-## Что на вход / на выход
+## Вход → выход
 
-**Вход:**
-- `04_БРЕНД/brand-kit.md` — бренд-кит с цветами, шрифтами, иконками, motion-параметрами и сеткой
+**Вход:** `04_БРЕНД/brand-kit.md` с описанием цветов, типографики, иконок, motion и сетки. Обязателен флаг `approved` у этапа 04 в `.landing-state.yaml`.
 
-**Выход:**
-- `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` — единый источник истины, токены с YAML frontmatter и провенансом (каждый цвет/шрифт ссылается на источник)
-- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — машиночитаемые токены для сборки темы
-- `05_ДИЗАЙН-СИСТЕМА/design-preview.html` — интерактивный превью живых компонентов по токенам
+**Выход:** `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` (единый источник истины токенов с YAML frontmatter), `tokens.json` (машиночитаемые токены для сборки темы), `design-preview.html` (живые компоненты для визуальной проверки).
 
-**Структура токенов:**
-цвета (primary / secondary / accent / text / bg), типографика (display / body / sizes), отступы (xs→3xl), сетка (columns / gap / max_width), скругления, тени, брейкпоинты (mobile / tablet / desktop), анимации (duration_fast/base/slow, easing).
+## Чем закрывается этап (gates)
 
-**Скрипты:**
-- `skills/design-tokens-generation/scripts/build-tokens.py <project-dir>` — строит DESIGN.md и tokens.json
-- `skills/design-tokens-generation/scripts/render-preview.py <project-dir>` — рендерит design-preview.html
+- `design_approved` — пользователь явно написал «утверждаю», «ok» или «дальше» после просмотра `design-preview.html`. Без этого переход к этапу 06 заблокирован.
 
-## Связанные концепты
+## Failure modes
 
-- [[brand-architect]] — предшествующий агент, создаёт brand-kit.md, который этот агент читает
-- [[brand-kit-build]] — скилл-владелец: design-system-generator входит в его область ответственности
-- [[design-tokens-generation]] — скилл, которому принадлежит агент; содержит скрипты build-tokens и render-preview
-- [[stack-planner]] — следующий этап (06): получает токены и определяет плагины/библиотеки
-- [[scene-director]] — альтернативный следующий шаг (только cinematic mode): использует tokens.json для motion-плана
+- `build-tokens.py` падает, если `brand-kit.md` не содержит обязательных секций (цвета, шрифты) — проверить полноту бренд-кита у `brand-architect`.
+- Stage gate enforcement (`enforce_stage_gate.py`) блокирует Write/Edit, если этап 04 не закрыт — не обходить, закрывать предшественника.
+- `render-preview.py` генерирует пустой превью при отсутствии `tokens.json` — убедиться что `build-tokens.py` завершился успешно до вызова рендера.
+- Агент ошибочно продолжает к этапу 06 без ожидания явного approve — HARD GATE обязателен, нельзя трактовать молчание как согласие.
+- Токены записаны без провенанса (поле `source` пустое) — нарушает traceability, `build-tokens.py` должен копировать ссылки из brand-kit секций.
 
-## Источник
+## Related
 
-- `agents/design-system-generator.md`
+- [[brand-architect]] — предшественник: создаёт `brand-kit.md`, без него нет входных данных
+- [[design-tokens-generation]] — skill, которому принадлежит агент; содержит `build-tokens.py` и `render-preview.py`
+- [[landing-orchestrator]] — вызывает агента в рамках общего pipeline после approve этапа 04

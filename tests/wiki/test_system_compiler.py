@@ -1,6 +1,6 @@
 """Тесты system_compiler с моком SDK."""
 from pathlib import Path
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -110,6 +110,41 @@ def test_compile_skips_unchanged(fake_repo, tmp_path, mocker):
     assert generate_mock.call_count == 0
 
 
+def test_throttle_defers_sources_over_limit(fake_repo, tmp_path, mocker, monkeypatch):
+    """WIKI_MAX_SDK_CALLS=1: только первый источник компилится, остальные deferred."""
+    # Добавим ещё 2 агента — итого 3 файла, лимит 1
+    (fake_repo / "agents" / "agent-b.md").write_text(
+        (FIXTURES / "agents" / "sample-agent.md").read_text()
+    )
+    (fake_repo / "agents" / "agent-c.md").write_text(
+        (FIXTURES / "agents" / "sample-agent.md").read_text()
+    )
+
+    wiki = tmp_path / "wiki"
+    generate_mock = mocker.patch(
+        "scripts.wiki.system_compiler.sdk_client.generate",
+        return_value="---\ntype: agent\n---\nbody",
+    )
+    mocker.patch(
+        "scripts.wiki.system_compiler._build_index",
+        return_value="idx",
+    )
+    monkeypatch.setenv("WIKI_MAX_SDK_CALLS", "1")
+    sources = [{"path": "agents/*.md", "concept_dir": "agents"}]
+
+    result = system_compiler.compile_system(
+        repo_root=fake_repo, wiki_dir=wiki, sources=sources
+    )
+
+    assert generate_mock.call_count == 1
+    assert len(result["compiled"]) == 1
+    assert len(result["deferred"]) == 2
+    # hash deferred источников НЕ должен быть в кэше — они подхватятся в следующий прогон
+    import json
+    cache = json.loads((wiki / ".cache.json").read_text())
+    assert len(cache) == 1
+
+
 def test_dry_run_does_not_write(fake_repo, tmp_path, mocker):
     wiki = tmp_path / "wiki"
     mocker.patch(
@@ -127,3 +162,163 @@ def test_dry_run_does_not_write(fake_repo, tmp_path, mocker):
     )
     assert not (wiki / "concepts" / "agents" / "sample-agent.md").exists()
     assert not (wiki / "index.md").exists()
+
+
+def test_cache_saved_once_per_compile_run(tmp_path: Path) -> None:
+    """save_cache должен вызываться один раз за прогон, а не в цикле.
+
+    Эта регрессия ловит то что описано в audit/01-scripts-wiki-python.md:
+    раньше save_cache(...) звался ВНУТРИ цикла → O(N²) IO для 473 концептов.
+    """
+    repo_root = tmp_path / "repo"
+    wiki_dir = tmp_path / "wiki"
+    (repo_root / "agents").mkdir(parents=True)
+    (repo_root / "agents" / "a.md").write_text("---\nname: a\n---\nA", encoding="utf-8")
+    (repo_root / "agents" / "b.md").write_text("---\nname: b\n---\nB", encoding="utf-8")
+    (repo_root / "agents" / "c.md").write_text("---\nname: c\n---\nC", encoding="utf-8")
+
+    sources = [{"path": "agents/*.md", "concept_dir": "agents"}]
+
+    with patch("scripts.wiki.hash_cache.save_cache") as mock_save, \
+         patch("scripts.wiki.system_compiler._compile_concept", return_value="---\nname: x\n---\nX"):
+        system_compiler.compile_system(
+            repo_root=repo_root,
+            wiki_dir=wiki_dir,
+            sources=sources,
+            dry_run=False,
+        )
+
+    # Bootstrap pre-population + финальный save = максимум 2 вызова.
+    # Если save_cache внутри цикла — будет ≥3 (по числу файлов).
+    assert mock_save.call_count <= 2, (
+        f"save_cache called {mock_save.call_count} times — should be ≤2 "
+        "(once for bootstrap pre-pop, once at end). Per-file save = O(N²) IO."
+    )
+
+
+def test_failed_sdk_call_still_caches_source_hash(tmp_path: Path) -> None:
+    """Если _compile_concept падает SDK-ошибкой — hash источника ВСЁ РАВНО
+    должен попасть в кэш, чтобы на следующем коммите этот файл не звал SDK снова.
+
+    Audit finding: system_compiler.py:179-183 — error logged but hash never
+    cached → defeats hash-cache purpose for chronically-broken files.
+    """
+    from scripts.wiki import hash_cache, sdk_client
+
+    repo_root = tmp_path / "repo"
+    wiki_dir = tmp_path / "wiki"
+    (repo_root / "agents").mkdir(parents=True)
+    src = repo_root / "agents" / "broken.md"
+    src.write_text("---\nname: broken\n---\nX", encoding="utf-8")
+
+    sources = [{"path": "agents/*.md", "concept_dir": "agents"}]
+
+    with patch("scripts.wiki.system_compiler._compile_concept",
+               side_effect=sdk_client.SDKError("simulated")):
+        system_compiler.compile_system(
+            repo_root=repo_root, wiki_dir=wiki_dir,
+            sources=sources, dry_run=False,
+        )
+
+    cache = hash_cache.load_cache(wiki_dir / ".cache.json")
+    assert "agents/broken.md" in cache, (
+        "Source hash not cached after SDK error — file will re-call SDK "
+        "on every subsequent commit (token leak)."
+    )
+    assert cache["agents/broken.md"] == hash_cache.compute_hash(src)
+
+
+def test_compile_emits_index_yaml(fake_repo, tmp_path, mocker):
+    """compile_system должен писать wiki/index.yaml с правильной структурой."""
+    import yaml
+
+    wiki = tmp_path / "wiki"
+    mocker.patch(
+        "scripts.wiki.system_compiler.sdk_client.generate",
+        return_value=(
+            "---\n"
+            "slug: sample-agent\n"
+            "type: agent\n"
+            "name: sample-agent\n"
+            "tags: [demo]\n"
+            "triggers: [test-trigger]\n"
+            "---\n"
+            "Body."
+        ),
+    )
+    mocker.patch(
+        "scripts.wiki.system_compiler._build_index",
+        return_value="# Index stub",
+    )
+    sources = [{"path": "agents/*.md", "concept_dir": "agents"}]
+
+    system_compiler.compile_system(
+        repo_root=fake_repo, wiki_dir=wiki, sources=sources
+    )
+
+    index_yaml = wiki / "index.yaml"
+    assert index_yaml.exists()
+    data = yaml.safe_load(index_yaml.read_text(encoding="utf-8"))
+    assert data["version"] == 1
+    assert data["counts"]["total"] == 1
+    concept = data["concepts"][0]
+    assert concept["slug"] == "sample-agent"
+    assert concept["type"] == "agent"
+    assert concept["tags"] == ["demo"]
+    assert concept["triggers"] == ["test-trigger"]
+    assert concept["card"] == "concepts/agents/sample-agent.md"
+
+
+def test_compile_concept_includes_known_slugs_in_user_prompt(fake_repo, tmp_path, mocker):
+    """SDK получает список known slug'ов в user-prompt — модель не выдумывает refs."""
+    wiki = tmp_path / "wiki"
+    # Pre-create a concept so it's a known slug
+    (wiki / "concepts" / "agents").mkdir(parents=True)
+    (wiki / "concepts" / "agents" / "existing-agent.md").write_text(
+        "---\nslug: existing-agent\ntype: agent\nname: existing-agent\n---\nbody",
+        encoding="utf-8",
+    )
+
+    captured = {}
+    def fake_generate(system, user):
+        captured["user"] = user
+        return "---\nslug: sample-agent\ntype: agent\nname: sample-agent\n---\nbody"
+
+    mocker.patch("scripts.wiki.system_compiler.sdk_client.generate", side_effect=fake_generate)
+    mocker.patch("scripts.wiki.system_compiler._build_index", return_value="idx")
+
+    sources = [{"path": "agents/*.md", "concept_dir": "agents"}]
+    system_compiler.compile_system(repo_root=fake_repo, wiki_dir=wiki, sources=sources)
+
+    assert "existing-agent" in captured["user"]
+    assert "known slugs" in captured["user"].lower() or "known_slugs" in captured["user"].lower()
+
+
+def test_concepts_summary_carries_extended_frontmatter(fake_repo, tmp_path, mocker):
+    """После compile concepts_summary должен содержать tags/triggers/related."""
+    wiki = tmp_path / "wiki"
+    mocker.patch(
+        "scripts.wiki.system_compiler.sdk_client.generate",
+        return_value=(
+            "---\n"
+            "slug: sample-agent\n"
+            "type: agent\n"
+            "name: sample-agent\n"
+            "tags: [a, b]\n"
+            "related: [x, y]\n"
+            "---\n"
+            "body"
+        ),
+    )
+    mocker.patch(
+        "scripts.wiki.system_compiler._build_index",
+        return_value="idx",
+    )
+    sources = [{"path": "agents/*.md", "concept_dir": "agents"}]
+    system_compiler.compile_system(repo_root=fake_repo, wiki_dir=wiki, sources=sources)
+
+    import yaml
+    data = yaml.safe_load((wiki / "index.yaml").read_text(encoding="utf-8"))
+    concept = data["concepts"][0]
+    assert concept["tags"] == ["a", "b"]
+    assert concept["related"] == ["x", "y"]

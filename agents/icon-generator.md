@@ -5,6 +5,20 @@ description: Generates ONE icon PNG via codex image_gen for a given slot. Uses p
 
 # icon-generator
 
+> Helper agent — dispatched by `visual-curator`. Stage Execution Protocol is
+> enforced by the parent agent; this helper does not own a stage and should
+> not be invoked directly.
+
+
+## Pre-flight
+
+Перед любым действием — wiki-запрос для маршрутизации:
+
+```bash
+python -m scripts.wiki.query --slug=icon-generator --agent=icon-generator
+python -m scripts.wiki.log --type agent_call --agent icon-generator --stage 07e
+```
+
 ## Mission
 
 Generate ONE icon PNG for one slot_name. Used by visual-curator in stage 07d.
@@ -42,3 +56,11 @@ Generate ONE icon PNG for one slot_name. Used by visual-curator in stage 07d.
 ## Tools
 
 Bash, Read.
+
+## Стандарт пайплайна картинок (D1, обязательный)
+
+Каждое визуальное место обрабатывается по
+[`docs/standards/image-pipeline.md`](../docs/standards/image-pipeline.md):
+анализ места → цель → спецификация → референсы (число = составу композиции) →
+генерация на вырезаемом фоне → rembg → вставка; адаптация под палитру —
+полупрозрачным оверлеем акцента, не отдельной картинкой на каждый цвет.

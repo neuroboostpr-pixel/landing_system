@@ -1,0 +1,51 @@
+category: features
+description: Короткий темный блок с крупным заявлением и зеленой акцентной плашкой
+  преимущества.
+display_name_ru: features-brutalist-split-antidiler-karpov-ru-2 (split)
+has_animation: false
+id: features-brutalist-split-antidiler-karpov-ru-2
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://antidiler-karpov.ru/
+layout_pattern: split
+niches_suitable:
+- premium-auto
+- services
+- tech
+ru_market: true
+slots:
+- name: eyebrow
+  type: text
+- name: heading
+  required: true
+  type: text
+- name: subhead
+  type: text
+- name: accent-label
+  type: text
+- name: accent-title
+  type: text
+- name: accent-text
+  type: text
+- name: feature-1-index
+  type: text
+- name: feature-1-title
+  type: text
+- name: feature-1-text
+  type: text
+- name: feature-2-index
+  type: text
+- name: feature-2-title
+  type: text
+- name: feature-2-text
+  type: text
+- name: feature-3-index
+  type: text
+- name: feature-3-title
+  type: text
+- name: feature-3-text
+  type: text
+style_mood: brutalist
+type: features
+variant: null

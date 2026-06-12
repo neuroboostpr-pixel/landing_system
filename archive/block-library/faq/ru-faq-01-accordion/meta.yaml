@@ -1,0 +1,75 @@
+category: faq
+conversion_notes: Native details — без JS, SEO-friendly. Частые возражения первыми.
+  6 вопросов — оптимально.
+created: 2026-05-12
+description: 6 вопросов-ответов через native HTML <details>-аккордеон. Без JavaScript.
+  SEO-friendly.
+display_name_ru: ru-faq-01-accordion (stacked)
+id: ru-faq-01-accordion
+layout_pattern: stacked
+layout_summary_ru: 6 вопросов-ответов через нативный HTML details-аккордеон без JavaScript.
+  SEO-friendly, часто закрывает ключевые возражения о цене и сроках.
+recommended_styles_ru:
+- Minimalism & Swiss Style
+ru_market: true
+slots:
+- max_chars: 60
+  name: headline
+  required: true
+  type: text
+- max_chars: 100
+  name: faq-1-q
+  required: true
+  type: text
+- max_chars: 400
+  name: faq-1-a
+  required: true
+  type: text
+- max_chars: 100
+  name: faq-2-q
+  required: true
+  type: text
+- max_chars: 400
+  name: faq-2-a
+  required: true
+  type: text
+- max_chars: 100
+  name: faq-3-q
+  required: true
+  type: text
+- max_chars: 400
+  name: faq-3-a
+  required: true
+  type: text
+- max_chars: 100
+  name: faq-4-q
+  required: false
+  type: text
+- max_chars: 400
+  name: faq-4-a
+  required: false
+  type: text
+- max_chars: 100
+  name: faq-5-q
+  required: false
+  type: text
+- max_chars: 400
+  name: faq-5-a
+  required: false
+  type: text
+- max_chars: 100
+  name: faq-6-q
+  required: false
+  type: text
+- max_chars: 400
+  name: faq-6-a
+  required: false
+  type: text
+source: manual
+source_attribution: ''
+type: faq
+use_cases:
+- services
+- b2c
+- local
+variant: null

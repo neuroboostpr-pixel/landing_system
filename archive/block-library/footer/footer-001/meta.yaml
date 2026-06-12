@@ -1,0 +1,79 @@
+category: footer
+created: '2026-06-01'
+display_name_ru: footer-001 (grid)
+has_bg_image: false
+id: footer-001
+layout_pattern: grid
+signature: footer|grid|[content]|bg:false
+slots:
+- name: brand-aria-label
+  type: text
+- name: brand-url
+  type: text
+- name: brand-name
+  type: text
+- name: footer-summary
+  type: text
+- name: social-label
+  type: text
+- name: social-link-1-label
+  type: text
+- name: social-link-1
+  type: text
+- name: social-link-2-label
+  type: text
+- name: social-link-2
+  type: text
+- name: social-link-3-label
+  type: text
+- name: social-link-3
+  type: text
+- name: footer-nav-label
+  type: text
+- name: menu-heading
+  type: text
+- name: menu-link-1-url
+  type: text
+- name: menu-link-1-label
+  type: text
+- name: menu-link-2-url
+  type: text
+- name: menu-link-2-label
+  type: text
+- name: menu-link-3-url
+  type: text
+- name: menu-link-3-label
+  type: text
+- name: menu-link-4-url
+  type: text
+- name: menu-link-4-label
+  type: text
+- name: contacts-heading
+  type: text
+- name: phone-url
+  type: text
+- name: phone-label
+  type: text
+- name: email-url
+  type: text
+- name: email-label
+  type: text
+- name: address-line
+  type: text
+- name: work-hours
+  type: text
+- name: copyright
+  type: text
+- name: legal-nav-label
+  type: text
+- name: legal-link-1-url
+  type: text
+- name: legal-link-1-label
+  type: text
+- name: legal-link-2-url
+  type: text
+- name: legal-link-2-label
+  type: text
+source: cleaned
+type: footer
+variant: null

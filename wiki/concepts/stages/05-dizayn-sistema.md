@@ -1,39 +1,52 @@
 ---
+slug: design-tokens-generation
 type: stage
-name: design-system
-sources: ["template/05_ДИЗАЙН-СИСТЕМА/README.md"]
-updated: 2026-05-15
-triggers: []
+name: "Этап 05: Генерация дизайн-системы"
 stage: "05"
-uses: ["design-system-generator", "brand-architect", "brand-kit-build", "design-tokens-generation"]
-tags: ["design", "tokens", "stage-05"]
+tags: [design, tokens, typography, colors, design-system]
+triggers: []
+inputs: [brand-kit-build]
+outputs: [design-tokens-generation]
+gates: [design_system_approved]
+pre_reqs: [brand-kit-build]
+related: [design-system-generator, landing-design, landing-brand, block-composer, landing-build]
+sources: ["template/05_ДИЗАЙН-СИСТЕМА/README.md"]
+updated: 2026-05-26
+confidence: {gates: low, triggers: low}
 ---
 
-# 05 — Дизайн-система
+# Этап 05: Генерация дизайн-системы
 
 ## Что делает
-Превращает бренд-кит в машиночитаемые дизайн-токены и единый источник истины о стиле лендинга: цвета, шрифты, отступы, визуальный preview.
 
-## Когда вызывать / в каком этапе
-Запускается на этапе 05 после того, как [[brand-architect]] завершил этап 04 и создал `04_БРЕНД/brand-kit.md`. Агент [[design-system-generator]] читает brand-kit и генерирует артефакты этапа.
+На этом этапе агент `design-system-generator` формирует единый источник истины по визуальному языку проекта. На основе утверждённого `brand-kit.md` (этап 04) создаются три артефакта: `DESIGN.md` с полным описанием токенов (цвета, шрифты, отступы, радиусы), `tokens.json` для машинного потребления сборщиком темы и `design-preview.html` для визуальной проверки палитры и типографики. Результат используется всеми последующими этапами — от wireframe до финального WordPress-билда.
 
-## Что на вход / на выход
+## Когда вызывается
 
-**Вход:**
-- `04_БРЕНД/brand-kit.md` — готовый бренд-кит от [[brand-architect]]
+Этап запускается после того, как пользователь утвердил бренд-кит (этап 04). В `landing-orchestrator` он следует за `landing-brand` и предшествует `landing-compose` / `landing-wireframe`.
 
-**Выход:**
-- `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` — единый источник истины: цвета, шрифты, отступы, компоненты
-- `05_ДИЗАЙН-СИСТЕМА/tokens.json` — машиночитаемые токены для инжекции в блоки
-- `05_ДИЗАЙН-СИСТЕМА/design-preview.html` — визуальный preview дизайн-системы для согласования с клиентом
+## Вход → выход
 
-## Связанные концепты
-- [[design-system-generator]] — агент, который создаёт все артефакты этапа 05
-- [[brand-architect]] — предшествующий агент: производит brand-kit.md, который является входом для этого этапа
-- [[brand-kit-build]] — скилл, которым владеет brand-architect
-- [[design-tokens-generation]] — скилл, которым владеет design-system-generator; описывает логику генерации tokens.json и DESIGN.md
-- [[stack-planner]] — следующий этап (06): читает DESIGN.md при выборе плагинов и библиотек
-- [[block-composition]] — этап 07b: потребляет tokens.json при инжекции токенов в composed.html
+**Вход:** `04_БРЕНД/brand-kit.md` — утверждённый бренд-кит с палитрой, шрифтами, тоном и логотипом.
 
-## Источник
-- `template/05_ДИЗАЙН-СИСТЕМА/README.md`
+**Выход:** `05_ДИЗАЙН-СИСТЕМА/DESIGN.md`, `05_ДИЗАЙН-СИСТЕМА/tokens.json`, `05_ДИЗАЙН-СИСТЕМА/design-preview.html` — полный дизайн-язык проекта в человеко- и машиночитаемом форматах.
+
+## Чем закрывается этап (gates)
+
+- `design_system_approved` — пользователь визуально проверил `design-preview.html` и явно утвердил дизайн-систему; без этого оркестратор не переходит к следующему этапу.
+
+## Failure modes
+
+- `tokens.json` генерируется с неполным набором токенов (нет отступов или радиусов) — последующий блок-композер падает на отсутствующих CSS-переменных.
+- `brand-kit.md` содержит неоднозначные цвета (hex не указан, только словесное описание) — агент угадывает цвет, результат расходится с ожиданиями клиента.
+- `design-preview.html` не открывается в браузере без локального сервера (относительные пути к шрифтам) — пользователь не может оценить результат.
+- Этап пропускается вручную «для скорости» — блок-библиотека применяет дефолтные токены вместо брендовых, визуал этапа 07b не соответствует бренду.
+- Шрифт подключён через Google Fonts, но домен клиента работает без доступа к внешним CDN — шрифт не грузится на продакшене.
+
+## Related
+
+- [[design-system-generator]] — агент, исполняющий этот этап
+- [[landing-design]] — slash-команда для ручного запуска/перегенерации этапа
+- [[landing-brand]] — предшествующий этап (04), чей output является входом
+- [[block-composer]] — потребляет `tokens.json` при сборке composed.html
+- [[landing-build]] — этап 08, снова использует токены при генерации WordPress-темы

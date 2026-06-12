@@ -1,0 +1,143 @@
+<style>
+  .block-gallery-001 {
+    font-family: system-ui, sans-serif;
+    background: #f5f5f5;
+    color: #333;
+    padding: 48px 24px;
+  }
+
+  .block-gallery-001__grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .block-gallery-001__card {
+    background: #e8e8e8;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .block-gallery-001__preview {
+    background: #d0d0d0;
+    aspect-ratio: 16 / 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    font-size: 14px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .block-gallery-001__body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+  }
+
+  .block-gallery-001__title {
+    margin: 0;
+    font-size: 20px;
+    line-height: 1.3;
+    color: #333;
+  }
+
+  .block-gallery-001__tags {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #999;
+  }
+
+  .block-gallery-001__meta {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 8px;
+  }
+
+  .block-gallery-001__id {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.4;
+    color: #999;
+  }
+
+  .block-gallery-001__cta {
+    display: inline-block;
+    padding: 12px 18px;
+    background: #999;
+    color: #f5f5f5;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 900px) {
+    .block-gallery-001__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .block-gallery-001 {
+      padding: 32px 16px;
+    }
+
+    .block-gallery-001__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+<section class="block-gallery-001" data-block-type="gallery">
+  <div class="block-gallery-001__grid">
+    <article class="block-gallery-001__card">
+      <div class="block-gallery-001__preview" data-slot-type="image">{{slot:card-1-preview}}</div>
+      <div class="block-gallery-001__body">
+        <h3 class="block-gallery-001__title">{{slot:card-1-title}}</h3>
+        <p class="block-gallery-001__tags">{{slot:card-1-tags}}</p>
+        <div class="block-gallery-001__meta">
+          <p class="block-gallery-001__id">{{slot:card-1-id}}</p>
+          <a href="#" class="block-gallery-001__cta">{{slot:card-1-cta}}</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="block-gallery-001__card">
+      <div class="block-gallery-001__preview" data-slot-type="image">{{slot:card-2-preview}}</div>
+      <div class="block-gallery-001__body">
+        <h3 class="block-gallery-001__title">{{slot:card-2-title}}</h3>
+        <p class="block-gallery-001__tags">{{slot:card-2-tags}}</p>
+        <div class="block-gallery-001__meta">
+          <p class="block-gallery-001__id">{{slot:card-2-id}}</p>
+          <a href="#" class="block-gallery-001__cta">{{slot:card-2-cta}}</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="block-gallery-001__card">
+      <div class="block-gallery-001__preview" data-slot-type="image">{{slot:card-3-preview}}</div>
+      <div class="block-gallery-001__body">
+        <h3 class="block-gallery-001__title">{{slot:card-3-title}}</h3>
+        <p class="block-gallery-001__tags">{{slot:card-3-tags}}</p>
+        <div class="block-gallery-001__meta">
+          <p class="block-gallery-001__id">{{slot:card-3-id}}</p>
+          <a href="#" class="block-gallery-001__cta">{{slot:card-3-cta}}</a>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>

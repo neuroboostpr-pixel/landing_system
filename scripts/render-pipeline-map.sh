@@ -35,38 +35,14 @@ if ! command -v yq >/dev/null 2>&1; then
     exit 3
 fi
 
-# Pipeline order — must match gate-check.sh
-PIPELINE_ORDER=(
-    "00_brief" "01_context" "01a_niche_analysis" "02_assets" "03_references"
-    "04_brand" "05_design" "06_stack" "07_content" "07a_prototype"
-    "07b_wireframe" "07c_composed" "07d_photos" "07e_visuals" "07f_composed_final"
-    "08_build" "08b_style" "10_qa" "09_deploy" "11_analytics" "12_seo"
-)
-
-# Short human-readable labels
-declare -A LABELS=(
-    ["00_brief"]="Бриф"
-    ["01_context"]="Контекст"
-    ["01a_niche_analysis"]="Анализ ниши"
-    ["02_assets"]="Материалы"
-    ["03_references"]="Референсы"
-    ["04_brand"]="Бренд"
-    ["05_design"]="Дизайн-система"
-    ["06_stack"]="Стек"
-    ["07_content"]="Контент"
-    ["07a_prototype"]="Прототип"
-    ["07b_wireframe"]="Wireframe"
-    ["07c_composed"]="Compose v1"
-    ["07d_photos"]="Фото"
-    ["07e_visuals"]="Иконки/чарты"
-    ["07f_composed_final"]="Compose final"
-    ["08_build"]="WP-сборка"
-    ["08b_style"]="Style polish"
-    ["10_qa"]="QA"
-    ["09_deploy"]="Деплой"
-    ["11_analytics"]="Аналитика"
-    ["12_seo"]="SEO"
-)
+# Pipeline order + labels — из config/stages.yaml (E1, single source of truth)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PIPELINE_ORDER=()
+declare -A LABELS=()
+while IFS=$'\t' read -r _sid _slabel; do
+    PIPELINE_ORDER+=("$_sid")
+    LABELS["$_sid"]="$_slabel"
+done < <(python3 "$SCRIPT_DIR/stages.py" --labels)
 
 render_map() {
 # Mermaid class definitions (visual states)

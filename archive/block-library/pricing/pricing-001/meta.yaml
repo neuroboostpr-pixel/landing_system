@@ -1,0 +1,83 @@
+category: pricing
+created: '2026-06-01'
+display_name_ru: pricing-001 (default)
+has_bg_image: false
+id: pricing-001
+layout_pattern: default
+signature: pricing|default|[content]|bg:false
+slots:
+- name: pricing-eyebrow
+  type: text
+- name: pricing-title
+  type: text
+- name: pricing-subhead
+  type: text
+- name: plan-1-title
+  type: text
+- name: plan-1-description
+  type: text
+- name: plan-1-price
+  type: text
+- name: plan-1-period
+  type: text
+- name: plan-1-features-label
+  type: text
+- name: plan-1-feature-1
+  type: text
+- name: plan-1-feature-2
+  type: text
+- name: plan-1-feature-3
+  type: text
+- name: plan-1-cta-url
+  type: text
+- name: plan-1-cta-label
+  type: text
+- name: plan-2-badge
+  type: text
+- name: plan-2-title
+  type: text
+- name: plan-2-description
+  type: text
+- name: plan-2-price
+  type: text
+- name: plan-2-period
+  type: text
+- name: plan-2-features-label
+  type: text
+- name: plan-2-feature-1
+  type: text
+- name: plan-2-feature-2
+  type: text
+- name: plan-2-feature-3
+  type: text
+- name: plan-2-feature-4
+  type: text
+- name: plan-2-cta-url
+  type: text
+- name: plan-2-cta-label
+  type: text
+- name: plan-3-title
+  type: text
+- name: plan-3-description
+  type: text
+- name: plan-3-price
+  type: text
+- name: plan-3-period
+  type: text
+- name: plan-3-features-label
+  type: text
+- name: plan-3-feature-1
+  type: text
+- name: plan-3-feature-2
+  type: text
+- name: plan-3-feature-3
+  type: text
+- name: plan-3-cta-url
+  type: text
+- name: plan-3-cta-label
+  type: text
+- name: pricing-note
+  type: text
+source: cleaned
+type: pricing
+variant: cards

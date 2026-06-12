@@ -1,51 +1,50 @@
 ---
+slug: qa-auditor
 type: agent
-name: qa-auditor
-sources: ["agents/qa-auditor.md"]
-updated: 2026-05-15
-triggers: ["после деплоя", "проверка сайта", "/landing-deploy завершён", "QA аудит"]
+name: "QA-аудитор"
 stage: "10"
-uses: ["landing-deploy", "wp-deployer", "integrations-engineer", "analytics-engineer"]
-tags: ["qa", "audit", "deploy", "checklist"]
+tags: [qa, audit, https, analytics, forms, mobile, deploy]
+triggers: [landing-deploy]
+inputs: [00_БРИФ/brief.md]
+outputs: [10_QA/qa-report.md]
+gates: [qa_report_approved]
+pre_reqs: []
+related: [landing-orchestrator, lifecycle-keeper, integrations-engineer]
+sources: ["agents/qa-auditor.md"]
+updated: 2026-05-26
+confidence: {triggers: low, gates: low}
 ---
 
-# qa-auditor — QA-аудитор задеплоенного лендинга
+# QA-аудитор
 
 ## Что делает
 
-Автоматически проверяет живой сайт по 7 критериям качества сразу после деплоя: от доступности и HTTPS до форм и аналитики. Формирует отчёт в виде таблицы и ждёт утверждения перед переходом к следующему этапу.
+Проверяет живой сайт по 7 критериям качества после деплоя: доступность (HTTP 200), корректный HTTPS-редирект, наличие мета-тегов (title, description, og:title), подключение Яндекс.Метрики, Google Tag Manager, рендер формы Fluent Forms и наличие viewport-тега для мобильных устройств. По результатам формирует структурированный отчёт в виде таблицы и ожидает явного утверждения — без него этап не закрывается.
 
-## Когда вызывать / в каком этапе
+## Когда вызывается
 
-Вызывается на **этапе 10** — после того как агент [[wp-deployer]] завершил деплой (`/landing-deploy`). Запуск через `/landing-qa` или автоматически через [[landing-orchestrator]].
+Запускается на этапе `10_qa` после успешного деплоя (`/landing-deploy`). Обязательное условие — `current_stage == 10_qa` в `.landing-state.yaml`. Если предшественник (stage 09) не закрыт, хук `enforce_stage_gate.py` блокирует любые Write/Edit-операции.
 
-## Что на вход / на выход
+## Вход → выход
 
-**Вход:**
-- `00_БРИФ/brief.md` — содержит URL задеплоенного сайта
-- Живой HTML сайта (скачивается через `curl`)
+**Вход:** URL задеплоенного сайта из `00_БРИФ/brief.md`; доступ к интернету для `curl`-запросов; пройденный gate-check `--stage 10_qa`.
 
-**Выход:**
-- `10_QA/qa-report.md` — таблица с результатами по 7 критериям (✅ / ❌)
+**Выход:** `10_QA/qa-report.md` — markdown-таблица с результатами по каждому из 7 критериев (✅ / ❌). После утверждения пользователем этап помечается `approved` через `gate-state.sh`.
 
-**Семь проверяемых критериев:**
-1. Доступность — HTTP 200
-2. HTTPS + редирект с HTTP → HTTPS (301)
-3. Meta-теги — `<title>`, `<meta description>`, `og:title`
-4. Яндекс Метрика — счётчик `mc.yandex.ru` в HTML
-5. Google Tag Manager — контейнер `googletagmanager` в HTML
-6. Fluent Forms — shortcode `fluentform` отрендерен в HTML
-7. Viewport — `<meta name="viewport">` для мобайла
+## Чем закрывается этап (gates)
 
-**HARD GATE:** после формирования отчёта агент показывает его пользователю и ждёт явного подтверждения. Следующий этап не открывается до approve.
+- `qa_report_approved` — пользователь явно подтвердил отчёт; все 7 критериев в статусе ✅ либо расхождения объяснены и приняты.
 
-## Связанные концепты
+## Failure modes
 
-- [[wp-deployer]] — выполняет деплой, после которого запускается qa-auditor
-- [[integrations-engineer]] — настраивает Fluent Forms и Telegram webhook (проверяется в п. 6)
-- [[analytics-engineer]] — добавляет счётчик Яндекс Метрики (проверяется в п. 4)
-- [[landing-orchestrator]] — управляет порядком этапов и HARD GATE между ними
+- **Сайт недоступен (не 200)** — curl возвращает ошибку; аудит прерывается на первом шаге, дальнейшие проверки не имеют смысла.
+- **HTTPS не настроен или редирект отсутствует** — HTTP 200 вместо 301 → https, браузер не показывает замок.
+- **Метрика / GTM отсутствуют в HTML** — analytics-фрагменты не вставлены в тему или удалены при регенерации `functions.php`.
+- **Fluent Forms shortcode не рендерится** — плагин не активирован или форма не опубликована на странице.
+- **Предшественник не закрыт** — `enforce_stage_gate.py` блокирует запись в `10_QA/`; агент должен остановиться и сообщить пользователю.
 
-## Источник
+## Related
 
-- `agents/qa-auditor.md`
+- [[landing-orchestrator]] — вызывает агента в рамках pipeline; управляет переходом к этапу 10
+- [[lifecycle-keeper]] — фиксирует статус этапа и вызов gate-state approve
+- [[integrations-engineer]] — отвечает за встройку GTM/Метрики в тему, которую здесь проверяют

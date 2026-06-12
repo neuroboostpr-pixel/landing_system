@@ -1,0 +1,61 @@
+category: hero
+description: Темный промо-блок с крупным заголовком, CTA-кнопками, 3D-предметом и
+  плашками преимуществ.
+display_name_ru: hero-cinematic-split-portfolio-kdm1-ru-2 (split)
+has_animation: false
+id: hero-cinematic-split-portfolio-kdm1-ru-2
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://portfolio.kdm1.ru/upload/iblock/c4c/ejaxky0hmu17f3t0aymzbkm7osq54n8x/Spetsodezhda-Siti.pdf
+layout_pattern: split
+niches_suitable:
+- services
+- ecommerce
+- premium-auto
+- tech
+ru_market: true
+slots:
+- name: eyebrow
+  type: text
+- name: headline
+  type: text
+- name: subhead
+  type: text
+- name: actions-label
+  type: text
+- name: primary-cta-link
+  type: text
+- name: primary-cta-label
+  type: text
+- name: secondary-cta-link
+  type: text
+- name: secondary-cta-label
+  type: text
+- name: benefits-label
+  type: text
+- name: benefit-1
+  type: text
+- name: benefit-2
+  type: text
+- name: benefit-3
+  type: text
+- name: visual-label
+  type: text
+- name: hero-image-mobile
+  type: text
+- name: hero-image-alt
+  type: text
+- name: hero-image
+  type: text
+- name: stat-1-value
+  type: text
+- name: stat-1-label
+  type: text
+- name: stat-2-value
+  type: text
+- name: stat-2-label
+  type: text
+style_mood: cinematic
+type: hero
+variant: null

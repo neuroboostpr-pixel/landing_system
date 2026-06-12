@@ -1,0 +1,41 @@
+category: features
+description: Плотный вводный блок с широкой плашкой, крупным тезисом и короткими текстовыми
+  колонками.
+display_name_ru: features-editorial-stacked-romanmelnikov-tilda-2 (stacked)
+has_animation: false
+id: features-editorial-stacked-romanmelnikov-tilda-2
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://romanmelnikov.tilda.ws/
+layout_pattern: stacked
+niches_suitable:
+- services
+- education
+- b2b-saas
+ru_market: true
+slots:
+- name: eyebrow
+  type: text
+- name: heading
+  required: true
+  type: text
+- name: subhead
+  type: text
+- name: statement
+  type: text
+- name: feature-1-title
+  type: text
+- name: feature-1-text
+  type: text
+- name: feature-2-title
+  type: text
+- name: feature-2-text
+  type: text
+- name: feature-3-title
+  type: text
+- name: feature-3-text
+  type: text
+style_mood: editorial
+type: features
+variant: null

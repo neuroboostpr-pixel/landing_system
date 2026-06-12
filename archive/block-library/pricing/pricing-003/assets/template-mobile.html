@@ -1,0 +1,280 @@
+<style>.lp-pricing-luxury-split {
+  background: var(--lp-bg);
+  color: var(--lp-text);
+  font-family: var(--lp-font-body);
+  padding: var(--lp-spacing-xl) var(--lp-spacing-md);
+}
+
+.lp-pricing-luxury-split * {
+  box-sizing: border-box;
+}
+
+.lp-pricing-luxury-split__inner {
+  display: grid;
+  gap: var(--lp-spacing-xl);
+  margin: 0 auto;
+  max-width: 1180px;
+}
+
+.lp-pricing-luxury-split__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lp-spacing-lg);
+}
+
+.lp-pricing-luxury-split__eyebrow {
+  color: var(--lp-accent);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  line-height: 1.4;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.lp-pricing-luxury-split__title {
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: clamp(2.4rem, 10vw, 5.8rem);
+  font-weight: 500;
+  line-height: 0.95;
+  margin: 0;
+}
+
+.lp-pricing-luxury-split__lead {
+  color: var(--lp-text-muted);
+  font-size: 1rem;
+  line-height: 1.7;
+  margin: 0;
+  max-width: 42rem;
+}
+
+.lp-pricing-luxury-split__plans {
+  display: grid;
+  gap: var(--lp-spacing-md);
+}
+
+.lp-pricing-luxury-split__plan {
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+  display: flex;
+  flex-direction: column;
+  gap: var(--lp-spacing-md);
+  padding: var(--lp-spacing-lg);
+}
+
+.lp-pricing-luxury-split__plan--accent {
+  background: var(--lp-bg-alt);
+  border-color: var(--lp-accent);
+}
+
+.lp-pricing-luxury-split__badge {
+  align-self: flex-start;
+  border: 1px solid var(--lp-accent);
+  border-radius: var(--lp-radius);
+  color: var(--lp-accent);
+  font-size: 0.75rem;
+  line-height: 1.2;
+  padding: var(--lp-spacing-xs) var(--lp-spacing-sm);
+}
+
+.lp-pricing-luxury-split__plan-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--lp-spacing-md);
+}
+
+.lp-pricing-luxury-split__plan-title {
+  color: var(--lp-text);
+  font-family: var(--lp-font-display);
+  font-size: 1.35rem;
+  font-weight: 500;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.lp-pricing-luxury-split__plan-price {
+  color: var(--lp-accent);
+  font-family: var(--lp-font-display);
+  font-size: 1.5rem;
+  line-height: 1;
+  margin: 0;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.lp-pricing-luxury-split__plan-text {
+  color: var(--lp-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.lp-pricing-luxury-split__features {
+  border-top: 1px solid var(--lp-border);
+  display: grid;
+  gap: var(--lp-spacing-sm);
+  list-style: none;
+  margin: 0;
+  padding: var(--lp-spacing-md) 0 0;
+}
+
+.lp-pricing-luxury-split__features li {
+  color: var(--lp-text);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  padding-left: var(--lp-spacing-md);
+  position: relative;
+}
+
+.lp-pricing-luxury-split__features li::before {
+  background: var(--lp-accent);
+  border-radius: var(--lp-radius);
+  content: "";
+  height: 0.35rem;
+  left: 0;
+  position: absolute;
+  top: 0.6em;
+  width: 0.35rem;
+}
+
+.lp-pricing-luxury-split__link,
+.lp-pricing-luxury-split__button {
+  align-items: center;
+  border-radius: var(--lp-radius);
+  display: inline-flex;
+  font-size: 0.95rem;
+  justify-content: center;
+  line-height: 1.2;
+  min-height: 3rem;
+  padding: var(--lp-spacing-sm) var(--lp-spacing-lg);
+  text-decoration: none;
+}
+
+.lp-pricing-luxury-split__link {
+  border: 1px solid var(--lp-border);
+  color: var(--lp-text);
+}
+
+.lp-pricing-luxury-split__button {
+  background: var(--lp-accent);
+  border: 1px solid var(--lp-accent);
+  color: var(--lp-bg);
+}
+
+.lp-pricing-luxury-split__media {
+  border-left: 1px solid var(--lp-border);
+  display: grid;
+  gap: var(--lp-spacing-md);
+  padding-left: var(--lp-spacing-md);
+}
+
+.lp-pricing-luxury-split__media picture {
+  display: block;
+}
+
+.lp-pricing-luxury-split__media img {
+  aspect-ratio: 3 / 4;
+  border-radius: var(--lp-radius-lg);
+  display: block;
+  height: auto;
+  object-fit: cover;
+  width: 100%;
+}
+
+.lp-pricing-luxury-split__note {
+  border-top: 1px solid var(--lp-border);
+  display: grid;
+  gap: var(--lp-spacing-xs);
+  padding-top: var(--lp-spacing-md);
+}
+
+.lp-pricing-luxury-split__note-kicker {
+  color: var(--lp-accent);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.lp-pricing-luxury-split__note p {
+  color: var(--lp-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .lp-pricing-luxury-split {
+    padding: var(--lp-spacing-xl) var(--lp-spacing-lg);
+  }
+
+  .lp-pricing-luxury-split__inner {
+    grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.65fr);
+    align-items: start;
+  }
+
+  .lp-pricing-luxury-split__plans {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lp-pricing-luxury-split__media {
+    padding-left: var(--lp-spacing-lg);
+    position: sticky;
+    top: var(--lp-spacing-lg);
+  }
+}
+
+/* Forced mobile viewport for preview */
+@media (min-width: 0) {
+  body, .lp-hero-cinematic-split, [class^="lp-"] { font-size: 14px; }
+}
+</style>
+<section aria-labelledby="lp-pricing-luxury-split-title" class="lp-pricing-luxury-split">
+<div class="lp-pricing-luxury-split__inner">
+<div class="lp-pricing-luxury-split__content">
+<p class="lp-pricing-luxury-split__eyebrow">{{slot:pricing-eyebrow}}</p>
+<h2 class="lp-pricing-luxury-split__title" id="lp-pricing-luxury-split-title">{{slot:pricing-title}}</h2>
+<p class="lp-pricing-luxury-split__lead">{{slot:pricing-subhead}}</p>
+<div class="lp-pricing-luxury-split__plans" role="list">
+<article class="lp-pricing-luxury-split__plan" role="listitem">
+<div class="lp-pricing-luxury-split__plan-head">
+<h3 class="lp-pricing-luxury-split__plan-title">{{slot:plan-1-title}}</h3>
+<p class="lp-pricing-luxury-split__plan-price">{{slot:plan-1-price}}</p>
+</div>
+<p class="lp-pricing-luxury-split__plan-text">{{slot:plan-1-description}}</p>
+<ul class="lp-pricing-luxury-split__features">
+<li>{{slot:plan-1-feature-1}}</li>
+<li>{{slot:plan-1-feature-2}}</li>
+<li>{{slot:plan-1-feature-3}}</li>
+</ul>
+<a class="lp-pricing-luxury-split__link" href="{{slot:plan-1-link}}">{{slot:plan-1-cta}}</a>
+</article>
+<article class="lp-pricing-luxury-split__plan lp-pricing-luxury-split__plan--accent" role="listitem">
+<div class="lp-pricing-luxury-split__badge">{{slot:plan-2-badge}}</div>
+<div class="lp-pricing-luxury-split__plan-head">
+<h3 class="lp-pricing-luxury-split__plan-title">{{slot:plan-2-title}}</h3>
+<p class="lp-pricing-luxury-split__plan-price">{{slot:plan-2-price}}</p>
+</div>
+<p class="lp-pricing-luxury-split__plan-text">{{slot:plan-2-description}}</p>
+<ul class="lp-pricing-luxury-split__features">
+<li>{{slot:plan-2-feature-1}}</li>
+<li>{{slot:plan-2-feature-2}}</li>
+<li>{{slot:plan-2-feature-3}}</li>
+</ul>
+<a class="lp-pricing-luxury-split__button" href="{{slot:plan-2-link}}">{{slot:plan-2-cta}}</a>
+</article>
+</div>
+</div>
+<aside aria-label="{{slot:pricing-media-label}}" class="lp-pricing-luxury-split__media">
+<picture>
+<source media="(max-width: 767px)" srcset="{{slot:pricing-portrait-mobile}}"/>
+<img alt="{{slot:pricing-portrait-alt}}" loading="lazy" src="{{slot:pricing-portrait}}"/>
+</picture>
+<div class="lp-pricing-luxury-split__note">
+<span class="lp-pricing-luxury-split__note-kicker">{{slot:pricing-note-kicker}}</span>
+<p>{{slot:pricing-note-text}}</p>
+</div>
+</aside>
+</div>
+</section>

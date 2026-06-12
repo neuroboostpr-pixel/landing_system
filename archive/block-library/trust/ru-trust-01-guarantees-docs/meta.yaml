@@ -1,0 +1,72 @@
+category: trust
+conversion_notes: Договор + лицензия — юридическая защита. Гарантия + возврат — финансовая
+  защита клиента.
+created: 2026-05-12
+description: '4 плашки доверия: договор, лицензия, гарантия, возврат — с иконками
+  и кратким текстом.'
+display_name_ru: ru-trust-01-guarantees-docs (centered)
+id: ru-trust-01-guarantees-docs
+layout_pattern: centered
+layout_summary_ru: 'Четыре плашки доверия в ряд: договор, лицензия, гарантия, возврат
+  — иконка + заголовок + описание. Юридическая и финансовая защита клиента.'
+recommended_styles_ru:
+- Corporate Professional
+- Minimalism & Swiss Style
+ru_market: true
+slots:
+- max_chars: 60
+  name: headline
+  required: true
+  type: text
+- name: trust-1-icon
+  required: false
+  type: icon
+- max_chars: 20
+  name: trust-1-title
+  required: true
+  type: text
+- max_chars: 80
+  name: trust-1-text
+  required: true
+  type: text
+- name: trust-2-icon
+  required: false
+  type: icon
+- max_chars: 20
+  name: trust-2-title
+  required: true
+  type: text
+- max_chars: 80
+  name: trust-2-text
+  required: true
+  type: text
+- name: trust-3-icon
+  required: false
+  type: icon
+- max_chars: 20
+  name: trust-3-title
+  required: true
+  type: text
+- max_chars: 80
+  name: trust-3-text
+  required: true
+  type: text
+- name: trust-4-icon
+  required: false
+  type: icon
+- max_chars: 20
+  name: trust-4-title
+  required: true
+  type: text
+- max_chars: 80
+  name: trust-4-text
+  required: true
+  type: text
+source: manual
+source_attribution: ''
+type: guarantees
+use_cases:
+- b2c
+- local
+- services
+variant: guarantees

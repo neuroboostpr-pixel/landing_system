@@ -1,0 +1,66 @@
+category: content
+description: Светлый блок с вопросительным заголовком, вкладками и карточками вокруг
+  размытого объекта.
+display_name_ru: process-technical-cards-medregistrant-ru-3 (cards)
+has_animation: false
+id: process-technical-cards-medregistrant-ru-3
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://medregistrant.ru/
+layout_pattern: cards
+niches_suitable:
+- services
+- medical
+- education
+ru_market: true
+slots:
+- name: process-eyebrow
+  type: text
+- name: process-title
+  type: text
+- name: process-subhead
+  type: text
+- name: process-tabs-label
+  type: text
+- name: tab-1-label
+  type: text
+- name: tab-2-label
+  type: text
+- name: tab-3-label
+  type: text
+- name: step-1-number
+  type: text
+- name: step-1-title
+  type: text
+- name: step-1-text
+  type: text
+- name: step-2-number
+  type: text
+- name: step-2-title
+  type: text
+- name: step-2-text
+  type: text
+- name: step-3-number
+  type: text
+- name: step-3-title
+  type: text
+- name: step-3-text
+  type: text
+- name: step-4-number
+  type: text
+- name: step-4-title
+  type: text
+- name: step-4-text
+  type: text
+- name: primary-cta-url
+  type: text
+- name: primary-cta-label
+  type: text
+- name: secondary-cta-url
+  type: text
+- name: secondary-cta-label
+  type: text
+style_mood: technical
+type: process
+variant: process

@@ -5,6 +5,12 @@ description: Generate a layered parallax hero block by producing one 2K 16:9 atl
 
 # paralaximus-codex
 
+## Pre-flight
+
+```bash
+python -m scripts.wiki.log --type skill_call --skill paralaximus-codex --stage 07b
+```
+
 Производство параллакс-героя: одна 2K-картинка → 4 слоя → CSS+JS параллакс с распадом по скроллу и движению мыши. Под капотом — Codex CLI built-in `image_gen` + локальный `remove_chroma_key.py` из системного навыка `imagegen`.
 
 ## Когда использовать

@@ -1,0 +1,42 @@
+category: header
+conversion_notes: 'Дескриптор отвечает: ЧТО + ЧТО ПРОДАЁМ + КОМУ. Примеры: ''Франшиза
+  мужских костюмов в Москве'', ''Ремонт квартир в Екатеринбурге'' (книга, стр. 4).'
+created: '2026-05-13'
+description: 'Шапка с дескриптором: ''Что / Что продаём / Кому продаём'' — логотип
+  слева, дескриптор по центру, телефон и CTA справа. Первый элемент, который видит
+  пользователь.'
+display_name_ru: ru-trust-03-descriptor-header (centered)
+id: ru-trust-03-descriptor-header
+layout_pattern: centered
+layout_summary_ru: Логотип слева, дескриптор по центру (Ниша + Продукт + Город), телефон
+  и кнопка 'Связаться' справа. Белый фон, тонкая нижняя граница.
+ru_market: true
+slots:
+- name: logo
+  ratio: '3:1'
+  required: true
+  type: photo
+- max_chars: 60
+  name: descriptor-text
+  required: true
+  type: text
+- max_chars: 20
+  name: phone
+  required: true
+  type: text
+- max_chars: 30
+  name: city-tag
+  required: false
+  type: text
+- default_text: Связаться
+  name: header-cta
+  required: false
+  type: cta
+source: manual
+source_attribution: PDF Как создать сайт-шедевр, страница 4
+type: guarantees
+use_cases:
+- services
+- b2c
+- local
+variant: null

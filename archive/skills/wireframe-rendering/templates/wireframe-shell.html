@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Wireframe — {{project_slug}}</title>
+<style>
+  /* ===== PR-R: new wireframe UX — one big centered preview per block + tabs ===== */
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    background: #f4f5f7;
+    color: #222;
+    padding-bottom: 96px;
+  }
+  h1 { padding: 24px 32px 8px; margin: 0; font-size: 28px; }
+  h1 .niche { font-size: 14px; color: #888; font-weight: 400; margin-left: 8px; }
+  .intro {
+    padding: 0 32px 16px;
+    color: #555;
+    max-width: 1200px;
+  }
+
+  /* === Sticky control bar === */
+  .wireframe-controls {
+    position: sticky; top: 0; z-index: 100;
+    background: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 12px 32px;
+    display: flex; gap: 24px; align-items: center;
+    font-size: 13px;
+  }
+  .wireframe-controls label { cursor: pointer; }
+  .wireframe-controls select { padding: 4px 8px; border-radius: 4px; border: 1px solid #ccc; }
+
+  /* === Side info panels (collapsed by default to give space to previews) === */
+  .proto-panel, .ux-panel, .ux-rules-panel, .palettes-panel, .typography-panel, .enrichment-panel {
+    margin: 16px auto;
+    max-width: 1280px;
+    background: #fff;
+    padding: 16px 24px;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .proto-panel summary, .ux-panel summary, .ux-rules-panel summary,
+  .palettes-panel summary, .typography-panel summary, .enrichment-panel summary {
+    font-weight: 600; font-size: 14px; cursor: pointer; padding: 4px 0; color: #333;
+  }
+  .proto-panel pre {
+    background: #fafafa; border: 1px solid #eee; border-radius: 6px;
+    padding: 16px; font-size: 13px; line-height: 1.5;
+    white-space: pre-wrap; max-height: 480px; overflow: auto; margin: 12px 0 0;
+  }
+  .proto-meta { color: #777; font-size: 12px; margin-top: 8px; }
+  .ux-patterns-grid, .palettes-grid, .typography-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px; margin-top: 12px;
+  }
+  .ux-pattern, .palette-card, .typo-card {
+    border: 1px solid #e0e0e0; padding: 12px; border-radius: 6px; background: #fafafa;
+  }
+  .ux-pattern-title { font-weight: 600; margin-bottom: 6px; }
+  .ux-pattern-detail { font-size: 12px; color: #555; margin-top: 4px; }
+  .ux-rules-list { font-size: 13px; line-height: 1.6; padding-left: 20px; margin-top: 8px; }
+  .ux-rule-critical { color: #c00; }
+  .ux-rule-high { color: #d80; }
+  .palette-name { font-weight: 600; font-size: 13px; margin-bottom: 8px; }
+  .palette-swatches { display: flex; gap: 6px; margin-bottom: 6px; }
+  .palette-hex { font-size: 11px; color: #888; }
+  .typo-name { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px; }
+  .enrichment-panel { background: #f0faf0; border-left: 4px solid #3a9e3a; }
+  .enrichment-panel pre {
+    background: #e8f5e8; border: 1px solid #b2d8b2; border-radius: 6px;
+    padding: 16px; font-size: 12px; line-height: 1.6;
+    white-space: pre-wrap; max-height: 400px; overflow: auto; margin: 12px 0 0;
+    color: #1a3a1a;
+  }
+
+  /* === BLOCK REORDERING BUTTONS (Feature 2) === */
+  .lp-reorder-buttons {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+  .lp-reorder-buttons button {
+    width: 32px;
+    height: 32px;
+    padding: 4px;
+    border: 1px solid #ddd;
+    background: #fafafa;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 6px;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .lp-reorder-buttons button:hover {
+    background: #fff;
+    border-color: #111;
+  }
+  .lp-reorder-buttons button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  /* Highlight block when it's moved */
+  .lp-block-wrapper.just-moved {
+    background: #fffbe6 !important;
+    border: 2px solid #ffc069 !important;
+    box-shadow: 0 0 20px rgba(255, 193, 7, 0.3) !important;
+    animation: moveHighlight 0.6s ease-out;
+  }
+  @keyframes moveHighlight {
+    0% { background-color: #fff7e6; border-color: #ffad33; box-shadow: 0 0 30px rgba(255, 193, 7, 0.5); }
+    100% { background-color: #fffbe6; border-color: #ffc069; box-shadow: 0 0 20px rgba(255, 193, 7, 0.3); }
+  }
+
+  /* === BIG BLOCK SECTION (PR-R core) === */
+  .lp-block-wrapper {
+    max-width: 1320px;
+    margin: 28px auto 56px;
+    padding: 28px 28px 24px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+    position: relative;
+  }
+  .lp-block-header {
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid #111;
+  }
+  .lp-block-header h2 {
+    font-family: "SF Mono", "Courier New", monospace;
+    font-size: 18px;
+    margin: 0 0 6px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+  .lp-block-header .lp-block-sub {
+    font-size: 13px;
+    color: #666;
+    margin: 0;
+  }
+  .lp-block-hint {
+    font-size: 12px; color: #555;
+    background: #fffbe6; border-left: 3px solid #f0c14b;
+    padding: 8px 12px; border-radius: 4px;
+    margin: 0 0 14px;
+    line-height: 1.5;
+  }
+
+  /* Stage = preview area. We keep ALL variants rendered;
+     visibility controlled by :checked on hidden radio inputs. */
+  .lp-preview-stage {
+    position: relative;
+    width: 100%;
+    background: #f5f5f5;
+    border: 1px dashed #b8b8b8;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .lp-preview-card {
+    display: none;
+    width: 100%;
+  }
+  /* The CHECKED-rule for showing the active variant is generated
+     by render-wireframe.py and inserted below: */
+  {{checked_rules}}
+
+  /* Big iframe — one centered preview ~1100-1200 wide, 720 tall */
+  .lp-preview-stage .device {
+    background: #fff;
+    margin: 0 auto;
+  }
+  .lp-preview-stage .device.desktop {
+    width: 100%;
+    max-width: 1240px;
+  }
+  /* Scaler: iframe рендерится при настоящих 1280×860, потом ужимается через
+     transform:scale до ширины контейнера. Блочные vw/min-height/clamp считаются
+     от 1280px (как на лендинге), а не от узкого контейнера → нет искажений. */
+  .iframe-scaler.desktop-scaler {
+    position: relative;
+    width: 100%;
+    /* высота = 1240/1280 * 860 ≈ 833px (сохраняет пропорцию после scale) */
+    aspect-ratio: 1280 / 860;
+    overflow: hidden;
+    background: #fff;
+  }
+  .iframe-scaler.desktop-scaler iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 1280px;
+    height: 860px;
+    border: 0;
+    display: block;
+    background: #fff;
+    transform: scale(0.96875);          /* 1240 / 1280 */
+    transform-origin: top left;
+  }
+  .lp-preview-stage .device-label {
+    font-size: 11px;
+    color: #888;
+    padding: 6px 12px;
+    background: #fafafa;
+    border-bottom: 1px solid #eee;
+  }
+
+  /* Optional small mobile preview alongside (hidden by default; toggle via control) */
+  .lp-preview-card .device.mobile { display: none; }
+  body.show-mobile .lp-preview-card { display: none; }
+  body.show-mobile .lp-preview-card.lp-active { display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap; justify-content: center; }
+  body.show-mobile .lp-preview-card .device.mobile { display: block; width: 390px; }
+  .iframe-scaler.mobile-scaler {
+    position: relative; width: 390px; aspect-ratio: 390 / 780;
+    overflow: hidden; background: #fff;
+  }
+  .iframe-scaler.mobile-scaler iframe {
+    position: absolute; top: 0; left: 0;
+    width: 390px; height: 780px; border: 0; display: block; background: #fff;
+  }
+  /* The :checked selector adds .lp-active class via CSS — we use direct display rule instead.
+     Mobile toggle is enabled via JS adding body.show-mobile + per-variant class. */
+
+  /* === Variant tabs UNDER the preview (horizontal carousel) === */
+  .lp-variant-tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    margin-top: 18px;
+    padding: 12px;
+    background: #f0f0f3;
+    border-radius: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: #ccc #f0f0f3;
+  }
+  .lp-variant-tabs::-webkit-scrollbar {
+    height: 6px;
+  }
+  .lp-variant-tabs::-webkit-scrollbar-track {
+    background: #f0f0f3;
+  }
+  .lp-variant-tabs::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+  }
+  .lp-variant-tabs::-webkit-scrollbar-thumb:hover {
+    background: #999;
+  }
+  .lp-variant-tabs label {
+    flex: 0 0 auto;
+    min-width: 220px;
+    text-align: center;
+    padding: 12px 14px;
+    background: #fff;
+    border: 1px solid #d4d4d8;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: "SF Mono", "Courier New", monospace;
+    transition: all 0.15s;
+    line-height: 1.4;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    white-space: nowrap;
+  }
+  .lp-variant-tabs label:hover {
+    border-color: #111;
+    background: #fafafa;
+  }
+  .lp-variant-tabs label .lp-tab-title {
+    font-weight: 600;
+    font-size: 13px;
+    color: #111;
+  }
+  .lp-variant-tabs label .lp-tab-id {
+    font-size: 11px;
+    color: #888;
+    font-weight: 400;
+  }
+  /* Active (checked) tab — uses sibling combinator via render-wireframe.py generated rules */
+  {{checked_tab_rules}}
+
+  /* === Mood tabs (PR-S: Style Moods System) === */
+  .lp-mood-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+    padding: 8px;
+    background: #f9f9fb;
+    border-radius: 8px;
+    border: 1px solid #e5e5e5;
+  }
+  .lp-mood-tabs label {
+    padding: 8px 12px;
+    background: #fff;
+    border: 1px solid #d0d0d0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    color: #555;
+    transition: all 0.12s ease;
+    flex: 0 1 auto;
+  }
+  .lp-mood-tabs label:hover {
+    border-color: #999;
+    background: #f5f5f5;
+  }
+  /* Active mood tab — checked radio changes appearance (PR-S: via sibling combinator) */
+  {{checked_mood_tab_rules}}
+
+  /* === Shape Selector (Feature 3: Shape Library) === */
+  .lp-shape-selector {
+    margin-top: 16px;
+    padding: 12px;
+    background: #f0f8ff;
+    border: 1px solid #b3d9ff;
+    border-radius: 8px;
+  }
+  .lp-shape-selector label {
+    display: inline-block;
+    font-weight: 600;
+    font-size: 12px;
+    color: #333;
+    margin-right: 12px;
+    margin-bottom: 8px;
+  }
+  .lp-shape-selector select,
+  .lp-shape-selector input[type="color"],
+  .lp-shape-selector input[type="range"] {
+    margin-right: 8px;
+    margin-bottom: 8px;
+  }
+  .lp-shape-selector select {
+    padding: 6px 10px;
+    border: 1px solid #b3d9ff;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .lp-shape-color-picker {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .lp-shape-color-swatch {
+    width: 28px;
+    height: 28px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .lp-shape-color-swatch:hover {
+    border-color: #111;
+    transform: scale(1.1);
+  }
+  .lp-shape-opacity-slider {
+    width: 150px;
+    vertical-align: middle;
+  }
+  .lp-shape-preview {
+    margin-top: 8px;
+    width: 100%;
+    height: 60px;
+    border: 1px dashed #999;
+    border-radius: 4px;
+    background: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: #888;
+  }
+
+  /* === Confirm bar (unchanged behaviour) === */
+  .confirm-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #111; color: #fff;
+    padding: 16px 24px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 200;
+  }
+  .confirm-bar button {
+    padding: 12px 24px; background: #fff; color: #111;
+    border: none; border-radius: 6px; font-weight: 600; cursor: pointer;
+  }
+
+  /* === PR-Q: B/W mode and zoom (kept) === */
+  .wireframe-bw .lp-preview-stage iframe { filter: grayscale(100%) contrast(0.95); }
+  .wireframe-zoom-50 .lp-preview-stage iframe { transform: scale(0.5); transform-origin: top left; }
+  .wireframe-zoom-75 .lp-preview-stage iframe { transform: scale(0.75); transform-origin: top left; }
+  .wireframe-zoom-100 .lp-preview-stage iframe { /* default */ }
+  .wireframe-zoom-125 .lp-preview-stage iframe { transform: scale(1.25); transform-origin: top left; }
+
+  /* Empty/no-candidates message */
+  .lp-block-empty {
+    padding: 40px;
+    text-align: center;
+    color: #999;
+    font-style: italic;
+    border: 1px dashed #ccc;
+    border-radius: 8px;
+  }
+
+  /* Footer per block — "shown N of M, open library" */
+  .lp-block-footer {
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: #fffbe6;
+    border-left: 3px solid #d4a01a;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #555;
+  }
+  .lp-block-footer p { margin: 0; }
+  .lp-block-footer code { background: #fff3bf; padding: 1px 4px; border-radius: 3px; font-size: 11px; }
+  .lp-block-footer a { color: #1a73e8; text-decoration: underline; }
+  .lp-block-footer a:hover { color: #0c47b7; }
+</style>
+</head>
+<body>
+
+<div class="wireframe-controls">
+  <strong style="font-size:14px;">Wireframe</strong>
+  <label><input type="checkbox" id="bw-toggle"> Чёрно-белый</label>
+  <label><input type="checkbox" id="mobile-toggle"> Показать mobile</label>
+  <label>Zoom:
+    <select id="zoom-level">
+      <option value="50">50%</option>
+      <option value="75">75%</option>
+      <option value="100" selected>100%</option>
+      <option value="125">125%</option>
+    </select>
+  </label>
+  <span style="margin-left:auto;color:#888;font-size:12px;">Каждый блок = одна большая секция, варианты переключаются табами под превью</span>
+</div>
+
+<h1>Wireframe — {{project_slug}} <span class="niche">niche: {{niche}}</span></h1>
+<p class="intro">Слева — что хотел клиент (прототип). Ниже — каждый блок прототипа отдельной секцией с одним большим превью и переключателем вариантов под ним. Тексты в превью — РЕАЛЬНЫЕ из <code>prototype.yaml</code>. Когда выбраны все варианты — нажми «Confirm selections» внизу.</p>
+
+{{enrichment_panel_html}}
+
+<details class="proto-panel">
+  <summary>📄 Прототип-источник (что хотел клиент)</summary>
+  <pre>{{prototype_source}}</pre>
+  <div class="proto-meta">Если нужно подправить — отредактируй <code>07_ПРОТОТИП/source/prototype.md</code> и перезапусти <code>/landing-prototype</code> → <code>/landing-wireframe</code>.</div>
+</details>
+
+<details class="ux-panel">
+  <summary>🎯 Рекомендованные UX-паттерны для ниши</summary>
+  <div class="ux-patterns-grid">{{ux_patterns_html}}</div>
+</details>
+
+<details class="ux-rules-panel">
+  <summary>⚠️ Критические UX-правила</summary>
+  <ul class="ux-rules-list">{{ux_rules_html}}</ul>
+</details>
+
+<details class="palettes-panel">
+  <summary>🎨 Рекомендованные палитры для ниши</summary>
+  <div class="palettes-grid">{{palettes_html}}</div>
+</details>
+
+<details class="typography-panel">
+  <summary>✍️ Рекомендованные пары шрифтов</summary>
+  <div class="typography-grid">{{typography_html}}</div>
+</details>
+
+{{blocks_html}}
+
+<div class="confirm-bar">
+  <span>Выбери варианты для всех блоков, затем подтверди.</span>
+  <button onclick="confirmSelections()">Confirm selections</button>
+</div>
+
+<script>
+document.getElementById('bw-toggle').addEventListener('change', function(e) {
+  document.body.classList.toggle('wireframe-bw', e.target.checked);
+});
+document.getElementById('mobile-toggle').addEventListener('change', function(e) {
+  document.body.classList.toggle('show-mobile', e.target.checked);
+});
+document.getElementById('zoom-level').addEventListener('change', function(e) {
+  document.body.className = document.body.className.replace(/wireframe-zoom-\d+/g, '').trim();
+  document.body.classList.add('wireframe-zoom-' + e.target.value);
+});
+
+// Block reordering state (Feature 2)
+const blockOrder = [];  // Will be populated on page load, storing data-block-position values in current order
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Initialize block order from DOM
+  document.querySelectorAll('.lp-block-wrapper').forEach((section, idx) => {
+    blockOrder[idx] = parseInt(section.getAttribute('data-block-position'), 10);
+  });
+});
+
+function reorderBlock(button, direction) {
+  const section = button.closest('.lp-block-wrapper');
+  if (!section) return;
+
+  const sections = Array.from(document.querySelectorAll('.lp-block-wrapper'));
+  const currentIdx = sections.indexOf(section);
+  const newIdx = currentIdx + direction;
+
+  if (newIdx < 0 || newIdx >= sections.length) return;
+
+  // Get the element we want to swap with
+  const targetSection = sections[newIdx];
+  if (!targetSection) return;
+
+  // Swap positions in DOM: if moving down, insert after target; if moving up, insert before target
+  if (direction > 0) {
+    // Moving down: insert section after targetSection
+    targetSection.after(section);
+  } else {
+    // Moving up: insert section before targetSection
+    targetSection.before(section);
+  }
+
+  // Add visual highlight animation to moved section
+  section.classList.remove('just-moved');
+  // Force reflow to restart animation
+  void section.offsetWidth;
+  section.classList.add('just-moved');
+
+  // Remove highlight class after animation
+  setTimeout(() => {
+    section.classList.remove('just-moved');
+  }, 600);
+
+  // Update all counter labels
+  updateBlockNumbers();
+}
+
+function updateBlockNumbers() {
+  const sections = document.querySelectorAll('.lp-block-wrapper');
+  sections.forEach((section, idx) => {
+    const counter = section.querySelector('.lp-block-counter');
+    if (counter) {
+      const total = sections.length;
+      counter.textContent = `БЛОК ${idx + 1} / ${total}`;
+    }
+  });
+}
+
+function confirmSelections() {
+  const radios = document.querySelectorAll('input[type=radio][name^="b"]:checked');
+  const sel = [];
+  radios.forEach(r => {
+    const pos = r.getAttribute('data-position');
+    if (!pos) return;
+    const blockPos = parseInt(pos, 10);
+    // Find mood selection for this block position (PR-S)
+    const moodRadio = document.querySelector(`input[type=radio][name="mood-${blockPos}"]:checked`);
+    const mood = moodRadio ? moodRadio.getAttribute('data-mood') : undefined;
+
+    // NEW (Feature 3): Find shape selection for this block
+    const shapeSelect = document.querySelector(`select[data-position="${blockPos}"].shape-select`);
+    const shapeColor = document.querySelector(`input[data-position="${blockPos}"].shape-color`);
+    const shapeOpacity = document.querySelector(`input[data-position="${blockPos}"].shape-opacity`);
+
+    const selection = {
+      block_position: blockPos,
+      chosen_variant: r.value,
+    };
+    if (mood) selection.style_mood = mood;
+
+    // Add shape fields if shape selected
+    if (shapeSelect && shapeSelect.value) {
+      selection.background_shape = shapeSelect.value;
+      selection.background_shape_color = shapeColor ? shapeColor.value : "primary";
+      selection.background_shape_opacity = shapeOpacity ? parseFloat(shapeOpacity.value) : 0.1;
+    }
+
+    sel.push(selection);
+  });
+
+  // Feature 2: Add display_position based on current visual order
+  const sections = document.querySelectorAll('.lp-block-wrapper');
+  const displayPosition = {};
+  sections.forEach((section, visIdx) => {
+    const blockPos = parseInt(section.getAttribute('data-block-position'), 10);
+    displayPosition[blockPos] = visIdx + 1;
+  });
+
+  sel.sort((a, b) => a.block_position - b.block_position);
+  const now = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
+  let yaml = `project_slug: {{project_slug}}\nselections:\n`;
+  sel.forEach(s => {
+    yaml += `  - block_position: ${s.block_position}\n    chosen_variant: ${s.chosen_variant}\n`;
+    if (displayPosition[s.block_position] !== s.block_position) {
+      yaml += `    display_position: ${displayPosition[s.block_position]}\n`;
+    }
+    if (s.style_mood) yaml += `    style_mood: ${s.style_mood}\n`;
+    if (s.background_shape) {
+      yaml += `    background_shape: ${s.background_shape}\n`;
+      yaml += `    background_shape_color: ${s.background_shape_color}\n`;
+      yaml += `    background_shape_opacity: ${s.background_shape_opacity}\n`;
+    }
+  });
+  yaml += `confirmed_at: "${now}"\n`;
+  const blob = new Blob([yaml], {type: 'text/yaml'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'selections.yaml';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+</script>
+</body>
+</html>

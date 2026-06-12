@@ -1,49 +1,46 @@
 ---
+slug: wp-deployer
 type: agent
-name: wp-deployer
-sources: ["agents/wp-deployer.md"]
-updated: 2026-05-15
-triggers: ["задеплой лендинг", "выложи сайт на сервер", "загрузи тему на Бегет", "запусти деплой"]
+name: "WP Deployer — Деплой-инженер"
 stage: "09"
-uses: ["landing-build", "landing-orchestrator", "landing-qa"]
-tags: ["deploy", "beget", "wordpress", "ssh", "ssl"]
+tags: [deploy, beget, ssh, rsync, wp-cli, ssl, wordpress]
+triggers: [landing-deploy]
+inputs: [08_КОД]
+outputs: [deployed-site-url]
+pre_reqs: [frontend-builder]
+related: [landing-orchestrator, lifecycle-keeper, integrations-engineer, frontend-builder]
+sources: ["agents/wp-deployer.md"]
+updated: 2026-05-26
+confidence: {triggers: low, inputs: low}
 ---
 
-# wp-deployer — Деплой на Бегет
+# WP Deployer — Деплой-инженер
 
 ## Что делает
 
-Загружает готовую WordPress-тему на хостинг Бегет через SSH+rsync, активирует тему и импортирует ACF-поля. После деплоя проверяет доступность сайта и настраивает SSL/редиректы.
+Берёт собранную WordPress-тему из этапа 08 и деплоит её на хостинг Бегет через SSH + rsync + wp-cli. После загрузки активирует тему, проверяет доступность сайта через curl, убеждается что SSL-сертификат установлен и редиректы HTTP→HTTPS и www→без www работают корректно. Завершает работу только после явного подтверждения пользователем — показывает финальный URL.
 
-## Когда вызывать / в каком этапе
+## Когда вызывается
 
-Запускается на **этапе 09**, после того как команда `/landing-build` успешно завершена и пользователь утвердил сборку. Агент не стартует без прохождения preflight-проверки конфигурации.
+Запускается командой `/landing-deploy` на этапе 09, строго после того как этап 08 (`08_КОД`) получил статус `approved`. `landing-orchestrator` вызывает агента автоматически, если пользователь следует основному workflow через `/landing-go`. Физический Stage Gate (`enforce_stage_gate.py`) блокирует любые действия, пока предшественник не закрыт.
 
-## Что на вход / на выход
+## Вход → выход
 
-**Вход:**
-- Собранная тема (артефакт этапа 08)
-- Файл `.env` с тремя переменными: `BEGET_USER`, `BEGET_HOST`, `BEGET_PATH`
-- Проект, прошедший HARD GATE этапа 08
+**Вход:** Собранная тема WordPress в `08_КОД/` (файлы темы, ACF/Lazy Blocks конфиги), заполненный `.env` с переменными `BEGET_USER`, `BEGET_HOST`, `BEGET_PATH`, и статус этапа 08 = `approved` в `.landing-state.yaml`.
 
-**Процесс:**
-1. Проверяет наличие всех трёх переменных `.env`
-2. Запускает `scripts/deploy.sh <project-dir>` (rsync → Бегет)
-3. Проверяет живость сайта: `curl -sI https://<domain> | head -5`
-4. Если SSL не настроен — выдаёт инструкцию для certbot через SSH
-5. Проверяет цепочку редиректов: HTTP→HTTPS, www→без www
-6. **HARD GATE**: показывает финальный URL и ждёт явного утверждения
+**Выход:** Рабочий сайт на Бегете — тема активирована, SSL настроен, редиректы проверены, URL сайта передан пользователю для финального апрува (HARD GATE).
 
-**Выход:**
-- Живой сайт по HTTPS
-- Подтверждённый URL для передачи в [[landing-qa]]
+## Failure modes
 
-## Связанные концепты
+- **Нет `.env` или неполные переменные** — `scripts/deploy.sh` падает ещё до rsync; агент останавливается и сообщает какие переменные отсутствуют.
+- **SSH-соединение отклонено** — неверный ключ или IP Бегета в firewall; агент выводит stderr rsync и предлагает проверить `~/.ssh/config`.
+- **Сайт не открывается после деплоя** — curl возвращает 5xx или таймаут; обычно тема не активирована или `wp-cli` упал на импорте полей.
+- **SSL не настроен** — curl показывает HTTP 200 без редиректа; агент выдаёт инструкцию для `certbot --nginx` по SSH, но не выполняет её автоматически.
+- **Stage Gate не пройден** — `gate-check.sh --stage 09_deploy` возвращает exit != 0; агент полностью останавливается — обойти нельзя.
 
-- [[landing-build]] — должен быть завершён и утверждён перед запуском деплоя
-- [[landing-orchestrator]] — диспатчит этот агент как часть общего 12-этапного флоу
-- [[landing-qa]] — следующий этап после деплоя, проверяет живой сайт по 7 критериям
+## Related
 
-## Источник
-
-- `agents/wp-deployer.md`
+- [[frontend-builder]] — генерирует артефакты этапа 08, которые деплоит этот агент
+- [[landing-orchestrator]] — диспатчит wp-deployer в нужный момент pipeline
+- [[lifecycle-keeper]] — обновляет `.landing-state.yaml` после успешного деплоя
+- [[integrations-engineer]] — настраивает CRM/аналитику до деплоя; конфиги должны быть готовы

@@ -1,0 +1,33 @@
+category: hero
+created: '2026-06-01'
+display_name_ru: hero-004 (default)
+has_bg_image: false
+id: hero-004
+layout_pattern: default
+signature: hero|default|[content]|bg:false
+slots:
+- name: eyebrow
+  type: text
+- name: heading
+  type: text
+- name: subhead
+  type: text
+- name: primary-cta-url
+  type: text
+- name: primary-cta-label
+  type: text
+- name: secondary-cta-url
+  type: text
+- name: secondary-cta-label
+  type: text
+- name: hero-image-mobile
+  type: text
+- name: hero-image-alt
+  type: text
+- name: hero-image
+  type: text
+- name: media-caption
+  type: text
+source: cleaned
+type: hero
+variant: null

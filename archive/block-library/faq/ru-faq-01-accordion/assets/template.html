@@ -1,0 +1,49 @@
+<style>
+  :root {
+    --lp-bg: #f5f5f5;
+    --lp-text: #1a1a1a;
+    --lp-accent: #333;
+    --lp-border: #e0e0e0;
+    --lp-font-display: system-ui, sans-serif;
+    --lp-font-body: system-ui, sans-serif;
+    --spacing-md: 16px;
+    --spacing-lg: 32px;
+  }
+  body { margin: 0; font-family: var(--lp-font-body); background: var(--lp-bg); color: var(--lp-text); }
+  .faq { padding: 64px var(--spacing-lg); max-width: 800px; margin: 0 auto; }
+  .section-headline { font-family: var(--lp-font-display); font-size: 36px; text-align: center; margin: 0 0 48px; }
+  details { border-bottom: 1px solid var(--lp-border); }
+  details:first-of-type { border-top: 1px solid var(--lp-border); }
+  summary { padding: 20px 0; font-weight: 600; font-size: 17px; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; font-size: 22px; color: var(--lp-accent); flex-shrink: 0; }
+  details[open] summary::after { content: "−"; }
+  .faq-answer { padding: 0 0 20px; font-size: 15px; color:#444; line-height: 1.7; }
+</style>
+<section class="faq" data-block-id="ru-faq-01-accordion">
+<h2 class="section-headline">{{slot:headline}}</h2>
+<details>
+<summary>{{slot:faq-1-q}}</summary>
+<div class="faq-answer">{{slot:faq-1-a}}</div>
+</details>
+<details>
+<summary>{{slot:faq-2-q}}</summary>
+<div class="faq-answer">{{slot:faq-2-a}}</div>
+</details>
+<details>
+<summary>{{slot:faq-3-q}}</summary>
+<div class="faq-answer">{{slot:faq-3-a}}</div>
+</details>
+<details>
+<summary>{{slot:faq-4-q}}</summary>
+<div class="faq-answer">{{slot:faq-4-a}}</div>
+</details>
+<details>
+<summary>{{slot:faq-5-q}}</summary>
+<div class="faq-answer">{{slot:faq-5-a}}</div>
+</details>
+<details>
+<summary>{{slot:faq-6-q}}</summary>
+<div class="faq-answer">{{slot:faq-6-a}}</div>
+</details>
+</section>

@@ -1,50 +1,44 @@
 ---
+slug: photo-classifier
 type: agent
-name: photo-classifier
-sources: ["agents/photo-classifier.md"]
-updated: 2026-05-15
-triggers: []
+name: "Классификатор фото"
 stage: "07c"
-uses: ["photo-curator", "photo-curation", "visual-curator"]
-tags: ["photos", "ai", "codex", "catalog", "classification"]
+tags: [photo, classifier, codex, ai, metadata, identity-safe]
+triggers: []
+inputs: [07c_PHOTOS/intake]
+outputs: [07c_PHOTOS/catalog.yaml]
+gates: []
+pre_reqs: [photo-curator]
+related: [photo-curator]
+sources: ["agents/photo-classifier.md"]
+updated: 2026-05-26
+confidence: {pre_reqs: low}
 ---
 
-# Photo Classifier — ИИ-тегирование фотографий
+# Классификатор фото
 
 ## Что делает
 
-Анализирует одну фотографию через codex CLI и создаёт структурированные метаданные: теги, подпись, кадрирование, совместимость с брендом. Сами фотографии не изменяются — агент работает только на чтение.
+Вспомогательный агент, который запускается родительским агентом `photo-curator`. Для каждого фото из папки `07c_PHOTOS/intake/` со статусом `tag_source: pending_ai_classify` вызывает codex CLI с передачей изображения. Получает в ответ структурированные метаданные: теги, подпись, состав кадра, подходящие соотношения сторон, совместимость с брендом и примечания. Результат записывается в `catalog.yaml` — существующая запись обновляется по `id`, новая — добавляется.
 
-## Когда вызывать / в каком этапе
+## Когда вызывается
 
-Вызывается автоматически агентом [[photo-curator]] на этапе **07c** (Photo Pipeline). Обрабатывает все фото в `07c_PHOTOS/intake/`, у которых в `catalog.yaml` стоит статус `tag_source: pending_ai_classify`. Не вызывается напрямую пользователем — только как субагент в рамках `/landing-photos`.
+Агент не вызывается напрямую. Его диспатчит `photo-curator` на этапе 07c, когда в каталоге есть фото с незаполненной AI-классификацией (`tag_source: pending_ai_classify`). Stage Execution Protocol контролирует родитель.
 
-## Что на вход / на выход
+## Вход → выход
 
-**Вход:**
-- `<project_dir>` — абсолютный путь к папке проекта
-- `<photo_path>` — путь к одному фото для классификации
-- Контекст проекта: `tokens.json`, `market-profile.md` (для составления промпта)
+**Вход:** абсолютный путь к папке проекта (`<project_dir>`) и путь к одному фото (`<photo_path>`); `tokens.json` и анализ ниши нужны для рендера промпта.
 
-**Выход:**
-- Запись в `07c_PHOTOS/catalog.yaml` с полями: `tags`, `caption`, `composition`, `usable_ratios`, `brand_compatible`, `notes`, статус `tag_source: ai_classify`
-- Полный лог промпта и ответа codex → `07c_PHOTOS/.logs/`
+**Выход:** запись в `<project>/07c_PHOTOS/catalog.yaml` с полями `tags`, `caption`, `composition`, `usable_ratios`, `brand_compatible`, `notes`, `tag_source: ai_classify`; полный лог промпта и ответа в `07c_PHOTOS/.logs/`.
 
-**Процесс:**
-1. Рендерит `templates/classify-prompt.md` с контекстом проекта.
-2. Вызывает `codex exec --image <photo_path> "<prompt>"` через обёртку `call-codex.sh`.
-3. Парсит YAML-ответ; при невалидном YAML — повторяет до 2 раз с более строгим промптом.
-4. При полном провале — помечает фото как `unclassified`, записывает предупреждение в `STATE.yaml`.
-5. Добавляет или обновляет запись в `catalog.yaml` по полю `id`.
+## Failure modes
 
-**Ограничение безопасности:** согласно `IDENTITY_SAFE.md`, агент никогда не перезаписывает пиксели фотографий. Только метаданные.
+- **Невалидный YAML от codex** — агент делает два повтора с более строгим промптом; если всё равно ошибка, фото помечается `tags: [unclassified]`, в `STATE.yaml` записывается предупреждение.
+- **Тихий сбой codex** — обрабатывается враппером `call-codex.sh` (retry + exit code).
+- **Отсутствие `tokens.json` или анализа ниши** — промпт рендерится неполным, качество тегов снижается без явной ошибки.
+- **Прямой вызов агента** — не поддерживается: агент не владеет этапом и не знает состояния пайплайна.
+- **Изменение байт фото** — принципиально заблокировано правилом identity-safe; агент работает только на чтение.
 
-## Связанные концепты
+## Related
 
-- [[photo-curator]] — оркестратор этапа 07c, вызывает photo-classifier для каждого фото из intake и агрегирует результаты в catalog.yaml
-- [[photo-curation]] — навык-обёртка, содержит скрипты (`codex-classify.sh`, `call-codex.sh`) и шаблоны промптов
-- [[landing-photos]] — slash-команда, запускающая весь пайплайн 07c включая этот агент
-
-## Источник
-
-- `agents/photo-classifier.md`
+- [[photo-curator]] — родительский агент, диспатчит классификатор и агрегирует результаты в `catalog.yaml`

@@ -1,0 +1,59 @@
+category: hero
+conversion_notes: Цифровые метрики немедленно убеждают в экспертизе. Швейцарская сетка
+  = доверие и профессионализм. Лаймовый акцент выделяет CTA.
+created: 2026-05-13
+description: 'Швейцарский стиль hero: жёлтый акцент, крупная цифра-метрика, тёмная
+  левая колонка, цифровые карточки справа. Финтех / B2B.'
+display_name_ru: ru-hero-06-swiss-metrics (centered)
+id: ru-hero-06-swiss-metrics
+layout_pattern: centered
+layout_summary_ru: Тёмная левая колонка с логотипом/навигацией, центральная область
+  с большим заголовком и акцентом, правая — 4 карточки-метрики. Лаймовый/жёлтый акцент.
+recommended_styles_ru:
+- Brutalism
+- Minimalism & Swiss Style
+ru_market: true
+slots:
+- max_chars: 12
+  name: metric-1-value
+  required: true
+  type: text
+- max_chars: 60
+  name: headline
+  required: true
+  type: text
+- max_chars: 180
+  name: subhead
+  required: true
+  type: text
+- default_text: Начать работу
+  name: primary-cta
+  required: true
+  type: cta
+- max_chars: 40
+  name: metric-1-label
+  required: true
+  type: text
+- max_chars: 40
+  name: metric-2-label
+  required: true
+  type: text
+- max_chars: 12
+  name: metric-2-value
+  required: true
+  type: text
+- max_chars: 40
+  name: metric-3-label
+  required: false
+  type: text
+- max_chars: 12
+  name: metric-3-value
+  required: false
+  type: text
+source: opendesign
+source_attribution: /tmp/open-design/skills/digits-fintech-swiss-template/example.html
+type: hero
+use_cases:
+- services
+- b2c
+variant: null

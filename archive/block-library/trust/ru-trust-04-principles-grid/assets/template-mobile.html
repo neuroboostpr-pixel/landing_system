@@ -1,0 +1,50 @@
+<style>
+  :root {
+    --lp-bg: #f5f5f5;
+    --lp-text: #1a1a1a;
+    --lp-accent: #333;
+    --lp-border: #e0e0e0;
+    --lp-font-display: system-ui, sans-serif;
+    --lp-font-body: system-ui, sans-serif;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--lp-font-body); background: var(--lp-bg); color: var(--lp-text); width: 375px; padding: 32px 16px; }
+  .headline { font-family: var(--lp-font-display); font-size: 1.8rem; letter-spacing: -.02em; margin-bottom: 24px; }
+  .headline em { font-style: italic; opacity: .6; }
+  .principles-grid { display: flex; flex-direction: column; gap: 10px; }
+  .principle-card { border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+  .pc-dark { background: var(--lp-accent); color:var(--lp-text-muted); }
+  .pc-light { background: rgba(0,0,0,.06); }
+  .pc-accent { background: var(--lp-text); color:var(--lp-text-muted); }
+  .pc-warm { background:var(--lp-bg); }
+  .principle-num { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; opacity: .65; }
+  .principle-title { font-size: 1.2rem; font-weight: 700; line-height: 1.05; }
+  .principle-text { font-size: .875rem; line-height: 1.45; opacity: .85; }
+</style>
+<section data-block-id="ru-trust-04-principles-grid">
+<h2 class="headline">{{slot:headline}}</h2>
+<div class="principles-grid">
+<article class="principle-card pc-dark">
+<div class="principle-num">/ 01</div>
+<div class="principle-title">{{slot:p1-title}}</div>
+<p class="principle-text">{{slot:p1-text}}</p>
+</article>
+<article class="principle-card pc-light">
+<div class="principle-num">/ 02</div>
+<div class="principle-title">{{slot:p2-title}}</div>
+<p class="principle-text">{{slot:p2-text}}</p>
+</article>
+<article class="principle-card pc-warm">
+<div class="principle-num">/ 03</div>
+<div class="principle-title">{{slot:p3-title}}</div>
+<p class="principle-text">{{slot:p3-text}}</p>
+</article>
+<article class="principle-card pc-accent">
+<div class="principle-num">/ 04</div>
+<div class="principle-title">{{slot:p4-title}}</div>
+<p class="principle-text">{{slot:p4-text}}</p>
+</article>
+</div>
+</section>

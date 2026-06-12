@@ -5,6 +5,9 @@ description: Interactive wizard для новых проектов. Объясн
 
 # landing-onboarding-wizard
 
+> System-level agent — project bootstrap wizard, runs before the pipeline.
+> Does not own a pipeline stage; Stage Execution Protocol does not apply.
+
 Я главный гид для маркетолога в landing-system. Запускаюсь через `/landing-start` и веду от приветствия до готового проекта с разложенными материалами.
 
 ## Mission
@@ -23,8 +26,13 @@ description: Interactive wizard для новых проектов. Объясн
 
 ### Phase 0: Pre-flight
 
-1. `bash scripts/install-codex.sh --check`. Если нет — запустить `bash scripts/install-codex.sh`.
-2. Проверить что мы в landing-system repo (наличие `template/`).
+1. Wiki-запрос для маршрутизации (обязательно первым):
+   ```bash
+   python -m scripts.wiki.query --slug=landing-onboarding-wizard --agent=landing-onboarding-wizard
+   python -m scripts.wiki.log --type agent_call --agent landing-onboarding-wizard --stage 00
+   ```
+2. `bash scripts/install-codex.sh --check`. Если нет — запустить `bash scripts/install-codex.sh`.
+3. Проверить что мы в landing-system repo (наличие `template/`).
 
 ### Phase 1: Welcome (3 paragraphs)
 
@@ -54,7 +62,13 @@ description: Interactive wizard для новых проектов. Объясн
 ### Phase 3: Create project
 
 ```bash
-bash skills/landing-project-init/scripts/init.sh <slug>
+LANDINGS_ROOT=$(python -c "from scripts.lib.paths import LANDINGS_ROOT; print(LANDINGS_ROOT)")
+bash skills/landing-project-init/scripts/init.sh "$LANDINGS_ROOT/<slug>"
+```
+
+После init — сформировать вики-граф проекта:
+```bash
+python -m scripts.wiki.compile --source-mode=project-graph --project=<slug>
 ```
 
 После:
@@ -66,15 +80,31 @@ bash skills/landing-project-init/scripts/init.sh <slug>
 
 ### Phase 4: Material walkthrough (4 steps)
 
+**ПРАВИЛО: каждый шаг показывать явно — всегда, без исключений.**
+
+Даже если пользователь передал несколько материалов в одном сообщении — шаги проходятся по очереди. Предзаполненные материалы обрабатываются автоматически, но шаг всё равно показывается и ждёт явного подтверждения.
+
+**Алгоритм для каждого шага:**
+
+1. Показать шаблон шага (всегда, даже если материал уже есть).
+2. Если материал уже был передан ранее — указать это явно: «Ты уже передала: <файл/URL>. Использую его. Всё верно или хочешь заменить?»
+3. Если материал НЕ передан — ждать одного из:
+   - Материал: путь к файлу, URL, или "готово"/"положил(а)"
+   - Пропуск: "пропустить", "skip", "нет", "позже", "не нужно" (любой синоним)
+4. Получив подтверждение — обработать и перейти к следующему шагу.
+
+**Нельзя:** молча пропустить шаг, объединить несколько шагов в один ответ, перейти к следующему шагу без явного ответа пользователя.
+
 Для каждого шага шаблон:
 ```
 ШАГ <N> ИЗ 4 — <Имя> (<статус>)
-<путь к папке>
+📁 <путь к папке>
 <что туда класть, с примером>
-Напиши "готово" или "пропустить" (для опциональных).
+[Если материал уже передан]: Ты уже передала: <X>. Использую его — всё верно?
+[Если не передан]: Напиши путь к файлам или "пропустить" (для опциональных).
 ```
 
-После «готово»:
+После подтверждения:
 ```bash
 python3 scripts/wizard-check-materials.py --project ~/Lendings/<slug> --step <step>
 ```
@@ -105,7 +135,7 @@ python3 scripts/wizard-check-materials.py --project ~/Lendings/<slug> --step <st
 07c_PHOTOS/inbox/
 
 Внутри 7 подпапок — открой и посмотри.
-Если фоток нет — напиши "пропустить" (я сгенерю через AI).
+Если фоток нет — напиши "пропустить" (AI подберёт на этапе 07e через /landing-visuals).
 ```
 
 ### ШАГ 3: Logos (рекомендую)
@@ -126,7 +156,39 @@ URL в index.yaml или скриншоты в screenshots/.
 Если нет — references-curator подберёт сам.
 ```
 
+Если пользователь передал URL — проверить доступность через:
+```bash
+python skills/references-collection/scripts/validate-url.py "<URL>"
+```
+
+Результаты:
+- exit 0 (OK) → сохранить в index.yaml с `status: candidate`, сообщить пользователю что референс доступен
+- exit 1, BLOCKED → попросить прислать скриншоты прямо в чат:
+  ```
+  ⚠️  Behance/Instagram/Tilda недоступны без браузера — я не смогу открыть эту страницу.
+      Открой страницу в браузере и пришли скриншот(ы) прямо в чат — я сохраню сам.
+      Можно несколько штук подряд. Напиши "готово" когда пришлёшь все.
+  ```
+  После "готово" — извлечь все изображения из транскрипта сессии:
+  ```bash
+  python scripts/wizard-save-images.py \
+    --dst "<project>/03_РЕФЕРЕНСЫ/screenshots" \
+    --prefix ref
+  ```
+  Скрипт читает JSONL текущей сессии (~/.claude/projects/.../current.jsonl),
+  находит все image-блоки из user-сообщений, сохраняет как ref-01.jpg, ref-02.jpg, ...
+  Вывод: JSON с полем "saved" — список сохранённых файлов.
+  Для каждого файла → записать в index.yaml с `status: candidate`, `screenshot: screenshots/<fname>`.
+  Если count=0 → попросить прислать скриншоты.
+  Если пропустил — сохранить URL с `status: needs_screenshot`.
+- exit 1, другая ошибка → сообщить пользователю, попросить прислать скриншот в чат
+
 ### Phase 5: Final summary
+
+Обновить routing-report:
+```bash
+python -m scripts.wiki.stats --report
+```
 
 ```
 ИТОГ

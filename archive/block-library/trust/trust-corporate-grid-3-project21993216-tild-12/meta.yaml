@@ -1,0 +1,62 @@
+category: trust
+description: Секция документов с тремя карточками сертификатов на светло-голубом фоне.
+display_name_ru: trust-corporate-grid-3-project21993216-tild-12 (grid-3)
+has_animation: false
+id: trust-corporate-grid-3-project21993216-tild-12
+imported:
+  import_method: codex-block-generation
+  imported_at: '2026-05-16'
+  source_url: https://project21993216.tilda.ws/
+layout_pattern: grid-3
+niches_suitable:
+- medical
+- services
+- ecommerce
+- tech
+ru_market: true
+slots:
+- name: trust-eyebrow
+  type: text
+- name: trust-title
+  type: text
+- name: trust-subhead
+  type: text
+- name: certificate-1-image-alt
+  type: text
+- name: certificate-1-image
+  type: text
+- name: certificate-1-title
+  type: text
+- name: certificate-1-text
+  type: text
+- name: certificate-1-link
+  type: text
+- name: certificate-1-link-label
+  type: text
+- name: certificate-2-image-alt
+  type: text
+- name: certificate-2-image
+  type: text
+- name: certificate-2-title
+  type: text
+- name: certificate-2-text
+  type: text
+- name: certificate-2-link
+  type: text
+- name: certificate-2-link-label
+  type: text
+- name: certificate-3-image-alt
+  type: text
+- name: certificate-3-image
+  type: text
+- name: certificate-3-title
+  type: text
+- name: certificate-3-text
+  type: text
+- name: certificate-3-link
+  type: text
+- name: certificate-3-link-label
+  type: text
+style_mood: corporate
+type: guarantees
+variant: certificates

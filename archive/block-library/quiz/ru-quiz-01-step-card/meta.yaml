@@ -1,0 +1,45 @@
+category: forms
+conversion_notes: Карточка по центру фокусирует внимание. Комментарий снимает тревожность
+  'зачем спрашиваете'.
+created: 2026-05-12
+description: 'Карточка вопроса квиза: вопрос + 4 кнопки-варианта + комментарий ''зачем
+  спрашиваем''.'
+display_name_ru: ru-quiz-01-step-card (centered)
+id: ru-quiz-01-step-card
+layout_pattern: centered
+layout_summary_ru: 'Один вопрос на экран: заголовок + 4 карточки-ответа с иконками.
+  Кнопка ''Далее'' активируется после выбора. Прогресс-бар сверху.'
+ru_market: true
+slots:
+- max_chars: 120
+  name: question-text
+  required: true
+  type: text
+- max_chars: 50
+  name: answer-1-text
+  required: true
+  type: text
+- max_chars: 50
+  name: answer-2-text
+  required: true
+  type: text
+- max_chars: 50
+  name: answer-3-text
+  required: true
+  type: text
+- max_chars: 50
+  name: answer-4-text
+  required: false
+  type: text
+- max_chars: 100
+  name: question-comment
+  required: false
+  type: text
+source: manual
+source_attribution: ''
+type: lead-form
+use_cases:
+- services
+- b2c
+- local
+variant: quiz

@@ -1,52 +1,45 @@
 ---
+slug: photo-preview-board
 type: agent
-name: photo-preview-board
-sources: ["agents/photo-preview-board.md"]
-updated: 2026-05-15
-triggers: []
+name: "Photo Preview Board — обработка слотов и рендер превью"
 stage: "07c"
-uses: ["photo-curator", "photo-matcher", "selections-validator", "photo-stylist", "identity-safe"]
-tags: ["photos", "preview", "identity-safe", "processing", "stage-07c"]
+tags: [photos, preview, identity-safe, codex, image-processing]
+triggers: []
+inputs: ["07c_PHOTOS/selections.yaml"]
+outputs: ["07c_PHOTOS/processed/<slot_id>/desktop.jpg", "07c_PHOTOS/processed/<slot_id>/mobile.jpg", "07c_PHOTOS/photo-preview.html"]
+gates: []
+pre_reqs: [photo-curator]
+related: [landing-photos]
+sources: ["agents/photo-preview-board.md"]
+updated: 2026-05-26
+confidence: {triggers: low, pre_reqs: low}
 ---
 
-# Photo Preview Board — рендер превью обработанных фото
+# Photo Preview Board — обработка слотов и рендер превью
 
 ## Что делает
 
-Берёт утверждённый пользователем файл `selections.yaml` и превращает каждый слот в реальное изображение: обрезает и масштабирует клиентские фото, генерирует изображения через codex или создаёт SVG-заглушку. После обработки всех слотов рендерит HTML-страницу `photo-preview.html` для финального просмотра перед сборкой.
+Хелпер-агент, вызываемый родительским агентом `photo-curator` после того, как пользователь утвердил `selections.yaml`. Для каждого слота из этого файла выполняет одно из трёх действий: кроппинг/ресайз клиентской фотографии, AI-генерацию изображения через codex (fallback), или создание SVG-заглушки. Затем рендерит `photo-preview.html` — финальный экран для проверки перед продолжением пайплайна. Принудительно применяет identity-safe политику: если слот помечен как идентификационный (testimonial, expert, team-member и т.п.) и флаг `ai_approved_by_user` не выставлен, стратегия `generate` молча понижается до `placeholder`.
 
-## Когда вызывать / в каком этапе
+## Когда вызывается
 
-Вызывается на этапе **07c** агентом-оркестратором `photo-curator` — автоматически после того, как пользователь одобрил `selections.yaml` в интерактивной фото-доске (`photo-board.html`). Вручную не вызывается напрямую — только через `/landing-photos`.
+Диспатчится агентом `photo-curator` после того, как пользователь скачал и положил `selections.yaml` обратно в `07c_PHOTOS/`. Не вызывается напрямую пользователем — это внутренний хелпер этапа 07c.
 
-## Что на вход / на выход
+## Вход → выход
 
-**Вход:**
-- Директория проекта с готовым `07c_PHOTOS/selections.yaml` (каноничный, утверждённый пользователем)
-- Обработанные фото в `07c_PHOTOS/intake/`
+**Вход:** Директория проекта с валидным `07c_PHOTOS/selections.yaml` (утверждённые пользователем слоты, каждый с указанной стратегией: `bring-your-own`, `generate` или `placeholder`).
 
-**Выход:**
-- `07c_PHOTOS/processed/<slot_id>/desktop.jpg` — обрезанное фото под десктоп
-- `07c_PHOTOS/processed/<slot_id>/mobile.jpg` — мобильный вариант (если блок задаёт `mobile_ratio`)
-- `07c_PHOTOS/photo-preview.html` — финальная страница для просмотра и утверждения
+**Выход:** Обработанные изображения в `07c_PHOTOS/processed/<slot_id>/desktop.jpg` (и `mobile.jpg` при наличии `mobile_ratio` в мета-блока), а также `07c_PHOTOS/photo-preview.html` — HTML-страница для финальной визуальной проверки всех слотов.
 
-**Три стратегии обработки слота:**
-1. `bring-your-own` — обрезка/масштаб клиентского фото через `style.py`
-2. `generate` — генерация через `codex-generate-fallback.sh` (с identity-safe проверкой)
-3. `placeholder` — SVG-заглушка через `svg-placeholder.py`
+## Failure modes
 
-## Identity-safe enforcement
+- `selections.yaml` не проходит валидацию (`selections-validator.py` → abort) — агент останавливается и не обрабатывает ни одного слота.
+- Недоступен codex CLI при стратегии `generate` — скрипт `codex-generate-fallback.sh` упадёт; нужна проверка установки через `scripts/install-codex.sh`.
+- `style.py` получает фото с нестандартным соотношением сторон и не может нормально кропнуть — результат может не совпасть с ожидаемым ratio.
+- Identity-safe downgrade происходит молча — пользователь не получает явного предупреждения, что слот переключён в placeholder; может вызвать удивление при просмотре превью.
+- Отсутствует `mobile_ratio` в `meta.yaml` блока, хотя блок адаптивный — мобильная версия не генерируется, что вскроется на этапе 08 Build.
 
-Критическое правило: если слот относится к типу `testimonial`, `expert`, `team-member` или `avatar` (т.е. может изображать реального человека) и при этом `ai_approved_by_user: false` — стратегия `generate` **молча понижается** до `placeholder`. Агент никогда не генерирует лица без явного разрешения пользователя. Эта проверка закреплена в шаге 2 процесса и является точкой принудительного соблюдения политики идентичности.
+## Related
 
-## Связанные концепты
-
-- [[photo-curator]] — оркестратор этапа 07c, вызывает этот агент после approve `selections.yaml`
-- [[photo-matcher]] — предшественник: формирует `selections.draft.yaml`, из которого пользователь делает `selections.yaml`
-- [[photo-stylist]] — предоставляет скрипт `style.py` для обрезки клиентских фото
-- selections-validator — валидирует `selections.yaml` перед обработкой; при ошибке агент прерывается
-- identity-safe — политика, запрещающая AI-репейнт людей без разрешения
-
-## Источник
-
-- `agents/photo-preview-board.md`
+- [[landing-photos]] — slash-команда этапа 07c, которая запускает весь photo-pipeline, включая вызов `photo-curator` → `photo-preview-board`
+- [[photo-curator]] — родительский агент, диспатчащий этот хелпер после approve `selections.yaml`

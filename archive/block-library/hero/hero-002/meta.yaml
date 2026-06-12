@@ -1,0 +1,33 @@
+category: hero
+created: '2026-06-01'
+display_name_ru: hero-002 (cinematic)
+has_bg_image: false
+id: hero-002
+layout_pattern: cinematic
+signature: hero|cinematic|[content]|bg:false
+slots:
+- name: eyebrow
+  type: text
+- name: heading
+  type: text
+- name: subhead
+  type: text
+- name: primary-cta-link
+  type: text
+- name: primary-cta-label
+  type: text
+- name: secondary-cta-link
+  type: text
+- name: secondary-cta-label
+  type: text
+- name: media-label
+  type: text
+- name: hero-image-mobile
+  type: text
+- name: hero-image-alt
+  type: text
+- name: hero-image
+  type: text
+source: cleaned
+type: hero
+variant: null

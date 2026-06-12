@@ -1,0 +1,154 @@
+<style>
+  :root {
+    --lp-bg: #f5f5f5;
+    --lp-text: #1a1a1a;
+    --lp-accent: #333;
+    --lp-border: #e0e0e0;
+    --lp-font-display: system-ui, sans-serif;
+    --lp-font-body: system-ui, sans-serif;
+    --spacing-md: 16px;
+    --spacing-lg: 32px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--lp-font-body); background: var(--lp-bg); color: var(--lp-text); width: 375px; }
+
+  .hero { display: flex; flex-direction: column; padding: 24px 20px; gap: 24px; }
+
+  .headline {
+    font-family: var(--lp-font-display);
+    font-size: 28px;
+    line-height: 1.15;
+    font-weight: 800;
+    margin: 0;
+  }
+  .bullets {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .bullets li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 15px;
+    line-height: 1.4;
+  }
+  .bullets li::before {
+    content: "✓";
+    color: var(--lp-accent);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .hero-cta {
+    display: block;
+    padding: 14px;
+    background: var(--lp-accent);
+    color:#fff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 16px;
+    text-align: center;
+  }
+
+  /* Form stacked below */
+  .lead-form {
+    background:var(--lp-bg);
+    border: 1.5px solid var(--lp-border);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .form-title {
+    font-family: var(--lp-font-display);
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+  }
+  .field-label {
+    font-size: 13px;
+    color:#555;
+    margin-bottom: 4px;
+    display: block;
+  }
+  .phone-input {
+    width: 100%;
+    padding: 12px;
+    border: 1.5px solid var(--lp-border);
+    border-radius: 6px;
+    font-size: 16px;
+    background:#fff;
+    font-family: var(--lp-font-body);
+  }
+  .contact-label {
+    font-size: 13px;
+    color:#555;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .radio-group { display: flex; flex-direction: column; gap: 8px; }
+  .radio-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+  }
+  .radio-row input[type="radio"] {
+    accent-color: var(--lp-accent);
+    width: 16px;
+    height: 16px;
+  }
+  .submit-btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: var(--lp-accent);
+    color:#fff;
+    border: none;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 16px;
+    font-family: var(--lp-font-body);
+  }
+  .form-disclaimer {
+    font-size: 11px;
+    color:#999;
+    text-align: center;
+    margin: 0;
+  }
+</style>
+<section class="hero" data-block-id="ru-hero-04-split-form">
+<!-- Value prop -->
+<div>
+<h1 class="headline">{{slot:headline}}</h1>
+</div>
+<ul class="bullets">
+<li>{{slot:bullet-1-text}}</li>
+<li>{{slot:bullet-2-text}}</li>
+<li>{{slot:bullet-3-text}}</li>
+</ul>
+<a class="hero-cta" href="#form">{{slot:primary-cta}}</a>
+<!-- Form below on mobile -->
+<form class="lead-form" novalidate="">
+<p class="form-title">Получить консультацию</p>
+<div>
+<label class="field-label" for="m-phone">Ваш телефон</label>
+<input class="phone-input" id="m-phone" placeholder="+7 (___) ___-__-__" type="tel"/>{{slot:lead-phone-input}}
+</div>
+<div>
+<span class="contact-label">Как связаться?</span>
+<div class="radio-group">
+<label class="radio-row"><input checked="" name="m-contact" type="radio" value="telegram"/> Telegram</label>
+<label class="radio-row"><input name="m-contact" type="radio" value="max"/> Max</label>
+<label class="radio-row"><input name="m-contact" type="radio" value="call"/> Позвоните мне</label>
+</div>
+</div>
+<button class="submit-btn" type="submit">{{slot:lead-submit-cta}}</button>
+<p class="form-disclaimer">Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности</p>
+</form>
+</section>

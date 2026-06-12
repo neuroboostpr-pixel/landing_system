@@ -63,6 +63,19 @@
 
 ---
 
+## Wiki-запросы (обязательный формат)
+
+Перед диспатчем любого агента — запрашивать wiki с явной передачей модели:
+
+```bash
+python -m scripts.wiki.query --stage=<N> --type=agent
+python -m scripts.wiki.query --slug=<concept-slug>
+```
+
+Модель берётся автоматически из `config.DEFAULT_MODEL` — менять только в [scripts/wiki/config.py](../../scripts/wiki/config.py).
+
+---
+
 ## Что запрещено
 
 - ❌ Начинать делать что-либо до Шага 1 (даже «по-быстрому проверить файл»)

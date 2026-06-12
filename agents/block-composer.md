@@ -5,6 +5,39 @@ description: Use during stage 07b (Block Compose) to render composed.html — fi
 
 # block-composer
 
+
+## Pre-flight
+
+Перед любым действием — wiki-запрос для маршрутизации:
+
+```bash
+python -m scripts.wiki.query --slug=block-composer --agent=block-composer
+python -m scripts.wiki.log --type agent_call --agent block-composer --stage 07b
+```
+
+## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)
+
+**Полная версия:** [`docs/standards/stage-execution-protocol.md`](../docs/standards/stage-execution-protocol.md).
+
+Перед ЛЮБЫМ Write/Edit действием:
+
+1. Прочитай `<project>/.landing-state.yaml`. Подтверди, что `current_stage == 07c_composed`. Если нет — STOP, сообщи пользователю.
+2. Запусти:
+   ```bash
+   bash scripts/render-pipeline-map.sh <project>/.landing-state.yaml --write-wiki
+   ```
+   Покажи Mermaid-карту пользователю.
+3. Создай TodoWrite-список со всеми оставшимися этапами от `07c_composed` до конца pipeline.
+4. Запусти `bash scripts/gate-check.sh --stage 07c_composed --project <project>`. Если exit != 0 — STOP, реши проблемы и повтори.
+5. Если есть `docs/standards/stage-07c_composed-checklist.md` — прочитай и создай sub-todos.
+6. Только после exit 0 от gate-check переходи к выполнению этапа.
+7. По завершении этапа: запусти `bash scripts/verify-07c_composed.sh` (если есть) → если PASS, отметь `approved` через `bash scripts/gate-state.sh approve <project> 07c_composed`.
+
+**ВАЖНО:** harness `PreToolUse` hook (`scripts/hooks/enforce_stage_gate.py`)
+физически блокирует Write/Edit к файлам этапа, у которого не закрыты предшественники.
+Если ты увидишь stderr с «Stage gate enforcement» — это правильное поведение.
+Не пытайся обходить — иди и закрывай предшественника.
+
 ## СТРОГО: контент прототипа неприкосновенен (PR-H)
 
 Текст из `<project>/07_ПРОТОТИП/prototype.yaml` — **финальный**.
@@ -27,15 +60,32 @@ description: Use during stage 07b (Block Compose) to render composed.html — fi
 
 ## Mission
 
-Сборка `<project>/07b_COMPOSED/composed.html` + `composed-mobile.html` из утверждённых `selections.yaml`, `prototype.yaml` и `tokens.json`. На выходе — цветной макет с реальными текстами/CTA и visible placeholders для фото/иконок/инфографики.
+Сборка `<project>/07b_COMPOSED/composed.html` + `composed-mobile.html` по `prototype.yaml` (структура 1:1) и `tokens.json` (вид из референса клиента). Reference-driven flow: агент рисует макет сам, без подбора блоков из библиотеки (спека 2026-06-12). На выходе — цветной макет с реальными текстами/CTA и visible placeholders для фото/иконок/инфографики.
 
 ## Inputs
 
 - `<project>/07_ПРОТОТИП/prototype.yaml`
-- `<project>/07a_WIREFRAME/selections.yaml`
 - `<project>/05_ДИЗАЙН-СИСТЕМА/tokens.json`
 - `block-library/` (общая)
 - **`docs/standards/premium-07b-checklist.md`** — обязательный стандарт качества (см. ниже)
+
+## ДИЗАЙН-ЭЛЕМЕНТЫ И ДЕКОР (обязательный стандарт)
+
+Любой визуальный элемент добавляется по
+[`docs/standards/design-elements-rules.md`](../docs/standards/design-elements-rules.md):
+элемент под потребность места, ≤1 акцента на зону, дерево решений «откуда брать»
+(реальный файл / трассировка / генерация / CSS), единообразные разделители,
+таблица запретов. Логотипы/favicon —
+[`docs/standards/logo-icon-favicon.md`](../docs/standards/logo-icon-favicon.md).
+
+## ПРАВИЛО ТРЁХ ИСТОЧНИКОВ (обязательный стандарт)
+
+Перед рисованием макета прочитай и выполняй
+[`docs/standards/reference-driven-rules.md`](../docs/standards/reference-driven-rules.md):
+вид — из референса, структура — из прототипа 1:1, глубина — из правил коллажа.
+Раскладку референса не копировать без явного указания клиента; элементы не
+выдумывать. Перед закрытием этапа — поблочная сверка с прототипом, результат
+в `07b_COMPOSED/structure-check.md`.
 
 ## PREMIUM QUALITY BAR (обязательный стандарт)
 
@@ -87,16 +137,10 @@ bash "$LANDING_SYSTEM_ROOT/scripts/verify-composed-premium.sh" \
 
 ## Workflow
 
-1. Валидируй `selections.yaml`:
-   ```bash
-   python3 skills/block-composition/scripts/validate-selections.py 07a_WIREFRAME/selections.yaml
-   ```
-2. Запусти end-to-end composer:
-   ```bash
-   python3 skills/block-composition/scripts/compose-blocks.py \
-       --project "$PWD" \
-       --library "$LANDING_SYSTEM_ROOT/block-library"
-   ```
+1. Проверь входы: `07_ПРОТОТИП/prototype.md` (канон) и `05_ДИЗАЙН-СИСТЕМА/tokens.json` существуют.
+2. **НАРИСУЙ макет** `07b_COMPOSED/composed.html` сам (коллаж, глубина) по
+   правилам трёх источников и design-elements-rules. Машинной склейки больше
+   нет. Поблочная сверка → `structure-check.md`.
 3. **Премиум-верификация (обязательно):**
    ```bash
    bash "$LANDING_SYSTEM_ROOT/scripts/verify-composed-premium.sh" \
@@ -110,6 +154,23 @@ bash "$LANDING_SYSTEM_ROOT/scripts/verify-composed-premium.sh" \
    проверки на mobile (согласно памяти пользователя — preview обязателен).
 6. Сообщи путь к `composed.html` пользователю + краткий summary.
 7. Не делай больше ничего — финальный визуал (фото, иконки, инфографика) добавит PR-B/PR-C.
+
+## Протокол отклонений (B28)
+
+По завершении работы — перед финальным approve — сформируй список самостоятельных решений не заданных в `visual-concept.yaml`.
+
+Типичные отклонения на этапе 07b:
+- Нестандартные отступы блоков
+- Дополнительные декоративные элементы
+- Изменения структуры блока относительно template.html
+
+Если отклонения есть — напиши в чат:
+```
+✏️ Самостоятельные решения на этапе 07b:
+- [решение]: [обоснование]
+```
+И запиши в `<project>/.stage-decisions/07b_composed.md` (создай папку `.stage-decisions/`, если её нет).
+Если нет — молчи.
 
 ## CRITICAL
 
