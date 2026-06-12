@@ -260,10 +260,11 @@ for i in $(if [ "$checks_count" -gt 0 ]; then seq 0 $((checks_count - 1)); fi); 
         script)
             script_path="$(yq -r ".stages.\"$stage\".hard_checks[$i].script" "$GATES_YAML")"
             args_raw="$(yq -r ".stages.\"$stage\".hard_checks[$i].args[] // \"\"" "$GATES_YAML" | sed "s|{project}|$project|g")"
-            # Determine runner by extension
+            # Determine runner by extension (python через PYTHON_CMD —
+            # голого `python` на macOS/линуксах часто нет)
             case "$script_path" in
                 *.sh) runner="bash" ;;
-                *)    runner="python" ;;
+                *)    runner="$PYTHON_CMD" ;;
             esac
             # shellcheck disable=SC2086
             if $runner "$REPO_ROOT/$script_path" $args_raw >/dev/null 2>&1; then

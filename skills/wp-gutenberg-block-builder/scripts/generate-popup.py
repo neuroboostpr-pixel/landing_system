@@ -34,21 +34,30 @@ document.addEventListener('DOMContentLoaded', function () {
 """
 
 _POPUP_CSS = """\
-/* lp-popup system */
+/* lp-popup system.
+   C3 (спека reference-driven §4.3): цвета — локальные токены в :root,
+   дефолты наследуют тему (var(--lp-…, fallback)); переопределяются палитрой. */
+:root {
+  --lp-popup-overlay: rgba(0, 0, 0, 0.55);
+  --lp-popup-bg: var(--lp-surface, var(--color-bg-card, #ffffff));
+  --lp-popup-shadow: rgba(0, 0, 0, 0.18);
+  --lp-popup-close: var(--lp-muted, #555555);
+  --lp-popup-close-hover: var(--lp-fg, #000000);
+}
 body.lp-popup-lock { overflow: hidden; }
 .lp-popup { display: none; position: fixed; inset: 0; z-index: 9999; align-items: center; justify-content: center; }
 .lp-popup--open { display: flex; }
-.lp-popup__overlay { position: absolute; inset: 0; background: rgba(0,0,0,.55); }
+.lp-popup__overlay { position: absolute; inset: 0; background: var(--lp-popup-overlay); }
 .lp-popup__box {
-  position: relative; z-index: 1; background: #fff; border-radius: 12px;
+  position: relative; z-index: 1; background: var(--lp-popup-bg); border-radius: 12px;
   padding: 2.5rem; width: min(560px, 94vw); max-height: 90vh; overflow-y: auto;
-  box-shadow: 0 24px 64px rgba(0,0,0,.18);
+  box-shadow: 0 24px 64px var(--lp-popup-shadow);
 }
 .lp-popup__close {
   position: absolute; top: 1rem; right: 1rem; background: none; border: none;
-  font-size: 1.5rem; cursor: pointer; line-height: 1; color: #555;
+  font-size: 1.5rem; cursor: pointer; line-height: 1; color: var(--lp-popup-close);
 }
-.lp-popup__close:hover { color: #000; }
+.lp-popup__close:hover { color: var(--lp-popup-close-hover); }
 """
 
 _POPUP_PHP = """\

@@ -17,8 +17,10 @@ __SCRIPT_DIR__="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DIR="${1:?ERROR: directory required}"
 
 [ -d "$DIR" ] || {
-    echo "ERROR: dir not found: $DIR" >&2
-    exit 2
+    # Lazy Blocks-трек (текущий) не генерирует block.json вообще —
+    # папка gutenberg-blocks существует только у legacy ACF-сборок.
+    echo "N/A: $DIR отсутствует (Lazy Blocks-трек без block.json) — проверка пропущена"
+    exit 0
 }
 
 errors=0

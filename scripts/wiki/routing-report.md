@@ -16,15 +16,15 @@
 | Категория | Событий | ~Токенов | Можно на вики? |
 |-----------|---------|----------|----------------|
 | wiki_query | 0 | -0 | -- |
-| session_start | -- | +16 293 | нет |
+| session_start | -- | +16 673 | нет |
 | [CLAUDE.md](../CLAUDE.md) | -- | ~10 231 | нет (fixed) |
 
 ## Запуски (сводка)
 
 | run_id | Дата | Агентов/этапов | Через вики | Утечки |
 |--------|------|----------------|------------|--------|
-| unknown | 2026-06-12 20:59 | 21 | 0 | 21 |
-| test-sess | 2026-06-12 20:28 | 4 | 0 | 4 |
+| unknown | 2026-06-12 20:59 | 30 | 0 | 30 |
+| test-sess | 2026-06-12 20:28 | 5 | 0 | 5 |
 
 ## Запуски vs вики (7д)
 
@@ -55,3 +55,13 @@
 | 21:03 | unknown | stage | 02_assets | 02_assets | ❌ | ⚠️ |
 | 21:03 | unknown | stage | 01a_niche_analysis | 01a_niche_analysis | ❌ | ⚠️ |
 | 21:03 | unknown | stage | 01a_niche_analysis | 01a_niche_analysis | ❌ | ⚠️ |
+| 21:26 | test-sess | stage | 04_brand | 04_brand | ❌ | ⚠️ |
+| 21:34 | unknown | stage | 07a_prototype | 07a_prototype | ❌ | ⚠️ |
+| 21:34 | unknown | stage | 07c_composed | 07c_composed | ❌ | ⚠️ |
+| 21:34 | unknown | stage | 07a_prototype | 07a_prototype | ❌ | ⚠️ |
+| 21:34 | unknown | stage | 07c_composed | 07c_composed | ❌ | ⚠️ |
+| 21:36 | unknown | stage | 07c_composed | 07c_composed | ❌ | ⚠️ |
+| 21:36 | unknown | stage | 08_build | 08_build | ❌ | ⚠️ |
+| 21:36 | unknown | stage | 07c_composed | 07c_composed | ❌ | ⚠️ |
+| 21:36 | unknown | stage | 08_build | 08_build | ❌ | ⚠️ |
+| 21:37 | unknown | stage | 08_build | 08_build | ❌ | ⚠️ |
