@@ -2,7 +2,7 @@
 
 > Авто-сгенерированный индекс. Обновляется при `python -m scripts.wiki.compile --source-mode=system`.
 
-**Концептов всего:** 112
+**Концептов всего:** 111
 **Категории:** agent, catalog, command, rule, skill, stage
 
 **Известные ограничения:**
@@ -127,7 +127,6 @@
 
 ## 📐 Правила (стандарты качества)
 
-- [[premium-07b-checklist]] — PREMIUM 07b — Чек-лист сборки composed.html
 - [[stage-08-spec-lint]] — Stage-08 Composed ↔ block-spec Lint
 - [[stage-agent-preamble]] — Stage Agent Preamble (канонический блок)
 - [[stage-execution-protocol]] — Протокол выполнения этапов (обязательный)

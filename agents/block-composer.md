@@ -69,6 +69,15 @@ python -m scripts.wiki.log --type agent_call --agent block-composer --stage 07b
 - `block-library/` (общая)
 - **`docs/standards/premium-07b-checklist.md`** — обязательный стандарт качества (см. ниже)
 
+## ДИЗАЙН-ЭЛЕМЕНТЫ И ДЕКОР (обязательный стандарт)
+
+Любой визуальный элемент добавляется по
+[`docs/standards/design-elements-rules.md`](../docs/standards/design-elements-rules.md):
+элемент под потребность места, ≤1 акцента на зону, дерево решений «откуда брать»
+(реальный файл / трассировка / генерация / CSS), единообразные разделители,
+таблица запретов. Логотипы/favicon —
+[`docs/standards/logo-icon-favicon.md`](../docs/standards/logo-icon-favicon.md).
+
 ## ПРАВИЛО ТРЁХ ИСТОЧНИКОВ (обязательный стандарт)
 
 Перед рисованием макета прочитай и выполняй
