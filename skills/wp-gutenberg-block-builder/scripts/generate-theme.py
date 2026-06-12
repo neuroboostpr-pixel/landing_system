@@ -182,9 +182,24 @@ def _write_style_css(theme_dir: Path, project_name: str, style_css: str) -> None
     (theme_dir / "style.css").write_text(header + body + "\n", encoding="utf-8")
 
 
+_C2_BASELINE_CSS = """
+/* ── C2 baseline (спека reference-driven §4.2) ─────────────────────────
+   Wrapper width: верхние обёртки Lazy Blocks не должны зажимать сетку
+   («масштаб поехал» при дефолтном content-width Gutenberg). */
+.entry-content > .wp-block,
+.wp-block-lazyblock,
+[class*="wp-block-lazyblock-"] { max-width: none; margin-left: 0; margin-right: 0; }
+/* Img geometry: наша CSS-геометрия приоритетнее width/height-атрибутов WP. */
+.lp-block img, [class*="lp-block--"] img { max-width: 100%; height: auto; }
+/* Кнопки: нейтрализуем дефолты WP (radius/padding из core-стилей). */
+.wp-block-button__link { background: none; border-radius: 0; padding: 0; }
+"""
+
+
 def _write_main_css(theme_dir: Path, main_css: str) -> None:
     body = main_css.strip() if main_css.strip() else "/* main.css — DESIGN.md had no §3–§9 styles */\n"
-    (theme_dir / "assets" / "css" / "main.css").write_text(body + "\n", encoding="utf-8")
+    (theme_dir / "assets" / "css" / "main.css").write_text(
+        body + "\n" + _C2_BASELINE_CSS, encoding="utf-8")
 
 
 def _write_functions_php(theme_dir: Path, stack: dict) -> None:
@@ -253,7 +268,8 @@ function lp_setup() {{
     add_theme_support('title-tag');
     add_theme_support('post-thumbnails');
     add_theme_support('editor-styles');
-    add_theme_support('wp-block-styles');
+    // C2: НЕ подключаем 'wp-block-styles' — дефолтные стили WP перебивают
+    // наши кнопки (спека reference-driven §4.2)
     add_theme_support('align-wide');
 }}
 add_action('after_setup_theme', 'lp_setup');

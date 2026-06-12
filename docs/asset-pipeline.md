@@ -189,3 +189,10 @@ helper-функцию `landing_register_favicon($attachment_id)`).
 - `skills/wp-gutenberg-block-builder/scripts/generate-lzb-templates.py` — шаблоны
 - `skills/wp-theme-assembler/scripts/bundle-assets.py` — копирование файлов
 - `tests/phase-stage-08/test-fix-page-content-images.py` — контракт-тесты
+
+## C2: наш CSS — источник истины вида элемента
+
+Общее правило из 16 болячек сборки (спека reference-driven §4.2): геометрию
+(размер, пропорции, форму) элементов задаёт НАШ CSS, а не размеры/стили,
+которые навешивает WordPress (width/height-атрибуты у `<img>`, дефолты
+`wp-block-styles`, content-width обёрток). Гейт: `lint-theme-php.py` (08_build).

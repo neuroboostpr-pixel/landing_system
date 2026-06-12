@@ -2,7 +2,7 @@
 
 > Авто-сгенерированный индекс. Обновляется при `python -m scripts.wiki.compile --source-mode=system`.
 
-**Концептов всего:** 112
+**Концептов всего:** 110
 **Категории:** agent, catalog, command, rule, skill, stage
 
 **Известные ограничения:**
@@ -63,7 +63,6 @@
 - [[style-extractor]] — Style Extractor
 - [[system-setup]] — Настройщик системы
 - [[visual-curator]] — Куратор визуалов
-- [[wp-builder]] — WP-сборщик (Lazy Blocks)
 - [[wp-deployer]] — WP Deployer — Деплой-инженер
 
 ## 🛠 Скиллы
@@ -98,7 +97,6 @@
 ## ⚡ Команды
 
 - [[landing-brand]] — /landing-brand — Построить бренд-кит
-- [[landing-build]] — /landing-build — Сборка WordPress-темы
 - [[landing-clone]] — Клонирование лендинга
 - [[landing-compose]] — /landing-compose — Сборка composed.html
 - [[landing-content]] — Контент-адаптация прототипа (Stage 07)

@@ -390,6 +390,21 @@ stages:
         type: file_exists
         path: "{project}/05_ДИЗАЙН-СИСТЕМА/DESIGN.md"
         required: true
+      # C2: болячки сборки — script-в-блоке, повторные функции, дефолты WP,
+      # ширина обёрток, img-geometry (спека reference-driven §4.2)
+      - id: theme_build_lint
+        type: script
+        script: "skills/wp-gutenberg-block-builder/scripts/lint-theme-php.py"
+        args: ["{project}/08_КОД/wp-theme"]
+        required: true
+        fix_hint: "Сборка темы содержит известные болячки (§4.2). Вывод линтера показывает что чинить: <script> из block.php → в assets/js; функции → function_exists; убрать wp-block-styles; добавить wrapper-width/img-geometry CSS."
+      # C3: токенизация темы синхронно с макетом
+      - id: theme_tokens_only_colors
+        type: script
+        script: "scripts/verify_tokens.py"
+        args: ["{project}/08_КОД/wp-theme/assets/css"]
+        required: true
+        fix_hint: "В CSS темы прямые цвета вне :root — замени на var(--…) (спека §4.3); исключения: бренд-цвета мессенджеров, /* token-exempt */."
       - id: final_copy
         type: file_exists
         path: "{project}/07_КОНТЕНТ/final-copy.md"

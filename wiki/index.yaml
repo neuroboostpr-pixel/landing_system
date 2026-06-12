@@ -1,13 +1,13 @@
 version: 1
-generated_at: '2026-06-12T18:15:29+00:00'
+generated_at: '2026-06-12T18:19:52+00:00'
 counts:
-  total: 112
+  total: 110
   by_type:
     stage: 19
-    agent: 32
+    agent: 31
     skill: 26
     catalog: 3
-    command: 27
+    command: 26
     rule: 5
 concepts:
 - slug: 00-brif
@@ -1124,48 +1124,6 @@ concepts:
   - design-system-generator
   confidence:
     gates: low
-- slug: landing-build
-  type: command
-  name: /landing-build — Сборка WordPress-темы
-  card: concepts/commands/landing-build.md
-  source: commands/landing-build.md
-  stage: 08
-  tags:
-  - build
-  - wordpress
-  - lazy-blocks
-  - theme
-  - analytics
-  - seo
-  - integrations
-  triggers:
-  - landing-build
-  inputs:
-  - 07_КОНТЕНТ/final-copy.md
-  - 05_ДИЗАЙН-СИСТЕМА/tokens.json
-  - 06_СТЕК/design-stack.yaml
-  - 08_КОД/block-spec.yaml
-  outputs:
-  - 08_КОД/wp-theme/
-  - 08_КОД/page-content.html
-  - 08_КОД/build-preview.html
-  - 08_КОД/integrations/
-  - 11_АНАЛИТИКА/metrika-config.md
-  - 12_SEO/meta-tags.yaml
-  gates:
-  - build_preview_approved
-  pre_reqs:
-  - content-writer
-  - design-system-generator
-  - stack-planner
-  related:
-  - analytics-engineer
-  - integrations-engineer
-  - seo-optimizer
-  - wp-builder
-  - wp-gutenberg-block-builder
-  - wp-cli-deployer
-  - block-composer
 - slug: landing-clone
   type: command
   name: Клонирование лендинга
@@ -3163,52 +3121,6 @@ concepts:
   related:
   - wiki
   - wiki-audit-checklist
-  confidence:
-    triggers: low
-- slug: wp-builder
-  type: agent
-  name: WP-сборщик (Lazy Blocks)
-  card: concepts/agents/wp-builder.md
-  source: agents/wp-builder.md
-  stage: 08
-  tags:
-  - wordpress
-  - lazy-blocks
-  - php
-  - css
-  - js
-  - stage-08
-  - build
-  - legal
-  triggers:
-  - landing-build
-  inputs:
-  - 05_ДИЗАЙН-СИСТЕМА/tokens.json
-  - 06_СТЕК/design-stack.yaml
-  - 07_КОНТЕНТ/final-copy.md
-  - 08_КОД/block-spec.yaml
-  - 01a_АНАЛИЗ_НИШИ/landing-structure.md
-  - 01a_АНАЛИЗ_НИШИ/market-profile.md
-  - 01a_АНАЛИЗ_НИШИ/positioning.md
-  outputs:
-  - 08_КОД/wp-theme/blocks/lazyblock-*/block.php
-  - 08_КОД/wp-theme/functions.php
-  - 08_КОД/wp-theme/assets/css/main.css
-  - 08_КОД/wp-theme/assets/js/main.js
-  - 08_КОД/page-content.html
-  pre_reqs:
-  - design-system-generator
-  - content-writer
-  related:
-  - design-system-generator
-  - content-writer
-  - landing-orchestrator
-  - frontend-builder
-  - block-composer
-  - analytics-engineer
-  - integrations-engineer
-  - icon-generator
-  - infographic-builder
   confidence:
     triggers: low
 - slug: wp-cli-deployer
