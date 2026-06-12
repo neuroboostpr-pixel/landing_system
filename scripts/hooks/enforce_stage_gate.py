@@ -35,8 +35,8 @@ PATH_MAP_FILE = THIS_DIR / "_stage_paths.yaml"
 
 PIPELINE_ORDER = [
     "00_brief", "01_context", "01a_niche_analysis", "02_assets",
-    "03_references", "04_brand", "05_design", "06_stack", "07_content",
-    "07a_prototype", "07b_wireframe", "07c_composed",
+    "03_references", "04_brand", "05_design", "06_stack",
+    "07a_prototype", "07_content", "07c_composed",
     "07d_photos", "07e_visuals", "07f_composed_final",
     "08_build", "10_qa", "09_deploy", "11_analytics", "12_seo",
 ]

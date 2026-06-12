@@ -21,7 +21,7 @@ import re
 from pathlib import Path
 
 NEW_STAGES = [
-    "07a_prototype", "07b_wireframe", "07c_composed",
+    "07a_prototype", "07c_composed",
     "07d_photos", "07e_visuals", "07f_composed_final",
 ]
 

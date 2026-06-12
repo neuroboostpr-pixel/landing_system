@@ -30,7 +30,7 @@ def test_fresh_project_next_is_07a_prototype(tmp_path):
     proj = _make_state(tmp_path, {
         "00_brief": {"status": "n/a"},
         "07a_prototype": {"status": "in_progress"},
-        "07b_wireframe": {"status": "locked"},
+        "07c_composed": {"status": "locked"},
     })
     assert _run(proj) == "07a_prototype"
 
@@ -40,7 +40,7 @@ def test_returns_first_non_approved_non_na(tmp_path):
         "00_brief": {"status": "n/a"},
         "07a_prototype": {"status": "approved"},
         "03_references": {"status": "locked"},
-        "07b_wireframe": {"status": "locked"},
+        "07c_composed": {"status": "locked"},
     })
     assert _run(proj) == "03_references"
 
@@ -57,7 +57,7 @@ def test_returns_done_when_all_complete(tmp_path):
 def test_handles_failed_status_by_returning_that_stage(tmp_path):
     proj = _make_state(tmp_path, {
         "07a_prototype": {"status": "failed"},
-        "07b_wireframe": {"status": "locked"},
+        "07c_composed": {"status": "locked"},
     })
     assert _run(proj) == "07a_prototype"
 
@@ -69,7 +69,7 @@ def test_in_progress_takes_priority_over_locked(tmp_path):
         "03_references": {"status": "locked"},
         "04_brand": {"status": "locked"},
         "07a_prototype": {"status": "in_progress"},
-        "07b_wireframe": {"status": "locked"},
+        "07c_composed": {"status": "locked"},
     })
     assert _run(proj) == "07a_prototype"
 

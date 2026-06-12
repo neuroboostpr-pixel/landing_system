@@ -26,8 +26,6 @@ mappings:
     stage: "07_content"
   - glob: "{project}/07_ПРОТОТИП/**"
     stage: "07a_prototype"
-  - glob: "{project}/07a_WIREFRAME/**"
-    stage: "07b_wireframe"
   - glob: "{project}/07b_COMPOSED/**"
     stage: "07c_composed"
   - glob: "{project}/07c_PHOTOS/**"

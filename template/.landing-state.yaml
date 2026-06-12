@@ -26,16 +26,19 @@ stages:
 
   # User-interactive design stages
   "03_references":        {status: locked, timestamp: ""}
+  "03b_visual_concept":   {status: locked, timestamp: ""}
   "04_brand":             {status: locked, timestamp: ""}
   "05_design":            {status: locked, timestamp: ""}
 
   # Auto stages
   "06_stack":             {status: locked, timestamp: ""}
+
+  # Prototype-first: сначала прототип (07a), затем контент (07_content
+  # требует approved 07a_prototype в stage-gates.yaml)
+  "07a_prototype":        {status: in_progress, timestamp: ""}
   "07_content":           {status: locked, timestamp: ""}
 
-  # PR-A artifacts (new in state tracking)
-  "07a_prototype":        {status: in_progress, timestamp: ""}
-  "07b_wireframe":        {status: locked, timestamp: ""}
+  # Reference-driven: макет composed.html рисует агент (wireframe-этап удалён)
   "07c_composed":         {status: locked, timestamp: ""}
 
   # PR-B + PR-C (parallel)

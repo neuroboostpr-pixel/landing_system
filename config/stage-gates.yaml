@@ -265,26 +265,13 @@ stages:
         required: true
         fix_hint: "Парсер потерял >10% текста или выдумал структуру (меню/фейк-цены). Открой 07_ПРОТОТИП/fidelity-report.md — перепарсь docx (extract-docx-text.py) или поправь prototype.yaml вручную, чтобы покрытие было ≥90%."
 
-  "07b_wireframe":
-    name: "Wireframe"
-    lock: hard
-    require_approved: ["04_brand", "05_design", "07a_prototype"]
-    hard_checks:
-      - id: wireframe_html_exists
-        type: file_exists
-        path: "{project}/07a_WIREFRAME/wireframe.html"
-        required: true
-        fix_hint: "auto_fix: /landing-wireframe"
-      - id: wireframe_selections
-        type: file_exists
-        path: "{project}/07a_WIREFRAME/selections.yaml"
-        required: true
-        fix_hint: "Открой wireframe.html в браузере, выбери варианты блоков, нажми Confirm. Скачается selections.yaml — положи его в 07a_WIREFRAME/"
+  # 07b_wireframe удалён: wireframe-этап выброшен (reference-driven flow, спека §6).
+  # Макет composed.html рисует агент по прототипу + референсу клиента.
 
   "07c_composed":
     name: "Composed (draft)"
     lock: hard
-    require_approved: ["05_design", "07a_prototype", "07b_wireframe"]
+    require_approved: ["05_design", "07a_prototype"]
     hard_checks:
       - id: composed_html
         type: file_exists
