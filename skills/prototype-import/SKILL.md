@@ -28,3 +28,10 @@ python -m scripts.wiki.log --type skill_call --skill prototype-import --stage 07
 Полная schema — `scripts/validate-prototype.py`. Кратко:
 - `project`: slug, niche (services|b2c|local), source_file
 - `blocks[]`: position (unique int), type (hero|features|...), headline, subhead, cta, slots, items, mobile_notes
+
+## Канон этапа (A1)
+
+`prototype.md` — канон (дословно, без потерь). `prototype.yaml` — производный
+артефакт, обязательным не является. Fidelity-гейт работает на всех форматах
+источника: docx / pdf (текстовый слой) / md / картинки (OCR best-effort,
+при недоступности — явное предупреждение в fidelity-report.md).

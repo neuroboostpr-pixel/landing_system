@@ -71,8 +71,14 @@ def main() -> None:
         ln.strip() for ln in Path(args.source_text).read_text(encoding="utf-8").splitlines()
         if ln.strip()
     ]
-    proto = yaml.safe_load(Path(args.prototype).read_text(encoding="utf-8")) or {}
-    yaml_blob = _norm(" \n ".join(_yaml_strings(proto)))
+    proto_path = Path(args.prototype)
+    if proto_path.suffix.lower() in (".md", ".txt"):
+        # A1: канон этапа — prototype.md; сверяем по сырому тексту.
+        proto = {}
+        yaml_blob = _norm(proto_path.read_text(encoding="utf-8"))
+    else:
+        proto = yaml.safe_load(proto_path.read_text(encoding="utf-8")) or {}
+        yaml_blob = _norm(" \n ".join(_yaml_strings(proto)))
 
     # COMPLETENESS: какая доля содержательных строк источника есть в yaml.
     # «содержательные» — длиннее 12 знаков (короткие служебные пропускаем).

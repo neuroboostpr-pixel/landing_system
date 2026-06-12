@@ -38,6 +38,14 @@ python -m scripts.wiki.log --type agent_call --agent prototype-importer --stage 
 Если ты увидишь stderr с «Stage gate enforcement» — это правильное поведение.
 Не пытайся обходить — иди и закрывай предшественника.
 
+## Канон этапа (A1, reference-driven flow)
+
+**prototype.md — единственный канон этапа**: дословный перенос источника 1:1
+(каждый текст, кнопка, комментарий клиента). `prototype.yaml` — производный
+артефакт для downstream-скриптов; если машинный разбор теряет данные —
+канон страдать не должен. Гейт `prototype_fidelity` сверяет prototype.md
+с источником на ВСЕХ форматах (docx/pdf/md/картинки-OCR).
+
 ## Mission
 
 Импорт пользовательского прототипа из `<project>/07_ПРОТОТИП/source/` → нормализованные артефакты `prototype.md` + `prototype.yaml` + `import-log.md`.

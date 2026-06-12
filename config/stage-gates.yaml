@@ -253,9 +253,12 @@ stages:
         path: "{project}/07_ПРОТОТИП/source"
         required: true
         fix_hint: "Положи prototype.pdf или prototype.md в 07_ПРОТОТИП/source/"
-      - id: prototype_yaml_exists
+      # A1: канон этапа — prototype.md (дословный, без потерь).
+      # prototype.yaml — производный артефакт для downstream-скриптов,
+      # обязательным НЕ является (машинный разбор терял данные — спека §2.1).
+      - id: prototype_md_exists
         type: file_exists
-        path: "{project}/07_ПРОТОТИП/prototype.yaml"
+        path: "{project}/07_ПРОТОТИП/prototype.md"
         required: true
         fix_hint: "auto_fix: /landing-prototype"
       - id: prototype_fidelity

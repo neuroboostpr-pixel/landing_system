@@ -106,10 +106,10 @@ def test_image_source_explicit_warning_when_no_ocr(tmp_path):
     r = _run_gate(proj)
     assert r.returncode == 0, r.stdout + r.stderr
     combined = r.stdout + r.stderr
-    assert "OCR" in combined or "не проверена" in combined
+    assert "OCR" in combined or "не проверена" in combined.lower()
     report = proj / "07_ПРОТОТИП" / "fidelity-report.md"
     assert report.exists()
-    assert "не проверена" in report.read_text(encoding="utf-8")
+    assert "не проверена" in report.read_text(encoding="utf-8").lower()
 
 
 def test_missing_prototype_md_and_yaml_fails(tmp_path):
