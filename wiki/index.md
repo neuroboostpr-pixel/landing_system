@@ -2,7 +2,7 @@
 
 > Авто-сгенерированный индекс. Обновляется при `python -m scripts.wiki.compile --source-mode=system`.
 
-**Концептов всего:** 59
+**Концептов всего:** 89
 **Категории:** agent, command, rule, skill, stage
 
 **Известные ограничения:**
@@ -11,6 +11,8 @@
 
 ## 📋 Этапы pipeline
 
+- [[00-brif]] — 00 — Бриф проекта
+- [[01-kontekst]] — 01 — Контекст проекта
 - [[01a-analiz-nishi]] — 01a. Анализ ниши
 
 ## 🤖 Агенты
@@ -74,10 +76,38 @@
 - [[wp-cli-deployer]] — WP-CLI Deployer
 - [[wp-gutenberg-block-builder]] — WP Gutenberg Block Builder
 - [[wp-landing-config]] — WP Landing Config — mu-plugin для настройки лендинга
+- [[wp-multisite]] — WP Multisite — управление Multisite-сетью на Beget
+- [[wp-theme-assembler]] — Сборщик WordPress-темы
 
 ## ⚡ Команды
 
+- [[landing-brand]] — /landing-brand — Построить бренд-кит
+- [[landing-build]] — /landing-build — Сборка WordPress-темы
+- [[landing-clone]] — Клонирование лендинга
+- [[landing-compose]] — /landing-compose — Сборка composed.html
+- [[landing-content]] — Контент-адаптация прототипа (Stage 07)
+- [[landing-deploy]] — Деплой лендинга на Бегет (/landing-deploy)
+- [[landing-design]] — Генерация дизайн-системы (этап 05)
+- [[landing-final-check]] — Финальная проверка лендинга
+- [[landing-from-context]] — Создать лендинг из контекста агентства
+- [[landing-go]] — /landing-go — Главная команда оркестратора
+- [[landing-help]] — Справка по командам системы
+- [[landing-moodboard]] — Команда /landing-moodboard
+- [[landing-new]] — /landing-new — создать новый проект лендинга
 - [[landing-niche]] — Анализ ниши /landing-niche
+- [[landing-onboarding]] — Команда первичной настройки /landing-onboarding
+- [[landing-photos]] — /landing-photos — Конвейер клиентских фото (stage 07c)
+- [[landing-previews]] — /landing-previews — Превью на устройствах
+- [[landing-prototype]] — /landing-prototype — Импорт прототипа
+- [[landing-qa]] — /landing-qa — Визуальный QA лендинга
+- [[landing-references]] — Сбор визуальных референсов
+- [[landing-rollback]] — Откат лендинга к предыдущей версии
+- [[landing-setup]] — Инициализация системы (/landing-setup)
+- [[landing-stack]] — Планирование стека WordPress (этап 06)
+- [[landing-start]] — /landing-start — Онбординг-визард
+- [[landing-status]] — Статус системы и проекта
+- [[landing-style]] — /landing-style — CSS и block.php для этапа 08b
+- [[landing-visuals]] — /landing-visuals — Генерация визуальных ассетов
 
 ## 📐 Правила (стандарты качества)
 

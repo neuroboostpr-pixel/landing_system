@@ -23,6 +23,9 @@
 | 11 | `11_АНАЛИТИКА/` | Я.Метрика, цели, события, UTM |
 | 12 | `12_SEO/` | Ключи, мета, Schema.org, sitemap |
 
+> Канонический порядок этапов (включая подэтапы 03b/07a/07c–07f/08b) —
+> `landing-system/config/stages.yaml` (single source of truth).
+
 ## Главный агент
 
 `landing-orchestrator` ведёт через все 13 этапов. На каждом этапе:

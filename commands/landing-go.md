@@ -52,6 +52,10 @@ fi
 
 ## Этапы
 
+> **Полный канонический порядок этапов — `config/stages.yaml`** (single source
+> of truth, E1). Карта прогресса: `bash scripts/render-pipeline-map.sh
+> <project>/.landing-state.yaml`. Таблица ниже — смысловая группировка.
+
 | # | Stage | Кто делает | Чем |
 |---|---|---|---|
 | 07a_prototype | prototype | АВТО | `/landing-prototype` |

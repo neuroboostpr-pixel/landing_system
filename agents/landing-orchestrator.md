@@ -277,6 +277,8 @@ I do **not** approve a stage on the user's behalf. The user must explicitly appr
 
 | # | Stage | Что делаю | Команда / агент |
 |---|---|---|---|
+> Полный порядок этапов — `config/stages.yaml` (single source of truth, E1).
+
 | 07a | Прототип (parse) | Авто | `/landing-prototype` → prototype-importer |
 | 07a→ | Bridge: prototype → landing-structure.md | Авто | `scripts/derive-landing-structure.py` (для совместимости с wp-builder) |
 | 03 | Референсы | User-interactive | references-curator (auto-fix: defaults по нише если пусто) |
