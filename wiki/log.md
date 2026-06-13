@@ -15540,3 +15540,141 @@
 - error docs/standards/stage-08-spec-lint 2.md: SDK call failed: Claude Code returned an error result: success
 - error docs/standards/stage-agent-preamble 2.md: SDK call failed: Claude Code returned an error result: success
 - error docs/standards/wiki-audit-checklist 2.md: SDK call failed: Claude Code returned an error result: success
+
+## [2026-06-13] compile --source-mode=system
+- skipped agents/analytics-engineer.md
+- skipped agents/block-composer.md
+- skipped agents/brand-architect.md
+- skipped agents/client-assets-collector.md
+- skipped agents/design-system-generator.md
+- skipped agents/frontend-builder.md
+- skipped agents/icon-generator.md
+- skipped agents/infographic-builder.md
+- skipped agents/integrations-engineer.md
+- skipped agents/landing-onboarding-wizard.md
+- skipped agents/landing-orchestrator.md
+- skipped agents/lifecycle-keeper.md
+- skipped agents/migration-engineer 2.md
+- skipped agents/migration-engineer.md
+- skipped agents/moodboard-composer.md
+- skipped agents/niche-analyst.md
+- skipped agents/onboarding-guide.md
+- skipped agents/photo-classifier.md
+- skipped agents/photo-curator.md
+- skipped agents/photo-matcher.md
+- skipped agents/photo-preview-board.md
+- skipped agents/photo-stylist.md
+- skipped agents/prototype-importer.md
+- skipped agents/qa-auditor.md
+- skipped agents/references-curator.md
+- skipped agents/scene-director.md
+- skipped agents/seo-optimizer.md
+- skipped agents/stack-planner.md
+- skipped agents/style-extractor.md
+- skipped agents/system-setup.md
+- skipped agents/visual-curator.md
+- skipped agents/visual-strategist 2.md
+- skipped agents/visual-strategist.md
+- skipped agents/wp-builder.md
+- skipped agents/wp-deployer.md
+- skipped skills/block-composition/SKILL.md
+- skipped skills/brand-kit-build/SKILL.md
+- skipped skills/client-assets-collection/SKILL.md
+- skipped skills/design-tokens-generation/SKILL.md
+- skipped skills/gpt5-prompting-engine/SKILL.md
+- skipped skills/landing-from-context/SKILL.md
+- skipped skills/landing-onboarding/SKILL.md
+- skipped skills/landing-project-init/SKILL.md
+- skipped skills/landing-versioning-and-cloning/SKILL.md
+- skipped skills/moodboard-creation/SKILL.md
+- skipped skills/niche-analysis/SKILL.md
+- skipped skills/paralaximus-codex/SKILL.md
+- skipped skills/photo-curation/SKILL.md
+- skipped skills/photo-styling/SKILL.md
+- skipped skills/prototype-import/SKILL.md
+- skipped skills/references-collection/SKILL.md
+- skipped skills/seo-tech-audit/SKILL.md
+- skipped skills/style-decomposition/SKILL.md
+- skipped skills/visual-concept-generator/SKILL.md
+- skipped skills/visual-generation/SKILL.md
+- skipped skills/visual-qa/SKILL.md
+- skipped skills/wiki-routing-observability/SKILL.md
+- skipped skills/wp-cli-deployer/SKILL.md
+- skipped skills/wp-gutenberg-block-builder/SKILL.md
+- skipped skills/wp-landing-config/SKILL.md
+- skipped skills/wp-multisite/SKILL.md
+- skipped skills/wp-theme-assembler/SKILL.md
+- skipped commands/landing-brand.md
+- skipped commands/landing-build.md
+- skipped commands/landing-clone.md
+- skipped commands/landing-compose.md
+- skipped commands/landing-content.md
+- skipped commands/landing-deploy.md
+- skipped commands/landing-design.md
+- skipped commands/landing-final-check.md
+- skipped commands/landing-from-context.md
+- skipped commands/landing-go.md
+- skipped commands/landing-help.md
+- skipped commands/landing-moodboard.md
+- skipped commands/landing-new.md
+- skipped commands/landing-niche.md
+- skipped commands/landing-onboarding.md
+- skipped commands/landing-photos.md
+- skipped commands/landing-previews.md
+- skipped commands/landing-prototype.md
+- skipped commands/landing-qa.md
+- skipped commands/landing-references.md
+- skipped commands/landing-rollback.md
+- skipped commands/landing-setup.md
+- skipped commands/landing-stack.md
+- skipped commands/landing-start.md
+- skipped commands/landing-status.md
+- skipped commands/landing-style.md
+- skipped commands/landing-visuals.md
+- skipped template/00_БРИФ/README.md
+- skipped template/01_КОНТЕКСТ/README.md
+- skipped template/01a_АНАЛИЗ_НИШИ/README.md
+- skipped template/02_МАТЕРИАЛЫ_КЛИЕНТА/README.md
+- skipped template/03_РЕФЕРЕНСЫ/README.md
+- skipped template/03b_КОНЦЕПТ/README.md
+- skipped template/04_БРЕНД/README.md
+- skipped template/05_ДИЗАЙН-СИСТЕМА/README.md
+- skipped template/06_СТЕК/README.md
+- skipped template/07_КОНТЕНТ/README.md
+- skipped template/07_ПРОТОТИП/README.md
+- skipped template/07b_COMPOSED/README.md
+- skipped template/07c_PHOTOS/README.md
+- skipped template/07d_VISUALS/README.md
+- skipped template/08_КОД/README.md
+- skipped template/09_ДЕПЛОЙ/README.md
+- skipped template/10_QA/README.md
+- skipped template/11_АНАЛИТИКА/README.md
+- skipped template/12_SEO/README.md
+- skipped template/13_СЕГМЕНТЫ_ЦА/README.md
+- skipped template/memory/README.md
+- skipped template/wiki/README.md
+- skipped docs/standards/block-lifecycle 2.md
+- skipped docs/standards/block-lifecycle.md
+- skipped docs/standards/block-template-format 2.md
+- skipped docs/standards/block-template-format.md
+- skipped docs/standards/design-elements-rules 2.md
+- skipped docs/standards/design-elements-rules.md
+- skipped docs/standards/image-pipeline 2.md
+- skipped docs/standards/image-pipeline.md
+- skipped docs/standards/logo-icon-favicon.md
+- skipped docs/standards/premium-07b-checklist.md
+- skipped docs/standards/prototype-fidelity 2.md
+- skipped docs/standards/prototype-fidelity.md
+- skipped docs/standards/reference-driven-rules 2.md
+- skipped docs/standards/reference-driven-rules.md
+- skipped docs/standards/stage-07-content-correct-flow 2.md
+- skipped docs/standards/stage-07-content-correct-flow.md
+- skipped docs/standards/stage-08-spec-lint 2.md
+- skipped docs/standards/stage-08-spec-lint.md
+- skipped docs/standards/stage-agent-preamble 2.md
+- skipped docs/standards/stage-agent-preamble.md
+- skipped docs/standards/stage-execution-protocol.md
+- skipped docs/standards/wiki-audit-checklist 2.md
+- skipped docs/standards/wiki-audit-checklist.md
+- skipped block-library/README.md
+- error agents/content-writer.md: SDK call failed: Claude Code returned an error result: success

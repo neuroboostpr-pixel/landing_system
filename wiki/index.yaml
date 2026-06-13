@@ -1,10 +1,10 @@
 version: 1
-generated_at: '2026-06-13T05:09:43+00:00'
+generated_at: '2026-06-13T05:13:23+00:00'
 counts:
-  total: 109
+  total: 108
   by_type:
     stage: 19
-    agent: 31
+    agent: 30
     skill: 23
     catalog: 3
     command: 27
@@ -857,46 +857,6 @@ concepts:
   - landing-niche
   - landing-references
   - landing-go
-  confidence:
-    triggers: low
-    pre_reqs: low
-- slug: content-writer
-  type: agent
-  name: Контент-райтер
-  card: concepts/agents/content-writer.md
-  source: agents/content-writer.md
-  stage: '07'
-  tags:
-  - copywriting
-  - content
-  - seo
-  - stage-07
-  triggers:
-  - landing-content
-  inputs:
-  - 01a_АНАЛИЗ_НИШИ/positioning.md
-  - 01a_АНАЛИЗ_НИШИ/landing-structure.md
-  - 01a_АНАЛИЗ_НИШИ/market-profile.md
-  - 07_ПРОТОТИП/prototype.md
-  - 05_ДИЗАЙН-СИСТЕМА/DESIGN.md
-  - 06_СТЕК/design-stack.yaml
-  - 02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/
-  - 02_МАТЕРИАЛЫ_КЛИЕНТА/assets-manifest.yaml
-  outputs:
-  - 07_КОНТЕНТ/final-copy.md
-  - 07_КОНТЕНТ/seo-copy.md
-  gates:
-  - user-approve-final-copy
-  pre_reqs:
-  - landing-niche
-  - landing-prototype
-  - landing-design
-  - landing-stack
-  related:
-  - landing-content
-  - landing-orchestrator
-  - landing-wireframe
-  - landing-compose
   confidence:
     triggers: low
     pre_reqs: low

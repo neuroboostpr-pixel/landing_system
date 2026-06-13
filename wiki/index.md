@@ -2,7 +2,7 @@
 
 > Авто-сгенерированный индекс. Обновляется при `python -m scripts.wiki.compile --source-mode=system`.
 
-**Концептов всего:** 109
+**Концептов всего:** 108
 **Категории:** agent, catalog, command, rule, skill, stage, unknown
 
 **Известные ограничения:**
@@ -37,7 +37,6 @@
 - [[block-composer]] — Block Composer (Сборка composed.html)
 - [[brand-architect]] — Brand Architect
 - [[client-assets-collector]] — Сборщик клиентских материалов
-- [[content-writer]] — Контент-райтер
 - [[design-system-generator]] — Генератор дизайн-системы
 - [[frontend-builder]] — Frontend Builder — CSS и PHP шаблоны блоков
 - [[icon-generator]] — Генератор иконок

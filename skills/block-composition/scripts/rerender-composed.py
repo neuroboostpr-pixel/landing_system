@@ -20,6 +20,8 @@ Exit: 0 ок (даже если заменять нечего) · 2 нет compo
 from __future__ import annotations
 
 import argparse
+import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -28,16 +30,51 @@ import yaml
 from bs4 import BeautifulSoup
 
 
-def _photo_map(project: Path) -> dict[str, dict]:
+def _photo_map(project: Path, composed_dir: Path) -> dict[str, dict]:
+    """slot → {'desktop': <src>, 'mobile': <src|None>} с путями относительно
+    директории composed.html.
+
+    Источник истины — `07c_PHOTOS/processed/manifest.json`, который пишет
+    photo-pipeline.py: `{ "<slot>.jpg": {path, status, ...} }`. Если манифеста
+    нет — fallback на сырые назначения из selections.yaml (dict `slots`/`blocks`:
+    `{slot_name: photo_rel}`), чтобы хотя бы исходное фото подставилось.
+    """
+    out: dict[str, dict] = {}
+
+    def _rel(p: Path) -> str:
+        try:
+            return os.path.relpath(p, composed_dir)
+        except ValueError:
+            return str(p)
+
+    manifest = project / "07c_PHOTOS" / "processed" / "manifest.json"
+    if manifest.exists():
+        data = json.loads(manifest.read_text(encoding="utf-8")) or {}
+        for key, entry in data.items():
+            slot = key[:-4] if key.endswith(".jpg") else key
+            path = entry.get("path") if isinstance(entry, dict) else None
+            if not path:
+                continue
+            desktop = Path(path)
+            mobile = desktop.with_name(f"{desktop.stem}-mobile{desktop.suffix}")
+            out[slot] = {
+                "desktop": _rel(desktop),
+                "mobile": _rel(mobile) if mobile.exists() else None,
+            }
+        if out:
+            return out
+
     sel_path = project / "07c_PHOTOS" / "selections.yaml"
-    if not sel_path.exists():
-        return {}
-    data = yaml.safe_load(sel_path.read_text(encoding="utf-8")) or {}
-    out = {}
-    for item in data.get("selections", []) or []:
-        slot = item.get("slot") or item.get("slot_name")
-        if slot and item.get("processed", {}).get("desktop"):
-            out[slot] = item["processed"]
+    if sel_path.exists():
+        data = yaml.safe_load(sel_path.read_text(encoding="utf-8")) or {}
+        assignments = data.get("slots") or data.get("blocks") or {}
+        if isinstance(assignments, dict):
+            for slot, photo_rel in assignments.items():
+                if not photo_rel:
+                    continue
+                src = project / "07c_PHOTOS" / str(photo_rel)
+                out[slot] = {"desktop": _rel(src) if src.exists() else str(photo_rel),
+                             "mobile": None}
     return out
 
 
@@ -88,7 +125,7 @@ def main() -> int:
 
     # DOM-замены
     soup = BeautifulSoup(html, "html.parser")
-    photos = _photo_map(project)
+    photos = _photo_map(project, composed.parent)
     for el in soup.find_all(attrs={"data-slot": True}):
         name = el["data-slot"]
         # 1. фото

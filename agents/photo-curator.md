@@ -108,7 +108,7 @@ If either gate fails: exit 1 with the relevant Russian message.
 
 10. **HARD GATE.** Print: `Открой 07c_PHOTOS/photo-preview.html — проверь как фотки лягут в макет. После approve — composed.html будет перерендерен.` Wait for user.
 
-11. **Re-render composed.** Run `python3 skills/block-composition/scripts/rerender-composed.py --project <project>` — подставляет processed-фото из `07c_PHOTOS/selections.yaml` в data-slot'ы готового composed.html (машинная склейка из библиотеки в архиве).
+11. **Re-render composed.** Run `python3 skills/block-composition/scripts/rerender-composed.py --project <project>` — подставляет processed-фото из `07c_PHOTOS/processed/manifest.json` (его пишет `photo-pipeline.py`) в data-slot'ы готового composed.html. Если manifest ещё нет — fallback на сырые назначения из `selections.yaml`.
 
 12. Mark `STATE.yaml:stages.process` done. Print success summary in Russian.
 

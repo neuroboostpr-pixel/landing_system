@@ -25,12 +25,16 @@ def _proj(tmp_path: Path) -> Path:
     icons.mkdir(parents=True)
     (icons / "feature-1-icon.png").write_bytes(b"\x89PNG\r\n\x00")
     (icons / "feature-2-icon.png").write_bytes(b"\x89PNG\r\n\x00")
-    photos = proj / "07c_PHOTOS"
-    photos.mkdir()
-    (photos / "selections.yaml").write_text(
-        "selections:\n  - slot: hero-photo\n    processed:\n"
-        "      desktop: assets/photos/hero.jpg\n      mobile: assets/photos/hero-m.jpg\n",
-        encoding="utf-8")
+    # Реальный контракт photo-pipeline: processed/manifest.json + processed/*.jpg
+    processed = proj / "07c_PHOTOS" / "processed"
+    processed.mkdir(parents=True)
+    (processed / "hero-photo.jpg").write_bytes(b"\xff\xd8\xff\x00")
+    (processed / "hero-photo-mobile.jpg").write_bytes(b"\xff\xd8\xff\x00")
+    import json as _json
+    (processed / "manifest.json").write_text(_json.dumps({
+        "hero-photo.jpg": {"slot": "hero-photo", "status": "processed",
+                            "path": str(processed / "hero-photo.jpg")}
+    }), encoding="utf-8")
     return proj
 
 
@@ -47,7 +51,8 @@ def test_replaces_marker_dataslot_and_photo(tmp_path):
     assert "[SLOT:" not in out
     assert 'src="07d_VISUALS/icons/feature-1-icon.png"' in out
     assert "feature-2-icon.png" in out
-    assert "<picture>" in out and "hero-m.jpg" in out
+    assert "<picture>" in out and "hero-photo-mobile.jpg" in out
+    assert "hero-photo.jpg" in out
     assert (proj / "07b_COMPOSED" / "composed.html.bak").exists()
 
 
