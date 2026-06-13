@@ -1,10 +1,10 @@
 version: 1
-generated_at: '2026-06-13T05:17:26+00:00'
+generated_at: '2026-06-13T05:21:23+00:00'
 counts:
-  total: 108
+  total: 109
   by_type:
     stage: 19
-    agent: 30
+    agent: 31
     skill: 23
     catalog: 3
     command: 27
@@ -634,6 +634,44 @@ concepts:
   confidence:
     triggers: low
     gates: low
+- slug: block-composer
+  type: agent
+  name: Block Composer (Сборка composed.html)
+  card: concepts/agents/block-composer.md
+  source: agents/block-composer.md
+  stage: 07b
+  tags:
+  - compose
+  - html
+  - design-tokens
+  - prototype
+  - wireframe
+  - premium
+  triggers:
+  - landing-compose
+  inputs:
+  - 07_ПРОТОТИП/prototype.yaml
+  - 07a_WIREFRAME/selections.yaml
+  - 05_ДИЗАЙН-СИСТЕМА/tokens.json
+  - block-library/
+  outputs:
+  - 07b_COMPOSED/composed.html
+  - 07b_COMPOSED/composed-mobile.html
+  - 07b_COMPOSED/composed-explained.md
+  gates:
+  - verify-composed-premium
+  - content-preserved
+  pre_reqs:
+  - landing-wireframe
+  - landing-design
+  related:
+  - landing-compose
+  - landing-prototype
+  - landing-photos
+  - landing-visuals
+  - landing-build
+  confidence:
+    triggers: low
 - slug: block-composition
   type: skill
   name: Block Composition — сборка composed.html

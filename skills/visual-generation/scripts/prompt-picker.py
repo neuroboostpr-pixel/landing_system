@@ -89,7 +89,7 @@ def _opendesign_match(hint: str, opendesign_index: Path, category: Optional[str]
         if json_path.name.endswith(".attribution.txt"):
             continue
         try:
-            data = json.loads(json_path.read_text())
+            data = json.loads(json_path.read_text(encoding="utf-8"))
         except json.JSONDecodeError:
             continue
 

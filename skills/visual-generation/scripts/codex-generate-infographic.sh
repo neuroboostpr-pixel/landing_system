@@ -35,21 +35,21 @@ from pathlib import Path
 
 template_path, project_dir, chart_type, data_json, out_file = sys.argv[1:6]
 
-text = Path(template_path).read_text()
+text = Path(template_path).read_text(encoding="utf-8")
 m = re.search(r"## Prompt body\s*\n+```\s*\n(.+?)\n```", text, re.DOTALL)
 if not m:
     sys.exit("ERROR: infographic-prompt.md missing Prompt body section")
 body = m.group(1)
 
 tokens_path = Path(project_dir) / "05_ДИЗАЙН-СИСТЕМА" / "tokens.json"
-tokens = json.loads(tokens_path.read_text()) if tokens_path.exists() else {}
+tokens = json.loads(tokens_path.read_text(encoding="utf-8")) if tokens_path.exists() else {}
 brand_accent = tokens.get("colors", {}).get("accent", "#1e3a8a")
 visual_style = tokens.get("design", {}).get("visual_style", "Minimalism")
 
 niche = ""
 niche_path = Path(project_dir) / "01a_АНАЛИЗ_НИШИ" / "market-profile.md"
 if niche_path.exists():
-    nm = re.search(r"\*\*Niche:\*\*\s*(.+)$", niche_path.read_text(), re.MULTILINE)
+    nm = re.search(r"\*\*Niche:\*\*\s*(.+)$", niche_path.read_text(encoding="utf-8"), re.MULTILINE)
     if nm:
         niche = nm.group(1).strip()
 

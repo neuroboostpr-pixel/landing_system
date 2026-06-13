@@ -116,7 +116,7 @@ def run_intake(inbox_root: Path, intake_dir: Path) -> dict:
 
     report_path = intake_dir / "intake-report.yaml"
     if report_path.exists():
-        report = yaml.safe_load(report_path.read_text()) or {"photos": []}
+        report = yaml.safe_load(report_path.read_text(encoding="utf-8")) or {"photos": []}
         if "photos" not in report:
             report["photos"] = []
     else:

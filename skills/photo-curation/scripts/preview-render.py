@@ -81,7 +81,7 @@ def main():
     ap.add_argument("--selections", required=True)
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
-    sel = yaml.safe_load(Path(args.selections).read_text())
+    sel = yaml.safe_load(Path(args.selections).read_text(encoding="utf-8"))
     render_preview(sel, Path(args.out))
 
 

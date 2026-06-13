@@ -67,7 +67,7 @@ def main():
     if not path.exists():
         print(f"ERROR: file not found: {path}", file=sys.stderr)
         sys.exit(2)
-    data = yaml.safe_load(path.read_text())
+    data = yaml.safe_load(path.read_text(encoding="utf-8"))
     try:
         validate(data)
     except ValidationError as e:

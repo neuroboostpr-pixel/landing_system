@@ -50,7 +50,7 @@ PIPELINE_ORDER = [
 @functools.lru_cache(maxsize=1)
 def _load_path_map() -> dict[str, Any]:
     """Parse _stage_paths.yaml once per process (cached)."""
-    return yaml.safe_load(PATH_MAP_FILE.read_text())
+    return yaml.safe_load(PATH_MAP_FILE.read_text(encoding="utf-8"))
 
 
 def _find_project_root(file_path: Path) -> Path | None:
@@ -237,7 +237,7 @@ def _check_bash_targets(
             continue
 
         try:
-            state = yaml.safe_load((proj_root / ".landing-state.yaml").read_text()) or {}
+            state = yaml.safe_load((proj_root / ".landing-state.yaml").read_text(encoding="utf-8")) or {}
         except Exception:
             continue  # fail-open on unreadable state
 
@@ -312,7 +312,7 @@ def _main_inner() -> int:
     if stage is None or stage == "__outside_pipeline__":
         return 0
 
-    state = yaml.safe_load((proj_root / ".landing-state.yaml").read_text()) or {}
+    state = yaml.safe_load((proj_root / ".landing-state.yaml").read_text(encoding="utf-8")) or {}
     ok, reason = _stage_predecessors_approved(state, stage)
     if not ok:
         sys.stderr.write(f"❌ Stage gate enforcement: {reason}\n")

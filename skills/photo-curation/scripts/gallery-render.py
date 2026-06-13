@@ -58,7 +58,7 @@ def _slot_card(slot: dict, photos_by_id: Mapping[str, dict]) -> str:
 
 def render_board(catalog: dict, selections_draft: dict, out_path: Path) -> None:
     """Render photo-board.html from catalog + draft selections."""
-    template = TEMPLATE_PATH.read_text()
+    template = TEMPLATE_PATH.read_text(encoding="utf-8")
     photos = catalog.get("photos", []) or []
     slots = selections_draft.get("slots", []) or []
     photos_by_id = {p["id"]: p for p in photos}
@@ -84,8 +84,8 @@ def main():
     ap.add_argument("--draft", required=True)
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
-    catalog = yaml.safe_load(Path(args.catalog).read_text())
-    draft = yaml.safe_load(Path(args.draft).read_text())
+    catalog = yaml.safe_load(Path(args.catalog).read_text(encoding="utf-8"))
+    draft = yaml.safe_load(Path(args.draft).read_text(encoding="utf-8"))
     render_board(catalog, draft, Path(args.out))
 
 

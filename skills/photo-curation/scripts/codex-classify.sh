@@ -50,7 +50,7 @@ from pathlib import Path
 
 response_path, catalog_path_str, photo_id = sys.argv[1], sys.argv[2], sys.argv[3]
 catalog_path = Path(catalog_path_str)
-catalog = yaml.safe_load(catalog_path.read_text()) if catalog_path.exists() else {"photos": []}
+catalog = yaml.safe_load(catalog_path.read_text(encoding="utf-8")) if catalog_path.exists() else {"photos": []}
 if catalog is None:
     catalog = {"photos": []}
 catalog.setdefault("photos", [])

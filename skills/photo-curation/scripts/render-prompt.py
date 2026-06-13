@@ -42,28 +42,28 @@ def load_context(project_dir: Path) -> dict:
 
     tokens_path = project_dir / "05_ДИЗАЙН-СИСТЕМА" / "tokens.json"
     if tokens_path.exists():
-        tokens = json.loads(tokens_path.read_text())
+        tokens = json.loads(tokens_path.read_text(encoding="utf-8"))
         ctx["BRAND_PRIMARY"] = tokens.get("colors", {}).get("primary", "")
         ctx["BRAND_ACCENT"] = tokens.get("colors", {}).get("accent", "")
         ctx["VISUAL_STYLE"] = tokens.get("design", {}).get("visual_style", "")
 
     design_path = project_dir / "05_ДИЗАЙН-СИСТЕМА" / "DESIGN.md"
     if design_path.exists():
-        design = design_path.read_text()
+        design = design_path.read_text(encoding="utf-8")
         m = re.search(r"\*\*Mood:\*\*\s*(.+)$", design, re.MULTILINE)
         if m:
             ctx["BRAND_MOOD"] = m.group(1).strip()
 
     profile_path = project_dir / "01a_АНАЛИЗ_НИШИ" / "market-profile.md"
     if profile_path.exists():
-        profile = profile_path.read_text()
+        profile = profile_path.read_text(encoding="utf-8")
         m = re.search(r"\*\*Niche:\*\*\s*(.+)$", profile, re.MULTILINE)
         if m:
             ctx["NICHE"] = m.group(1).strip()
 
     pos_path = project_dir / "01a_АНАЛИЗ_НИШИ" / "positioning.md"
     if pos_path.exists():
-        pos = pos_path.read_text()
+        pos = pos_path.read_text(encoding="utf-8")
         m = re.search(r"\*\*Audience:\*\*\s*(.+)$", pos, re.MULTILINE)
         if m:
             ctx["AUDIENCE"] = m.group(1).strip()
@@ -105,7 +105,7 @@ def main():
     ap.add_argument("--strict", action="store_true")
     args = ap.parse_args()
 
-    template_text = Path(args.template).read_text()
+    template_text = Path(args.template).read_text(encoding="utf-8")
     ctx = load_context(Path(args.project))
     sys.stdout.write(render(template_text, ctx, strict=args.strict))
 
