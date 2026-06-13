@@ -1,6 +1,6 @@
 {
   "agents/analytics-engineer.md": "4b9de8202a26b8d1ac32f69be0778a647bba031895adb71deadb647d9982578e",
-  "agents/block-composer.md": "c1580c5e21fa40962b6d943dd669b05e40ea271a1258641b6b0fed711a8fc503",
+  "agents/block-composer.md": "56639551c7c17c3d08515cd033f66d7312bcc5b7e7b5dd7b6c23ebe6285724d1",
   "agents/brand-architect.md": "feb367c2c5fc90531d749baafd2b82bc5f5996ead73a666308a7a112ee10ab2a",
   "agents/client-assets-collector.md": "f86ae0481e30cfb4343117857bea4f892fd8a5ad44ec52e5809ab8f1a500b410",
   "agents/content-writer.md": "01140f929481aa9b5d0f8833a4b27e4898e84a5b9ae871a81d193baba4cd8e59",
@@ -79,7 +79,7 @@
   "docs/standards/prototype-fidelity 2.md": "3e5cb0118d3ac113fc001cd9bcf288d1c997a2329b17cb191db01c5149f51614",
   "docs/standards/prototype-fidelity.md": "3e5cb0118d3ac113fc001cd9bcf288d1c997a2329b17cb191db01c5149f51614",
   "docs/standards/reference-driven-rules 2.md": "3b6d979066aa960d9390efa14475e0a04ac8a42b0c449cd3d4d9fe4a3b0da19f",
-  "docs/standards/reference-driven-rules.md": "3b6d979066aa960d9390efa14475e0a04ac8a42b0c449cd3d4d9fe4a3b0da19f",
+  "docs/standards/reference-driven-rules.md": "d054987c1d9d4c454dea99b08205f622f84dce0523bdcd98c62669ddeca47293",
   "docs/standards/stage-07-content-correct-flow 2.md": "c82df51c1ede371a6b9d7eefd17476eb01ace4a2cf32579ef0794f3d2400efe3",
   "docs/standards/stage-07-content-correct-flow.md": "c82df51c1ede371a6b9d7eefd17476eb01ace4a2cf32579ef0794f3d2400efe3",
   "docs/standards/stage-08-spec-lint 2.md": "3751fd0980c25a102b54de72ad8a8bd840118c4097412f0ce773d22763ef8c50",

@@ -443,11 +443,14 @@ stages:
         script: "skills/wp-gutenberg-block-builder/scripts/lint-composed-vs-spec.py"
         args: ["--project", "{project}"]
         fix_hint: "Run: python3 skills/wp-gutenberg-block-builder/scripts/lint-composed-vs-spec.py --project {project} --fix"
-    soft_checks:
+      # Legal-блоки (cookie-banner/consent/legal-block) — авто-проверка скриптом.
+      # required:false → отсутствие предупреждает, но не блокирует сборку (B1/B2).
       - id: legal_blocks_present
-        title: "Cookie-banner, consent-init, legal-block присутствуют в теме"
-        command: "bash scripts/checks/check_legal_blocks.sh {project_dir}"
-        blocking: false
+        type: script
+        script: "scripts/checks/check_legal_blocks.sh"
+        args: ["{project}"]
+        required: false
+        fix_hint: "В теме нет legal-block.php / cookie-banner. См. docs (B1/B2): подключи юр-инфраструктуру 152-ФЗ."
 
   "08b_style":
     name: "Frontend style"

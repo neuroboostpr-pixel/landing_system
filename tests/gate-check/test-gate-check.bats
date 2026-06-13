@@ -10,10 +10,10 @@ setup() {
 }
 
 @test "fails when require_approved stages not approved" {
-    # 02_assets requires 00_brief + 01_context
-    run bash "$SCRIPT" --stage 02_assets --project "$PROJECT_DIR"
+    # 07_content requires 07a_prototype (не approved в свежем state)
+    run bash "$SCRIPT" --stage 07_content --project "$PROJECT_DIR" --auto
     [ "$status" -ne 0 ]
-    [[ "$output" == *"00_brief"* || "$output" == *"01_context"* ]]
+    [[ "$output" == *"07a_prototype"* ]]
 }
 
 @test "fails when hard_check file_exists fails" {
@@ -35,4 +35,12 @@ setup() {
     bash "$SCRIPT" --stage 00_brief --project "$PROJECT_DIR" --approve
     run bash "$REPO_ROOT/scripts/gate-state.sh" get "$PROJECT_DIR" "00_brief"
     [ "$output" = "approved" ]
+}
+
+@test "required:false hard_check does not block stage (07e visuals)" {
+    # 07d_VISUALS/icons отсутствует → visuals_generated (dir_has_files) падает,
+    # но он required:false → этап не блокируется (иконки опциональны/из Lucide).
+    run bash "$SCRIPT" --stage 07e_visuals --project "$PROJECT_DIR" --auto
+    [ "$status" -eq 0 ]
+    [[ "$output" == *"необязательная проверка"* ]]
 }

@@ -166,6 +166,12 @@ for i in $(if [ "$checks_count" -gt 0 ]; then seq 0 $((checks_count - 1)); fi); 
     check_id="$(yq -r ".stages.\"$stage\".hard_checks[$i].id" "$GATES_YAML")"
     check_type="$(yq -r ".stages.\"$stage\".hard_checks[$i].type" "$GATES_YAML")"
     fix_hint="$(yq -r ".stages.\"$stage\".hard_checks[$i].fix_hint // \"\"" "$GATES_YAML")"
+    # required: false → проверка информативная, её провал НЕ блокирует этап
+    # (по умолчанию true). NB: НЕ использовать `// true` — оператор `//` в yq/jq
+    # схлопывает и false, и null → false стал бы true. Читаем как есть; "null"
+    # (ключ отсутствует) трактуем как required=true ниже.
+    required="$(yq -r ".stages.\"$stage\".hard_checks[$i].required" "$GATES_YAML")"
+    prev_fail="$fail"
 
     case "$check_type" in
         file_exists)
@@ -282,6 +288,13 @@ for i in $(if [ "$checks_count" -gt 0 ]; then seq 0 $((checks_count - 1)); fi); 
             fail=1
             ;;
     esac
+
+    # Если упала ИМЕННО эта проверка (fail поднялся с 0) и она required:false —
+    # откатываем: предупреждаем, но этап не валим.
+    if [ "$fail" = "1" ] && [ "$prev_fail" = "0" ] && [ "$required" = "false" ]; then
+        echo "     ⚠️  необязательная проверка ($check_id) не пройдена — не блокирует этап"
+        fail=0
+    fi
 done
 
 if [ "$fail" = "1" ]; then

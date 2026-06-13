@@ -1,5 +1,5 @@
 version: 1
-generated_at: '2026-06-13T05:15:38+00:00'
+generated_at: '2026-06-13T05:17:26+00:00'
 counts:
   total: 108
   by_type:
@@ -634,44 +634,6 @@ concepts:
   confidence:
     triggers: low
     gates: low
-- slug: block-composer
-  type: agent
-  name: Block Composer (Сборка composed.html)
-  card: concepts/agents/block-composer.md
-  source: agents/block-composer.md
-  stage: 07b
-  tags:
-  - compose
-  - html
-  - design-tokens
-  - prototype
-  - wireframe
-  - premium
-  triggers:
-  - landing-compose
-  inputs:
-  - 07_ПРОТОТИП/prototype.yaml
-  - 07a_WIREFRAME/selections.yaml
-  - 05_ДИЗАЙН-СИСТЕМА/tokens.json
-  - block-library/
-  outputs:
-  - 07b_COMPOSED/composed.html
-  - 07b_COMPOSED/composed-mobile.html
-  - 07b_COMPOSED/composed-explained.md
-  gates:
-  - verify-composed-premium
-  - content-preserved
-  pre_reqs:
-  - landing-wireframe
-  - landing-design
-  related:
-  - landing-compose
-  - landing-prototype
-  - landing-photos
-  - landing-visuals
-  - landing-build
-  confidence:
-    triggers: low
 - slug: block-composition
   type: skill
   name: Block Composition — сборка composed.html
@@ -2250,6 +2212,48 @@ concepts:
   - prototype-importer
   confidence:
     gates: low
+- slug: photo-curator
+  type: agent
+  name: Куратор фотографий — оркестратор этапа 07c
+  card: concepts/agents/photo-curator.md
+  source: agents/photo-curator.md
+  stage: 07c
+  tags:
+  - photos
+  - pipeline
+  - orchestrator
+  - pr-b
+  - identity-safe
+  - codex
+  triggers:
+  - landing-photos
+  inputs:
+  - .landing-state.yaml
+  - 07c_PHOTOS/inbox/
+  - 07_ПРОТОТИП/prototype.yaml
+  - 07a_WIREFRAME/selections.yaml
+  - 02_МАТЕРИАЛЫ_КЛИЕНТА/photos/original/
+  outputs:
+  - 07c_PHOTOS/STATE.yaml
+  - 07c_PHOTOS/catalog.yaml
+  - 07c_PHOTOS/selections.draft.yaml
+  - 07c_PHOTOS/photo-board.html
+  - 07c_PHOTOS/photo-preview.html
+  - 07b_COMPOSED/composed.html
+  gates:
+  - photo-board-user-approve
+  - photo-preview-user-approve
+  pre_reqs:
+  - landing-design
+  - landing-wireframe
+  related:
+  - photo-classifier
+  - photo-matcher
+  - photo-preview-board
+  - landing-photos
+  - landing-compose
+  confidence:
+    stage: low
 - slug: photo-matcher
   type: agent
   name: Агент сопоставления фото со слотами
