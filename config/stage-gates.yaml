@@ -309,10 +309,11 @@ stages:
         fix_hint: "В composed.html прямые цвета вне :root. Замени на var(--…); легальные исключения — бренд-цвета мессенджеров и /* token-exempt */ (спека reference-driven §4.3)."
       # A2: поблочная сверка макета с прототипом (reference-driven-rules.md §4)
       - id: structure_check_md
-        type: file_exists
-        path: "{project}/07b_COMPOSED/structure-check.md"
+        type: script
+        script: "scripts/verify-structure-check.py"
+        args: ["{project}"]
         required: true
-        fix_hint: "block-composer обязан поблочно сверить composed.html с prototype.md (порядок/состав/выравнивание) и записать результат в 07b_COMPOSED/structure-check.md — см. docs/standards/reference-driven-rules.md"
+        fix_hint: "block-composer обязан поблочно сверить composed.html с prototype.md (порядок/состав/выравнивание) и записать результат + строку `STRUCTURE_MATCH: PASS` в 07b_COMPOSED/structure-check.md — см. docs/standards/reference-driven-rules.md"
     soft_checks:
       - id: structure_matches_prototype
         prompt: "structure-check.md: все блоки прототипа на месте, порядок/состав совпадают, выдуманных элементов нет? (yes / no)"

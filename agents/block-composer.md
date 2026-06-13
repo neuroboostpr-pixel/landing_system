@@ -85,7 +85,9 @@ python -m scripts.wiki.log --type agent_call --agent block-composer --stage 07b
 вид — из референса, структура — из прототипа 1:1, глубина — из правил коллажа.
 Раскладку референса не копировать без явного указания клиента; элементы не
 выдумывать. Перед закрытием этапа — поблочная сверка с прототипом, результат
-в `07b_COMPOSED/structure-check.md`.
+в `07b_COMPOSED/structure-check.md`; файл обязан заканчиваться строкой
+`STRUCTURE_MATCH: PASS` (иначе гейт 07c не закроется — см.
+docs/standards/reference-driven-rules.md §4).
 
 ## PREMIUM QUALITY BAR (обязательный стандарт)
 

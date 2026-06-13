@@ -37,6 +37,7 @@
 - [[block-composer]] — Block Composer (Сборка composed.html)
 - [[brand-architect]] — Brand Architect
 - [[client-assets-collector]] — Сборщик клиентских материалов
+- [[content-writer]] — Контент-райтер
 - [[design-system-generator]] — Генератор дизайн-системы
 - [[frontend-builder]] — Frontend Builder — CSS и PHP шаблоны блоков
 - [[icon-generator]] — Генератор иконок
@@ -48,7 +49,6 @@
 - [[niche-analyst]] — Аналитик ниши (Stage 01a)
 - [[onboarding-guide]] — Проводник по онбордингу
 - [[photo-classifier]] — Классификатор фото
-- [[photo-curator]] — Куратор фотографий — оркестратор этапа 07c
 - [[photo-matcher]] — Агент сопоставления фото со слотами
 - [[photo-preview-board]] — Photo Preview Board — обработка слотов и рендер превью
 - [[photo-stylist]] — Photo Stylist
