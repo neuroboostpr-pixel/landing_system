@@ -1,0 +1,55 @@
+# path_globs → stage_id.
+# Hook scripts/hooks/enforce_stage_gate.py читает этот файл и для каждого
+# Write/Edit определяет, к какой стадии относится файл.
+# Если стадия НЕ approved (или predecessor НЕ approved) — блокируем.
+#
+# Порядок важен: первый match выигрывает.
+
+mappings:
+  - glob: "{project}/00_БРИФ/**"
+    stage: "00_brief"
+  - glob: "{project}/01_КОНТЕКСТ/**"
+    stage: "01_context"
+  - glob: "{project}/01a_АНАЛИЗ_НИШИ/**"
+    stage: "01a_niche_analysis"
+  - glob: "{project}/02_МАТЕРИАЛЫ_КЛИЕНТА/**"
+    stage: "02_assets"
+  - glob: "{project}/03_РЕФЕРЕНСЫ/**"
+    stage: "03_references"
+  - glob: "{project}/04_БРЕНД/**"
+    stage: "04_brand"
+  - glob: "{project}/05_ДИЗАЙН-СИСТЕМА/**"
+    stage: "05_design"
+  - glob: "{project}/06_СТЕК/**"
+    stage: "06_stack"
+  - glob: "{project}/07_КОНТЕНТ/**"
+    stage: "07_content"
+  - glob: "{project}/07_ПРОТОТИП/**"
+    stage: "07a_prototype"
+  - glob: "{project}/07b_COMPOSED/**"
+    stage: "07c_composed"
+  - glob: "{project}/07c_PHOTOS/**"
+    stage: "07d_photos"
+  - glob: "{project}/07d_VISUALS/**"
+    stage: "07e_visuals"
+  - glob: "{project}/07f_COMPOSED_FINAL/**"
+    stage: "07f_composed_final"
+  - glob: "{project}/08_КОД/**"
+    stage: "08_build"
+  - glob: "{project}/09_ДЕПЛОЙ/**"
+    stage: "09_deploy"
+  - glob: "{project}/10_QA/**"
+    stage: "10_qa"
+  - glob: "{project}/11_АНАЛИТИКА/**"
+    stage: "11_analytics"
+  - glob: "{project}/12_SEO/**"
+    stage: "12_seo"
+
+# Какие пути ВСЕГДА разрешены (вне зависимости от стадии)
+always_allowed:
+  - "{project}/.landing-state.yaml"   # state-файл может писаться любым этапом
+  - "{project}/wiki/**"                # вики автокомпиляция
+  - "{project}/CLAUDE.md"
+  - "{project}/README.md"
+  - "{project}/.env"
+  - "{project}/deploy.sh"

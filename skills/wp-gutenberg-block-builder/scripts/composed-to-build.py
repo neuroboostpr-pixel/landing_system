@@ -43,6 +43,16 @@ def _text(el) -> str:
     return re.sub(r"\s+", " ", el.get_text(" ", strip=True)).strip()
 
 
+def _normalize_img(src: str) -> str:
+    """Локальную картинку → `assets/photos/<basename>` (контракт asset-pipeline /
+    deploy-фиксера, спека §4.2 «картинки битые / плейсхолдеры не заменились»).
+    Внешние URL (http/https/data:) — как есть."""
+    if not src or src.startswith(("http://", "https://", "data:", "//")):
+        return src
+    base = src.rsplit("/", 1)[-1]
+    return f"assets/photos/{base}" if base else src
+
+
 def _extract_root_tokens(html: str) -> dict[str, str]:
     tokens: dict[str, str] = {}
     for m in re.finditer(r":root\s*\{(.*?)\}", html, re.DOTALL):
@@ -67,29 +77,45 @@ def _extract_fonts(soup: BeautifulSoup, html: str) -> dict:
 
 
 def _extract_images(soup: BeautifulSoup, html: str) -> list[str]:
-    imgs = [img.get("src") for img in soup.find_all("img") if img.get("src")]
+    imgs = [_normalize_img(img.get("src")) for img in soup.find_all("img") if img.get("src")]
     css_urls = re.findall(r"url\(['\"]?([^'\")]+)['\"]?\)", html)
-    css_imgs = [u for u in css_urls if not u.startswith("data:") and "font" not in u]
+    css_imgs = [_normalize_img(u) for u in css_urls
+                if not u.startswith("data:") and "font" not in u]
     seen, out = set(), []
     for u in imgs + css_imgs:
-        if u not in seen:
+        if u and u not in seen:
             seen.add(u)
             out.append(u)
     return out
 
 
+def _card_signature(el) -> tuple:
+    """Структурная сигнатура потенциальной карточки (группировка без классов)."""
+    return (el.name, bool(el.find(HEADINGS)), bool(el.find("p")), bool(el.find("img")))
+
+
 def _find_card_grid(section):
-    """Найти повторяющиеся карточки: контейнер, у которого ≥2 детей с одинаковым классом."""
+    """Найти повторяющиеся карточки в секции.
+
+    Сначала по одинаковому непустому классу (тогда у карт есть CSS-селектор),
+    иначе — по одинаковой структурной сигнатуре. Голые `<div>`-карточки без
+    класса раньше терялись и секция схлопывалась в один блок (спека §4.2
+    «карточки не рендерятся / внутренние блоки-карточки теряются»)."""
     for container in section.find_all(True):
         children = [c for c in container.find_all(True, recursive=False)]
         if len(children) < 2:
             continue
-        classes = Counter(
-            tuple(c.get("class") or []) for c in children
-        )
+        # 1) по классу — карта получает реальный селектор
+        classes = Counter(tuple(c.get("class") or []) for c in children)
         (cls, count), = [classes.most_common(1)[0]]
         if count >= 2 and cls:
             cards = [c for c in children if tuple(c.get("class") or []) == cls]
+            return container, cards
+        # 2) по структуре — карта = есть заголовок или абзац
+        sigs = Counter(_card_signature(c) for c in children)
+        (sig, scount), = [sigs.most_common(1)[0]]
+        if scount >= 2 and (sig[1] or sig[2]):
+            cards = [c for c in children if _card_signature(c) == sig]
             return container, cards
     return None, None
 
@@ -110,7 +136,7 @@ def _card_fields(card) -> dict[str, str]:
             fields["cta_url"] = a["href"]
     img = card.find("img")
     if img and img.get("src"):
-        fields["image"] = img["src"]
+        fields["image"] = _normalize_img(img["src"])
     return fields
 
 
@@ -140,7 +166,7 @@ def _section_controls(section, exclude_card_container=None) -> list[dict]:
     img = next((el for el in section.find_all("img") if outside_cards(el)), None)
     if img is not None and img.get("src"):
         controls.append({"id": "c_image", "name": "image", "type": "image",
-                         "label": "Изображение", "default": img["src"]})
+                         "label": "Изображение", "default": _normalize_img(img["src"])})
     return controls
 
 
@@ -170,9 +196,12 @@ def _build_blocks(soup: BeautifulSoup) -> list[dict]:
         if cards:
             block["type"] = "section-card"
             block["probe_kind"] = "card-collection"
+            # section_grid_class обязателен (block_spec.validate). Если у контейнера
+            # карточек нет класса — синтезируем `<slug>-grid`: generate-lzb-templates
+            # навесит его на грид-обёртку, generate-css-patches пропишет под него
+            # сеточные правила (внутренне согласовано, не зависит от классов макета).
             grid_cls = (container.get("class") or [""])[0]
-            if grid_cls:
-                block["section_grid_class"] = grid_cls
+            block["section_grid_class"] = grid_cls or f"{slug}-grid"
             block["controls"] = _section_controls(section, exclude_card_container=container)
             first_fields = _card_fields(cards[0])
             card_controls = []

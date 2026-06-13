@@ -30,7 +30,25 @@ PHOTO_MAP = {
     "favicon.ico": "12",
     "logo.svg": "13",
     "decoration.webp": "14",
+    "Team_Photo.jpg": "15",
 }
+
+
+def test_placeholder_filename_with_underscores():
+    """Имя файла с подчёркиваниями (Team_Photo.jpg) — раньше regex [^_]+ не
+    матчил, плейсхолдер оставался в page-content (BLOCKER §4.2 «битые картинки»)."""
+    html = '"section_image": __IMAGE_ATTACHMENT_ID__assets/photos/Team_Photo.jpg__'
+    out, stats = transform(html, PHOTO_MAP)
+    assert "15" in out and "__IMAGE_ATTACHMENT_ID__" not in out
+    assert stats["placeholders"] == 1
+
+
+def test_placeholder_basename_only():
+    """Плейсхолдер без assets/<sub>/ префикса — матчится по basename."""
+    html = '"hero_bg": __IMAGE_ATTACHMENT_ID__hero.jpg__'
+    out, stats = transform(html, PHOTO_MAP)
+    assert "10" in out and "__IMAGE_ATTACHMENT_ID__" not in out
+    assert stats["placeholders"] == 1
 
 
 def test_placeholder_in_photos_subfolder():

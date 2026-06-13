@@ -1,0 +1,72 @@
+{
+  "generated_at": "2026-05-23",
+  "source": "phase-0 reclassification with python imports + php dynamic includes + dynamic globs (scripts/wiki/config.py SOURCES list)",
+  "status": "complete",
+  "processed_count": 309,
+  "total": 309,
+  "summary": {
+    "dynamic_active": 273,
+    "expected-doc-only": 29,
+    "manual-documented": 3,
+    "genuine-orphan": 2,
+    "genuine-doc-only": 2
+  },
+  "false_positive_sources": [
+    {
+      "source": "scripts/wiki/config.py SOURCES",
+      "count_approx": 184,
+      "evidence": "lines 30, 32, 33, 51-54 — globs for block-library/*/*/meta.yaml, _patterns/*/meta.yaml, scripts/*.doc.md, scripts/**/*.doc.md"
+    },
+    {
+      "source": "Python sibling-relative imports",
+      "count_approx": 18,
+      "evidence": "run-audit.py: from lib.fix_actions, from runners.html_checks; lint-composed-vs-spec.py: from composed_inspector, spec_inspector; scripts/wiki/compile.py: from scripts.wiki import system_compiler"
+    },
+    {
+      "source": "PHP dynamic include via variable",
+      "count_approx": 7,
+      "evidence": "cookie-banner/render.php:20 include $tpl (4 layouts); seo-audit/admin-network.php:228 include $tab_file (3 tabs)"
+    },
+    {
+      "source": ".claude/settings.json hooks",
+      "count_approx": 3,
+      "evidence": "lines 77, 88, 99 — scripts/wiki/hooks/{session_start,session_end,pre_compact}.py"
+    },
+    {
+      "source": "config/stage-gates.yaml verify scripts",
+      "count_approx": 10,
+      "evidence": "references scripts/lib/check-block-registration.sh, scripts/lib/stage_08_helper.py, verify-*.sh files"
+    }
+  ],
+  "most_suspicious_genuine_orphans": [
+    {
+      "path": "scripts/refresh-catalog.py",
+      "evidence": "0 callers in agents/commands/config/scripts; appears superseded by scripts/import-blocks/update-catalog.py (cf. phase-0-suspicious-duplicates.md row 70)"
+    },
+    {
+      "path": "scripts/migrate-blocks-to-wireframe-format.py",
+      "evidence": "0 callers anywhere; one-shot migration likely no longer needed"
+    }
+  ],
+  "genuine_doc_only": [
+    {
+      "path": "docs/standards/stage-agent-preamble.md",
+      "evidence": "not referenced in agents/, not in CLAUDE.md actively"
+    },
+    {
+      "path": "docs/standards/stage-08-spec-lint.md",
+      "evidence": "only in CLAUDE.md (mentioned as standard), not pulled by any agent"
+    }
+  ],
+  "manual_documented": [
+    {
+      "path": "scripts/install-git-hooks.sh",
+      "evidence": "mentioned in CLAUDE.md as manual command for fresh-machine setup"
+    },
+    {
+      "path": "skills/wp-gutenberg-block-builder/scripts/lint-composed-vs-spec.py",
+      "evidence": "mentioned in CLAUDE.md (docs/standards/stage-08-spec-lint.md path) as manual verification command"
+    }
+  ],
+  "note_on_files_list": "Full per-file objects (309 entries) were NOT written because Write permission was denied during agent execution. The summary above is complete and load-bearing for Phase 1; the per-file detail can be regenerated on demand if needed by re-running the reclassification."
+}

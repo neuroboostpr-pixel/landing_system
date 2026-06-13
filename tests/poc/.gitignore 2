@@ -1,0 +1,7 @@
+# Local-only — contains Beget credentials, SSH key paths
+lib/env.sh
+
+# Test logs and runtime data
+logs/
+gauntlet.log
+*.output

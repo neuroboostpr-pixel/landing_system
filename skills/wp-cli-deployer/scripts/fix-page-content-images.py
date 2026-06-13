@@ -85,12 +85,16 @@ def transform(html: str, photo_map: dict[str, str]) -> tuple[str, dict[str, int]
 
     ext_alt = "|".join(ASSET_FILE_EXTS)
 
-    # 1. __IMAGE_ATTACHMENT_ID__assets/<sub>/<fname>__ → <id>
-    #    Covers assets/photos/, assets/icons/, assets/logos/, etc.
+    # 1. __IMAGE_ATTACHMENT_ID__<path>/<fname>__ → <id>
+    #    Префикс (assets/photos/, ../images/, или вовсе без него) и подчёркивания
+    #    в имени файла допускаются: ключ photo_map — basename (см. §4.2 «битые
+    #    картинки / плейсхолдеры не заменились»).
     def repl_placeholder(m):
-        return photo_map.get(m.group(1), "0")
+        raw = m.group(1)
+        base = raw.rsplit("/", 1)[-1]
+        return photo_map.get(base, photo_map.get(raw, "0"))
     html, stats["placeholders"] = re.subn(
-        rf'__IMAGE_ATTACHMENT_ID__assets/[^/]+/([^_]+\.(?:{ext_alt}))__',
+        rf'__IMAGE_ATTACHMENT_ID__(.+?\.(?:{ext_alt}))__',
         repl_placeholder, html
     )
 
