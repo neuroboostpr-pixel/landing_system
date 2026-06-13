@@ -48,3 +48,9 @@ audit/
 
 # Claude Code scheduler lock (local)
 .claude/scheduled_tasks.lock
+
+# iCloud/merge-дубликаты «<name> 2.ext» — байт-в-байт копии оригиналов.
+# Не индексируем; pytest их тоже игнорит (pytest.ini --ignore-glob).
+# Удалить локально: find . -name "* 2.*" -not -path "./.git/*"  (только untracked).
+* 2.*
+*\ 2.*

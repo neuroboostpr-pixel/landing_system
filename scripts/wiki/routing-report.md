@@ -16,15 +16,15 @@
 | Категория | Событий | ~Токенов | Можно на вики? |
 |-----------|---------|----------|----------------|
 | wiki_query | 0 | -0 | -- |
-| session_start | -- | +19 048 | нет |
+| session_start | -- | +21 993 | нет |
 | [CLAUDE.md](../CLAUDE.md) | -- | ~10 231 | нет (fixed) |
 
 ## Запуски (сводка)
 
 | run_id | Дата | Агентов/этапов | Через вики | Утечки |
 |--------|------|----------------|------------|--------|
-| unknown | 2026-06-12 20:59 | 30 | 0 | 30 |
-| test-sess | 2026-06-12 20:28 | 8 | 0 | 8 |
+| unknown | 2026-06-12 20:59 | 64 | 0 | 64 |
+| test-sess | 2026-06-12 20:28 | 10 | 0 | 10 |
 
 ## Запуски vs вики (7д)
 
@@ -68,3 +68,39 @@
 | 21:37 | test-sess | stage | 04_brand | 04_brand | ❌ | ⚠️ |
 | 21:41 | test-sess | stage | 04_brand | 04_brand | ❌ | ⚠️ |
 | 21:44 | test-sess | stage | 04_brand | 04_brand | ❌ | ⚠️ |
+| 07:56 | test-sess | stage | 04_brand | 04_brand | ❌ | ⚠️ |
+| 07:56 | test-sess | stage | 04_brand | 04_brand | ❌ | ⚠️ |
+| 07:56 | unknown | stage | 02_assets | 02_assets | ❌ | ⚠️ |
+| 07:56 | unknown | stage | 01a_niche_analysis | 01a_niche_analysis | ❌ | ⚠️ |
+| 07:56 | unknown | stage | 01a_niche_analysis | 01a_niche_analysis | ❌ | ⚠️ |
+| 08:19 | unknown | stage | 02_assets | 02_assets | ❌ | ⚠️ |
+| 08:19 | unknown | stage | 02_assets | 02_assets | ❌ | ⚠️ |
+| 08:19 | unknown | stage | 00_brief | 00_brief | ❌ | ⚠️ |
+| 08:19 | unknown | stage | 00_brief | 00_brief | ❌ | ⚠️ |
+| 08:19 | unknown | stage | 07e_visuals | 07e_visuals | ❌ | ⚠️ |
+| 08:19 | unknown | stage | 07e_visuals | 07e_visuals | ❌ | ⚠️ |
+| 08:19 | unknown | stage | 02_assets | 02_assets | ❌ | ⚠️ |
+| 08:19 | unknown | stage | 02_assets | 02_assets | ❌ | ⚠️ |
+| 08:19 | unknown | stage | 00_brief | 00_brief | ❌ | ⚠️ |
+| 08:19 | unknown | stage | 00_brief | 00_brief | ❌ | ⚠️ |
+| 08:19 | unknown | stage | 07e_visuals | 07e_visuals | ❌ | ⚠️ |
+| 08:20 | unknown | stage | 02_assets | 02_assets | ❌ | ⚠️ |
+| 08:20 | unknown | stage | 02_assets | 02_assets | ❌ | ⚠️ |
+| 08:20 | unknown | stage | 00_brief | 00_brief | ❌ | ⚠️ |
+| 08:20 | unknown | stage | 00_brief | 00_brief | ❌ | ⚠️ |
+| 08:20 | unknown | stage | 07e_visuals | 07e_visuals | ❌ | ⚠️ |
+| 08:20 | unknown | stage | 02_assets | 02_assets | ❌ | ⚠️ |
+| 08:20 | unknown | stage | 07_content | 07_content | ❌ | ⚠️ |
+| 08:20 | unknown | stage | 02_assets | 02_assets | ❌ | ⚠️ |
+| 08:20 | unknown | stage | 00_brief | 00_brief | ❌ | ⚠️ |
+| 08:20 | unknown | stage | 00_brief | 00_brief | ❌ | ⚠️ |
+| 08:20 | unknown | stage | 07e_visuals | 07e_visuals | ❌ | ⚠️ |
+| 08:20 | unknown | stage | test_stage | test_stage | ❌ | ⚠️ |
+| 08:20 | unknown | stage | test_stage | test_stage | ❌ | ⚠️ |
+| 08:20 | unknown | stage | test_stage | test_stage | ❌ | ⚠️ |
+| 08:20 | unknown | stage | test_stage | test_stage | ❌ | ⚠️ |
+| 08:20 | unknown | stage | test_stage | test_stage | ❌ | ⚠️ |
+| 08:20 | unknown | stage | test_stage | test_stage | ❌ | ⚠️ |
+| 08:20 | unknown | stage | 08_build | 08_build | ❌ | ⚠️ |
+| 08:20 | unknown | stage | 06_stack | 06_stack | ❌ | ⚠️ |
+| 08:20 | unknown | stage | 06_stack | 06_stack | ❌ | ⚠️ |
