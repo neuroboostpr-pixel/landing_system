@@ -55,71 +55,69 @@ See: [`docs/standards/stage-07-content-correct-flow.md`](../standards/stage-07-c
 import yaml
 import os
 
-# ✅ ACTUALLY OPEN AND READ THE FILE:
-prototype_yaml_path = f"{project}/07_ПРОТОТИП/prototype.yaml"
-if not os.path.exists(prototype_yaml_path):
-    FAIL("prototype.yaml not found. Run /landing-prototype first")
-
-with open(prototype_yaml_path) as f:
-    prototype = yaml.safe_load(f)  # ← ACTUALLY READ & PARSE
-
+# ✅ A1: КАНОН ЭТАПА — prototype.md. prototype.yaml ОПЦИОНАЛЕН (машинный разбор
+#    теряет данные, спека §2.1). Обязателен именно .md.
 prototype_md_path = f"{project}/07_ПРОТОТИП/prototype.md"
-prototype_md_content = ""
-if os.path.exists(prototype_md_path):
-    with open(prototype_md_path) as f:
-        prototype_md_content = f.read()  # ← FALLBACK SOURCE
+if not os.path.exists(prototype_md_path):
+    FAIL("prototype.md not found. Run /landing-prototype first")
+
+with open(prototype_md_path, encoding="utf-8") as f:
+    prototype_md_content = f.read()  # ← PRIMARY SOURCE (канон)
+
+# yaml — только опциональное структурное подспорье, если есть и без потерь.
+prototype = {}
+prototype_yaml_path = f"{project}/07_ПРОТОТИП/prototype.yaml"
+if os.path.exists(prototype_yaml_path):
+    with open(prototype_yaml_path, encoding="utf-8") as f:
+        prototype = yaml.safe_load(f) or {}
+
+# Нормализуем список блоков: новая схема md-to-yaml = 'blocks', legacy = 'sections'.
+# Если yaml нет — извлекаем блоки из prototype.md (заголовки '## Block N: type').
+proto_blocks = prototype.get("blocks")
+if proto_blocks is None and prototype.get("sections"):
+    proto_blocks = [b for s in prototype["sections"] for b in s.get("blocks", [])]
+if not proto_blocks:
+    import re as _re
+    proto_blocks = [{"label": m.strip(), "type": "section"}
+                    for m in _re.findall(r"^##\s+(.+)$", prototype_md_content, _re.MULTILINE)]
 ```
 
 ### Step 2: EXTRACT CONTENT (FROM ACTUAL FILES)
 
 **❌ WRONG:** "The Skills You Need" (invented)  
-**✅ CORRECT:** Extract ONLY from `prototype['sections'][...]['blocks'][...]['text']`
+**✅ CORRECT:** Extract ONLY from `prototype.md` (канон) / нормализованного `proto_blocks`
 
 ```python
 extracted_sections = []
 
-for section in prototype['sections']:
-    section_name = section['name']  # ← FROM YAML
-    section_blocks = []
-    
-    for block in section['blocks']:
-        block_label = block.get('label', block.get('type', 'Unknown'))
-        
-        # TRY TO EXTRACT TEXT IN THIS ORDER:
-        block_text = None
-        
-        if 'text' in block:
-            block_text = block['text']  # ← PRIMARY
-        elif 'title' in block:
-            block_text = block['title']
-        elif 'description' in block:
-            block_text = block['description']
-        elif 'label' in block:
-            block_text = block['label']
-        
-        # FALLBACK: If no text in YAML, search prototype.md
-        if not block_text and prototype_md_content:
-            # GREP for this block in markdown:
-            import re
-            pattern = rf"### {re.escape(block_label)}.*?(?=###|##|$)"
-            match = re.search(pattern, prototype_md_content, re.DOTALL)
-            if match:
-                block_text = match.group(0)
-        
-        # If STILL no text found, WARN (don't invent):
-        if not block_text:
-            warnings.append(f"No text found for block '{block_label}' in section '{section_name}'")
-            block_text = f"[TEXT NOT FOUND IN PROTOTYPE]"  # ← MARK AS MISSING, DON'T INVENT
-        
-        section_blocks.append({
-            'label': block_label,
-            'text': block_text
-        })
-    
-    extracted_sections.append({
-        'name': section_name,
-        'blocks': section_blocks
-    })
+# Итерируем нормализованный proto_blocks (из yaml-blocks/sections или из md-заголовков).
+for block in proto_blocks:
+    block_label = block.get('label', block.get('type', 'Unknown'))
+
+    # TRY TO EXTRACT TEXT IN THIS ORDER (yaml-поля, если yaml был):
+    block_text = None
+    if 'text' in block:
+        block_text = block['text']          # ← PRIMARY
+    elif 'title' in block:
+        block_text = block['title']
+    elif 'description' in block:
+        block_text = block['description']
+
+    # КАНОН: если в yaml текста нет (или yaml вовсе не было) — берём из prototype.md
+    # по заголовку блока. prototype.md — источник истины (A1).
+    if not block_text and prototype_md_content:
+        import re
+        pattern = rf"#{{2,3}}\s+.*{re.escape(block_label)}.*?(?=\n#{{2,3}}\s|$)"
+        match = re.search(pattern, prototype_md_content, re.DOTALL)
+        if match:
+            block_text = match.group(0)
+
+    # If STILL no text found, WARN (don't invent):
+    if not block_text:
+        warnings.append(f"No text found for block '{block_label}'")
+        block_text = "[TEXT NOT FOUND IN PROTOTYPE]"  # ← MARK AS MISSING, DON'T INVENT
+
+    extracted_sections.append({'label': block_label, 'text': block_text})
 ```
 
 ### Step 3: WRITE content.md (ONLY REAL TEXT)

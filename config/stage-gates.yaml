@@ -222,9 +222,10 @@ stages:
       - id: content_sections_match
         type: script
         script: "skills/landing-system/scripts/validate-content-extraction.py"
-        args: ["{project}/07_КОНТЕНТ/content.md", "{project}/07_ПРОТОТИП/prototype.yaml", "--check-sections-match"]
+        # A1: канон — prototype.md (yaml опционален; валидатор сам fallback'ит на md).
+        args: ["{project}/07_КОНТЕНТ/content.md", "{project}/07_ПРОТОТИП/prototype.md", "--check-sections-match"]
         required: true
-        fix_hint: "Кол-во секций в prototype.yaml не совпадает с content.md. Проверь extraction-log.md"
+        fix_hint: "Кол-во секций в prototype.md не совпадает с content.md. Проверь extraction-log.md"
 
       - id: extraction_log_exists
         type: file_exists

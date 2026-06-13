@@ -39,37 +39,65 @@ def check_no_lorem(content_file):
     return True
 
 
+def _count_md_blocks(md_text):
+    """Кол-во блоков в prototype.md — по заголовкам '## ' (## Block N: type)."""
+    return len(re.findall(r"^##\s", md_text, re.MULTILINE))
+
+
+def _count_prototype_units(prototype_file):
+    """Кол-во блоков прототипа. A1: канон — prototype.md; yaml опционален.
+
+    - .md   → считаем '## ' заголовки.
+    - .yaml → ключ 'blocks' (схема md-to-yaml) или 'sections' (legacy).
+              Если yaml отсутствует — fallback на sibling prototype.md.
+    Возвращает (count, source_label) или (None, reason) при ошибке.
+    """
+    path = prototype_file
+    if path.endswith(".md"):
+        if not os.path.exists(path):
+            return None, f"{path} not found"
+        with open(path, 'r', encoding='utf-8') as f:
+            return _count_md_blocks(f.read()), "prototype.md"
+
+    if not os.path.exists(path):
+        md_sibling = os.path.join(os.path.dirname(path), "prototype.md")
+        if os.path.exists(md_sibling):
+            with open(md_sibling, 'r', encoding='utf-8') as f:
+                return _count_md_blocks(f.read()), "prototype.md (fallback)"
+        return None, f"нет ни {path}, ни prototype.md"
+
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            proto = yaml.safe_load(f) or {}
+    except yaml.YAMLError as e:
+        return None, f"Cannot parse {path}: {e}"
+    units = proto.get('blocks')
+    if units is None:
+        units = proto.get('sections', [])
+    return len(units), "prototype.yaml"
+
+
 def check_sections_match(content_file, prototype_file):
-    """Check that number of sections match between content.md and prototype.yaml."""
+    """Кол-во секций content.md == кол-во блоков прототипа (A1-aware)."""
     if not os.path.exists(content_file):
         print(f"FAIL: {content_file} not found")
         return False
 
-    if not os.path.exists(prototype_file):
-        print(f"FAIL: {prototype_file} not found")
-        return False
-
-    # Count H2 headers in content.md (## Section Name)
     with open(content_file, 'r', encoding='utf-8') as f:
         content_text = f.read()
     content_sections = len(re.findall(r"^##\s", content_text, re.MULTILINE))
 
-    # Count sections in prototype.yaml
-    try:
-        with open(prototype_file, 'r', encoding='utf-8') as f:
-            proto = yaml.safe_load(f)
-    except yaml.YAMLError as e:
-        print(f"FAIL: Cannot parse {prototype_file}: {e}")
+    proto_count, source = _count_prototype_units(prototype_file)
+    if proto_count is None:
+        print(f"FAIL: {source}")
         return False
 
-    yaml_sections = len(proto.get('sections', []))
-
-    if content_sections == yaml_sections:
-        print(f"PASS: {content_sections} sections match")
+    if content_sections == proto_count:
+        print(f"PASS: {content_sections} sections match ({source})")
         return True
-    else:
-        print(f"FAIL: content.md has {content_sections} sections, prototype.yaml has {yaml_sections}")
-        return False
+    print(f"FAIL: content.md has {content_sections} sections, "
+          f"{source} has {proto_count}")
+    return False
 
 
 def check_log_passed(log_file):
