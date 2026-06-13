@@ -3,49 +3,23 @@ type: script
 name: render-pipeline-map
 language: bash
 sources: ["scripts/render-pipeline-map.sh"]
-updated: 2026-05-19
+updated: 2026-05-18
 ---
 
 # render-pipeline-map.sh
 
-Рендерит Mermaid-карту pipeline проекта-лендинга из его `.landing-state.yaml`.
-Используется `landing-orchestrator` в Шаге 1 обязательного протокола
-([`docs/standards/stage-execution-protocol.md`](../docs/standards/stage-execution-protocol.md)).
+render-pipeline-map.sh — Render Mermaid pipeline map from .landing-state.yaml.
 
-## Что делает
+Inspired by Tencent Agent-Memory paper finding #2 (Mermaid task map reduces
+agent drift in 30+ step workflows). We use it as a visible carto for both
+agent and user — single source of truth for "where are we, what's left".
 
-1. Читает статусы всех этапов pipeline из `.landing-state.yaml`
-2. Рисует Mermaid flowchart с цветами по статусам:
-   - ✓ Зелёный — `approved`
-   - ▶ Оранжевый — `in_progress`
-   - ✗ Красный — `failed`
-   - ○ Серый — `locked`
-   - — Пунктир — `n/a`
-3. Печатает сводку (счётчики статусов)
-4. Указывает следующий шаг
+Usage:
+render-pipeline-map.sh <project>/.landing-state.yaml [--write-wiki]
 
-## Usage
-
-```bash
-# Только в stdout (для показа в чате)
-bash scripts/render-pipeline-map.sh <project>/.landing-state.yaml
-
-# В stdout И в wiki проекта одновременно
-bash scripts/render-pipeline-map.sh <project>/.landing-state.yaml --write-wiki
-```
-
-С флагом `--write-wiki` карта дополнительно сохраняется в
-`<project>/wiki/pipeline-map.md` (auto-generated, не редактировать руками).
-
-## Когда вызывается
-
-- Шаг 1 Stage Execution Protocol — orchestrator в начале каждого прогона
-- Hook после `gate-check.sh --approve` (опционально, для обновления вики)
-- Любая ad-hoc проверка «где сейчас проект»
-
-## Зависимости
-
-- `yq` (mikefarah/yq) — `brew install yq`
+Default: outputs Mermaid + status to stdout.
+With --write-wiki: ALSO writes the same output to <project>/wiki/pipeline-map.md
+so the latest map becomes part of the project's wiki index.
 
 ## Источник
 

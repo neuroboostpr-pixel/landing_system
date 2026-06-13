@@ -11,15 +11,15 @@ description: Stage 07c (PR-B) photo pipeline — intake, AI-classification via c
 python -m scripts.wiki.log --type skill_call --skill photo-curation --stage 07c
 ```
 
-Конвейер обработки клиентских фоток для лендинга. Запускается командой `/landing-photos` после approved `05_design` + `07a_wireframe`.
+Конвейер обработки клиентских фоток для лендинга. Запускается командой `/landing-photos` после approved `05_design` + `07c_composed` (готовый composed.html со слотами).
 
 ## Этапы
 
 1. **intake** — `scripts/intake.py` копирует фотки из `07c_PHOTOS/inbox/` подпапок в `07c_PHOTOS/intake/`. HEIC→JPEG, EXIF strip, dedupe, folder-tag.
 2. **classify** — `scripts/codex-classify.sh` тегирует фотки из `_свалка/` через codex CLI (фото в подпапках уже имеют folder-tag).
-3. **match** — `scripts/codex-match.sh` ранжирует кандидатов на каждый photo-слот из prototype.yaml + wireframe selections.
+3. **match** — `scripts/codex-match.sh` ранжирует кандидатов на каждый photo-слот (`data-slot` в composed.html / prototype.md).
 4. **approve** — пользователь открывает `photo-board.html` (рендерит `scripts/gallery-render.py`), правит выбор, скачивает `selections.yaml`.
-5. **process** — `scripts/style.py` (расширенный) обрезает под `slots[].ratio` + `mobile_ratio`. Для AI-fallback слотов — `scripts/codex-generate-fallback.sh`.
+5. **process** — `scripts/photo-pipeline.py` (через `scripts/codex-process-photo.sh`) обрезает под `slots[].ratio`, пишет `07c_PHOTOS/processed/` + `manifest.json`. Для AI-fallback слотов — `scripts/codex-generate-fallback.sh`.
 6. **preview** — `scripts/preview-render.py` собирает `photo-preview.html` для финального approve.
 7. **compose re-render** — `inject-content.py` (PR-A) читает `07c_PHOTOS/selections.yaml` и подставляет реальные фотки в `composed.html`.
 

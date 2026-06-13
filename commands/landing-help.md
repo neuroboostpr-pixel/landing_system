@@ -1,46 +1,127 @@
 ---
-description: Show all landing-system slash commands and their usage
+description: Показать список всех команд landing-system со кратким описанием.
 allowed-tools: Read
 ---
 
 # /landing-help
 
-Print a summary of all available landing-system commands.
+Выводит список из 32 команд landing-system, сгруппированных по сценариям использования.
 
-## Output
+## Что вывести
 
-Print exactly:
+Напечатай в чат ровно следующий блок (без обрамляющих ```, прямо как markdown).
 
 ```
-Landing System — Commands
+Landing System — все команды
 
-ENTRY POINTS:
-  /landing-new <slug>              — new project from scratch
-  /landing-from-context <slug>     — new project from parent agency folder
-  /landing-clone <src> --as <new>  — A/B copy of existing landing (Phase 5)
+═══════════════════════════════════════════════════════════════════
+ГЛАВНЫЕ ТОЧКИ ВХОДА
+═══════════════════════════════════════════════════════════════════
+  /landing-start           — Welcome-wizard для нового пользователя.
+                             Объясняет систему, создаёт папку проекта,
+                             проводит через 4 шага материалов.
+  /landing-go              — Главный двигатель конвейера. Читает
+                             .landing-state.yaml, диспатчит следующий
+                             этап через landing-orchestrator.
+  /landing-help            — Этот список команд.
+  /landing-status          — Состояние системы и активных проектов.
 
-PER-STAGE (Phase 2+):
-  /landing-references              — stage 03
-  /landing-moodboard               — stage 03
-  /landing-brand                   — stage 04
-  /landing-design                  — stage 05
-  /landing-stack                   — stage 06
-  /landing-content                 — stage 07
-  /landing-build                   — stage 08
+═══════════════════════════════════════════════════════════════════
+ПЕРВАЯ НАСТРОЙКА (запустить один раз на машине)
+═══════════════════════════════════════════════════════════════════
+  /landing-setup           — Системная инициализация: preflight-проверки,
+                             настройка .env, config/system.yaml.
+  /landing-onboarding      — Wizard первого запуска: проверяет
+                             зависимости и API-ключи.
 
-OPERATIONS (Phase 5):
-  /landing-deploy                  — deploy to Бегет
-  /landing-redeploy                — redeploy after edits
-  /landing-rollback <version>      — rollback
-  /landing-qa                      — run QA audit
+═══════════════════════════════════════════════════════════════════
+СОЗДАТЬ ПРОЕКТ ЛЕНДИНГА
+═══════════════════════════════════════════════════════════════════
+  /landing-new <slug>           — Новый проект с нуля.
+  /landing-from-context <slug>  — Новый проект из родительской папки
+                                  агентства (snapshot контекста).
 
-SERVICE:
-  /landing-status                  — current state
-  /landing-help                    — this help
-  /landing-update                  — update master system (Phase 6+ — еще не реализован)
+═══════════════════════════════════════════════════════════════════
+ЭТАПЫ КОНВЕЙЕРА (вызываются автоматом через /landing-go,
+                 либо вручную по отдельности)
+═══════════════════════════════════════════════════════════════════
+  /landing-niche           — 01a. Анализ ниши: бриф → niche-analysis,
+                                  competitors, positioning.
+  /landing-references      — 03.  Собрать визуальные референсы.
+  /landing-moodboard       — 03.  Сгенерировать moodboard из референсов.
+  /landing-brand           — 04.  Собрать brand-kit (после style-extract).
+  /landing-design          — 05.  Сгенерировать design-system.
+  /landing-stack           — 06.  Запланировать стек плагинов WordPress.
+  /landing-prototype       — 07.  Импорт прототипа (PDF/MD) из
+                                  07_ПРОТОТИП/source/.
+  /landing-content         — 07.  Адаптировать текст прототипа в
+                                  Gutenberg-блоки.
+  /landing-compose         — 07b. Собрать composed.html с design-tokens
+                                  и текстами прототипа.
+  /landing-photos          — 07c. Обработка клиентских фото:
+                                  AI-классификация + matching к слотам.
+  /landing-visuals         — 07d. Генерация иконок и инфографики через
+                                  codex image_gen.
+  /landing-build           — 08.  Сгенерировать WordPress-тему, Lazy
+                                  Blocks, integrations, analytics, SEO.
+  /landing-style           — 08b. Перевести wireframes из DESIGN.md в
+                                  per-block CSS и block.php-шаблоны.
+  /landing-deploy          — 09.  Деплой на Бегет (SSH+rsync+wp-cli).
+  /landing-qa              — 10.  Visual QA: Playwright скриншоты +
+                                  codex-анализ, опциональный auto-fix.
+  /landing-audit           — 11.  SEO/Tech аудит — 43 HTTP-проверки
+                                  (HTML/Network/Schema), hard-gate этапа.
 
-Phase 1 of MVP is in progress. Most stage commands return "not yet implemented".
-See docs/superpowers/plans/ for roadmap.
+═══════════════════════════════════════════════════════════════════
+СЕГМЕНТЫ ЦА (multisite)
+═══════════════════════════════════════════════════════════════════
+  /landing-segment <slug>       — Создать новый сегмент ЦА: поддомен +
+                                  WordPress-subsite + skeleton-папка.
+                                  Single-site автоматом мигрирует в
+                                  multisite при первом сегменте.
+  /landing-clone <src> <dst>    — Byte-by-byte копия сегмента в новый
+                                  сегмент внутри multisite-сети.
+
+═══════════════════════════════════════════════════════════════════
+АДМИНКА КЛИЕНТА (mu-plugin)
+═══════════════════════════════════════════════════════════════════
+  /landing-admin-install        — Установить mu-plugin landing-config:
+                                  таблицы wp_<bid>_landing_leads,
+                                  REST endpoint /wp-json/landing/v1/lead.
+                                  Авто-активируется (mu-plugins).
+
+═══════════════════════════════════════════════════════════════════
+ЭКСПЛУАТАЦИЯ ПОСЛЕ ДЕПЛОЯ
+═══════════════════════════════════════════════════════════════════
+  /landing-rollback             — Откатить лендинг на предыдущую версию.
+  /landing-final-check          — Финальная авто-проверка перед деплоем
+                                  (bundle всех verify-скриптов).
+  /landing-previews             — Сгенерировать desktop/mobile/responsive
+                                  HTML-обёртки для composed.html.
+
+═══════════════════════════════════════════════════════════════════
+УТИЛИТЫ
+═══════════════════════════════════════════════════════════════════
+
+═══════════════════════════════════════════════════════════════════
+ПОРЯДОК КОМАНД ЭТАПА 07 (важно — имена похожие, легко перепутать)
+═══════════════════════════════════════════════════════════════════
+  prototype → content → wireframe → compose → photos ⇆ visuals
+  ──────────  ───────   ─────────   ───────   ──────────────────
+  PDF →       Текст     2-3         Финальный   Реальные фото +
+  prototype.  в блоки.  варианта    composed.   AI-иконки в
+  md/yaml.              блоков.     html.       composed.
+
+═══════════════════════════════════════════════════════════════════
+ДЛЯ НОВИЧКА — ТИПИЧНЫЙ СЦЕНАРИЙ
+═══════════════════════════════════════════════════════════════════
+  1. /landing-setup            (один раз на машине)
+  2. /landing-start            (создать первый проект, положить
+                                прототип в 07_ПРОТОТИП/source/)
+  3. /landing-go               (всё остальное — само)
+
+  Если /landing-go упал на каком-то этапе — можно запустить ту
+  конкретную команду этапа отдельно, починить, продолжить /landing-go.
 ```
 
-End of help.
+Не добавляй ничего после блока. Не комментируй. Просто выведи список и закончи.

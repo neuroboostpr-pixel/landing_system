@@ -70,7 +70,7 @@ Orchestrate the full photo pipeline (stage 07c) for the landing project. Identit
 
 Before running anything, verify:
 - `<project>/.landing-state.yaml:stages.05_design.status == approved` — иначе exit с русским сообщением «Сначала утверди дизайн-систему».
-- `<project>/.landing-state.yaml:stages.07a_wireframe.status == approved` (или эквивалент — wireframe selections.yaml exists) — иначе exit «Сначала выбери варианты блоков в wireframe.html».
+- `<project>/.landing-state.yaml:stages.07c_composed.status == approved` (или эквивалент — `07b_COMPOSED/composed.html` существует) — иначе exit «Сначала собери и утверди composed.html (этап 07c)».
 
 If either gate fails: exit 1 with the relevant Russian message.
 

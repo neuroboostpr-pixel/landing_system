@@ -8,18 +8,14 @@ updated: 2026-05-18
 
 # session_start.py
 
-SessionStart hook: печатает wiki/index + memory index в stdout.
+SessionStart hook: печатает компактный wiki hint (~50 tokens).
 
-Claude Code инжектит вывод как system context.
+Old behavior (deprecated): инжектил полный wiki/index.md (~3K tokens) на каждой
+сессии. New behavior: печатает только пойнтер на wiki/index.yaml + команду
+запроса. Orchestrator решает САМ, когда подгружать карточки.
 
-Логика:
-1. cwd = текущая папка сессии (передаётся через stdin JSON).
-2. Если cwd внутри landing-system/ → читать landing-system/wiki/index.md.
-3. Если cwd похож на ~/Lendings/<slug>/ → читать <slug>/wiki/index.md + последний daily log.
-4. Если оба пути актуальны (например работаем в landing-system над проектом)
-   → инжектить ОБА индекса.
-
-Скрипт быстрый (<1 сек), без сетевых вызовов.
+Сохраняет проектный wiki (~/Lendings/<slug>/wiki/index.md) и recent memory —
+они контекстные и компактные.
 
 ## Источник
 

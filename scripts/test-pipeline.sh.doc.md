@@ -11,7 +11,7 @@ updated: 2026-05-18
 test-pipeline.sh — Complete PR-A test for ANY project in one command.
 
 Creates a new project, drops a prototype, runs the full pipeline:
-prototype.md/pdf  →  prototype.yaml  →  wireframe.html  →  composed.html
+prototype.md/pdf  →  prototype.yaml  →  composed.html (рисует агент)
 
 Usage:
 bash scripts/test-pipeline.sh <slug> <path-to-prototype>

@@ -10,7 +10,7 @@ updated: 2026-05-18
 
 scripts/migrate-add-wiki.sh
 Добавляет wiki/ и memory/ к существующему проекту-лендингу.
-Использование: bash scripts/migrate-add-wiki.sh ~/Lendings/<slug>
+Использование: bash scripts/migrate-add-wiki.sh <путь к проекту>
 
 ## Источник
 

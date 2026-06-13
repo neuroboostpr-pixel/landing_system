@@ -8,16 +8,13 @@ updated: 2026-05-18
 
 # verify-composed-premium.sh
 
-verify-composed-premium.sh — проверяет, что composed.html соответствует
-premium-07b-checklist.md (обязательные интерактивные фичи).
+verify-composed-premium.sh — тонкая обёртка над verify_composed_premium.py (v2).
+Имя сохранено: его вызывают гейты 07c_composed / 07f_composed_final.
 
 Usage: verify-composed-premium.sh <path-to-composed.html>
-Exit codes:
-0 — все premium-фичи найдены
-1 — одна или несколько фич отсутствуют
-2 — файл не найден
+Exit: 0 PASS · 1 FAIL · 2 файл не найден.
 
-Полный стандарт: docs/standards/premium-07b-checklist.md
+Стандарт: docs/standards/premium-07b-checklist.md (v2, reference-driven).
 
 ## Источник
 

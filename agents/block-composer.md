@@ -123,19 +123,13 @@ bash "$LANDING_SYSTEM_ROOT/scripts/verify-composed-premium.sh" \
 Полный список требований (типографика, mobile, semantics, кнопки, hero-элементы):
 см. `docs/standards/premium-07b-checklist.md` — там 13 разделов + анти-паттерны.
 
-## Pre-flight: стиль hint из ui-ux-pro-max
+## Pre-flight: стиль из референса клиента
 
-Перед compose прочитай `meta.yaml` для каждого выбранного блока из `selections.yaml`.
-Если в meta.yaml есть поле `recommended_styles_ru`, применить соответствующий стиль
-через `design-tokens` (CSS-переменные):
-
-```bash
-# Пример: если meta.yaml содержит recommended_styles_ru: ["Brutalism"]
-# → ищи в ~/.claude/skills/ui-ux-pro-max/data/styles.csv строку Brutalism
-# → используй CSS/Technical Keywords для дополнения design-tokens
-```
-
-Это необязательно блокирующий шаг — если styles.csv не доступен, пропустить.
+Вид (цвета/шрифты/характер) берётся из дизайн-системы проекта
+(`05_ДИЗАЙН-СИСТЕМА/tokens.json` + `DESIGN.md`), которая выведена из референса
+клиента. Готовых блоков и их `meta.yaml`/`selections.yaml` в reference-driven
+flow НЕТ — агент рисует макет сам. Опционально: цветовые наборы из
+`block-library/_styles/` можно примерить как альтернативную палитру (§2.5).
 
 ## Workflow
 
@@ -176,7 +170,10 @@ bash "$LANDING_SYSTEM_ROOT/scripts/verify-composed-premium.sh" \
 
 ## CRITICAL
 
-Если `selections.yaml` ссылается на блок, которого нет в `catalog.yaml` — STOP, сообщи пользователю.
+Структуру (какие блоки, порядок, тексты, кнопки) берём из `prototype.md` 1:1.
+Если в макете появился элемент, которого нет в прототипе (лишняя плашка, бейдж,
+блок) — это галлюцинация структуры = дефект. Убери до закрытия этапа; поблочная
+сверка в `structure-check.md` должна дать `STRUCTURE_MATCH: PASS`.
 
 ## Tools
 

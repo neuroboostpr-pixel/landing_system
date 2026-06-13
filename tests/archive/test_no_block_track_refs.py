@@ -31,6 +31,9 @@ FORBIDDEN = [
     "ux-composer",
     "07b_wireframe",
     "07a_WIREFRAME",
+    "07a_wireframe",        # lowercase-форма тоже запрещена (была дырой в guard)
+    "wireframe.html",
+    "wireframe selections",
 ]
 
 EXTS = {".md", ".py", ".sh", ".yaml", ".yml", ".html", ".json", ".bats"}
