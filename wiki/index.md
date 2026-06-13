@@ -2,7 +2,7 @@
 
 > Авто-сгенерированный индекс. Обновляется при `python -m scripts.wiki.compile --source-mode=system`.
 
-**Концептов всего:** 108
+**Концептов всего:** 109
 **Категории:** agent, catalog, command, rule, skill, stage, unknown
 
 **Известные ограничения:**
@@ -34,6 +34,7 @@
 ## 🤖 Агенты
 
 - [[analytics-engineer]] — Инженер аналитики
+- [[block-composer]] — Block Composer (Сборка composed.html)
 - [[brand-architect]] — Brand Architect
 - [[client-assets-collector]] — Сборщик клиентских материалов
 - [[content-writer]] — Контент-райтер
