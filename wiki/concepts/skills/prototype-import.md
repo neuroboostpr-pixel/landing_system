@@ -2,24 +2,16 @@
 slug: prototype-import
 type: skill
 name: "Импорт прототипа"
-stage: "07"
-tags: [prototype, import, pdf, yaml, parse, ocr]
+stage: "07a"
+tags: [prototype, import, parsing, stage-07a]
 triggers: [landing-prototype]
-inputs:
-  - 07_ПРОТОТИП/source/prototype.pdf
-  - 07_ПРОТОТИП/source/prototype.md
-outputs:
-  - 07_ПРОТОТИП/prototype.md
-  - 07_ПРОТОТИП/prototype.yaml
-  - 07_ПРОТОТИП/import-log.md
-pre_reqs: [client-assets-collection]
-related:
-  - prototype-importer
-  - landing-orchestrator
-  - block-composer
-  - ux-composer
+inputs: ["07_ПРОТОТИП/source/"]
+outputs: ["07_ПРОТОТИП/prototype.md", "07_ПРОТОТИП/prototype.yaml", "07_ПРОТОТИП/import-log.md"]
+gates: []
+pre_reqs: [02-materialy-klienta]
+related: [prototype-importer, landing-prototype, 07-prototip, landing-compose, landing-content]
 sources: ["skills/prototype-import/SKILL.md"]
-updated: 2026-05-26
+updated: 2026-06-19
 confidence: {pre_reqs: low}
 ---
 
@@ -27,29 +19,30 @@ confidence: {pre_reqs: low}
 
 ## Что делает
 
-Скилл принимает пользовательский прототип в формате PDF или Markdown и преобразует его в два машино-читаемых артефакта: `prototype.md` (читаемый документ со структурой блоков) и `prototype.yaml` (формализованная схема для дальнейшего использования оркестратором и блок-композером). Параллельно ведётся `import-log.md` с протоколом разбора. При PDF-входе используется OCR-fallback через `anthropic-skills:pdf`.
+Скилл принимает пользовательский прототип в формате PDF или MD, извлекает из него текст (при необходимости — через OCR), нормализует структуру и записывает два артефакта: человекочитаемый `prototype.md` (канонический источник истины) и машинный `prototype.yaml` (для последующих этапов pipeline). Также формирует `import-log.md` с отчётом о точности парсинга. Скилл используется агентом `prototype-importer`, который вызывается командой `/landing-prototype`.
 
 ## Когда вызывается
 
-Запускается командой `/landing-prototype`, когда пользователь положил файл прототипа (`prototype.pdf` или `prototype.md`) в папку `<project>/07_ПРОТОТИП/source/`. Вызывается агентом `prototype-importer`. Является обязательным первым шагом цепочки PR-A (Прототип → Wireframe → Compose).
+Запускается командой `/landing-prototype` на этапе 07a, когда пользователь положил файл прототипа (`prototype.pdf` или `prototype.md`) в папку `<project>/07_ПРОТОТИП/source/`. Без этого файла скилл не запускается.
 
 ## Вход → выход
 
-**Вход:** файл прототипа в `07_ПРОТОТИП/source/` — либо `prototype.pdf` (текст или сканированный), либо структурированный `prototype.md`.
+**Вход:** файл прототипа в `07_ПРОТОТИП/source/` (PDF с текстовым слоем, DOCX или структурированный MD); утверждённые материалы клиента (этап 02).
 
-**Выход:** нормализованные `prototype.md` и `prototype.yaml` в папке `07_ПРОТОТИП/`, а также `import-log.md` с деталями импорта. YAML валидируется скриптом `validate-prototype.py` на соответствие схеме (поля `project`, `blocks[]` с позицией, типом, заголовком, CTA, слотами).
+**Выход:** `prototype.md` — дословный канон структуры без потерь; `prototype.yaml` — машинная схема с полями `project` (slug, niche, source_file) и `blocks[]` (position, type, headline, subhead, cta, slots, items, mobile_notes); `import-log.md` — отчёт о потерях при парсинге (fidelity-gate не пропустит этап при потере >10% текста или выдуманной структуре).
 
 ## Failure modes
 
-- PDF содержит только растровые изображения без текстового слоя — OCR-fallback может дать низкое качество или пропустить мелкий текст.
-- Пользовательский MD не следует ожидаемой структуре — `md-to-yaml.py` не сможет однозначно распарсить секции; import-log покажет предупреждения, но схема окажется неполной.
-- Дублирующиеся значения `position` у блоков — `validate-prototype.py` упадёт с ошибкой схемы; прогон не завершится до ручного исправления.
-- Файл не найден в `source/` — скилл сразу завершается с ошибкой, не создавая выходных файлов.
-- Неизвестный тип блока (не входит в перечень `hero|features|...`) — валидатор отклонит YAML; нужно либо скорректировать исходник, либо расширить enum в схеме.
+- **Плохой PDF без текстового слоя** — OCR даёт неточный результат; скилл выдаёт предупреждение в `fidelity-report.md`, этап остаётся незакрытым.
+- **Потеря >10% текста прототипа** — hard-gate `prototype_fidelity` блокирует переход к следующему этапу.
+- **Выдуманная структура блоков** — если агент добавил блоки, которых нет в источнике, fidelity-gate тоже упадёт.
+- **Файл не в `source/`** — скилл не находит входной файл и завершается с ошибкой до старта парсинга.
+- **Некорректная YAML-схема** — `validate-prototype.py` вернёт ошибку; `prototype.yaml` не будет создан, pipeline остановится.
 
 ## Related
 
-- [[prototype-importer]] — агент, который непосредственно исполняет скрипты этого скилла
-- [[landing-orchestrator]] — вызывает prototype-import как первый этап в PR-D workflow
-- [[block-composer]] — потребляет `prototype.yaml` на этапе 07b для сборки wireframe и composed.html
-- [[ux-composer]] — использует нормализованные данные блоков при генерации wireframe-вариантов
+- [[prototype-importer]] — агент, который вызывает этот скилл и оркеструет шаги парсинга
+- [[landing-prototype]] — slash-команда, запускающая прогон скилла
+- [[07-prototip]] — этап pipeline, частью которого является этот импорт
+- [[landing-compose]] — следующий этап: использует `prototype.yaml` для построения composed.html
+- [[landing-content]] — также потребляет `prototype.yaml` для извлечения реальных текстов

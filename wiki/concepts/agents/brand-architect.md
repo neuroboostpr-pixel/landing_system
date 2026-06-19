@@ -1,9 +1,9 @@
 ---
 slug: brand-architect
 type: agent
-name: "Brand Architect — синтез бренд-кита"
+name: "Архитектор бренд-кита"
 stage: "04"
-tags: [brand, typography, palette, provenance, legal]
+tags: [brand, design-tokens, provenance, legal, typography]
 triggers: [landing-brand]
 inputs:
   - 03b_КОНЦЕПТ/visual-concept.yaml
@@ -20,48 +20,55 @@ outputs:
   - 04_БРЕНД/brand-kit.md
   - 04_БРЕНД/brand-kit.html
   - 04_БРЕНД/extracted/legal.yaml
-gates: [brand_kit_html_approved]
+gates: [brand_kit_approved]
 pre_reqs: [03-referensy, 01a-analiz-nishi, style-extractor]
-related: [brand-kit-build, landing-brand, style-extractor, design-system-generator, 04-brend, stage-execution-protocol, niche-analyst]
+related:
+  - brand-kit-build
+  - style-extractor
+  - landing-brand
+  - 04-brend
+  - 05-dizayn-sistema
+  - design-system-generator
+  - stage-execution-protocol
 sources: ["agents/brand-architect.md"]
 updated: 2026-06-19
 confidence: {gates: low}
 ---
 
-# Brand Architect — синтез бренд-кита
+# Архитектор бренд-кита
 
 ## Что делает
 
-Агент этапа 04: собирает все данные, извлечённые на предшествующих шагах (палитра, шрифты, иконки, сетка, анимации), и синтезирует единый `brand-kit.md` с полной провенансой — каждый токен трассируется к источнику. Реализует визуальный концепт из `03b_КОНЦЕПТ/visual-concept.yaml`, не изобретая палитру самостоятельно. Дополнительно собирает legal-реквизиты Оператора ПД (152-ФЗ) и рендерит HTML-превью бренд-кита для согласования с клиентом.
+Агент этапа 04. Синтезирует единый бренд-кит (`brand-kit.md`) из всех извлечённых стилевых данных — палитры, шрифтов, иконок, сетки и motion-токенов. Каждый токен сопровождается ссылкой на источник (провенанс). Параллельно собирает юридические реквизиты Оператора ПД для выполнения требований 152-ФЗ и рендерит HTML-превью для согласования с менеджером. Правки делит на концептуальные (→ redirect на `visual-concept.yaml`) и локальные (принимает сразу). Фиксирует самостоятельно принятые решения в `.stage-decisions/04_brand.md`.
 
 ## Когда вызывается
 
-Запускается командой `/landing-brand` после завершения этапа 03 (референсы одобрены, `visual-concept.yaml` присутствует). Не стартует без утверждённого visual-concept: при отсутствии файла останавливается и просит запустить `/landing-visual-concept`.
+Запускается скиллом `/landing-brand` после того, как `style-extractor` завершил работу и в `03b_КОНЦЕПТ/` появился утверждённый `visual-concept.yaml`. Если файл концепта отсутствует — агент прекращает работу и просит сначала закрыть этап 03b.
 
 ## Вход → выход
 
-**Вход:** утверждённый `visual-concept.yaml`; пять извлечённых артефактов из `04_БРЕНД/extracted/` (палитра, шрифты, иконки, сетка, motion); `03_РЕФЕРЕНСЫ/index.yaml`; три файла ниши из `01a_АНАЛИЗ_НИШИ/` (positioning, market-profile, landing-structure).
+**Вход:** утверждённый `visual-concept.yaml` (03b), пять артефактов extraction (палитра, шрифты, иконки, сетка, motion), индекс референсов (03), файлы позиционирования и профиля ниши (01a).
 
-**Выход:** `04_БРЕНД/brand-kit.md` — канонический бренд-кит с провенансой; `04_БРЕНД/brand-kit.html` — визуальный превью (свотчи, образцы шрифтов, иконки); `04_БРЕНД/extracted/legal.yaml` — юридические реквизиты клиента.
+**Выход:** `04_БРЕНД/brand-kit.md` — канонический бренд-кит с провенансом; `04_БРЕНД/brand-kit.html` — визуальное превью (свотчи, шрифтовые образцы, иконки); `04_БРЕНД/extracted/legal.yaml` — реквизиты Оператора ПД.
 
 ## Чем закрывается этап (gates)
 
-- `brand_kit_html_approved` — пользователь явно одобрил `brand-kit.html` перед переходом к этапу 05
+- `brand_kit_approved` — пользователь явно подтвердил `brand-kit.html`; без этого этап 05 не открывается.
 
 ## Failure modes
 
-- **Отсутствует `visual-concept.yaml`** — агент останавливается; этап 03b не завершён, дальнейшая работа заблокирована.
-- **Концептуальная правка после показа превью** (другой цвет, другой mood) — без перезаписи `visual-concept.yaml` агент отклоняет правку и просит сначала обновить файл концепта.
-- **Неполный набор extracted-артефактов** — HARD GATE не пропускает генерацию, если хоть один из пяти файлов отсутствует.
-- **Legal-реквизиты не заполнены** — pipeline не блокируется, но деплой в РФ невозможен; секция Legal в brand-kit остаётся с метками `TODO_LEGAL`.
-- **Предшественник (03-referensy) не закрыт** — PreToolUse-хук физически блокирует Write/Edit к файлам этапа 04.
+- `visual-concept.yaml` отсутствует или устарел — агент останавливается, Pipeline уходит в дедлок этапа 04.
+- Не все пять extracted-файлов присутствуют в `04_БРЕНД/extracted/` — `build.py` падает с ошибкой, brand-kit не генерируется.
+- Менеджер вносит концептуальную правку (смена цвета, mood) напрямую в brand-kit вместо `visual-concept.yaml` — агент принимает её как локальную; при следующем прогоне правка перезатирается.
+- Legal-данные не получены и поле остаётся `TODO_LEGAL` — лендинг не может выйти в продакшен в РФ без заполнения `legal.yaml` до `/landing-deploy`.
+- `gate-check.sh` для этапа 04 возвращает exit != 0 (не закрыты предшественники) — `PreToolUse`-хук физически блокирует запись файлов.
 
 ## Related
 
-- [[brand-kit-build]] — скилл-владелец; содержит Python-скрипты `build.py` и `render-html.py`
-- [[landing-brand]] — slash-команда, которая диспатчит этого агента
-- [[style-extractor]] — производит все extracted/*.yaml, необходимые на входе
-- [[design-system-generator]] — следующий этап (05), использует brand-kit.md как базу
-- [[04-brend]] — каталог этапа, в котором агент работает
-- [[stage-execution-protocol]] — обязательный протокол pre-flight перед любым Write
-- [[niche-analyst]] — производит positioning.md и market-profile.md, влияющие на типографику и палитру
+- [[brand-kit-build]] — скилл, владеющий агентом и Python-скриптами `build.py` / `render-html.py`
+- [[style-extractor]] — предшественник: извлекает palette/fonts/icons/grid/motion в `04_БРЕНД/extracted/`
+- [[landing-brand]] — команда-триггер этапа 04
+- [[04-brend]] — папка-этап в шаблоне проекта
+- [[05-dizayn-sistema]] — следующий этап; открывается только после `brand_kit_approved`
+- [[design-system-generator]] — агент этапа 05, потребляет brand-kit.md как вход
+- [[stage-execution-protocol]] — обязательный протокол pre-flight для всех агентов

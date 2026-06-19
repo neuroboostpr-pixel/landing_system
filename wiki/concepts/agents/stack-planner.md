@@ -1,57 +1,65 @@
 ---
 slug: stack-planner
 type: agent
-name: "Планировщик стека (Stack Planner)"
+name: "Планировщик стека"
 stage: "06"
-tags: [stack, wordpress, plugins, fonts, icons, design-system, cinematic]
-triggers: []
+tags: [wordpress, stack, plugins, fonts, icons, design-tokens]
+triggers: [landing-stack]
 inputs:
   - 05_ДИЗАЙН-СИСТЕМА/DESIGN.md
   - 05_ДИЗАЙН-СИСТЕМА/tokens.json
   - 04_БРЕНД/brand-kit.md
   - 00_БРИФ/brief.md
-  - .landing-state.yaml
 outputs:
   - 06_СТЕК/design-stack.yaml
   - 06_СТЕК/component-library-plan.md
   - 06_СТЕК/effects-plan.md
   - 06_СТЕК/font-and-color-plan.md
-gates: []
-pre_reqs: [design-system-generator, brand-architect]
-related: [landing-orchestrator, block-composer, frontend-builder]
+gates: [design-stack-approved]
+pre_reqs: [05-dizayn-sistema]
+related:
+  - design-system-generator
+  - landing-stack
+  - landing-go
+  - landing-orchestrator
+  - 06-stek
 sources: ["agents/stack-planner.md"]
-updated: 2026-05-26
-confidence: {triggers: low, gates: low}
+updated: 2026-06-19
+confidence: {triggers: low}
 ---
 
-# Планировщик стека (Stack Planner)
+# Планировщик стека
 
 ## Что делает
 
-Фиксирует технологический стек лендинга на этапе 06: выбирает WordPress-плагины, JS-библиотеки, иконочный набор и CDN для шрифтов. Читает дизайн-систему и бренд-кит, определяет режим сборки (standard или cinematic), затем записывает четыре артефакта этапа — главный из которых `design-stack.yaml`. Все последующие агенты (сборщик, билдер) опираются именно на этот файл как единственный источник правды о стеке.
+Фиксирует технологический стек лендинга: выбирает WordPress-плагины, JS-библиотеки, набор иконок и CDN для шрифтов. Решение принимается на основе дизайн-системы (DESIGN.md, tokens.json), бренд-кита и флага режима (standard или cinematic из brief.md). Итог — файл `design-stack.yaml`, который становится единым источником истины для сборки на этапе 08.
 
 ## Когда вызывается
 
-Вызывается оркестратором `landing-orchestrator` при переходе к этапу `06_stack` — после того как дизайн-система (`05_ДИЗАЙН-СИСТЕМА`) утверждена пользователем. Предварительно проверяет `.landing-state.yaml` (поле `current_stage == 06_stack`) и завершает работу только после явного approve пользователем `design-stack.yaml`.
+Запускается на этапе 06 через скилл `landing-stack` после того, как этап 05 (дизайн-система) закрыт и одобрен пользователем. `landing-orchestrator` диспатчит агента автоматически при прохождении gate-check этапа 06.
 
 ## Вход → выход
 
-**Вход:** утверждённые `DESIGN.md` и `tokens.json` из этапа 05; `brand-kit.md` с описанием иконок и шрифтов из этапа 04; `brief.md` с флагом режима (cinematic или standard); `.landing-state.yaml` с текущим статусом пайплайна.
+**Вход:** `DESIGN.md` и `tokens.json` из этапа 05; `brand-kit.md` с семейством шрифтов и иконками; `brief.md` с флагом cinematic.
 
-**Выход:** `06_СТЕК/design-stack.yaml` — полный манифест стека (плагины, шрифты, иконки, JS-библиотеки); `component-library-plan.md` — откуда берётся каждый компонент; `effects-plan.md` — анимации и motion (пусто в standard-режиме); `font-and-color-plan.md` — маппинг шрифтов и цветов к токенам.
+**Выход:** `design-stack.yaml` (WordPress-тема, плагины, шрифты, иконки, JS-библиотеки); `component-library-plan.md` (откуда берётся каждый компонент); `effects-plan.md` (анимации и motion, пусто в standard-режиме); `font-and-color-plan.md` (маппинг шрифтов и цветов к токенам).
+
+## Чем закрывается этап (gates)
+
+- `design-stack-approved` — пользователь явно одобрил сгенерированный `design-stack.yaml` перед переходом к этапу 07.
 
 ## Failure modes
 
-- **`current_stage` не `06_stack`** — агент останавливается и сообщает об ошибке; пропуск этапов не допускается.
-- **Не пройден gate-check предшественника** — `enforce_stage_gate.py` физически блокирует Write, агент не может записать файлы.
-- **Пользователь не дал approve** — HARD GATE держит этап открытым; переход к 07 не происходит.
-- **Флаг cinematic отсутствует в brief.md** — режим определится как standard, JS-анимации (gsap, lenis) не попадут в стек; нужно уточнить у клиента.
-- **Запрещённые пакеты в запросе** (Tailwind, Elementor, shadcn) — агент отклоняет их по правилам; возможна путаница если пользователь настаивает.
+- Этап 05 не закрыт: `enforce_stage_gate.py` блокирует запись файлов, агент останавливается.
+- В `brief.md` отсутствует флаг cinematic — режим определяется как standard, JS-библиотеки остаются пустым списком; при необходимости cinematic — нужно явно дописать флаг в бриф.
+- В `brand-kit.md` нет секции fonts/icons — агент выбирает дефолты (Bunny Fonts + Lucide), что может не совпадать с брендом клиента.
+- Запрещённые пакеты (Tailwind, Elementor, shadcn) попадают в стек из-за неверного контекста в DESIGN.md — нарушает правила сборки этапа 08.
+- Пользователь пропускает HARD GATE (не утверждает design-stack.yaml) — pipeline продолжается с несогласованным стеком, что ломает сборку на этапе 08.
 
 ## Related
 
-- [[design-system-generator]] — предшественник; поставляет DESIGN.md и tokens.json
-- [[brand-architect]] — поставляет brand-kit.md с семейством шрифтов и иконками
-- [[landing-orchestrator]] — диспатчит этот агент в нужный момент пайплайна
-- [[block-composer]] — потребляет design-stack.yaml при сборке wireframe и composed.html
-- [[frontend-builder]] — использует стек при генерации WordPress-темы на этапе 08
+- [[design-system-generator]] — предшественник: генерирует DESIGN.md и tokens.json, которые читает stack-planner
+- [[landing-stack]] — скилл-точка входа, через который вызывается агент
+- [[landing-go]] — оркестратор, диспатчит stack-planner в рамках общего pipeline
+- [[06-stek]] — этап, артефакты которого создаёт этот агент
+- [[landing-orchestrator]] — управляет последовательностью этапов и gate-проверками

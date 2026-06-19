@@ -3,44 +3,50 @@ slug: wp-deployer
 type: agent
 name: "WP Deployer — Деплой-инженер"
 stage: "09"
-tags: [deploy, beget, ssh, rsync, wp-cli, ssl, wordpress]
+tags: [deploy, beget, ssh, rsync, wp-cli, ssl, dns]
 triggers: [landing-deploy]
-inputs: [08_КОД]
-outputs: [deployed-site-url]
-pre_reqs: [frontend-builder]
-related: [landing-orchestrator, lifecycle-keeper, integrations-engineer, frontend-builder]
+inputs: [08-kod]
+outputs: [09-deploy]
+gates: [deploy_gate]
+pre_reqs: [08-kod]
+related: [landing-deploy, wp-cli-deployer, landing-build, 09-deploy, 10-qa]
 sources: ["agents/wp-deployer.md"]
-updated: 2026-05-26
-confidence: {triggers: low, inputs: low}
+updated: 2026-06-19
+confidence: {gates: low, triggers: low}
 ---
 
 # WP Deployer — Деплой-инженер
 
 ## Что делает
 
-Берёт собранную WordPress-тему из этапа 08 и деплоит её на хостинг Бегет через SSH + rsync + wp-cli. После загрузки активирует тему, проверяет доступность сайта через curl, убеждается что SSL-сертификат установлен и редиректы HTTP→HTTPS и www→без www работают корректно. Завершает работу только после явного подтверждения пользователем — показывает финальный URL.
+Разворачивает готовый WordPress-лендинг на хостинг Бегет. Проверяет переменные окружения, запускает скрипт деплоя, загружает и активирует тему, импортирует ACF-поля. После деплоя автоматически проверяет доступность сайта через curl, контролирует SSL и редиректы (HTTP→HTTPS, www→без www). Не переходит к следующему этапу без явного утверждения пользователем живого URL.
 
 ## Когда вызывается
 
-Запускается командой `/landing-deploy` на этапе 09, строго после того как этап 08 (`08_КОД`) получил статус `approved`. `landing-orchestrator` вызывает агента автоматически, если пользователь следует основному workflow через `/landing-go`. Физический Stage Gate (`enforce_stage_gate.py`) блокирует любые действия, пока предшественник не закрыт.
+Вызывается командой `/landing-deploy` после того, как этап 08 (генерация кода) закрыт и одобрен пользователем. Физически блокируется hook'ом `enforce_stage_gate.py`, если предшествующие этапы не завершены.
 
 ## Вход → выход
 
-**Вход:** Собранная тема WordPress в `08_КОД/` (файлы темы, ACF/Lazy Blocks конфиги), заполненный `.env` с переменными `BEGET_USER`, `BEGET_HOST`, `BEGET_PATH`, и статус этапа 08 = `approved` в `.landing-state.yaml`.
+**Вход:** сгенерированный WordPress-код в `08_КОД/` (этап `08-kod` в статусе approved); `.env` с переменными `BEGET_USER`, `BEGET_HOST`, `BEGET_PATH`; `.landing-state.yaml` с `current_stage == 09_deploy`.
 
-**Выход:** Рабочий сайт на Бегете — тема активирована, SSL настроен, редиректы проверены, URL сайта передан пользователю для финального апрува (HARD GATE).
+**Выход:** задеплоенный и работающий сайт на Бегете; подтверждённый HTTPS-URL; этап `09_deploy` переведён в статус `approved` через `gate-state.sh`.
+
+## Чем закрывается этап (gates)
+
+- deploy_gate — сайт открывается по HTTPS, curl -sI возвращает 200, SSL-сертификат активен, HTTP→HTTPS и www→не-www редиректы работают; пользователь явно одобрил живой URL.
 
 ## Failure modes
 
-- **Нет `.env` или неполные переменные** — `scripts/deploy.sh` падает ещё до rsync; агент останавливается и сообщает какие переменные отсутствуют.
-- **SSH-соединение отклонено** — неверный ключ или IP Бегета в firewall; агент выводит stderr rsync и предлагает проверить `~/.ssh/config`.
-- **Сайт не открывается после деплоя** — curl возвращает 5xx или таймаут; обычно тема не активирована или `wp-cli` упал на импорте полей.
-- **SSL не настроен** — curl показывает HTTP 200 без редиректа; агент выдаёт инструкцию для `certbot --nginx` по SSH, но не выполняет её автоматически.
-- **Stage Gate не пройден** — `gate-check.sh --stage 09_deploy` возвращает exit != 0; агент полностью останавливается — обойти нельзя.
+- `.env` отсутствует или содержит неверные BEGET_*-переменные — деплой падает на первом шаге до rsync.
+- SSH-соединение с Бегетом не устанавливается (неправильный host, ключ не добавлен) — `deploy.sh` завершается с ненулевым кодом.
+- SSL-сертификат не выпущен или certbot недоступен — сайт открывается по HTTP, hard gate не проходит.
+- Тема загружена, но не активирована (конфликт имён или PHP-ошибка) — wp-cli возвращает ошибку, сайт показывает дефолтную тему.
+- Предшественник `08-kod` не закрыт — hook `enforce_stage_gate.py` блокирует любые Write/Edit операции с файлами этапа.
 
 ## Related
 
-- [[frontend-builder]] — генерирует артефакты этапа 08, которые деплоит этот агент
-- [[landing-orchestrator]] — диспатчит wp-deployer в нужный момент pipeline
-- [[lifecycle-keeper]] — обновляет `.landing-state.yaml` после успешного деплоя
-- [[integrations-engineer]] — настраивает CRM/аналитику до деплоя; конфиги должны быть готовы
+- [[landing-deploy]] — slash-команда, которая вызывает этого агента
+- [[wp-cli-deployer]] — скрипты деплоя и rsync-утилиты
+- [[landing-build]] — предыдущий этап, генерирует код для деплоя
+- [[09-deploy]] — этап pipeline, который закрывает агент
+- [[10-qa]] — следующий этап после успешного деплоя

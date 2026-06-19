@@ -1,65 +1,63 @@
 ---
 slug: niche-analyst
 type: agent
-name: "Аналитик ниши (Stage 01a)"
+name: "Агент анализа ниши"
 stage: "01a"
 tags: [niche, analysis, competitors, positioning, market-profile, zero-touch]
-triggers: [landing-orchestrator]
-inputs:
-  - 00_БРИФ/brief.md
-  - 01_КОНТЕКСТ/context.md
-outputs:
-  - 01a_АНАЛИЗ_НИШИ/niche-analysis.md
-  - 01a_АНАЛИЗ_НИШИ/competitors.yaml
-  - 01a_АНАЛИЗ_НИШИ/market-profile.md
-  - 01a_АНАЛИЗ_НИШИ/positioning.md
-  - 01a_АНАЛИЗ_НИШИ/landing-structure.md
-  - 01a_АНАЛИЗ_НИШИ/visual-requirements.md
-gates: [gate-check-01a-niche-analysis]
-pre_reqs: []
-related:
-  - landing-orchestrator
-  - brand-architect
-  - content-writer
-  - wp-builder
+triggers: [landing-niche, landing-go]
+inputs: [00-brif, 01-kontekst]
+outputs: [01a-analiz-nishi]
+gates: [competitors_valid, market_profile_valid, positioning_valid, landing_structure_valid, visual_requirements_valid]
+pre_reqs: [00-brif, 01-kontekst]
+related: [niche-analysis, landing-orchestrator, brand-architect, content-writer, wp-builder, landing-go]
 sources: ["agents/niche-analyst.md"]
-updated: 2026-05-26
-confidence:
-  triggers: low
-  pre_reqs: low
+updated: 2026-06-19
+confidence: {triggers: low}
 ---
 
-# Аналитик ниши (Stage 01a)
+# Агент анализа ниши
 
 ## Что делает
 
-Автоматически исследует нишу клиента и формирует **6 артефактов** для downstream-этапов (бренд, контент, вёрстка). Классифицирует бренд по типу (1 — глобальный, 2 — региональный, 3 — локальный), рассчитывает доступность продукта по доходам региона, собирает 15–25 конкурентов в 7 ролях, выбирает один из трёх режимов позиционирования (rational / emotional_aspiration / trust_authority или гибрид) и прописывает карту блоков лендинга под конкретный тип × режим. Работает полностью без вопросов к пользователю — пробелы помечает `[ДОПУЩЕНИЕ]`.
+Агент автоматически исследует нишу клиента на этапе 01a: классифицирует бренд по типу (1 — глобальный, 2 — региональный, 3 — локальный), собирает 15–25 конкурентов и скрейпит их сайты, рассчитывает accessibility tier через соотношение цены к медианному доходу региона, выбирает один из трёх режимов позиционирования (rational / emotional_aspiration / trust_authority или гибрид) и генерирует карту блоков лендинга. Всё это без единого вопроса пользователю — нехватка данных отмечается как `[ДОПУЩЕНИЕ]`.
 
 ## Когда вызывается
 
-Запускается `landing-orchestrator`-ом автоматически, когда `.landing-state.yaml` переходит в `current_stage == 01a_niche_analysis`. Условие — `00_БРИФ/brief.md` существует и gate-check предыдущего этапа вернул exit 0.
+Запускается оркестратором (`landing-orchestrator`) при переходе pipeline на этап `01a_niche_analysis`. Предусловие: этап `00-brif` должен быть закрыт и `current_stage` в `.landing-state.yaml` должен совпадать с `01a_niche_analysis`. Если предшественник не закрыт — `PreToolUse` hook блокирует запись файлов физически.
 
 ## Вход → выход
 
-**Вход:** `00_БРИФ/brief.md` (обязательно) и `01_КОНТЕКСТ/context.md` (если есть). Из брифа извлекаются: название, категория, регион, целевой рынок, цена/чек.
+**Вход:** `00_БРИФ/brief.md` (обязательно) и `01_КОНТЕКСТ/context.md` (опционально). Дополнительно — WebSearch и mcp__firecrawl__scrape для сбора данных о конкурентах и доходах региона.
 
-**Выход:** шесть файлов в `01a_АНАЛИЗ_НИШИ/` — обзорный `niche-analysis.md`, `competitors.yaml` (15–25 записей, схема валидируется), `market-profile.md` (8 секций с tier-расчётом), `positioning.md` (шаблон по режиму), `landing-structure.md` (таблица блоков лендинга с контрактом для wp-builder), `visual-requirements.md` (правила из `config/niche-visual-rules.yaml` + дериваты из конкурентов). Все четыре Python-валидатора должны вернуть exit 0.
+**Выход:** 6 артефактов в папке `01a_АНАЛИЗ_НИШИ/`:
+- `niche-analysis.md` — обзорный документ 400–800 слов
+- `competitors.yaml` — 15–25 записей в 7 ролях
+- `market-profile.md` — 8 секций с accessibility tier и predicted mode
+- `positioning.md` — заполненный шаблон выбранного режима
+- `landing-structure.md` — карта блоков по комбинации Тип × Mode
+- `visual-requirements.md` — визуальные требования на основе категории и режима
 
 ## Чем закрывается этап (gates)
 
-- `gate-check-01a-niche-analysis` — все 6 артефактов записаны, все валидаторы (`validate-competitors.py`, `validate-market-profile.py`, `validate-positioning.py`, `validate-landing-structure.py`, `validate-visual-requirements.py`) возвращают exit 0, обязательные блоки Hero/CTA/Footer присутствуют в landing-structure.
+- `competitors_valid` — валидатор `validate-competitors.py` возвращает exit 0 (≥15 записей, ≥3 роли)
+- `market_profile_valid` — валидатор `validate-market-profile.py` проверяет все 8 секций и наличие `Predicted mode`
+- `positioning_valid` — валидатор `validate-positioning.py` проверяет заголовок `**Mode:**` и структуру шаблона
+- `landing_structure_valid` — валидатор проверяет наличие Hero, CTA, Footer и заголовков-цитат
+- `visual_requirements_valid` — валидатор проверяет минимум 3 ❌ и 3 ✅ с обоснованиями
 
 ## Failure modes
 
-- **Недостаточно конкурентов** — WebSearch или Firecrawl не нашли 15 записей; агент вынужден дублировать роли, валидатор падает по `min_competitors`.
-- **Неверный tier** — медианный доход региона недоступен, расчёт ratio делается по ВВП-прокси; реальный tier может быть завышен/занижен; confidence: low не проставлен.
-- **Конфликт brief_indicators** — бриф содержит смешанные сигналы, агент выбирает dominant-маркер без уточнения, что ведёт к неверному режиму позиционирования.
-- **Отсутствие `context.md`** — агент пропускает конкурентный анализ выше уровня поиска и опирается только на бриф; итоговый список конкурентов беднее.
-- **Harness-блокировка** — `enforce_stage_gate.py` не даёт записать файлы, если предшественник не закрыт; агент STOP'ится и ожидает закрытия предыдущего gate.
+- **Неверная классификация типа бренда** — английский бриф ошибочно трактуется как глобальный бренд; агент должен проверять Wikipedia, а не язык документа.
+- **Неверный accessibility tier** — ratio рассчитывается по категорийной цене из конкурентов, но если у direct-конкурентов нет поля `price_range`, tier ставится с `[ДОПУЩЕНИЕ]` и может быть занижен/завышен.
+- **Менее 15 конкурентов** — при узкой нише WebSearch возвращает мало результатов; валидатор заблокирует закрытие этапа.
+- **Конфликт brief_indicators** — несколько override-сигналов из брифа указывают в разные режимы; агент выбирает доминирующий, но может ошибиться с гибридом.
+- **Блокировка stage gate hook** — если предшественник `01-kontekst` не помечен approved, `enforce_stage_gate.py` блокирует Write и агент не может записать файлы.
 
 ## Related
 
-- [[landing-orchestrator]] — диспатчит агента и принимает hand-off после gate-check
+- [[niche-analysis]] — wiki-карточка концепта, который этот агент реализует
+- [[landing-orchestrator]] — диспатчит агента и проверяет gates после завершения
 - [[brand-architect]] — потребляет `positioning.md` и `market-profile.md` на этапе 04
-- [[content-writer]] — опирается на `landing-structure.md` при написании текстов (этап 07)
-- [[wp-builder]] — использует контракт template-parts из `landing-structure.md` на этапе 08
+- [[content-writer]] — использует `landing-structure.md` как карту блоков для контента
+- [[wp-builder]] — использует `landing-structure.md` для генерации template-parts
+- [[landing-go]] — точка входа в pipeline, через которую запускается этот агент

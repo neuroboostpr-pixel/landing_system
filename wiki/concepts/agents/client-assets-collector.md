@@ -3,50 +3,71 @@ slug: client-assets-collector
 type: agent
 name: "Сборщик материалов клиента"
 stage: "02"
-tags: [stage-02, scraping, photos, reviews, assets, pillow, playwright]
-triggers: [landing-orchestrator]
-inputs: [00-brif, 01a-analiz-nishi]
-outputs: [02-materialy-klienta]
-gates: [assets_gallery_approved]
-pre_reqs: [00-brif, 01a-analiz-nishi]
-related: [client-assets-collection, photo-curator, photo-stylist, landing-orchestrator, 02-materialy-klienta]
+tags: [scraping, photos, videos, reviews, assets, stage-02]
+triggers: []
+inputs:
+  - 00_БРИФ/brief.md
+  - 01a_АНАЛИЗ_НИШИ/visual-requirements.md
+  - 02_МАТЕРИАЛЫ_КЛИЕНТА/photos/original/
+  - 02_МАТЕРИАЛЫ_КЛИЕНТА/videos/
+outputs:
+  - 02_МАТЕРИАЛЫ_КЛИЕНТА/photos/original/
+  - 02_МАТЕРИАЛЫ_КЛИЕНТА/videos/
+  - 02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/
+  - 02_МАТЕРИАЛЫ_КЛИЕНТА/assets-manifest.yaml
+  - 02_МАТЕРИАЛЫ_КЛИЕНТА/style-report.md
+  - 02_МАТЕРИАЛЫ_КЛИЕНТА/assets-gallery.html
+gates:
+  - assets_gallery_approved
+pre_reqs:
+  - 00-brif
+  - 01a-analiz-nishi
+related:
+  - client-assets-collection
+  - photo-stylist
+  - photo-curator
+  - 02-materialy-klienta
+  - niche-analyst
+  - landing-orchestrator
 sources: ["agents/client-assets-collector.md"]
 updated: 2026-06-19
-confidence: {triggers: low}
+confidence:
+  triggers: low
 ---
 
 # Сборщик материалов клиента
 
 ## Что делает
 
-Агент этапа 02: собирает все клиентские материалы — фото и видео — и парсит публичные отзывы с Яндекс.Карт, 2GIS, Otzovik, Flamp через локальный скрейпинг (trafilatura + Playwright, без API-ключей). Анализирует стиль фотографий через Pillow и формирует `style-report.md` с вердиктом (однородный / нужна обработка / не хватает). Генерирует `assets-gallery.html` для просмотра и `assets-manifest.yaml` с плановым назначением каждого файла (hero / about / proof). Читает `01a_АНАЛИЗ_НИШИ/visual-requirements.md`, чтобы корректно сформировать запрос к клиенту и заранее обозначить red flags.
+Агент этапа 02 собирает всё исходное сырьё клиента в единое место: фотографии, видео и публичные отзывы с Яндекс Карт, 2GIS, Otzovik, Flamp. Использует бесплатный локальный скрейпинг (trafilatura + Playwright) без API-ключей. После сбора автоматически анализирует качество и однородность фото через Pillow, выставляет вердикт «готово / нужна обработка / не хватает» и формирует HTML-галерею для визуальной проверки маркетологом.
 
 ## Когда вызывается
 
-Запускается оркестратором, когда `.landing-state.yaml` содержит `current_stage == 02_assets`. Предшественники (бриф и анализ ниши) должны быть закрыты — иначе harness PreToolUse hook физически блокирует запись. Перед любым действием агент выводит Mermaid-карту pipeline и создаёт TodoWrite-список оставшихся этапов.
+Запускается на этапе `02_assets`, когда `.landing-state.yaml::current_stage == 02_assets`. Вызывается оркестратором после закрытия этапа 01a (анализ ниши). Перед запросом материалов обязательно читает `01a_АНАЛИЗ_НИШИ/visual-requirements.md` (секции 1–4, 6) — это определяет, какие фото нужны, а какие red flags клиенту нельзя передавать.
 
 ## Вход → выход
 
-**Вход:** файлы клиента (фото/видео), URL-адреса площадок с отзывами, `00_БРИФ/brief.md`, `01a_АНАЛИЗ_НИШИ/visual-requirements.md`.
+**Вход:** бриф (`brief.md`), требования к визуалу из нишевого анализа, пользовательские файлы (фото/видео), URL публичных страниц с отзывами.
 
-**Выход:** `02_МАТЕРИАЛЫ_КЛИЕНТА/photos/original/` (оригинальные фото), `videos/` (видео), `testimonials/<source>/*.json` (отзывы), `assets-manifest.yaml`, `style-report.md`, `assets-gallery.html`.
+**Выход:** рассортированные фото в `photos/original/`, видео в `videos/`, разобранные отзывы в `testimonials/<source>/*.json`, сводный манифест `assets-manifest.yaml` с плановым использованием каждого файла (hero / about / proof), отчёт `style-report.md` об анализе фото-стиля, интерактивная галерея `assets-gallery.html`.
 
 ## Чем закрывается этап (gates)
 
-- `assets_gallery_approved` — пользователь просмотрел `assets-gallery.html` и подтвердил набор материалов перед переходом на этап 03 (References).
+- `assets_gallery_approved` — пользователь просмотрел `assets-gallery.html` и явно подтвердил переход к этапу 03; агент не идёт дальше без этого одобрения.
 
 ## Failure modes
 
-- Парсинг отзывов падает по сети или блокировке сайта — агент сообщает об ошибке и спрашивает: повторить или пропустить источник.
-- Фотографий меньше 3–5 штук — `style-report.md` возвращает «не хватает», агент запрашивает дополнительные материалы у клиента и не закрывает этап.
-- `current_stage != 02_assets` в state-файле — агент останавливается сразу, не выполняет никаких Write/Edit действий.
-- Отсутствует `01a_АНАЛИЗ_НИШИ/visual-requirements.md` — нельзя корректно сформулировать запрос на нужные фото, агент должен остановиться.
-- harness PreToolUse hook блокирует Write/Edit, если предшественник не закрыт — нельзя обходить, нужно закрыть предшественника.
+- Скрейпинг падает (сетевая ошибка, блокировка) — агент сообщает об ошибке и спрашивает: повторить или пропустить источник.
+- Фото-анализ возвращает вердикт «не хватает» (менее 3–5 фото) — агент останавливается и запрашивает у клиента дополнительные материалы.
+- `current_stage != 02_assets` — агент полностью останавливается, не делая никаких записей, и сообщает о несоответствии.
+- PreToolUse хук блокирует Write/Edit если предшественник не закрыт — не обходить, закрывать предшественника.
+- `assets-manifest.yaml` не сгенерирован (ошибка скрипта) — gate-check упадёт с exit != 0, этап не откроется.
 
 ## Related
 
-- [[client-assets-collection]] — Python-скрипты парсинга отзывов и анализа стиля фото, которые вызывает этот агент
-- [[01a-analiz-nishi]] — обязательный вход: задаёт требования к фото и red flags для запроса клиенту
-- [[photo-curator]] — следующий в цепочке: принимает отобранные фото для дальнейшей обработки
-- [[landing-orchestrator]] — диспатчит агента в рамках pipeline по состоянию `.landing-state.yaml`
-- [[02-materialy-klienta]] — целевая папка-этап, которую агент наполняет артефактами
+- [[client-assets-collection]] — Python-скилл с конкретными скриптами `parse-reviews.py` и `analyze-photo-style.py`, которые вызывает агент
+- [[photo-stylist]] — следующий владелец собранных фото (обработка / ретушь)
+- [[photo-curator]] — занимается подбором фото к слотам на этапе 07c
+- [[01a-analiz-nishi]] — обязательный предшественник; его `visual-requirements.md` определяет, что запрашивать
+- [[02-materialy-klienta]] — папка-этап, которую агент наполняет
+- [[niche-analyst]] — агент, создавший `visual-requirements.md` на этапе 01a
