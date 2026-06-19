@@ -15,7 +15,7 @@ from scripts.hooks.enforce_stage_gate import PIPELINE_ORDER
 
 def test_pipeline_order_matches_require_approved_chains():
     repo_root = Path(__file__).parent.parent.parent
-    gates = yaml.safe_load((repo_root / "config" / "stage-gates.yaml").read_text())
+    gates = yaml.safe_load((repo_root / "config" / "stage-gates.yaml").read_text(encoding="utf-8"))
 
     violations = []
     for stage_id, stage_def in gates.get("stages", {}).items():

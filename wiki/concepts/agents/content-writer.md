@@ -3,59 +3,53 @@ slug: content-writer
 type: agent
 name: "Контент-райтер"
 stage: "07"
-tags: [copywriting, content, seo, stage-07]
+tags: [content, extraction, prototype, gutenberg, copy]
 triggers: [landing-content]
-inputs:
-  - 01a_АНАЛИЗ_НИШИ/positioning.md
-  - 01a_АНАЛИЗ_НИШИ/landing-structure.md
-  - 01a_АНАЛИЗ_НИШИ/market-profile.md
-  - 07_ПРОТОТИП/prototype.md
-  - 05_ДИЗАЙН-СИСТЕМА/DESIGN.md
-  - 06_СТЕК/design-stack.yaml
-  - 02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/
-  - 02_МАТЕРИАЛЫ_КЛИЕНТА/assets-manifest.yaml
-outputs:
-  - 07_КОНТЕНТ/final-copy.md
-  - 07_КОНТЕНТ/seo-copy.md
-gates: [user-approve-final-copy]
-pre_reqs: [landing-niche, landing-prototype, landing-design, landing-stack]
-related: [landing-content, landing-orchestrator, landing-wireframe, landing-compose]
+inputs: [07_ПРОТОТИП/prototype.md, 07_ПРОТОТИП/prototype.yaml, 01a_АНАЛИЗ_НИШИ/positioning.md, 01a_АНАЛИЗ_НИШИ/competitors.yaml]
+outputs: [07_КОНТЕНТ/content.md, 07_КОНТЕНТ/extraction-log.md]
+gates: [content_md_exists, content_no_lorem, content_sections_match, extraction_log_passed]
+pre_reqs: [07-prototip, 06-stek, 05-dizayn-sistema]
+related: [landing-content, prototype-importer, block-composer, landing-compose, prototype-import]
 sources: ["agents/content-writer.md"]
-updated: 2026-05-26
-confidence: {triggers: low, pre_reqs: low}
+updated: 2026-06-19
+confidence: {triggers: low}
 ---
 
 # Контент-райтер
 
 ## Что делает
 
-Адаптирует исходный прототип текста под конкретные блоки лендинга. Читает `landing-structure.md` как единственный источник истины по порядку блоков, извлекает из `positioning.md` режим коммуникации (`rational`, `emotional_aspiration`, `trust_authority` и др.) и перекладывает тексты из `prototype.md` в итоговые файлы. Регистр и структура копирайта строго подчиняются выбранному Mode: без аспирации для `rational`, StoryBrand-нарратив для `emotional_aspiration`, доказательства на каждый claim для `trust_authority`. Параллельно пишет SEO-тексты и мета-данные. Завершается жёсткой паузой на утверждение пользователем.
+Извлекает реальные тексты из прототипа лендинга и структурирует их по блокам будущей страницы. Главный принцип — никакой выдумки: каждое слово в `content.md` должно быть взято из `prototype.md` или `prototype.yaml`, а не сочинено агентом. После извлечения валидирует результат на отсутствие шаблонных заглушек (Lorem ipsum, «описание здесь» и т.д.) и фиксирует итог в лог-файле.
 
 ## Когда вызывается
 
-Вызывается командой `/landing-content` или диспетчируется `landing-orchestrator` при переходе к этапу `07_content`. Условие: этап `07_content` должен быть активным в `.landing-state.yaml`, а все предшественники (01a, 02, 05, 06, prototype) — закрыты. `PreToolUse`-хук физически блокирует запись, если gate не пройден.
+Запускается командой `/landing-content` на этапе 07, когда прототип уже импортирован (`07-prototip` закрыт) и дизайн-система одобрена (`05-dizayn-sistema`). Перед первым Write-действием агент обязан убедиться, что `.landing-state.yaml` показывает `current_stage == 07_content`, и пройти `gate-check.sh --stage 07_content`.
 
 ## Вход → выход
 
-**Вход:** `positioning.md` с Mode, `landing-structure.md` с картой блоков, `prototype.md` с исходными текстами, `DESIGN.md` с деталями секций, `design-stack.yaml`, реальные отзывы из `testimonials/` и `assets-manifest.yaml`.
+**Вход:** `07_ПРОТОТИП/prototype.md` (канон, обязателен) + опционально `prototype.yaml` (машинная структура блоков). Дополнительно: `01a_АНАЛИЗ_НИШИ/positioning.md` и `competitors.yaml` для тонального контекста.
 
-**Выход:** `07_КОНТЕНТ/final-copy.md` — тексты всех блоков без Lorem ipsum, каждый блок помечен заголовком из landing-structure; `07_КОНТЕНТ/seo-copy.md` — SEO-заголовки, description, варианты h1.
+**Выход:** `07_КОНТЕНТ/content.md` — тексты, структурированные по секциям (H2) и блокам (H3) прототипа. `07_КОНТЕНТ/extraction-log.md` — лог с числом извлечённых блоков, предупреждениями и статусом валидации.
 
 ## Чем закрывается этап (gates)
 
-- `user-approve-final-copy` — пользователь явно утверждает `final-copy.md`; агент показывает файл и ждёт подтверждения перед переходом к следующему этапу.
+- `content_md_exists` — файл `content.md` физически создан в `07_КОНТЕНТ/`
+- `content_no_lorem` — в файле нет шаблонных заглушек (Lorem ipsum, placeholder-фраз)
+- `content_sections_match` — число секций в `content.md` совпадает с числом секций в прототипе
+- `extraction_log_passed` — `extraction-log.md` существует и содержит статус ✅ PASSED
 
 ## Failure modes
 
-- **Блоки взяты из DESIGN.md, а не из landing-structure.md** — несоответствие порядка блоков, потеря секций или дублирование.
-- **Mode не считан из positioning.md** — тексты идут в нейтральном регистре вместо требуемого, Hero получает неправильный акцент.
-- **Реальные отзывы не подключены** — testimonials-блок содержит заглушки вместо данных из `testimonials/`.
-- **Gate-check не пройден** — `enforce_stage_gate.py` блокирует запись, агент не сообщает причину и зависает.
-- **assets-manifest не прочитан** — копирайт ссылается на несуществующие иконки или фото, что ломает верстку на этапе 08.
+- **Текст не найден в yaml и md** — агент помечает блок `[TEXT NOT FOUND IN PROTOTYPE]` вместо выдуманного текста; это приводит к падению gate `content_no_lorem`, если не устранить.
+- **prototype.md не существует** — агент останавливается с FAIL ещё до начала извлечения; нужно сначала запустить `/landing-prototype`.
+- **Число секций расходится** — если yaml содержит устаревшую схему (`sections` вместо `blocks`), нормализатор может пропустить часть структуры.
+- **Stage gate enforcement** — хук `enforce_stage_gate.py` физически блокирует запись, если предшественник (например `07-prototip`) не закрыт; обход невозможен.
+- **Выдуманный контент** — самый критичный дефект; агент обязан провалить валидацию, а не тихо записать сочинённый текст.
 
 ## Related
 
-- [[landing-content]] — slash-команда / skill, которая запускает этого агента
-- [[landing-orchestrator]] — диспетчер; вызывает агента в рамках общего pipeline
-- [[landing-wireframe]] — следующий этап (07a); работает с текстами из final-copy.md
-- [[landing-compose]] — этап 07b; вставляет тексты из final-copy.md в composed.html
+- [[landing-content]] — слеш-команда, которая вызывает этот агент
+- [[prototype-importer]] — создаёт `prototype.md` и `prototype.yaml`, обязательный предшественник
+- [[block-composer]] — потребляет `content.md` на этапе 07c для сборки `composed.html`
+- [[landing-compose]] — следующий этап, где тексты из `content.md` встраиваются в макет
+- [[stage-execution-protocol]] — обязательный протокол pre-flight для всех этапов

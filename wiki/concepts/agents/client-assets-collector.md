@@ -1,52 +1,52 @@
 ---
 slug: client-assets-collector
 type: agent
-name: "Сборщик клиентских материалов"
+name: "Сборщик материалов клиента"
 stage: "02"
-tags: [stage-02, assets, photos, videos, reviews, scraping, testimonials, trafilatura, playwright]
-triggers: [landing-go]
-inputs:
-  - 00_БРИФ/brief.md
-  - 01a_АНАЛИЗ_НИШИ/visual-requirements.md
-outputs:
-  - 02_МАТЕРИАЛЫ_КЛИЕНТА/photos/original/
-  - 02_МАТЕРИАЛЫ_КЛИЕНТА/videos/
-  - 02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/
-  - 02_МАТЕРИАЛЫ_КЛИЕНТА/assets-manifest.yaml
-  - 02_МАТЕРИАЛЫ_КЛИЕНТА/assets-gallery.html
-pre_reqs: []
-related: [landing-niche, landing-references, landing-go]
+tags: [stage-02, scraping, photos, reviews, assets, pillow, playwright]
+triggers: [landing-orchestrator]
+inputs: [00-brif, 01a-analiz-nishi]
+outputs: [02-materialy-klienta]
+gates: [assets_gallery_approved]
+pre_reqs: [00-brif, 01a-analiz-nishi]
+related: [client-assets-collection, photo-curator, photo-stylist, landing-orchestrator, 02-materialy-klienta]
 sources: ["agents/client-assets-collector.md"]
-updated: 2026-05-26
-confidence: {triggers: low, pre_reqs: low}
+updated: 2026-06-19
+confidence: {triggers: low}
 ---
 
-# Сборщик клиентских материалов
+# Сборщик материалов клиента
 
 ## Что делает
 
-Агент этапа 02: собирает все клиентские ассеты (фото, видео) и парсит публичные отзывы с внешних площадок (Яндекс Карты, 2ГИС, Отзовик, Flamp). Для парсинга использует только свободные локальные инструменты — `trafilatura` и `Playwright`, без API-ключей. По итогу формирует `assets-manifest.yaml` с указанием планируемого использования каждого файла (hero / about / proof) и рендерит `assets-gallery.html` для визуальной проверки клиентом.
+Агент этапа 02: собирает все клиентские материалы — фото и видео — и парсит публичные отзывы с Яндекс.Карт, 2GIS, Otzovik, Flamp через локальный скрейпинг (trafilatura + Playwright, без API-ключей). Анализирует стиль фотографий через Pillow и формирует `style-report.md` с вердиктом (однородный / нужна обработка / не хватает). Генерирует `assets-gallery.html` для просмотра и `assets-manifest.yaml` с плановым назначением каждого файла (hero / about / proof). Читает `01a_АНАЛИЗ_НИШИ/visual-requirements.md`, чтобы корректно сформировать запрос к клиенту и заранее обозначить red flags.
 
 ## Когда вызывается
 
-Запускается оркестратором (`landing-go`) автоматически при переходе на этап `02_assets`, при условии что этапы 00 (бриф) и 01a (анализ ниши) уже закрыты. До запуска проверяет `.landing-state.yaml` (`current_stage == 02_assets`) и прогоняет `gate-check.sh`. Если предшественники не закрыты — останавливается и сообщает пользователю.
+Запускается оркестратором, когда `.landing-state.yaml` содержит `current_stage == 02_assets`. Предшественники (бриф и анализ ниши) должны быть закрыты — иначе harness PreToolUse hook физически блокирует запись. Перед любым действием агент выводит Mermaid-карту pipeline и создаёт TodoWrite-список оставшихся этапов.
 
 ## Вход → выход
 
-**Вход:** клиентские файлы (фото/видео), которые пользователь кладёт в `02_МАТЕРИАЛЫ_КЛИЕНТА/photos/original/` и `videos/`; URL-адреса страниц с отзывами; `00_БРИФ/brief.md`; `01a_АНАЛИЗ_НИШИ/visual-requirements.md` — определяет, какие типы фото запрашивать и что явно не подходит (red flags, секция 6).
+**Вход:** файлы клиента (фото/видео), URL-адреса площадок с отзывами, `00_БРИФ/brief.md`, `01a_АНАЛИЗ_НИШИ/visual-requirements.md`.
 
-**Выход:** исходные фото и видео в подпапках `02_МАТЕРИАЛЫ_КЛИЕНТА/`; отзывы в `testimonials/<source>/*.json`; `assets-manifest.yaml` с планом использования каждого ассета; `assets-gallery.html` для финального просмотра и HARD GATE: переход на этап 03 возможен только после явного подтверждения пользователем через галерею.
+**Выход:** `02_МАТЕРИАЛЫ_КЛИЕНТА/photos/original/` (оригинальные фото), `videos/` (видео), `testimonials/<source>/*.json` (отзывы), `assets-manifest.yaml`, `style-report.md`, `assets-gallery.html`.
+
+## Чем закрывается этап (gates)
+
+- `assets_gallery_approved` — пользователь просмотрел `assets-gallery.html` и подтвердил набор материалов перед переходом на этап 03 (References).
 
 ## Failure modes
 
-- Парсер отзывов (trafilatura/Playwright) не достучался до URL — агент показывает ошибку, спрашивает: повторить или пропустить источник.
-- Пользователь не положил файлы в нужную папку до запуска — агент явно уточняет, ждёт и проверяет повторно.
-- `gate-check.sh` возвращает ненулевой exit (предшественник не закрыт) — harness физически блокирует Write/Edit через `PreToolUse` хук; обходить нельзя.
-- `01a_АНАЛИЗ_НИШИ/visual-requirements.md` отсутствует — агент не может сформировать корректный запрос клиенту и должен остановиться до получения файла.
-- `assets-manifest.yaml` генерируется с пустым списком (клиент не предоставил ничего) — этап нельзя считать пройденным; нужно запросить материалы повторно.
+- Парсинг отзывов падает по сети или блокировке сайта — агент сообщает об ошибке и спрашивает: повторить или пропустить источник.
+- Фотографий меньше 3–5 штук — `style-report.md` возвращает «не хватает», агент запрашивает дополнительные материалы у клиента и не закрывает этап.
+- `current_stage != 02_assets` в state-файле — агент останавливается сразу, не выполняет никаких Write/Edit действий.
+- Отсутствует `01a_АНАЛИЗ_НИШИ/visual-requirements.md` — нельзя корректно сформулировать запрос на нужные фото, агент должен остановиться.
+- harness PreToolUse hook блокирует Write/Edit, если предшественник не закрыт — нельзя обходить, нужно закрыть предшественника.
 
 ## Related
 
-- [[landing-niche]] — поставляет `visual-requirements.md`, без которого агент не знает, что запрашивать у клиента
-- [[landing-references]] — следующий этап (03), открывается после approve галереи
-- [[landing-go]] — единая точка входа, диспатчит этот агент через оркестратор
+- [[client-assets-collection]] — Python-скрипты парсинга отзывов и анализа стиля фото, которые вызывает этот агент
+- [[01a-analiz-nishi]] — обязательный вход: задаёт требования к фото и red flags для запроса клиенту
+- [[photo-curator]] — следующий в цепочке: принимает отобранные фото для дальнейшей обработки
+- [[landing-orchestrator]] — диспатчит агента в рамках pipeline по состоянию `.landing-state.yaml`
+- [[02-materialy-klienta]] — целевая папка-этап, которую агент наполняет артефактами

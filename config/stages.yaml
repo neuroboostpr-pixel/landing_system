@@ -18,12 +18,17 @@ stages:
   - {id: 01_context,          label: "Контекст"}
   - {id: 01a_niche_analysis,  label: "Анализ ниши"}
   - {id: 02_assets,           label: "Материалы"}
+  # 07a_prototype идёт ПЕРВЫМ в design-ветке (prototype-first, reference-driven
+  # flow §1): прототип — правда о структуре, рисуется до сбора референсов/бренда/
+  # дизайн-системы. Совпадает с CLAUDE.md (PR-D), dispatch-таблицей /landing-go и
+  # дефолтным in_progress=07a в template/.landing-state.yaml. Топология
+  # require_approved сохранена: 07_content(→07a), 07c_composed(→05_design,07a).
+  - {id: 07a_prototype,       label: "Прототип"}
   - {id: 03_references,       label: "Референсы"}
   - {id: 03b_visual_concept,  label: "Визуальная концепция"}
   - {id: 04_brand,            label: "Бренд"}
   - {id: 05_design,           label: "Дизайн-система"}
   - {id: 06_stack,            label: "Стек"}
-  - {id: 07a_prototype,       label: "Прототип"}
   - {id: 07_content,          label: "Контент"}
   - {id: 07c_composed,        label: "Макет (composed)"}
   - {id: 07d_photos,          label: "Фото"}

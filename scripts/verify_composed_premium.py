@@ -38,14 +38,28 @@ REQUIRED: list[tuple[str, str]] = [
 
 RECOMMENDED: list[tuple[str, str]] = [
     (r"backdrop-filter\s*:", "glassmorphism (backdrop-filter)"),
-    (r"(scrollY|[^\w]y)\s*\*\s*0\.\d", "parallax"),
     (r"slider-track|swiper|slick", "слайдер"),
     (r"lightbox", "lightbox"),
-    (r"text-fill-color\s*:\s*transparent", "gradient text"),
     (r"requestAnimationFrame|count-up", "count-up"),
-    (r"clip-path\s*:|mask-image\s*:", "нестандартные формы"),
-    (r"translateY\(-\d", "hover lift"),
 ]
+
+# КОЛЛАЖ/ГЛУБИНА — HARD (reference-driven §3). Премиальность = композиционная
+# глубина, не тёмный фон. Требуем минимум COLLAGE_MIN из COLLAGE приёмов —
+# чтобы запретить плоскую вёрстку «карточки в ряд».
+COLLAGE: list[tuple[str, str]] = [
+    (r"position\s*:\s*absolute", "слои (position:absolute) — наезжающие элементы"),
+    (r"clip-path\s*:|mask-image\s*:|border-radius\s*:\s*\d+%\s+\d+%",
+     "форма-подложка/блоб (clip-path/mask/неровный border-radius)"),
+    (r"-webkit-text-fill-color\s*:\s*transparent|text-fill-color\s*:\s*transparent",
+     "gradient text (акцент на ключевом слове)"),
+    (r"translateY\(-\d", "hover lift (подъём карточек)"),
+    (r"(scrollY|[^\w]y)\s*\*\s*0\.\d|parallax", "parallax/слой фона"),
+    (r'class="[^"]*\bnum\b|font-size\s*:\s*clamp\([^)]*[3-9]rem',
+     "крупные цифры-якоря (display-размер)"),
+    (r"radial-gradient|linear-gradient\([^)]*\b(glow|свеч)|box-shadow\s*:[^;]*\d{2,}px[^;]*rgba",
+     "свечение/градиентная глубина"),
+]
+COLLAGE_MIN = 4
 
 # эмодзи-диапазоны (основные блоки)
 _EMOJI = re.compile(
@@ -87,6 +101,22 @@ def main() -> int:
         failed.append("эмодзи в заголовках")
     else:
         print("  ✓  нет эмодзи в заголовках")
+
+    # КОЛЛАЖ — HARD: минимум COLLAGE_MIN приёмов глубины
+    print(f"  — коллаж/глубина (нужно ≥{COLLAGE_MIN} из {len(COLLAGE)}, HARD):")
+    collage_hits = 0
+    for pattern, desc in COLLAGE:
+        ok = re.search(pattern, html) is not None
+        if ok:
+            collage_hits += 1
+        print(f"  {'✓' if ok else '✗'}  {desc}")
+    if collage_hits < COLLAGE_MIN:
+        failed.append(
+            f"коллаж: только {collage_hits}/{len(COLLAGE)} приёмов глубины "
+            f"(нужно ≥{COLLAGE_MIN}) — вёрстка плоская, не премиум"
+        )
+    else:
+        print(f"  ✓  коллаж: {collage_hits}/{len(COLLAGE)} приёмов (порог {COLLAGE_MIN})")
 
     print("  — рекомендации (не блокируют):")
     for pattern, desc in RECOMMENDED:

@@ -14,7 +14,10 @@ import yaml
 from bs4 import BeautifulSoup
 
 
-SKIP_KEYS = {"id", "type", "block_id", "class", "tag", "data-block"}
+# name/hint — это метаданные слота (машинный id и описание фото-инструкция),
+# а не видимый текст лендинга → не требуем их в composed (reference-driven §1.1).
+SKIP_KEYS = {"id", "type", "block_id", "class", "tag", "data-block", "name", "hint",
+             "slug", "source_file", "action"}
 MIN_LEN = 3  # минимальная длина строки чтобы проверять (короткие — false positives)
 PLACEHOLDER_MARKERS = ("____", "___", "TBD", "tbd")
 

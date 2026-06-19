@@ -1,11 +1,12 @@
 ---
 slug: brand-architect
 type: agent
-name: "Brand Architect"
+name: "Brand Architect — синтез бренд-кита"
 stage: "04"
-tags: [brand-kit, style, provenance, legal, 152-fz, palette, fonts, icons]
+tags: [brand, typography, palette, provenance, legal]
 triggers: [landing-brand]
 inputs:
+  - 03b_КОНЦЕПТ/visual-concept.yaml
   - 04_БРЕНД/extracted/palette.yaml
   - 04_БРЕНД/extracted/fonts.yaml
   - 04_БРЕНД/extracted/icons.yaml
@@ -19,48 +20,48 @@ outputs:
   - 04_БРЕНД/brand-kit.md
   - 04_БРЕНД/brand-kit.html
   - 04_БРЕНД/extracted/legal.yaml
-gates: [brand-kit-approved]
-pre_reqs: [style-extractor]
-related:
-  - landing-brand
-  - landing-design
-  - landing-niche
+gates: [brand_kit_html_approved]
+pre_reqs: [03-referensy, 01a-analiz-nishi, style-extractor]
+related: [brand-kit-build, landing-brand, style-extractor, design-system-generator, 04-brend, stage-execution-protocol, niche-analyst]
 sources: ["agents/brand-architect.md"]
-updated: 2026-05-26
-confidence:
-  triggers: low
+updated: 2026-06-19
+confidence: {gates: low}
 ---
 
-# Brand Architect
+# Brand Architect — синтез бренд-кита
 
 ## Что делает
 
-Агент этапа 04. Синтезирует все извлечённые стилевые данные (палитра, шрифты, иконки, сетка, анимации) в единый `brand-kit.md` с полным указанием источника для каждого токена. Параллельно собирает legal-реквизиты Оператора ПД (для 152-ФЗ compliance) и записывает их в `legal.yaml`. На выходе рендерит HTML-превью `brand-kit.html` со свотчами, образцами шрифтов и иконками для визуального утверждения командой.
+Агент этапа 04: собирает все данные, извлечённые на предшествующих шагах (палитра, шрифты, иконки, сетка, анимации), и синтезирует единый `brand-kit.md` с полной провенансой — каждый токен трассируется к источнику. Реализует визуальный концепт из `03b_КОНЦЕПТ/visual-concept.yaml`, не изобретая палитру самостоятельно. Дополнительно собирает legal-реквизиты Оператора ПД (152-ФЗ) и рендерит HTML-превью бренд-кита для согласования с клиентом.
 
 ## Когда вызывается
 
-Запускается командой `/landing-brand` после того, как `style-extractor` отработал и все пять файлов в `04_БРЕНД/extracted/` присутствуют. Агент читает `.landing-state.yaml` и убеждается, что `current_stage == 04_brand`; иначе отказывается действовать.
+Запускается командой `/landing-brand` после завершения этапа 03 (референсы одобрены, `visual-concept.yaml` присутствует). Не стартует без утверждённого visual-concept: при отсутствии файла останавливается и просит запустить `/landing-visual-concept`.
 
 ## Вход → выход
 
-**Вход:** пять YAML/MD-артефактов от `style-extractor` (`palette.yaml`, `fonts.yaml`, `icons.yaml`, `grid.md`, `motion.md`) + одобренный список референсов `03_РЕФЕРЕНСЫ/index.yaml` + три обязательных документа ниши (`positioning.md`, `market-profile.md`, `landing-structure.md`).
+**Вход:** утверждённый `visual-concept.yaml`; пять извлечённых артефактов из `04_БРЕНД/extracted/` (палитра, шрифты, иконки, сетка, motion); `03_РЕФЕРЕНСЫ/index.yaml`; три файла ниши из `01a_АНАЛИЗ_НИШИ/` (positioning, market-profile, landing-structure).
 
-**Выход:** `04_БРЕНД/brand-kit.md` — канонический бренд-кит с провенансом; `04_БРЕНД/brand-kit.html` — визуальный превью; `04_БРЕНД/extracted/legal.yaml` — реквизиты Оператора ПД (или заглушки `TODO_LEGAL`).
+**Выход:** `04_БРЕНД/brand-kit.md` — канонический бренд-кит с провенансой; `04_БРЕНД/brand-kit.html` — визуальный превью (свотчи, образцы шрифтов, иконки); `04_БРЕНД/extracted/legal.yaml` — юридические реквизиты клиента.
 
 ## Чем закрывается этап (gates)
 
-- `brand-kit-approved` — пользователь явно утвердил `brand-kit.html` перед переходом на этап 05 (Design System).
+- `brand_kit_html_approved` — пользователь явно одобрил `brand-kit.html` перед переходом к этапу 05
 
 ## Failure modes
 
-- Один из пяти `extracted/*.yaml` файлов отсутствует — агент останавливается с ошибкой hard gate; решение: перезапустить `style-extractor`.
-- Файл `01a_АНАЛИЗ_НИШИ/positioning.md` не содержит поля `**Mode:**` — бренд-кит генерируется без mode-аугментации, тон и палитра могут не соответствовать нише.
-- Пользователь пропускает сбор legal-данных — поля заполняются `TODO_LEGAL`; `landing-deploy` будет заблокирован до заполнения.
-- `scripts/gate-check.sh --stage 04_brand` возвращает exit != 0 — `PreToolUse` hook блокирует все Write/Edit, нужно закрыть предшественника.
-- `brand-kit.html` утверждён без проверки соответствия блокам из `landing-structure.md` — design-system на этапе 05 не покроет все `template-parts`.
+- **Отсутствует `visual-concept.yaml`** — агент останавливается; этап 03b не завершён, дальнейшая работа заблокирована.
+- **Концептуальная правка после показа превью** (другой цвет, другой mood) — без перезаписи `visual-concept.yaml` агент отклоняет правку и просит сначала обновить файл концепта.
+- **Неполный набор extracted-артефактов** — HARD GATE не пропускает генерацию, если хоть один из пяти файлов отсутствует.
+- **Legal-реквизиты не заполнены** — pipeline не блокируется, но деплой в РФ невозможен; секция Legal в brand-kit остаётся с метками `TODO_LEGAL`.
+- **Предшественник (03-referensy) не закрыт** — PreToolUse-хук физически блокирует Write/Edit к файлам этапа 04.
 
 ## Related
 
-- [[landing-brand]] — slash-команда, которая запускает этого агента
-- [[landing-design]] — следующий этап (05), потребляет `brand-kit.md` как основной вход
-- [[landing-niche]] — поставляет `positioning.md` и `market-profile.md` с описанием ниши и accessibility-tier
+- [[brand-kit-build]] — скилл-владелец; содержит Python-скрипты `build.py` и `render-html.py`
+- [[landing-brand]] — slash-команда, которая диспатчит этого агента
+- [[style-extractor]] — производит все extracted/*.yaml, необходимые на входе
+- [[design-system-generator]] — следующий этап (05), использует brand-kit.md как базу
+- [[04-brend]] — каталог этапа, в котором агент работает
+- [[stage-execution-protocol]] — обязательный протокол pre-flight перед любым Write
+- [[niche-analyst]] — производит positioning.md и market-profile.md, влияющие на типографику и палитру

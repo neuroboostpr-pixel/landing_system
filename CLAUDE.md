@@ -147,9 +147,9 @@ bash scripts/migrate-template-readmes.sh ~/Lendings/<existing-project>
 | Стандарт | Применяется | Verify-скрипт |
 |---|---|---|
 | [`stage-execution-protocol.md`](docs/standards/stage-execution-protocol.md) | **Все этапы** — обязательный протокол для orchestrator и любых stage-агентов | `scripts/render-pipeline-map.sh` (показывает карту) |
-| [`reference-driven-rules.md`](docs/standards/reference-driven-rules.md) | 07c Compose — правило трёх источников, поблочная сверка, composed=канон | гейт `structure_check_md` + `verify-content-preserved.sh` |
+| [`reference-driven-rules.md`](docs/standards/reference-driven-rules.md) | 07c Compose — прототип=ТОЛЬКО структура (§1.1), раскладку прототипа НЕ копировать 1:1 — дизайн свой (§1.2), premium≠тёмный (§1.3), текст не выдумывать (§2.1) | `structure_check_md` + `verify-content-preserved.sh` + `verify_no_invented_text.py` |
 | [`design-elements-rules.md`](docs/standards/design-elements-rules.md) | 07c Compose — декор/иконки/разделители, дерево решений | — |
-| [`premium-07b-checklist.md`](docs/standards/premium-07b-checklist.md) (v2) | 07c Compose | `scripts/verify-composed-premium.sh` |
+| [`premium-07b-checklist.md`](docs/standards/premium-07b-checklist.md) (v2 + hard gates) | 07c Compose | `verify-composed-premium.sh` + `verify_collage_depth.py` (глубина ≥5/6) + `verify-block-transitions.py` (единые переходы) + `verify-collage-plan.py` (анализ блоков) |
 | Токенизация цветов (спека §4.3) | 07c + 08 | `scripts/verify_tokens.py` |
 | Болячки сборки (спека §4.2) | 08 Build | `skills/wp-gutenberg-block-builder/scripts/lint-theme-php.py` |
 | [`logo-icon-favicon.md`](docs/standards/logo-icon-favicon.md) | 07d/08/09 — логотипы, favicon | — |

@@ -24,6 +24,11 @@ stages:
   "01a_niche_analysis":   {status: locked, timestamp: ""}
   "02_assets":            {status: locked, timestamp: ""}
 
+  # Prototype-first: прототип (07a) ПЕРВЫЙ в design-ветке (reference-driven §1).
+  # Порядок совпадает с config/stages.yaml (E1). По умолчанию in_progress —
+  # новый проект стартует с импорта прототипа.
+  "07a_prototype":        {status: in_progress, timestamp: ""}
+
   # User-interactive design stages
   "03_references":        {status: locked, timestamp: ""}
   "03b_visual_concept":   {status: locked, timestamp: ""}
@@ -33,9 +38,7 @@ stages:
   # Auto stages
   "06_stack":             {status: locked, timestamp: ""}
 
-  # Prototype-first: сначала прототип (07a), затем контент (07_content
-  # требует approved 07a_prototype в stage-gates.yaml)
-  "07a_prototype":        {status: in_progress, timestamp: ""}
+  # Контент после design-ветки (07_content требует approved 07a_prototype)
   "07_content":           {status: locked, timestamp: ""}
 
   # Reference-driven: макет composed.html рисует агент (wireframe-этап удалён)

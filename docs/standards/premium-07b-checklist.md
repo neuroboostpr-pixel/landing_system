@@ -409,3 +409,22 @@ function scrollTo(id) {
 ### 20. clip-path или mask-image для нестандартных форм
 Хотя бы один блок имеет нестандартную форму через clip-path (geometric mask, angled bottom) — премиум-маркер 2026.
 
+---
+
+## HARD GATES этапа 07c (измеримые, блокируют закрытие)
+
+Помимо чек-листа выше, этап 07c/07f закрывается только если PASS все скрипты:
+
+| Гейт | Скрипт | Что проверяет |
+|---|---|---|
+| `composed_premium_standard` | `verify-composed-premium.sh` | 10 обязательных premium-паттернов + нет эмодзи в заголовках |
+| `collage_depth` | `verify_collage_depth.py` | **измеримая глубина ≥5 из 6** (≥6 `position:absolute`, наезды за рамку, ≥2 парящих декор-формы, типографика ≥4rem, вырезанное фото на форме, ≥2 свечения/тени). Ловит плоское «карточки в ряд», независимо от темы |
+| `block_transitions` | `verify-block-transitions.py` | **единые переходы между ВСЕМИ секциями** (один приём: чередование base↔deep ИЛИ единый divider), не вперемешку |
+| `collage_plan_exists` | `verify-collage-plan.py` | артефакт `07b_COMPOSED/collage-plan.md` — анализ каждого блока (§3.4), `COLLAGE_PLAN: READY` |
+| `no_invented_text` | `verify_no_invented_text.py` | нет НОВЫХ слов-смыслов сверх прототипа (оформление — можно), терпимо к словоформам |
+| `content_preserved` | `verify-content-preserved.sh` | все тексты прототипа present, порядок сохранён |
+| `tokens_only_colors` | `verify_tokens.py` | 0 прямых цветов вне `:root` |
+| `structure_check_md` | `verify-structure-check.py` | поблочная сверка, `STRUCTURE_MATCH: PASS` |
+
+**Светлая/тёмная тема — обе валидны.** `collage_depth` проверяет глубину, не цвет.
+
