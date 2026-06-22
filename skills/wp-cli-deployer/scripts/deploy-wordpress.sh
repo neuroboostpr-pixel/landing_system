@@ -140,23 +140,33 @@ else
 fi
 
 # ── C4: деплой забывал .htaccess → REST/превью блоков ломались ──
+# C4-fix (2026-06-22): для установки в ПОДПАПКУ (public_html/<slug>) RewriteBase
+# обязан быть /<slug>/, иначе pretty-permalink REST (/wp-json/) уходит в корень
+# домена → 404 → редактор Gutenberg падает «not a valid JSON response».
+# Вычисляем subpath из BEGET_PATH (часть после .../public_html) и ВСЕГДА
+# перезаписываем .htaccess (старый с RewriteBase / тоже чинится).
 echo "▶ Ensure .htaccess + rewrite rules"
-ssh_run "test -f ${BEGET_PATH}/.htaccess" || {
-    echo "  .htaccess отсутствует — создаю дефолтный WordPress"
-    ssh_run "cat > ${BEGET_PATH}/.htaccess <<'HTEOF'
+# subpath = всё после public_html/ ; для корня домена пусто → RewriteBase /
+HT_SUBPATH="$(printf '%s' "$BEGET_PATH" | sed -E 's#.*/public_html##; s#^/+##; s#/+$##')"
+if [ -n "$HT_SUBPATH" ]; then
+    HT_BASE="/${HT_SUBPATH}/"
+else
+    HT_BASE="/"
+fi
+echo "  RewriteBase=${HT_BASE} (subdir-aware)"
+ssh_run "cat > ${BEGET_PATH}/.htaccess <<HTEOF
 # BEGIN WordPress
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
-RewriteBase /
-RewriteRule ^index\.php$ - [L]
+RewriteBase ${HT_BASE}
+RewriteRule ^index\\.php\$ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . /index.php [L]
+RewriteRule . ${HT_BASE}index.php [L]
 </IfModule>
 # END WordPress
 HTEOF"
-}
 ssh_run "$WP rewrite structure '/%postname%/' 2>/dev/null || true"
 ssh_run "$WP rewrite flush --hard" || ssh_run "$WP rewrite flush" || true
 

@@ -134,6 +134,41 @@ wp option update home 'http://<host>/<path>'
 
 **Профилактика на новом проекте:** не ставить `siteurl=https://` пока SSL не настроен **и не проверен** через curl. Stage-08 генератор должен выставлять `http://` по умолчанию, апгрейдить на `https://` только после успешного выпуска SSL.
 
+### 7. WP в ПОДПАПКЕ + `.htaccess RewriteBase /` = REST API 404 = админка «not a valid JSON response»
+
+**Симптом (validated на cars-auto и hibridcars-uae):** в wp-admin при сохранении страницы — `Updating failed. The response is not a valid JSON response`, превью Lazy Blocks — `Error loading block preview: The response is not a valid JSON response`. Фронтенд при этом открывается нормально.
+
+**Корень:** сайт установлен в подпапку (`public_html/<slug>`), а `.htaccess` имеет `RewriteBase /` и `RewriteRule . /index.php` (пути для КОРНЯ домена). Pretty-permalink REST `/<slug>/wp-json/` маршрутизируется в корень домена → Apache 404. Gutenberg-редактор бьёт по `/wp-json/` и получает HTML-404 вместо JSON.
+
+**Диагностика:**
+```bash
+curl -s   http://<host>/<slug>/wp-json/                    # HTML 404 (Apache) = баг
+curl -s   'http://<host>/<slug>/index.php?rest_route=/'    # JSON = REST жив, дело в rewrite
+ssh ... "cat <BEGET_PATH>/.htaccess"                       # RewriteBase / ?
+```
+
+**Решение** — `RewriteBase` и таргет правила должны включать подпапку:
+```apache
+RewriteBase /<slug>/
+RewriteRule . /<slug>/index.php [L]
+```
+
+**Профилактика (зафиксировано во флоу):** `deploy-wordpress.sh` (блок «C4») теперь вычисляет subpath из `BEGET_PATH` (часть после `public_html`) и **всегда перезаписывает** `.htaccess` с корректным `RewriteBase` (подпапка → `/<slug>/`, корень домена → `/`). Старый неверный `.htaccess` тоже чинится. Проверка после деплоя: `curl -sI http://<host>/<slug>/wp-json/` должен дать `200`.
+
+### 8. block.php хардкодит текст вместо `$attributes` = правки в wp-admin не видны на сайте
+
+**Симптом (validated на cars-auto):** маркетолог меняет поле блока (Заголовок/Подзаголовок) в редакторе, сохраняет — на сайте остаётся старый текст.
+
+**Корень:** при ручной перезаписи `block.php` под composed-дизайн текст зашивается литералом (`$heading_html = 'Premium ...'`) вместо чтения `$attributes['heading']`. Часто провоцируется тем, что в composed заголовок содержит HTML (`<span class="grad-text">`) — проще захардкодить, чем собрать из атрибута.
+
+**Решение:** каждое редактируемое поле из `block-spec.yaml` (heading/subheading/cta_text/...) ОБЯЗАНО рендериться через `$attributes['<name>'] ?? '<дефолт>'`. HTML-обёртки (grad-text и т.п.) накладываются ПОВЕРХ значения атрибута:
+```php
+$heading = $attributes['heading'] ?? 'Premium Chinese EVs & Hybrids in the UAE';
+$heading = preg_replace('/\bHybrids\b/u', '<span class="grad-text">Hybrids</span>', esc_html($heading), 1);
+```
+
+**Профилактика (зафиксировано во флоу):** гейт 08 (`config/stage-gates.yaml`) получил hard-check `block_php_uses_attributes` (скрипт `scripts/verify-block-php-uses-attributes.py`) — он сверяет каждый text/textarea-control блока с наличием `$attributes['name']` в его `block.php`. Хардкод → FAIL до закрытия сборки.
+
 ---
 
 ## Wildcard SSL: два рабочих способа
