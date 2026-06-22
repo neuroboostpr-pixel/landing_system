@@ -1,61 +1,73 @@
 ---
 slug: block-composer
 type: agent
-name: "Block Composer — сборка composed.html"
+name: "Block Composer — сборщик composed.html"
 stage: "07b"
-tags: [compose, html, design-tokens, prototype, premium, reference-driven]
+tags: [compose, html, design-tokens, prototype, premium, collage]
 triggers: [landing-compose]
-inputs: [07-prototip, 05-dizayn-sistema]
-outputs: [07b-composed]
-gates: [composed_premium_standard, collage_depth, tokens_only_colors, content_preserved, no_invented_text, structure_check_md, collage_plan_exists, block_transitions]
-pre_reqs: [07-prototip, 05-dizayn-sistema]
-related: [landing-compose, premium-07b-checklist, stage-execution-protocol, 07c-photos, 07d-visuals, landing-prototype, design-system-generator]
+inputs:
+  - 07_ПРОТОТИП/prototype-*.yaml
+  - 05_ДИЗАЙН-СИСТЕМА/moods/{mood}/objects.yaml
+  - 05_ДИЗАЙН-СИСТЕМА/moods/{mood}/palette.css
+  - 05_ДИЗАЙН-СИСТЕМА/moods/{mood}/metrics.css
+  - 05_ДИЗАЙН-СИСТЕМА/moods/{mood}/typography.css
+  - 05_ДИЗАЙН-СИСТЕМА/moods/{mood}/motion.css
+  - 07b_COMPOSED/build-spec.md
+outputs:
+  - 07b_COMPOSED/composed.html
+  - 07b_COMPOSED/composed-mobile-preview.html
+  - 07b_COMPOSED/structure-check.md
+  - 07b_COMPOSED/composed-explained.md
+  - 07b_COMPOSED/collage-plan.md
+pre_reqs: [07-prototip, 05-dizayn-sistema, 06-stek, 07-kontent]
+related:
+  - landing-compose
+  - stage-execution-protocol
+  - premium-07b-checklist
+  - design-system-generator
+  - prototype-importer
+  - 07b-composed
+  - 07c-photos
+  - 07d-visuals
+  - landing-go
 sources: ["agents/block-composer.md"]
-updated: 2026-06-19
+updated: 2026-06-22
+confidence: {triggers: low}
 ---
 
-# Block Composer — сборка composed.html
+# Block Composer — сборщик composed.html
 
 ## Что делает
 
-Агент этапа 07b: рисует `07b_COMPOSED/composed.html` и `composed-mobile.html` по правилу трёх источников — структура 1:1 из `prototype.yaml`, вид из `tokens.json` (выведен из референса клиента), композиционная глубина из правил коллажа. Работает в reference-driven режиме: не подбирает готовые блоки из библиотеки, а строит макет вручную. Подставляет реальные тексты и CTA из прототипа; фото, иконки и инфографика остаются видимыми плейсхолдерами для PR-B/PR-C. По завершении запускает `verify-composed-premium.sh` и формирует `structure-check.md` с итогом `STRUCTURE_MATCH: PASS`.
+Агент рисует финальный HTML-макет лендинга (`07b_COMPOSED/composed.html`) в reference-driven режиме — без подбора готовых блоков из библиотеки. Берёт структуру и тексты из активного прототипа (`prototype-*.yaml`, `active: true`) дословно и 1:1, а вид (цвета, шрифты, кегли, эффекты) — из дизайн-системы проекта, собранной из референса клиента. Визуальные заглушки для фото, иконок и инфографики остаются: их заполнят PR-B (`/landing-photos`) и PR-C (`/landing-visuals`). По завершении запускает премиум-верификацию и не закрывает этап, пока `verify-composed-premium.sh` не вернёт exit 0.
 
 ## Когда вызывается
 
-Вызывается командой `/landing-compose` внутри папки проекта. Условие: `.landing-state.yaml` должен показывать `current_stage == 07c_composed`; этапы 07-prototip и 05-dizayn-sistema должны быть закрыты. Если предусловия не выполнены — агент останавливается и сообщает об этом.
+Вызывается командой `/landing-compose` (скилл `landing-compose`) после того, как этапы 05 (дизайн-система), 06 (стек), 07a (прототип разобран) и 07 (контент) закрыты и одобрены пользователем. Harness-хук `enforce_stage_gate.py` физически блокирует запись в файлы этапа, если предшественники не закрыты.
 
 ## Вход → выход
 
-**Вход:** `07_ПРОТОТИП/prototype.yaml` (структура, тексты, CTA), `05_ДИЗАЙН-СИСТЕМА/tokens.json` (цвета, шрифты, характер из референса), `docs/standards/premium-07b-checklist.md` и `docs/standards/reference-driven-rules.md`.
+**Вход:** активный `prototype-*.yaml` (флаг `active: true`), `build-spec.md` (ТЗ — маппинг контента на роли ДС), `objects.yaml` / `palette.css` / `metrics.css` / `typography.css` / `motion.css` из папки нужного муда дизайн-системы.
 
-**Выход:** `07b_COMPOSED/composed.html` (полный цветной макет, 13 premium-фич), `composed-mobile.html` (адаптив), `composed-mobile-preview.html` (iframe для глазной проверки), `collage-plan.md` (поблочный анализ глубины), `structure-check.md` (сверка с прототипом, заканчивается `STRUCTURE_MATCH: PASS`), `composed-explained.md` (описание решений на русском).
-
-## Чем закрывается этап (gates)
-
-- `composed_premium_standard` — `verify-composed-premium.sh` возвращает exit 0 (все 13 фич присутствуют)
-- `collage_depth` — `verify_collage_depth.py` фиксирует ≥5/6 приёмов глубины
-- `tokens_only_colors` — `verify_tokens.py` находит 0 прямых цветов вне `:root`
-- `content_preserved` — `verify-content-preserved.sh` подтверждает сохранность всех текстов прототипа
-- `no_invented_text` — `verify_no_invented_text.py` не находит выдуманных слов
-- `structure_check_md` — `structure-check.md` заканчивается строкой `STRUCTURE_MATCH: PASS`
-- `collage_plan_exists` — файл `collage-plan.md` существует и непуст
-- `block_transitions` — `verify-block-transitions.py` подтверждает единые переходы между секциями
+**Выход:** `composed.html` (цветной макет с реальными текстами и видимыми плейсхолдерами), `composed-mobile-preview.html` (iframe iPhone+iPad), `structure-check.md` (поблочная сверка, должна заканчиваться `STRUCTURE_MATCH: PASS`), `collage-plan.md` (анализ блоков по глубине коллажа), `composed-explained.md` (краткое описание на русском), опционально `.stage-decisions/07b_composed.md` (самостоятельные решения агента).
 
 ## Failure modes
 
-- **Галлюцинация структуры** — агент добавляет блок или элемент, которого нет в прототипе; гейт `no_invented_text` / `structure_check_md` заблокирует закрытие этапа.
-- **Копирование раскладки прототипа** — CSS повторяет визуальный скриншот прототипа вместо своего дизайна; нарушает §1.2 reference-driven-rules, внешне незаметно до ревью.
-- **Пропуск premium-фич** — одна из 13 обязательных фич отсутствует; `verify-composed-premium.sh` вернёт ненулевой exit-код, HARD GATE не пройдён.
-- **Прямые цвета вне `:root`** — хардкод `#hex` вместо CSS-переменных; ломает переключение mood-палитр, гейт `tokens_only_colors` упадёт.
-- **Запуск на неправильном этапе** — `current_stage` в `.landing-state.yaml` не соответствует `07c_composed`; `enforce_stage_gate.py` физически заблокирует Write/Edit.
+- **Нет активного прототипа** — файл не найден или `active: true` не выставлен; агент не может определить структуру и останавливается.
+- **Галлюцинация структуры** — агент добавил блок или элемент, которого нет в прототипе; гейт `structure_check_md` падает (`STRUCTURE_MATCH: FAIL`).
+- **Хардкод цветов / размеров** — прямые hex-значения или числа вне `var()` нарушают гейт `tokens_only_colors`; `verify_tokens.py` вернёт ошибки.
+- **Отсутствие премиум-фич** — одна или несколько из 13 обязательных фич пропущены; `verify-composed-premium.sh` возвращает exit != 0, этап не закрывается.
+- **Изменённый или выдуманный текст** — любое «улучшение» заголовка или добавление нового смысла без явного разрешения пользователя нарушает гейты `content_preserved` и `no_invented_text`.
+- **Предшественник не закрыт** — попытка записать файл при незакрытом этапе 05/06/07 блокируется harness-хуком со сообщением «Stage gate enforcement».
 
 ## Related
 
-- [[landing-compose]] — slash-команда, запускающая этот агент
-- [[premium-07b-checklist]] — definition of done: 13 обязательных фич
-- [[stage-execution-protocol]] — обязательный протокол pre-flight для всех этапов
+- [[landing-compose]] — скилл-точка входа, вызывает этого агента
+- [[stage-execution-protocol]] — обязательный протокол pre-flight перед любым Write/Edit
+- [[premium-07b-checklist]] — definition of done: 13 премиум-фич, без которых этап не закрыть
+- [[design-system-generator]] — создаёт дизайн-систему (05), которую читает агент
+- [[prototype-importer]] — разбирает прототип (07a), из которого берётся структура
 - [[07b-composed]] — этап pipeline, который закрывает этот агент
-- [[07c-photos]] — следующий этап: подстановка реальных фото вместо плейсхолдеров (PR-B)
-- [[07d-visuals]] — параллельный этап: AI-генерация иконок и инфографики (PR-C)
-- [[landing-prototype]] — предшественник: импорт и нормализация прототипа клиента
-- [[design-system-generator]] — предшественник: генерация tokens.json из референса
+- [[07c-photos]] — следующий этап: подставляет реальные фото в плейсхолдеры
+- [[07d-visuals]] — следующий этап: подставляет иконки и инфографику
+- [[landing-go]] — оркестратор, диспатчит агента в нужный момент конвейера
