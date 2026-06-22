@@ -1,0 +1,164 @@
+# Dark-mint mood — RECIPES (приёмы коллажа/декора)
+#
+# ВИД снят ГЛАЗАМИ с ___References/02/ (01–05.png — онлайн-обучение «ДЕНЬГИ PRO»).
+# Читает АГЕНТ при этапе 07c (compose), НЕ код. Рецепт направляет руку агента.
+#
+# ЧТО ЕСТЬ: только приёмы «как мод делает красоту», в терминах lp-классов + токенов.
+# ЧЕГО НЕТ: текстов, слотов, «какие блоки» — это даёт ПРОТОТИП. Переносится на любой
+#   проект на dark-mint без изменений.
+# 08-формат: реальный текст в семантических тегах (h1/p/li/a), один <section class="lp-...">
+#   на блок — 08 (composed-to-build.py) извлекает поля Lazy Blocks из текста сам.
+
+meta:
+  mood: dark-mint
+  ref: "___References/02/ (01–05.png)"
+  character: "тёмный premium, неон-мята; коллаж: фигура-вырез + ромбы-кристаллы + купюры + glow; гигантская дисплейная типографика (часть контурная)"
+  reader: agent
+  stage: "07c"
+
+recipes:
+
+  - id: hero_layout
+    title: "КАРТА ЗОН hero — слоёный коллаж по координатам (ГЛАВНАЯ фишка рефа 02)"
+    analysis: "Заполнять зоны по _REFERENCE-ANALYSIS-LOGIC.md (роли зон ← реф, смыслы ← прототип, БЕЗ дубля, правило непересечения шаг 4)."
+    intent: >
+      Hero — НЕ «колонка текста слева + фото справа». Это ПОЗИЦИОННЫЙ ХОЛСТ: фигура-якорь
+      по центру, гигантские слова-якоря по РАЗНЫМ краям (наезжают на фигуру), мелкие
+      текст-блоки и объекты раскиданы по УГЛАМ, всё слоится по z. Снято с реф 02/01.
+      ЯКОРЯ: anchor_fill = accent_word прототипа (залит). anchor_outline = ДРУГАЯ
+      отдельная единица (qualifier/action), НЕ часть accent_word. Нет такой — outline НЕ рисуем.
+    lp_class: "lp-hero-canvas (position:relative; min-height:92vh) + абсолютные зоны"
+    css_hint: >
+      Холст: position:relative, min-height ~92vh, overflow скрыт по краям умеренно.
+      Каждый элемент — position:absolute по координате (см. zones). Фигура — по центру,
+      z между задними и передними словами. На мобиле зоны схлопываются в поток (flow).
+    zones:
+      figure:      {pos: "центр, низ→верх", z: 3, role: "якорь композиции (вырез+glow)"}
+      anchor_fill: {pos: "ЛЕВЫЙ край, средняя высота", z: 4, text: "ключевое слово прототипа", style: "гигант, мята-залив, можно вертикально/наклон"}
+      anchor_outline: {pos: "ПРАВЫЙ край, чуть ниже центра", z: 2, text: "одно короткое слово", style: "гигант, контур, ЗА фигурой"}
+      script_eyebrow: {pos: "над anchor_fill (верх-лево)", z: 5, text: "eyebrow прототипа", style: "рукопись Caveat, наклон"}
+      badge_top:   {pos: "верх-лево", z: 5, text: "дата/плашка-доверие", style: "мелкая, с галкой"}
+      text_tl:     {pos: "лево, под anchor_fill", z: 5, text: "короткий абзац (subhead/фишки)", style: "мелкий"}
+      text_tr:     {pos: "верх-право", z: 5, text: "короткий тезис (доверие/число)", style: "мелкий"}
+      text_br:     {pos: "право, ниже anchor_outline", z: 5, text: "абзац-объяснение", style: "мелкий"}
+      cta_round:   {pos: "низ, лево/центр", z: 6, text: "CTA прототипа", style: "круглая мятная кнопка"}
+      objects:     {pos: "верх-право + лево + низ-лево", z: "2 и 6", style: "ромбы-кристаллы, летящие купюры, мелкие карты — по пустотам, часть за фигурой часть перед"}
+    layers: "фон → объекты-зад(z2) → anchor_outline(z2) → фигура(z3) → anchor_fill(z4) → тексты/badge(z5) → cta+объекты-перёд(z6)"
+    when_to_use: >
+      hero. Раскидать элементы прототипа (eyebrow, ключевое слово, хвост H1, фишки, CTA, badge)
+      по этим зонам — НЕ собирать в одну колонку. Точные слова/тексты — из прототипа.
+      Мобила: зоны в вертикальный поток.
+
+  - id: block_divider
+    title: "Тёмный переход со сменой провала (НЕ волна)"
+    intent: "Между блоками — смена тёмного тона (база ↔ самый тёмный провал) + ромбы по стыку. Не линия, не волна — глубина за счёт градиента-зоны."
+    lp_class: "lp-zone-shift"
+    css_hint: >
+      Соседние секции отличаются фоном: var(--lp-bg) ↔ var(--lp-bg-deep).
+      На стыке — пара ромбов (lp-diamond) и/или мягкое glow-пятно. Резких линий нет.
+    tokens: ["--lp-bg", "--lp-bg-deep"]
+    when_to_use: "Любой переход между секциями. Чередовать тон, чтобы был ритм глубины."
+
+  - id: accent_zone
+    title: "Teal-подложка с угловым glow"
+    intent: "Важный блок выносится на глубокий teal (var(--lp-surface-2)) с мятным glow в угол — как панель «про что курс» реф 02/02."
+    lp_class: "lp-teal-zone"
+    css_hint: >
+      background:var(--lp-surface-2) ИЛИ linear-gradient к нему; в угол — radial glow
+      var(--lp-accent) opacity .14 blur 70px. Текст белый. Карточки внутри — var(--lp-surface).
+    tokens: ["--lp-surface-2", "--lp-accent", "--lp-surface"]
+    when_to_use: "1–2 акцент-блока (про/форма/тариф-выделение). Не вся страница."
+
+  - id: accent_band
+    title: "Полноширинная TEAL-зона-якорь (держит яркость)"
+    intent: "1–2 секции на глубоком teal (var(--lp-surface-2)) с мятным glow — крупные акцент-пятна (кейсы, доверие). Без них тёмный лендинг монотонный (П2)."
+    lp_class: "lp-teal-zone (full-bleed)"
+    css_hint: "Секция background:var(--lp-surface-2); карточки темнее (rgba bg-deep); мятный glow в угол; заголовок белый."
+    tokens: ["--lp-surface-2", "--lp-accent"]
+    when_to_use: "Кейсы, доверие, CTA-зона. 1–2 раза."
+
+  - id: section_bg_rhythm
+    title: "Смена фона секций (ритм тёмных тонов, П2)"
+    intent: "Фон чередуется: база (--lp-bg) ↔ провал (--lp-bg-deep) ↔ teal-зона (--lp-surface-2). Не все секции одним тоном."
+    lp_class: "чередование на <section>"
+    css_hint: "Соседние секции — разный тёмный тон. Глубина за счёт смены тона + glow."
+    tokens: ["--lp-bg", "--lp-bg-deep", "--lp-surface-2"]
+    when_to_use: "Все секции."
+
+  - id: cta
+    title: "Мятная кнопка (заливка или круглая)"
+    intent: "Действие — неон-мята. Главная hero-CTA может быть КРУГЛОЙ (как «ЗАНЯТЬ МЕСТО» реф 02/01); прочие — пилюля."
+    lp_class: "lp-cta-btn"
+    css_hint: >
+      background:var(--lp-accent); color:var(--lp-on-accent) (тёмный текст!);
+      border-radius:40px пилюля ИЛИ 50% круг для hero; glow-тень мятная; hover → var(--lp-accent-2)+lift.
+    tokens: ["--lp-accent", "--lp-on-accent", "--lp-accent-2"]
+    when_to_use: "Главные CTA. Круглый вариант — только hero/одиночный сильный акцент."
+
+  - id: headline_anchor
+    title: "Дисплей-заголовок: ДВА коротких слова-якоря (залит + контур), остальное мелко"
+    intent: >
+      Как реф 02/01: гигантское залитое слово (мятой) + гигантское КОНТУРНОЕ слово
+      по РАЗНЫМ краям, фигура между ними. Это 1–2 КОРОТКИХ слова-якоря, НЕ предложение.
+      Полная фраза заголовка прототипа — это НЕ дисплей: ключевое слово делается гигантским
+      залитым, ОДНО второе короткое слово — контурным; ВЕСЬ ОСТАЛЬНОЙ текст H1 идёт обычным
+      некрупным весом (var(--fs-h3)/h4), рядом, НЕ контуром.
+    lp_class: "lp-display (.fill + .outline) + lp-h-rest"
+    css_hint: >
+      ЗАПРЕТ: контур (-webkit-text-stroke) ТОЛЬКО на одно короткое слово в ОДНУ строку.
+      НИКОГДА не пускать в контур длинный хвост/предложение (растягивается на весь экран — дефект).
+      Залитое слово: color:var(--lp-accent), очень крупно (clamp до ~7rem), 1 строка.
+      Контур-слово: color:transparent; -webkit-text-stroke:1.5px var(--lp-text), очень крупно, 1 строка.
+      Остаток фразы: var(--fs-h3) или мельче, var(--lp-text), обычный вес, line-height 1.2.
+      Раскладка широкая/горизонтальная (слова по краям), НЕ узкая вертикальная колонка.
+    tokens: ["--lp-text", "--lp-accent"]
+    when_to_use: >
+      H1 hero: accent_word прототипа → гигант залитый; +1 короткое слово → контур;
+      остальное предложение → обычный некрупный текст. H2 секций — обычный Playfair.
+
+  - id: figure_glow
+    title: "Фигура-вырез на мятном glow"
+    intent: "Фото человека/объекта — вырез (PNG прозрачный) с круглым мятным glow за ним, drop-shadow вниз. Центр коллажа реф 02/01,02/04."
+    lp_class: "lp-figure-cutout"
+    css_hint: >
+      img без рамки; за ним div.glow (radial var(--lp-accent) opacity .22 blur 80px);
+      filter:drop-shadow(0 30px 60px rgba(0,0,0,.55)). Фигура справа ИЛИ по центру."
+    tokens: ["--lp-accent"]
+    when_to_use: "hero, блок автора/эксперта."
+
+  - id: void_decor
+    title: "Ромбы-кристаллы + купюры + glow по пустотам"
+    intent: "Коллажный декор: изумрудные ромбы (заливка/контур), мелкие летящие купюры/карты, glow-пятна. По углам и пустотам, в перспективе."
+    lp_class: "lp-diamond / lp-bg-glow"
+    css_hint: >
+      Ромб: 46px, border-radius 10px, rotate45, gradient var(--lp-accent)→var(--lp-accent-dark),
+      тень мятная. Контурный вариант: transparent + border var(--lp-border-strong).
+      Glow-пятно: blur 80px var(--lp-accent) низкий opacity. Не перекрывать текст.
+    tokens: ["--lp-accent", "--lp-accent-dark", "--lp-border-strong"]
+    when_to_use: "Углы hero, стыки зон, пустоты у крупных объектов."
+
+  - id: list_marker
+    title: "Ромб-маркер списка (◆)"
+    intent: "Пункты — мятный ромб ◆ (заливка=важное/выгода, контур=нейтральное/боль) — как пункты автора реф 02/04."
+    lp_class: "lp-mark"
+    css_hint: >
+      14px, border-radius 4px, rotate45. Заливка: gradient var(--lp-accent)→var(--lp-accent-dark) + тень.
+      Контур: transparent + border 1.5px var(--lp-text-muted).
+    tokens: ["--lp-accent", "--lp-accent-dark", "--lp-text-muted"]
+    when_to_use: "Списки выгод (заливка) vs боли (контур)."
+
+  - id: card_panel
+    title: "Тёмная скруглённая панель с мятным контуром"
+    intent: "Карточки — тёмные (var(--lp-surface)), скруг 24px, тонкий контур; ВЫДЕЛЕННАЯ — мятная неоновая рамка (как VIP-тариф реф 02/05)."
+    lp_class: "lp-card / lp-card--featured"
+    css_hint: >
+      background:var(--lp-surface); border:1px var(--lp-border); border-radius:24px.
+      Featured: border-color var(--lp-border-strong) + лёгкий мятный glow.
+    tokens: ["--lp-surface", "--lp-border", "--lp-border-strong"]
+    when_to_use: "stats, тарифы, форматы, панели болей/выгод."
+
+notes:
+  - "Ритм: тёмная база → teal-зона (glow) → провал-тёмный. Глубина за счёт смены тона, не линий."
+  - "Мята — единственный акцент (CTA, ромбы, контуры, числа). Никаких других ярких цветов."
+  - "Дисплей-заголовок: ровно одно слово контурное, одно залитое. Не весь заголовок."
+  - "Все приёмы — обёртка вокруг семантики (h1/p/li). Текст реальный, 08 извлекает из тегов."
