@@ -1,10 +1,10 @@
 ---
-description: Stage 07c (PR-B) — обработка клиентских фоток: AI-классификация, matching к слотам прототипа, generative fallback. Требует approved 05 design + 07a wireframe.
+description: Stage 07d — обработка клиентских фоток: AI-классификация, matching к composed-слотам, generative fallback. Требует approved 07c composed.
 ---
 
 # /landing-photos
 
-Запускает полный конвейер обработки клиентских фоток для лендинга. Это **stage 07c** между `07b_COMPOSED/` и финальным re-render для production.
+Запускает полный конвейер обработки клиентских фоток для лендинга. Это **stage 07d** после чернового `07b_COMPOSED/composed.html` и перед финальным re-render для production.
 
 ## Использование
 
@@ -19,11 +19,11 @@ description: Stage 07c (PR-B) — обработка клиентских фот
 
 ## Гейты (что должно быть готово до запуска)
 
-1. `<project>/.landing-state.yaml:stages.05_design.status == approved` — иначе:
-   > Сначала утверди дизайн-систему (`05_ДИЗАЙН-СИСТЕМА/DESIGN.md`) — без `tokens.json` промпты codex не могут попасть в стиль.
+1. `<project>/.landing-state.yaml:stages.07c_composed.status == approved` — иначе:
+   > Сначала утверди черновой composed (`07b_COMPOSED/composed.html`) — без реального макета нельзя правильно подобрать фото.
 
-2. `<project>/07_ПРОТОТИП/prototype.yaml` существует — иначе:
-   > Сначала импортируй прототип (`/landing-prototype`) — photo-слоты выводятся из прототипа.
+2. `<project>/07b_COMPOSED/composed.html` существует — иначе:
+   > Сначала запусти `/landing-compose` — photo-слоты берутся из чернового макета.
 
 ## Что происходит
 

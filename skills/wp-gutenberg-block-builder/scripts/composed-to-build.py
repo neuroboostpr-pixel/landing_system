@@ -53,6 +53,33 @@ def _normalize_img(src: str) -> str:
     return f"assets/photos/{base}" if base else src
 
 
+def _srcset_urls(srcset: str) -> list[str]:
+    urls: list[str] = []
+    for item in str(srcset or "").split(","):
+        url = item.strip().split(" ", 1)[0]
+        if url:
+            urls.append(url)
+    return urls
+
+
+def _picture_sources(img) -> list[str]:
+    picture = img.find_parent("picture")
+    if picture is None:
+        return []
+    out: list[str] = []
+    for source in picture.find_all("source"):
+        if source.get("srcset"):
+            out.extend(_srcset_urls(source["srcset"]))
+        elif source.get("src"):
+            out.append(source["src"])
+    return out
+
+
+def _first_picture_source(img) -> str:
+    sources = _picture_sources(img)
+    return _normalize_img(sources[0]) if sources else ""
+
+
 def _extract_root_tokens(html: str) -> dict[str, str]:
     tokens: dict[str, str] = {}
     for m in re.finditer(r":root\s*\{(.*?)\}", html, re.DOTALL):
@@ -77,7 +104,11 @@ def _extract_fonts(soup: BeautifulSoup, html: str) -> dict:
 
 
 def _extract_images(soup: BeautifulSoup, html: str) -> list[str]:
-    imgs = [_normalize_img(img.get("src")) for img in soup.find_all("img") if img.get("src")]
+    imgs = []
+    for img in soup.find_all("img"):
+        imgs.extend(_normalize_img(src) for src in _picture_sources(img))
+        if img.get("src"):
+            imgs.append(_normalize_img(img.get("src")))
     css_urls = re.findall(r"url\(['\"]?([^'\")]+)['\"]?\)", html)
     css_imgs = [_normalize_img(u) for u in css_urls
                 if not u.startswith("data:") and "font" not in u]
@@ -137,6 +168,9 @@ def _card_fields(card) -> dict[str, str]:
     img = card.find("img")
     if img and img.get("src"):
         fields["image"] = _normalize_img(img["src"])
+        mobile = _first_picture_source(img)
+        if mobile:
+            fields["image_mobile"] = mobile
     return fields
 
 
@@ -167,6 +201,10 @@ def _section_controls(section, exclude_card_container=None) -> list[dict]:
     if img is not None and img.get("src"):
         controls.append({"id": "c_image", "name": "image", "type": "image",
                          "label": "Изображение", "default": _normalize_img(img["src"])})
+        mobile = _first_picture_source(img)
+        if mobile:
+            controls.append({"id": "c_image_mobile", "name": "image_mobile", "type": "image",
+                             "label": "Изображение mobile", "default": mobile})
     return controls
 
 
@@ -206,9 +244,11 @@ def _build_blocks(soup: BeautifulSoup) -> list[dict]:
             first_fields = _card_fields(cards[0])
             card_controls = []
             type_map = {"name": "text", "text": "textarea",
-                        "cta_text": "text", "cta_url": "url", "image": "image"}
+                        "cta_text": "text", "cta_url": "url", "image": "image",
+                        "image_mobile": "image"}
             label_map = {"name": "Заголовок карточки", "text": "Текст карточки",
-                         "cta_text": "Кнопка", "cta_url": "Ссылка", "image": "Картинка"}
+                         "cta_text": "Кнопка", "cta_url": "Ссылка", "image": "Картинка",
+                         "image_mobile": "Картинка mobile"}
             for fname, fval in first_fields.items():
                 card_controls.append({
                     "id": f"c_card_{fname}", "name": fname,

@@ -2,7 +2,11 @@
 require_once __DIR__ . '/fixtures/wp-bootstrap.php';
 require_once __DIR__ . '/../mu-plugin/landing-config/includes/cascade.php';
 require_once __DIR__ . '/../mu-plugin/landing-config/includes/encryption.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/includes/helpers.php';
 require_once __DIR__ . '/../mu-plugin/landing-config/includes/integrations.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/adapters/AdapterInterface.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/adapters/EmailAdapter.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/includes/lead-dispatcher.php';
 
 use function LandingConfig\Integrations\save_integration;
 use function LandingConfig\Integrations\get_integration;
@@ -18,6 +22,8 @@ function reset_int() {
     $GLOBALS['_mock_post_meta'] = [];
     $GLOBALS['_mock_next_post_id'] = 1;
     $GLOBALS['_mock_current_blog_id'] = 1;
+    $GLOBALS['_mock_mail_sent'] = [];
+    $GLOBALS['_mock_actions_fired'] = [];
     putenv('WP_LANDING_CONFIG_KEY=' . str_repeat('a', 32));
 }
 
@@ -79,6 +85,23 @@ $post_id = \wp_insert_post(['post_type' => 'lp_integration', 'post_status' => 'p
 $row = get_integration($post_id);
 // On decrypt failure, value must NOT be silently blanked; either ciphertext preserved or null/error sentinel
 assert_test($row['settings']['api_key'] !== '', 'T7 decrypt failure does not silently blank field');
+
+// T8 lead dispatcher sends to enabled integration
+reset_int();
+save_integration('email', ['to' => 'sales@example.com', 'subject' => 'Новая заявка'], false, 1, []);
+\LandingConfig\LeadDispatcher\dispatch(501, [
+    'name' => 'Анна',
+    'phone' => '+79990000000',
+    'email' => 'anna@example.com',
+    'message' => 'Хочу консультацию',
+    'source_block' => 'hero',
+    'utm_source' => 'direct',
+    'utm_medium' => '',
+    'utm_campaign' => '',
+    'created_at' => '2026-06-22 10:00:00',
+]);
+assert_test(count($GLOBALS['_mock_mail_sent']) === 1, 'T8a dispatcher sent one email');
+assert_test($GLOBALS['_mock_mail_sent'][0]['to'] === 'sales@example.com', 'T8b dispatcher used integration email');
 
 echo "$tests tests, $failures failures\n";
 exit($failures > 0 ? 1 : 0);

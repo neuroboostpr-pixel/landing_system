@@ -13,3 +13,9 @@ load 'helpers.bash'
     run bash "$PR_I_A_REPO_ROOT/scripts/verify-photo-pipeline.sh" "$project"
     [ "$status" -eq 0 ]
 }
+
+@test "pass: visual SVG assets are ignored by photo gate" {
+    project="$(make_project_with_visual_assets_only)"
+    run bash "$PR_I_A_REPO_ROOT/scripts/verify-photo-pipeline.sh" "$project"
+    [ "$status" -eq 0 ]
+}

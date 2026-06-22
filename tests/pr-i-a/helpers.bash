@@ -36,3 +36,19 @@ HTML
     echo '{"hero-bg.jpg": {"slot": "hero-bg", "status": "processed"}}' > "$tmpdir/07c_PHOTOS/processed/manifest.json"
     echo "$tmpdir"
 }
+
+make_project_with_visual_assets_only() {
+    local tmpdir
+    tmpdir=$(mktemp -d)
+    mkdir -p "$tmpdir/07b_COMPOSED" "$tmpdir/07d_VISUALS/icons"
+    cat > "$tmpdir/07b_COMPOSED/composed.html" <<'HTML'
+<!DOCTYPE html>
+<html><body>
+<section data-block="hero-1">
+  <img class="lp-icon" data-slot-type="icon" src="../07d_VISUALS/icons/feature-1.svg" alt="icon">
+  <img data-slot="decor:page-sweep" src="../05_ДИЗАЙН-СИСТЕМА/moods/grooming/assets/decor/page-sweep.svg" alt="">
+</section>
+</body></html>
+HTML
+    echo "$tmpdir"
+}

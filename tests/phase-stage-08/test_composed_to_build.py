@@ -185,6 +185,31 @@ def test_image_src_normalized_to_basename(tmp_path):
     assert "../images/Team_Photo.jpg" not in flat
 
 
+def test_picture_sources_preserve_mobile_variant(tmp_path):
+    """Mobile <source srcset> из <picture> не должен теряться при сборке."""
+    proj = tmp_path / "picture"
+    (proj / "07b_COMPOSED").mkdir(parents=True)
+    (proj / "08_КОД").mkdir()
+    (proj / "05_ДИЗАЙН-СИСТЕМА").mkdir()
+    html = ('<html><head><meta charset="utf-8"><title>P</title>'
+            '<style>:root{--lp-bg:#fff;}</style></head><body>'
+            '<section id="hero"><h1>Заголовок</h1><picture>'
+            '<source media="(max-width: 700px)" srcset="../photos/hero-mobile.jpg 1x, ../photos/hero-mobile@2x.jpg 2x">'
+            '<img src="../photos/hero-desktop.jpg" alt="hero"></picture></section>'
+            '</body></html>')
+    (proj / "07b_COMPOSED" / "composed.html").write_text(html, encoding="utf-8")
+    r = _run(proj)
+    assert r.returncode == 0, r.stdout + r.stderr
+    assets = yaml.safe_load((proj / "08_КОД" / "assets-manifest.yaml").read_text(encoding="utf-8"))
+    assert "assets/photos/hero-desktop.jpg" in assets["images"]
+    assert "assets/photos/hero-mobile.jpg" in assets["images"]
+    assert "assets/photos/hero-mobile@2x.jpg" in assets["images"]
+    spec = yaml.safe_load((proj / "08_КОД" / "block-spec.yaml").read_text(encoding="utf-8"))
+    flat = yaml.dump(spec, allow_unicode=True)
+    assert "image_mobile" in flat
+    assert "assets/photos/hero-mobile.jpg" in flat
+
+
 def test_existing_spec_backed_up(tmp_path):
     proj = _make_project(tmp_path)
     (proj / "08_КОД" / "block-spec.yaml").write_text("version: 1\nblocks: []\n",

@@ -298,9 +298,18 @@ I do **not** approve a stage on the user's behalf. The user must explicitly appr
 Когда `state.yaml:stages.07c_composed.status == approved` → я диспатчу **двух субагентов одновременно** через `superpowers:dispatching-parallel-agents`:
 
 - Subagent A: `photo-curator` (стадия 07d_photos)
-- Subagent B: `visual-curator` (стадия 07e_visuals)
+- Subagent B: `visual-curator` (стадия 07e_visuals, включая DS asset-pack plan)
 
-После того как **оба** DONE → проверяю оба гейта → перехожу к 07f.
+После того как **оба** DONE → проверяю оба гейта → перед 07f дополнительно
+убеждаюсь, что DS asset-pack ready-gate пройдёт:
+
+```bash
+python experimental/ds-engine-v2/engine/verify_ds_asset_pack.py --project <project> --mode ready
+```
+
+Если не проходит — не перехожу к финальному composed. Возвращаю visual-curator список
+недостающих файлов: desktop/mobile preview с реальным текстом, layers, Canvas/Canva,
+обязательные SVG/PNG/JPG.
 
 ### Auto-fix mechanism
 

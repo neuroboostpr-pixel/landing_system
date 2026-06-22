@@ -65,3 +65,11 @@ setup() {
 @test "get-deploy-target.py script exists" {
   [ -f "$TARGET_SCRIPT" ]
 }
+
+@test "deploy-targets override env files by loading after project env" {
+  project_env_line="$(grep -n 'PROJECT_ENV=' "$DEPLOY" | head -1 | cut -d: -f1)"
+  targets_line="$(grep -n 'TARGETS_YAML=' "$DEPLOY" | head -1 | cut -d: -f1)"
+  [ "$targets_line" -gt "$project_env_line" ]
+  run grep -q "final authority" "$DEPLOY"
+  [ "$status" -eq 0 ]
+}

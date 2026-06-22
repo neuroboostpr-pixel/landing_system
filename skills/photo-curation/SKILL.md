@@ -1,6 +1,6 @@
 ---
 name: photo-curation
-description: Stage 07c (PR-B) photo pipeline — intake, AI-classification via codex, AI-matching to wireframe slots, processing under design-system tokens, generative fallback. Owned by photo-curator agent.
+description: Stage 07d photo pipeline — intake, AI-classification via codex, AI-matching to composed slots, processing under design-system tokens, generative fallback. Owned by photo-curator agent.
 ---
 
 # photo-curation
@@ -8,10 +8,10 @@ description: Stage 07c (PR-B) photo pipeline — intake, AI-classification via c
 ## Pre-flight
 
 ```bash
-python -m scripts.wiki.log --type skill_call --skill photo-curation --stage 07c
+python -m scripts.wiki.log --type skill_call --skill photo-curation --stage 07d
 ```
 
-Конвейер обработки клиентских фоток для лендинга. Запускается командой `/landing-photos` после approved `05_design` + `07c_composed` (готовый composed.html со слотами).
+Конвейер обработки клиентских фоток для лендинга. Запускается командой `/landing-photos` после approved `07c_composed` (готовый черновой composed.html со слотами).
 
 ## Этапы
 

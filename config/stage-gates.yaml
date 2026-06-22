@@ -275,7 +275,7 @@ stages:
   "07c_composed":
     name: "Composed (draft)"
     lock: hard
-    require_approved: ["05_design", "07a_prototype"]
+    require_approved: ["05_design", "07a_prototype", "07_content"]
     hard_checks:
       - id: composed_html
         type: file_exists
@@ -298,8 +298,8 @@ stages:
         type: script
         script: "scripts/verify-photo-pipeline.sh"
         args: ["{project}"]
-        required: true
-        fix_hint: "Photo pipeline не пройден. Запусти /landing-photos для обработки фото через codex. Проверь что в composed.html нет SVG placeholder'ов."
+        required: false
+        fix_hint: "На 07c это только предупреждение: черновой composed может содержать photo placeholders. Жёсткая проверка фото стоит на 07f_composed_final."
       # C3: все цвета через токены — иначе переключатель палитры «течёт»
       - id: tokens_only_colors
         type: script
@@ -325,7 +325,7 @@ stages:
   "07d_photos":
     name: "Photos pipeline"
     lock: soft
-    require_approved: []
+    require_approved: ["07c_composed"]
     hard_checks:
       - id: photo_selections_yaml
         type: file_exists
@@ -336,8 +336,14 @@ stages:
   "07e_visuals":
     name: "Visuals pipeline (icons + infographics)"
     lock: soft
-    require_approved: []
+    require_approved: ["07c_composed"]
     hard_checks:
+      - id: ds_asset_pack_plan
+        type: script
+        script: "experimental/ds-engine-v2/engine/verify_ds_asset_pack.py"
+        args: ["--project", "{project}", "--mode", "plan"]
+        required: true
+        fix_hint: "Нужен DS asset-pack: mood recipes + assets-manifest.yaml + ASSETS-TODO.md + asset-pack.yaml. Запусти: python experimental/ds-engine-v2/engine/gen_assets_report.py grooming --project <project>."
       - id: visuals_generated
         type: dir_has_files
         path: "{project}/07d_VISUALS/icons"
@@ -347,8 +353,14 @@ stages:
   "07f_composed_final":
     name: "Composed (final)"
     lock: soft
-    require_approved: []
+    require_approved: ["07d_photos", "07e_visuals"]
     hard_checks:
+      - id: ds_asset_pack_ready
+        type: script
+        script: "experimental/ds-engine-v2/engine/verify_ds_asset_pack.py"
+        args: ["--project", "{project}", "--mode", "ready"]
+        required: true
+        fix_hint: "Пакет ассетов не готов: нужны preview desktop/mobile с реальным текстом, слои, Canvas/Canva-файл, source-rules и файлы обязательных ассетов."
       - id: composed_has_real_visuals
         type: script
         script: "scripts/verify-composed-has-visuals.sh"
@@ -386,7 +398,7 @@ stages:
   "08_build":
     name: "WP Build"
     lock: hard
-    require_approved: ["07c_composed"]
+    require_approved: ["07f_composed_final"]
     hard_checks:
       - id: design_md
         type: file_exists

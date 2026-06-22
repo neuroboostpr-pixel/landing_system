@@ -265,19 +265,21 @@ for i in $(if [ "$checks_count" -gt 0 ]; then seq 0 $((checks_count - 1)); fi); 
             ;;
         script)
             script_path="$(yq -r ".stages.\"$stage\".hard_checks[$i].script" "$GATES_YAML")"
-            args_raw="$(yq -r ".stages.\"$stage\".hard_checks[$i].args[] // \"\"" "$GATES_YAML" | sed "s|{project}|$project|g")"
+            script_args=()
+            while IFS= read -r arg; do
+                script_args+=("${arg//\{project\}/$project}")
+            done < <(yq -r ".stages.\"$stage\".hard_checks[$i].args[]?" "$GATES_YAML" 2>/dev/null || true)
             # Determine runner by extension (python через PYTHON_CMD —
             # голого `python` на macOS/линуксах часто нет)
             case "$script_path" in
-                *.sh) runner="bash" ;;
-                *)    runner="$PYTHON_CMD" ;;
+                *.sh) runner_cmd=(bash) ;;
+                *)    read -r -a runner_cmd <<< "$PYTHON_CMD" ;;
             esac
-            # shellcheck disable=SC2086
-            if $runner "$REPO_ROOT/$script_path" $args_raw >/dev/null 2>&1; then
+            if "${runner_cmd[@]}" "$REPO_ROOT/$script_path" "${script_args[@]}" >/dev/null 2>&1; then
                 echo "  ✅ $check_id ($script_path)"
             else
                 echo "  ❌ $check_id: script $script_path failed"
-                $runner "$REPO_ROOT/$script_path" $args_raw 2>&1 | sed 's/^/     /' || true
+                "${runner_cmd[@]}" "$REPO_ROOT/$script_path" "${script_args[@]}" 2>&1 | sed 's/^/     /' || true
                 [ -n "$fix_hint" ] && echo "     → $fix_hint"
                 fail=1
             fi

@@ -1,6 +1,6 @@
 ---
 name: photo-curator
-description: Stage 07c orchestrator (PR-B). Runs intake, dispatches photo-classifier/photo-matcher/photo-preview-board, manages STATE.yaml, renders photo-board.html, waits for user approve. Triggered by /landing-photos.
+description: Stage 07d orchestrator. Runs intake, dispatches photo-classifier/photo-matcher/photo-preview-board, manages STATE.yaml, renders photo-board.html, waits for user approve. Triggered by /landing-photos.
 ---
 
 # photo-curator
@@ -12,7 +12,7 @@ description: Stage 07c orchestrator (PR-B). Runs intake, dispatches photo-classi
 
 ```bash
 python -m scripts.wiki.query --slug=photo-curator --agent=photo-curator
-python -m scripts.wiki.log --type agent_call --agent photo-curator --stage 07c
+python -m scripts.wiki.log --type agent_call --agent photo-curator --stage 07d
 ```
 
 ## ОБЯЗАТЕЛЬНЫЕ предусловия (Stage Execution Protocol)
@@ -56,15 +56,16 @@ Pipeline для каждого слота:
 - Использовать сырые фотки из inbox/ без codex обработки
 - Подменять оригинальный объект через codex (identity check ловит это)
 
-**HARD GATE 07c и 07f:** `scripts/verify-photo-pipeline.sh` проверит
-всё это при закрытии этапа. Если хоть один placeholder/raw фото —
-этап не закроется.
+**GATE:** на `07c_composed` проверка фото является предупреждением, потому что это
+черновой макет до photo pipeline. На `07f_composed_final` это HARD GATE:
+`scripts/verify-photo-pipeline.sh` не даст закрыть финал, если остались
+placeholder/raw фото.
 
 Подробнее: `docs/superpowers/specs/2026-05-15-pr-i-a-photo-pipeline-design.md`.
 
 ## Mission
 
-Orchestrate the full photo pipeline (stage 07c) for the landing project. Identity-safe rules per [`skills/photo-curation/IDENTITY_SAFE.md`](../skills/photo-curation/IDENTITY_SAFE.md).
+Orchestrate the full photo pipeline (stage 07d) for the landing project. Identity-safe rules per [`skills/photo-curation/IDENTITY_SAFE.md`](../skills/photo-curation/IDENTITY_SAFE.md).
 
 ## Gate (hard prerequisites)
 

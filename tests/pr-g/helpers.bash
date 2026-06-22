@@ -17,10 +17,12 @@ stages:
   "03_references": {status: locked, timestamp: ""}
   "04_brand": {status: locked, timestamp: ""}
   "05_design": {status: locked, timestamp: ""}
+  "07c_composed": {status: locked, timestamp: ""}
+  "07d_photos": {status: locked, timestamp: ""}
+  "07e_visuals": {status: locked, timestamp: ""}
+  "07f_composed_final": {status: locked, timestamp: ""}
   "07_content": {status: approved, timestamp: "2026-05-15T00:00:00Z"}
   "07a_prototype": {status: locked, timestamp: ""}
-  "07b_wireframe": {status: locked, timestamp: ""}
-  "07c_composed": {status: locked, timestamp: ""}
   "08_build": {status: locked, timestamp: ""}
   "09_deploy": {status: locked, timestamp: ""}
   "10_qa": {status: locked, timestamp: ""}

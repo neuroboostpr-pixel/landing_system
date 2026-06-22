@@ -9,6 +9,18 @@ if (!defined('ABSPATH')) { exit; }
  * @return mixed
  */
 function landing_config_get(string $key, $default = '') {
+    if (preg_match('/^integration_([a-z0-9]+)_(.+)$/', $key, $m)
+        && function_exists('\\LandingConfig\\Integrations\\resolve_integration')) {
+        $blog_id = function_exists('get_current_blog_id') ? (int) get_current_blog_id() : 1;
+        $resolved = \LandingConfig\Integrations\resolve_integration($m[1], $blog_id);
+        if (is_array($resolved) && !empty($resolved['enabled'])) {
+            $settings = is_array($resolved['settings'] ?? null) ? $resolved['settings'] : [];
+            if (array_key_exists($m[2], $settings) && $settings[$m[2]] !== '') {
+                return $settings[$m[2]];
+            }
+        }
+    }
+
     $site_value = get_option('landing_' . $key, null);
     if ($site_value !== null && $site_value !== false && $site_value !== '') {
         return $site_value;

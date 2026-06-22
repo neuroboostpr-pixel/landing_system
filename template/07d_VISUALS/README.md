@@ -1,13 +1,17 @@
 # 07d_VISUALS — иконки и инфографика
 
-Это папка для AI-сгенерённых визуальных элементов лендинга: иконки и инфографика.
+Это папка для автоматически сгенерённых визуальных элементов лендинга: иконки и
+инфографика. Полный mood asset-pack для верстки лежит в:
+
+`05_ДИЗАЙН-СИСТЕМА/moods/<mood>/`
 
 ## Что произойдёт когда запустишь /landing-visuals
 
-1. Система просканирует `07b_COMPOSED/composed.html`, найдёт все слоты с `data-slot-type="icon"` и `data-slot-type="infographic"`.
-2. Для каждого слота — codex (gpt-image-2) сгенерит PNG под брендинг проекта (цвета, стиль, ниша из tokens.json + market-profile).
-3. PNG сохранится в `icons/<slot-name>.png` или `infographics/<slot-name>.png`.
-4. `composed.html` перерендерится — placeholders `[SLOT: ...]` заменятся на `<img>`.
+1. Система проверит DS asset-pack plan: `recipes.yaml`, `assets-manifest.yaml`, `ASSETS-TODO.md`, `asset-pack.yaml`.
+2. Система просканирует `07b_COMPOSED/composed.html`, найдёт визуальные слоты.
+3. Для каждого слота — сгенерит или возьмёт из asset-pack PNG/SVG под брендинг проекта.
+4. PNG/SVG сохранится в `icons/`, `infographics/` или mood `assets/`.
+5. `composed.html` перерендерится — placeholders `[SLOT: ...]` заменятся на реальные файлы.
 
 ## Кэш
 
@@ -25,6 +29,21 @@
 - `prompts.yaml` — какой промпт → какой PNG (для аудита и attribution)
 - `STATE.yaml` — статусы этапов
 - `.logs/` — codex prompts + responses
+
+## Mood asset-pack
+
+В `05_ДИЗАЙН-СИСТЕМА/moods/<mood>/` должны быть:
+
+- `ASSETS-TODO.md` — список файлов для генерации с готовыми промптами
+- `asset-pack.yaml` — машинный контракт
+- `assets/previews/preview-desktop.png`
+- `assets/previews/preview-mobile.png`
+- `assets/layers/layers.svg` или `layers.json`
+- `assets/canvas/canvas-file.*`
+- `assets/prompts.md`
+- `assets/source-rules.md`
+
+Если preview с реальным текстом плохо читается на desktop или mobile, пакет не готов.
 
 ## Что НЕ делать
 

@@ -43,6 +43,7 @@ require_once LANDING_CONFIG_DIR . '/adapters/WhatsAppAdapter.php';
 require_once LANDING_CONFIG_DIR . '/adapters/AmoCRMAdapter.php';
 require_once LANDING_CONFIG_DIR . '/adapters/Bitrix24Adapter.php';
 require_once LANDING_CONFIG_DIR . '/adapters/HubSpotAdapter.php';
+require_once LANDING_CONFIG_DIR . '/includes/lead-dispatcher.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-integrations.php';
 
 // B2 cookie-banner

@@ -28,6 +28,32 @@ except ImportError:
 HERO_RATIO_TOLERANCE = 0.05  # 5% — больше → exit 1 (hero не должен обрезаться)
 
 
+def _is_visual_asset_img(img, src: str) -> bool:
+    """Return True for non-photo visual assets handled by 07e/DS asset-pack."""
+    src_l = src.lower()
+    slot_type = str(img.get("data-slot-type") or img.get("data-type") or "").lower()
+    data_slot = str(img.get("data-slot") or "").lower()
+    classes = " ".join(img.get("class") or []).lower()
+
+    if slot_type in {"icon", "infographic", "visual", "decor", "brand", "logo"}:
+        return True
+    if data_slot.startswith(("icon:", "decor:", "brand:", "infographic:")):
+        return True
+    if any(token in classes for token in ("lp-icon", "lp-infographic", "icon", "infographic", "logo")):
+        return True
+    visual_paths = (
+        "07d_visuals/",
+        "/icons/",
+        "/infographics/",
+        "assets/decor/",
+        "assets/icons/",
+        "assets/brand/",
+        "assets/layers/",
+        "moods/",
+    )
+    return any(token in src_l for token in visual_paths)
+
+
 def _parse_ratio(r):
     if not r or not isinstance(r, str):
         return None
@@ -105,6 +131,8 @@ def _check_hero_no_crop(soup, project_dir: Path, repo_root: Path):
         src = img.get("src", "")
         if not src or src.startswith(("http://", "https://", "data:")):
             continue
+        if _is_visual_asset_img(img, src):
+            continue
 
         # Резолвим путь к файлу
         candidates = [
@@ -165,10 +193,14 @@ def main(project_dir, repo_root: Path = None):
     soup = BeautifulSoup(composed.read_text(encoding="utf-8"), "html.parser")
     issues = []
 
+    photo_imgs = []
     for img in soup.find_all("img"):
         src = img.get("src", "")
         if not src or src.startswith(("http://", "https://", "data:")):
             continue
+        if _is_visual_asset_img(img, src):
+            continue
+        photo_imgs.append(img)
         # Placeholder detection
         if "placeholder" in src.lower() or src.lower().endswith(".svg"):
             issues.append(f"placeholder остался: {src}")
@@ -179,7 +211,7 @@ def main(project_dir, repo_root: Path = None):
 
     # Manifest
     manifest = project_dir / "07c_PHOTOS" / "processed" / "manifest.json"
-    if not manifest.exists() and len([i for i in soup.find_all("img") if i.get("src")]) > 0:
+    if not manifest.exists() and photo_imgs:
         issues.append("manifest.json отсутствует в 07c_PHOTOS/processed/")
 
     # PR-K: hero-bg не должен обрезаться

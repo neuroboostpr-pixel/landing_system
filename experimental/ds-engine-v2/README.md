@@ -30,6 +30,7 @@ experimental/ds-engine-v2/
     build_landing_3moods.py        ← генератор: ДС → composed HTML (3 мода + переключатель)
     mood_{darkmint,freshgreen,grooming}.py  ← рендерер каждого мода (своя разметка)
     gen_assets_report.py           ← manifest → ASSETS-TODO.md (отчёт для человека)
+    verify_ds_asset_pack.py        ← gate-check: plan/ready проверка asset-pack
 ```
 
 ## Флоу (3 звена)
@@ -62,7 +63,8 @@ python gen_assets_report.py grooming --project ~/Lendings/<твой-проект
 **Требования:** Python 3 + `pyyaml` (`pip install pyyaml`).
 
 **Что коллега увидит:** один HTML с 3 модами и переключателем снизу (примерка),
-+ человекочитаемый `ASSETS-TODO.md` с готовыми промптами для генерации ассетов.
++ человекочитаемый `ASSETS-TODO.md` с готовыми промптами для генерации ассетов,
++ `asset-pack.yaml` и структуру `assets/` под preview, слои, Canvas/Canva и исходники.
 
 **Важно про моды:** движок читает recipes/моды ИЗ ПРОЕКТА
 (`<project>/05_ДИЗАЙН-СИСТЕМА/moods/`). Эталонные recipes этой ветки лежат в
@@ -71,11 +73,19 @@ python gen_assets_report.py grooming --project ~/Lendings/<твой-проект
 
 ## Что осталось до врастания в боевой флоу (НЕ сделано)
 
-- параметризовать движок (убрать хардкод путей проекта `Тест`) → принимать project-path;
 - assets-manifest для dark-mint и fresh-green (сейчас только grooming);
 - генератор должен ставить слоты `{{decor:}}/{{icon:}}/{{bg:}}` из манифеста в HTML
   (сейчас декор инлайн, слоты манифеста в HTML не выводятся);
 - подключение к `agents/block-composer.md` + `docs/standards/` + wiki-синк;
-- перенос правил в `docs/standards/` каноном системы.
+- полная автоматическая генерация Canvas/Canva-файла через подключённый плагин/редактор.
 
-Пока всё это не сделано — флоу остаётся в `experimental/`, боевой не затрагивается.
+## Что уже подключено к боевым проверкам
+
+- `07e_visuals` требует DS asset-pack plan:
+  `verify_ds_asset_pack.py --mode plan`.
+- `07f_composed_final` требует готовый DS asset-pack:
+  `verify_ds_asset_pack.py --mode ready`.
+- Канон полного пакета описан в `docs/standards/ds-asset-pack.md`.
+
+Сам рендерер `composed-3moods.html` пока остаётся experimental, но контракт ассетов
+уже используется как gate, чтобы финальная верстка не уходила без материалов.

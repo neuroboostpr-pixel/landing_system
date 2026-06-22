@@ -39,24 +39,21 @@ fi
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-# Load deploy-targets.yaml if present (overrides .env for host/user/path)
-TARGETS_YAML="$PROJECT/09_ДЕПЛОЙ/deploy-targets.yaml"
-if [ -f "$TARGETS_YAML" ]; then
-    if command -v "$PYTHON_CMD" >/dev/null 2>&1; then
-        _PY_CMD="$PYTHON_CMD"
-    else
-        _PY_CMD="python"
-    fi
-    while IFS= read -r line; do
-        export "${line?}"
-    done < <("$_PY_CMD" "$SCRIPT_DIR/get-deploy-target.py" "$TARGETS_YAML" "$DEPLOY_ENV")
-fi
-
 ENV_FILE="$SCRIPT_DIR/../../../.env"
 [ -f "$ENV_FILE" ] && source "$ENV_FILE"
 # Per-project .env overrides system-level .env (e.g. BEGET_PATH per landing).
 PROJECT_ENV="$PROJECT/.env"
 [ -f "$PROJECT_ENV" ] && source "$PROJECT_ENV"
+
+# deploy-targets.yaml is the final authority for host/user/path.
+# It is loaded AFTER .env so --env staging cannot be overwritten by prod defaults.
+TARGETS_YAML="$PROJECT/09_ДЕПЛОЙ/deploy-targets.yaml"
+if [ -f "$TARGETS_YAML" ]; then
+    read -r -a PYTHON_RUNNER <<< "$PYTHON_CMD"
+    while IFS= read -r line; do
+        eval "export ${line?}"
+    done < <("${PYTHON_RUNNER[@]}" "$SCRIPT_DIR/get-deploy-target.py" "$TARGETS_YAML" "$DEPLOY_ENV")
+fi
 
 : "${BEGET_USER:?BEGET_USER not set in .env or deploy-targets.yaml}"
 : "${BEGET_HOST:?BEGET_HOST not set in .env or deploy-targets.yaml}"
