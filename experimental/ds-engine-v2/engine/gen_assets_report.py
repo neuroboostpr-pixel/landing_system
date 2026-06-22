@@ -9,11 +9,20 @@ ASSETS-TODO.md — что нужно сгенерировать/положить
 """
 import sys, pathlib, yaml
 
-ROOT  = pathlib.Path(__file__).resolve().parents[1]
+import argparse
+ap = argparse.ArgumentParser(description="manifest → ASSETS-TODO.md (отчёт для человека)")
+ap.add_argument("mood", nargs="?", default="grooming", help="мод (grooming/dark-mint/fresh-green)")
+ap.add_argument("--project", help="путь к проекту-лендингу (иначе автопоиск на уровень выше)")
+args = ap.parse_args()
+
+ROOT  = (pathlib.Path(args.project).expanduser().resolve()
+         if args.project else pathlib.Path(__file__).resolve().parents[1])
 MOODS = ROOT / "05_ДИЗАЙН-СИСТЕМА" / "moods"
-mood  = sys.argv[1] if len(sys.argv) > 1 else "grooming"
+mood  = args.mood
 MAN   = MOODS / mood / "assets-manifest.yaml"
 OUT   = MOODS / mood / "ASSETS-TODO.md"
+if not MAN.exists():
+    sys.exit(f"[ОШИБКА] нет {MAN}\nУкажи проект: python gen_assets_report.py {mood} --project <путь>")
 
 d = yaml.safe_load(MAN.read_text(encoding="utf-8"))
 assets = d["assets"]

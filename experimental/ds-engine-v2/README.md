@@ -38,19 +38,36 @@ experimental/ds-engine-v2/
 2. **HTML** — `build_landing_3moods.py` рисует composed по правилам.
 3. **Отчёт** — `gen_assets_report.py` → человекочитаемый список ассетов с промптами.
 
-## Как тестировать СЕЙЧАС
+## Как тестировать (для коллеги)
 
-Движок написан под структуру **проекта-лендинга** (читает `../07_ПРОТОТИП/`,
-`../05_ДИЗАЙН-СИСТЕМА/moods/`, `../07c_PHOTOS/`). Поэтому обкатка пока идёт в
-тест-проекте `d:/AI_TEAMS/Lendings/Тест/` — там полная структура и реальные данные.
-Эта папка — **снапшот** артефактов под версионирование и системный обзор.
+Движок ПАРАМЕТРИЗОВАН — принимает путь к проекту-лендингу флагом `--project`.
+Проект должен иметь стандартную структуру (`05_ДИЗАЙН-СИСТЕМА/moods/`,
+`07_ПРОТОТИП/prototype*.yaml`, `07c_PHOTOS/`).
 
-Запуск в тест-проекте:
 ```bash
-cd <project>/07b_COMPOSED
-python build_landing_3moods.py     # → composed-3moods.html
-python gen_assets_report.py grooming  # → moods/grooming/ASSETS-TODO.md
+# из папки engine/ (или любой) — указываешь свой проект:
+cd experimental/ds-engine-v2/engine
+python build_landing_3moods.py --project ~/Lendings/<твой-проект>
+#   → <проект>/07b_COMPOSED/composed-3moods.html  (открыть в браузере)
+
+python gen_assets_report.py grooming --project ~/Lendings/<твой-проект>
+#   → <проект>/05_ДИЗАЙН-СИСТЕМА/moods/grooming/ASSETS-TODO.md
 ```
+
+Опции:
+- `--prototype <имя.yaml>` — конкретный прототип (по умолчанию активный `meta.active` или `prototype-01`).
+- Без `--project` движок ищет проект на уровень выше себя (работает, только если
+  скопировать `engine/` внутрь `<project>/07b_COMPOSED/`).
+
+**Требования:** Python 3 + `pyyaml` (`pip install pyyaml`).
+
+**Что коллега увидит:** один HTML с 3 модами и переключателем снизу (примерка),
++ человекочитаемый `ASSETS-TODO.md` с готовыми промптами для генерации ассетов.
+
+**Важно про моды:** движок читает recipes/моды ИЗ ПРОЕКТА
+(`<project>/05_ДИЗАЙН-СИСТЕМА/moods/`). Эталонные recipes этой ветки лежат в
+`experimental/ds-engine-v2/moods/` — при необходимости скопировать их в проект.
+Эталонный тест-проект (полные данные) — `d:/AI_TEAMS/Lendings/Тест/`.
 
 ## Что осталось до врастания в боевой флоу (НЕ сделано)
 

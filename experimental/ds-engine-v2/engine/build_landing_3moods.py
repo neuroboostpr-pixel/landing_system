@@ -12,13 +12,50 @@
 
 Тексты — из prototype-01.yaml (активный, Екатерина Безикова). Дословно.
 """
-import html, pathlib, yaml
+import html, pathlib, yaml, argparse, sys
 
-ROOT = pathlib.Path(__file__).resolve().parents[1]
-PROTO = ROOT / "07_ПРОТОТИП" / "prototype-01.yaml"
+# --- путь к проекту: --project <путь>, иначе автопоиск (если движок лежит в <project>/07b_COMPOSED) ---
+def _resolve_project():
+    ap = argparse.ArgumentParser(description="DS-Engine v2 — собрать composed-3moods.html по проекту")
+    ap.add_argument("--project", help="путь к проекту-лендингу (папка с 05_ДИЗАЙН-СИСТЕМА/, 07_ПРОТОТИП/)")
+    ap.add_argument("--prototype", default=None, help="имя файла прототипа в 07_ПРОТОТИП/ (по умолчанию активный/первый)")
+    args, _ = ap.parse_known_args()
+    if args.project:
+        root = pathlib.Path(args.project).expanduser().resolve()
+    else:
+        # fallback: движок внутри <project>/07b_COMPOSED → проект на уровень выше
+        root = pathlib.Path(__file__).resolve().parents[1]
+    if not (root / "05_ДИЗАЙН-СИСТЕМА" / "moods").exists():
+        sys.exit(f"[ОШИБКА] не нашёл 05_ДИЗАЙН-СИСТЕМА/moods в {root}\n"
+                 f"Укажи проект: python build_landing_3moods.py --project <путь-к-проекту>")
+    return root, args.prototype
+
+ROOT, _PROTO_NAME = _resolve_project()
 MOODS = ROOT / "05_ДИЗАЙН-СИСТЕМА" / "moods"
-OUT = pathlib.Path(__file__).resolve().parent / "composed-3moods.html"
+
+# прототип: явный --prototype, иначе активный (meta.active), иначе prototype-01/первый
+def _find_proto():
+    pdir = ROOT / "07_ПРОТОТИП"
+    if _PROTO_NAME:
+        return pdir / _PROTO_NAME
+    cands = sorted(pdir.glob("prototype*.yaml"))
+    for c in cands:
+        try:
+            if yaml.safe_load(open(c, encoding="utf-8")).get("meta", {}).get("active"):
+                return c
+        except Exception:
+            pass
+    if (pdir / "prototype-01.yaml").exists():
+        return pdir / "prototype-01.yaml"
+    if cands:
+        return cands[0]
+    sys.exit(f"[ОШИБКА] не нашёл prototype*.yaml в {pdir}")
+
+PROTO = _find_proto()
+OUT = ROOT / "07b_COMPOSED" / "composed-3moods.html"
 PHOTO = "../07c_PHOTOS/photo.png"
+
+def esc(s): return html.escape(str(s), quote=True)
 
 def esc(s): return html.escape(str(s), quote=True)
 
