@@ -83,11 +83,37 @@ def _is_content_word(w: str, min_len: int) -> bool:
 
 
 def _proto_words(project_dir: Path) -> set[str]:
+    """Слова АКТИВНОГО прототипа.
+
+    Источник истины — `meta.active: true` (новый формат gen-prototype:
+    prototype-NN.yaml). Если активного нет — legacy-имена prototype.yaml/.md.
+    Раньше читались только legacy-имена → новый prototype-01.yaml не находился
+    и ВЕСЬ текст считался «выдуманным» (ложный FAIL).
+    """
+    proto_dir = project_dir / "07_ПРОТОТИП"
     words: set[str] = set()
-    for name in ("prototype.yaml", "prototype.md"):
-        p = project_dir / "07_ПРОТОТИП" / name
-        if p.exists():
-            words |= set(_words(p.read_text(encoding="utf-8")))
+
+    # 1) активный prototype-*.yaml по флагу meta.active:true
+    active_found = False
+    try:
+        import yaml
+        for p in sorted(proto_dir.glob("prototype-*.yaml")):
+            try:
+                d = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+            except Exception:
+                continue
+            if (d.get("meta") or {}).get("active") is True:
+                words |= set(_words(p.read_text(encoding="utf-8")))
+                active_found = True
+    except ImportError:
+        pass
+
+    # 2) fallback — legacy-имена (старые проекты)
+    if not active_found:
+        for name in ("prototype.yaml", "prototype.md"):
+            p = proto_dir / name
+            if p.exists():
+                words |= set(_words(p.read_text(encoding="utf-8")))
     return words
 
 

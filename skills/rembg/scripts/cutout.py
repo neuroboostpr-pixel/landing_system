@@ -22,13 +22,32 @@ autocrop по bbox объекта + контрольный preview на тёмн
   - webp сохраняет alpha; для дальнейшей вставки в карточку adapt см. T41 (оверлей mood).
 """
 import argparse, os, sys
-from PIL import Image
+from PIL import Image, ImageFilter
 
 
-def cut_one(remove_fn, sess, src, out_dir, crop=True, preview=False, webp=False):
+def feather_edges(im, radius=3.0, erode_size=7, alpha_floor=40):
+    """Сглаживание края выреза: эрозия альфы (срезает кайму остаточного фона ~3px)
+    + порог альфы (убирает полупрозрачную кайму) + gaussian-blur (~3-4px feather).
+    Применяется ТОЛЬКО к alpha, RGB не трогаем. Обязательный финальный шаг для
+    вырезанных фигур/объектов (резкие края rembg = видимая «вырезанность» + остатки фона).
+    erode_size — нечётное ядро MinFilter (7≈срез 3px); alpha_floor — порог отсечки каймы."""
+    im = im.convert('RGBA')
+    r, g, b, a = im.split()
+    if erode_size and erode_size >= 3:
+        a = a.filter(ImageFilter.MinFilter(erode_size))   # срезать кайму фона
+    if alpha_floor:
+        a = a.point(lambda v: 0 if v < alpha_floor else v)  # убрать полупрозрачную кайму
+    a = a.filter(ImageFilter.GaussianBlur(radius))          # feather
+    im.putalpha(a)
+    return im
+
+
+def cut_one(remove_fn, sess, src, out_dir, crop=True, preview=False, webp=False, feather=True):
     name = os.path.splitext(os.path.basename(src))[0]
     im = Image.open(src).convert('RGBA')
     res = remove_fn(im, session=sess)
+    if feather:
+        res = feather_edges(res)
     if crop:
         bbox = res.getbbox()
         if bbox:
@@ -58,6 +77,8 @@ def main():
     ap.add_argument('--no-crop', action='store_true', help='не обрезать по bbox')
     ap.add_argument('--preview', action='store_true', help='сохранить preview на тёмном фоне')
     ap.add_argument('--webp', action='store_true', help='сохранять webp (alpha) вместо png')
+    ap.add_argument('--no-feather', action='store_true',
+                    help='НЕ сглаживать края (по умолчанию feather ~2px вкл — убирает резкость/кайму)')
     a = ap.parse_args()
 
     from rembg import remove, new_session
@@ -72,7 +93,8 @@ def main():
         srcs = [a.src]
 
     for s in srcs:
-        cut_one(remove, sess, s, a.out, crop=not a.no_crop, preview=a.preview, webp=a.webp)
+        cut_one(remove, sess, s, a.out, crop=not a.no_crop, preview=a.preview,
+                webp=a.webp, feather=not a.no_feather)
     print('done:', len(srcs), 'file(s)')
 
 

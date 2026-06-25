@@ -1,62 +1,56 @@
 ---
 slug: landing-content
 type: command
-name: "Контент-адаптация прототипа (Stage 07)"
+name: "Адаптация прототипа в контент блоков (stage 07)"
 stage: "07"
-tags: [content, copywriting, seo, gutenberg, prototype]
+tags: [content, gutenberg, prototype, seo, copywriting]
 triggers: [landing-content]
-inputs:
-  - 07_ПРОТОТИП/prototype.md
-  - 06_СТЕК/design-stack.yaml
-  - 02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/
-  - DESIGN.md
-outputs:
-  - 07_КОНТЕНТ/final-copy.md
-  - 07_КОНТЕНТ/seo-copy.md
+inputs: [07-prototip, 06-stek]
+outputs: [07-kontent]
 gates: []
-pre_reqs:
-  - stack-planner
-  - prototype-import
-related:
-  - content-writer
-  - landing-onboarding
-  - landing-orchestrator
-  - prototype-importer
-  - seo-optimizer
-  - wp-gutenberg-block-builder
+pre_reqs: [06-stek, 07-prototip]
+related: [content-writer, landing-prototype, landing-stack, landing-compose, landing-orchestrator]
 sources: ["commands/landing-content.md"]
-updated: 2026-05-26
+updated: 2026-06-22
 ---
 
-# Контент-адаптация прототипа (Stage 07)
+# Адаптация прототипа в контент блоков (stage 07)
 
 ## Что делает
 
-Команда адаптирует текстовый прототип лендинга в финальный копирайт, структурированный по Gutenberg-блокам. Запускает агента `content-writer`, который читает `prototype.md`, блочную структуру из `DESIGN.md` и реальные отзывы клиента, после чего формирует два артефакта: финальный текст по блокам и SEO-вариации. Весь этап завершается обязательным ревью пользователем — без явного утверждения переход на stage 08 невозможен.
+Команда `/landing-content` запускает агента `content-writer`, который читает `prototype.md` и структуру блоков из `DESIGN.md`, затем собирает финальные тексты лендинга, распределяя их по блокам Gutenberg в соответствии со стеком проекта. Параллельно формируется SEO-копирайтинг. Выход этапа — два файла в `07_КОНТЕНТ/`, которые служат основой для сборки `composed.html` на этапе 07b.
 
 ## Когда вызывается
 
-Команда вызывается вручную через `/landing-content` после того как стек одобрен (`06_СТЕК/design-stack.yaml`) и прошёл gate-check для stage 07_content. Если стек не утверждён или onboarding не пройден, команда останавливается с объяснением причины.
+Запускается вручную командой `/landing-content` после того, как утверждён стек проекта (`06_СТЕК/design-stack.yaml`). Gate-check проверяет, что этап 06 закрыт; при незакрытом этапе команда останавливается с объяснением, какой предыдущий шаг пропущен.
 
 ## Вход → выход
 
-**Вход:** `07_ПРОТОТИП/prototype.md` — текст прототипа; `06_СТЕК/design-stack.yaml` — блочная структура; `02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/` — реальные отзывы клиента; `DESIGN.md` — структура блоков по этапам.
+**Вход:**
+- `07_ПРОТОТИП/prototype.md` — исходный прототип с реальными текстами клиента.
+- `06_СТЕК/design-stack.yaml` — определения блоков стека.
+- `02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/` — реальные отзывы (при наличии).
 
-**Выход:** `07_КОНТЕНТ/final-copy.md` — финальный копирайт, разложенный по каждому Gutenberg-блоку; `07_КОНТЕНТ/seo-copy.md` — варианты SEO-заголовков, мета-описаний и H1.
+**Выход:**
+- `07_КОНТЕНТ/final-copy.md` — финальный копирайтинг, распределённый по блокам Gutenberg.
+- `07_КОНТЕНТ/seo-copy.md` — SEO-заголовки, описания, варианты h1.
+
+## Чем закрывается этап (gates)
+
+Этап имеет **HARD GATE**: агент показывает `final-copy.md` и ждёт явного подтверждения пользователя перед переходом к этапу 08. Без approve дальнейшая работа оркестратора блокируется. После утверждения запускается `gate-check.sh --approve`.
 
 ## Failure modes
 
-- `07_ПРОТОТИП/prototype.md` отсутствует или пустой — агент `content-writer` не может сформировать финальный копирайт; нужно сначала запустить `/landing-prototype`.
-- `06_СТЕК/design-stack.yaml` не одобрён — gate-check вернёт exit 1 и команда остановится раньше основного flow.
-- Onboarding не пройден (`setup_complete` флаг отсутствует) — pre-flight check блокирует выполнение на первом же шаге.
-- Отсутствуют реальные отзывы в `02_МАТЕРИАЛЫ_КЛИЕНТА/testimonials/` — SEO-копирайт и testimonial-блоки могут быть заполнены-заглушками, что потребует ручной доработки.
-- Пользователь не дал явного approve `final-copy.md` — stage 08 не может начаться; HARD GATE не допускает пропуска.
+- **Отсутствует `prototype.md`** — агент не может извлечь тексты; команда остановится или сгенерирует пустые блоки.
+- **Onboarding не пройден** — pre-flight возвращает exit 1 до запуска агента.
+- **Стек не утверждён (этап 06 не закрыт)** — gate-check блокирует выполнение с сообщением об ошибке.
+- **Lorem ipsum в output** — нарушение правила «реальные тексты из прототипа»; проверяется ревью `final-copy.md` перед approve.
+- **Пользователь не даёт approve** — пайплайн встаёт на HARD GATE и не переходит к composed/08.
 
 ## Related
 
-- [[content-writer]] — агент, непосредственно генерирующий копирайт по блокам
-- [[prototype-importer]] — предшествующий этап: импорт прототипа в `prototype.md`
-- [[stack-planner]] — предшествующий этап: формирование `design-stack.yaml`
-- [[seo-optimizer]] — SEO-логика, используемая при создании `seo-copy.md`
-- [[landing-orchestrator]] — оркестратор, управляющий переходами между этапами
-- [[wp-gutenberg-block-builder]] — следующий по цепочке: использует `final-copy.md` при сборке блоков
+- [[content-writer]] — агент, который непосредственно пишет `final-copy.md` и `seo-copy.md`
+- [[landing-prototype]] — предыдущий этап: импорт и нормализация прототипа в `prototype.md`
+- [[landing-stack]] — предыдущий этап: утверждение стека блоков (`design-stack.yaml`)
+- [[landing-compose]] — следующий этап: сборка `composed.html` с токенами и текстами из этого этапа
+- [[landing-orchestrator]] — оркестратор, диспатчит этот этап в рамках общего пайплайна

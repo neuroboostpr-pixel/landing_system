@@ -1,12 +1,12 @@
 version: 1
-generated_at: '2026-06-19T12:52:33+00:00'
+generated_at: '2026-06-22T06:24:34+00:00'
 counts:
-  total: 47
+  total: 81
   by_type:
     stage: 1
     agent: 34
-    skill: 11
-    command: 1
+    skill: 32
+    command: 14
 concepts:
 - slug: 01a-analiz-nishi
   type: stage
@@ -80,7 +80,7 @@ concepts:
     stage: low
 - slug: block-composer
   type: agent
-  name: Block Composer — сборка composed.html
+  name: Block Composer — сборщик composed.html
   card: concepts/agents/block-composer.md
   source: agents/block-composer.md
   stage: 07b
@@ -90,34 +90,40 @@ concepts:
   - design-tokens
   - prototype
   - premium
-  - reference-driven
+  - collage
   triggers:
   - landing-compose
   inputs:
-  - 07-prototip
-  - 05-dizayn-sistema
+  - 07_ПРОТОТИП/prototype-*.yaml
+  - 05_ДИЗАЙН-СИСТЕМА/moods/{mood}/objects.yaml
+  - 05_ДИЗАЙН-СИСТЕМА/moods/{mood}/palette.css
+  - 05_ДИЗАЙН-СИСТЕМА/moods/{mood}/metrics.css
+  - 05_ДИЗАЙН-СИСТЕМА/moods/{mood}/typography.css
+  - 05_ДИЗАЙН-СИСТЕМА/moods/{mood}/motion.css
+  - 07b_COMPOSED/build-spec.md
   outputs:
-  - 07b-composed
-  gates:
-  - composed_premium_standard
-  - collage_depth
-  - tokens_only_colors
-  - content_preserved
-  - no_invented_text
-  - structure_check_md
-  - collage_plan_exists
-  - block_transitions
+  - 07b_COMPOSED/composed.html
+  - 07b_COMPOSED/composed-mobile-preview.html
+  - 07b_COMPOSED/structure-check.md
+  - 07b_COMPOSED/composed-explained.md
+  - 07b_COMPOSED/collage-plan.md
   pre_reqs:
   - 07-prototip
   - 05-dizayn-sistema
+  - 06-stek
+  - 07-kontent
   related:
   - landing-compose
-  - premium-07b-checklist
   - stage-execution-protocol
+  - premium-07b-checklist
+  - design-system-generator
+  - prototype-importer
+  - 07b-composed
   - 07c-photos
   - 07d-visuals
-  - landing-prototype
-  - design-system-generator
+  - landing-go
+  confidence:
+    triggers: low
 - slug: block-composition
   type: skill
   name: Block Composition (пост-обработка макета)
@@ -433,6 +439,175 @@ concepts:
   - wp-gutenberg-block-builder
   - 05-dizayn-sistema
   - 08-kod
+- slug: gen-design-system
+  type: skill
+  name: Генератор дизайн-системы (моды)
+  card: concepts/skills/gen-design-system.md
+  source: skills/gen-design-system/SKILL.md
+  stage: '05'
+  tags:
+  - design-system
+  - tokens
+  - moods
+  - css
+  - objects
+  - references
+  - stage-05
+  triggers:
+  - landing-design
+  inputs:
+  - 03-referensy
+  outputs:
+  - 05-dizayn-sistema
+  pre_reqs:
+  - 03-referensy
+  related:
+  - landing-design
+  - design-system-generator
+  - landing-compose
+  - moodboard-composer
+  - style-extractor
+  - landing-brand
+  confidence:
+    triggers: low
+- slug: gen-html
+  type: skill
+  name: Генератор composed.html (gen-html)
+  card: concepts/skills/gen-html.md
+  source: skills/gen-html/SKILL.md
+  stage: 07c
+  tags:
+  - html
+  - compose
+  - reference-driven
+  - moods
+  - design-system
+  - collage
+  triggers:
+  - landing-compose
+  inputs:
+  - 07b-composed
+  - 07-prototip
+  - 05-dizayn-sistema
+  outputs:
+  - 07b-composed
+  pre_reqs:
+  - 05-dizayn-sistema
+  - 07-prototip
+  - landing-compose
+  related:
+  - landing-compose
+  - landing-visuals
+  - 07b-composed
+  - 05-dizayn-sistema
+  - 07-prototip
+  - premium-07b-checklist
+  confidence:
+    triggers: low
+- slug: gen-images
+  type: skill
+  name: Генерация изображений (иконки и фото)
+  card: concepts/skills/gen-images.md
+  source: skills/gen-images/SKILL.md
+  stage: 07c
+  tags:
+  - icons
+  - svg
+  - photos
+  - cutout
+  - image-generation
+  - codex
+  - vtracer
+  - rembg
+  triggers:
+  - landing-compose
+  - landing-visuals
+  - landing-photos
+  inputs:
+  - 07b_COMPOSED/build-spec.md
+  - 07b_COMPOSED/composed.html
+  - 07c_PHOTOS/inbox
+  - 05_ДИЗАЙН-СИСТЕМА/tokens.json
+  - market-profile.md
+  outputs:
+  - 07d_VISUALS/icons/*.svg
+  - 07c_PHOTOS/processed/*.png
+  pre_reqs:
+  - 07b-composed
+  - 05-dizayn-sistema
+  - 07-prototip
+  related:
+  - 07c-photos
+  - 07d-visuals
+  - landing-visuals
+  - landing-photos
+  - landing-compose
+  - icon-generator
+  - visual-generation
+  - rembg
+  confidence:
+    triggers: low
+    stage: low
+- slug: gen-prototype
+  type: skill
+  name: Генератор прототипа (gen-prototype)
+  card: concepts/skills/gen-prototype.md
+  source: skills/gen-prototype/SKILL.md
+  stage: 07a
+  tags:
+  - prototype
+  - parsing
+  - yaml
+  - fidelity
+  - stage-07a
+  triggers:
+  - landing-prototype
+  inputs:
+  - 07-prototip
+  outputs:
+  - 07-prototip
+  gates:
+  - prototype_fidelity
+  pre_reqs:
+  - 02-materialy-klienta
+  - 07-prototip
+  related:
+  - landing-prototype
+  - prototype-importer
+  - prototype-import
+  - landing-compose
+  - 07b-composed
+  - stage-execution-protocol
+  - landing-content
+  confidence:
+    triggers: low
+- slug: gen-spec
+  type: skill
+  name: Генератор ТЗ (build-spec)
+  card: concepts/skills/gen-spec.md
+  source: skills/gen-spec/SKILL.md
+  stage: 07b
+  tags:
+  - spec
+  - mapping
+  - design-system
+  - prototype
+  - build-spec
+  inputs:
+  - 07_ПРОТОТИП/prototype-*.yaml
+  - 05_ДИЗАЙН-СИСТЕМА/moods/
+  outputs:
+  - 07b_COMPOSED/build-spec.md
+  pre_reqs:
+  - 05-dizayn-sistema
+  - 07-prototip
+  related:
+  - landing-compose
+  - prototype-importer
+  - design-system-generator
+  - block-composer
+  confidence:
+    triggers: low
 - slug: gpt5-prompting-engine
   type: skill
   name: GPT-5 Prompting Engine
@@ -544,6 +719,328 @@ concepts:
   confidence:
     triggers: low
     gates: low
+- slug: landing-admin-install
+  type: command
+  name: Установить mu-plugin landing-config
+  card: concepts/commands/landing-admin-install.md
+  source: commands/landing-admin-install.md
+  stage: 09
+  tags:
+  - mu-plugin
+  - wordpress
+  - beget
+  - crm
+  - rest-api
+  - landing-config
+  triggers:
+  - /landing-admin-install
+  inputs:
+  - 09-deploy
+  outputs:
+  - wp-landing-config
+  pre_reqs:
+  - 09-deploy
+  - wp-landing-config
+  related:
+  - landing-deploy
+  - landing-build
+  - 08-kod
+  - 13-segmenty-tsa
+  confidence:
+    stage: low
+- slug: landing-audit
+  type: command
+  name: SEO/Tech Аудит Лендинга
+  card: concepts/commands/landing-audit.md
+  source: commands/landing-audit.md
+  stage: '11'
+  tags:
+  - seo
+  - audit
+  - qa
+  - http-checks
+  - multisite
+  triggers:
+  - /landing-audit
+  outputs:
+  - 11_QA/audit-report.md
+  - 11_QA/audit-report.json
+  - 11_QA/per-site
+  pre_reqs:
+  - 09-deploy
+  related:
+  - seo-tech-audit
+  - 10-qa
+  - 11-analitika
+  - 12-seo
+  - landing-qa
+- slug: landing-brand
+  type: command
+  name: Команда /landing-brand — сборка бренд-кита (этап 04)
+  card: concepts/commands/landing-brand.md
+  source: commands/landing-brand.md
+  stage: '04'
+  tags:
+  - brand
+  - command
+  - stage-04
+  - brand-kit
+  triggers:
+  - landing-brand
+  inputs:
+  - 04-brend
+  outputs:
+  - 04-brend
+  pre_reqs:
+  - 03-referensy
+  - landing-moodboard
+  related:
+  - brand-architect
+  - brand-kit-build
+  - style-extractor
+  - landing-design
+  - 04-brend
+  - 05-dizayn-sistema
+  confidence:
+    gates: low
+- slug: landing-build
+  type: command
+  name: /landing-build — сборка WordPress-темы (этап 08)
+  card: concepts/commands/landing-build.md
+  source: commands/landing-build.md
+  stage: 08
+  tags:
+  - build
+  - wordpress
+  - lazy-blocks
+  - theme
+  - analytics
+  - seo
+  - integrations
+  triggers:
+  - landing-build
+  inputs:
+  - 07_КОНТЕНТ/final-copy.md
+  - 05_ДИЗАЙН-СИСТЕМА/tokens.json
+  - 06_СТЕК/design-stack.yaml
+  - 08_КОД/block-spec.yaml
+  outputs:
+  - 08_КОД/wp-theme/
+  - 08_КОД/page-content.html
+  - 08_КОД/build-preview.html
+  - 11_АНАЛИТИКА/
+  - 12_SEO/
+  gates:
+  - build-preview-approval
+  pre_reqs:
+  - 07-kontent
+  - 07b-composed
+  - 05-dizayn-sistema
+  - 06-stek
+  related:
+  - analytics-engineer
+  - integrations-engineer
+  - seo-optimizer
+  - wp-gutenberg-block-builder
+  - wp-theme-assembler
+  - landing-deploy
+  - 08-kod
+- slug: landing-clone
+  type: command
+  name: Клонирование сегмента ЦА
+  card: concepts/commands/landing-clone.md
+  source: commands/landing-clone.md
+  stage: '13'
+  tags:
+  - multisite
+  - clone
+  - segment
+  - a-b-test
+  triggers:
+  - landing-clone
+  inputs:
+  - 13-segmenty-tsa
+  outputs:
+  - 13-segmenty-tsa
+  pre_reqs:
+  - wp-multisite
+  - landing-segment
+  related:
+  - landing-segment
+  - wp-multisite
+  - landing-versioning-and-cloning
+  - 13-segmenty-tsa
+  confidence:
+    stage: low
+- slug: landing-compose
+  type: command
+  name: Сборка composed.html (этап 07b)
+  card: concepts/commands/landing-compose.md
+  source: commands/landing-compose.md
+  stage: 07b
+  tags:
+  - compose
+  - html
+  - design-tokens
+  - prototype
+  - collage
+  - moods
+  triggers:
+  - landing-go
+  inputs:
+  - 05-dizayn-sistema
+  - 07-prototip
+  outputs:
+  - 07b-composed
+  pre_reqs:
+  - 05-dizayn-sistema
+  - 07-prototip
+  related:
+  - block-composer
+  - landing-go
+  - landing-photos
+  - landing-visuals
+  - premium-07b-checklist
+  - landing-design
+  - landing-content
+  confidence:
+    triggers: low
+- slug: landing-content
+  type: command
+  name: Адаптация прототипа в контент блоков (stage 07)
+  card: concepts/commands/landing-content.md
+  source: commands/landing-content.md
+  stage: '07'
+  tags:
+  - content
+  - gutenberg
+  - prototype
+  - seo
+  - copywriting
+  triggers:
+  - landing-content
+  inputs:
+  - 07-prototip
+  - 06-stek
+  outputs:
+  - 07-kontent
+  pre_reqs:
+  - 06-stek
+  - 07-prototip
+  related:
+  - content-writer
+  - landing-prototype
+  - landing-stack
+  - landing-compose
+  - landing-orchestrator
+- slug: landing-delete
+  type: command
+  name: Удаление проекта лендинга
+  card: concepts/commands/landing-delete.md
+  source: commands/landing-delete.md
+  stage: ''
+  tags:
+  - cleanup
+  - project-management
+  - safety
+  triggers:
+  - /landing-delete
+  related:
+  - landing-new
+  - landing-start
+  - landing-rollback
+  - landing-status
+  confidence:
+    stage: low
+- slug: landing-deploy
+  type: command
+  name: Деплой лендинга на Beget
+  card: concepts/commands/landing-deploy.md
+  source: commands/landing-deploy.md
+  stage: 09
+  tags:
+  - deploy
+  - beget
+  - wordpress
+  - ssh
+  - rsync
+  - wp-cli
+  triggers:
+  - landing-deploy
+  inputs:
+  - 08-kod
+  outputs:
+  - 09-deploy
+  gates:
+  - site_live
+  - ssl_ok
+  - http_https_redirect
+  pre_reqs:
+  - 08-kod
+  related:
+  - landing-build
+  - landing-qa
+  - wp-cli-deployer
+  - wp-deployer
+  - landing-go
+  - landing-onboarding
+  confidence:
+    gates: low
+- slug: landing-design
+  type: command
+  name: Генерация дизайн-системы (этап 05)
+  card: concepts/commands/landing-design.md
+  source: commands/landing-design.md
+  stage: '05'
+  tags:
+  - design-system
+  - tokens
+  - preview
+  - stage-05
+  triggers:
+  - landing-design
+  inputs:
+  - 04-brend
+  outputs:
+  - 05-dizayn-sistema
+  pre_reqs:
+  - 04-brend
+  related:
+  - design-system-generator
+  - design-tokens-generation
+  - brand-architect
+  - landing-brand
+  - landing-compose
+  - 05-dizayn-sistema
+  - scene-director
+- slug: landing-final-check
+  type: command
+  name: Финальная проверка перед деплоем
+  card: concepts/commands/landing-final-check.md
+  source: commands/landing-final-check.md
+  stage: 09
+  tags:
+  - qa
+  - verify
+  - pre-deploy
+  - bundle
+  triggers:
+  - landing-final-check
+  outputs:
+  - 10-qa
+  pre_reqs:
+  - 07b-composed
+  - 07c-photos
+  - 07d-visuals
+  related:
+  - landing-deploy
+  - landing-qa
+  - premium-07b-checklist
+  - visual-qa
+  - stage-execution-protocol
+  confidence:
+    stage: low
+    pre_reqs: low
 - slug: landing-from-context
   type: skill
   name: Создание лендинга из контекста агентства
@@ -575,6 +1072,64 @@ concepts:
   - 01-kontekst
   - 07-prototip
   - 02-materialy-klienta
+  confidence:
+    stage: low
+- slug: landing-from-context
+  type: command
+  name: Создание проекта из родительской папки агентства
+  card: concepts/commands/landing-from-context.md
+  source: commands/landing-from-context.md
+  stage: '02'
+  tags:
+  - project-init
+  - context-snapshot
+  - agency
+  triggers:
+  - /landing-from-context
+  inputs:
+  - 01-kontekst
+  - 02-materialy-klienta
+  outputs:
+  - landing-project-init
+  related:
+  - landing-new
+  - landing-start
+  - landing-go
+  - landing-orchestrator
+  - 02-materialy-klienta
+  - 01-kontekst
+  confidence:
+    stage: low
+    pre_reqs: low
+- slug: landing-go
+  type: command
+  name: Главная команда оркестратора
+  card: concepts/commands/landing-go.md
+  source: commands/landing-go.md
+  tags:
+  - orchestrator
+  - entry-point
+  - pipeline
+  - prototype-first
+  - auto-fix
+  triggers:
+  - landing-go
+  inputs:
+  - 07-prototip
+  outputs:
+  - 07b-composed
+  - 08-kod
+  - 09-deploy
+  pre_reqs:
+  - landing-start
+  related:
+  - landing-orchestrator
+  - landing-prototype
+  - landing-compose
+  - landing-photos
+  - landing-visuals
+  - landing-build
+  - landing-deploy
   confidence:
     stage: low
 - slug: landing-niche
@@ -868,6 +1423,31 @@ concepts:
   - visual-curator
   confidence:
     triggers: low
+- slug: niche-analysis
+  type: skill
+  name: Анализ ниши
+  card: concepts/skills/niche-analysis.md
+  source: skills/niche-analysis/SKILL.md
+  stage: 01a
+  tags:
+  - niche
+  - research
+  - competitors
+  - analysis
+  - automation
+  triggers:
+  - landing-niche
+  inputs:
+  - 00-brif
+  outputs:
+  - 01a-analiz-nishi
+  pre_reqs:
+  - 00-brif
+  related:
+  - niche-analyst
+  - landing-niche
+  - landing-orchestrator
+  - 01a-analiz-nishi
 - slug: niche-analyst
   type: agent
   name: Агент анализа ниши
@@ -930,6 +1510,38 @@ concepts:
   confidence:
     stage: low
     triggers: low
+- slug: paralaximus-codex
+  type: skill
+  name: Параллакс-герой через Codex (Paralaximus)
+  card: concepts/skills/paralaximus-codex.md
+  source: skills/paralaximus-codex/SKILL.md
+  stage: 07b
+  tags:
+  - parallax
+  - hero
+  - codex
+  - image-gen
+  - visual
+  - css-animation
+  triggers:
+  - landing-compose
+  - landing-visuals
+  inputs:
+  - 07b-composed
+  - 05-dizayn-sistema
+  outputs:
+  - 07b-composed
+  pre_reqs:
+  - 05-dizayn-sistema
+  - 07b-composed
+  related:
+  - landing-compose
+  - landing-visuals
+  - visual-generation
+  - block-composer
+  - visual-curator
+  confidence:
+    triggers: low
 - slug: photo-classifier
   type: agent
   name: Классификатор фотографий
@@ -958,6 +1570,44 @@ concepts:
   confidence:
     triggers: low
     pre_reqs: low
+- slug: photo-curation
+  type: skill
+  name: Обработка фотографий (Photo Curation)
+  card: concepts/skills/photo-curation.md
+  source: skills/photo-curation/SKILL.md
+  stage: 07c
+  tags:
+  - photos
+  - pipeline
+  - codex
+  - ai
+  - intake
+  - classify
+  - match
+  - identity-safe
+  triggers:
+  - landing-photos
+  inputs:
+  - 07c_PHOTOS/inbox
+  - 05-dizayn-sistema
+  - 07b-composed
+  outputs:
+  - 07c_PHOTOS/processed
+  - photo-preview.html
+  - selections.yaml
+  - 07b-composed
+  pre_reqs:
+  - 05-dizayn-sistema
+  - 07b-composed
+  related:
+  - photo-curator
+  - photo-classifier
+  - photo-matcher
+  - photo-preview-board
+  - photo-stylist
+  - landing-photos
+  - landing-compose
+  - landing-visuals
 - slug: photo-curator
   type: agent
   name: Photo Curator
@@ -1045,6 +1695,34 @@ concepts:
   - 07c-photos
   confidence:
     triggers: low
+- slug: photo-styling
+  type: skill
+  name: Стилизация фотографий (identity-safe)
+  card: concepts/skills/photo-styling.md
+  source: skills/photo-styling/SKILL.md
+  stage: '02'
+  tags:
+  - photos
+  - image-processing
+  - cutout
+  - compositing
+  - stage-02
+  inputs:
+  - 02-materialy-klienta
+  outputs:
+  - 07c-photos
+  pre_reqs:
+  - 02-materialy-klienta
+  related:
+  - photo-stylist
+  - photo-classifier
+  - photo-curator
+  - photo-matcher
+  - 07c-photos
+  confidence:
+    triggers: low
+    inputs: low
+    outputs: low
 - slug: photo-stylist
   type: agent
   name: Стилист фотографий
@@ -1072,6 +1750,35 @@ concepts:
   confidence:
     stage: low
     triggers: low
+- slug: prototype-import
+  type: skill
+  name: Импорт прототипа
+  card: concepts/skills/prototype-import.md
+  source: skills/prototype-import/SKILL.md
+  stage: 07a
+  tags:
+  - prototype
+  - import
+  - parsing
+  - stage-07a
+  triggers:
+  - landing-prototype
+  inputs:
+  - 07_ПРОТОТИП/source/
+  outputs:
+  - 07_ПРОТОТИП/prototype.md
+  - 07_ПРОТОТИП/prototype.yaml
+  - 07_ПРОТОТИП/import-log.md
+  pre_reqs:
+  - 02-materialy-klienta
+  related:
+  - prototype-importer
+  - landing-prototype
+  - 07-prototip
+  - landing-compose
+  - landing-content
+  confidence:
+    pre_reqs: low
 - slug: prototype-importer
   type: agent
   name: Импортёр прототипа
@@ -1141,6 +1848,32 @@ concepts:
   - landing-deploy
   - landing-final-check
   - seo-tech-audit
+  confidence:
+    triggers: low
+- slug: references-collection
+  type: skill
+  name: Сбор и ведение индекса референсов
+  card: concepts/skills/references-collection.md
+  source: skills/references-collection/SKILL.md
+  stage: '03'
+  tags:
+  - references
+  - yaml
+  - index
+  - stage-03
+  - crud
+  inputs:
+  - 03-referensy
+  outputs:
+  - 03-referensy
+  pre_reqs:
+  - 02-materialy-klienta
+  related:
+  - references-curator
+  - landing-references
+  - 03-referensy
+  - 04-brend
+  - visual-curator
   confidence:
     triggers: low
 - slug: references-curator
@@ -1270,6 +2003,39 @@ concepts:
   confidence:
     triggers: low
     stage: low
+- slug: seo-tech-audit
+  type: skill
+  name: SEO/Tech Аудит лендинга
+  card: concepts/skills/seo-tech-audit.md
+  source: skills/seo-tech-audit/SKILL.md
+  stage: '11'
+  tags:
+  - seo
+  - audit
+  - qa
+  - html
+  - network
+  - schema
+  - multisite
+  triggers:
+  - landing-audit
+  inputs:
+  - 09-deploy
+  outputs:
+  - 10-qa
+  gates:
+  - seo_audit_pass
+  pre_reqs:
+  - 09-deploy
+  related:
+  - landing-audit
+  - landing-qa
+  - landing-deploy
+  - landing-orchestrator
+  - 10-qa
+  confidence:
+    inputs: low
+    outputs: low
 - slug: stack-planner
   type: agent
   name: Планировщик стека
@@ -1305,6 +2071,35 @@ concepts:
   - landing-go
   - landing-orchestrator
   - 06-stek
+  confidence:
+    triggers: low
+- slug: style-decomposition
+  type: skill
+  name: Декомпозиция стиля (Style Decomposition)
+  card: concepts/skills/style-decomposition.md
+  source: skills/style-decomposition/SKILL.md
+  stage: '04'
+  tags:
+  - palette
+  - fonts
+  - icons
+  - extraction
+  - design
+  triggers:
+  - landing-brand
+  inputs:
+  - 03-referensy
+  outputs:
+  - 04-brend
+  pre_reqs:
+  - 03-referensy
+  - 02-materialy-klienta
+  related:
+  - style-extractor
+  - brand-architect
+  - landing-brand
+  - 04-brend
+  - 05-dizayn-sistema
   confidence:
     triggers: low
 - slug: style-extractor
@@ -1367,6 +2162,37 @@ concepts:
   - landing-go
   confidence:
     triggers: low
+- slug: visual-concept-generator
+  type: skill
+  name: Генератор визуального концепта
+  card: concepts/skills/visual-concept-generator.md
+  source: skills/visual-concept-generator/SKILL.md
+  stage: 03b
+  tags:
+  - visual-concept
+  - references
+  - brief
+  - prototype
+  - design
+  - palette
+  inputs:
+  - 00_БРИФ/brief.md
+  - 07_ПРОТОТИП/prototype.yaml
+  - 03_РЕФЕРЕНСЫ/index.yaml
+  outputs:
+  - 03b_КОНЦЕПТ/visual-concept.yaml
+  pre_reqs:
+  - 00-brif
+  - 07-prototip
+  - 03-referensy
+  related:
+  - references-curator
+  - visual-curator
+  - moodboard-composer
+  - brand-architect
+  - landing-references
+  confidence:
+    triggers: low
 - slug: visual-curator
   type: agent
   name: Visual Curator — оркестратор генерации визуалов
@@ -1403,6 +2229,69 @@ concepts:
   - 07d-visuals
   - visual-qa
   - image-pipeline
+- slug: visual-generation
+  type: skill
+  name: Visual Generation — генерация иконок и инфографики
+  card: concepts/skills/visual-generation.md
+  source: skills/visual-generation/SKILL.md
+  stage: 07d
+  tags:
+  - visuals
+  - icons
+  - infographics
+  - codex
+  - image-gen
+  - cache
+  - slot-injection
+  triggers:
+  - landing-visuals
+  inputs:
+  - 05-dizayn-sistema
+  - 07b-composed
+  outputs:
+  - 07d-visuals
+  pre_reqs:
+  - 05-dizayn-sistema
+  - 07b-composed
+  related:
+  - visual-curator
+  - landing-visuals
+  - landing-compose
+  - photo-curator
+  - 07c-photos
+  - landing-visuals
+  confidence:
+    stage: low
+- slug: visual-qa
+  type: skill
+  name: Visual QA
+  card: concepts/skills/visual-qa.md
+  source: skills/visual-qa/SKILL.md
+  stage: 07c
+  tags:
+  - qa
+  - playwright
+  - codex
+  - screenshots
+  - visual
+  - auto-fix
+  triggers:
+  - landing-qa
+  inputs:
+  - 07b-composed
+  outputs:
+  - 10-qa
+  pre_reqs:
+  - 07b-composed
+  related:
+  - landing-qa
+  - gpt5-prompting-engine
+  - 10-qa
+  - landing-compose
+  - landing-photos
+  - landing-visuals
+  confidence:
+    stage: low
 - slug: visual-strategist
   type: agent
   name: Визуальный стратег
@@ -1435,6 +2324,30 @@ concepts:
   - moodboard-composer
   - references-curator
   - landing-orchestrator
+  confidence:
+    triggers: low
+- slug: wiki-routing-observability
+  type: skill
+  name: Wiki Routing Observability
+  card: concepts/skills/wiki-routing-observability.md
+  source: skills/wiki-routing-observability/SKILL.md
+  tags:
+  - wiki
+  - observability
+  - logging
+  - analytics
+  - routing
+  inputs:
+  - wiki/index.yaml
+  - logs/wiki-usage.jsonl
+  outputs:
+  - logs/wiki-usage.jsonl
+  - wiki/routing-report.md
+  pre_reqs:
+  - wiki
+  related:
+  - wiki
+  - wiki-audit-checklist
   confidence:
     triggers: low
 - slug: wp-builder
@@ -1477,6 +2390,40 @@ concepts:
   - block-composer
   confidence:
     triggers: low
+- slug: wp-cli-deployer
+  type: skill
+  name: WP-CLI Deployer
+  card: concepts/skills/wp-cli-deployer.md
+  source: skills/wp-cli-deployer/SKILL.md
+  stage: 09
+  tags:
+  - deploy
+  - wordpress
+  - beget
+  - rsync
+  - wp-cli
+  - media-import
+  triggers:
+  - landing-deploy
+  inputs:
+  - 08_КОД/wp-theme/
+  - 08_КОД/page-content.html
+  - theme/assets/img/
+  - .env
+  outputs:
+  - deployed-wordpress-theme
+  - media-library-attachments
+  - front-page-seeded
+  pre_reqs:
+  - wp-builder
+  - frontend-builder
+  related:
+  - wp-builder
+  - qa-auditor
+  - landing-orchestrator
+  - frontend-builder
+  confidence:
+    pre_reqs: low
 - slug: wp-deployer
   type: agent
   name: WP Deployer — Деплой-инженер
@@ -1509,4 +2456,104 @@ concepts:
   - 10-qa
   confidence:
     gates: low
+    triggers: low
+- slug: wp-landing-config
+  type: skill
+  name: WP Landing Config — mu-plugin для настройки лендинга
+  card: concepts/skills/wp-landing-config.md
+  source: skills/wp-landing-config/SKILL.md
+  stage: 08
+  tags:
+  - wordpress
+  - multisite
+  - crm
+  - cta
+  - seo
+  - admin-ui
+  - mu-plugin
+  triggers:
+  - landing-admin-install
+  inputs:
+  - project-dir
+  outputs:
+  - wp-content/mu-plugins/landing-config/
+  pre_reqs:
+  - wp-builder
+  - wp-deployer
+  related:
+  - integrations-engineer
+  - analytics-engineer
+  - frontend-builder
+  - seo-optimizer
+  confidence:
+    stage: low
+    pre_reqs: low
+- slug: wp-multisite
+  type: skill
+  name: WP Multisite — управление Multisite-сетью на Beget
+  card: concepts/skills/wp-multisite.md
+  source: skills/wp-multisite/SKILL.md
+  tags:
+  - multisite
+  - beget
+  - wordpress
+  - segments
+  - cloning
+  triggers:
+  - landing-segment
+  - landing-clone
+  inputs:
+  - <project-dir>/.landing-state.yaml
+  - <project-dir>/13_СЕГМЕНТЫ_ЦА/
+  outputs:
+  - <project-dir>/13_СЕГМЕНТЫ_ЦА/<slug>/
+  - .landing-state.yaml::multisite
+  - .landing-state.yaml::audience_segments[]
+  pre_reqs:
+  - wp-deployer
+  - wp-builder
+  related:
+  - landing-orchestrator
+  - wp-builder
+  - wp-deployer
+  - lifecycle-keeper
+  confidence:
+    triggers: low
+    pre_reqs: low
+- slug: wp-theme-assembler
+  type: skill
+  name: WP Theme Assembler — сборка ресурсов и build-preview
+  card: concepts/skills/wp-theme-assembler.md
+  source: skills/wp-theme-assembler/SKILL.md
+  stage: 08
+  tags:
+  - wp-theme
+  - assets
+  - preview
+  - fonts
+  - icons
+  - images
+  - stage-08
+  triggers:
+  - landing-build
+  inputs:
+  - 08-kod
+  - 05-dizayn-sistema
+  - 07b-composed
+  outputs:
+  - 08-kod
+  pre_reqs:
+  - wp-builder
+  - integrations-engineer
+  - analytics-engineer
+  - seo-optimizer
+  related:
+  - wp-builder
+  - landing-build
+  - 08-kod
+  - integrations-engineer
+  - analytics-engineer
+  - seo-optimizer
+  - landing-previews
+  confidence:
     triggers: low

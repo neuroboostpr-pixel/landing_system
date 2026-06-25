@@ -255,6 +255,18 @@ if [ -f "$PAGE_HTML" ]; then
         PAGE_ID="$(ssh_run "$WP post create --post_type=page --post_status=publish --post_title='${PAGE_TITLE}' --post_name='${PAGE_SLUG}' --post_content=\"\$(cat ${REMOTE_HTML})\" --porcelain")"
     fi
 
+    # Guard: KSES может экранировать вложенные блок-комментарии
+    # (<!-- wp:lazyblock/* --> внутри section-card) в &lt;!-- … -->, из-за
+    # чего блоки рендерятся сырым текстом. wp-cli в admin-контексте обычно
+    # безопасен, но при программной записи это всплывает (см. asset-pipeline.md
+    # «KSES экранирует вложенные блоки»). Проверяем и при необходимости
+    # переписываем post_content напрямую в БД, минуя content-фильтры.
+    escaped="$(ssh_run "$WP post get ${PAGE_ID} --field=content | grep -c '&lt;!-- wp:' || true" | head -n1)"
+    if [ "${escaped:-0}" != "0" ]; then
+        echo "⚠ KSES экранировал вложенные блоки — переписываю post_content напрямую"
+        ssh_run "$WP eval 'global \$wpdb; \$wpdb->update(\$wpdb->posts, [\"post_content\"=>file_get_contents(\"${REMOTE_HTML}\")], [\"ID\"=>${PAGE_ID}]); clean_post_cache(${PAGE_ID});'"
+    fi
+
     ssh_run "$WP option update show_on_front page"
     ssh_run "$WP option update page_on_front ${PAGE_ID}"
     ssh_run "rm -f ${REMOTE_HTML}"

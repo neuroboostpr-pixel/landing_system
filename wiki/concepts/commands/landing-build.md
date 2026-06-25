@@ -1,7 +1,7 @@
 ---
 slug: landing-build
 type: command
-name: "/landing-build — Сборка WordPress-темы"
+name: "/landing-build — сборка WordPress-темы (этап 08)"
 stage: "08"
 tags: [build, wordpress, lazy-blocks, theme, analytics, seo, integrations]
 triggers: [landing-build]
@@ -14,58 +14,56 @@ outputs:
   - 08_КОД/wp-theme/
   - 08_КОД/page-content.html
   - 08_КОД/build-preview.html
-  - 08_КОД/integrations/
-  - 11_АНАЛИТИКА/metrika-config.md
-  - 12_SEO/meta-tags.yaml
-gates: [build_preview_approved]
-pre_reqs: [content-writer, design-system-generator, stack-planner]
+  - 11_АНАЛИТИКА/
+  - 12_SEO/
+gates: [build-preview-approval]
+pre_reqs: [07-kontent, 07b-composed, 05-dizayn-sistema, 06-stek]
 related:
   - analytics-engineer
   - integrations-engineer
   - seo-optimizer
-  - wp-builder
   - wp-gutenberg-block-builder
-  - wp-cli-deployer
-  - block-composer
+  - wp-theme-assembler
+  - landing-deploy
+  - 08-kod
 sources: ["commands/landing-build.md"]
-updated: 2026-05-26
+updated: 2026-06-22
 ---
 
-# /landing-build — Сборка WordPress-темы
+# /landing-build — сборка WordPress-темы (этап 08)
 
 ## Что делает
 
-Команда запускает полный пайплайн генерации WordPress-темы для лендинга на этапе 08. Последовательно вызывает 11 шагов: детерминированные Python-генераторы (тема, Lazy Blocks, регистрация блоков, CSS-патчи, page-content), затем AI-агентов для форм/интеграций, аналитики и SEO, после чего собирает JS-библиотеки, popup-систему и финальный build-preview. Результат — полностью готовая WP-тема и статический превью для согласования с пользователем.
+Команда запускает детерминированный конвейер из 11 шагов, который превращает утверждённый макет `composed.html` и финальные тексты в полноценную WordPress-тему с Lazy Blocks, формами, аналитикой и SEO. Сначала конвертер `composed-to-build.py` генерирует `block-spec.yaml` из макета, затем пять Python-скриптов строят scaffolding темы, регистрацию блоков, CSS-патчи и Gutenberg-разметку страницы. Параллельно агенты `integrations-engineer`, `analytics-engineer` и `seo-optimizer` дописывают в `functions.php` CRM-хуки, Яндекс.Метрику и Schema.org. Заканчивается сборка созданием статического `build-preview.html` для финального одобрения.
 
 ## Когда вызывается
 
-Вызывается вручную командой `/landing-build` (или с флагом `--cinematic` для GSAP/ScrollTrigger) после того как контент-райтер завершил `07_КОНТЕНТ/final-copy.md` и пользователь его одобрил. Предварительно система проверяет флаг онбординга, gate этапа 08 и наличие `block-spec.yaml` — без любого из них сборка останавливается с диагностическим сообщением.
+Запускается вручную командой `/landing-build` внутри папки проекта после того, как этапы 07 (контент) и 07b (composed.html) одобрены. Оркестратор `landing-orchestrator` может вызвать команду автоматически в рамках `/landing-go`. Если не пройдены онбординг или предыдущие гейты — команда останавливается с сообщением об ошибке.
 
 ## Вход → выход
 
-**Вход:** `final-copy.md` (контент), `tokens.json` (дизайн-токены), `design-stack.yaml` (стек), `block-spec.yaml` (спецификация блоков).
+**Вход:** `07_КОНТЕНТ/final-copy.md`, `05_ДИЗАЙН-СИСТЕМА/tokens.json`, `06_СТЕК/design-stack.yaml`, `07b_COMPOSED/composed.html`, `08_КОД/block-spec.yaml` (генерируется конвертером из composed).
 
-**Выход:** `08_КОД/wp-theme/` с PHP/CSS/JS, `page-content.html` с Gutenberg-разметкой, `build-preview.html` для финального согласования, конфиги аналитики в `11_АНАЛИТИКА/` и SEO-файлы в `12_SEO/`.
+**Выход:** `08_КОД/wp-theme/` (PHP + CSS + JS + ассеты), `08_КОД/page-content.html` (Gutenberg-разметка фронт-страницы), `08_КОД/build-preview.html` (статический превью для одобрения), `11_АНАЛИТИКА/metrika-config.md` + UTM-шаблоны, `12_SEO/meta-tags.yaml` + structured-data.
 
 ## Чем закрывается этап (gates)
 
-- `build_preview_approved` — пользователь просматривает `08_КОД/build-preview.html` и явно подтверждает переход к деплою; без этого `gate-check.sh --approve` не выполняется и этап 09 не открывается.
+- `build-preview-approval` — пользователь смотрит `08_КОД/build-preview.html` и явно подтверждает готовность к деплою; без этого этап 09 не открывается.
 
 ## Failure modes
 
-- Отсутствует `08_КОД/block-spec.yaml` — генераторы 2–5 падают с ошибкой, сборка останавливается полностью.
-- Gate предыдущего этапа не закрыт — `gate-check.sh` возвращает exit 1, команда завершается до запуска генераторов.
-- Онбординг не пройден (`setup_complete` не установлен) — команда отказывает с подсказкой `/landing-onboarding`.
-- AI-агенты (`analytics-engineer`, `integrations-engineer`, `seo-optimizer`) могут вернуть неполный результат при нечётком брифе или отсутствии токенов CRM.
-- `bundle-assets.py` не находит шрифты или фото — превью генерируется с плейсхолдерами, но деплой впоследствии может упасть на stage 09.
+- **Отсутствует `block-spec.yaml`** — генераторы 2–5 падают с явной ошибкой; нужно сначала запустить `composed-to-build.py`.
+- **Гейт предыдущего этапа не пройден** — `gate-check.sh --stage 08_build` возвращает exit 1, команда прерывается и сообщает какой этап пропущен.
+- **`block.php` не читает `$attributes`** — тексты в wp-admin не видны на сайте; ловится gate-чеком `block_php_uses_attributes`.
+- **Прямые цвета вне `:root`** — `verify_tokens.py` падает; CSS-токенизация должна быть 100%, иначе переключатель мудов сломан.
+- **Онбординг не пройден** — `setup-flag.sh is_complete` возвращает exit 1, команда не стартует.
 
 ## Related
 
-- [[analytics-engineer]] — агент аналитики: вставляет Yandex Metrika и GTM в functions.php
-- [[integrations-engineer]] — агент интеграций: добавляет Fluent Forms / CRM-вебхук
-- [[seo-optimizer]] — агент SEO: мета-теги и Schema.org
-- [[wp-builder]] — скилл сборки WP-темы, вызывается внутри пайплайна
-- [[wp-gutenberg-block-builder]] — скилл генерации popup, JS-инициализации и CSS-патчей
-- [[wp-cli-deployer]] — следующий этап: деплой собранной темы на Beget
-- [[block-composer]] — предшествующий этап: composed.html, из которого берётся структура блоков
-- [[content-writer]] — поставляет `final-copy.md` как входной артефакт
+- [[analytics-engineer]] — агент этапа 08, инжектирует Яндекс.Метрику и GTM
+- [[integrations-engineer]] — агент этапа 08, добавляет CRM-вебхуки
+- [[seo-optimizer]] — агент этапа 08, генерирует meta-теги и Schema.org
+- [[wp-gutenberg-block-builder]] — скилл с Python-скриптами генерации (popup, JS, analytics, integrations)
+- [[wp-theme-assembler]] — скилл с bundle-assets и render-build-preview
+- [[landing-deploy]] — следующий этап (09) после одобрения build-preview
+- [[08-kod]] — папка проекта, куда складываются все артефакты сборки

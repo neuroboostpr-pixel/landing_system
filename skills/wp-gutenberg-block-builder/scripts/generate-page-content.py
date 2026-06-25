@@ -80,7 +80,24 @@ def _build_attrs(controls: list[Control], override: dict | None = None) -> dict:
 _PLACEHOLDER_QUOTED_RE = re.compile(r'"(__IMAGE_ATTACHMENT_ID__[^"]+__)"')
 
 
+def _collapse_ws(value: object) -> object:
+    """Схлопнуть переносы строк в строковых значениях атрибутов.
+
+    Block-комментарий Gutenberg (`<!-- wp:... {json} -->`) должен быть
+    однострочным. Многострочные значения (inline-SVG в `logo_html`, HTML
+    в textarea-атрибутах) с реальными `\\n` ломают block-parser и при
+    сохранении контента экранируются KSES в `&lt;...`, из-за чего блок
+    рендерится сырым комментарием. Для SVG/HTML переносы незначимы —
+    схлопываем в пробел. См. reference: KSES escapes inner blocks.
+    """
+    if isinstance(value, str) and ("\n" in value or "\r" in value):
+        collapsed = value.replace("\r\n", " ").replace("\n", " ").replace("\r", " ")
+        return re.sub(r"\s{2,}", " ", collapsed)
+    return value
+
+
 def _render_block(slug: str, attrs: dict, inner_html: str = "") -> str:
+    attrs = {k: _collapse_ws(v) for k, v in attrs.items()}
     attr_json = json.dumps(attrs, ensure_ascii=False)
     # Strip the surrounding quotes around image-id placeholders so that
     # after deploy sed-replaces the token with a numeric attachment id,
