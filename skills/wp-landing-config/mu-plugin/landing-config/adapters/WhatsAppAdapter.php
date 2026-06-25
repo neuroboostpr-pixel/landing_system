@@ -53,10 +53,11 @@ class WhatsAppAdapter implements AdapterInterface {
     }
 
     public function send(array $lead): array {
-        $token_enc = \landing_config_get('integration_whatsapp_access_token');
-        $token = $token_enc ? decrypt($token_enc) : '';
-        $phone_id = \landing_config_get('integration_whatsapp_phone_id');
-        $to = preg_replace('/[^0-9]/', '', \landing_config_get('integration_whatsapp_to_phone'));
+        $s = static::settings();
+        $token_raw = $s['access_token'] ?? \landing_config_get('integration_whatsapp_access_token');
+        $token = $token_raw ? (str_starts_with($token_raw, 'v1:') ? decrypt($token_raw) : $token_raw) : '';
+        $phone_id = $s['phone_number_id'] ?? \landing_config_get('integration_whatsapp_phone_id');
+        $to = preg_replace('/[^0-9]/', '', $s['to_phone'] ?? \landing_config_get('integration_whatsapp_to_phone'));
         if ($token === '' || $phone_id === '' || $to === '') {
             return ['ok' => false, 'response_code' => null, 'response_body' => '', 'error' => 'Token/phone_id/to missing'];
         }
@@ -76,9 +77,10 @@ class WhatsAppAdapter implements AdapterInterface {
     }
 
     public function test_connection(): array {
-        $token_enc = \landing_config_get('integration_whatsapp_access_token');
-        $token = $token_enc ? decrypt($token_enc) : '';
-        $phone_id = \landing_config_get('integration_whatsapp_phone_id');
+        $s = static::settings();
+        $token_raw = $s['access_token'] ?? \landing_config_get('integration_whatsapp_access_token');
+        $token = $token_raw ? (str_starts_with($token_raw, 'v1:') ? decrypt($token_raw) : $token_raw) : '';
+        $phone_id = $s['phone_number_id'] ?? \landing_config_get('integration_whatsapp_phone_id');
         if ($token === '' || $phone_id === '') {
             return ['ok' => false, 'message' => 'Access token или Phone ID не заданы'];
         }

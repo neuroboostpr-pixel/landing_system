@@ -47,9 +47,10 @@ class AmoCRMAdapter implements AdapterInterface {
     }
 
     public function send(array $lead): array {
-        $sub = \landing_config_get('integration_amocrm_subdomain');
-        $token_enc = \landing_config_get('integration_amocrm_access_token');
-        $token = $token_enc ? decrypt($token_enc) : '';
+        $s = static::settings();
+        $sub = $s['subdomain'] ?? \landing_config_get('integration_amocrm_subdomain');
+        $token_raw = $s['access_token'] ?? \landing_config_get('integration_amocrm_access_token');
+        $token = $token_raw ? (str_starts_with($token_raw, 'v1:') ? decrypt($token_raw) : $token_raw) : '';
         if ($sub === '' || $token === '') {
             return ['ok' => false, 'response_code' => null, 'response_body' => '', 'error' => 'subdomain or token missing'];
         }
@@ -81,9 +82,10 @@ class AmoCRMAdapter implements AdapterInterface {
     }
 
     public function test_connection(): array {
-        $sub = \landing_config_get('integration_amocrm_subdomain');
-        $token_enc = \landing_config_get('integration_amocrm_access_token');
-        $token = $token_enc ? decrypt($token_enc) : '';
+        $s = static::settings();
+        $sub = $s['subdomain'] ?? \landing_config_get('integration_amocrm_subdomain');
+        $token_raw = $s['access_token'] ?? \landing_config_get('integration_amocrm_access_token');
+        $token = $token_raw ? (str_starts_with($token_raw, 'v1:') ? decrypt($token_raw) : $token_raw) : '';
         if ($sub === '' || $token === '') return ['ok' => false, 'message' => 'subdomain или token не заданы'];
 
         $resp = \wp_remote_get("https://{$sub}.amocrm.ru/api/v4/account", [

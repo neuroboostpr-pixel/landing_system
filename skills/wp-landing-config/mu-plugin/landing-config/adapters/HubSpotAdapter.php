@@ -42,8 +42,9 @@ class HubSpotAdapter implements AdapterInterface {
     }
 
     public function send(array $lead): array {
-        $token_enc = \landing_config_get('integration_hubspot_access_token');
-        $token = $token_enc ? decrypt($token_enc) : '';
+        $s = static::settings();
+        $token_raw = $s['access_token'] ?? \landing_config_get('integration_hubspot_access_token');
+        $token = $token_raw ? (str_starts_with($token_raw, 'v1:') ? decrypt($token_raw) : $token_raw) : '';
         if ($token === '') return ['ok' => false, 'response_code' => null, 'response_body' => '', 'error' => 'token missing'];
 
         $payload = [
@@ -70,8 +71,9 @@ class HubSpotAdapter implements AdapterInterface {
     }
 
     public function test_connection(): array {
-        $token_enc = \landing_config_get('integration_hubspot_access_token');
-        $token = $token_enc ? decrypt($token_enc) : '';
+        $s = static::settings();
+        $token_raw = $s['access_token'] ?? \landing_config_get('integration_hubspot_access_token');
+        $token = $token_raw ? (str_starts_with($token_raw, 'v1:') ? decrypt($token_raw) : $token_raw) : '';
         if ($token === '') return ['ok' => false, 'message' => 'Token не задан'];
 
         $resp = \wp_remote_get('https://api.hubapi.com/account-info/v3/details', [
