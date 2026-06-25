@@ -148,11 +148,22 @@ function render_page(): void {
                         $badge_warn = $v ? '' : ' title="Статус не найден в vocab"';
                         $detail_url = admin_url('admin.php?page=landing-config-lead-detail&id=' . (int) $r['id']);
                     ?>
+                        <?php
+                            $delete_url = wp_nonce_url(
+                                admin_url('admin-post.php?action=landing_lead_delete&lead_id=' . (int) $r['id']),
+                                'landing_lead_delete_' . (int) $r['id']
+                            );
+                        ?>
                         <tr>
                             <th scope="row" class="check-column"><input type="checkbox" name="lead_ids[]" value="<?php echo (int) $r['id']; ?>"></th>
                             <td><?php echo (int) $r['id']; ?></td>
                             <td><?php echo esc_html($r['created_at']); ?></td>
-                            <td><a href="<?php echo esc_url($detail_url); ?>"><?php echo esc_html($r['name'] ?: '— без имени —'); ?></a></td>
+                            <td>
+                                <a href="<?php echo esc_url($detail_url); ?>"><?php echo esc_html($r['name'] ?: '— без имени —'); ?></a>
+                                <div class="row-actions">
+                                    <span class="trash"><a href="<?php echo esc_url($delete_url); ?>" style="color:#b32d2e;" onclick="return confirm('Удалить заявку #<?php echo (int) $r['id']; ?>? Это необратимо.');">Удалить</a></span>
+                                </div>
+                            </td>
                             <td><?php echo esc_html($r['phone']); ?></td>
                             <td><?php echo esc_html($r['email']); ?></td>
                             <td><span<?php echo $badge_warn; ?> style="background:<?php echo esc_attr($badge_color); ?>; color:#fff; padding:3px 10px; border-radius:3px; font-size:12px;"><?php echo esc_html($badge_label); ?></span></td>
