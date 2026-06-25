@@ -1,74 +1,48 @@
 ---
 slug: photo-curator
 type: agent
-name: "Куратор фотографий — оркестратор этапа 07c"
+name: "Photo Curator"
 stage: "07c"
-tags: [photos, pipeline, orchestrator, pr-b, identity-safe, codex]
+tags: [photo, pipeline, orchestrator, pr-b, stage-07c]
 triggers: [landing-photos]
-inputs:
-  - .landing-state.yaml
-  - 07c_PHOTOS/inbox/
-  - 07_ПРОТОТИП/prototype.yaml
-  - 07a_WIREFRAME/selections.yaml
-  - 02_МАТЕРИАЛЫ_КЛИЕНТА/photos/original/
-outputs:
-  - 07c_PHOTOS/STATE.yaml
-  - 07c_PHOTOS/catalog.yaml
-  - 07c_PHOTOS/selections.draft.yaml
-  - 07c_PHOTOS/photo-board.html
-  - 07c_PHOTOS/photo-preview.html
-  - 07b_COMPOSED/composed.html
-gates:
-  - photo-board-user-approve
-  - photo-preview-user-approve
-pre_reqs:
-  - landing-design
-  - landing-wireframe
-related:
-  - photo-classifier
-  - photo-matcher
-  - photo-preview-board
-  - landing-photos
-  - landing-compose
+inputs: [07c-photos, 02-materialy-klienta, 05-dizayn-sistema, 07b-composed]
+outputs: [07c-photos]
+gates: []
+pre_reqs: [05-dizayn-sistema, 07b-composed]
+related: [photo-classifier, photo-matcher, photo-preview-board, photo-curation, landing-photos, landing-compose]
 sources: ["agents/photo-curator.md"]
-updated: 2026-05-26
-confidence:
-  stage: low
+updated: 2026-06-19
 ---
 
-# Куратор фотографий — оркестратор этапа 07c
+# Photo Curator
 
 ## Что делает
 
-`photo-curator` управляет всем фото-пайплайном этапа 07c (PR-B): принимает клиентские фотографии из inbox, классифицирует их через `photo-classifier`, сопоставляет с wireframe-слотами через `photo-matcher`, генерирует интерактивную галерею `photo-board.html` для ручного расстановки, обрабатывает утверждённые фото через codex (resize + бренд-постобработка), рендерит `photo-preview.html` и — после финального approve — перегенерирует `composed.html`, заменяя все placeholder-слоты реальными изображениями.
+Оркестрирует весь фото-пайплайн на этапе 07c (PR-B): принимает клиентские фотографии из `07c_PHOTOS/inbox/` (или из `02_МАТЕРИАЛЫ_КЛИЕНТА/photos/`), классифицирует их через sub-агент `photo-classifier`, сопоставляет со слотами прототипа через `photo-matcher`, рендерит интерактивную галерею `photo-board.html` для ручного расставления, валидирует выбор, запускает codex post-process для каждой фотки (identity-safe), и финально перерендерит `composed.html` с реальными фото вместо SVG-плейсхолдеров. Идемпотентен: при рестарте читает `STATE.yaml` и продолжает с незавершённого шага.
 
 ## Когда вызывается
 
-Запускается командой `/landing-photos`. Требует двух жёстких предусловий: этап `05_design` должен быть в статусе `approved`, а wireframe (`07a_wireframe`) — тоже утверждён (или присутствует `selections.yaml`). Если хотя бы одно условие не выполнено — агент останавливается с сообщением об ошибке на русском языке.
+Запускается вручную командой `/landing-photos` внутри папки проекта. До запуска обязательно: этап 05 (дизайн-система) в статусе `approved` и существующий `07b_COMPOSED/composed.html`. Если хотя бы одно условие не выполнено — агент завершается с русским сообщением об ошибке.
 
 ## Вход → выход
 
-**Вход:** фотографии в `07c_PHOTOS/inbox/` (или `02_МАТЕРИАЛЫ_КЛИЕНТА/photos/original/`), `prototype.yaml` с описанием слотов, `selections.yaml` из wireframe-этапа, `tokens.json` с бренд-цветами, `market-profile.md` с нишей/регионом.
+**Вход:** клиентские фото в `07c_PHOTOS/inbox/` (7 подпапок по типу контента), `07_ПРОТОТИП/prototype.yaml` (список слотов), `tokens.json` и `market-profile.md` (для codex post-process параметров), `07b_COMPOSED/composed.html`.
 
-**Выход:** `catalog.yaml` с классифицированными фото, `photo-board.html` для пользовательского выбора, `selections.yaml` после approve, обработанные фото в `07c_PHOTOS/processed/`, `photo-preview.html` для финальной проверки, обновлённый `composed.html` без SVG-placeholder'ов.
-
-## Чем закрывается этап (gates)
-
-- **photo-board-user-approve** — пользователь расставил фото drag-drop в `photo-board.html`, скачал и положил `selections.yaml` в `07c_PHOTOS/`; `selections-validator.py` вернул exit 0.
-- **photo-preview-user-approve** — пользователь открыл `photo-preview.html` и подтвердил, что фото корректно легли в макет; `scripts/verify-photo-pipeline.sh` возвращает exit 0 (нет сырых inbox-фото и SVG-placeholder'ов).
+**Выход:** `07c_PHOTOS/catalog.yaml`, `selections.draft.yaml`, `selections.yaml` (после пользовательского approve), `photo-board.html`, `photo-preview.html`, `processed/<slot>.jpg` для каждого слота + `processed/manifest.json`, обновлённый `composed.html` с подставленными реальными фото, обновлённый `07c_PHOTOS/STATE.yaml`.
 
 ## Failure modes
 
-- **Гейт-предшественник не закрыт** — `enforce_stage_gate.py` физически блокирует Write/Edit; агент не может обойти это, нужно закрыть 05_design или 07a_wireframe.
-- **`selections-validator.py` падает** — несовпадение слот-идентификаторов или пустые обязательные слоты; агент возвращается к шагу 7 (повторный approve через photo-board.html).
-- **Codex-постобработка зависает или меняет identity** — встроенная identity-проверка ловит репейнт объекта клиента (машина/лицо/товар); при срабатывании — слот остаётся без обработки и логируется в `STATE.yaml:errors`.
-- **Фото не соответствует ratio слота** — `validate ratio` отклоняет фото до codex-вызова; ошибка фиксируется, пользователю нужно заменить изображение.
-- **Перезапуск на полуслове** — `STATE.yaml` хранит статус каждого подэтапа; агент идемпотентен и продолжит с первого незавершённого шага. При сбое конкретного подэтапа — `--force-stage <name>`.
+- **Не пройдены hard-gates предшественников** — агент остановится при старте, если 05 или 07b не в статусе `approved`; пользователь получит сообщение но не трассировку ошибки.
+- **Пользователь не кладёт `selections.yaml` обратно** — агент зависнет на шаге 8, ожидая файл; нет тайм-аута.
+- **Codex post-process падает на отдельной фотке** — manifest.json будет неполным; `verify-photo-pipeline.sh` заблокирует закрытие этапа, пока хоть один слот не обработан.
+- **SVG-плейсхолдеры в composed.html после перерендера** — HARD GATE 07c и 07f поймает это; причина — отсутствие processed-фото для слота.
+- **Несоответствие ratio фото к слоту** — codex-process-photo.sh должен валидировать до обработки, но при ошибке валидации фото молча может остаться необработанным.
 
 ## Related
 
-- [[photo-classifier]] — диспатчится батчами по 5 фото для AI-классификации через codex CLI
-- [[photo-matcher]] — сопоставляет классифицированный каталог со слотами из wireframe
-- [[photo-preview-board]] — финальная обработка + рендер photo-preview.html
-- [[landing-photos]] — slash-команда, запускающая данного агента
-- [[landing-compose]] — скилл compose-blocks.py, который перегенерирует composed.html на шаге 11
+- [[photo-classifier]] — sub-агент AI-классификации фото по тегам и типу
+- [[photo-matcher]] — sub-агент сопоставления фото со слотами прототипа
+- [[photo-preview-board]] — sub-агент финальной обработки и рендера preview HTML
+- [[photo-curation]] — скилл-контейнер со скриптами пайплайна (intake, gallery-render, validator)
+- [[landing-photos]] — slash-команда, запускающая photo-curator
+- [[landing-compose]] — предшествующий этап 07b, создающий composed.html с плейсхолдерами

@@ -21,18 +21,23 @@ use function LandingConfig\Snippets\list_site_snippets;
 use function LandingConfig\Snippets\get_snippet;
 use function LandingConfig\Snippets\save_snippet;
 use function LandingConfig\Snippets\delete_snippet;
+use function LandingConfig\AdminMode\cap;
+use function LandingConfig\AdminMode\admin_url_for;
+use function LandingConfig\AdminMode\menu_hook;
+use function LandingConfig\AdminMode\parent_slug;
+use function LandingConfig\AdminMode\page_slug;
 
 // ---------------------------------------------------------------------------
 // Menu registration
 // ---------------------------------------------------------------------------
 
-\add_action('network_admin_menu', function () {
+\add_action(menu_hook(), function () {
     \add_submenu_page(
-        'landing-config-network',
+        parent_slug(),
         'Снипеты (сеть)',
         'Снипеты',
-        'manage_network_options',
-        'landing-config-network-snippets',
+        cap(),
+        page_slug('snippets'),
         __NAMESPACE__ . '\\dispatch'
     );
 });
@@ -52,8 +57,8 @@ function current_segment(): int {
  * Build the base URL for this page, including the segment param.
  */
 function page_url(int $segment, array $extra = []): string {
-    $args = array_merge(['page' => 'landing-config-network-snippets', 'segment' => $segment], $extra);
-    return \network_admin_url('admin.php?' . \http_build_query($args));
+    $args = array_merge(['page' => \LandingConfig\AdminMode\page_slug('snippets'), 'segment' => $segment], $extra);
+    return admin_url_for('admin.php?' . \http_build_query($args));
 }
 
 // ---------------------------------------------------------------------------
@@ -61,7 +66,7 @@ function page_url(int $segment, array $extra = []): string {
 // ---------------------------------------------------------------------------
 
 function dispatch(): void {
-    if (!\current_user_can('manage_network_options')) {
+    if (!\current_user_can(cap())) {
         \wp_die('Insufficient permissions');
     }
 
@@ -140,6 +145,11 @@ function render_page(int $segment): void {
 // ---------------------------------------------------------------------------
 
 function render_segment_selector(int $current_segment): void {
+    // Single-site has no audience segments → no selector. Everything is edited
+    // at segment=0 (the only / network-default level) on the current blog.
+    if (!\is_multisite()) {
+        return;
+    }
     $sites = \get_sites(['number' => 0]);
     ?>
     <div style="padding:12px 0 8px;">
@@ -182,6 +192,11 @@ function compute_overrides_by_name(array $network_snippets): array {
     }
     if (empty($names)) {
         return [];
+    }
+
+    // Single-site has no subsites that could override network snippets.
+    if (!\is_multisite()) {
+        return $names;
     }
 
     $sites = \get_sites(['number' => 0]);
@@ -296,7 +311,7 @@ function render_edit_form_network(): void {
     <div class="wrap">
         <h1><?php echo $snippet ? 'Edit network snippet' : 'New network snippet'; ?></h1>
         <form method="post" action="<?php echo \esc_url($form_url); ?>">
-            <input type="hidden" name="page" value="landing-config-network-snippets">
+            <input type="hidden" name="page" value="<?php echo \esc_attr(\LandingConfig\AdminMode\page_slug('snippets')); ?>">
             <input type="hidden" name="segment" value="0">
             <input type="hidden" name="action" value="save">
             <input type="hidden" name="id" value="<?php echo (int) $s['id']; ?>">
@@ -352,6 +367,31 @@ function render_edit_form_network(): void {
                         <p class="description">Разрешены только безопасные теги: script, meta, link, style, noscript, iframe, div, span, img, a, p, br.</p>
                     </td>
                 </tr>
+                <?php
+                $cur_scope = isset($s['subpage_scope']) ? $s['subpage_scope'] : 'all';
+                $all_checked = ($cur_scope === 'all');
+                $selected_slugs = $all_checked ? [] : array_map('trim', explode(',', $cur_scope));
+                $subpages = ['li-auto' => 'Li Auto', 'zeekr' => 'Zeekr', 'xiaomi' => 'Xiaomi', 'lynk-co' => 'Lynk & Co', 'rox' => 'ROX'];
+                ?>
+                <tr id="lp-snip-subpage-row">
+                    <th>Охват подстраниц</th>
+                    <td>
+                        <label>
+                            <input type="checkbox" id="lp-snip-all-subpages" name="subpage_scope_all" value="1" <?php \checked($all_checked, true); ?> onchange="document.getElementById('lp-subpage-list-n').style.display=this.checked?'none':'block'">
+                            На всех страницах (включая бренд-подстраницы)
+                        </label>
+                        <div id="lp-subpage-list-n" style="margin-top:8px;<?php echo $all_checked ? 'display:none;' : ''; ?>">
+                            <p class="description" style="margin:0 0 6px;">Выберите бренд-подстраницы:</p>
+                            <?php foreach ($subpages as $slug => $label): ?>
+                                <label style="display:block; margin-bottom:4px;">
+                                    <input type="checkbox" name="subpage_slugs[]" value="<?php echo \esc_attr($slug); ?>" <?php \checked(in_array($slug, $selected_slugs, true), true); ?>>
+                                    <?php echo \esc_html($label); ?>
+                                </label>
+                            <?php endforeach; ?>
+                        </div>
+                        <p class="description" style="margin-top:6px;">Управляет тем, на каких страницах появляется снипет. При «На всех страницах» — включая и главную, и бренд-подстраницы.</p>
+                    </td>
+                </tr>
             </table>
 
             <p class="submit">
@@ -368,6 +408,14 @@ function render_edit_form_network(): void {
 // ---------------------------------------------------------------------------
 
 function handle_save_network(): void {
+    $scope_all = !empty($_POST['subpage_scope_all']);
+    if ($scope_all) {
+        $subpage_scope = 'all';
+    } else {
+        $slugs = array_map('sanitize_key', (array) ($_POST['subpage_slugs'] ?? []));
+        $subpage_scope = $slugs ? implode(',', $slugs) : 'all';
+    }
+
     $id = save_snippet([
         'id'              => isset($_POST['id']) ? (int) $_POST['id'] : 0,
         'title'           => \sanitize_text_field($_POST['title'] ?? ''),
@@ -378,6 +426,7 @@ function handle_save_network(): void {
         'target_post_ids' => [],
         'enabled'         => !empty($_POST['enabled']),
         'priority'        => (int) ($_POST['priority'] ?? 10),
+        'subpage_scope'   => $subpage_scope,
     ], true);
 
     \wp_safe_redirect(page_url(0, ['saved' => $id]));
@@ -415,7 +464,7 @@ function render_list_site(int $segment): void {
     }
 
     $new_url = page_url($segment, ['action' => 'new']);
-    $site    = \get_blog_details($segment);
+    $site    = \is_multisite() ? \get_blog_details($segment) : null;
     $domain  = $site ? \esc_html($site->domain . $site->path) : "blog_id={$segment}";
     ?>
     <div class="wrap">
@@ -541,7 +590,7 @@ function render_edit_form_site(int $segment): void {
     ];
     $s = $snippet ?: $defaults;
 
-    $site       = \get_blog_details($segment);
+    $site       = \is_multisite() ? \get_blog_details($segment) : null;
     $domain     = $site ? \esc_html($site->domain . $site->path) : "blog_id={$segment}";
     $cancel_url = page_url($segment);
     $form_url   = page_url($segment);
@@ -549,7 +598,7 @@ function render_edit_form_site(int $segment): void {
     <div class="wrap">
         <h1><?php echo $snippet ? "Edit snippet — {$domain}" : "New snippet — {$domain}"; ?></h1>
         <form method="post" action="<?php echo \esc_url($form_url); ?>">
-            <input type="hidden" name="page" value="landing-config-network-snippets">
+            <input type="hidden" name="page" value="<?php echo \esc_attr(\LandingConfig\AdminMode\page_slug('snippets')); ?>">
             <input type="hidden" name="segment" value="<?php echo $segment; ?>">
             <input type="hidden" name="action" value="save">
             <input type="hidden" name="id" value="<?php echo (int) $s['id']; ?>">
@@ -639,6 +688,31 @@ function render_edit_form_site(int $segment): void {
                         <p class="description">Разрешены только безопасные теги: script, meta, link, style, noscript, iframe, div, span, img, a, p, br.</p>
                     </td>
                 </tr>
+                <?php
+                $cur_scope_s = isset($s['subpage_scope']) ? $s['subpage_scope'] : 'all';
+                $all_checked_s = ($cur_scope_s === 'all');
+                $selected_slugs_s = $all_checked_s ? [] : array_map('trim', explode(',', $cur_scope_s));
+                $subpages_s = ['li-auto' => 'Li Auto', 'zeekr' => 'Zeekr', 'xiaomi' => 'Xiaomi', 'lynk-co' => 'Lynk & Co', 'rox' => 'ROX'];
+                ?>
+                <tr>
+                    <th>Охват подстраниц</th>
+                    <td>
+                        <label>
+                            <input type="checkbox" id="lp-snip-all-subpages-s" name="subpage_scope_all" value="1" <?php \checked($all_checked_s, true); ?> onchange="document.getElementById('lp-subpage-list-s').style.display=this.checked?'none':'block'">
+                            На всех страницах (включая бренд-подстраницы)
+                        </label>
+                        <div id="lp-subpage-list-s" style="margin-top:8px;<?php echo $all_checked_s ? 'display:none;' : ''; ?>">
+                            <p class="description" style="margin:0 0 6px;">Выберите бренд-подстраницы:</p>
+                            <?php foreach ($subpages_s as $slug => $label): ?>
+                                <label style="display:block; margin-bottom:4px;">
+                                    <input type="checkbox" name="subpage_slugs[]" value="<?php echo \esc_attr($slug); ?>" <?php \checked(in_array($slug, $selected_slugs_s, true), true); ?>>
+                                    <?php echo \esc_html($label); ?>
+                                </label>
+                            <?php endforeach; ?>
+                        </div>
+                        <p class="description" style="margin-top:6px;">Управляет тем, на каких страницах появляется снипет. При «На всех страницах» — включая и главную, и бренд-подстраницы.</p>
+                    </td>
+                </tr>
             </table>
 
             <p class="submit">
@@ -655,6 +729,14 @@ function render_edit_form_site(int $segment): void {
 // ---------------------------------------------------------------------------
 
 function handle_save_site(int $segment): void {
+    $scope_all_s = !empty($_POST['subpage_scope_all']);
+    if ($scope_all_s) {
+        $subpage_scope_s = 'all';
+    } else {
+        $slugs_s = array_map('sanitize_key', (array) ($_POST['subpage_slugs'] ?? []));
+        $subpage_scope_s = $slugs_s ? implode(',', $slugs_s) : 'all';
+    }
+
     \switch_to_blog($segment);
     try {
         $id = save_snippet([
@@ -667,6 +749,7 @@ function handle_save_site(int $segment): void {
             'target_post_ids' => array_map('intval', (array) ($_POST['target_post_ids'] ?? [])),
             'enabled'         => !empty($_POST['enabled']),
             'priority'        => (int) ($_POST['priority'] ?? 10),
+            'subpage_scope'   => $subpage_scope_s,
         ], false);
     } finally {
         \restore_current_blog();

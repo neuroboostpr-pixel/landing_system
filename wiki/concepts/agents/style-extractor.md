@@ -1,55 +1,55 @@
 ---
 slug: style-extractor
 type: agent
-name: "Style Extractor"
+name: "Style Extractor — Извлечение стиля из референсов"
 stage: "04"
-tags: [brand, style, palette, fonts, icons, extraction]
+tags: [brand, style, palette, fonts, extraction, stage-04]
 triggers: [landing-brand]
-inputs: [03_РЕФЕРЕНСЫ/index.yaml]
+inputs: [03_РЕФЕРЕНСЫ/index.yaml, 03-referensy]
 outputs: [04_БРЕНД/extracted/palette.yaml, 04_БРЕНД/extracted/fonts.yaml, 04_БРЕНД/extracted/icons.yaml, 04_БРЕНД/extracted/grid.md, 04_БРЕНД/extracted/motion.md]
-gates: [all_5_outputs_present]
-pre_reqs: [moodboard-composer]
-related: [brand-architect, moodboard-composer, design-system-generator]
+gates: []
+pre_reqs: [03-referensy, landing-moodboard]
+related: [brand-architect, style-decomposition, 04-brend, landing-brand, references-collection, visual-curator]
 sources: ["agents/style-extractor.md"]
-updated: 2026-05-26
+updated: 2026-06-19
 confidence: {triggers: low}
 ---
 
-# Style Extractor
+# Style Extractor — Извлечение стиля из референсов
 
 ## Что делает
 
-Агент извлекает конкретную, готовую к использованию в коде систему стилей из утверждённых референсных изображений и URL-адресов. Он читает список одобренных референсов из `03_РЕФЕРЕНСЫ/index.yaml`, запускает серию Python-скриптов для анализа палитры, шрифтов и иконок, агрегирует результаты и записывает пять структурированных файлов в папку `04_БРЕНД/extracted/`. Именно эти файлы станут основой для работы агента `brand-architect` на том же этапе 04.
+Агент обрабатывает утверждённые визуальные референсы (изображения и URL) и извлекает из них конкретную, готовую к использованию в коде стилевую систему. Запускает цепочку Python-скриптов: извлечение палитры цветов, идентификацию шрифтов, подбор иконочного набора, агрегацию через orchestrate.py. Результатом являются ровно 5 структурированных файлов в папке `04_БРЕНД/extracted/`, на которые опирается `brand-architect` при сборке brand-kit.
 
 ## Когда вызывается
 
-Вызывается командой `/landing-brand` после того, как мудборд проекта утверждён пользователем (этап 03 закрыт). До запуска агент проверяет, что `current_stage == 04_brand` в `.landing-state.yaml`, и запускает `gate-check.sh` — если предшествующий этап не закрыт, выполнение блокируется.
+Вызывается в рамках этапа `04_brand` после того, как мудборд утверждён пользователем. Агент не запускается, если предшественники (этапы 03 и ниже) не закрыты — hook `enforce_stage_gate.py` физически блокирует запись файлов при незакрытых шлюзах.
 
 ## Вход → выход
 
-**Вход:** `03_РЕФЕРЕНСЫ/index.yaml` со списком референсов со статусом `approved`; изображения из папки референсов; URL-адреса сайтов для анализа шрифтов.
+**Вход:** `03_РЕФЕРЕНСЫ/index.yaml` с записями `status: approved`; изображения референсов; URL сайтов-ориентиров; `.landing-state.yaml` с `current_stage == 04_brand`.
 
 **Выход:** пять файлов в `04_БРЕНД/extracted/`:
-- `palette.yaml` — цветовая палитра
-- `fonts.yaml` — гарнитуры и их параметры
-- `icons.yaml` — подобранные иконки
-- `grid.md` — сеточная система
-- `motion.md` — параметры анимаций
-
-## Чем закрывается этап (gates)
-
-- `all_5_outputs_present` — все пять файлов (`palette.yaml`, `fonts.yaml`, `icons.yaml`, `grid.md`, `motion.md`) записаны в `04_БРЕНД/extracted/`; `brand-architect` не запускается, пока хоть один из них отсутствует
+- `palette.yaml` — извлечённая цветовая палитра;
+- `fonts.yaml` — кандидаты шрифтов;
+- `icons.yaml` — выбранный иконочный набор;
+- `grid.md` — сеточная система (placeholder при недоступных референсах);
+- `motion.md` — правила анимации (placeholder при недоступных референсах).
 
 ## Failure modes
 
-- Референсы в `03_РЕФЕРЕНСЫ/index.yaml` не помечены как `approved` — агент не найдёт материал для анализа и сформирует пустые выходные файлы
-- Python-скрипты (`extract-palette.py`, `identify-fonts.py`, `match-icons.py`) недоступны или упали — `orchestrate.py` не завершится, gate не будет закрыт
-- URL-референсы недоступны по сети — блок идентификации шрифтов завершится с ошибкой; остальные файлы могут быть неполными
-- `grid.md` и `motion.md` создаются как плейсхолдеры — если агент не перезаписал их реальными данными, дизайн-система получит пустые значения
-- Этап 03 не закрыт через `gate-state.sh` — `enforce_stage_gate.py` заблокирует запись файлов ещё до их создания
+- **Заблокированные источники** (Behance / Dribbble / Instagram): скрипты не могут считать цвета — агент создаёт пустые placeholder-файлы и берёт палитру из `03b_КОНЦЕПТ/visual-concept.yaml`; при отсутствии этого файла — тихий некорректный результат.
+- **Неутверждённые референсы**: если ни один ref не имеет `status: approved` в index.yaml, pipeline получает пустые данные и brand-kit строится без реальных цветов.
+- **Отсутствие хотя бы одного из 5 файлов**: hard gate не закрывается; `gate-check.sh` вернёт exit != 0 и следующий этап не запустится.
+- **Ошибка orchestrate.py**: при падении агрегирующего скрипта частично созданные файлы остаются, но могут содержать невалидный YAML — brand-architect упадёт при чтении.
+- **Запуск не из stage 04**: если `.landing-state.yaml` показывает другой `current_stage`, агент обязан остановиться, но при ручном вызове это условие может быть пропущено.
 
 ## Related
 
-- [[moodboard-composer]] — должен завершить этап 03 с утверждёнными референсами, иначе агенту нечего анализировать
-- [[brand-architect]] — использует все 5 выходных файлов style-extractor'а как входные данные для сборки бренд-кита
-- [[design-system-generator]] — на этапе 05 потребляет бренд-кит, основанный на результатах этого агента
+- [[brand-architect]] — следующий агент в цепочке; читает все 5 файлов для сборки brand-kit
+- [[style-decomposition]] — skill, содержащий Python-скрипты extract-palette / identify-fonts / match-icons / orchestrate
+- [[03-referensy]] — этап-источник: утверждённые референсы, без которых нечего извлекать
+- [[04-brend]] — этап, которому принадлежит агент; закрывается после approve всех 5 файлов
+- [[landing-brand]] — skill-команда, диспатчащая этот агент
+- [[references-collection]] — skill сбора и каталогизации референсов (pre-req)
+- [[visual-curator]] — смежный агент ручной оценки визуала перед запуском extractor'а

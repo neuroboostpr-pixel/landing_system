@@ -1,46 +1,52 @@
 ---
 slug: seo-tech-audit
 type: skill
-name: "SEO Tech Audit"
+name: "SEO/Tech Аудит лендинга"
 stage: "11"
-tags: [seo, audit, qa, python, multisite, stage-gate]
+tags: [seo, audit, qa, html, network, schema, multisite]
 triggers: [landing-audit]
-inputs: [.landing-state.yaml, project-url]
-outputs: [11_QA/audit-report.md, 11_QA/audit-report.json, 11_QA/per-site/]
+inputs: [09-deploy]
+outputs: [10-qa]
 gates: [seo_audit_pass]
-pre_reqs: [wp-deployer]
-related: [qa-auditor, seo-optimizer, landing-orchestrator]
+pre_reqs: [09-deploy]
+related: [landing-audit, landing-qa, landing-deploy, landing-orchestrator, 10-qa]
 sources: ["skills/seo-tech-audit/SKILL.md"]
-updated: 2026-05-26
+updated: 2026-06-19
+confidence: {inputs: low, outputs: low}
 ---
 
-# SEO Tech Audit
+# SEO/Tech Аудит лендинга
 
 ## Что делает
 
-Автоматически проверяет задеплоенный лендинг по 43 критериям трёх групп: HTML on-page (25 проверок — title, meta-description, h1, canonical, lang, alt у изображений и др.), Network/Infra (13 — SSL срок, редиректы, robots.txt, sitemap, мягкие 404, security-headers, Whois), Schema/Microdata (5 — Open Graph, Twitter Card, JSON-LD, favicon). Работает на чистом Python без Lighthouse и Node.js. Поддерживает multisite: автоматически обнаруживает поддомены из `.landing-state.yaml::audience_segments` и прогоняет каждый поддомен отдельно со сводным отчётом.
+Автоматически проверяет задеплоенный лендинг по 43 параметрам качества: HTML on-page (title, meta, h1, canonical, lang, img-alt), сетевая инфраструктура (SSL, редиректы, robots.txt, sitemap, Whois), микроразметка (Open Graph, Twitter Card, JSON-LD, favicon). Работает на чистом Python без Lighthouse и Node.js. В мультисайт-режиме автоматически обнаруживает все поддомены из `.landing-state.yaml` и проверяет каждый отдельно. Используется как hard-gate этапа 11: стейдж не закрывается, пока хоть один критичный чек падает на любом поддомене.
 
 ## Когда вызывается
 
-Запускается вручную через `/landing-audit <slug>` или автоматически orchestrator'ом на этапе 11 (QA) как hard-gate `seo_audit_pass`. Этап 11 не закрывается, пока хотя бы один hard-gate провален на любом поддомене. Может вызываться ad-hoc для любого URL без привязки к проекту.
+Запускается командой `/landing-audit <slug>` или напрямую через `python skills/seo-tech-audit/scripts/run-audit.py`. Вызывается после успешного деплоя (этап 09) как часть QA-цикла. Оркестратор запускает его автоматически при попытке закрыть gate `seo_audit_pass` в `config/stage-gates.yaml`.
 
 ## Вход → выход
 
-**Вход:** задеплоенный сайт (URL или slug проекта), опционально `.landing-state.yaml` с перечнем поддоменов аудитории.
+**Вход:** задеплоенный лендинг (URL или slug проекта с `.landing-state.yaml`); доступность целевого домена по HTTPS.
 
-**Выход:** `11_QA/audit-report.md` (сводный отчёт по всем поддоменам), `11_QA/audit-report.json` (машиночитаемый для CI/orchestrator), `11_QA/per-site/<host>.{md,json}` (детали по каждому поддомену). Exit code `0` — все hard-gates прошли; `1` — есть провалы; `2` — системная ошибка.
+**Выход:** отчёты в `<project>/11_QA/` — `audit-report.md` (сводный по всем поддоменам), `audit-report.json` (для CI/оркестратора), отдельные файлы `per-site/<host>.{md,json}` на каждый поддомен. Exit code 0 = все hard-gates ✓, 1 = есть failures, 2 = system error.
+
+## Чем закрывается этап (gates)
+
+- seo_audit_pass — run-audit.py возвращает exit 0 на всех поддоменах проекта; при multisite проверяются все записи из `audience_segments[]`
 
 ## Failure modes
 
-- Сайт недоступен по сети — exit code `2`, аудит не запускается; нужно проверить деплой.
-- SSL-сертификат истёк или истекает менее чем через 7 дней — hard-gate fail, этап 11 не закроется до продления.
-- robots.txt или sitemap.xml отсутствуют — hard-gate fail; нужно добавить через wp-cli или плагин.
-- Multisite: `.landing-state.yaml` не содержит `audience_segments` — аудит прогоняется только по главному домену, поддомены пропускаются молча.
-- Мягкая 404 (сервер отдаёт 200 на несуществующую страницу) — hard-gate fail, требует настройки `.htaccess` или permalink'ов WordPress.
+- Домен недоступен или DNS не разрезолвился — exit code 2, аудит не запускается; нужно проверить деплой этапа 09.
+- SSL-сертификат истекает менее чем через 7 дней — hard-gate блокирует закрытие этапа 11.
+- robots.txt или sitemap.xml отсутствуют на сервере — чек падает; для Бегета нужно убедиться, что файлы задеплоены через wp-cli или rsync.
+- В мультисайт-режиме один поддомен не отвечает — весь аудит считается failed, хотя остальные поддомены прошли.
+- Lighthouse-метрики (LCP/CLS) не проверяются в E1 — если заказчик требует Web Vitals, нужна фаза E2.
 
 ## Related
 
-- [[qa-auditor]] — агент, который интерпретирует результаты аудита и формирует задачи на исправление
-- [[seo-optimizer]] — работает с SEO-атрибутами на этапе контента; результаты его работы проверяет этот скилл
-- [[landing-orchestrator]] — вызывает скилл как часть stage-11 gate-check
-- [[wp-deployer]] — должен завершиться до запуска аудита (сайт обязан быть доступен)
+- [[landing-audit]] — slash-команда, которая вызывает этот скилл
+- [[landing-qa]] — общий QA-скилл этапа 10, предшествует аудиту
+- [[landing-deploy]] — деплой (этап 09), обязательный pre-req
+- [[landing-orchestrator]] — управляет gate-check и диспатчит аудит
+- [[10-qa]] — этап, в папку которого пишутся отчёты

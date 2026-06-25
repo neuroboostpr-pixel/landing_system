@@ -7,6 +7,7 @@ use function LandingConfig\Snippets\list_site_snippets;
 use function LandingConfig\Snippets\list_network_snippets;
 
 \add_action('admin_menu', function () {
+    if (!\is_multisite()) return;
     \add_submenu_page(
         'landing-config',
         'Снипеты (просмотр)',

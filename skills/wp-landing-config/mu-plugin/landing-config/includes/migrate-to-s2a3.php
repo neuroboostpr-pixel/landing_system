@@ -56,15 +56,15 @@ function migrate_cta_from_options(int $network_blog_id): int {
  * Map adapter machine name to its class name.
  */
 function _class_for_adapter(string $name): string {
-    return match ($name) {
+    $map = [
         'email'    => 'EmailAdapter',
         'telegram' => 'TelegramAdapter',
         'whatsapp' => 'WhatsAppAdapter',
         'amocrm'   => 'AmoCRMAdapter',
         'bitrix24' => 'Bitrix24Adapter',
         'hubspot'  => 'HubSpotAdapter',
-        default    => '',
-    };
+    ];
+    return $map[$name] ?? '';
 }
 
 /**

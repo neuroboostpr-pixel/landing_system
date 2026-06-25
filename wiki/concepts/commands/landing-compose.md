@@ -1,59 +1,48 @@
 ---
 slug: landing-compose
 type: command
-name: "/landing-compose — Сборка composed.html"
+name: "Сборка composed.html (этап 07b)"
 stage: "07b"
-tags: [compose, wireframe, tokens, html, stage-07b]
-triggers: [landing-compose]
-inputs:
-  - 07_ПРОТОТИП/prototype.yaml
-  - 07a_WIREFRAME/selections.yaml
-  - 05_ДИЗАЙН-СИСТЕМА/tokens.json
-outputs:
-  - 07b_COMPOSED/composed.html
-  - 07b_COMPOSED/composed-mobile.html
-  - 07b_COMPOSED/block-injection-log.md
-pre_reqs: [wireframe-rendering, design-tokens-generation, prototype-import]
-related:
-  - block-composer
-  - block-composition
-  - wireframe-rendering
-  - design-tokens-generation
-  - prototype-import
-  - landing-orchestrator
+tags: [compose, html, design-tokens, prototype, collage, moods]
+triggers: [landing-go]
+inputs: [05-dizayn-sistema, 07-prototip]
+outputs: [07b-composed]
+pre_reqs: [05-dizayn-sistema, 07-prototip]
+related: [block-composer, landing-go, landing-photos, landing-visuals, premium-07b-checklist, landing-design, landing-content]
 sources: ["commands/landing-compose.md"]
-updated: 2026-05-26
+updated: 2026-06-22
+confidence: {triggers: low}
 ---
 
-# /landing-compose — Сборка composed.html
+# Сборка composed.html (этап 07b)
 
 ## Что делает
 
-Команда запускает этап **07b_COMPOSED**: собирает финальный HTML-файл лендинга, подставляя в него токены дизайн-системы (`tokens.json`) и контент из выбранных wireframe-блоков (`selections.yaml`). Передаёт основную работу агенту `block-composer`, который инжектирует шрифты, цвета, отступы и текстовый контент из прототипа. Визуальные плейсхолдеры (фото, иконки, инфографика) на этом этапе **не заменяются** — они остаются как `[SLOT: ...]` до прохождения этапов 07c и 07d.
+Запускает этап **07b_COMPOSED**: агент рисует HTML-макет лендинга, собирая три источника правды — дизайн-токены из `tokens.json`, реальные тексты из активного прототипа и, если есть, поблочное ТЗ `build-spec.md`. Результат — `composed.html` с полной коллажной глубиной, токенизированными цветами и переключателем мудов. Визуальные плейсхолдеры (фото, иконки, инфографика) остаются пустыми и заполняются на следующих этапах 07c/07d.
 
 ## Когда вызывается
 
-Вызывается вручную командой `/landing-compose` или автоматически через `/landing-go`. Условие запуска: в папке `07a_WIREFRAME/` должен лежать `selections.yaml` (результат утверждения вариантов в wireframe.html), а в `05_ДИЗАЙН-СИСТЕМА/` — `tokens.json`. Без этих файлов команда завершится с ошибкой.
+Автоматически через `/landing-go` после того, как утверждены этап 05 (дизайн-система) и этап 07 (прототип). Может быть запущена вручную командой `/landing-compose` из папки проекта. Минимальное условие — наличие `05_ДИЗАЙН-СИСТЕМА/tokens.json`.
 
 ## Вход → выход
 
-**Вход:** `prototype.yaml` (структура блоков и тексты), `selections.yaml` (выбранные варианты wireframe-блоков), `tokens.json` (цвета, типографика, отступы дизайн-системы).
+**Вход:** `05_ДИЗАЙН-СИСТЕМА/tokens.json`, активный `07_ПРОТОТИП/prototype-*.yaml` (`meta.active: true`). Опционально: `07b_COMPOSED/build-spec.md` (ТЗ — главный источник правды при наличии), `05_ДИЗАЙН-СИСТЕМА/moods/*/objects.yaml`, `compositions/hero.yaml`.
 
-**Выход:** `07b_COMPOSED/composed.html` — полная страница лендинга с токенами и текстами, но с визуальными плейсхолдерами; `composed-mobile.html` — мобильная версия; `block-injection-log.md` — лог того, какие блоки были инжектированы и с каким результатом.
+**Выход:** `07b_COMPOSED/composed.html` — полный макет с коллажными слоями и обязательной панелью переключения мудов; `07b_COMPOSED/composed-mobile.html`; `07b_COMPOSED/block-injection-log.md` — лог поблочной инъекции.
 
 ## Failure modes
 
-- `selections.yaml` отсутствует или не скачан из `wireframe.html` — команда останавливается с требованием пройти этап 07a.
-- `tokens.json` не найден или повреждён — блоки собираются без CSS-переменных, визуальный результат неверный.
-- `prototype.yaml` содержит блоки без соответствий в `selections.yaml` — `block-composer` логирует пропущенные блоки, плейсхолдер остаётся пустым.
-- `verify-composed-premium.sh` возвращает ненулевой exit-код — этап 07b не закрывается (HARD GATE), нужна доработка `composed.html`.
-- Команда запущена вручную при незавершённых предыдущих этапах — `landing-orchestrator` может перезаписать артефакты при следующем `/landing-go`.
+- **ТЗ есть, но агент его проигнорировал** — генерация без сверки с `build-spec.md` считается дефектом («ТЗ протекает мимо флоу»); все поблочные требования обязательны.
+- **Выдуманный текст** — агент добавляет контент, которого нет в прототипе; нарушение `reference-driven-rules.md §2.1`; ловится `verify_no_invented_text.py`.
+- **Отсутствует панель мудов** — `verify-composed-premium.sh` вернёт ненулевой exit; hard-gate 07b не закроется.
+- **Прямые цвета вместо токенов** — переключение мудов сломается; ловится `scripts/verify_tokens.py`.
+- **Использован неактивный прототип** — при нескольких `prototype-*.yaml` без проверки `active: true` текст будет неверным; см. `07_ПРОТОТИП/prototypes-index.md`.
 
 ## Related
 
-- [[block-composer]] — агент, выполняющий сборку блоков
-- [[block-composition]] — скилл сборки composed.html
-- [[wireframe-rendering]] — предыдущий этап (07a), поставляет selections.yaml
-- [[design-tokens-generation]] — поставляет tokens.json
-- [[prototype-import]] — поставляет prototype.yaml
-- [[landing-orchestrator]] — вызывает команду автоматически в рамках полного pipeline
+- [[block-composer]] — агент, который непосредственно рисует макет по ТЗ и токенам
+- [[landing-go]] — оркестратор, вызывающий этот этап автоматически
+- [[landing-photos]] — этап 07c, добавляет реальные фото в composed.html после сборки
+- [[landing-visuals]] — этап 07d, генерирует иконки и инфографику для плейсхолдеров
+- [[premium-07b-checklist]] — обязательный чеклист: токены, clamp, коллажная глубина, панель мудов
+- [[landing-design]] — поставляет tokens.json и objects.yaml для этапа 07b

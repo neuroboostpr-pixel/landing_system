@@ -2,43 +2,46 @@
 slug: landing-onboarding
 type: skill
 name: "Онбординг landing-system"
-tags: [onboarding, setup, validation, deps, api-keys, mcp]
+stage: ""
+tags: [setup, onboarding, dependencies, api-keys, mcp]
 triggers: [landing-onboarding]
 inputs: []
 outputs: ["~/.landing-system/setup_complete"]
 pre_reqs: []
-related: [system-setup, landing-orchestrator, onboarding-guide]
+related: [landing-go, landing-start, landing-new, landing-photos, landing-visuals, system-setup]
 sources: ["skills/landing-onboarding/SKILL.md"]
-updated: 2026-05-26
-confidence: {stage: low}
+updated: 2026-06-19
+confidence: {inputs: low}
 ---
 
 # Онбординг landing-system
 
 ## Что делает
 
-Скилл выполняет первичную настройку landing-system на новой машине: проверяет локальные зависимости, MCP-серверы, плагин superpowers и все API-ключи (15 валидаторов). После успешной проверки записывает флаг `~/.landing-system/setup_complete` с ISO-таймстампом. Начиная с PR-D также устанавливает codex CLI (`npm i -g @openai/codex` + `codex login`), без которого не работают `/landing-photos` и `/landing-visuals`.
+Настраивает landing-system на новой машине за один прогон. Проверяет наличие локальных зависимостей, MCP-серверов, плагина superpowers и 15 API-ключей. При необходимости устанавливает codex CLI (`npm i -g @openai/codex`) и запускает `codex login`. По завершении создаёт файл-флаг `~/.landing-system/setup_complete` с ISO-меткой времени — все остальные `/landing-*` команды проверяют его перед началом работы.
 
 ## Когда вызывается
 
-Запускается явно командой `/landing-onboarding` или автоматически при первом вызове любой `/landing-*` команды, если файл `~/.landing-system/setup_complete` отсутствует. Это жёсткий prerequisite: без пройденного онбординга система блокирует любой следующий шаг.
+Явно — через слеш-команду `/landing-onboarding`. Автоматически — когда любая `/landing-*` команда не находит файл `~/.landing-system/setup_complete` и перенаправляет пользователя сюда. Без codex CLI этапы `07c` (photos) и `07d` (visuals) недоступны.
 
 ## Вход → выход
 
-**Вход:** чистая машина с установленным Claude Code и доступом к интернету. API-ключи и конфигурация MCP предполагаются наличными у пользователя (вводятся интерактивно в ходе wizard).
+**Вход:** чистая машина с установленным Claude Code и доступом к сети; API-ключи в переменных окружения или готовые для ввода интерактивно.
 
-**Выход:** файл `~/.landing-system/setup_complete` (флаг с ISO-таймстампом), настроенные зависимости, проверенные API-ключи, установленный `codex` CLI. Машина готова к запуску `/landing-go`.
+**Выход:** `~/.landing-system/setup_complete` — файл-флаг с меткой времени; все 15 API-валидаторов возвращают OK; `codex` доступен на PATH; MCP-серверы сконфигурированы.
 
 ## Failure modes
 
-- **codex CLI отсутствует после установки** — npm не на PATH или нет интернета; скрипт `install-codex.sh` падает без явной диагностики.
-- **API-ключ невалиден** — `validate-all.sh` не проходит один из 15 валидаторов; setup_complete не создаётся, сообщение об ошибке может быть неочевидным.
-- **MCP-сервер недоступен** — wizard зависает на проверке MCP-коннекта; нужно проверить конфиг `.mcp.json` вручную.
-- **setup_complete устарел** — флаг есть, но окружение изменилось (новые ключи, новый MCP); система не запросит повторную проверку без ручного удаления файла.
-- **Smoke-тест падает** — `USE_CODEX_MOCK=1 bash scripts/test-pipeline.sh smoke-onboarding ...` не прошёл, но setup_complete уже записан; пайплайн будет работать нестабильно.
+- **codex не устанавливается** — отсутствует `npm` или Node.js; скрипт `install-codex.sh` падает без подсказки по причине.
+- **API-валидатор зависает** — один из 15 сервисов недоступен, `validate-all.sh` ждёт timeout без промежуточного вывода.
+- **setup_complete создан, но MCP сломан** — флаг выставлен, но MCP-серверы не стартуют; `/landing-go` не перенаправит на онбординг повторно.
+- **Smoke-test падает на mock-codex** — `USE_CODEX_MOCK=1` не подхватывается окружением (Windows path issues).
+- **Повторный прогон не перезаписывает флаг** — `setup-flag.sh` не обновляет ISO-метку при апдейте зависимостей, статус кажется актуальным, хотя окружение изменилось.
 
 ## Related
 
-- [[system-setup]] — низкоуровневая инфраструктура машины, которую онбординг проверяет
-- [[landing-orchestrator]] — главный агент, который блокируется до появления setup_complete
-- [[onboarding-guide]] — пользовательский гайд, параллельный этому скиллу
+- [[landing-go]] — главная точка входа после онбординга; проверяет setup_complete перед запуском оркестратора
+- [[landing-start]] — wizard для нового проекта; также требует setup_complete
+- [[landing-photos]] — этап 07c, требует codex CLI установленного этим скиллом
+- [[landing-visuals]] — этап 07d, аналогично зависит от codex
+- [[system-setup]] — связанная концепция управления машинным окружением

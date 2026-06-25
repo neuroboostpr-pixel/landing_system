@@ -14,7 +14,15 @@ import yaml
 from bs4 import BeautifulSoup
 
 
-SKIP_KEYS = {"id", "type", "block_id", "class", "tag", "data-block"}
+# name/hint — это метаданные слота (машинный id и описание фото-инструкция),
+# а не видимый текст лендинга → не требуем их в composed (reference-driven §1.1).
+SKIP_KEYS = {"id", "type", "block_id", "class", "tag", "data-block", "name", "hint",
+             "slug", "source_file", "action",
+             # ── структурные ключи типизированного формата gen-prototype ──
+             # (роли/группы/ярлыки/служебная мета — НЕ видимый контент лендинга)
+             "role", "group", "screen_label", "block_label", "label", "position",
+             "meta", "source", "niche", "project", "title",
+             "client_notes", "block_instructions", "seo_phrases"}
 MIN_LEN = 3  # минимальная длина строки чтобы проверять (короткие — false positives)
 PLACEHOLDER_MARKERS = ("____", "___", "TBD", "tbd")
 
@@ -73,14 +81,33 @@ def _md_strings(md_path: Path) -> list[str]:
     return out
 
 
+def _active_proto_yaml(proto_dir: Path) -> Path | None:
+    """Активный prototype-*.yaml по meta.active:true (формат gen-prototype).
+
+    Раньше читался только legacy prototype.yaml → новый prototype-01.yaml не
+    находился и весь контент считался «потерянным» (ложный FAIL). Теперь
+    источник истины — флаг active; legacy-имя остаётся fallback'ом.
+    """
+    for p in sorted(proto_dir.glob("prototype-*.yaml")):
+        try:
+            d = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+        except Exception:
+            continue
+        if (d.get("meta") or {}).get("active") is True:
+            return p
+    legacy = proto_dir / "prototype.yaml"
+    return legacy if legacy.exists() else None
+
+
 def main(project_dir: Path) -> int:
-    proto_yaml = project_dir / "07_ПРОТОТИП" / "prototype.yaml"
-    proto_md = project_dir / "07_ПРОТОТИП" / "prototype.md"
+    proto_dir = project_dir / "07_ПРОТОТИП"
+    proto_yaml = _active_proto_yaml(proto_dir) or (proto_dir / "prototype.yaml")
+    proto_md = proto_dir / "prototype.md"
     composed_path = project_dir / "07b_COMPOSED" / "composed.html"
 
     if not proto_yaml.exists() and not proto_md.exists():
-        print(f"ERROR: нет ни prototype.yaml, ни prototype.md в "
-              f"{project_dir / '07_ПРОТОТИП'}", file=sys.stderr)
+        print(f"ERROR: нет активного prototype-*.yaml / prototype.yaml / prototype.md в "
+              f"{proto_dir}", file=sys.stderr)
         return 2
     if not composed_path.exists():
         print(f"ERROR: {composed_path} не найден", file=sys.stderr)

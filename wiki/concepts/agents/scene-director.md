@@ -3,7 +3,7 @@ slug: scene-director
 type: agent
 name: "Режиссёр сцен (Cinematic Premium)"
 stage: "05"
-tags: [cinematic, design, motion, gsap, animation, parallax, scrolltrigger]
+tags: [cinematic, motion, gsap, scenes, design-system]
 triggers: []
 inputs:
   - 00_БРИФ/brief.md
@@ -12,10 +12,10 @@ inputs:
 outputs:
   - 05_ДИЗАЙН-СИСТЕМА/scenes.md
 gates: []
-pre_reqs: [design-system-generator]
-related: [brand-architect, design-system-generator, block-composer]
+pre_reqs: [design-system-generator, 04-brend, 05-dizayn-sistema]
+related: [design-system-generator, brand-architect, landing-design, 05-dizayn-sistema]
 sources: ["agents/scene-director.md"]
-updated: 2026-05-26
+updated: 2026-06-19
 confidence: {triggers: low}
 ---
 
@@ -23,28 +23,29 @@ confidence: {triggers: low}
 
 ## Что делает
 
-Проектирует кинематографическую структуру лендинга из 6–8 сцен. На входе — бриф, бренд-кит и motion-токены из DESIGN.md. На выходе — `scenes.md` с детализированной scene grammar: тип сцены, описание визуала, инструкции GSAP/ScrollTrigger/Lenis, parallax-логика и мобильный фоллбек. Соблюдает запреты: без scroll hijack, без particle systems, без monotone fade-up на каждом блоке.
+Проектирует кинематографическую архитектуру лендинга: разбивает страницу на 6–8 сцен и описывает для каждой визуальный характер, глубину слоёв, GSAP/ScrollTrigger/Lenis-инструкции и parallax-логику. Работает только в режиме `--cinematic` — стандартным проектам этот агент не нужен. Результат — `scenes.md` в папке дизайн-системы, который затем использует `block-composer` при создании `composed.html`.
 
 ## Когда вызывается
 
-Активируется только при флаге `--cinematic` при создании проекта или при явном вызове пользователя. Работает исключительно в рамках этапа `05_design` — если `current_stage` в `.landing-state.yaml` отличается, агент останавливается и сообщает об ошибке. Обязательна закрытая gate предшественника `design-system-generator`.
+Активируется только при флаге `--cinematic` во время создания проекта или при явном вызове пользователя. Обязательное предусловие: этап `05_design` активен (`.landing-state.yaml::current_stage == 05_design`) и `design-system-generator` уже завершён. Без этих условий агент останавливается и сообщает об ошибке.
 
 ## Вход → выход
 
-**Вход:** `brief.md` (ниша, ЦА, тон), `brand-kit.md` (цвета, motion-настройки), `DESIGN.md` (motion-токены этапа 05). Требуется пройденный stage-gate `05_design` (exit 0 от `gate-check.sh`).
+**Вход:** `00_БРИФ/brief.md` (ниша, ЦА, тон), `04_БРЕНД/brand-kit.md` (цвета, motion-правила), `05_ДИЗАЙН-СИСТЕМА/DESIGN.md` (motion-токены).
 
-**Выход:** `05_ДИЗАЙН-СИСТЕМА/scenes.md` — полная scene grammar: название и тип каждой из 6–8 сцен, GSAP-план, parallax-инструкции, mobile fallback.
+**Выход:** `05_ДИЗАЙН-СИСТЕМА/scenes.md` — scene grammar для 6–8 сцен: название, тип, визуальное описание, GSAP-инструкции, parallax-параметры, mobile fallback для каждой сцены.
 
 ## Failure modes
 
-- Агент запущен без флага `--cinematic` — не активируется, что может быть неочевидно при ручном вызове.
-- `current_stage` в `.landing-state.yaml` не равен `05_design` — жёсткая остановка, пользователю нужно вручную закрыть предшественника.
-- `DESIGN.md` не содержит motion-токенов (этап 05 прошёл без кинематографических настроек) — scenes.md генерируется с неполными или дефолтными параметрами GSAP.
-- Конфликт между motion-токенами brand-kit и выбранным типом сцены — агент не предупреждает, просто перекрывает одно другим.
-- Mobile fallback прописан формально, но не верифицируется скриптом — на реальных устройствах могут появляться тяжёлые анимации.
+- Агент запускается без закрытого предшественника (`design-system-generator`) — hook `enforce_stage_gate.py` блокирует Write, задача виснет.
+- `DESIGN.md` не содержит motion-токенов — сцены генерируются без привязки к реальному бренду, визуал расходится с дизайн-системой.
+- Нарушение Motion Rules: scroll-hijack, particle-системы или fade-up на каждом блоке — явно запрещены спекой, но агент может нарушить их при недостаточном контексте из brief.
+- `brief.md` не заполнен — агент не может определить тон и ЦА, сцены получаются обезличенными.
+- `scenes.md` генерируется для не-cinematic проекта — лишний артефакт ломает ожидания `block-composer`.
 
 ## Related
 
-- [[design-system-generator]] — обязательный предшественник, создаёт DESIGN.md с motion-токенами
-- [[brand-architect]] — формирует brand-kit.md, из которого берутся цвета и motion-настройки
-- [[block-composer]] — использует scenes.md при сборке composed.html на этапе 07b
+- [[design-system-generator]] — обязательный предшественник; даёт motion-токены и DESIGN.md
+- [[brand-architect]] — создаёт brand-kit.md с цветами и motion-правилами, которые читает этот агент
+- [[05-dizayn-sistema]] — этап, в рамках которого работает агент
+- [[landing-design]] — slash-команда, через которую запускается cinematic-режим

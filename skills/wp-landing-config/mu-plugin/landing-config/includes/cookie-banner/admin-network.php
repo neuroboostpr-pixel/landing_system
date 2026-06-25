@@ -10,18 +10,22 @@ use function LandingConfig\CookieBanner\Resolver\get_post_id_for_segment;
 use function LandingConfig\CookieBanner\Resolver\read_settings;
 use function LandingConfig\SegmentSelector\render;
 use function LandingConfig\SegmentSelector\current_from_request;
+use function LandingConfig\AdminMode\cap;
+use function LandingConfig\AdminMode\admin_url_for;
+use function LandingConfig\AdminMode\menu_hook;
+use function LandingConfig\AdminMode\parent_slug;
 
 const MENU_SLUG = 'landing-config-network-cookie-banner';
 
-add_action('network_admin_menu', __NAMESPACE__ . '\\register_menu');
+add_action(menu_hook(), __NAMESPACE__ . '\\register_menu');
 add_action('admin_post_lp_cb_save', __NAMESPACE__ . '\\handle_save');
 
 function register_menu(): void {
     \add_submenu_page(
-        'landing-config-network',
+        parent_slug(),
         'Cookie-banner',
         'Cookie-banner',
-        'manage_network_options',
+        cap(),
         MENU_SLUG,
         __NAMESPACE__ . '\\render_page'
     );
@@ -35,7 +39,7 @@ function _save_field(int $post_id, string $meta_key, $value): void {
 }
 
 function handle_save(): void {
-    if (!\current_user_can('manage_network_options')) wp_die('forbidden');
+    if (!\current_user_can(cap())) wp_die('forbidden');
     \check_admin_referer('lp_cb_save');
     $segment = (int) ($_POST['segment'] ?? 0);
 
@@ -57,6 +61,8 @@ function handle_save(): void {
         ]);
         \update_post_meta($post_id, SEGMENT_META, (string) $segment);
     }
+
+    _save_field($post_id, '_lp_cb_enabled', !empty($_POST['_lp_cb_enabled']) ? '1' : '0');
 
     $layout = sanitize_text_field($_POST['layout'] ?? 'bottom-bar');
     if (!in_array($layout, VALID_LAYOUTS, true)) $layout = 'bottom-bar';
@@ -103,12 +109,12 @@ function handle_save(): void {
         \restore_current_blog();
     }
 
-    \wp_safe_redirect(\add_query_arg(['page' => MENU_SLUG, 'segment' => $segment, 'saved' => 1], \network_admin_url('admin.php')));
+    \wp_safe_redirect(\add_query_arg(['page' => MENU_SLUG, 'segment' => $segment, 'saved' => 1], admin_url_for('admin.php')));
     exit;
 }
 
 function render_page(): void {
-    if (!\current_user_can('manage_network_options')) wp_die('forbidden');
+    if (!\current_user_can(cap())) wp_die('forbidden');
     $segment = current_from_request();
     $post_id = get_post_id_for_segment($segment);
     $current = $post_id ? read_settings($post_id, $segment) : [];
@@ -189,6 +195,15 @@ function render_page(): void {
             <input type="hidden" name="action" value="lp_cb_save">
             <input type="hidden" name="segment" value="<?php echo esc_attr($segment); ?>">
             <?php \wp_nonce_field('lp_cb_save'); ?>
+
+            <p style="margin:16px 0; padding:12px 16px; background:#fff; border:1px solid #c3c4c7; border-left:4px solid #2271b1;">
+                <label style="font-weight:600;">
+                    <input type="checkbox" name="_lp_cb_enabled" id="lp-cb-enabled" value="1" <?php checked((bool) $get('enabled', true), true); ?>>
+                    Cookie-баннер включён
+                </label>
+                <br>
+                <span class="description">Когда снято — баннер не показывается на сайте, а остальные настройки ниже становятся недоступны для редактирования.</span>
+            </p>
 
             <h2>Layout</h2>
             <fieldset>
@@ -276,5 +291,24 @@ function render_page(): void {
             </p>
         </form>
     </div>
+    <script>
+    (function () {
+        var t = document.getElementById('lp-cb-enabled');
+        if (!t) return;
+        var form = t.closest('form');
+        if (!form) return;
+        function sync() {
+            var off = !t.checked;
+            form.querySelectorAll('input, textarea, select, button').forEach(function (el) {
+                if (el === t) return;                 // keep the master toggle usable
+                if (el.type === 'hidden') return;     // action / segment / nonce
+                if (el.type === 'submit') return;      // keep "Save" usable to persist OFF
+                el.disabled = off;
+            });
+        }
+        t.addEventListener('change', sync);
+        sync();
+    })();
+    </script>
     <?php
 }

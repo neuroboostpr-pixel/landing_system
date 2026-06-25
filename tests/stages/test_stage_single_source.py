@@ -18,8 +18,9 @@ STAGES_YAML = ROOT / "config" / "stages.yaml"
 
 EXPECTED_ORDER = [
     "00_brief", "01_context", "01a_niche_analysis", "02_assets",
+    "07a_prototype",
     "03_references", "03b_visual_concept", "04_brand", "05_design",
-    "06_stack", "07a_prototype", "07_content", "07c_composed",
+    "06_stack", "07_content", "07c_composed",
     "07d_photos", "07e_visuals", "07f_composed_final",
     "08_build", "08b_style", "10_qa", "09_deploy", "11_analytics", "12_seo",
 ]
@@ -39,7 +40,7 @@ def test_canonical_file_well_formed():
 def test_stages_py_prints_order():
     out = subprocess.run(
         [sys.executable, str(ROOT / "scripts" / "stages.py"), "--order"],
-        capture_output=True, text=True, check=True,
+        capture_output=True, text=True, check=True, encoding="utf-8",
     )
     assert out.stdout.split() == EXPECTED_ORDER
 
@@ -47,7 +48,7 @@ def test_stages_py_prints_order():
 def test_stages_py_prints_labels():
     out = subprocess.run(
         [sys.executable, str(ROOT / "scripts" / "stages.py"), "--labels"],
-        capture_output=True, text=True, check=True,
+        capture_output=True, text=True, check=True, encoding="utf-8",
     )
     lines = [l for l in out.stdout.splitlines() if l.strip()]
     assert len(lines) == len(EXPECTED_ORDER)

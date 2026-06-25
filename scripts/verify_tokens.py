@@ -34,10 +34,10 @@ COLOR_RE = re.compile(
 EXEMPT_MARKER = "token-exempt"
 
 
-def _root_spans(text: str) -> list[tuple[int, int]]:
-    """Диапазоны содержимого блоков :root { ... } (по простому скобочному счёту)."""
+def _block_spans(text: str, opener_re: str) -> list[tuple[int, int]]:
+    """Диапазоны содержимого блоков <selector> { ... } (по простому скобочному счёту)."""
     spans = []
-    for m in re.finditer(r":root\s*\{", text):
+    for m in re.finditer(opener_re, text):
         depth = 1
         i = m.end()
         while i < len(text) and depth:
@@ -50,14 +50,32 @@ def _root_spans(text: str) -> list[tuple[int, int]]:
     return spans
 
 
+def _root_spans(text: str) -> list[tuple[int, int]]:
+    """Легальные зоны определения токенов: :root{} И html[data-mood="..."]{}.
+
+    html[data-mood] — это источник токенов мода (переключатель палитры требует
+    разных значений на одной странице), функционально эквивалентен :root.
+    Прямые hex/rgba в этих блоках легальны; в компонентном CSS/HTML — нет.
+    """
+    return (_block_spans(text, r":root\s*\{")
+            + _block_spans(text, r'html\[data-mood[^\]]*\]\s*\{'))
+
+
 def _theme_color_spans(text: str) -> list[tuple[int, int]]:
     return [(m.start(), m.end())
             for m in re.finditer(r"<meta[^>]*theme-color[^>]*>", text, re.IGNORECASE)]
 
 
+def _comment_spans(text: str) -> list[tuple[int, int]]:
+    """Диапазоны CSS- и HTML-комментариев — hex в комментариях не «течёт»."""
+    spans = [(m.start(), m.end()) for m in re.finditer(r"/\*.*?\*/", text, re.DOTALL)]
+    spans += [(m.start(), m.end()) for m in re.finditer(r"<!--.*?-->", text, re.DOTALL)]
+    return spans
+
+
 def check_file(path: Path) -> list[str]:
     text = path.read_text(encoding="utf-8", errors="replace")
-    ok_spans = _root_spans(text) + _theme_color_spans(text)
+    ok_spans = _root_spans(text) + _theme_color_spans(text) + _comment_spans(text)
     violations = []
     for m in COLOR_RE.finditer(text):
         pos = m.start()
@@ -77,9 +95,18 @@ def check_file(path: Path) -> list[str]:
     return violations
 
 
+# Файлы-ОПРЕДЕЛЕНИЯ токенов: hex/rgba в них ожидаемы (это источник токенов мода,
+# как :root). С флагом --skip-token-files гейт их не проверяет (проверяет только
+# composed.html и компонентный CSS, где должно быть var(--…)).
+_TOKEN_FILE_NAMES = {"palette.css", "motion.css"}
+
+
 def main(argv: list[str]) -> int:
+    skip_token_files = "--skip-token-files" in argv
+    argv = [a for a in argv if a != "--skip-token-files"]
     if not argv:
-        print("usage: verify_tokens.py <file.html|file.css> [...]", file=sys.stderr)
+        print("usage: verify_tokens.py [--skip-token-files] <file.html|file.css> [...]",
+              file=sys.stderr)
         return 2
     all_violations: list[str] = []
     for a in argv:
@@ -92,6 +119,8 @@ def main(argv: list[str]) -> int:
             if not f.is_file():
                 print(f"ERROR: нет файла {f}", file=sys.stderr)
                 return 2
+            if skip_token_files and f.name in _TOKEN_FILE_NAMES:
+                continue
             all_violations += check_file(f)
     if all_violations:
         print(f"FAIL: {len(all_violations)} прямых цветов вне токенов "

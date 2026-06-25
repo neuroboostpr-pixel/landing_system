@@ -307,6 +307,13 @@ stages:
         args: ["{project}/07b_COMPOSED/composed.html"]
         required: true
         fix_hint: "В composed.html прямые цвета вне :root. Замени на var(--…); легальные исключения — бренд-цвета мессенджеров и /* token-exempt */ (спека reference-driven §4.3)."
+      # Архитектура ДС: HTML соответствует дизайн-системе (размеры через токены metrics.css, роли composition реализованы)
+      - id: html_vs_ds
+        type: script
+        script: "scripts/verify_html_vs_ds.py"
+        args: ["{project}"]
+        required: true
+        fix_hint: "composed.html не соответствует ДС: токен размера из {mood}/metrics.css не используется через var() (размер захардкожен) ИЛИ роль из composition не реализована. Размеры/расположение из ДС менять ЗАПРЕЩЕНО (reference-driven-rules.md §6-7). Замени голые px на var(--…)."
       # A2: поблочная сверка макета с прототипом (reference-driven-rules.md §4)
       - id: structure_check_md
         type: script
@@ -314,6 +321,34 @@ stages:
         args: ["{project}"]
         required: true
         fix_hint: "block-composer обязан поблочно сверить composed.html с prototype.md (порядок/состав/выравнивание) и записать результат + строку `STRUCTURE_MATCH: PASS` в 07b_COMPOSED/structure-check.md — см. docs/standards/reference-driven-rules.md"
+      # §2.2: НИЧЕГО не выдумывать — в composed нет новых смыслов сверх прототипа
+      - id: no_invented_text
+        type: script
+        script: "scripts/verify_no_invented_text.py"
+        args: ["{project}"]
+        required: true
+        fix_hint: "В composed.html есть текст, которого нет в прототипе. ОФОРМЛЯТЬ текст прототипа (иконки/шрифты/css) можно; ДОБАВЛЯТЬ новые смыслы/буллеты/CTA — нельзя (reference-driven §2.2). Убери выдуманные слова."
+      # §3.4: анализ блоков — обязательный артефакт collage-plan.md
+      - id: collage_plan_exists
+        type: script
+        script: "scripts/verify-collage-plan.py"
+        args: ["{project}"]
+        required: true
+        fix_hint: "Перед вёрсткой агент пишет 07b_COMPOSED/collage-plan.md: по каждому блоку — что пусто/плоско → какой визуал-приём (форма-подложка/цифра-якорь/вырезанное фото/разделитель). См. reference-driven §3.4."
+      # §3: коллаж/глубина — строгий измеримый гейт (≥5 из 6 критериев композиции)
+      - id: collage_depth
+        type: script
+        script: "scripts/verify_collage_depth.py"
+        args: ["{project}/07b_COMPOSED/composed.html"]
+        required: true
+        fix_hint: "Вёрстка плоская («карточки в ряд»). Нужна КОМПОЗИЦИЯ со слоями: ≥6 position:absolute, ≥2 парящих декор-элемента, ≥2 свечения, вырезанное фото на форме, наезды за рамку. См. collage-plan.md + reference-driven §3."
+      # §3.4: единообразные переходы между ВСЕМИ блоками — HARD
+      - id: block_transitions
+        type: script
+        script: "scripts/verify-block-transitions.py"
+        args: ["{project}"]
+        required: true
+        fix_hint: "Переходы между секциями должны быть оформлены ЕДИНООБРАЗНО на всех стыках (один приём: переход цвета ИЛИ единый разделитель). Голый стык фонов = недоделано. См. reference-driven §3.4."
     soft_checks:
       - id: structure_matches_prototype
         prompt: "structure-check.md: все блоки прототипа на месте, порядок/состав совпадают, выдуманных элементов нет? (yes / no)"
@@ -379,6 +414,24 @@ stages:
         args: ["{project}"]
         required: true
         fix_hint: "Identity violation для одной или нескольких фоток. Проверь 07c_PHOTOS/processed/manifest.json. Решение: вернуть оригинал или переобработать с уточнённым промптом."
+      - id: no_invented_text
+        type: script
+        script: "scripts/verify_no_invented_text.py"
+        args: ["{project}"]
+        required: true
+        fix_hint: "В composed.html есть текст, которого нет в прототипе. Оформление текста прототипа можно; новые смыслы — нельзя (reference-driven §2.2)."
+      - id: collage_depth
+        type: script
+        script: "scripts/verify_collage_depth.py"
+        args: ["{project}/07b_COMPOSED/composed.html"]
+        required: true
+        fix_hint: "Финальная вёрстка плоская. Нужна композиция со слоями (≥5/6 критериев) — см. reference-driven §3."
+      - id: block_transitions
+        type: script
+        script: "scripts/verify-block-transitions.py"
+        args: ["{project}"]
+        required: true
+        fix_hint: "Переходы между секциями должны быть единообразны на всех стыках (reference-driven §3.4)."
     soft_checks:
       - id: visual_qa_passed
         prompt: "Запустить Visual QA через /landing-qa? (опционально, не блокирует этап)"
@@ -443,6 +496,13 @@ stages:
         script: "skills/wp-gutenberg-block-builder/scripts/lint-composed-vs-spec.py"
         args: ["--project", "{project}"]
         fix_hint: "Run: python3 skills/wp-gutenberg-block-builder/scripts/lint-composed-vs-spec.py --project {project} --fix"
+      # block.php обязан читать текстовые поля из $attributes, а не хардкодить —
+      # иначе правки в wp-admin не отображаются на сайте (болячка 2026-06-22).
+      - id: block_php_uses_attributes
+        type: script
+        script: "scripts/verify-block-php-uses-attributes.py"
+        args: ["--project", "{project}"]
+        fix_hint: "Поле зашито хардкодом в block.php. Замени литерал на $attributes['<name>'] ?? '<дефолт>' — иначе правки в редакторе не видны на сайте."
       # Legal-блоки (cookie-banner/consent/legal-block) — авто-проверка скриптом.
       # required:false → отсутствие предупреждает, но не блокирует сборку (B1/B2).
       - id: legal_blocks_present

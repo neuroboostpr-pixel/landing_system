@@ -80,6 +80,9 @@ function handle_lead($request) {
     // Email fallback — never block user response on this; wp_mail silently fails if SMTP down
     send_admin_email($data, $lead_id);
 
+    // Telegram notification (temporary until full CTA→integration routing is implemented, task 025)
+    dispatch_telegram(['id' => $lead_id] + $data);
+
     // Adapter dispatch happens in A5; A1 just stores + emails
     do_action('landing_config_lead_received', $lead_id, $data);
 
@@ -87,6 +90,37 @@ function handle_lead($request) {
         'ok'      => true,
         'lead_id' => $lead_id,
     ], 200);
+}
+
+function dispatch_telegram(array $lead): void {
+    $integration = \LandingConfig\Integrations\resolve_integration('telegram', \get_current_blog_id());
+    if (!$integration || empty($integration['enabled'])) return;
+
+    $settings = $integration['settings'];
+    $token    = $settings['bot_token'] ?? '';
+    $chat_id  = $settings['chat_id'] ?? '';
+    if ($token === '' || $chat_id === '') return;
+
+    $id      = $lead['id'] ?? '?';
+    $name    = $lead['name'] ?? '';
+    $phone   = $lead['phone'] ?? '';
+    $email   = $lead['email'] ?? '';
+    $message = $lead['message'] ?? '';
+    $source  = $lead['source_block'] ?? '';
+    $utm     = $lead['utm_source'] ?? '';
+
+    $text = "🔔 *Новая заявка #$id*\n\n"
+          . "👤 Имя: " . ($name    ?: '—') . "\n"
+          . "📱 Телефон: " . ($phone   ? "`$phone`" : '—') . "\n"
+          . "📧 Email: " . ($email   ?: '—') . "\n"
+          . "💬 Сообщение: " . ($message ?: '—') . "\n"
+          . "📦 Источник: " . ($source  ?: '—') . "\n"
+          . "🔗 UTM: " . ($utm     ?: '—') . "\n";
+
+    \wp_remote_post("https://api.telegram.org/bot{$token}/sendMessage", [
+        'timeout' => 10,
+        'body'    => ['chat_id' => $chat_id, 'text' => $text, 'parse_mode' => 'Markdown'],
+    ]);
 }
 
 function send_admin_email(array $data, int $lead_id): void {

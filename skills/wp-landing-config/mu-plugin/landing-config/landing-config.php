@@ -13,6 +13,7 @@ define('LANDING_CONFIG_VERSION', '0.1.0');
 define('LANDING_CONFIG_DIR', __DIR__);
 define('LANDING_CONFIG_URL', plugins_url('', __FILE__));
 
+require_once LANDING_CONFIG_DIR . '/includes/admin-mode.php';
 require_once LANDING_CONFIG_DIR . '/includes/db.php';
 require_once LANDING_CONFIG_DIR . '/includes/encryption.php';
 require_once LANDING_CONFIG_DIR . '/includes/helpers.php';
@@ -29,13 +30,18 @@ require_once LANDING_CONFIG_DIR . '/includes/admin-pages.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-leads.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-leads-network.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-cta.php';
-require_once LANDING_CONFIG_DIR . '/includes/admin-cta-readonly.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-snippets.php';
-require_once LANDING_CONFIG_DIR . '/includes/admin-snippets-readonly.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-lead-statuses.php';
-require_once LANDING_CONFIG_DIR . '/includes/admin-lead-statuses-readonly.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-lead-detail.php';
-require_once LANDING_CONFIG_DIR . '/includes/admin-integrations-readonly.php';
+// Read-only stubs override the editor submenus on single-site, hiding the real
+// editors. They are only meaningful on multisite (subsite = read-only, super-admin
+// edits from network). On single-site the editors above own the pages.
+if (\is_multisite()) {
+    require_once LANDING_CONFIG_DIR . '/includes/admin-cta-readonly.php';
+    require_once LANDING_CONFIG_DIR . '/includes/admin-snippets-readonly.php';
+    require_once LANDING_CONFIG_DIR . '/includes/admin-lead-statuses-readonly.php';
+    require_once LANDING_CONFIG_DIR . '/includes/admin-integrations-readonly.php';
+}
 require_once LANDING_CONFIG_DIR . '/adapters/AdapterInterface.php';
 require_once LANDING_CONFIG_DIR . '/adapters/EmailAdapter.php';
 require_once LANDING_CONFIG_DIR . '/adapters/TelegramAdapter.php';
@@ -53,7 +59,11 @@ require_once __DIR__ . '/includes/cookie-banner/enqueue.php';
 require_once __DIR__ . '/includes/cookie-banner/migrate.php';
 if (\is_admin() || \is_network_admin()) {
     require_once __DIR__ . '/includes/cookie-banner/admin-network.php';
-    require_once __DIR__ . '/includes/cookie-banner/admin-site-readonly.php';
+    // Read-only subsite view only makes sense on multisite; on single-site the
+    // editor (admin-network.php) owns the page directly.
+    if (\is_multisite()) {
+        require_once __DIR__ . '/includes/cookie-banner/admin-site-readonly.php';
+    }
 }
 
 // SEO head injector (meta description + Open Graph + favicon)
@@ -74,7 +84,7 @@ add_action('init', function () {
 }, 1);
 
 add_action('admin_init', function () {
-    if (\function_exists('current_user_can') && \current_user_can('manage_network_options')) {
+    if (\function_exists('current_user_can') && \current_user_can(\LandingConfig\AdminMode\cap())) {
         \LandingConfig\Migrate\maybe_run();
         \LandingConfig\CookieBanner\Migrate\maybe_run();
     }

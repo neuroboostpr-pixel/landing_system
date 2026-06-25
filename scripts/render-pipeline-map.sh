@@ -37,12 +37,36 @@ fi
 
 # Pipeline order + labels — из config/stages.yaml (E1, single source of truth)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Resolve a REAL Python interpreter. On Windows `python3` is often the Microsoft
+# Store stub that prints "Python" and exits 0 without running anything — which
+# would silently leave PIPELINE_ORDER empty and render a blank map. Pick the
+# first candidate that actually executes a script.
+PY=""
+for cand in python3 python py; do
+    command -v "$cand" >/dev/null 2>&1 || continue
+    if [ "$("$cand" -c 'print("ok")' 2>/dev/null)" = "ok" ]; then
+        PY="$cand"
+        break
+    fi
+done
+if [ -z "$PY" ]; then
+    echo "❌ no working Python interpreter found (tried python3/python/py)" >&2
+    exit 4
+fi
+
 PIPELINE_ORDER=()
 declare -A LABELS=()
 while IFS=$'\t' read -r _sid _slabel; do
     PIPELINE_ORDER+=("$_sid")
     LABELS["$_sid"]="$_slabel"
-done < <(python3 "$SCRIPT_DIR/stages.py" --labels)
+done < <("$PY" "$SCRIPT_DIR/stages.py" --labels)
+
+# Guard: never emit a blank map silently (the original Windows bug).
+if [ "${#PIPELINE_ORDER[@]}" -eq 0 ]; then
+    echo "❌ stages.py returned no stages — cannot render map (interpreter: $PY)" >&2
+    exit 5
+fi
 
 render_map() {
 # Mermaid class definitions (visual states)

@@ -3,60 +3,64 @@ slug: prototype-importer
 type: agent
 name: "Импортёр прототипа"
 stage: "07a"
-tags: [prototype, import, pdf, yaml, normalization, quiz-funnel]
-triggers: [landing-prototype]
+tags: [prototype, import, stage-07a, fidelity, docx, pdf, quiz-funnel]
+triggers: [landing-prototype, landing-go]
 inputs:
-  - "<project>/07_ПРОТОТИП/source/prototype.pdf"
-  - "<project>/07_ПРОТОТИП/source/prototype.md"
+  - 07_ПРОТОТИП/source/prototype.pdf
+  - 07_ПРОТОТИП/source/prototype.docx
+  - 07_ПРОТОТИП/source/prototype.md
 outputs:
-  - "<project>/07_ПРОТОТИП/prototype.md"
-  - "<project>/07_ПРОТОТИП/prototype.yaml"
-  - "<project>/07_ПРОТОТИП/import-log.md"
-  - "<project>/07_ПРОТОТИП/enrichment-log.md"
-gates:
-  - prototype_md_verified
-  - prototype_yaml_valid
-pre_reqs: []
+  - 07_ПРОТОТИП/prototype.md
+  - 07_ПРОТОТИП/prototype.yaml
+  - 07_ПРОТОТИП/import-log.md
+  - 07_ПРОТОТИП/enrichment-log.md
+gates: [prototype_fidelity]
+pre_reqs: [06-stek]
 related:
-  - block-composer
-  - landing-orchestrator
+  - landing-prototype
+  - prototype-import
+  - 07-prototip
+  - landing-go
+  - landing-compose
+  - 07b-composed
 sources: ["agents/prototype-importer.md"]
-updated: 2026-05-26
-confidence:
-  triggers: low
-  pre_reqs: low
+updated: 2026-06-19
+confidence: {triggers: low}
 ---
 
 # Импортёр прототипа
 
 ## Что делает
 
-Агент принимает пользовательский прототип в формате PDF или Markdown из папки `07_ПРОТОТИП/source/`, извлекает структуру блоков и нормализует её в два артефакта: `prototype.md` (человеко-читаемый) и `prototype.yaml` (машино-читаемый). При обнаружении квиз-блоков автоматически расширяет их в полный Marquiz-фаннел (welcome → вопросы → лоадер → скидка → лид-форма → спасибо), что по данным RU-рынка даёт +25–40% CR. Все решения и заданные уточняющие вопросы фиксируются в `import-log.md`.
+Агент принимает пользовательский прототип из папки `07_ПРОТОТИП/source/` (PDF, DOCX или Markdown), извлекает из него весь текст дословно — включая таблицы с ценами и тарифами — и структурирует результат в `prototype.md` (человекочитаемый) и `prototype.yaml` (машиночитаемый). При обнаружении квиз-блоков автоматически расширяет их в полный Marquiz-фаннел (welcome → вопросы → лоадер → скидка → лид-форма → спасибо). Фиксирует вопросы к клиенту в `import-log.md` и отчёт обогащения в `enrichment-log.md`. Строго соблюдает принцип «без потерь и без выдумки»: из прототипа берётся только структура и тексты, визуальный стиль игнорируется полностью.
 
 ## Когда вызывается
 
-Вызывается командой `/landing-prototype` вручную или через `landing-orchestrator` на этапе `07a_prototype`. Обязательное условие: `.landing-state.yaml` должен содержать `current_stage == 07a_prototype`; если нет — агент останавливается и сообщает пользователю.
+Запускается командой `/landing-prototype` или оркестратором при выполнении `/landing-go`, когда `.landing-state.yaml` фиксирует `current_stage == 07a_prototype`. Предшественник — закрытый этап 06 (стек). Если этап не активен, агент останавливается без записи файлов.
 
 ## Вход → выход
 
-**Вход:** файл `source/prototype.pdf` (с текстовым слоем или сканированный — тогда используется OCR через `anthropic-skills:pdf`) либо `source/prototype.md`. Один из файлов обязан присутствовать.
+**Вход:** один файл прототипа в `<project>/07_ПРОТОТИП/source/` (`prototype.pdf`, `prototype.docx` или `prototype.md`); закрытый предыдущий этап в `.landing-state.yaml`.
 
-**Выход:** нормализованный `prototype.md` с разметкой блоков по типам (hero / features / quiz / pricing / …), валидированный `prototype.yaml` пригодный для wireframe-рендеринга, `import-log.md` с фиксацией всех неоднозначностей и ответов пользователя, `enrichment-log.md` с отчётом о расширении квиз-фаннела.
+**Выход:** `prototype.md` — дословная нормализация источника; `prototype.yaml` — машиночитаемый разбор блоков; `import-log.md` — зафиксированные уточнения; `enrichment-log.md` — отчёт о квиз-фаннеле. После прохождения hard gate этап переводится в статус `approved`.
 
 ## Чем закрывается этап (gates)
 
-- `prototype_md_verified` — пользователь проверил `prototype.md` и подтвердил корректность извлечения блоков
-- `prototype_yaml_valid` — `validate-prototype.py` завершился с exit 0
+- `prototype_fidelity` — покрытие ≥ 90% текста источника в `prototype.yaml` без галлюцинаций; проверяется скриптом `verify-prototype-fidelity.py`; при провале агент обязан доработать `prototype.yaml` перед закрытием
 
 ## Failure modes
 
-- **Сканированный PDF без текстового слоя** — `extract-pdf-text.py` возвращает exit 2; агент должен переключиться на OCR через `anthropic-skills:pdf`, но если скилл недоступен — процесс полностью блокируется.
-- **Неоднозначный тип блока** — агент обязан спросить у пользователя вместо угадывания; если вопрос пропущен, `prototype.yaml` содержит некорректные типы и ломает wireframe-рендеринг.
-- **Пустые CTA или заголовки** — агент записывает `cta: ""` и логирует в `import-log.md`; если этот сигнал игнорируется, downstream блоки генерируются без текста.
-- **Провал `validate-prototype.py`** после конвертации — требует ручной правки `prototype.md` и повторного запуска; цикл может зациклиться, если схема валидатора и формат MD расходятся.
-- **PreToolUse hook блокирует запись** — хук `enforce_stage_gate.py` физически не даёт писать файлы, если предшествующий этап не закрыт; обойти нельзя, нужно закрыть предшественника.
+- Сканированный PDF без текстового слоя — fallback на OCR через `anthropic-skills:pdf`; без него агент падает с exit code 2
+- Таблицы цен в DOCX теряются при PDF-конвертации — для `.docx` обязателен `extract-docx-text.py`; иначе тарифы пропадут
+- Выдуманные пункты меню, CTA или тарифные опции — hard gate `prototype_fidelity` упадёт; нужна ручная правка и перезапуск
+- Покрытие < 90% после конвертации `md-to-yaml.py` — цикл доработки, этап не закрыть до PASS
+- Агент вызван при неверном `current_stage` — немедленный STOP, пользователь получает сообщение с объяснением
 
 ## Related
 
-- [[block-composer]] — потребитель `prototype.yaml` на этапе 07b wireframe
-- [[landing-orchestrator]] — диспетчер, вызывающий агента в рамках pipeline
+- [[landing-prototype]] — slash-команда, которая диспатчит этого агента
+- [[prototype-import]] — скилл с библиотекой скриптов (extract-pdf, extract-docx, md-to-yaml, validate, enrich-quiz)
+- [[07-prototip]] — этап pipeline, которому принадлежит агент
+- [[landing-go]] — оркестратор, который автоматически вызывает агента в нужный момент
+- [[landing-compose]] — следующий этап: рисует `composed.html` по `prototype.yaml` и референсу
+- [[07b-composed]] — артефакт следующего этапа, зависящий от `prototype.yaml`

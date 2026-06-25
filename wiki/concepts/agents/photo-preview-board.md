@@ -1,45 +1,53 @@
 ---
 slug: photo-preview-board
 type: agent
-name: "Photo Preview Board — обработка слотов и рендер превью"
+name: "Photo Preview Board — рендер превью фотографий"
 stage: "07c"
-tags: [photos, preview, identity-safe, codex, image-processing]
+tags: [photos, preview, identity-safe, codex, photo-processing]
 triggers: []
-inputs: ["07c_PHOTOS/selections.yaml"]
-outputs: ["07c_PHOTOS/processed/<slot_id>/desktop.jpg", "07c_PHOTOS/processed/<slot_id>/mobile.jpg", "07c_PHOTOS/photo-preview.html"]
+inputs: [07c-photos]
+outputs: [07c-photos]
 gates: []
-pre_reqs: [photo-curator]
-related: [landing-photos]
+pre_reqs: [photo-curator, photo-matcher]
+related: [photo-curator, photo-classifier, photo-stylist, photo-curation, photo-styling, landing-photos, 07c-photos]
 sources: ["agents/photo-preview-board.md"]
-updated: 2026-05-26
-confidence: {triggers: low, pre_reqs: low}
+updated: 2026-06-19
+confidence: {triggers: low}
 ---
 
-# Photo Preview Board — обработка слотов и рендер превью
+# Photo Preview Board — рендер превью фотографий
 
 ## Что делает
 
-Хелпер-агент, вызываемый родительским агентом `photo-curator` после того, как пользователь утвердил `selections.yaml`. Для каждого слота из этого файла выполняет одно из трёх действий: кроппинг/ресайз клиентской фотографии, AI-генерацию изображения через codex (fallback), или создание SVG-заглушки. Затем рендерит `photo-preview.html` — финальный экран для проверки перед продолжением пайплайна. Принудительно применяет identity-safe политику: если слот помечен как идентификационный (testimonial, expert, team-member и т.п.) и флаг `ai_approved_by_user` не выставлен, стратегия `generate` молча понижается до `placeholder`.
+Агент-помощник, вызываемый `photo-curator` после того, как пользователь одобрил `selections.yaml`. Обрабатывает каждый слот из этого файла: кадрирует и ресайзит клиентские фотографии, при необходимости вызывает Codex для генерации изображения-замены, а для слотов без фото создаёт SVG-плейсхолдер. В финале рендерит `photo-preview.html` для финального просмотра маркетологом. Самостоятельно не управляет этапом — это вспомогательная единица внутри pipeline `landing-photos`.
 
 ## Когда вызывается
 
-Диспатчится агентом `photo-curator` после того, как пользователь скачал и положил `selections.yaml` обратно в `07c_PHOTOS/`. Не вызывается напрямую пользователем — это внутренний хелпер этапа 07c.
+Диспатчится агентом `photo-curator` автоматически после того, как пользователь разместил одобренный `selections.yaml` в папку `07c_PHOTOS/`. Не предназначен для прямого ручного вызова.
 
 ## Вход → выход
 
-**Вход:** Директория проекта с валидным `07c_PHOTOS/selections.yaml` (утверждённые пользователем слоты, каждый с указанной стратегией: `bring-your-own`, `generate` или `placeholder`).
+**Вход:** директория проекта с валидным `07c_PHOTOS/selections.yaml` (слоты с полями `strategy`, `slot_id`, `ratio`, `hint`, `ai_approved_by_user`).
 
-**Выход:** Обработанные изображения в `07c_PHOTOS/processed/<slot_id>/desktop.jpg` (и `mobile.jpg` при наличии `mobile_ratio` в мета-блока), а также `07c_PHOTOS/photo-preview.html` — HTML-страница для финальной визуальной проверки всех слотов.
+**Выход:**
+- `07c_PHOTOS/processed/<slot_id>/desktop.jpg` — обработанное изображение
+- `07c_PHOTOS/processed/<slot_id>/mobile.jpg` — мобильный вариант (если блок требует `mobile_ratio`)
+- `07c_PHOTOS/photo-preview.html` — HTML-превью для финального просмотра
 
 ## Failure modes
 
-- `selections.yaml` не проходит валидацию (`selections-validator.py` → abort) — агент останавливается и не обрабатывает ни одного слота.
-- Недоступен codex CLI при стратегии `generate` — скрипт `codex-generate-fallback.sh` упадёт; нужна проверка установки через `scripts/install-codex.sh`.
-- `style.py` получает фото с нестандартным соотношением сторон и не может нормально кропнуть — результат может не совпасть с ожидаемым ratio.
-- Identity-safe downgrade происходит молча — пользователь не получает явного предупреждения, что слот переключён в placeholder; может вызвать удивление при просмотре превью.
-- Отсутствует `mobile_ratio` в `meta.yaml` блока, хотя блок адаптивный — мобильная версия не генерируется, что вскроется на этапе 08 Build.
+- **Невалидный `selections.yaml`** — скрипт `selections-validator.py` вернёт ошибку, агент прерывает выполнение, не трогая файлы.
+- **Недоступен Codex API** — слоты со `strategy: generate` зависнут; нужен fallback до `placeholder` вручную или повтор.
+- **Нарушение identity-safe** — слот `testimonial|expert|team-member` с `ai_approved_by_user: false` молча деградирует до `placeholder`. Если логика не сработала — генерируется лицо без согласия пользователя (критичный дефект).
+- **Отсутствует `mobile_ratio` в meta.yaml блока** — мобильная версия не создаётся, блок может выглядеть некорректно на смартфонах.
+- **Повреждён или отсутствует исходник фото** — `style.py` упадёт с ошибкой чтения файла; нужно проверить путь в `intake/`.
 
 ## Related
 
-- [[landing-photos]] — slash-команда этапа 07c, которая запускает весь photo-pipeline, включая вызов `photo-curator` → `photo-preview-board`
-- [[photo-curator]] — родительский агент, диспатчащий этот хелпер после approve `selections.yaml`
+- [[photo-curator]] — родительский агент, который диспатчит photo-preview-board
+- [[photo-curation]] — скилл, содержащий скрипты валидации, генерации и рендера
+- [[photo-styling]] — скилл кадрирования/ресайза клиентских фото
+- [[photo-classifier]] — предшествует: классифицирует фото клиента по слотам
+- [[photo-matcher]] — предшествует: сопоставляет фото со слотами в `selections.yaml`
+- [[07c-photos]] — этап, которому принадлежит весь photo-pipeline
+- [[landing-photos]] — команда верхнего уровня, запускающая весь photo-pipeline

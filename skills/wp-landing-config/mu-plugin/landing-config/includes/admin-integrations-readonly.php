@@ -15,6 +15,7 @@ function mask(string $v): string {
 }
 
 \add_action('admin_menu', function () {
+    if (!\is_multisite()) return;
     \add_submenu_page(
         'landing-config',
         'Интеграции (просмотр)',

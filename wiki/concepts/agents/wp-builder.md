@@ -1,74 +1,48 @@
 ---
 slug: wp-builder
 type: agent
-name: "WP-сборщик (Lazy Blocks)"
+name: "WP-сборщик"
 stage: "08"
-tags: [wordpress, lazy-blocks, php, css, js, stage-08, build, legal]
+tags: [wordpress, lazy-blocks, php, css, js, codegen, stage-08]
 triggers: [landing-build]
-inputs:
-  - 05_ДИЗАЙН-СИСТЕМА/tokens.json
-  - 06_СТЕК/design-stack.yaml
-  - 07_КОНТЕНТ/final-copy.md
-  - 08_КОД/block-spec.yaml
-  - 01a_АНАЛИЗ_НИШИ/landing-structure.md
-  - 01a_АНАЛИЗ_НИШИ/market-profile.md
-  - 01a_АНАЛИЗ_НИШИ/positioning.md
-outputs:
-  - 08_КОД/wp-theme/blocks/lazyblock-*/block.php
-  - 08_КОД/wp-theme/functions.php
-  - 08_КОД/wp-theme/assets/css/main.css
-  - 08_КОД/wp-theme/assets/js/main.js
-  - 08_КОД/page-content.html
-gates: []
-pre_reqs: [design-system-generator, content-writer]
-related:
-  - design-system-generator
-  - content-writer
-  - landing-orchestrator
-  - frontend-builder
-  - block-composer
-  - analytics-engineer
-  - integrations-engineer
-  - icon-generator
-  - infographic-builder
+inputs: [05-dizayn-sistema, 06-stek, 07-kontent, 07b-composed, 01a-analiz-nishi]
+outputs: [08-kod]
+pre_reqs: [design-system-generator, content-writer, 05-dizayn-sistema, 06-stek, 07-kontent, 07b-composed]
+related: [wp-theme-assembler, wp-gutenberg-block-builder, landing-build, landing-style, wp-cli-deployer, block-composer]
 sources: ["agents/wp-builder.md"]
-updated: 2026-05-26
-confidence:
-  triggers: low
+updated: 2026-06-19
+confidence: {triggers: low}
 ---
 
-# WP-сборщик (Lazy Blocks)
+# WP-сборщик
 
 ## Что делает
 
-Генерирует полный PHP-код WordPress-темы на базе Lazy Blocks Free: по одному `block.php` на каждый блок из `block-spec.yaml`, регистрацию блоков через `lzb/init` в `functions.php`, финальную Gutenberg-разметку `page-content.html` для импорта в WP-страницу, а также CSS и JS с поддержкой токенов дизайна. Учитывает режим позиционирования (emotional / trust / rational / cinematic), ценовой тир из market-profile, требования 152-ФЗ (cookie-banner, legal-block в формах, страницы /policy и /consent) и визуальные ограничения из visual-requirements.md.
+Генерирует полный PHP/CSS/JS-код WordPress-лендинга на Lazy Blocks Free. Запускает пятишаговый пайплайн (`generate-wp-blocks.py`): создаёт scaffold темы, один `block.php` на каждый блок из `block-spec.yaml`, секцию `lzb/init` в `functions.php`, готовую Gutenberg-разметку `page-content.html` и ассеты CSS/JS. Адаптирует вывод под positioning-mode проекта (`emotional_aspiration`, `trust_authority`, `rational`) и tier ценового сегмента (`luxury_status` → цена скрыта, `mass_consumer` → цена на первом экране). Также подключает юридическую инфраструктуру 152-ФЗ: legal-block в каждую форму, страницы /policy и /consent.
 
 ## Когда вызывается
 
-Вызывается автоматически через `landing-orchestrator` или вручную командой `/landing-build` на этапе `08_build`, при условии что этапы 05 (дизайн-система), 06 (стек) и 07 (контент) закрыты и утверждены. Физически заблокирован хуком `enforce_stage_gate.py`, если предшественники не закрыты.
+Вызывается скилом `landing-build` на этапе `08_build`, после того как утверждены дизайн-система (05), стек (06), финальный контент (07) и макет `composed.html` (07b). Перед запуском `gate-check.sh --stage 08_build` должен вернуть exit 0; иначе агент останавливается.
 
 ## Вход → выход
 
-**Вход:** `tokens.json`, `design-stack.yaml`, `final-copy.md`, `block-spec.yaml`, `landing-structure.md`, `market-profile.md`, `positioning.md`. При cinematic-режиме дополнительно читает `scenes.md`.
+**Вход:** `05_ДИЗАЙН-СИСТЕМА/tokens.json`, `06_СТЕК/design-stack.yaml`, `07_КОНТЕНТ/final-copy.md`, `08_КОД/block-spec.yaml` (генерируется конвертером `composed-to-build.py`), `01a_АНАЛИЗ_НИШИ/landing-structure.md`, `market-profile.md`, `positioning.md`.
 
-**Выход:** `wp-theme/blocks/lazyblock-<slug>/block.php` (по одному на блок), обновлённые `functions.php`, `main.css`, `main.js`, готовый `page-content.html`. После деплоя темы отдельный скрипт создаёт WP-страницы `/policy` и `/consent` через wp-cli.
+**Выход:** `08_КОД/wp-theme/blocks/lazyblock-<slug>/block.php` — по файлу на блок; `wp-theme/functions.php` с `lzb/init`; `wp-theme/assets/css/main.css` и `main.js`; `08_КОД/page-content.html` для импорта в WP-страницу.
 
 ## Failure modes
 
-- `block-spec.yaml` отсутствует или не заполнен — пайплайн `generate-wp-blocks.py` упадёт с ошибкой до создания каких-либо файлов.
-- Токены не найдены или `tokens.json` содержит хардкод цветов вместо переменных — CSS окажется с жёстко зашитыми значениями, что нарушает правило CSS-переменных.
-- Не закрыты предшественники (05/06/07) — `enforce_stage_gate.py` заблокирует Write/Edit; агент обязан остановиться, а не обходить хук.
-- Отсутствие ## Legal в `brand-kit.md` — скрипт `install_legal_pages.sh` бросает ошибку и блокирует деплой; этап 08 не может быть закрыт без `/policy` и `/consent` страниц.
-- В heroes/catalog попадают fallback-ссылки на Pexels/Unsplash без разрешения в `visual-requirements.md` — нарушение правил визуальных проверок, grep по теме обязателен.
+- `block-spec.yaml` не создан конвертером `composed-to-build.py` — пайплайн падает на первом шаге; нужно запустить конвертер вручную.
+- В `block.php` попадают хардкод-цвета или inline-стили — нарушает CSS-токенизацию; верификация `verify_tokens.py` выдаст ошибку.
+- Отсутствует legal-block в форме заявки — `stage-08_build-checklist` не закрывается, страницы /policy и /consent дают 404.
+- Positioning-mode не прочитан или указан несуществующий — агент работает как `legacy_v1` без mode-аугментации блоков.
+- `lint-composed-vs-spec.py` возвращает ненулевой код — структура `block-spec.yaml` расходится с `composed.html`; нужно пересобрать spec конвертером.
 
 ## Related
 
-- [[design-system-generator]] — поставляет `tokens.json` и `scenes.md` для stage 08
-- [[content-writer]] — поставляет `final-copy.md`, обязательный prereq
-- [[landing-orchestrator]] — диспатчит wp-builder в нужный момент pipeline
-- [[frontend-builder]] — смежная роль по CSS/JS, может дополнять cinematic-сборку
-- [[block-composer]] — создаёт `composed.html` (этап 07b), служит источником структуры блоков
-- [[analytics-engineer]] — подключается после wp-builder для интеграции GTM/Metrica
-- [[integrations-engineer]] — добавляет CRM-адаптеры поверх собранной темы
-- [[icon-generator]] — генерирует SVG-иконки, которые wp-builder встраивает в block.php
-- [[infographic-builder]] — поставляет PNG-инфографику для каталогных блоков
+- [[landing-build]] — скил, который вызывает агента и управляет hard gate утверждения
+- [[wp-gutenberg-block-builder]] — низкоуровневая библиотека скриптов (generate-wp-blocks.py, composed-to-build.py, lint)
+- [[wp-theme-assembler]] — scaffold темы, создаваемый в шаге 1 пайплайна
+- [[landing-style]] — этап 08b, дополняет CSS блоков после wp-builder
+- [[wp-cli-deployer]] — следующий агент (09), принимает output этапа 08
+- [[block-composer]] — автор `composed.html`, чей макет конвертируется в `block-spec.yaml`

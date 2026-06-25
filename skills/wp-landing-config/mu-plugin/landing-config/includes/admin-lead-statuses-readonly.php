@@ -6,6 +6,7 @@ if (!defined('ABSPATH')) { exit; }
 use function LandingConfig\LeadStatuses\list_lead_statuses;
 
 \add_action('admin_menu', function () {
+    if (!\is_multisite()) return; // on single-site the full editor registers via admin_menu (admin-mode.php)
     \add_submenu_page(
         'landing-config',
         'Статусы заявок (просмотр)',

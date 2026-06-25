@@ -43,11 +43,12 @@ class EmailAdapter implements AdapterInterface {
     }
 
     public function send(array $lead): array {
-        $to = \landing_config_get('integration_email_to');
+        $s = static::settings();
+        $to = $s['to'] ?? \landing_config_get('integration_email_to');
         if ($to === '') {
             return ['ok' => false, 'response_code' => null, 'response_body' => '', 'error' => 'No recipient configured'];
         }
-        $subject = \landing_config_get('integration_email_subject', 'Новая заявка');
+        $subject = $s['subject'] ?? \landing_config_get('integration_email_subject', 'Новая заявка');
         $body = "Получена заявка #{$lead['id']}\n\n"
               . "Имя:      {$lead['name']}\n"
               . "Телефон:  {$lead['phone']}\n"
@@ -67,7 +68,8 @@ class EmailAdapter implements AdapterInterface {
     }
 
     public function test_connection(): array {
-        $to = \landing_config_get('integration_email_to');
+        $s = static::settings();
+        $to = $s['to'] ?? \landing_config_get('integration_email_to');
         if ($to === '') {
             return ['ok' => false, 'message' => 'Email получателя не указан'];
         }
