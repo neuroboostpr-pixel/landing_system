@@ -232,6 +232,19 @@ Guard: `pytest tests/archive/` не даёт живому коду ссылат�
 3. **Frequent commits:** один commit = одна логическая единица.
 4. **HARD GATE между этапами проектов:** агент не идёт на следующий этап workflow без явного утверждения пользователем.
 
+## Правило деплоя (обязательно для всех проектов с тестом и продом)
+
+**НИКОГДА не копировать файлы через `scp` или любой другой способ напрямую на сервер.** Единственный легальный способ деплоя:
+
+1. Отредактировать файл локально
+2. `git commit` в нужном репо (если mu-plugin/скиллы — в `landing_system`; если тема/конфиг проекта — в репо проекта)
+3. Если менялся submodule (`landing_system`) — обновить указатель в репо проекта: `git add landing_system && git commit`
+4. `bash deploy/deploy.sh test` → проверить тест → `bash deploy/deploy.sh prod`
+
+**Почему:** `scp` создаёт расхождение между репо и сервером. При следующем деплое через `deploy.sh` файл либо затирается обратно (rsync по mtime), либо submodule откатывается к закоммиченному коммиту — и все scp-правки исчезают бесследно. Именно это было причиной повторяющихся багов с cookie banner и readonly-режимом админки.
+
+**✅ Тест считается пройденным только когда:** изменение задеплоено через `deploy.sh test`, проверено в браузере, затем `deploy.sh prod`.
+
 ## Для нового проекта-лендинга
 
 При запуске `/landing-new my-project` агенты:
@@ -328,6 +341,18 @@ bash scripts/check-wiki-sync.sh
 аудитории (`russian.liauto.dubai`, `family.liauto.dubai`, ...),
 каждый — отдельный WordPress subsite в одной multisite-сети.
 
+### ПРАВИЛО: single-site по умолчанию + multisite только под сегменты (2026-06-23)
+
+**Деплоим single-site по умолчанию.** Multisite включаем ТОЛЬКО когда реально
+появляется сегмент ЦА (через `/landing-segment` — он сам конвертирует при первом
+сегменте). Не разворачивать multisite «на будущее»: конверсия живого сайта
+рискованна (меняет wp-config/.htaccess/таблицы БД, на проде без SSH — нестандартный
+путь), требует wildcard DNS+SSL и две админки.
+
+Вся управляющая админка (cookie-баннер, интеграции/CRM, CTA, снипеты, заявки,
+статусы лидов, SEO/аудит) **полностью работает на single-site** через mu-plugin
+`landing-config` — см. правило ниже. Multisite для админки НЕ требуется.
+
 ### Команды
 
 - `/landing-segment <slug>` — создать новый сегмент ЦА (subdomain + WP subsite).
@@ -357,14 +382,26 @@ clone-subsite + lib (beget-api, ssh-helpers, state).
 
 ## Landing-config mu-plugin (S2-A)
 
+**ПРАВИЛО (2026-06-23): mu-plugin `landing-config` ставится на КАЖДЫЙ деплой —
+всегда, обязательно.** Это «полноценная админка управления» лендингом, и она
+работает на single-site (multisite не требуется). Деплой без `landing-config`
+= неполный: клиент не сможет настроить куки/интеграции/заявки. Установка
+обязательна на этапе 09 (deploy), идемпотентна (mu-plugins always-active).
+На хостингах без SSH ставится через FTP (rsync-замена) — см.
+`PROD-DEPLOY-GUIDE.md`.
+
 С 2026-05-19 landing-system включает pre-built mu-plugin `landing-config`
 который даёт клиенту и маркетологу через wp-admin настраивать:
 - CRM/мессенджеры (6 адаптеров: Email, Telegram, WhatsApp, AmoCRM, Bitrix24, HubSpot)
 - CTA-кнопки (5 пресетов с per-site override)
 - Снипеты (произвольный HTML в head/body_open/footer; network-level + per-site override через `name`)
 - Заявки (per-blog таблицы wp_<bid>_landing_leads + admin UI)
+- Cookie-баннер (5 layouts, категории, Google Consent Mode v2)
+- Статусы заявок (workflow + история), SEO/Head настройки, аудит
 
-Multisite-aware: network defaults + per-site override; per-blog таблицы заявок.
+На single-site меню «Лендинг» появляется в обычном wp-admin (одна панель).
+Multisite-aware: на сети — network defaults + per-site override; per-blog
+таблицы заявок. На single-site cascade схлопывается в один уровень настроек.
 
 ### Установка на проект
 
