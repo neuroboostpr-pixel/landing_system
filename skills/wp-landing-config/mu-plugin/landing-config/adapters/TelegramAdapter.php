@@ -46,9 +46,10 @@ class TelegramAdapter implements AdapterInterface {
     }
 
     public function send(array $lead): array {
-        $token_enc = \landing_config_get('integration_telegram_bot_token');
+        $s = static::settings();
+        $token_enc = $s['bot_token'] ?? \landing_config_get('integration_telegram_bot_token');
         $token = $token_enc ? decrypt($token_enc) : '';
-        $chat_id = \landing_config_get('integration_telegram_chat_id');
+        $chat_id = $s['chat_id'] ?? \landing_config_get('integration_telegram_chat_id');
         if ($token === '' || $chat_id === '') {
             return ['ok' => false, 'response_code' => null, 'response_body' => '', 'error' => 'Token or chat_id missing'];
         }
@@ -69,7 +70,8 @@ class TelegramAdapter implements AdapterInterface {
     }
 
     public function test_connection(): array {
-        $token_enc = \landing_config_get('integration_telegram_bot_token');
+        $s = static::settings();
+        $token_enc = $s['bot_token'] ?? \landing_config_get('integration_telegram_bot_token');
         $token = $token_enc ? decrypt($token_enc) : '';
         if ($token === '') return ['ok' => false, 'message' => 'Bot token не задан'];
 
