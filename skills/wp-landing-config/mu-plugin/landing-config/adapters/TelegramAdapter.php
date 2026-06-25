@@ -47,8 +47,8 @@ class TelegramAdapter implements AdapterInterface {
 
     public function send(array $lead): array {
         $s = static::settings();
-        $token_enc = $s['bot_token'] ?? \landing_config_get('integration_telegram_bot_token');
-        $token = $token_enc ? decrypt($token_enc) : '';
+        $token_raw = $s['bot_token'] ?? \landing_config_get('integration_telegram_bot_token');
+        $token = $token_raw ? (str_starts_with($token_raw, 'v1:') ? decrypt($token_raw) : $token_raw) : '';
         $chat_id = $s['chat_id'] ?? \landing_config_get('integration_telegram_chat_id');
         if ($token === '' || $chat_id === '') {
             return ['ok' => false, 'response_code' => null, 'response_body' => '', 'error' => 'Token or chat_id missing'];
@@ -71,8 +71,8 @@ class TelegramAdapter implements AdapterInterface {
 
     public function test_connection(): array {
         $s = static::settings();
-        $token_enc = $s['bot_token'] ?? \landing_config_get('integration_telegram_bot_token');
-        $token = $token_enc ? decrypt($token_enc) : '';
+        $token_raw = $s['bot_token'] ?? \landing_config_get('integration_telegram_bot_token');
+        $token = $token_raw ? (str_starts_with($token_raw, 'v1:') ? decrypt($token_raw) : $token_raw) : '';
         if ($token === '') return ['ok' => false, 'message' => 'Bot token не задан'];
 
         $resp = \wp_remote_get("https://api.telegram.org/bot{$token}/getMe", ['timeout' => 10]);
