@@ -1,18 +1,19 @@
 .lp-cb {
-    /* Theme CSS vars chain — supports both naming conventions:
+    /* Theme CSS vars chain — supports three naming conventions:
        (a) "long" — --color-bg-card, --color-accent, ... (default brand-kit)
-       (b) "short" — --bg-card, --yellow, --text-2, --border, ... (brutalist + others)
+       (b) "c-prefix" — --c-bg-alt, --c-ink, --c-accent, --c-line, ... (landing-system design-moods)
+       (c) "short" — --bg-card, --yellow, --text-2, --border, ... (brutalist + others)
        Last value = hardcoded fallback for themes without any vars. */
-    --cb-bg:      var(--color-bg-card, var(--bg-card, var(--bg, #ffffff)));
-    --cb-text:    var(--color-text-primary, var(--text, var(--white, #1d2327)));
-    --cb-text-2:  var(--color-text-secondary, var(--text-2, #646970));
-    --cb-accent:  var(--color-accent, var(--yellow, var(--accent, #2271b1)));
-    --cb-border:  var(--color-border, var(--border, #c3c4c7));
+    --cb-bg:      var(--color-bg-card, var(--c-bg-alt, var(--c-bg, var(--bg-card, var(--bg, #ffffff)))));
+    --cb-text:    var(--color-text-primary, var(--c-ink, var(--text, var(--white, #1d2327))));
+    --cb-text-2:  var(--color-text-secondary, var(--c-ink-soft, var(--text-2, #646970)));
+    --cb-accent:  var(--color-accent, var(--c-accent, var(--yellow, var(--accent, #2271b1))));
+    --cb-border:  var(--color-border, var(--c-line, var(--border, #c3c4c7)));
     --cb-radius:  var(--radius-md, 6px);
     --cb-font:    var(--font-body, var(--font, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif));
     /* Accent text colour: most brutalist themes use dark text on yellow accent,
        most light themes use white text on blue accent. Theme can override. */
-    --cb-accent-text: var(--color-on-accent, var(--text-on-yel, #ffffff));
+    --cb-accent-text: var(--color-on-accent, var(--c-on-accent, var(--text-on-yel, #ffffff)));
 
     position: fixed;
     z-index: 99999;
@@ -27,7 +28,14 @@
 .lp-cb *, .lp-cb *::before, .lp-cb *::after { box-sizing: border-box; }
 .lp-cb[hidden] { display: none !important; }
 
-.lp-cb__title { margin: 0 0 8px; font-size: 16px; font-weight: 600; }
+.lp-cb__title {
+    margin: 0 0 8px;
+    font-size: 16px;
+    font-weight: 600;
+    overflow-wrap: break-word;
+    word-break: normal;
+    hyphens: none;
+}
 .lp-cb__desc  { margin: 0 0 12px; color: var(--cb-text-2); }
 
 .lp-cb__categories { margin: 12px 0; }

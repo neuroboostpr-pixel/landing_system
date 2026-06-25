@@ -60,6 +60,18 @@ function render_page(): void {
             <button type="button" class="button button-primary" style="margin-left:12px;" onclick="document.getElementById('change-status-modal').style.display='block'">
                 Сменить статус
             </button>
+            <?php
+            $delete_url = \wp_nonce_url(
+                \admin_url('admin-post.php?action=landing_lead_delete&lead_id=' . $lead_id),
+                'landing_lead_delete_' . $lead_id
+            );
+            ?>
+            <a href="<?php echo \esc_url($delete_url); ?>"
+               class="button"
+               style="margin-left:8px; color:#b32d2e; border-color:#b32d2e;"
+               onclick="return confirm('Удалить заявку #<?php echo (int) $lead_id; ?>? Действие необратимо — данные и история статусов будут удалены навсегда.');">
+                Удалить заявку
+            </a>
         </p>
 
         <?php if (isset($_GET['saved'])): ?>

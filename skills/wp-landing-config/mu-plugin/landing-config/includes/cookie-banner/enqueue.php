@@ -59,6 +59,9 @@ function on_head(): void {
         $settings = resolve_for_blog(\get_current_blog_id());
     }
     if ($settings === null) return;
+    // Master toggle: если баннер выключен — не грузим ни Consent Mode, ни CSS/JS.
+    // Отсутствие meta _lp_cb_enabled → DEFAULTS['enabled']=true (обратная совместимость).
+    if (empty($settings['enabled'])) return;
 
     // 1. Google Consent Mode v2 default DENIED
     echo "<script>"

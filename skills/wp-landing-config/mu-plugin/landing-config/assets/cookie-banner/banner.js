@@ -79,7 +79,8 @@
     }
 
     banner.addEventListener('click', function (e) {
-        var action = e.target && e.target.dataset && e.target.dataset.action;
+        var el = e.target && e.target.closest ? e.target.closest('[data-action]') : null;
+        var action = el ? el.dataset.action : null;
         if (!action) return;
         if (action === 'accept-all') {
             saveConsent(consentAll(true));

@@ -23,6 +23,9 @@ function render_with_settings(array $settings): void {
 function on_footer(): void {
     $settings = resolve_for_blog(\get_current_blog_id());
     if ($settings === null) return;
+    // Banner master toggle. Absence of the meta defaults to enabled=true
+    // (handled in resolver via DEFAULTS), so existing records keep showing.
+    if (empty($settings['enabled'])) return;
     render_with_settings($settings);
 }
 

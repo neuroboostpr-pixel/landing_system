@@ -11,6 +11,7 @@ use const LandingConfig\CookieBanner\CPT\VALID_LAYOUTS;
 const NETWORK_BLOG_ID = 1;
 
 const DEFAULTS = [
+    'enabled'              => true,
     'layout'               => 'bottom-bar',
     'title'                => 'Мы используем cookies',
     'description'          => 'Cookies помогают нам обеспечить работу сайта и понять, как вы им пользуетесь.',
@@ -40,6 +41,7 @@ const DEFAULTS = [
 ];
 
 const META_KEY_MAP = [
+    'enabled'              => '_lp_cb_enabled',
     'layout'               => '_lp_cb_layout',
     'title'                => '_lp_cb_title',
     'description'          => '_lp_cb_description',
@@ -120,7 +122,7 @@ function read_settings(int $post_id, int $source_segment = 0): array {
         if ($field === 'categories') {
             $decoded = json_decode((string) $val, true);
             $out[$field] = is_array($decoded) ? $decoded : null;
-        } elseif ($field === 'show_categories') {
+        } elseif ($field === 'enabled' || $field === 'show_categories') {
             $out[$field] = ($val === '1' || $val === 1 || $val === true);
         } elseif ($field === 'consent_version') {
             $out[$field] = (int) $val;

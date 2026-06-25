@@ -110,6 +110,11 @@ function save_snippet(array $args, bool $is_network = false): int {
             $id = wp_insert_post($post);
         }
 
+        // subpage_scope: 'all' | comma-separated slugs (li-auto,zeekr,...)
+        // Controls whether the snippet is injected into self-contained brand subpages.
+        $subpage_scope = sanitize_text_field($args['subpage_scope'] ?? 'all');
+        if ($subpage_scope === '') $subpage_scope = 'all';
+
         update_post_meta($id, '_lp_snippet_code', $code);
         update_post_meta($id, '_lp_snippet_name', $name);
         update_post_meta($id, '_lp_snippet_position', $position);
@@ -118,6 +123,7 @@ function save_snippet(array $args, bool $is_network = false): int {
         update_post_meta($id, '_lp_snippet_enabled', $enabled ? '1' : '0');
         update_post_meta($id, '_lp_snippet_priority', $priority);
         update_post_meta($id, '_lp_snippet_is_network', $is_network ? '1' : '0');
+        update_post_meta($id, '_lp_snippet_subpage_scope', $subpage_scope);
 
         return (int) $id;
     };
@@ -139,6 +145,7 @@ function get_snippet(int $id, bool $is_network = false): ?array {
             'enabled'         => (string) get_post_meta($id, '_lp_snippet_enabled', true) === '1',
             'priority'        => (int) get_post_meta($id, '_lp_snippet_priority', true),
             'is_network'      => (string) get_post_meta($id, '_lp_snippet_is_network', true) === '1',
+            'subpage_scope'   => (string) get_post_meta($id, '_lp_snippet_subpage_scope', true) ?: 'all',
         ];
     };
     return $is_network ? _with_network_blog($op) : $op();
@@ -178,6 +185,51 @@ function list_snippets(array $filter = [], bool $is_network = false): array {
 
 function list_site_snippets(array $filter = []): array    { return list_snippets($filter, false); }
 function list_network_snippets(array $filter = []): array { return list_snippets($filter, true); }
+
+/**
+ * Return snippets for a given position filtered by subpage slug.
+ * Used by lp_render_subpage() to inject only relevant snippets.
+ *
+ * @param string $position  head | body_open | body_close
+ * @param string $slug      subpage slug (e.g. 'li-auto'), or '' for main page
+ */
+function get_snippets_for_subpage(string $position, string $slug): array {
+    $all = render_collect($position);
+    return array_values(array_filter($all, function ($s) use ($slug) {
+        $scope = $s['subpage_scope'] ?? 'all';
+        if ($scope === 'all' || $scope === '') return true;
+        $allowed = array_map('trim', explode(',', $scope));
+        return in_array($slug, $allowed, true);
+    }));
+}
+
+/**
+ * Collect rendered snippet objects (same logic as render() but returns array).
+ */
+function render_collect(string $position): array {
+    if (!in_array($position, VALID_POSITIONS, true)) return [];
+
+    $current = function_exists('get_queried_object_id') ? get_queried_object_id() : 0;
+    $site = list_site_snippets(['position' => $position, 'enabled' => true]);
+    $site = array_values(array_filter($site, function ($s) use ($current) {
+        if ($s['scope'] === 'global') return true;
+        return in_array($current, $s['target_post_ids'], true);
+    }));
+
+    $site_names = [];
+    foreach ($site as $s) {
+        if ($s['name'] !== '') $site_names[] = $s['name'];
+    }
+
+    $network = list_network_snippets(['position' => $position, 'enabled' => true]);
+    $network = array_values(array_filter($network, function ($s) use ($site_names) {
+        return $s['name'] === '' || !in_array($s['name'], $site_names, true);
+    }));
+
+    $all = array_merge($network, $site);
+    usort($all, fn($a, $b) => $a['priority'] - $b['priority']);
+    return $all;
+}
 
 add_action('wp_head',      __NAMESPACE__ . '\\render_head',       5);
 add_action('wp_body_open', __NAMESPACE__ . '\\render_body_open',  5);

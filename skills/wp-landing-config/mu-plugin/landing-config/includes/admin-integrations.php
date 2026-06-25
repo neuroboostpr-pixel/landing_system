@@ -11,17 +11,22 @@ use function LandingConfig\Integrations\has_override;
 use const LandingConfig\Integrations\VALID_ADAPTERS;
 use function LandingConfig\SegmentSelector\render as render_selector;
 use function LandingConfig\SegmentSelector\current_from_request;
+use function LandingConfig\AdminMode\cap;
+use function LandingConfig\AdminMode\admin_url_for;
+use function LandingConfig\AdminMode\menu_hook;
+use function LandingConfig\AdminMode\parent_slug;
+use function LandingConfig\AdminMode\page_slug;
 
 function adapter_class(string $name): string {
-    return match ($name) {
+    $map = [
         'email'    => '\\LandingConfig\\Adapters\\EmailAdapter',
         'telegram' => '\\LandingConfig\\Adapters\\TelegramAdapter',
         'whatsapp' => '\\LandingConfig\\Adapters\\WhatsAppAdapter',
         'amocrm'   => '\\LandingConfig\\Adapters\\AmoCRMAdapter',
         'bitrix24' => '\\LandingConfig\\Adapters\\Bitrix24Adapter',
         'hubspot'  => '\\LandingConfig\\Adapters\\HubSpotAdapter',
-        default    => '',
-    };
+    ];
+    return $map[$name] ?? '';
 }
 
 function mask_secret(string $val): string {
@@ -30,13 +35,13 @@ function mask_secret(string $val): string {
     return str_repeat('•', max(0, strlen($val) - 4)) . substr($val, -4);
 }
 
-\add_action('network_admin_menu', function () {
+\add_action(menu_hook(), function () {
     \add_submenu_page(
-        'landing-config-network',
+        parent_slug(),
         'Интеграции',
         'Интеграции',
-        'manage_network_options',
-        'landing-config-network-integrations',
+        cap(),
+        page_slug('integrations'),
         __NAMESPACE__ . '\\dispatch'
     );
 });
@@ -45,7 +50,7 @@ function mask_secret(string $val): string {
 \add_action('admin_post_landing_int_toggle_override', __NAMESPACE__ . '\\handle_toggle_override');
 
 function dispatch(): void {
-    if (!\current_user_can('manage_network_options')) { \wp_die('No.', 403); }
+    if (!\current_user_can(cap())) { \wp_die('No.', 403); }
     $segment = current_from_request();
     render_page($segment);
 }
@@ -81,7 +86,7 @@ function render_page(int $segment): void {
                 </h2>
 
                 <?php if ($segment !== 0): ?>
-                    <form method="post" action="<?php echo \esc_url(\network_admin_url('admin-post.php')); ?>" style="margin-bottom:12px;">
+                    <form method="post" action="<?php echo \esc_url(admin_url_for('admin-post.php')); ?>" style="margin-bottom:12px;">
                         <?php \wp_nonce_field('landing_int_toggle_override_' . $adapter_name); ?>
                         <input type="hidden" name="action" value="landing_int_toggle_override">
                         <input type="hidden" name="adapter_name" value="<?php echo \esc_attr($adapter_name); ?>">
@@ -107,7 +112,7 @@ function render_page(int $segment): void {
                         </ul>
                     </div>
                 <?php else: ?>
-                    <form method="post" action="<?php echo \esc_url(\network_admin_url('admin-post.php')); ?>">
+                    <form method="post" action="<?php echo \esc_url(admin_url_for('admin-post.php')); ?>">
                         <?php \wp_nonce_field('landing_int_save_' . $adapter_name); ?>
                         <input type="hidden" name="action" value="landing_int_save">
                         <input type="hidden" name="adapter_name" value="<?php echo \esc_attr($adapter_name); ?>">
@@ -147,7 +152,7 @@ function render_page(int $segment): void {
 }
 
 function handle_save(): void {
-    if (!\current_user_can('manage_network_options')) { \wp_die('No.', 403); }
+    if (!\current_user_can(cap())) { \wp_die('No.', 403); }
     $adapter_name = \sanitize_text_field($_POST['adapter_name'] ?? '');
     if (!in_array($adapter_name, VALID_ADAPTERS, true)) \wp_die('Invalid', 400);
     \check_admin_referer('landing_int_save_' . $adapter_name);
@@ -182,12 +187,12 @@ function handle_save(): void {
     }
     save_integration($adapter_name, $new_settings, $is_network, $blog_id, $encrypted_fields, true);
 
-    \wp_safe_redirect(\network_admin_url('admin.php?page=landing-config-network-integrations&segment=' . $segment . '&saved=1'));
+    \wp_safe_redirect(admin_url_for('admin.php?page=landing-config-network-integrations&segment=' . $segment . '&saved=1'));
     exit;
 }
 
 function handle_toggle_override(): void {
-    if (!\current_user_can('manage_network_options')) { \wp_die('No.', 403); }
+    if (!\current_user_can(cap())) { \wp_die('No.', 403); }
     $adapter_name = \sanitize_text_field($_POST['adapter_name'] ?? '');
     if (!in_array($adapter_name, VALID_ADAPTERS, true)) \wp_die('Invalid', 400);
     \check_admin_referer('landing_int_toggle_override_' . $adapter_name);
@@ -211,6 +216,6 @@ function handle_toggle_override(): void {
         foreach ($cls::field_definitions() as $f => $m) if (!empty($m['encrypt'])) $encrypted_fields[] = $f;
         save_integration($adapter_name, $settings, false, $segment, $encrypted_fields, true);
     }
-    \wp_safe_redirect(\network_admin_url('admin.php?page=landing-config-network-integrations&segment=' . $segment));
+    \wp_safe_redirect(admin_url_for('admin.php?page=landing-config-network-integrations&segment=' . $segment));
     exit;
 }

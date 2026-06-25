@@ -12,14 +12,19 @@ use const LandingConfig\CTA\PRESET_NAMES;
 use const LandingConfig\CTA\VALID_TYPES;
 use function LandingConfig\SegmentSelector\render as render_selector;
 use function LandingConfig\SegmentSelector\current_from_request;
+use function LandingConfig\AdminMode\cap;
+use function LandingConfig\AdminMode\admin_url_for;
+use function LandingConfig\AdminMode\menu_hook;
+use function LandingConfig\AdminMode\parent_slug;
+use function LandingConfig\AdminMode\page_slug;
 
-\add_action('network_admin_menu', function () {
+\add_action(menu_hook(), function () {
     \add_submenu_page(
-        'landing-config-network',
+        parent_slug(),
         'CTA-кнопки',
         'CTA-кнопки',
-        'manage_network_options',
-        'landing-config-network-cta',
+        cap(),
+        page_slug('cta'),
         __NAMESPACE__ . '\\dispatch'
     );
 });
@@ -28,7 +33,7 @@ use function LandingConfig\SegmentSelector\current_from_request;
 \add_action('admin_post_landing_cta_delete_override', __NAMESPACE__ . '\\handle_delete_override');
 
 function dispatch(): void {
-    if (!\current_user_can('manage_network_options')) { \wp_die('Insufficient permissions', 403); }
+    if (!\current_user_can(cap())) { \wp_die('Insufficient permissions', 403); }
     $segment = current_from_request();
     render_page($segment);
 }
@@ -67,7 +72,7 @@ function render_page(int $segment): void {
                     <p style="color:#646970;">Этот пресет наследуется от сетевого дефолта. Чтобы изменить для этого сегмента — нажмите «Override».</p>
                 <?php endif; ?>
 
-                <form method="post" action="<?php echo \esc_url(\network_admin_url('admin-post.php')); ?>">
+                <form method="post" action="<?php echo \esc_url(admin_url_for('admin-post.php')); ?>">
                     <?php \wp_nonce_field('landing_cta_save_' . $preset_name); ?>
                     <input type="hidden" name="action" value="landing_cta_save">
                     <input type="hidden" name="preset_name" value="<?php echo \esc_attr($preset_name); ?>">
@@ -107,7 +112,7 @@ function render_page(int $segment): void {
 
                         <?php if ($is_override): ?>
                             <a href="<?php echo \esc_url(\wp_nonce_url(
-                                \network_admin_url('admin-post.php?action=landing_cta_delete_override&preset_name=' . $preset_name . '&segment=' . $segment),
+                                admin_url_for('admin-post.php?action=landing_cta_delete_override&preset_name=' . $preset_name . '&segment=' . $segment),
                                 'landing_cta_delete_override_' . $preset_name
                             )); ?>" class="button" style="margin-left:1em;" onclick="return confirm('Удалить override и вернуться к сетевому дефолту?');">Удалить override</a>
                         <?php endif; ?>
@@ -120,7 +125,7 @@ function render_page(int $segment): void {
 }
 
 function handle_save(): void {
-    if (!\current_user_can('manage_network_options')) { \wp_die('No.', 403); }
+    if (!\current_user_can(cap())) { \wp_die('No.', 403); }
     $preset = \sanitize_text_field($_POST['preset_name'] ?? '');
     if (!in_array($preset, PRESET_NAMES, true)) \wp_die('Invalid preset', 400);
     \check_admin_referer('landing_cta_save_' . $preset);
@@ -148,12 +153,12 @@ function handle_save(): void {
         'message_template' => $_POST['message_template'] ?? '',
     ], $is_network, $blog_id);
 
-    \wp_safe_redirect(\network_admin_url('admin.php?page=landing-config-network-cta&segment=' . $segment . '&saved=1'));
+    \wp_safe_redirect(admin_url_for('admin.php?page=landing-config-network-cta&segment=' . $segment . '&saved=1'));
     exit;
 }
 
 function handle_delete_override(): void {
-    if (!\current_user_can('manage_network_options')) { \wp_die('No.', 403); }
+    if (!\current_user_can(cap())) { \wp_die('No.', 403); }
     $preset = \sanitize_text_field($_GET['preset_name'] ?? '');
     $segment = (int) ($_GET['segment'] ?? 0);
     if (!in_array($preset, PRESET_NAMES, true) || $segment === 0) \wp_die('Invalid', 400);
@@ -164,6 +169,6 @@ function handle_delete_override(): void {
             delete_cta($r['id']);
         }
     }
-    \wp_safe_redirect(\network_admin_url('admin.php?page=landing-config-network-cta&segment=' . $segment . '&deleted=1'));
+    \wp_safe_redirect(admin_url_for('admin.php?page=landing-config-network-cta&segment=' . $segment . '&deleted=1'));
     exit;
 }

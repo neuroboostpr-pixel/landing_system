@@ -4,6 +4,7 @@ namespace LandingConfig\Admin\Leads;
 if (!defined('ABSPATH')) { exit; }
 
 use function LandingConfig\DB\get_leads_table_name;
+use function LandingConfig\DB\get_lead_status_log_table_name;
 use function LandingConfig\LeadStatuses\list_lead_statuses;
 use function LandingConfig\LeadStatuses\resolve_lead_status;
 use function LandingConfig\LeadStatusLog\log_status_change;
@@ -19,8 +20,10 @@ add_action('admin_menu', function () {
     );
 });
 
-add_action('admin_post_landing_leads_bulk_intent', __NAMESPACE__ . '\\handle_bulk_intent');
-add_action('admin_post_landing_leads_bulk_status', __NAMESPACE__ . '\\handle_bulk_status');
+add_action('admin_post_landing_leads_bulk_intent',  __NAMESPACE__ . '\\handle_bulk_intent');
+add_action('admin_post_landing_leads_bulk_status',  __NAMESPACE__ . '\\handle_bulk_status');
+add_action('admin_post_landing_leads_bulk_delete',  __NAMESPACE__ . '\\handle_bulk_delete');
+add_action('admin_post_landing_lead_delete',        __NAMESPACE__ . '\\handle_single_delete');
 
 function render_page(): void {
     if (!current_user_can('manage_options')) { wp_die('Insufficient permissions'); }
@@ -81,6 +84,10 @@ function render_page(): void {
     <div class="wrap">
         <?php if (isset($_GET['bulk_updated'])): $bu = (int) $_GET['bulk_updated']; $bf = (int) ($_GET['bulk_failed'] ?? 0); ?>
             <div class="notice notice-success is-dismissible"><p>Обновлено заявок: <strong><?php echo $bu; ?></strong>.<?php if ($bf > 0): ?> Не удалось: <strong><?php echo $bf; ?></strong> (см. debug.log).<?php endif; ?></p></div>
+        <?php elseif (isset($_GET['bulk_deleted'])): $bd = (int) $_GET['bulk_deleted']; $bf = (int) ($_GET['bulk_failed'] ?? 0); ?>
+            <div class="notice notice-success is-dismissible"><p>Удалено заявок: <strong><?php echo $bd; ?></strong>.<?php if ($bf > 0): ?> Не удалось: <strong><?php echo $bf; ?></strong> (см. debug.log).<?php endif; ?></p></div>
+        <?php elseif (isset($_GET['deleted'])): ?>
+            <div class="notice notice-success is-dismissible"><p>Заявка удалена.</p></div>
         <?php elseif (isset($_GET['bulk_error'])): ?>
             <div class="notice notice-error is-dismissible"><p>Ошибка: <code><?php echo esc_html((string) $_GET['bulk_error']); ?></code>. Проверь выбор заявок и параметры.</p></div>
         <?php endif; ?>
@@ -115,6 +122,7 @@ function render_page(): void {
                     <select name="bulk_action">
                         <option value="">— Действие —</option>
                         <option value="change_status">Изменить статус…</option>
+                        <option value="delete">Удалить</option>
                     </select>
                     <button type="submit" class="button action">Применить</button>
                 </div>
@@ -228,12 +236,37 @@ function handle_bulk_intent(): void {
     $lead_ids = array_values(array_filter($lead_ids, fn($i) => $i > 0));
     $return_status = sanitize_key($_POST['status'] ?? 'all');
 
-    if ($bulk_action !== 'change_status') {
+    if (!in_array($bulk_action, ['change_status', 'delete'], true)) {
         wp_safe_redirect(admin_url('admin.php?page=landing-config-leads&status=' . $return_status));
         exit;
     }
     if (empty($lead_ids)) {
         wp_safe_redirect(admin_url('admin.php?page=landing-config-leads&status=' . $return_status . '&bulk_error=no_selection'));
+        exit;
+    }
+    if ($bulk_action === 'delete') {
+        // POST to dedicated delete handler (own nonce)
+        $blog_id = get_current_blog_id();
+        $vocab = list_lead_statuses($blog_id);
+        $back_url = admin_url('admin.php?page=landing-config-leads&status=' . $return_status);
+        ?>
+        <div class="wrap">
+            <h1>Удаление заявок</h1>
+            <p>Выбрано заявок: <strong><?php echo count($lead_ids); ?></strong>. Это действие <strong>необратимо</strong> — заявки и вся история статусов будут удалены навсегда.</p>
+            <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+                <?php wp_nonce_field('landing_leads_bulk_delete'); ?>
+                <input type="hidden" name="action" value="landing_leads_bulk_delete">
+                <input type="hidden" name="return_status" value="<?php echo esc_attr($return_status); ?>">
+                <?php foreach ($lead_ids as $id): ?>
+                    <input type="hidden" name="lead_ids[]" value="<?php echo (int) $id; ?>">
+                <?php endforeach; ?>
+                <p>
+                    <button type="submit" class="button button-primary" style="background:#b32d2e; border-color:#b32d2e;">Да, удалить <?php echo count($lead_ids); ?> заявок(у)</button>
+                    <a href="<?php echo esc_url($back_url); ?>" class="button" style="margin-left:8px;">Отмена</a>
+                </p>
+            </form>
+        </div>
+        <?php
         exit;
     }
 
@@ -335,5 +368,79 @@ function handle_bulk_status(): void {
 
     $redirect = admin_url('admin.php?page=landing-config-leads&status=' . $return_status . '&bulk_updated=' . $updated . ($failed > 0 ? '&bulk_failed=' . $failed : ''));
     wp_safe_redirect($redirect);
+    exit;
+}
+
+/**
+ * Bulk delete: удаляет выбранные заявки и их лог статусов.
+ * Каждая заявка в отдельной транзакции — ошибка одной не блокирует остальные.
+ */
+function handle_bulk_delete(): void {
+    if (!current_user_can('manage_options')) { wp_die('No.', 403); }
+    check_admin_referer('landing_leads_bulk_delete');
+
+    $lead_ids = array_map('intval', (array) ($_POST['lead_ids'] ?? []));
+    $lead_ids = array_values(array_filter($lead_ids, fn($i) => $i > 0));
+    $return_status = sanitize_key($_POST['return_status'] ?? 'all');
+
+    if (empty($lead_ids)) {
+        wp_safe_redirect(admin_url('admin.php?page=landing-config-leads&status=' . $return_status . '&bulk_error=no_selection'));
+        exit;
+    }
+
+    global $wpdb;
+    $table     = get_leads_table_name();
+    $log_table = get_lead_status_log_table_name();
+
+    $deleted = 0;
+    $failed  = 0;
+    foreach ($lead_ids as $lid) {
+        $wpdb->query('START TRANSACTION');
+        try {
+            $del_log = $wpdb->delete($log_table, ['lead_id' => $lid], ['%d']);
+            if ($del_log === false) throw new \RuntimeException('log delete failed: ' . $wpdb->last_error);
+            $del = $wpdb->delete($table, ['id' => $lid], ['%d']);
+            if ($del === false) throw new \RuntimeException('lead delete failed: ' . $wpdb->last_error);
+            if ($del === 0) { $wpdb->query('ROLLBACK'); $failed++; continue; }
+            $wpdb->query('COMMIT');
+            $deleted++;
+        } catch (\Throwable $e) {
+            $wpdb->query('ROLLBACK');
+            error_log('[landing-config] bulk_delete lead_id=' . $lid . ' failed: ' . $e->getMessage());
+            $failed++;
+        }
+    }
+
+    $redirect = admin_url('admin.php?page=landing-config-leads&status=' . $return_status . '&bulk_deleted=' . $deleted . ($failed > 0 ? '&bulk_failed=' . $failed : ''));
+    wp_safe_redirect($redirect);
+    exit;
+}
+
+/**
+ * Single-lead delete from detail page.
+ */
+function handle_single_delete(): void {
+    if (!current_user_can('manage_options')) { wp_die('No.', 403); }
+    $lead_id = (int) ($_GET['lead_id'] ?? 0);
+    if ($lead_id <= 0) { wp_die('Invalid lead_id', 400); }
+    check_admin_referer('landing_lead_delete_' . $lead_id);
+
+    global $wpdb;
+    $table     = get_leads_table_name();
+    $log_table = get_lead_status_log_table_name();
+
+    $wpdb->query('START TRANSACTION');
+    try {
+        $del_log = $wpdb->delete($log_table, ['lead_id' => $lead_id], ['%d']);
+        if ($del_log === false) throw new \RuntimeException($wpdb->last_error);
+        $del = $wpdb->delete($table, ['id' => $lead_id], ['%d']);
+        if ($del === false) throw new \RuntimeException($wpdb->last_error);
+        $wpdb->query('COMMIT');
+    } catch (\Throwable $e) {
+        $wpdb->query('ROLLBACK');
+        wp_die('Ошибка удаления. Подробности в debug.log.', 500);
+    }
+
+    wp_safe_redirect(admin_url('admin.php?page=landing-config-leads&deleted=1'));
     exit;
 }

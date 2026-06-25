@@ -9,14 +9,19 @@ use function LandingConfig\LeadStatuses\delete_lead_status;
 use function LandingConfig\LeadStatuses\has_override;
 use function LandingConfig\SegmentSelector\render as render_selector;
 use function LandingConfig\SegmentSelector\current_from_request;
+use function LandingConfig\AdminMode\cap;
+use function LandingConfig\AdminMode\admin_url_for;
+use function LandingConfig\AdminMode\menu_hook;
+use function LandingConfig\AdminMode\parent_slug;
+use function LandingConfig\AdminMode\page_slug;
 
-\add_action('network_admin_menu', function () {
+\add_action(menu_hook(), function () {
     \add_submenu_page(
-        'landing-config-network',
+        parent_slug(),
         'Статусы заявок',
         'Статусы заявок',
-        'manage_network_options',
-        'landing-config-network-lead-statuses',
+        cap(),
+        page_slug('lead-statuses'),
         __NAMESPACE__ . '\\dispatch'
     );
 });
@@ -26,7 +31,7 @@ use function LandingConfig\SegmentSelector\current_from_request;
 \add_action('admin_post_landing_lead_status_delete_override', __NAMESPACE__ . '\\handle_delete_override');
 
 function dispatch(): void {
-    if (!\current_user_can('manage_network_options')) { \wp_die('Insufficient permissions', 403); }
+    if (!\current_user_can(cap())) { \wp_die('Insufficient permissions', 403); }
     $segment = current_from_request();
     render_page($segment);
 }
@@ -84,7 +89,7 @@ function render_page(int $segment): void {
                             <?php if (($segment === 0 && $s['is_network']) || ($segment !== 0 && $is_site_row)): ?>
                                 <a href="#edit-<?php echo (int) $s['id']; ?>" class="button button-small" onclick="document.getElementById('edit-form-<?php echo (int) $s['id']; ?>').style.display='block'; return false;">Изменить</a>
                                 <a href="<?php echo \esc_url(\wp_nonce_url(
-                                    \network_admin_url('admin-post.php?action=landing_lead_status_delete&id=' . $s['id'] . '&segment=' . $segment),
+                                    admin_url_for('admin-post.php?action=landing_lead_status_delete&id=' . $s['id'] . '&segment=' . $segment),
                                     'landing_lead_status_delete_' . $s['id']
                                 )); ?>" class="button button-small" onclick="return confirm('Удалить статус? Существующие заявки сохранят значение slug, но потеряют label/color.');">Удалить</a>
                             <?php elseif ($can_override): ?>
@@ -118,7 +123,7 @@ function render_page(int $segment): void {
 
 function render_edit_form(array $s, int $segment): void {
     ?>
-    <form method="post" action="<?php echo \esc_url(\network_admin_url('admin-post.php')); ?>" style="background:#fff; padding:12px; border-radius:4px; border:1px solid #c3c4c7;">
+    <form method="post" action="<?php echo \esc_url(admin_url_for('admin-post.php')); ?>" style="background:#fff; padding:12px; border-radius:4px; border:1px solid #c3c4c7;">
         <?php \wp_nonce_field('landing_lead_status_save'); ?>
         <input type="hidden" name="action" value="landing_lead_status_save">
         <input type="hidden" name="id" value="<?php echo (int) $s['id']; ?>">
@@ -135,7 +140,7 @@ function render_edit_form(array $s, int $segment): void {
 }
 
 function handle_save(): void {
-    if (!\current_user_can('manage_network_options')) { \wp_die('No.', 403); }
+    if (!\current_user_can(cap())) { \wp_die('No.', 403); }
     \check_admin_referer('landing_lead_status_save');
 
     $segment = (int) ($_POST['segment'] ?? 0);
@@ -154,12 +159,12 @@ function handle_save(): void {
         \wp_die('Не удалось сохранить статус. Проверь slug (a-z, 0-9, _, -).', 400);
     }
 
-    \wp_safe_redirect(\network_admin_url('admin.php?page=landing-config-network-lead-statuses&segment=' . $segment . '&saved=1'));
+    \wp_safe_redirect(admin_url_for('admin.php?page=landing-config-network-lead-statuses&segment=' . $segment . '&saved=1'));
     exit;
 }
 
 function handle_delete(): void {
-    if (!\current_user_can('manage_network_options')) { \wp_die('No.', 403); }
+    if (!\current_user_can(cap())) { \wp_die('No.', 403); }
     $id = (int) ($_GET['id'] ?? 0);
     if ($id <= 0) \wp_die('Invalid id', 400);
     \check_admin_referer('landing_lead_status_delete_' . $id);
@@ -167,12 +172,12 @@ function handle_delete(): void {
     $segment = (int) ($_GET['segment'] ?? 0);
     delete_lead_status($id);
 
-    \wp_safe_redirect(\network_admin_url('admin.php?page=landing-config-network-lead-statuses&segment=' . $segment . '&deleted=1'));
+    \wp_safe_redirect(admin_url_for('admin.php?page=landing-config-network-lead-statuses&segment=' . $segment . '&deleted=1'));
     exit;
 }
 
 function handle_delete_override(): void {
-    if (!\current_user_can('manage_network_options')) { \wp_die('No.', 403); }
+    if (!\current_user_can(cap())) { \wp_die('No.', 403); }
     \check_admin_referer('landing_lead_status_delete_override');
 
     $slug = \sanitize_key($_GET['slug'] ?? '');
@@ -184,6 +189,6 @@ function handle_delete_override(): void {
             delete_lead_status($s['id']);
         }
     }
-    \wp_safe_redirect(\network_admin_url('admin.php?page=landing-config-network-lead-statuses&segment=' . $segment));
+    \wp_safe_redirect(admin_url_for('admin.php?page=landing-config-network-lead-statuses&segment=' . $segment));
     exit;
 }

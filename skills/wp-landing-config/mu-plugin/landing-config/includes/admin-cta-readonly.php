@@ -8,6 +8,7 @@ use function LandingConfig\CTA\has_cta_override as has_override;
 use const LandingConfig\CTA\PRESET_NAMES;
 
 \add_action('admin_menu', function () {
+    if (!\is_multisite()) return;
     \add_submenu_page(
         'landing-config',
         'CTA-кнопки (просмотр)',
