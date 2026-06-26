@@ -416,7 +416,13 @@ POST /wp-json/landing/v1/lead
 Body: name=... phone=... email=... message=... source_block=... utm_source=...
 ```
 
-Защита: honeypot-поле `website` (должно быть пустым), rate-limit 10 req/hour per IP.
+Защита: honeypot-поле `website` (должно быть пустым), rate-limit per IP.
+
+**Rate limit (обязательно для каждого проекта):** добавить в `wp-config.php` перед `/* That's all, stop editing! */`:
+```php
+define('LP_RATE_LIMIT_PER_HOUR', 50); // тест: 100, прод: 50–100
+```
+Без этого fallback = 10 req/hour — слишком мало для QA и тестирования.
 
 ### Helper-функции для тем
 
