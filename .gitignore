@@ -54,3 +54,4 @@ audit/
 # Удалить локально: find . -name "* 2.*" -not -path "./.git/*"  (только untracked).
 * 2.*
 *\ 2.*
+.worktrees/
