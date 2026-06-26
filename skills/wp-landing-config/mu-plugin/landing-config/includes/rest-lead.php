@@ -94,11 +94,12 @@ function handle_lead($request) {
 
 function dispatch_telegram(array $lead): void {
     $integration = \LandingConfig\Integrations\resolve_integration('telegram', \get_current_blog_id());
-    if (!$integration || empty($integration['enabled'])) return;
+    if (!$integration) return;
 
-    $settings = $integration['settings'];
-    $token    = $settings['bot_token'] ?? '';
-    $chat_id  = $settings['chat_id'] ?? '';
+    $settings  = $integration['settings'];
+    $token_raw = $settings['bot_token'] ?? '';
+    $token     = $token_raw ? (str_starts_with($token_raw, 'v1:') ? \LandingConfig\Encryption\decrypt($token_raw) : $token_raw) : '';
+    $chat_id   = $settings['chat_id'] ?? '';
     if ($token === '' || $chat_id === '') return;
 
     $id      = $lead['id'] ?? '?';
