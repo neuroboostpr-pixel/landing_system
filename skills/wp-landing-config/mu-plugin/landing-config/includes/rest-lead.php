@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) { exit; }
 
 use function LandingConfig\DB\get_leads_table_name;
 
-const RATE_LIMIT_PER_HOUR = 10;
+define('LandingConfig\REST\RATE_LIMIT_PER_HOUR', defined('LP_RATE_LIMIT_PER_HOUR') ? LP_RATE_LIMIT_PER_HOUR : 10);
 
 add_action('rest_api_init', function () {
     register_rest_route('landing/v1', '/lead', [
