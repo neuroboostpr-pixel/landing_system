@@ -80,10 +80,9 @@ function handle_lead($request) {
     // Email fallback — never block user response on this; wp_mail silently fails if SMTP down
     send_admin_email($data, $lead_id);
 
-    // Telegram notification (temporary until full CTA→integration routing is implemented, task 025)
-    dispatch_telegram(['id' => $lead_id] + $data);
+    // Dispatch to all active integrations
+    dispatch_all_integrations(['id' => $lead_id] + $data);
 
-    // Adapter dispatch happens in A5; A1 just stores + emails
     do_action('landing_config_lead_received', $lead_id, $data);
 
     return new \WP_REST_Response([
@@ -92,11 +91,34 @@ function handle_lead($request) {
     ], 200);
 }
 
-function dispatch_telegram(array $lead): void {
-    $integration = \LandingConfig\Integrations\resolve_integration('telegram', \get_current_blog_id());
-    if (!$integration) return;
+function dispatch_all_integrations(array $lead): void {
+    $blog_id      = \get_current_blog_id();
+    $integrations = \LandingConfig\Integrations\list_integrations($blog_id);
 
-    $settings  = $integration['settings'];
+    foreach ($integrations as $integration) {
+        if (!$integration['enabled']) continue;
+
+        $type = $integration['adapter_type'];
+
+        if ($type === 'telegram') {
+            _send_telegram($integration['settings'], $lead);
+        } else {
+            $map = [
+                'email'    => '\\LandingConfig\\Adapters\\EmailAdapter',
+                'whatsapp' => '\\LandingConfig\\Adapters\\WhatsAppAdapter',
+                'amocrm'   => '\\LandingConfig\\Adapters\\AmoCRMAdapter',
+                'bitrix24' => '\\LandingConfig\\Adapters\\Bitrix24Adapter',
+                'hubspot'  => '\\LandingConfig\\Adapters\\HubSpotAdapter',
+            ];
+            if (!empty($map[$type]) && class_exists($map[$type])) {
+                $adapter = new $map[$type]();
+                $adapter->send($lead);
+            }
+        }
+    }
+}
+
+function _send_telegram(array $settings, array $lead): void {
     $token_raw = $settings['bot_token'] ?? '';
     $token     = $token_raw ? (str_starts_with($token_raw, 'v1:') ? \LandingConfig\Encryption\decrypt($token_raw) : $token_raw) : '';
     $chat_id   = $settings['chat_id'] ?? '';
@@ -110,13 +132,13 @@ function dispatch_telegram(array $lead): void {
     $source  = $lead['source_block'] ?? '';
     $utm     = $lead['utm_source'] ?? '';
 
-    $text = "🔔 *Новая заявка #$id*\n\n"
-          . "👤 Имя: " . ($name    ?: '—') . "\n"
-          . "📱 Телефон: " . ($phone   ? "`$phone`" : '—') . "\n"
-          . "📧 Email: " . ($email   ?: '—') . "\n"
-          . "💬 Сообщение: " . ($message ?: '—') . "\n"
-          . "📦 Источник: " . ($source  ?: '—') . "\n"
-          . "🔗 UTM: " . ($utm     ?: '—') . "\n";
+    $text = "\xF0\x9F\x94\x94 *Новая заявка #$id*\n\n"
+          . "\xF0\x9F\x91\xA4 Имя: " . ($name    ?: '—') . "\n"
+          . "\xF0\x9F\x93\xB1 Телефон: " . ($phone   ? "`$phone`" : '—') . "\n"
+          . "\xF0\x9F\x93\xA7 Email: " . ($email   ?: '—') . "\n"
+          . "\xF0\x9F\x92\xAC Сообщение: " . ($message ?: '—') . "\n"
+          . "\xF0\x9F\x93\xA6 Источник: " . ($source  ?: '—') . "\n"
+          . "\xF0\x9F\x94\x97 UTM: " . ($utm     ?: '—') . "\n";
 
     \wp_remote_post("https://api.telegram.org/bot{$token}/sendMessage", [
         'timeout' => 10,
