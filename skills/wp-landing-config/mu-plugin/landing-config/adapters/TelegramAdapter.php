@@ -73,17 +73,28 @@ class TelegramAdapter implements AdapterInterface {
         $s = static::settings();
         $token_raw = $s['bot_token'] ?? \landing_config_get('integration_telegram_bot_token');
         $token = $token_raw ? (str_starts_with($token_raw, 'v1:') ? decrypt($token_raw) : $token_raw) : '';
+        $chat_id = $s['chat_id'] ?? \landing_config_get('integration_telegram_chat_id');
         if ($token === '') return ['ok' => false, 'message' => 'Bot token не задан'];
+        if ($chat_id === '') return ['ok' => false, 'message' => 'Chat ID не задан'];
 
-        $resp = \wp_remote_get("https://api.telegram.org/bot{$token}/getMe", ['timeout' => 10]);
+        $site = \get_bloginfo('name') ?: \get_bloginfo('url');
+        $resp = \wp_remote_post("https://api.telegram.org/bot{$token}/sendMessage", [
+            'timeout' => 10,
+            'body'    => [
+                'chat_id'    => $chat_id,
+                'text'       => "\xE2\x9C\x85 Тест соединения\n\nИнтеграция настроена корректно.\nСайт: {$site}",
+                'parse_mode' => 'Markdown',
+            ],
+        ]);
         if (\is_wp_error($resp)) return ['ok' => false, 'message' => 'Network error: ' . $resp->get_error_message()];
 
         $code = \wp_remote_retrieve_response_code($resp);
         $body = json_decode(\wp_remote_retrieve_body($resp), true);
         if ($code === 200 && !empty($body['ok'])) {
-            return ['ok' => true, 'message' => 'Бот: @' . $body['result']['username']];
+            return ['ok' => true, 'message' => 'Сообщение отправлено в чат'];
         }
-        return ['ok' => false, 'message' => "API вернул {$code}: " . substr(\wp_remote_retrieve_body($resp), 0, 200)];
+        $err = $body['description'] ?? substr(\wp_remote_retrieve_body($resp), 0, 200);
+        return ['ok' => false, 'message' => "Ошибка {$code}: {$err}"];
     }
 
     private static function normalize_response($resp): array {
