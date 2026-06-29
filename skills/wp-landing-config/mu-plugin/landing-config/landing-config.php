@@ -81,6 +81,7 @@ if (\is_admin() || \is_network_admin()) {
 add_action('init', function () {
     \LandingConfig\DB\maybe_install_or_migrate();
     \LandingConfig\DB\maybe_migrate_b1_pd_consent();
+    \LandingConfig\DB\maybe_migrate_roistat_visit();
 }, 1);
 
 add_action('admin_init', function () {

@@ -63,6 +63,7 @@ function handle_lead($request) {
         'utm_campaign'     => sanitize_text_field(wp_unslash($params['utm_campaign'] ?? '')),
         'utm_term'         => sanitize_text_field(wp_unslash($params['utm_term'] ?? '')),
         'utm_content'      => sanitize_text_field(wp_unslash($params['utm_content'] ?? '')),
+        'roistat_visit'    => sanitize_text_field(wp_unslash($params['roistat_visit'] ?? '')),
         'ip'               => sanitize_text_field($ip),
         'user_agent'       => sanitize_text_field($_SERVER['HTTP_USER_AGENT'] ?? ''),
         'created_at'       => current_time('mysql'),
@@ -109,6 +110,7 @@ function dispatch_all_integrations(array $lead): void {
                 'amocrm'   => '\\LandingConfig\\Adapters\\AmoCRMAdapter',
                 'bitrix24' => '\\LandingConfig\\Adapters\\Bitrix24Adapter',
                 'hubspot'  => '\\LandingConfig\\Adapters\\HubSpotAdapter',
+                'roistat'  => '\\LandingConfig\\Adapters\\RoistatAdapter',
             ];
             if (!empty($map[$type]) && class_exists($map[$type])) {
                 $adapter = new $map[$type]();

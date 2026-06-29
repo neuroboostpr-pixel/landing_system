@@ -97,6 +97,41 @@ function maybe_migrate_b1_pd_consent(): void {
     }
 }
 
+/**
+ * One-time migration: add roistat_visit column to existing installs.
+ * Marker: landing_config_migration_roistat_visit
+ */
+function maybe_migrate_roistat_visit(): void {
+    if (get_site_option('landing_config_migration_roistat_visit')) {
+        return;
+    }
+
+    $ok = true;
+    if (is_multisite()) {
+        $sites = get_sites(['number' => 0]);
+        foreach ($sites as $site) {
+            switch_to_blog((int)$site->blog_id);
+            try {
+                create_tables_for_current_blog();
+            } catch (\Throwable $e) {
+                $ok = false;
+            } finally {
+                restore_current_blog();
+            }
+        }
+    } else {
+        try {
+            create_tables_for_current_blog();
+        } catch (\Throwable $e) {
+            $ok = false;
+        }
+    }
+
+    if ($ok) {
+        update_site_option('landing_config_migration_roistat_visit', true);
+    }
+}
+
 function create_tables_for_current_blog(): void {
     global $wpdb;
     $charset = $wpdb->get_charset_collate();
@@ -117,6 +152,7 @@ function create_tables_for_current_blog(): void {
         utm_campaign VARCHAR(191) NOT NULL DEFAULT '',
         utm_term VARCHAR(191) NOT NULL DEFAULT '',
         utm_content VARCHAR(191) NOT NULL DEFAULT '',
+        roistat_visit VARCHAR(64) NOT NULL DEFAULT '',
         ip VARCHAR(45) NOT NULL DEFAULT '',
         user_agent TEXT NULL,
         processed_status VARCHAR(32) NOT NULL DEFAULT 'pending',
