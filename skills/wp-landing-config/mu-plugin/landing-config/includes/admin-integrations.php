@@ -246,7 +246,7 @@ function render_edit_page(string $mode): void {
                         <td>
                             <input type="text" id="lp_int_label" name="int_label"
                                    value="<?php echo \esc_attr($current_label); ?>"
-                                   placeholder="Например: Менеджер Али"
+                                   placeholder="Например: Roistat основной"
                                    class="regular-text" required>
                             <p class="description">Отображается в таблице. Поможет отличить несколько интеграций одного типа.</p>
                         </td>
