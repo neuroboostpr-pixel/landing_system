@@ -1,0 +1,19 @@
+/* gen-html — базовые классы эффектов. Копируется в <style> composed.html.
+ * Зависит от мод-токенов: --reveal-dur, --reveal-shift, --ease (motion.css каждого мода).
+ */
+
+/* доступность: скрыто визуально, но в DOM (SEO/скринридеры) — напр. полный H1 при расколотом заголовке */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* REVEAL — появление ПО СКРОЛЛУ (только секции НИЖЕ первого экрана) */
+.reveal{opacity:0;transform:translateY(var(--reveal-shift,16px));transition:opacity var(--reveal-dur,.6s) var(--ease),transform var(--reveal-dur,.6s) var(--ease)}
+.reveal.in{opacity:1;transform:none}
+
+/* ON-LOAD — появление ПРИ ЗАГРУЗКЕ (контент первого экрана виден сразу, НЕ ждёт скролла) */
+.on-load{opacity:0;transform:translateY(calc(var(--reveal-shift,16px) * .75));animation:onLoadIn var(--reveal-dur,.6s) var(--ease) forwards}
+@keyframes onLoadIn{to{opacity:1;transform:none}}
+
+/* доступность: уважать prefers-reduced-motion — всё показать сразу, без анимаций */
+@media(prefers-reduced-motion:reduce){
+  .reveal,.on-load{opacity:1;transform:none;transition:none;animation:none}
+}
