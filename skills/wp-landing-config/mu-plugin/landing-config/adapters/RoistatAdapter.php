@@ -54,10 +54,19 @@ class RoistatAdapter implements AdapterInterface {
         $phone = $lead['phone'] ?? '';
         $email = $lead['email'] ?? '';
 
+        // Страница из source_block (содержит URL)
+        $source_url = $lead['source_block'] ?? '';
+        $path = parse_url($source_url, PHP_URL_PATH) ?? '/';
+        $segments = array_filter(explode('/', trim($path, '/')));
+        $page = count($segments) ? end($segments) : 'main';
+
         $comment_parts = [];
-        if (!empty($lead['message']))      $comment_parts[] = $lead['message'];
-        if (!empty($lead['source_block'])) $comment_parts[] = 'Блок: ' . $lead['source_block'];
-        if (!empty($lead['utm_source']))   $comment_parts[] = 'UTM: ' . $lead['utm_source'] . '/' . ($lead['utm_medium'] ?? '') . '/' . ($lead['utm_campaign'] ?? '');
+        $comment_parts[] = 'Страница: ' . $page;
+        if (!empty($lead['message']) && strpos($lead['message'], 'Model:') === 0) {
+            $comment_parts[] = trim($lead['message']);
+        } elseif (!empty($lead['message'])) {
+            $comment_parts[] = 'Сообщение: ' . $lead['message'];
+        }
         $comment = implode("\n", $comment_parts);
 
         $payload = [
