@@ -22,6 +22,7 @@ function adapter_class(string $name): string {
         'amocrm'   => '\\LandingConfig\\Adapters\\AmoCRMAdapter',
         'bitrix24' => '\\LandingConfig\\Adapters\\Bitrix24Adapter',
         'hubspot'  => '\\LandingConfig\\Adapters\\HubSpotAdapter',
+        'roistat'  => '\\LandingConfig\\Adapters\\RoistatAdapter',
     ];
     return $map[$name] ?? '';
 }
@@ -34,6 +35,7 @@ function adapter_label(string $type): string {
         'amocrm'   => 'AmoCRM',
         'bitrix24' => 'Bitrix24',
         'hubspot'  => 'HubSpot',
+        'roistat'  => 'Roistat',
     ];
     return $labels[$type] ?? $type;
 }

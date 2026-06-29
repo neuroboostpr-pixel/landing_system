@@ -18,7 +18,7 @@ const SETTINGS_META        = '_lp_int_settings';
 const ENCRYPTED_FIELDS_META = '_lp_int_encrypted_fields';
 const ENABLED_META         = '_lp_int_enabled';
 
-const VALID_ADAPTERS = ['email', 'telegram', 'whatsapp', 'amocrm', 'bitrix24', 'hubspot'];
+const VALID_ADAPTERS = ['email', 'telegram', 'whatsapp', 'amocrm', 'bitrix24', 'hubspot', 'roistat'];
 
 add_action('init', __NAMESPACE__ . '\\register', 5);
 
