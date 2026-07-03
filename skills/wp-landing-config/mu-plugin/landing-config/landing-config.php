@@ -27,6 +27,7 @@ require_once LANDING_CONFIG_DIR . '/includes/segment-selector.php';
 require_once LANDING_CONFIG_DIR . '/includes/snippets.php';
 require_once LANDING_CONFIG_DIR . '/includes/rest-lead.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-pages.php';
+require_once LANDING_CONFIG_DIR . '/includes/admin-general-settings.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-leads.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-leads-network.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-cta.php';

@@ -5,7 +5,12 @@ if (!defined('ABSPATH')) { exit; }
 
 use function LandingConfig\DB\get_leads_table_name;
 
-define('LandingConfig\REST\RATE_LIMIT_PER_HOUR', defined('LP_RATE_LIMIT_PER_HOUR') ? LP_RATE_LIMIT_PER_HOUR : 10);
+function get_rate_limit(): int {
+    if (defined('LP_RATE_LIMIT_PER_HOUR')) {
+        return (int) LP_RATE_LIMIT_PER_HOUR;
+    }
+    return (int) get_option('lp_rate_limit_per_hour', 10);
+}
 
 add_action('rest_api_init', function () {
     register_rest_route('landing/v1', '/lead', [
@@ -23,11 +28,11 @@ function handle_lead($request) {
         return new \WP_REST_Response(['ok' => false, 'error' => 'invalid'], 400);
     }
 
-    // Rate limit per IP — transient-based, 10 req/hour.
+    // Rate limit per IP — transient-based.
     $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
     $rl_key = 'landing_lead_rl_' . md5($ip);
     $rl_count = (int) get_transient($rl_key);
-    if ($rl_count >= RATE_LIMIT_PER_HOUR) {
+    if ($rl_count >= get_rate_limit()) {
         return new \WP_REST_Response(['ok' => false, 'error' => 'rate_limit'], 429);
     }
     set_transient($rl_key, $rl_count + 1, HOUR_IN_SECONDS);
