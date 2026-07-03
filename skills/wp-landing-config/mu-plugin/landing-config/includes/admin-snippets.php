@@ -416,11 +416,15 @@ function handle_save_network(): void {
         $subpage_scope = $slugs ? implode(',', $slugs) : 'all';
     }
 
+    \kses_remove_filters();
+    $raw_code = \wp_unslash($_POST['code'] ?? '');
+    \kses_init_filters();
+
     $id = save_snippet([
         'id'              => isset($_POST['id']) ? (int) $_POST['id'] : 0,
         'title'           => \sanitize_text_field($_POST['title'] ?? ''),
         'name'            => \sanitize_key($_POST['name'] ?? ''),
-        'code'            => \wp_unslash($_POST['code'] ?? ''),
+        'code'            => $raw_code,
         'position'        => \sanitize_key($_POST['position'] ?? 'head'),
         'scope'           => 'global',
         'target_post_ids' => [],
@@ -737,13 +741,17 @@ function handle_save_site(int $segment): void {
         $subpage_scope_s = $slugs_s ? implode(',', $slugs_s) : 'all';
     }
 
+    \kses_remove_filters();
+    $raw_code_s = \wp_unslash($_POST['code'] ?? '');
+    \kses_init_filters();
+
     \switch_to_blog($segment);
     try {
         $id = save_snippet([
             'id'              => isset($_POST['id']) ? (int) $_POST['id'] : 0,
             'title'           => \sanitize_text_field($_POST['title'] ?? ''),
             'name'            => \sanitize_key($_POST['name'] ?? ''),
-            'code'            => \wp_unslash($_POST['code'] ?? ''),
+            'code'            => $raw_code_s,
             'position'        => \sanitize_key($_POST['position'] ?? 'head'),
             'scope'           => \sanitize_key($_POST['scope'] ?? 'global'),
             'target_post_ids' => array_map('intval', (array) ($_POST['target_post_ids'] ?? [])),
