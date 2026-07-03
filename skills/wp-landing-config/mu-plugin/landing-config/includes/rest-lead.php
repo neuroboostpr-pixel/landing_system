@@ -6,10 +6,14 @@ if (!defined('ABSPATH')) { exit; }
 use function LandingConfig\DB\get_leads_table_name;
 
 function get_rate_limit(): int {
+    $from_db = get_option('lp_rate_limit_per_hour', false);
+    if ($from_db !== false) {
+        return (int) $from_db;
+    }
     if (defined('LP_RATE_LIMIT_PER_HOUR')) {
         return (int) LP_RATE_LIMIT_PER_HOUR;
     }
-    return (int) get_option('lp_rate_limit_per_hour', 10);
+    return 10;
 }
 
 add_action('rest_api_init', function () {

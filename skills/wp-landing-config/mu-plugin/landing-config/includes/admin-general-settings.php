@@ -26,8 +26,10 @@ function render_page(): void {
         $saved = true;
     }
 
-    $rate_limit = (int) get_option('lp_rate_limit_per_hour', defined('LP_RATE_LIMIT_PER_HOUR') ? LP_RATE_LIMIT_PER_HOUR : 10);
-    $wp_config_override = defined('LP_RATE_LIMIT_PER_HOUR');
+    $from_db = get_option('lp_rate_limit_per_hour', false);
+    $wp_config_val = defined('LP_RATE_LIMIT_PER_HOUR') ? (int) LP_RATE_LIMIT_PER_HOUR : null;
+    // Effective: DB value wins over wp-config constant
+    $rate_limit = $from_db !== false ? (int) $from_db : ($wp_config_val ?? 10);
     ?>
     <div class="wrap">
         <h1>Лендинг — Общие настройки</h1>
@@ -54,12 +56,11 @@ function render_page(): void {
                             min="1"
                             max="10000"
                             style="width:100px;"
-                            <?php echo $wp_config_override ? 'disabled' : ''; ?>
                         >
                         <p class="description">
-                            <?php if ($wp_config_override): ?>
-                                <strong>Значение задано в wp-config.php (<code>LP_RATE_LIMIT_PER_HOUR = <?php echo (int) LP_RATE_LIMIT_PER_HOUR; ?></code>) и переопределяет настройку здесь.</strong>
-                                Удалите константу из wp-config.php, чтобы управлять лимитом отсюда.
+                            <?php if ($wp_config_val !== null): ?>
+                                В wp-config.php задана константа <code>LP_RATE_LIMIT_PER_HOUR = <?php echo $wp_config_val; ?></code>.
+                                Значение из этой формы её перекрывает — после сохранения здесь константа больше не учитывается.
                             <?php else: ?>
                                 Количество заявок с одного IP-адреса за час. Для тестирования: 100+, для прода: 10–50.
                             <?php endif; ?>
@@ -68,9 +69,7 @@ function render_page(): void {
                 </tr>
             </table>
 
-            <?php if (!$wp_config_override): ?>
-                <?php submit_button('Сохранить настройки'); ?>
-            <?php endif; ?>
+            <?php submit_button('Сохранить настройки'); ?>
         </form>
     </div>
     <?php
