@@ -24,6 +24,53 @@ add_action('rest_api_init', function () {
     ]);
 });
 
+/**
+ * Verify reCAPTCHA v3 token with Google.
+ * Returns score (float 0.0-1.0) on success, null on network error or missing token.
+ * Returns false if token is invalid (score below threshold or verification failed).
+ *
+ * Fail-open: returns null (not false) on network errors so forms still work
+ * when Google API is unreachable.
+ */
+function verify_recaptcha(string $token): ?float {
+    if (get_option('lp_recaptcha_enabled', '0') !== '1') {
+        return null; // disabled — skip
+    }
+
+    if ($token === '') {
+        return null; // no token — skip (frontend may not have loaded yet)
+    }
+
+    $secret_enc = (string) get_option('lp_recaptcha_secret_key_enc', '');
+    if ($secret_enc === '') {
+        return null; // not configured — skip
+    }
+
+    $secret = $secret_enc;
+    if (str_starts_with($secret_enc, 'v1:')) {
+        $secret = \LandingConfig\Encryption\decrypt($secret_enc);
+    }
+    if ($secret === '') {
+        return null;
+    }
+
+    $response = wp_remote_post('https://www.google.com/recaptcha/api/siteverify', [
+        'timeout' => 5,
+        'body'    => ['secret' => $secret, 'response' => $token],
+    ]);
+
+    if (is_wp_error($response)) {
+        return null; // network error — fail open
+    }
+
+    $body = json_decode(wp_remote_retrieve_body($response), true);
+    if (!is_array($body) || empty($body['success'])) {
+        return 0.0; // invalid token
+    }
+
+    return (float) ($body['score'] ?? 0.0);
+}
+
 function handle_lead($request) {
     $params = $request->get_params();
 
@@ -48,6 +95,14 @@ function handle_lead($request) {
             ['ok' => false, 'error' => 'pd_consent_required'],
             400
         );
+    }
+
+    // reCAPTCHA v3 verification (fail-open on network errors)
+    $recaptcha_token = sanitize_text_field(wp_unslash($params['recaptcha_token'] ?? ''));
+    $recaptcha_score = verify_recaptcha($recaptcha_token);
+    $threshold = (float) get_option('lp_recaptcha_threshold', '0.5');
+    if ($recaptcha_score !== null && $recaptcha_score < $threshold) {
+        return new \WP_REST_Response(['ok' => false, 'error' => 'recaptcha_failed'], 403);
     }
 
     // Required: at least one of phone or email
@@ -78,6 +133,7 @@ function handle_lead($request) {
         'created_at'       => current_time('mysql'),
         'processed_status'      => 'pending',
         'pd_consent_granted_at' => current_time('mysql'),
+        'recaptcha_score'       => $recaptcha_score !== null ? number_format((float)$recaptcha_score, 2, '.', '') : null,
     ];
 
     global $wpdb;
