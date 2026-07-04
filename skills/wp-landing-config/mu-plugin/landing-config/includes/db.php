@@ -132,6 +132,41 @@ function maybe_migrate_roistat_visit(): void {
     }
 }
 
+/**
+ * One-time migration: add recaptcha_score column to existing installs.
+ * Marker: landing_config_migration_recaptcha_score
+ */
+function maybe_migrate_recaptcha_score(): void {
+    if (get_site_option('landing_config_migration_recaptcha_score')) {
+        return;
+    }
+
+    $ok = true;
+    if (is_multisite()) {
+        $sites = get_sites(['number' => 0]);
+        foreach ($sites as $site) {
+            switch_to_blog((int)$site->blog_id);
+            try {
+                create_tables_for_current_blog();
+            } catch (\Throwable $e) {
+                $ok = false;
+            } finally {
+                restore_current_blog();
+            }
+        }
+    } else {
+        try {
+            create_tables_for_current_blog();
+        } catch (\Throwable $e) {
+            $ok = false;
+        }
+    }
+
+    if ($ok) {
+        update_site_option('landing_config_migration_recaptcha_score', true);
+    }
+}
+
 function create_tables_for_current_blog(): void {
     global $wpdb;
     $charset = $wpdb->get_charset_collate();
@@ -157,6 +192,7 @@ function create_tables_for_current_blog(): void {
         user_agent TEXT NULL,
         processed_status VARCHAR(32) NOT NULL DEFAULT 'pending',
         pd_consent_granted_at DATETIME NULL,
+        recaptcha_score DECIMAL(3,2) NULL,
         PRIMARY KEY (id),
         KEY created_at (created_at),
         KEY processed_status (processed_status)
