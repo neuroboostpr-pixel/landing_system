@@ -134,12 +134,13 @@ function render_page(): void {
                         <td class="check-column"><input type="checkbox" id="cb-select-all"></td>
                         <th>ID</th><th>Дата</th><th>Имя</th><th>Телефон</th><th>Email</th>
                         <th>Статус</th>
+                        <th>Score</th>
                         <th>Сообщение</th><th>Источник</th><th>UTM</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if (empty($rows)): ?>
-                        <tr><td colspan="10"><em>Заявок нет.</em></td></tr>
+                        <tr><td colspan="11"><em>Заявок нет.</em></td></tr>
                     <?php else: foreach ($rows as $r):
                         $status_slug = (string) ($r['processed_status'] ?? '');
                         $v = $vocab_by_slug[$status_slug] ?? null;
@@ -167,6 +168,22 @@ function render_page(): void {
                             <td><?php echo esc_html($r['phone']); ?></td>
                             <td><?php echo esc_html($r['email']); ?></td>
                             <td><span<?php echo $badge_warn; ?> style="background:<?php echo esc_attr($badge_color); ?>; color:#fff; padding:3px 10px; border-radius:3px; font-size:12px;"><?php echo esc_html($badge_label); ?></span></td>
+                            <td><?php
+                                $score_val = $r['recaptcha_score'] ?? null;
+                                if ($score_val !== null && $score_val !== '') {
+                                    $score_f = (float) $score_val;
+                                    if ($score_f >= 0.7) {
+                                        $sc = '#46b450'; // green
+                                    } elseif ($score_f >= 0.4) {
+                                        $sc = '#f0ad00'; // yellow
+                                    } else {
+                                        $sc = '#b32d2e'; // red
+                                    }
+                                    echo '<span style="background:' . esc_attr($sc) . '; color:#fff; padding:2px 8px; border-radius:3px; font-size:12px; font-family:monospace;">' . esc_html(number_format($score_f, 2)) . '</span>';
+                                } else {
+                                    echo '<span style="color:#646970;">—</span>';
+                                }
+                            ?></td>
                             <td><?php echo esc_html(mb_substr($r['message'] ?? '', 0, 60)); ?></td>
                             <td><?php echo esc_html($r['source_block']); ?></td>
                             <td><?php
