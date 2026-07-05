@@ -19,12 +19,6 @@ function render_page(): void {
         wp_die('Нет доступа');
     }
 
-    $rc_toggled = false;
-    if (isset($_POST['lp_recaptcha_toggle_nonce']) && wp_verify_nonce($_POST['lp_recaptcha_toggle_nonce'], 'lp_recaptcha_toggle')) {
-        update_option('lp_recaptcha_enabled', '0');
-        $rc_toggled = true;
-    }
-
     $saved = false;
     if (isset($_POST['lp_general_nonce']) && wp_verify_nonce($_POST['lp_general_nonce'], 'lp_general_settings')) {
         $rate_limit = max(1, (int) ($_POST['lp_rate_limit'] ?? 10));
@@ -63,10 +57,6 @@ function render_page(): void {
         <?php if ($saved): ?>
             <div class="notice notice-success is-dismissible"><p>Настройки сохранены.</p></div>
         <?php endif; ?>
-        <?php if ($rc_toggled): ?>
-            <div class="notice notice-success is-dismissible"><p>reCAPTCHA отключена.</p></div>
-        <?php endif; ?>
-
         <form method="post" action="">
             <?php wp_nonce_field('lp_general_settings', 'lp_general_nonce'); ?>
 
@@ -107,15 +97,6 @@ function render_page(): void {
                             <input type="checkbox" name="lp_recaptcha_enabled" value="1" <?php checked($rc_enabled); ?>>
                             Проверять токен reCAPTCHA при отправке формы
                         </label>
-                        <?php if ($rc_enabled): ?>
-                        <form method="post" action="" style="display:inline-block;margin-left:16px;">
-                            <?php wp_nonce_field('lp_recaptcha_toggle', 'lp_recaptcha_toggle_nonce'); ?>
-                            <button type="submit" class="button button-secondary" style="color:#b32d2e;border-color:#b32d2e;"
-                                onclick="return confirm('Отключить reCAPTCHA? Ключи сохранятся, можно включить обратно.');">
-                                Выключить reCAPTCHA
-                            </button>
-                        </form>
-                        <?php endif; ?>
                     </td>
                 </tr>
                 <tr>
