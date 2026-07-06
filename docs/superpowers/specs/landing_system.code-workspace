@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "../../../../Lendings"
+		},
+		{
+			"path": "../../../../landing_system_v2"
 		}
 	],
 	"settings": {}

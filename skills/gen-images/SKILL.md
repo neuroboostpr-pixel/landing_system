@@ -93,62 +93,212 @@ python -m scripts.wiki.log --type skill_call --skill gen-images --stage 07c
    Иконка ч/б генерится → на сайте красится токеном мода (`fill/stroke:var(--lp-accent)` через `currentColor`).
 6. Кэш по hash(concepts+style+brand+niche). Метафоры/стиль — под нишу из `market-profile.md` + мод.
 
-**Промт (codex image_gen) — подставить CONCEPTS из текстов блока, стиль адаптировать под мод/нишу:**
+**Промт (codex image_gen) — подставить только CONCEPTS из текстов блока; стиль, ограничения и output уже зафиксированы:**
 
 ```
-Create a cohesive professional 3D icon set.
+Create a cohesive professional 3D icon set for the following concepts:
 
-CONCEPTS:[
+CONCEPTS:
 1. {текст элемента 1}
 2. {текст элемента 2}
 ...
 N. {текст элемента N}
-]
+
+Generate exactly one icon for each listed concept.
 
 CONCEPT SELECTION
-No reference image is provided.
-For each concept, choose the simplest and most recognizable visual metaphor used in modern
-financial and software interfaces. Use no more than two primary semantic elements per icon.
-Recommended metaphors (пример для финансов — адаптировать под нишу):
-* Финансовый план — clipboard or document with a simple financial chart
-* Первые долги — wallet or financial document with a minus symbol
-* Первые накопления — piggy bank or coin with a plus symbol
-* Поддержка шаг за шагом — staircase with a helping hand, person, or goal flag
-Preserve instant recognition. Avoid abstract, experimental, or decorative metaphors.
-Do not add text or labels inside the icons. Use the same visual language for all icons.
+
+Mode 1 — Reference Image Provided
+
+If a reference image is provided, analyze it only as instructed below.
+
+If the reference defines the meaning of a specific concept:
+
+* Preserve the primary semantic idea communicated by the reference.
+* Do not invent a different metaphor.
+* Do not replace it with a more common symbol.
+* Extract the minimum number of elements needed to preserve recognition.
+* Remove decorative and non-essential details.
+* Preserve meaning rather than exact appearance.
+
+If the reference is provided only as a style reference:
+
+* Preserve its material, depth, lighting, outline shape, proportions, shadows, and overall visual language.
+* Do not copy its specific objects or concepts.
+* Apply the same style consistently to all requested icons.
+
+If the written concept and its semantic reference communicate slightly different ideas, follow the semantic reference.
+
+Mode 2 — No Semantic Reference Provided
+
+For every concept:
+
+* Select the simplest and most recognizable visual metaphor.
+* Use established symbols from modern software, fintech, automotive, and premium digital interfaces.
+* Prioritize instant recognition over originality.
+* Use no more than two primary semantic elements whenever possible.
+* Avoid abstract, artistic, experimental, or overly clever interpretations.
+* Do not force vehicles, arrows, people, or other objects into concepts where they are unnecessary.
+* Make every icon recognizable at small interface sizes.
 
 STYLE
+
 Premium monochrome 3D outline icon set.
+
 Black and dark graphite icons on a pure white background.
-Rounded tubular outlines with visible physical thickness. Soft extruded depth. Smooth beveled edges.
-Subtle glossy highlights along the upper-left edges. Soft ambient shadows directly beneath and behind.
-Gentle studio lighting from the upper left. Matte black material with restrained metallic highlights.
-Clean, polished, tactile appearance. Modern premium fintech interface aesthetic.
-The icons should look like sculpted 3D versions of high-quality UI line icons.
+
+Rounded tubular outlines with visible physical thickness.
+
+Soft extruded depth.
+
+Smooth beveled edges.
+
+Subtle glossy highlights along the upper-left edges.
+
+Soft ambient shadows directly beneath and slightly behind each icon.
+
+Gentle studio lighting from the upper left.
+
+Matte black or dark graphite material with restrained metallic highlights.
+
+Clean, polished, tactile appearance.
+
+Modern premium digital product aesthetic.
+
+The icons should look like sculpted 3D versions of high-quality monoline UI icons.
+
+CONSISTENCY
+
+All icons must belong to one coherent visual system.
+
+Maintain consistent:
+
+* outline thickness
+* extrusion depth
+* bevel radius
+* corner rounding
+* lighting direction
+* shadow softness
+* material response
+* perspective
+* visual weight
+* scale
+* level of detail
+
+Do not mix flat icons, filled icons, realistic objects, or different rendering styles.
+
+ICON CONSTRUCTION
+
+Use one clear visual metaphor per concept.
+
+Use the minimum number of shapes required to communicate the meaning.
+
+Prefer simple geometric construction.
+
+Use clean curves and rounded corners.
+
+Keep balanced proportions and centered compositions.
+
+Avoid unnecessary internal lines and small details.
+
+Do not create complete scenes or illustrations.
+
+Do not add decorative elements that do not improve recognition.
+
+Avoid complex overlaps.
+
+Ensure every icon remains clear when reduced to a small size.
 
 COMPOSITION
-All N icons arranged on ONE SHEET as an evenly spaced GRID (multiple rows and columns;
-there may be many icons on the sheet, NOT a single row). Equal visual size. Equal spacing.
-Consistent viewing angle, outline thickness, extrusion depth, lighting and shadow direction.
-Generous white margins around every icon and around the whole set.
-Each icon must remain visually distinct and easy to crop into a separate square asset.
 
-VISUAL REQUIREMENTS
-Minimal geometric construction. Rounded corners. Clean curves. Balanced proportions.
-No unnecessary details. No realistic scenes. No characters with detailed faces.
-No text. No letters. No currency symbols other than a simple ₽ symbol where financially relevant.
-No colored elements. No gradients in the background. No complex reflections. No transparent glass.
-No photorealism. No excessive depth. No dramatic perspective. No floating decorative particles.
-No additional objects.
+Arrange all icons in a clean, structured layout appropriate to their number.
+
+For a small number of icons:
+
+* use a single horizontal row when practical
+
+For a larger number of icons:
+
+* use a balanced grid with equal columns and rows
+
+Keep:
+
+* equal spacing
+* equal visual size
+* consistent alignment
+* generous white margins
+* enough separation for easy cropping
+
+Each icon must occupy its own clear visual area and be easy to crop into an individual square asset.
+
+Do not place icons inside cards, circles, tiles, frames, or containers unless explicitly requested.
+
+RESTRICTIONS
+
+No text.
+
+No captions.
+
+No labels.
+
+No letters unless the letter or symbol is essential to the concept.
+
+No unnecessary currency symbols.
+
+No colored elements.
+
+No colored background.
+
+No background gradient.
+
+No dramatic reflections.
+
+No transparent glass.
+
+No photorealistic materials.
+
+No excessive gloss.
+
+No heavy metallic texture.
+
+No dramatic perspective.
+
+No complex environment.
+
+No floating particles.
+
+No decorative objects.
+
+No visual clutter.
+
+No duplicated metaphors unless two concepts genuinely require the same symbol.
+
+No additional icons beyond the supplied concept list.
 
 OUTPUT
-Generate exactly one cohesive image (one SHEET) containing all N icons in a grid.
-One icon per concept. One variation only. Pure white background. High resolution.
+
+Generate one cohesive image containing one icon for every listed concept.
+
+The total number of icons must exactly match the number of concepts.
+
+Use one final interpretation per concept.
+
+Do not generate alternative versions.
+
+Do not omit, combine, or add concepts.
+
+Use a pure white background.
+
+Use a canvas and aspect ratio appropriate for the number of icons.
+
+Use high resolution.
+
 Professional 3D icon library quality.
 ```
 
-> ⚙️ `STYLE`-блок подстраивается под мод (3D-премиум для тёмного; монолайн/flat для светлого editorial).
-> Метафоры — под нишу (`market-profile.md`). Цвет иконок на сайте — токен мода (иконка ч/б генерится, красится CSS).
+> ⚙️ В A2 передаём модели только список `CONCEPTS`; стиль, ограничения, sheet-композиция и правила соответствия количеству иконок зафиксированы прямо в prompt.
+> Отраслевая узнаваемость метафор допускается через список "modern software, fintech, automotive, and premium digital interfaces", без динамической пересборки `STYLE`-блока под нишу.
+> Цвет иконок на сайте по-прежнему может задаваться CSS-токенами после трассировки/inline-вставки, но baseline-генерация самого sheet теперь монохромная.
 
 ---
 
