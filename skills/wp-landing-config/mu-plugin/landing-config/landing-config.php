@@ -30,6 +30,7 @@ require_once LANDING_CONFIG_DIR . '/includes/admin-pages.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-general-settings.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-leads.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-leads-network.php';
+require_once LANDING_CONFIG_DIR . '/includes/admin-lead-audit.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-cta.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-snippets.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-lead-statuses.php';
@@ -85,6 +86,7 @@ add_action('init', function () {
     \LandingConfig\DB\maybe_migrate_b1_pd_consent();
     \LandingConfig\DB\maybe_migrate_roistat_visit();
     \LandingConfig\DB\maybe_migrate_recaptcha_score();
+    \LandingConfig\DB\maybe_migrate_lead_audit();
 }, 1);
 
 add_action('admin_init', function () {
