@@ -34,6 +34,13 @@ function update_option($key, $value) {
     return true;
 }
 
+function add_option($key, $value = '', $deprecated = '', $autoload = 'yes') {
+    $bid = get_current_blog_id();
+    if (array_key_exists($key, $GLOBALS['_mock_options'][$bid] ?? [])) { return false; }
+    $GLOBALS['_mock_options'][$bid][$key] = $value;
+    return true;
+}
+
 function get_site_option($key, $default = false) {
     return $GLOBALS['_mock_site_meta'][$key] ?? $default;
 }
@@ -137,11 +144,14 @@ if (!function_exists('sanitize_key')) {
 }
 function sanitize_email($v) { return is_string($v) ? filter_var(trim($v), FILTER_SANITIZE_EMAIL) : ''; }
 function esc_html($v) { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
-function current_time($fmt) { return date('Y-m-d H:i:s'); }
+function current_time($fmt, $gmt = false) {
+    if (array_key_exists('_lr_now', $GLOBALS)) { return $GLOBALS['_lr_now']; }
+    return date('Y-m-d H:i:s');
+}
 
 function wp_mail($to, $subject, $body, $headers = []) {
     $GLOBALS['_mock_mail_sent'][] = compact('to', 'subject', 'body');
-    return true;
+    return array_key_exists('_lr_mail_result', $GLOBALS) ? (bool)$GLOBALS['_lr_mail_result'] : true;
 }
 
 function get_bloginfo($key) {
@@ -232,9 +242,22 @@ class WP_REST_Request {
 }
 
 function wp_remote_post($url, $args) {
+    if (array_key_exists('_lr_http', $GLOBALS)) {
+        $GLOBALS['_lr_http_requests'][] = compact('url', 'args');
+        return $GLOBALS['_lr_http'];
+    }
     return ['response' => ['code' => 200], 'body' => '{"ok":true}'];
 }
-function is_wp_error($v) { return false; }
+if (!class_exists('WP_Error')) {
+    class WP_Error {
+        private string $code;
+        private string $message;
+        public function __construct(string $code = '', string $message = '') { $this->code = $code; $this->message = $message; }
+        public function get_error_code(): string { return $this->code; }
+        public function get_error_message(): string { return $this->message; }
+    }
+}
+function is_wp_error($value) { return $value instanceof WP_Error; }
 function wp_remote_retrieve_response_code($r) { return $r['response']['code'] ?? 0; }
 function wp_remote_retrieve_body($r) { return $r['body'] ?? ''; }
 
