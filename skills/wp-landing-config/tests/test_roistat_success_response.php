@@ -52,6 +52,13 @@ $error = $adapter->send($lead, $settings);
 $assert(($error['ok'] ?? true) === false, 'unrecognised HTTP 200 body is not a false success');
 
 $GLOBALS['_lr_http'] = [
+    'response' => ['code' => 200],
+    'body' => 'lead was successfully created',
+];
+$case_variant = $adapter->send($lead, $settings);
+$assert(($case_variant['ok'] ?? true) === false, 'plain-text success phrase is case-sensitive and exact');
+
+$GLOBALS['_lr_http'] = [
     'response' => ['code' => 500],
     'body' => 'Lead was successfully created',
 ];

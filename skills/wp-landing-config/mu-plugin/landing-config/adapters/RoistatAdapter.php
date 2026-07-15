@@ -140,6 +140,6 @@ class RoistatAdapter implements AdapterInterface {
     private static function is_confirmed_success(int $code, string $body, $json): bool {
         if ($code < 200 || $code >= 300) return false;
         if (is_array($json) && ($json['status'] ?? '') === 'ok') return true;
-        return strcasecmp(trim($body), 'Lead was successfully created') === 0;
+        return trim($body) === 'Lead was successfully created';
     }
 }
