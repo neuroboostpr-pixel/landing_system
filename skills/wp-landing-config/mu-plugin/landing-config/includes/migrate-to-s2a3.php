@@ -133,6 +133,8 @@ function migrate_integrations_from_options(int $network_blog_id): int {
         // passing them would cause double-encryption in save_integration → _encrypt_settings.
         save_integration(
             $adapter_name,
+            $adapter_name,   // label — preserve the legacy adapter-slug title
+            '',              // description — unavailable in legacy options
             $collected['settings'],
             true,            // is_network
             $network_blog_id,
@@ -166,6 +168,8 @@ function migrate_subsite_integrations(int $blog_id): int {
 
             save_integration(
                 $adapter_name,
+                $adapter_name, // label — preserve the legacy adapter-slug title
+                '',            // description — unavailable in legacy options
                 $collected['settings'],
                 false,   // is_network — site-level for subsite
                 $blog_id,

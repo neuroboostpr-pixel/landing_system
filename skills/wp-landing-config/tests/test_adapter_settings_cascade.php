@@ -26,12 +26,12 @@ assert_test(isset($def['bot_token']['encrypt']) && $def['bot_token']['encrypt'] 
 
 // T2: settings() reads via cascade
 reset_ad();
-save_integration('telegram', ['bot_token' => 'NETBOT', 'chat_id' => '-100'], true, 1, ['bot_token']);
+save_integration('telegram', 'telegram', '', ['bot_token' => 'NETBOT', 'chat_id' => '-100'], true, 1, ['bot_token']);
 $s = TelegramAdapter::settings();
 assert_test($s['bot_token'] === 'NETBOT', 'T2 network settings via cascade');
 
 $GLOBALS['_mock_current_blog_id'] = 2;
-save_integration('telegram', ['bot_token' => 'SITEBOT', 'chat_id' => '-200'], false, 2, ['bot_token']);
+save_integration('telegram', 'telegram', '', ['bot_token' => 'SITEBOT', 'chat_id' => '-200'], false, 2, ['bot_token']);
 $s = TelegramAdapter::settings();
 assert_test($s['bot_token'] === 'SITEBOT', 'T2b site override via cascade');
 

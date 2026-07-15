@@ -193,6 +193,26 @@ class MockWpdbInsert extends MockWpdb {
         return 1;
     }
 
+    public function update($table, $data, $where, $formats = null, $where_formats = null) {
+        $changed = 0;
+        foreach ($GLOBALS['_mock_inserted_leads'] as $index => $row) {
+            if (($row['table'] ?? '') !== $table) { continue; }
+
+            $matches = true;
+            foreach ($where as $key => $value) {
+                $actual = $key === 'id'
+                    ? $index + 101
+                    : ($row['data'][$key] ?? null);
+                if ($actual != $value) { $matches = false; break; }
+            }
+            if ($matches) {
+                $GLOBALS['_mock_inserted_leads'][$index]['data'] = array_merge($row['data'], $data);
+                $changed++;
+            }
+        }
+        return $changed;
+    }
+
     public function get_results($sql, $output = OBJECT) {
         if (strpos($sql, 'landing_lead_status_log') !== false) {
             if (!isset($GLOBALS['_mock_status_log'])) { $GLOBALS['_mock_status_log'] = []; }

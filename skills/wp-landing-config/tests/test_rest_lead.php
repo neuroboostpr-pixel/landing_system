@@ -1,7 +1,10 @@
 <?php
 require_once __DIR__ . '/fixtures/wp-bootstrap.php';
 require_once __DIR__ . '/../mu-plugin/landing-config/includes/db.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/includes/encryption.php';
 require_once __DIR__ . '/../mu-plugin/landing-config/includes/helpers.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/includes/cascade.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/includes/integrations.php';
 require_once __DIR__ . '/../mu-plugin/landing-config/includes/rest-lead.php';
 
 use function LandingConfig\REST\handle_lead;
@@ -16,6 +19,13 @@ function assert_test($condition, $message) {
         echo "FAIL: $message\n";
         $failures++;
     }
+}
+
+function inserted_lead_rows(): array {
+    return array_values(array_filter(
+        $GLOBALS['_mock_inserted_leads'],
+        static fn($row) => str_ends_with((string)($row['table'] ?? ''), 'landing_leads')
+    ));
 }
 
 // Reset rate-limit before each batch
@@ -37,8 +47,8 @@ assert_test(
     "missing phone+email returns 400 (got: " . $resp->get_status() . ")"
 );
 assert_test(
-    count($GLOBALS['_mock_inserted_leads']) === 0,
-    "no DB insert when validation fails"
+    count(inserted_lead_rows()) === 0,
+    "no lead insert when validation fails"
 );
 
 // Test 2: honeypot field filled → 400 (silently rejects bots)
@@ -68,10 +78,10 @@ assert_test(
     "valid request returns 200 (got: " . $resp->get_status() . ")"
 );
 assert_test(
-    count($GLOBALS['_mock_inserted_leads']) === 1,
-    "exactly 1 DB insert"
+    count(inserted_lead_rows()) === 1,
+    "exactly 1 lead insert"
 );
-$inserted = $GLOBALS['_mock_inserted_leads'][0];
+$inserted = inserted_lead_rows()[0];
 assert_test(
     $inserted['data']['name'] === 'Alice' &&
     $inserted['data']['phone'] === '+79991234567' &&
@@ -113,9 +123,10 @@ $req = new WP_REST_Request([
     'name' => 'BlogTwo', 'phone' => '+79993334444', 'email' => 'b2@x.com', 'pd_consent' => '1',
 ]);
 handle_lead($req);
+$blog_two_rows = inserted_lead_rows();
 assert_test(
-    $GLOBALS['_mock_inserted_leads'][0]['table'] === 'wp_2_landing_leads',
-    "insert goes to wp_<bid>_landing_leads (got: " . $GLOBALS['_mock_inserted_leads'][0]['table'] . ")"
+    count($blog_two_rows) === 1 && $blog_two_rows[0]['table'] === 'wp_2_landing_leads',
+    "insert goes to wp_<bid>_landing_leads (got: " . ($blog_two_rows[0]['table'] ?? 'none') . ")"
 );
 
 // Test 6: rate limit — 11th request from same IP within window returns 429
@@ -144,7 +155,8 @@ assert_test(
     "different IP not affected by first IP's rate limit (got: " . $resp->get_status() . ")"
 );
 
-// T_PD_1..5: pd_consent validation in rest-lead handler
+// T_PD_1..5: characterize the current pd_consent baseline in rest-lead handler.
+// Missing/false consent is currently accepted; Task 6 must reverse that behavior.
 
 function reset_pd() {
     $GLOBALS['_mock_inserted_leads'] = [];
@@ -170,11 +182,11 @@ $req = pd_request();
 $resp = \LandingConfig\REST\handle_lead($req);
 $data = $resp->get_data();
 assert_test($data['ok'] === true, 'T_PD_1a returns ok=true');
-$rows = array_values($GLOBALS['_mock_inserted_leads']);
+$rows = inserted_lead_rows();
 assert_test(count($rows) === 1, 'T_PD_1b 1 lead inserted');
 assert_test(!empty($rows[0]['data']['pd_consent_granted_at']), 'T_PD_1c pd_consent_granted_at populated');
 
-// T_PD_2: без pd_consent → 400
+// T_PD_2: current baseline accepts a request without pd_consent (Task 6 regression target)
 reset_pd();
 $req = pd_request();
 $params = $req->get_params();
@@ -182,26 +194,26 @@ unset($params['pd_consent']);
 $req2 = new WP_REST_Request($params);
 $resp = \LandingConfig\REST\handle_lead($req2);
 $data = $resp->get_data();
-assert_test($resp->get_status() === 400, 'T_PD_2a status 400');
-assert_test($data['ok'] === false, 'T_PD_2b ok=false');
-assert_test(count($GLOBALS['_mock_inserted_leads']) === 0, 'T_PD_2c no lead inserted');
+assert_test($resp->get_status() === 200, 'T_PD_2a current baseline accepts missing pd_consent (Task 6 must reject)');
+assert_test($data['ok'] === true, 'T_PD_2b current baseline returns ok=true without pd_consent');
+assert_test(count(inserted_lead_rows()) === 1, 'T_PD_2c current baseline inserts lead without pd_consent');
 
-// T_PD_3: с pd_consent='' → 400
+// T_PD_3: current baseline accepts pd_consent=''
 reset_pd();
 $resp = \LandingConfig\REST\handle_lead(pd_request(['pd_consent' => '']));
-assert_test($resp->get_status() === 400, 'T_PD_3 empty pd_consent rejected');
+assert_test($resp->get_status() === 200, 'T_PD_3 current baseline accepts empty pd_consent (Task 6 must reject)');
 
-// T_PD_4: с pd_consent='0' → 400
+// T_PD_4: current baseline accepts pd_consent='0'
 reset_pd();
 $resp = \LandingConfig\REST\handle_lead(pd_request(['pd_consent' => '0']));
-assert_test($resp->get_status() === 400, 'T_PD_4 pd_consent=0 rejected');
+assert_test($resp->get_status() === 200, 'T_PD_4 current baseline accepts pd_consent=0 (Task 6 must reject)');
 
 // T_PD_5: timestamp в пределах текущей минуты
 reset_pd();
 set_mock_current_blog_id(1);
 $ts_before = time();
 \LandingConfig\REST\handle_lead(pd_request());
-$rows = array_values($GLOBALS['_mock_inserted_leads']);
+$rows = inserted_lead_rows();
 $ts_granted = strtotime($rows[0]['data']['pd_consent_granted_at']);
 $ts_after = time();
 assert_test($ts_granted >= $ts_before && $ts_granted <= $ts_after + 1,

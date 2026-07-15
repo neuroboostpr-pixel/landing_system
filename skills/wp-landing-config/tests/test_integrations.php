@@ -23,7 +23,7 @@ function reset_int() {
 
 // T1 round-trip with encrypted field
 reset_int();
-$id = save_integration('telegram', ['bot_token' => 'SECRET123', 'chat_id' => '-1001'], true, 1, ['bot_token']);
+$id = save_integration('telegram', 'telegram', '', ['bot_token' => 'SECRET123', 'chat_id' => '-1001'], true, 1, ['bot_token']);
 assert_test($id > 0, 'T1a save_integration returned id');
 $row = get_integration($id);
 assert_test($row['settings']['bot_token'] === 'SECRET123', 'T1b token decrypted on get');
@@ -31,9 +31,9 @@ assert_test($row['adapter_name'] === 'telegram' && $row['is_network'] === true, 
 
 // T2 cascade override
 reset_int();
-save_integration('amocrm', ['domain' => 'net.amocrm.ru', 'token' => 'NET'], true, 1, ['token']);
+save_integration('amocrm', 'amocrm', '', ['domain' => 'net.amocrm.ru', 'token' => 'NET'], true, 1, ['token']);
 $GLOBALS['_mock_current_blog_id'] = 2;
-save_integration('amocrm', ['domain' => 'site.amocrm.ru', 'token' => 'SITE'], false, 2, ['token']);
+save_integration('amocrm', 'amocrm', '', ['domain' => 'site.amocrm.ru', 'token' => 'SITE'], false, 2, ['token']);
 $r = resolve_integration('amocrm', 2);
 assert_test($r['settings']['domain'] === 'site.amocrm.ru', 'T2a site override domain');
 assert_test($r['settings']['token'] === 'SITE', 'T2b site override token decrypted');
@@ -42,24 +42,25 @@ assert_test($r['settings']['token'] === 'SITE', 'T2b site override token decrypt
 $r = resolve_integration('amocrm', 1);
 assert_test($r['settings']['domain'] === 'net.amocrm.ru', 'T3 network fallback');
 
-// T4 list merge
+// T4 list calls remain scoped to the requested blog under the multi-record API
 reset_int();
-save_integration('email', ['to' => 'net@x.ru'], true, 1, []);
+save_integration('email', 'email', '', ['to' => 'net@x.ru'], true, 1, []);
 $GLOBALS['_mock_current_blog_id'] = 2;
-save_integration('telegram', ['bot_token' => 'T', 'chat_id' => '1'], false, 2, ['bot_token']);
-$list = list_integrations(2);
-$names = array_column($list, 'adapter_name');
-assert_test(in_array('email', $names) && in_array('telegram', $names), 'T4 list merge');
+save_integration('telegram', 'telegram', '', ['bot_token' => 'T', 'chat_id' => '1'], false, 2, ['bot_token']);
+$site_names = array_column(list_integrations(2), 'adapter_name');
+$network_names = array_column(list_integrations(1), 'adapter_name');
+assert_test($site_names === ['telegram'], 'T4a site list contains exactly the site record');
+assert_test($network_names === ['email'], 'T4b network list contains exactly the network record');
 
 // T5 delete
 reset_int();
-$id = save_integration('email', ['to' => 'x@y.z'], false, 1, []);
+$id = save_integration('email', 'email', '', ['to' => 'x@y.z'], false, 1, []);
 assert_test(delete_integration($id) === true && get_integration($id) === null, 'T5 delete works');
 
 // T6 update path — repeated save with $post_id updates instead of duplicating
 reset_int();
-$id1 = save_integration('telegram', ['bot_token' => 'OLD', 'chat_id' => '1'], false, 1, ['bot_token']);
-$id2 = save_integration('telegram', ['bot_token' => 'NEW', 'chat_id' => '2'], false, 1, ['bot_token'], true, $id1);
+$id1 = save_integration('telegram', 'telegram', '', ['bot_token' => 'OLD', 'chat_id' => '1'], false, 1, ['bot_token']);
+$id2 = save_integration('telegram', 'telegram', '', ['bot_token' => 'NEW', 'chat_id' => '2'], false, 1, ['bot_token'], true, $id1);
 assert_test($id1 === $id2, 'T6a update reuses same post id');
 $row = get_integration($id1);
 assert_test($row['settings']['chat_id'] === '2', 'T6b updated value persists');
