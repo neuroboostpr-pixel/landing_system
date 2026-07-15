@@ -43,11 +43,12 @@ class Bitrix24Adapter implements AdapterInterface {
         return $out;
     }
 
-    public function send(array $lead): array {
-        $s = static::settings();
-        $url_raw = $s['webhook_url'] ?? \landing_config_get('integration_bitrix24_webhook_url');
+    public function send(array $lead, ?array $settings = null): array {
+        $explicit = $settings !== null;
+        $s = $explicit ? $settings : static::settings();
+        $url_raw = $s['webhook_url'] ?? ($explicit ? '' : \landing_config_get('integration_bitrix24_webhook_url'));
         $url = $url_raw ? (str_starts_with($url_raw, 'v1:') ? decrypt($url_raw) : $url_raw) : '';
-        if ($url === '') return ['ok' => false, 'response_code' => null, 'response_body' => '', 'error' => 'webhook URL missing'];
+        if ($url === '') return ['ok' => false, 'status' => 'failed_permanent', 'response_code' => null, 'response_body' => '', 'error' => 'webhook URL missing'];
 
         $endpoint = rtrim($url, '/') . '/crm.lead.add.json';
         $payload = [

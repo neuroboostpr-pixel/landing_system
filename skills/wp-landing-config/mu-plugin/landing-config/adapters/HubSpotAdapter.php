@@ -41,11 +41,12 @@ class HubSpotAdapter implements AdapterInterface {
         return $out;
     }
 
-    public function send(array $lead): array {
-        $s = static::settings();
-        $token_raw = $s['access_token'] ?? \landing_config_get('integration_hubspot_access_token');
+    public function send(array $lead, ?array $settings = null): array {
+        $explicit = $settings !== null;
+        $s = $explicit ? $settings : static::settings();
+        $token_raw = $s['access_token'] ?? ($explicit ? '' : \landing_config_get('integration_hubspot_access_token'));
         $token = $token_raw ? (str_starts_with($token_raw, 'v1:') ? decrypt($token_raw) : $token_raw) : '';
-        if ($token === '') return ['ok' => false, 'response_code' => null, 'response_body' => '', 'error' => 'token missing'];
+        if ($token === '') return ['ok' => false, 'status' => 'failed_permanent', 'response_code' => null, 'response_body' => '', 'error' => 'token missing'];
 
         $payload = [
             'properties' => [

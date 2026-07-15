@@ -46,19 +46,20 @@ class AmoCRMAdapter implements AdapterInterface {
         return $out;
     }
 
-    public function send(array $lead): array {
-        $s = static::settings();
-        $sub = $s['subdomain'] ?? \landing_config_get('integration_amocrm_subdomain');
-        $token_raw = $s['access_token'] ?? \landing_config_get('integration_amocrm_access_token');
+    public function send(array $lead, ?array $settings = null): array {
+        $explicit = $settings !== null;
+        $s = $explicit ? $settings : static::settings();
+        $sub = $s['subdomain'] ?? ($explicit ? '' : \landing_config_get('integration_amocrm_subdomain'));
+        $token_raw = $s['access_token'] ?? ($explicit ? '' : \landing_config_get('integration_amocrm_access_token'));
         $token = $token_raw ? (str_starts_with($token_raw, 'v1:') ? decrypt($token_raw) : $token_raw) : '';
         if ($sub === '' || $token === '') {
-            return ['ok' => false, 'response_code' => null, 'response_body' => '', 'error' => 'subdomain or token missing'];
+            return ['ok' => false, 'status' => 'failed_permanent', 'response_code' => null, 'response_body' => '', 'error' => 'subdomain or token missing'];
         }
 
         $payload = [[
             'name' => "Заявка с сайта: {$lead['name']}",
             'created_at' => time(),
-            'responsible_user_id' => (int)\landing_config_get('integration_amocrm_responsible_user_id', 0) ?: null,
+            'responsible_user_id' => (int)($s['responsible_user_id'] ?? ($explicit ? 0 : \landing_config_get('integration_amocrm_responsible_user_id', 0))) ?: null,
             '_embedded' => [
                 'contacts' => [[
                     'name' => $lead['name'] ?: 'Без имени',

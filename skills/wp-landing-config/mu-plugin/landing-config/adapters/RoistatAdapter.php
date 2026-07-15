@@ -43,11 +43,11 @@ class RoistatAdapter implements AdapterInterface {
         return $out;
     }
 
-    public function send(array $lead): array {
-        $s = static::settings();
+    public function send(array $lead, ?array $settings = null): array {
+        $s = $settings ?? static::settings();
         $url_raw = $s['webhook_url'] ?? '';
         $url = $url_raw ? (str_starts_with($url_raw, 'v1:') ? decrypt($url_raw) : $url_raw) : '';
-        if ($url === '') return ['ok' => false, 'response_code' => null, 'response_body' => '', 'error' => 'webhook URL missing'];
+        if ($url === '') return ['ok' => false, 'status' => 'failed_permanent', 'response_code' => null, 'response_body' => '', 'error' => 'webhook URL missing'];
 
         $site_url = rtrim($s['site_url'] ?? get_home_url(), '/') . '/';
         $name  = $lead['name'] ?? '';

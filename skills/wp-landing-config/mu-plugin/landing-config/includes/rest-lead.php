@@ -26,53 +26,6 @@ add_action('rest_api_init', function () {
 });
 
 /**
- * Verify reCAPTCHA v3 token with Google.
- * Returns score (float 0.0-1.0) on success, null on network error or missing token.
- * Returns false if token is invalid (score below threshold or verification failed).
- *
- * Fail-open: returns null (not false) on network errors so forms still work
- * when Google API is unreachable.
- */
-function verify_recaptcha(string $token): ?float {
-    if (get_option('lp_recaptcha_enabled', '0') !== '1') {
-        return null; // disabled — skip
-    }
-
-    if ($token === '') {
-        return null; // no token — skip (frontend may not have loaded yet)
-    }
-
-    $secret_enc = (string) get_option('lp_recaptcha_secret_key_enc', '');
-    if ($secret_enc === '') {
-        return null; // not configured — skip
-    }
-
-    $secret = $secret_enc;
-    if (str_starts_with($secret_enc, 'v1:')) {
-        $secret = \LandingConfig\Encryption\decrypt($secret_enc);
-    }
-    if ($secret === '') {
-        return null;
-    }
-
-    $response = wp_remote_post('https://www.google.com/recaptcha/api/siteverify', [
-        'timeout' => 5,
-        'body'    => ['secret' => $secret, 'response' => $token],
-    ]);
-
-    if (is_wp_error($response)) {
-        return null; // network error — fail open
-    }
-
-    $body = json_decode(wp_remote_retrieve_body($response), true);
-    if (!is_array($body) || empty($body['success'])) {
-        return 0.0; // invalid token
-    }
-
-    return (float) ($body['score'] ?? 0.0);
-}
-
-/**
  * Insert one row into landing_lead_audit. Called at the very start of handle_lead
  * (before any checks) and updated with lead_id on success.
  * Returns the audit row id so the caller can update it later.
@@ -125,6 +78,73 @@ function audit_log_success(int $audit_id, int $lead_id): void {
     );
 }
 
+/**
+ * Reduce an integration result to non-sensitive evidence. Provider response
+ * bodies frequently echo the submitted contact, so only a hash and byte count
+ * are allowed into WordPress delivery history.
+ */
+function safe_delivery_summary(array $result): array {
+    $ok = ($result['ok'] ?? false) === true;
+    $code = isset($result['response_code']) && is_numeric($result['response_code'])
+        ? (int) $result['response_code']
+        : null;
+    $raw_body = is_string($result['response_body'] ?? null)
+        ? (string) $result['response_body']
+        : '';
+
+    $requested_status = is_string($result['status'] ?? null) ? $result['status'] : '';
+    $allowed_statuses = ['success', 'accepted', 'retry_wait', 'failed_permanent', 'unknown'];
+    if (in_array($requested_status, $allowed_statuses, true)) {
+        $status = $requested_status;
+    } elseif ($ok) {
+        $status = 'success';
+    } elseif ($code === null || $code >= 500 || $code === 408 || $code === 409) {
+        $status = 'unknown';
+    } elseif ($code === 429) {
+        $status = 'retry_wait';
+    } else {
+        $status = 'failed_permanent';
+    }
+
+    $outcome = $ok ? 'accepted' : 'not_confirmed';
+    $body_evidence = 'provider_result; outcome=' . $outcome
+        . '; body_sha256=' . hash('sha256', $raw_body)
+        . '; bytes=' . strlen($raw_body);
+
+    return [
+        'status'        => $status,
+        'response_code' => $code,
+        'response_body' => $body_evidence,
+        'error_text'    => $ok ? null : 'provider_error',
+    ];
+}
+
+function log_delivery_attempt(int $lead_id, string $adapter, array $result): void {
+    if ($lead_id <= 0 || $adapter === '') return;
+
+    global $wpdb;
+    $safe = safe_delivery_summary($result);
+    $wpdb->insert(\LandingConfig\DB\get_lead_log_table_name(), [
+        'lead_id'       => $lead_id,
+        'adapter'       => sanitize_key($adapter),
+        'attempt'       => 1,
+        'status'        => $safe['status'],
+        'response_code' => $safe['response_code'],
+        'response_body' => $safe['response_body'],
+        'error_text'    => $safe['error_text'],
+        'created_at'    => current_time('mysql'),
+    ]);
+
+    // Only internal identifiers are written to debug.log; never contacts,
+    // provider bodies, webhook URLs or credentials.
+    error_log(sprintf(
+        '[landing-config] delivery lead_id=%d adapter=%s status=%s',
+        $lead_id,
+        sanitize_key($adapter),
+        $safe['status']
+    ));
+}
+
 function handle_lead($request) {
     $params = $request->get_params();
     $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
@@ -138,6 +158,13 @@ function handle_lead($request) {
         return new \WP_REST_Response(['ok' => false, 'error' => 'invalid'], 400);
     }
 
+    // Consent must be an explicit affirmative value from a real checkbox.
+    // The early audit above preserves the attempted contact for diagnosis.
+    if ((string) ($params['pd_consent'] ?? '') !== '1') {
+        audit_log_block($audit_id, 'pd_consent', 'explicit consent missing');
+        return new \WP_REST_Response(['ok' => false, 'error' => 'pd_consent'], 400);
+    }
+
     // Rate limit per IP — transient-based.
     $rl_key = 'landing_lead_rl_' . md5($ip);
     $rl_count = (int) get_transient($rl_key);
@@ -146,15 +173,6 @@ function handle_lead($request) {
         return new \WP_REST_Response(['ok' => false, 'error' => 'rate_limit'], 429);
     }
     set_transient($rl_key, $rl_count + 1, HOUR_IN_SECONDS);
-
-    // reCAPTCHA v3 verification (fail-open on network errors)
-    $recaptcha_token = sanitize_text_field(wp_unslash($params['recaptcha_token'] ?? ''));
-    $recaptcha_score = verify_recaptcha($recaptcha_token);
-    $threshold = (float) get_option('lp_recaptcha_threshold', '0.5');
-    if ($recaptcha_score !== null && $recaptcha_score < $threshold) {
-        audit_log_block($audit_id, 'recaptcha_failed', 'score=' . number_format((float)$recaptcha_score, 2));
-        return new \WP_REST_Response(['ok' => false, 'error' => 'recaptcha_failed'], 403);
-    }
 
     // Required: at least one of phone or email
     $name = sanitize_text_field(wp_unslash($params['name'] ?? ''));
@@ -185,7 +203,7 @@ function handle_lead($request) {
         'created_at'       => current_time('mysql'),
         'processed_status'      => 'pending',
         'pd_consent_granted_at' => current_time('mysql'),
-        'recaptcha_score'       => $recaptcha_score !== null ? number_format((float)$recaptcha_score, 2, '.', '') : null,
+        'recaptcha_score'       => null,
     ];
 
     global $wpdb;
@@ -194,13 +212,14 @@ function handle_lead($request) {
         audit_log_block($audit_id, 'db_error', $wpdb->last_error);
         return new \WP_REST_Response(['ok' => false, 'error' => 'db_error'], 500);
     }
-    $lead_id = $wpdb->insert_id;
+    $lead_id = (int) $wpdb->insert_id;
+    if ($lead_id <= 0) {
+        audit_log_block($audit_id, 'db_error', 'lead insert did not return a positive id');
+        return new \WP_REST_Response(['ok' => false, 'error' => 'db_error'], 500);
+    }
 
     // Audit: пометить как успешно сохранённую заявку
     audit_log_success($audit_id, $lead_id);
-
-    // Email fallback — never block user response on this; wp_mail silently fails if SMTP down
-    send_admin_email($data, $lead_id);
 
     // Dispatch to all active integrations
     dispatch_all_integrations(['id' => $lead_id] + $data);
@@ -222,22 +241,54 @@ function dispatch_all_integrations(array $lead): void {
 
         $type = $integration['adapter_type'];
 
-        if ($type === 'telegram') {
-            _send_telegram($integration['settings'], $lead);
-        } else {
-            $map = [
-                'email'    => '\\LandingConfig\\Adapters\\EmailAdapter',
-                'whatsapp' => '\\LandingConfig\\Adapters\\WhatsAppAdapter',
-                'amocrm'   => '\\LandingConfig\\Adapters\\AmoCRMAdapter',
-                'bitrix24' => '\\LandingConfig\\Adapters\\Bitrix24Adapter',
-                'hubspot'  => '\\LandingConfig\\Adapters\\HubSpotAdapter',
-                'roistat'  => '\\LandingConfig\\Adapters\\RoistatAdapter',
-            ];
-            if (!empty($map[$type]) && class_exists($map[$type])) {
-                $adapter = new $map[$type]();
-                $adapter->send($lead);
+        try {
+            if ($type === 'telegram') {
+                $result = _send_telegram($integration['settings'], $lead);
+            } else {
+                $map = [
+                    'email'    => '\\LandingConfig\\Adapters\\EmailAdapter',
+                    'whatsapp' => '\\LandingConfig\\Adapters\\WhatsAppAdapter',
+                    'amocrm'   => '\\LandingConfig\\Adapters\\AmoCRMAdapter',
+                    'bitrix24' => '\\LandingConfig\\Adapters\\Bitrix24Adapter',
+                    'hubspot'  => '\\LandingConfig\\Adapters\\HubSpotAdapter',
+                    'roistat'  => '\\LandingConfig\\Adapters\\RoistatAdapter',
+                ];
+                if (empty($map[$type]) || !class_exists($map[$type])) {
+                    $result = [
+                        'ok' => false,
+                        'status' => 'failed_permanent',
+                        'response_code' => null,
+                        'response_body' => '',
+                        'error' => 'unsupported_adapter',
+                    ];
+                } else {
+                    $adapter = new $map[$type]();
+                    $result = $adapter->send($lead, (array) ($integration['settings'] ?? []));
+                }
             }
+        } catch (\Throwable $e) {
+            $result = [
+                'ok' => false,
+                'status' => 'unknown',
+                'response_code' => null,
+                'response_body' => '',
+                'error' => 'adapter_exception',
+            ];
         }
+
+        if (!is_array($result)) {
+            $result = [
+                'ok' => false,
+                'status' => 'unknown',
+                'response_code' => null,
+                'response_body' => '',
+                'error' => 'invalid_adapter_result',
+            ];
+        }
+        if ($type === 'email' && ($result['ok'] ?? false) === true) {
+            $result['status'] = 'accepted';
+        }
+        log_delivery_attempt((int) ($lead['id'] ?? 0), (string) $type, $result);
     }
 }
 
@@ -255,11 +306,19 @@ function _tg_escape_markdown(string $text): string {
     );
 }
 
-function _send_telegram(array $settings, array $lead): void {
+function _send_telegram(array $settings, array $lead): array {
     $token_raw = $settings['bot_token'] ?? '';
     $token     = $token_raw ? (str_starts_with($token_raw, 'v1:') ? \LandingConfig\Encryption\decrypt($token_raw) : $token_raw) : '';
     $chat_id   = $settings['chat_id'] ?? '';
-    if ($token === '' || $chat_id === '') return;
+    if ($token === '' || $chat_id === '') {
+        return [
+            'ok' => false,
+            'status' => 'failed_permanent',
+            'response_code' => null,
+            'response_body' => '',
+            'error' => 'configuration_missing',
+        ];
+    }
 
     $id      = $lead['id'] ?? '?';
     $name    = _tg_escape_markdown($lead['name'] ?? '');
@@ -286,41 +345,36 @@ function _send_telegram(array $settings, array $lead): void {
           . "\xF0\x9F\x94\x97 UTM: " . ($utm     ?: '—') . "\n";
 
     $resp = \wp_remote_post("https://api.telegram.org/bot{$token}/sendMessage", [
-        'timeout' => 10,
+        'timeout' => 8,
+        'redirection' => 0,
         'body'    => ['chat_id' => $chat_id, 'text' => $text, 'parse_mode' => 'Markdown'],
     ]);
 
-    // Log failures instead of failing silently — makes future issues visible
-    // in Debug Log Manager / debug.log instead of requiring manual API testing.
     if (\is_wp_error($resp)) {
-        error_log('[landing-config] Telegram send error: ' . $resp->get_error_message());
-    } else {
-        $code = \wp_remote_retrieve_response_code($resp);
-        if ($code !== 200) {
-            error_log('[landing-config] Telegram API error ' . $code . ': ' . \wp_remote_retrieve_body($resp));
-        }
+        return [
+            'ok' => false,
+            'status' => 'unknown',
+            'response_code' => null,
+            'response_body' => '',
+            'error' => 'transport_error',
+        ];
     }
-}
 
-function send_admin_email(array $data, int $lead_id): void {
-    $admin_email = get_bloginfo('admin_email');
-    if (empty($admin_email)) return;
+    $code = \wp_remote_retrieve_response_code($resp);
+    $body = (string) \wp_remote_retrieve_body($resp);
+    $json = json_decode($body, true);
+    $message_id = is_array($json) ? ($json['result']['message_id'] ?? null) : null;
+    $confirmed = $code === 200
+        && is_array($json)
+        && ($json['ok'] ?? null) === true
+        && (is_int($message_id) || (is_string($message_id) && ctype_digit($message_id)))
+        && (int) $message_id > 0;
 
-    $subject = sprintf('[%s] Новая заявка #%d', get_bloginfo('name'), $lead_id);
-    $body = "Получена новая заявка:\n\n";
-    foreach (['name', 'phone', 'email', 'message', 'source_block'] as $field) {
-        if (!empty($data[$field])) {
-            $body .= ucfirst($field) . ': ' . $data[$field] . "\n";
-        }
-    }
-    $utm_parts = [];
-    foreach (['utm_source', 'utm_medium', 'utm_campaign'] as $u) {
-        if (!empty($data[$u])) {
-            $utm_parts[] = "$u={$data[$u]}";
-        }
-    }
-    if ($utm_parts) {
-        $body .= "\nUTM: " . implode(', ', $utm_parts) . "\n";
-    }
-    wp_mail($admin_email, $subject, $body);
+    return [
+        'ok' => $confirmed,
+        'status' => $confirmed ? 'success' : (($code >= 500 || $code === 0) ? 'unknown' : 'failed_permanent'),
+        'response_code' => $code ?: null,
+        'response_body' => $body,
+        'error' => $confirmed ? null : 'telegram_not_confirmed',
+    ];
 }

@@ -52,14 +52,15 @@ class WhatsAppAdapter implements AdapterInterface {
         return $out;
     }
 
-    public function send(array $lead): array {
-        $s = static::settings();
-        $token_raw = $s['access_token'] ?? \landing_config_get('integration_whatsapp_access_token');
+    public function send(array $lead, ?array $settings = null): array {
+        $explicit = $settings !== null;
+        $s = $explicit ? $settings : static::settings();
+        $token_raw = $s['access_token'] ?? ($explicit ? '' : \landing_config_get('integration_whatsapp_access_token'));
         $token = $token_raw ? (str_starts_with($token_raw, 'v1:') ? decrypt($token_raw) : $token_raw) : '';
-        $phone_id = $s['phone_number_id'] ?? \landing_config_get('integration_whatsapp_phone_id');
-        $to = preg_replace('/[^0-9]/', '', $s['to_phone'] ?? \landing_config_get('integration_whatsapp_to_phone'));
+        $phone_id = $s['phone_number_id'] ?? ($explicit ? '' : \landing_config_get('integration_whatsapp_phone_id'));
+        $to = preg_replace('/[^0-9]/', '', $s['to_phone'] ?? ($explicit ? '' : \landing_config_get('integration_whatsapp_to_phone')));
         if ($token === '' || $phone_id === '' || $to === '') {
-            return ['ok' => false, 'response_code' => null, 'response_body' => '', 'error' => 'Token/phone_id/to missing'];
+            return ['ok' => false, 'status' => 'failed_permanent', 'response_code' => null, 'response_body' => '', 'error' => 'Token/phone_id/to missing'];
         }
 
         $text = "Новая заявка #{$lead['id']}: {$lead['name']}, {$lead['phone']}, {$lead['email']}";

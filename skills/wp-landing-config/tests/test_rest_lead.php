@@ -98,15 +98,11 @@ assert_test(
     "response includes ok=true + lead_id"
 );
 
-// Test 4: email-fallback sent on successful insert
+// Test 4: the endpoint never sends a second, hard-coded fallback email.
+// Delivery belongs only to configured integrations.
 assert_test(
-    count($GLOBALS['_mock_mail_sent']) === 1,
-    "wp_mail called once on success"
-);
-$mail = $GLOBALS['_mock_mail_sent'][0];
-assert_test(
-    $mail['to'] === 'admin@example.com',
-    "mail sent to admin_email"
+    count($GLOBALS['_mock_mail_sent']) === 0,
+    "no hard-coded admin fallback email is sent"
 );
 
 // Test 4b: landing_config_lead_received action fired
@@ -115,6 +111,29 @@ assert_test(
     in_array('landing_config_lead_received', $fired_hooks, true),
     "action 'landing_config_lead_received' fired on success"
 );
+
+// A database write is not confirmed unless MySQL returns a positive row id.
+class MockWpdbZeroLeadId extends MockWpdbInsert {
+    public function insert($table, $data, $formats = null) {
+        $result = parent::insert($table, $data, $formats);
+        if (str_ends_with((string) $table, 'landing_leads')) {
+            $this->insert_id = 0;
+        }
+        return $result;
+    }
+}
+$normal_wpdb = $GLOBALS['wpdb'];
+$GLOBALS['wpdb'] = new MockWpdbZeroLeadId();
+reset_state();
+$resp = handle_lead(new WP_REST_Request([
+    'name' => 'NoId',
+    'phone' => '+971501234567',
+    'pd_consent' => '1',
+]));
+assert_test($resp->get_status() === 500, 'lead insert without a positive id returns 500');
+assert_test(($resp->get_data()['ok'] ?? true) === false, 'lead insert without a positive id never returns ok=true');
+assert_test(!isset($resp->get_data()['lead_id']), 'failed response never exposes a false positive lead id');
+$GLOBALS['wpdb'] = $normal_wpdb;
 
 // Test 5: writes to per-blog table
 reset_state();
@@ -155,8 +174,7 @@ assert_test(
     "different IP not affected by first IP's rate limit (got: " . $resp->get_status() . ")"
 );
 
-// T_PD_1..5: characterize the current pd_consent baseline in rest-lead handler.
-// Missing/false consent is currently accepted; Task 6 must reverse that behavior.
+// T_PD_1..5: explicit consent is mandatory. The browser must never fabricate it.
 
 function reset_pd() {
     $GLOBALS['_mock_inserted_leads'] = [];
@@ -186,7 +204,7 @@ $rows = inserted_lead_rows();
 assert_test(count($rows) === 1, 'T_PD_1b 1 lead inserted');
 assert_test(!empty($rows[0]['data']['pd_consent_granted_at']), 'T_PD_1c pd_consent_granted_at populated');
 
-// T_PD_2: current baseline accepts a request without pd_consent (Task 6 regression target)
+// T_PD_2: missing consent is rejected after the early audit, before lead creation.
 reset_pd();
 $req = pd_request();
 $params = $req->get_params();
@@ -194,19 +212,20 @@ unset($params['pd_consent']);
 $req2 = new WP_REST_Request($params);
 $resp = \LandingConfig\REST\handle_lead($req2);
 $data = $resp->get_data();
-assert_test($resp->get_status() === 200, 'T_PD_2a current baseline accepts missing pd_consent (Task 6 must reject)');
-assert_test($data['ok'] === true, 'T_PD_2b current baseline returns ok=true without pd_consent');
-assert_test(count(inserted_lead_rows()) === 1, 'T_PD_2c current baseline inserts lead without pd_consent');
+assert_test($resp->get_status() === 400, 'T_PD_2a missing pd_consent is rejected');
+assert_test($data['ok'] === false, 'T_PD_2b missing pd_consent returns ok=false');
+assert_test(($data['error'] ?? '') === 'pd_consent', 'T_PD_2c missing pd_consent has stable error code');
+assert_test(count(inserted_lead_rows()) === 0, 'T_PD_2d missing pd_consent creates no lead');
 
-// T_PD_3: current baseline accepts pd_consent=''
+// T_PD_3: empty consent is rejected.
 reset_pd();
 $resp = \LandingConfig\REST\handle_lead(pd_request(['pd_consent' => '']));
-assert_test($resp->get_status() === 200, 'T_PD_3 current baseline accepts empty pd_consent (Task 6 must reject)');
+assert_test($resp->get_status() === 400, 'T_PD_3 empty pd_consent is rejected');
 
-// T_PD_4: current baseline accepts pd_consent='0'
+// T_PD_4: false consent is rejected.
 reset_pd();
 $resp = \LandingConfig\REST\handle_lead(pd_request(['pd_consent' => '0']));
-assert_test($resp->get_status() === 200, 'T_PD_4 current baseline accepts pd_consent=0 (Task 6 must reject)');
+assert_test($resp->get_status() === 400, 'T_PD_4 pd_consent=0 is rejected');
 
 // T_PD_5: timestamp в пределах текущей минуты
 reset_pd();
@@ -218,6 +237,14 @@ $ts_granted = strtotime($rows[0]['data']['pd_consent_granted_at']);
 $ts_after = time();
 assert_test($ts_granted >= $ts_before && $ts_granted <= $ts_after + 1,
     "T_PD_5 timestamp within range (ts_before=$ts_before, ts_granted=$ts_granted, ts_after=$ts_after)");
+
+// Active reCAPTCHA code is intentionally absent. Historical DB columns may remain
+// additive, but no Google verification or score-based rejection may run.
+$rest_source = file_get_contents(__DIR__ . '/../mu-plugin/landing-config/includes/rest-lead.php');
+assert_test(!str_contains($rest_source, 'function verify_recaptcha'), 'reCAPTCHA verifier is removed');
+assert_test(!str_contains($rest_source, 'google.com/recaptcha'), 'REST endpoint never calls Google reCAPTCHA');
+assert_test(!str_contains($rest_source, "'recaptcha_failed'"), 'REST endpoint has no reCAPTCHA rejection path');
+assert_test(!str_contains($rest_source, 'send_admin_email('), 'hard-coded duplicate email sender is removed');
 
 echo "\n$tests tests, $failures failures\n";
 exit($failures > 0 ? 1 : 0);

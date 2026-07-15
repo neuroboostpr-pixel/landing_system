@@ -18,9 +18,10 @@ interface AdapterInterface {
      * Send a lead to the external service.
      *
      * @param array $lead       Row from wp_<bid>_landing_leads (all columns)
+     * @param array|null $settings Exact integration settings, or null for legacy resolution.
      * @return array  ['ok'=>bool, 'response_code'=>int|null, 'response_body'=>string, 'error'=>string|null]
      */
-    public function send(array $lead): array;
+    public function send(array $lead, ?array $settings = null): array;
 
     /**
      * Test connection without creating a real lead.

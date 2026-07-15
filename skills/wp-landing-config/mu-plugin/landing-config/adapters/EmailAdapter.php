@@ -42,13 +42,14 @@ class EmailAdapter implements AdapterInterface {
         return $out;
     }
 
-    public function send(array $lead): array {
-        $s = static::settings();
-        $to = $s['to'] ?? \landing_config_get('integration_email_to');
+    public function send(array $lead, ?array $settings = null): array {
+        $explicit = $settings !== null;
+        $s = $explicit ? $settings : static::settings();
+        $to = $s['to'] ?? ($explicit ? '' : \landing_config_get('integration_email_to'));
         if ($to === '') {
-            return ['ok' => false, 'response_code' => null, 'response_body' => '', 'error' => 'No recipient configured'];
+            return ['ok' => false, 'status' => 'failed_permanent', 'response_code' => null, 'response_body' => '', 'error' => 'No recipient configured'];
         }
-        $subject = $s['subject'] ?? \landing_config_get('integration_email_subject', 'Новая заявка');
+        $subject = $s['subject'] ?? ($explicit ? 'Новая заявка' : \landing_config_get('integration_email_subject', 'Новая заявка'));
         $body = "Получена заявка #{$lead['id']}\n\n"
               . "Имя:      {$lead['name']}\n"
               . "Телефон:  {$lead['phone']}\n"

@@ -45,13 +45,14 @@ class TelegramAdapter implements AdapterInterface {
         return $out;
     }
 
-    public function send(array $lead): array {
-        $s = static::settings();
-        $token_raw = $s['bot_token'] ?? \landing_config_get('integration_telegram_bot_token');
+    public function send(array $lead, ?array $settings = null): array {
+        $explicit = $settings !== null;
+        $s = $explicit ? $settings : static::settings();
+        $token_raw = $s['bot_token'] ?? ($explicit ? '' : \landing_config_get('integration_telegram_bot_token'));
         $token = $token_raw ? (str_starts_with($token_raw, 'v1:') ? decrypt($token_raw) : $token_raw) : '';
-        $chat_id = $s['chat_id'] ?? \landing_config_get('integration_telegram_chat_id');
+        $chat_id = $s['chat_id'] ?? ($explicit ? '' : \landing_config_get('integration_telegram_chat_id'));
         if ($token === '' || $chat_id === '') {
-            return ['ok' => false, 'response_code' => null, 'response_body' => '', 'error' => 'Token or chat_id missing'];
+            return ['ok' => false, 'status' => 'failed_permanent', 'response_code' => null, 'response_body' => '', 'error' => 'Token or chat_id missing'];
         }
 
         $text = "🔔 *Новая заявка #{$lead['id']}*\n\n"
