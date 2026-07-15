@@ -116,8 +116,8 @@ class RoistatAdapter implements AdapterInterface {
         $code = \wp_remote_retrieve_response_code($resp);
         $body = \wp_remote_retrieve_body($resp);
         $json = json_decode($body, true);
-        if ($code >= 200 && $code < 300 && ($json['status'] ?? '') === 'ok') {
-            return ['ok' => true, 'message' => 'Roistat принял сделку (status: ok)'];
+        if (self::is_confirmed_success($code, $body, $json)) {
+            return ['ok' => true, 'message' => 'Roistat подтвердил создание сделки'];
         }
         $msg = $json['message'] ?? $body;
         return ['ok' => false, 'message' => "HTTP {$code}: {$msg}"];
@@ -128,7 +128,18 @@ class RoistatAdapter implements AdapterInterface {
         $code = \wp_remote_retrieve_response_code($resp);
         $body = \wp_remote_retrieve_body($resp);
         $json = json_decode($body, true);
-        $ok   = $code >= 200 && $code < 300 && ($json['status'] ?? '') === 'ok';
+        $ok   = self::is_confirmed_success($code, $body, $json);
         return ['ok' => $ok, 'response_code' => $code, 'response_body' => $body, 'error' => !$ok ? ($json['message'] ?? "HTTP {$code}") : null];
+    }
+
+    /**
+     * Roistat has returned both JSON {"status":"ok"} and the documented
+     * integration's plain-text confirmation in production. Accept only those
+     * two explicit success contracts, never an arbitrary HTTP 2xx body.
+     */
+    private static function is_confirmed_success(int $code, string $body, $json): bool {
+        if ($code < 200 || $code >= 300) return false;
+        if (is_array($json) && ($json['status'] ?? '') === 'ok') return true;
+        return strcasecmp(trim($body), 'Lead was successfully created') === 0;
     }
 }
