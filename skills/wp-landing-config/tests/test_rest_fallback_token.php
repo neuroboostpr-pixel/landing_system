@@ -33,6 +33,16 @@ $wrong = hash_hmac('sha256', "v1\nhybridautos-ae\n1784190000\n1784233200\n012345
 $assert($wrong !== $vector, 'using 64-byte hex text as key does not match');
 $assert(!\LandingConfig\FallbackToken\secrets_are_valid($secret, $secret), 'equal signing and status keys are rejected');
 
+// Literal contract shared with the independent fallback runtime. Expected
+// bytes are fixed here and are never calculated by the production helper.
+$cross_runtime_token = function_exists('LandingConfig\\FallbackToken\\build_signed_token')
+    ? \LandingConfig\FallbackToken\build_signed_token(
+        $secret, 1789000000, 1789043200, '0123456789abcdef0123456789abcdef', 'test'
+    )
+    : null;
+$assert($cross_runtime_token === 'v1.1789000000.1789043200.0123456789abcdef0123456789abcdef.test.8224b5f62987dbbedee81dc3471cd77481058e58c73db13030faa7d15f266e6b',
+    'literal cross-runtime intake token vector matches byte-for-byte');
+
 lr_reset_state();
 $GLOBALS['_lr_logged_in'] = false;
 $GLOBALS['_lr_capabilities'] = [];

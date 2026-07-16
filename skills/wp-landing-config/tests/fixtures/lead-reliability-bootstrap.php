@@ -155,6 +155,8 @@ function lr_reset_state(): void {
     $GLOBALS['_lr_mail_result'] = true;
     $GLOBALS['_lr_now'] = '2026-07-15 12:00:00';
     $GLOBALS['_lr_next_scheduled'] = [];
+    $GLOBALS['_lr_scheduled_single'] = [];
+    $GLOBALS['_lr_spawn_cron_calls'] = [];
     $GLOBALS['_lr_uuid_counter'] = 0;
     $GLOBALS['_lr_force_lock_failure'] = false;
     $GLOBALS['_lr_logged_in'] = false;

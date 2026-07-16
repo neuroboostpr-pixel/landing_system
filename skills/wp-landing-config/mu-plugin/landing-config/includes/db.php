@@ -5,6 +5,49 @@ if (!defined('ABSPATH')) { exit; }
 
 const DB_VERSION = '1.1.0';
 const DB_VERSION_OPTION = 'landing_config_db_version';
+const DELIVERY_ROLLOUT_BOUNDARY_OPTION = 'landing_delivery_async_boundary';
+
+function valid_mysql_utc_timestamp(string $value): bool {
+    if (preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $value) !== 1) { return false; }
+    $parsed = \DateTimeImmutable::createFromFormat('!Y-m-d H:i:s', $value, new \DateTimeZone('UTC'));
+    return $parsed instanceof \DateTimeImmutable && $parsed->format('Y-m-d H:i:s') === $value;
+}
+
+/**
+ * Mark the first instant at which exact per-integration reservations can be
+ * created. Historical rows receive integration_id=0 during dbDelta, so the
+ * marker must exist before the new REST intake can save its first lead.
+ */
+function ensure_delivery_rollout_boundary_for_current_blog(): string {
+    $existing = (string)get_option(DELIVERY_ROLLOUT_BOUNDARY_OPTION, '');
+    if (valid_mysql_utc_timestamp($existing)) { return $existing; }
+
+    $boundary = function_exists('current_time')
+        ? (string)current_time('mysql', true)
+        : gmdate('Y-m-d H:i:s');
+    if (!valid_mysql_utc_timestamp($boundary)) { $boundary = gmdate('Y-m-d H:i:s'); }
+
+    if (add_option(DELIVERY_ROLLOUT_BOUNDARY_OPTION, $boundary, '', false)) { return $boundary; }
+    // Another request may have won the atomic add. Preserve its earlier
+    // boundary; replace only a malformed internal value, which remains safe
+    // because "now" cannot include historical leads.
+    $concurrent = (string)get_option(DELIVERY_ROLLOUT_BOUNDARY_OPTION, '');
+    if (valid_mysql_utc_timestamp($concurrent)) { return $concurrent; }
+    update_option(DELIVERY_ROLLOUT_BOUNDARY_OPTION, $boundary);
+    return $boundary;
+}
+
+function ensure_delivery_rollout_boundaries(): void {
+    if (!is_multisite()) {
+        ensure_delivery_rollout_boundary_for_current_blog();
+        return;
+    }
+    foreach (get_sites(['number' => 0]) as $site) {
+        switch_to_blog((int)$site->blog_id);
+        try { ensure_delivery_rollout_boundary_for_current_blog(); }
+        finally { restore_current_blog(); }
+    }
+}
 
 function get_leads_table_name(): string {
     global $wpdb;
@@ -42,6 +85,10 @@ function get_monitor_alerts_table_name(): string {
  * explicit branches on $current — not currently needed.
  */
 function maybe_install_or_migrate(): void {
+    // This intentionally runs even when the schema version is already current:
+    // a partially completed rollout must fail closed rather than replay legacy
+    // leads whose migrated delivery rows have integration_id=0.
+    ensure_delivery_rollout_boundaries();
     $current = get_site_option(DB_VERSION_OPTION, '');
     if ($current === DB_VERSION) {
         return;

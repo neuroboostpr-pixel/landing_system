@@ -61,6 +61,12 @@ assert_test(
     count($GLOBALS['_mock_dbdelta_calls']) >= 2,  // at least leads + lead_log per blog
     "maybe_install_or_migrate triggers dbDelta calls (got: " . count($GLOBALS['_mock_dbdelta_calls']) . ")"
 );
+foreach ([1, 2, 3] as $blog_id) {
+    assert_test(
+        preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', (string)($GLOBALS['_mock_options'][$blog_id]['landing_delivery_async_boundary'] ?? '')) === 1,
+        "migration records a one-time UTC async-delivery boundary for blog {$blog_id} before reconciliation"
+    );
+}
 
 // Test 5: maybe_install_or_migrate is idempotent — second call with same version is no-op
 $first_count = count($GLOBALS['_mock_dbdelta_calls']);
@@ -69,6 +75,20 @@ assert_test(
     count($GLOBALS['_mock_dbdelta_calls']) === $first_count,
     "maybe_install_or_migrate is no-op when version matches (call count unchanged)"
 );
+
+// A site that already has the target schema version but missed the option must
+// fail safely by establishing the boundary now, without rerunning dbDelta.
+$GLOBALS['_mock_options'] = [];
+$before_boundary_backfill = count($GLOBALS['_mock_dbdelta_calls']);
+maybe_install_or_migrate();
+assert_test(
+    !empty($GLOBALS['_mock_options'][1]['landing_delivery_async_boundary'])
+        && !empty($GLOBALS['_mock_options'][2]['landing_delivery_async_boundary'])
+        && !empty($GLOBALS['_mock_options'][3]['landing_delivery_async_boundary']),
+    'boundary is backfilled for every blog even when database version is already current'
+);
+assert_test(count($GLOBALS['_mock_dbdelta_calls']) === $before_boundary_backfill,
+    'boundary backfill does not rerun schema migration');
 
 // Test 6: schema SQL includes required columns
 $sql = $GLOBALS['_mock_dbdelta_calls'][0] ?? '';

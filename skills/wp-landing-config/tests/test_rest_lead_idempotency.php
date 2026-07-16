@@ -79,6 +79,24 @@ $lock_sql = implode("\n", $GLOBALS['wpdb']->query_log);
 $assert(str_contains($lock_sql, 'GET_LOCK'), 'UUID requests use a named lock');
 $assert(!str_contains($lock_sql, '+971501111111'), 'lock SQL contains no contact');
 
+// Even a protected 429 response must leave the submitted contact in the
+// private audit table so the sales team can recover it after an alert.
+lr_reset_state();
+$_SERVER['REMOTE_ADDR'] = '203.0.113.77';
+$_SERVER['HTTP_USER_AGENT'] = 'rate-limit-recovery-test';
+update_option('lp_rate_limit_per_hour', 1);
+$rate_key = 'landing_lead_rl_' . md5('203.0.113.77');
+set_transient($rate_key, 1, HOUR_IN_SECONDS);
+$limited = handle_lead(idempotent_request([
+    'submission_id' => '22222222-2222-4222-8222-222222222222',
+    'phone' => '+971509876543',
+]));
+$limited_audit = lr_rows(\LandingConfig\DB\get_lead_audit_table_name())[0] ?? [];
+$assert($limited->get_status() === 429, 'rate-limited primary request returns protected 429');
+$assert(($limited_audit['blocked_by'] ?? '') === 'rate_limit', 'rate-limited request records its exact safe reason');
+$assert(($limited_audit['phone'] ?? '') === '+971509876543' && empty($limited_audit['lead_id']),
+    'rate-limited contact remains recoverable from private audit without pretending a lead was saved');
+
 lr_reset_state();
 $_SERVER['REMOTE_ADDR'] = '203.0.113.8';
 $_SERVER['HTTP_USER_AGENT'] = 'legacy-test';

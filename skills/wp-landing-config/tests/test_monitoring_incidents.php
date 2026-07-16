@@ -79,14 +79,39 @@ $bad_external = \LandingConfig\Monitoring\record_external_incident(
 );
 $assert($bad_external === 0, 'external scope cannot be applied to another incident kind');
 
-// Reconciliation queues reservations for old saved leads with no delivery rows,
-// alerts old queued work, and does not alert a bounded retry with a future successor.
+// Reconciliation repairs each missing exact integration reservation. A partial
+// primary failure (Email and Roistat rows exist, Telegram row is absent) must
+// not make Telegram disappear forever or replay completed integrations.
 lr_reset_state();
 update_option('landing_monitor_enabled', '1');
+update_option('landing_delivery_async_boundary', '2026-07-15 11:30:00');
 $integration_id = \LandingConfig\Integrations\save_integration(
     'email', 'Launch mailbox', '', ['to' => 'elapova00@gmail.com'], false, 1, [], true
 );
-lr_queue_results([['id' => 70]]); // saved leads missing all delivery rows
+$telegram_id = \LandingConfig\Integrations\save_integration(
+    'telegram', 'Launch Telegram', '', ['bot_token' => 'test', 'chat_id' => '1'], false, 1, [], true
+);
+$roistat_id = \LandingConfig\Integrations\save_integration(
+    'roistat', 'Launch CRM', '', ['webhook_url' => 'https://roistat.invalid'], false, 1, [], true
+);
+$delivery_table = \LandingConfig\DB\get_lead_log_table_name();
+// A legacy row gets integration_id=0 during rollout. It must remain evidence
+// only and must never trigger a new delivery to every current integration.
+$GLOBALS['wpdb']->insert($delivery_table, [
+    'lead_id' => 69, 'integration_id' => 0, 'adapter' => 'email',
+    'attempt' => 6001, 'status' => 'success', 'created_at' => '2026-07-15 11:00:00',
+]);
+foreach ([[$integration_id, 'email'], [$roistat_id, 'roistat']] as [$existing_id, $adapter]) {
+    $GLOBALS['wpdb']->insert($delivery_table, [
+        'lead_id' => 70, 'integration_id' => $existing_id, 'adapter' => $adapter,
+        'attempt' => 1, 'status' => 'success', 'created_at' => '2026-07-15 11:58:00',
+    ]);
+}
+lr_queue_results([
+    ['id' => 69, 'created_at' => '2026-07-15 11:00:00'], // legacy, before boundary
+    ['id' => 70, 'created_at' => '2026-07-15 11:58:00'], // fresh, missing Telegram
+    ['id' => 71, 'created_at' => '2026-07-15 11:59:00'], // fresh, total reservation failure
+]);
 lr_queue_results([[
     'id' => 80, 'lead_id' => 71, 'integration_id' => $integration_id,
     'adapter' => 'email', 'status' => 'queued', 'attempt' => 1,
@@ -97,13 +122,37 @@ lr_queue_results([[
 ]]);
 lr_queue_row(['id' => 82, 'status' => 'queued', 'next_attempt_at' => '2026-07-15 12:10:00']);
 $summary = \LandingConfig\Monitoring\reconcile_delivery_rows(strtotime('2026-07-15 12:00:00 UTC'));
-$assert(($summary['reservations_recreated'] ?? 0) === 1, 'old lead missing delivery rows is re-reserved');
+$assert(($summary['reservations_recreated'] ?? 0) === 4,
+    'new partial and total failures recreate four exact rows while legacy lead is excluded');
+$delivery_rows = lr_rows($delivery_table);
+$lead_69_rows = array_values(array_filter($delivery_rows, static fn($row) => (int)($row['lead_id'] ?? 0) === 69));
+$assert(count($lead_69_rows) === 1 && (int)($lead_69_rows[0]['integration_id'] ?? -1) === 0,
+    'legacy lead before rollout boundary keeps only its historical integration_id=0 row');
+$legacy_jobs = array_values(array_filter($GLOBALS['_lr_scheduled_single'], static fn($job) => (int)($job['args'][0] ?? 0) === 69));
+$assert($legacy_jobs === [], 'legacy lead before boundary schedules no new delivery messages');
+$lead_70_rows = array_values(array_filter($delivery_rows, static fn($row) => (int)($row['lead_id'] ?? 0) === 70));
+$lead_70_ids = array_map(static fn($row) => (int)($row['integration_id'] ?? 0), $lead_70_rows);
+sort($lead_70_ids);
+$expected_ids = [$integration_id, $telegram_id, $roistat_id];
+sort($expected_ids);
+$assert($lead_70_ids === $expected_ids, 'partial reservation failure restores only the missing Telegram exact ID');
+$existing_rows = array_values(array_filter($lead_70_rows, static fn($row) => in_array((int)($row['integration_id'] ?? 0), [$integration_id, $roistat_id], true)));
+$assert(count($existing_rows) === 2 && count(array_filter($existing_rows, static fn($row) => ($row['status'] ?? '') === 'success')) === 2,
+    'existing completed Email and Roistat rows are not replaced or replayed');
+$lead_71_rows = array_values(array_filter($delivery_rows, static fn($row) => (int)($row['lead_id'] ?? 0) === 71));
+$lead_71_ids = array_map(static fn($row) => (int)($row['integration_id'] ?? 0), $lead_71_rows);
+sort($lead_71_ids);
+$assert($lead_71_ids === $expected_ids, 'new lead with total reservation failure receives every enabled exact reservation');
 $assert(($summary['stuck'] ?? 0) === 1, 'old queued row creates one stuck incident');
 $assert(count($GLOBALS['_lr_scheduled_single'] ?? []) >= 1, 'recreated reservation schedules worker');
 $stuck = array_values(array_filter(lr_rows(\LandingConfig\DB\get_monitor_alerts_table_name()), static fn($row) => ($row['incident_kind'] ?? '') === 'delivery_stuck'));
 $assert(count($stuck) === 1, 'future valid retry successor does not add another stuck alert');
 
 $monitor_source = file_get_contents(__DIR__ . '/../mu-plugin/landing-config/includes/monitoring-alerts.php');
+$assert(str_contains((string)$monitor_source, 'COUNT(DISTINCT d.integration_id)'),
+    'reconciliation SQL detects a lead missing any enabled exact integration, not only leads with zero rows');
+$assert(str_contains((string)$monitor_source, 'DELIVERY_ROLLOUT_BOUNDARY_OPTION'),
+    'reconciliation is hard-bounded by the one-time asynchronous rollout timestamp');
 $worker_source = file_get_contents(__DIR__ . '/../mu-plugin/landing-config/includes/lead-delivery-worker.php');
 foreach (['CONTACT-MARKER', '+971501111111', 'response_body', 'error_text'] as $marker) {
     if (in_array($marker, ['response_body','error_text'], true)) { continue; }

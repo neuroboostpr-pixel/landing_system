@@ -134,7 +134,9 @@ class RoistatAdapter implements AdapterInterface {
             'response_code' => $code,
             'response_body' => $body,
             'error' => !$ok ? ($json['message'] ?? "HTTP {$code}") : null,
-            'retry_after' => \wp_remote_retrieve_header($resp, 'retry-after'),
+            'retry_after' => \function_exists('wp_remote_retrieve_header')
+                ? \wp_remote_retrieve_header($resp, 'retry-after')
+                : '',
         ];
     }
 

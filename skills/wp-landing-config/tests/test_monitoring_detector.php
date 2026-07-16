@@ -38,6 +38,14 @@ $uuid = '11111111-1111-4111-8111-111111111111';
 $path = '/api/v1/receipts/' . $uuid;
 $signature = \LandingConfig\Monitoring\receipt_status_signature($path, 1784190000);
 $assert($signature === 'b7f697a76e4fc52b194c284dd14b9e9ae54f2a1879b2e81b356825f126da51c5', 'receipt status uses shared decoded-key HMAC vector');
+$cross_status_path = '/api/v1/receipts/d9428888-122b-4b3e-a105-4d4f0a13262f';
+$cross_status = function_exists('LandingConfig\\Monitoring\\sign_receipt_status_components')
+    ? \LandingConfig\Monitoring\sign_receipt_status_components(
+        str_repeat('0123456789abcdef', 4), $cross_status_path, 1789000000
+    )
+    : null;
+$assert($cross_status === 'a954e8f42b2b873dd99489c98989ced365b860ca983ed17779dce014d86ed172',
+    'literal cross-runtime receipt status vector matches byte-for-byte');
 
 lr_reset_state();
 update_option('landing_monitor_enabled', '1');
@@ -126,11 +134,15 @@ lr_queue_results([['submission_id' => $uuid, 'last_event_at' => '2026-07-15 11:5
 lr_queue_results([
     ['id' => 1, 'event_sequence' => 1, 'event_name' => 'submit_attempt', 'event_detail' => ''],
     ['id' => 2, 'event_sequence' => 2, 'event_name' => 'request_started', 'event_detail' => ''],
+    ['id' => 3, 'event_sequence' => 3, 'event_name' => 'request_failed', 'event_detail' => 'http_4xx'],
 ]);
 lr_set_http(['response' => ['code' => 404], 'body' => '', 'headers' => []]);
 $at_300 = \LandingConfig\Monitoring\run_missing_lead_scan(100, strtotime('2026-07-15 12:00:00 UTC'));
 $assert(($at_300['classified'] ?? 0) === 1, 'age exactly 300 seconds is classified');
-$assert(count(array_filter(detector_incidents(), static fn($row) => ($row['incident_kind'] ?? '') === 'missing_lead')) === 1, 'missing external receipt leaves one safe missing alert');
+$missing_alerts = array_values(array_filter(detector_incidents(), static fn($row) => ($row['incident_kind'] ?? '') === 'missing_lead'));
+$assert(count($missing_alerts) === 1, 'missing external receipt leaves one safe missing alert');
+$assert(($missing_alerts[0]['safe_status'] ?? '') === 'request_failed',
+    'failed protected request, including rate limit, remains visible to the missing-lead monitor');
 
 $serialized = json_encode([detector_incidents(), $GLOBALS['_lr_http_requests'], $GLOBALS['wpdb']->query_log]);
 foreach (['+971501111111','contact@example.com','provider raw body'] as $pii) {

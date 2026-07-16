@@ -63,6 +63,13 @@ function sign_token_components(string $secret, int $issued_at, int $expires_at,
     return hash_hmac('sha256', $canonical, $key);
 }
 
+function build_signed_token(string $secret, int $issued_at, int $expires_at,
+    string $nonce, string $mode): ?string {
+    $signature = sign_token_components($secret, $issued_at, $expires_at, $nonce, $mode);
+    if ($signature === null) { return null; }
+    return implode('.', ['v1', $issued_at, $expires_at, $nonce, $mode, $signature]);
+}
+
 function build_token_bundle(string $mode, ?int $now = null): ?array {
     if (!defined('LP_FALLBACK_SIGNING_SECRET') || !defined('LP_FALLBACK_STATUS_SECRET')) { return null; }
     $signing = (string)LP_FALLBACK_SIGNING_SECRET;
@@ -73,8 +80,8 @@ function build_token_bundle(string $mode, ?int $now = null): ?array {
     $expires_at = $issued_at + TOKEN_TTL_SECONDS;
     try { $nonce = bin2hex(random_bytes(16)); }
     catch (\Throwable $ignored) { return null; }
-    $signature = sign_token_components($signing, $issued_at, $expires_at, $nonce, $mode);
-    if ($signature === null) { return null; }
+    $token = build_signed_token($signing, $issued_at, $expires_at, $nonce, $mode);
+    if ($token === null) { return null; }
     return [
         'ok' => true,
         'site_id' => SITE_ID,
@@ -84,7 +91,7 @@ function build_token_bundle(string $mode, ?int $now = null): ?array {
         'issued_at' => $issued_at,
         'expires_at' => $expires_at,
         'nonce' => $nonce,
-        'token' => implode('.', ['v1', $issued_at, $expires_at, $nonce, $mode, $signature]),
+        'token' => $token,
     ];
 }
 

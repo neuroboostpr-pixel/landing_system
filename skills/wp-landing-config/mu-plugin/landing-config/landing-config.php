@@ -25,8 +25,28 @@ require_once LANDING_CONFIG_DIR . '/includes/lead-status-log.php';
 require_once LANDING_CONFIG_DIR . '/includes/migrate-to-s2a3.php';
 require_once LANDING_CONFIG_DIR . '/includes/segment-selector.php';
 require_once LANDING_CONFIG_DIR . '/includes/snippets.php';
+
+// Integration contracts and concrete adapters must exist before the async
+// delivery worker is loaded.
+require_once LANDING_CONFIG_DIR . '/adapters/AdapterInterface.php';
+require_once LANDING_CONFIG_DIR . '/adapters/EmailAdapter.php';
+require_once LANDING_CONFIG_DIR . '/adapters/TelegramAdapter.php';
+require_once LANDING_CONFIG_DIR . '/adapters/WhatsAppAdapter.php';
+require_once LANDING_CONFIG_DIR . '/adapters/AmoCRMAdapter.php';
+require_once LANDING_CONFIG_DIR . '/adapters/Bitrix24Adapter.php';
+require_once LANDING_CONFIG_DIR . '/adapters/HubSpotAdapter.php';
+require_once LANDING_CONFIG_DIR . '/adapters/RoistatAdapter.php';
+
+// Reliability stack: strict shared HMAC decoder, monitor, worker, primary
+// endpoint, anonymous telemetry, then signed health/reconciliation routes.
+require_once LANDING_CONFIG_DIR . '/includes/rest-fallback-token.php';
+require_once LANDING_CONFIG_DIR . '/includes/monitoring-alerts.php';
+require_once LANDING_CONFIG_DIR . '/includes/lead-delivery-worker.php';
 require_once LANDING_CONFIG_DIR . '/includes/rest-lead.php';
 require_once LANDING_CONFIG_DIR . '/includes/rest-form-events.php';
+require_once LANDING_CONFIG_DIR . '/includes/rest-health.php';
+
+// Administrator modules load only after their storage and runtime services.
 require_once LANDING_CONFIG_DIR . '/includes/admin-pages.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-general-settings.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-leads.php';
@@ -37,6 +57,9 @@ require_once LANDING_CONFIG_DIR . '/includes/admin-cta.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-snippets.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-lead-statuses.php';
 require_once LANDING_CONFIG_DIR . '/includes/admin-lead-detail.php';
+require_once LANDING_CONFIG_DIR . '/includes/admin-integrations.php';
+require_once LANDING_CONFIG_DIR . '/includes/admin-monitoring.php';
+
 // Read-only stubs override the editor submenus on single-site, hiding the real
 // editors. They are only meaningful on multisite (subsite = read-only, super-admin
 // edits from network). On single-site the editors above own the pages.
@@ -46,15 +69,6 @@ if (\is_multisite()) {
     require_once LANDING_CONFIG_DIR . '/includes/admin-lead-statuses-readonly.php';
     require_once LANDING_CONFIG_DIR . '/includes/admin-integrations-readonly.php';
 }
-require_once LANDING_CONFIG_DIR . '/adapters/AdapterInterface.php';
-require_once LANDING_CONFIG_DIR . '/adapters/EmailAdapter.php';
-require_once LANDING_CONFIG_DIR . '/adapters/TelegramAdapter.php';
-require_once LANDING_CONFIG_DIR . '/adapters/WhatsAppAdapter.php';
-require_once LANDING_CONFIG_DIR . '/adapters/AmoCRMAdapter.php';
-require_once LANDING_CONFIG_DIR . '/adapters/Bitrix24Adapter.php';
-require_once LANDING_CONFIG_DIR . '/adapters/HubSpotAdapter.php';
-require_once LANDING_CONFIG_DIR . '/adapters/RoistatAdapter.php';
-require_once LANDING_CONFIG_DIR . '/includes/admin-integrations.php';
 
 // B2 cookie-banner
 require_once __DIR__ . '/includes/cookie-banner/cpt.php';

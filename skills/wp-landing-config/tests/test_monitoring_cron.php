@@ -1,6 +1,10 @@
 <?php
 require __DIR__ . '/fixtures/lead-reliability-bootstrap.php';
 require_once __DIR__ . '/../mu-plugin/landing-config/includes/db.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/includes/encryption.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/includes/helpers.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/includes/cascade.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/includes/integrations.php';
 require_once __DIR__ . '/../mu-plugin/landing-config/includes/rest-fallback-token.php';
 require_once __DIR__ . '/../mu-plugin/landing-config/includes/monitoring-alerts.php';
 require_once __DIR__ . '/../mu-plugin/landing-config/includes/lead-delivery-worker.php';
@@ -28,9 +32,30 @@ $assert($GLOBALS['_lr_next_scheduled'] === $before, 'schedule setup is idempoten
 
 update_option('landing_monitor_enabled', '0');
 \LandingConfig\Monitoring\sync_monitoring_schedule(1784190120);
-foreach ([\LandingConfig\LeadDelivery\DELIVERY_HOOK, \LandingConfig\Monitoring\SCAN_HOOK, \LandingConfig\Monitoring\QUEUE_HOOK, \LandingConfig\Monitoring\CLEANUP_HOOK] as $hook) {
+// Delivery is a sales-critical service and must keep running while only the
+// optional monitoring/alert layer is disabled during staged rollout.
+$assert(isset($GLOBALS['_lr_next_scheduled'][\LandingConfig\LeadDelivery\DELIVERY_HOOK]), 'disabled monitor keeps asynchronous lead delivery scheduled');
+foreach ([\LandingConfig\Monitoring\SCAN_HOOK, \LandingConfig\Monitoring\QUEUE_HOOK, \LandingConfig\Monitoring\CLEANUP_HOOK] as $hook) {
     $assert(!isset($GLOBALS['_lr_next_scheduled'][$hook]), "disabled monitor clears {$hook}");
 }
+
+// Reservation repair belongs to core delivery too: staged rollout may keep
+// Telegram alerts disabled, but a saved lead still needs all delivery rows.
+$integration_id = \LandingConfig\Integrations\save_integration(
+    'email', 'Core delivery', '', ['to' => 'elapova00@gmail.com'], false, 1, [], true
+);
+update_option(\LandingConfig\Monitoring\DELIVERY_ROLLOUT_BOUNDARY_OPTION, '2026-07-15 11:30:00');
+lr_queue_results([['id' => 500, 'created_at' => '2026-07-15 11:59:00']]); // reservation reconciliation
+lr_queue_results([]); // old queued rows
+lr_queue_results([]); // retry rows
+lr_queue_results([]); // stale sending rows
+lr_queue_results([]); // worker queue
+\LandingConfig\Monitoring\run_delivery_cron();
+$disabled_delivery_rows = lr_rows(\LandingConfig\DB\get_lead_log_table_name());
+$assert(count($disabled_delivery_rows) === 1
+    && (int)($disabled_delivery_rows[0]['lead_id'] ?? 0) === 500
+    && (int)($disabled_delivery_rows[0]['integration_id'] ?? 0) === $integration_id,
+    'disabled alert monitoring still reconciles a saved lead into core delivery');
 
 lr_reset_state();
 \LandingConfig\Monitoring\touch_heartbeat(true, 1784190000);

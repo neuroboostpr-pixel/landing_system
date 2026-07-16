@@ -16,6 +16,7 @@ const QUEUE_HOOK = 'landing_config_monitor_queue';
 const CLEANUP_HOOK = 'landing_config_monitor_cleanup';
 const DELIVERY_HOOK = 'landing_config_deliver_lead';
 const GRACE_SECONDS = 300;
+const DELIVERY_ROLLOUT_BOUNDARY_OPTION = 'landing_delivery_async_boundary';
 const HEARTBEAT_STALE_SECONDS = 180;
 const LOCK_TTL_SECONDS = 120;
 const MAX_SEND_ATTEMPTS = 3;
@@ -166,20 +167,46 @@ function observe_delivery_result(int $lead_id, int $integration_id, string $adap
 function reconcile_delivery_rows(?int $now = null): array {
     global $wpdb;
     $now = $now ?? time();
-    $missing = $wpdb->get_results($wpdb->prepare(
-        "SELECT l.id FROM `" . get_leads_table_name() . "` l LEFT JOIN `" . get_lead_log_table_name()
-        . "` d ON d.lead_id=l.id WHERE l.created_at<=%s GROUP BY l.id HAVING COUNT(d.id)=0 LIMIT 100",
-        utc_mysql($now - 60)
-    ), ARRAY_A);
+    $enabled_ids = [];
+    foreach (\LandingConfig\Integrations\list_integrations(get_current_blog_id()) as $integration) {
+        $integration_id = (int)($integration['id'] ?? 0);
+        if (($integration['enabled'] ?? false) === true && $integration_id > 0) {
+            $enabled_ids[$integration_id] = $integration_id;
+        }
+    }
+    $missing = [];
+    $boundary = (string)get_option(DELIVERY_ROLLOUT_BOUNDARY_OPTION, '');
+    $boundary_valid = function_exists('LandingConfig\\DB\\valid_mysql_utc_timestamp')
+        && \LandingConfig\DB\valid_mysql_utc_timestamp($boundary);
+    if ($enabled_ids !== [] && $boundary_valid) {
+        // The IDs come from WordPress integration records and are cast to
+        // positive integers above, so the IN list cannot contain SQL input.
+        $enabled_id_sql = implode(',', $enabled_ids);
+        $missing = $wpdb->get_results($wpdb->prepare(
+            "SELECT l.id,l.created_at FROM `" . get_leads_table_name() . "` l LEFT JOIN `" . get_lead_log_table_name()
+            . "` d ON d.lead_id=l.id AND d.integration_id IN ({$enabled_id_sql})"
+            . " WHERE l.created_at>=%s AND l.created_at<=%s GROUP BY l.id"
+            . " HAVING COUNT(DISTINCT d.integration_id)<%d ORDER BY l.id ASC LIMIT 100",
+            $boundary, utc_mysql($now - 60), count($enabled_ids)
+        ), ARRAY_A);
+    }
     $reservations_recreated = 0;
     foreach (is_array($missing) ? $missing : [] as $lead) {
         $lead_id = (int)($lead['id'] ?? 0);
-        if ($lead_id <= 0) { continue; }
-        \LandingConfig\LeadDelivery\reserve_integrations($lead_id);
+        $created_at = (string)($lead['created_at'] ?? '');
+        // SQL owns the normal path; this second boundary check prevents a
+        // stale replica/mock/corrupt row from ever replaying a legacy lead.
+        if ($lead_id <= 0 || !$boundary_valid
+            || !\LandingConfig\DB\valid_mysql_utc_timestamp($created_at)
+            || strcmp($created_at, $boundary) < 0) {
+            continue;
+        }
+        $created = \LandingConfig\LeadDelivery\reserve_integrations($lead_id);
+        if ($created <= 0) { continue; }
         if (function_exists('wp_schedule_single_event')) {
             wp_schedule_single_event($now, \LandingConfig\LeadDelivery\DELIVERY_HOOK, [$lead_id]);
         }
-        $reservations_recreated++;
+        $reservations_recreated += $created;
     }
 
     $queued = $wpdb->get_results($wpdb->prepare(
@@ -243,14 +270,18 @@ function classify_timeline(array $events): ?array {
     return null;
 }
 
+function sign_receipt_status_components(string $secret, string $path, int $timestamp): ?string {
+    $key = \LandingConfig\FallbackSecurity\decode_hmac_hex_secret($secret);
+    if ($key === null) { return null; }
+    return hash_hmac('sha256', "GET\n{$path}\n{$timestamp}\nhybridautos-ae", $key);
+}
+
 function receipt_status_signature(string $path, int $timestamp): ?string {
     if (!defined('LP_FALLBACK_STATUS_SECRET') || !defined('LP_FALLBACK_SITE_ID')
         || LP_FALLBACK_SITE_ID !== 'hybridautos-ae') {
         return null;
     }
-    $key = \LandingConfig\FallbackSecurity\decode_hmac_hex_secret((string)LP_FALLBACK_STATUS_SECRET);
-    if ($key === null) { return null; }
-    return hash_hmac('sha256', "GET\n{$path}\n{$timestamp}\nhybridautos-ae", $key);
+    return sign_receipt_status_components((string)LP_FALLBACK_STATUS_SECRET, $path, $timestamp);
 }
 
 function empty_receipt_result(string $lookup): array {
@@ -799,15 +830,18 @@ function check_external_monitor_stale(?int $now = null): array {
 
 function sync_monitoring_schedule(?int $now = null): void {
     $now = $now ?? time();
-    $hooks = [DELIVERY_HOOK, SCAN_HOOK, QUEUE_HOOK, CLEANUP_HOOK];
-    if (!is_enabled()) {
-        foreach ($hooks as $hook) { wp_clear_scheduled_hook($hook); }
-        return;
-    }
-    note_monitoring_enabled($now);
+    // Lead delivery is a sales-critical service, not an optional monitoring
+    // feature. Keep its worker scheduled during a staged monitoring rollout.
     if (!wp_next_scheduled(DELIVERY_HOOK)) {
         wp_schedule_event($now + 5, 'landing_every_minute', DELIVERY_HOOK);
     }
+    if (!is_enabled()) {
+        foreach ([SCAN_HOOK, QUEUE_HOOK, CLEANUP_HOOK] as $hook) {
+            wp_clear_scheduled_hook($hook);
+        }
+        return;
+    }
+    note_monitoring_enabled($now);
     if (!wp_next_scheduled(SCAN_HOOK)) {
         wp_schedule_event($now + 10, 'landing_every_minute', SCAN_HOOK);
     }
@@ -820,8 +854,10 @@ function sync_monitoring_schedule(?int $now = null): void {
 }
 
 function run_delivery_cron(): void {
-    if (!is_enabled()) { return; }
     try {
+        // Reservation repair is part of delivery correctness and therefore
+        // runs even when optional incident alerts are staged off.
+        reconcile_delivery_rows();
         \LandingConfig\LeadDelivery\mark_stale_sending_unknown();
         \LandingConfig\LeadDelivery\run_delivery_worker(20);
     } catch (\Throwable $ignored) {
