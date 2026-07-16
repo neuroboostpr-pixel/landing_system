@@ -32,6 +32,26 @@ function blocked_label(string $reason): string {
     return $labels[$reason] ?? esc_html($reason);
 }
 
+function normalize_submission_filter($value): ?string {
+    if (!is_scalar($value)) { return null; }
+    $submission_id = strtolower(trim((string)$value));
+    return wp_is_uuid($submission_id, 4) ? $submission_id : null;
+}
+
+/** @return array{0:string,1:array<int,string>} */
+function build_audit_filter_sql(string $filter, $submission_value): array {
+    $clauses = [];
+    $args = [];
+    if ($filter === 'ok') { $clauses[] = 'lead_id IS NOT NULL'; }
+    elseif ($filter === 'blocked') { $clauses[] = 'lead_id IS NULL'; }
+    $submission_id = normalize_submission_filter($submission_value);
+    if ($submission_id !== null) {
+        $clauses[] = 'submission_id=%s';
+        $args[] = $submission_id;
+    }
+    return [$clauses === [] ? '' : 'WHERE ' . implode(' AND ', $clauses), $args];
+}
+
 function render_page(): void {
     if (!current_user_can('manage_options')) { wp_die('Insufficient permissions'); }
 
@@ -43,19 +63,18 @@ function render_page(): void {
 
     // Фильтр: all / ok / blocked
     $filter = sanitize_key($_GET['filter'] ?? 'all');
-    $where = '';
-    if ($filter === 'ok') {
-        $where = 'WHERE lead_id IS NOT NULL';
-    } elseif ($filter === 'blocked') {
-        $where = 'WHERE lead_id IS NULL';
-    }
+    $submission_id = normalize_submission_filter($_GET['submission_id'] ?? null);
+    [$where, $where_args] = build_audit_filter_sql($filter, $submission_id);
 
     // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery
-    $total = (int) $wpdb->get_var("SELECT COUNT(*) FROM `$audit_table` $where");
+    $total_sql = "SELECT COUNT(*) FROM `$audit_table` $where";
+    if ($where_args !== []) { $total_sql = $wpdb->prepare($total_sql, ...$where_args); }
+    $total = (int) $wpdb->get_var($total_sql);
     // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery
+    $row_args = array_merge($where_args, [$per_page, $offset]);
     $rows = $wpdb->get_results($wpdb->prepare(
         "SELECT * FROM `$audit_table` $where ORDER BY created_at DESC LIMIT %d OFFSET %d",
-        $per_page, $offset
+        ...$row_args
     ), ARRAY_A);
 
     // Счётчики для вкладок
@@ -66,6 +85,9 @@ function render_page(): void {
     $count_all     = $count_ok + $count_blocked;
 
     $base_url = admin_url('admin.php?page=landing-config-lead-audit');
+    if ($submission_id !== null) {
+        $base_url = add_query_arg('submission_id', $submission_id, $base_url);
+    }
 
     // Результат bulk-переноса
     $promoted = isset($_GET['promoted']) ? (int) $_GET['promoted'] : null;
@@ -74,6 +96,13 @@ function render_page(): void {
     <div class="wrap">
         <h1>Лог заявок (аудит)</h1>
         <p style="color:#646970;">Сюда попадают <strong>все</strong> попытки отправки формы — до любых проверок. Колонка <strong>Статус</strong> показывает прошла ли заявка в основную таблицу.</p>
+
+        <?php if ($submission_id !== null): ?>
+            <div class="notice notice-info inline"><p>
+                Показан точный идентификатор отправки <code><?php echo esc_html($submission_id); ?></code>.
+                <a href="<?php echo esc_url(admin_url('admin.php?page=landing-config-lead-audit')); ?>">Сбросить фильтр</a>
+            </p></div>
+        <?php endif; ?>
 
         <?php if ($promoted !== null): ?>
             <div class="notice notice-success is-dismissible">
@@ -97,6 +126,9 @@ function render_page(): void {
             <?php wp_nonce_field('landing_audit_bulk_promote'); ?>
             <input type="hidden" name="action" value="landing_audit_bulk_promote">
             <input type="hidden" name="filter" value="<?php echo esc_attr($filter); ?>">
+            <?php if ($submission_id !== null): ?>
+                <input type="hidden" name="submission_id" value="<?php echo esc_attr($submission_id); ?>">
+            <?php endif; ?>
 
             <div class="tablenav top">
                 <div class="alignleft actions bulkactions">
@@ -211,11 +243,160 @@ function render_page(): void {
     <?php
 }
 
+function audit_promotion_lock_name(int $audit_id, ?string $submission_id = null): string {
+    $submission_id = normalize_submission_filter($submission_id);
+    if ($submission_id !== null) {
+        // Use the primary intake lock namespace so a live retry and an admin
+        // recovery cannot insert the same submission concurrently.
+        if (function_exists('LandingConfig\\REST\\submission_lock_name')) {
+            return \LandingConfig\REST\submission_lock_name($submission_id);
+        }
+        return 'lpl_' . get_current_blog_id() . '_' . substr(hash('sha256', $submission_id), 0, 32);
+    }
+    $scope = 'audit_' . max(0, $audit_id);
+    return 'lpap_' . get_current_blog_id() . '_' . $scope;
+}
+
+function acquire_audit_promotion_lock(int $audit_id, ?string $submission_id = null): bool {
+    global $wpdb;
+    return $audit_id > 0 && (int)$wpdb->get_var($wpdb->prepare(
+        'SELECT GET_LOCK(%s, %d)', audit_promotion_lock_name($audit_id, $submission_id), 2
+    )) === 1;
+}
+
+function release_audit_promotion_lock(int $audit_id, ?string $submission_id = null): void {
+    global $wpdb;
+    if ($audit_id > 0) {
+        $wpdb->get_var($wpdb->prepare(
+            'SELECT RELEASE_LOCK(%s)', audit_promotion_lock_name($audit_id, $submission_id)
+        ));
+    }
+}
+
+function audit_row_is_promotable(array $row): bool {
+    $lead_id = $row['lead_id'] ?? null;
+    return ($lead_id === null || $lead_id === '')
+        && (string)($row['pd_consent'] ?? '') === '1'
+        && (trim((string)($row['phone'] ?? '')) !== '' || trim((string)($row['email'] ?? '')) !== '');
+}
+
+function find_promoted_lead_by_submission(string $submission_id): int {
+    if (!wp_is_uuid($submission_id, 4)) { return 0; }
+    global $wpdb;
+    $row = $wpdb->get_row($wpdb->prepare(
+        'SELECT id FROM `' . get_leads_table_name() . '` WHERE submission_id=%s ORDER BY id ASC LIMIT 1',
+        $submission_id
+    ), ARRAY_A);
+    return is_array($row) ? max(0, (int)($row['id'] ?? 0)) : 0;
+}
+
+function link_audit_to_lead(int $audit_id, int $lead_id, string $detail): void {
+    if ($audit_id <= 0 || $lead_id <= 0) { return; }
+    global $wpdb;
+    $wpdb->update(
+        get_lead_audit_table_name(),
+        ['lead_id' => $lead_id, 'blocked_by' => null, 'block_detail' => $detail],
+        ['id' => $audit_id],
+        ['%d', '%s', '%s'],
+        ['%d']
+    );
+}
+
+function queue_promoted_lead_delivery(int $lead_id): void {
+    if ($lead_id <= 0) { return; }
+    try {
+        if (function_exists('LandingConfig\\LeadDelivery\\reserve_integrations')) {
+            \LandingConfig\LeadDelivery\reserve_integrations($lead_id);
+        }
+        if (function_exists('wp_schedule_single_event')) {
+            wp_schedule_single_event(time(), \LandingConfig\LeadDelivery\DELIVERY_HOOK, [$lead_id]);
+        }
+        if (function_exists('spawn_cron')) { spawn_cron(); }
+    } catch (\Throwable $ignored) {
+        error_log('[landing-config] audit_promote_delivery_schedule_failed');
+    }
+}
+
+function promote_one_audit_row(int $audit_id): string {
+    if ($audit_id <= 0) { return 'skipped'; }
+    global $wpdb;
+    $audit_table = get_lead_audit_table_name();
+    $initial = $wpdb->get_row($wpdb->prepare(
+        "SELECT * FROM `{$audit_table}` WHERE id=%d LIMIT 1", $audit_id
+    ), ARRAY_A);
+    if (!is_array($initial) || !audit_row_is_promotable($initial)) { return 'skipped'; }
+    $locked_submission_id = normalize_submission_filter($initial['submission_id'] ?? null);
+    if (!acquire_audit_promotion_lock($audit_id, $locked_submission_id)) { return 'skipped'; }
+    try {
+        $row = $wpdb->get_row($wpdb->prepare(
+            "SELECT * FROM `{$audit_table}` WHERE id=%d LIMIT 1", $audit_id
+        ), ARRAY_A);
+        if (!is_array($row) || !audit_row_is_promotable($row)) { return 'skipped'; }
+        $phone = trim((string)($row['phone'] ?? ''));
+        $email = trim((string)($row['email'] ?? ''));
+
+        $submission_id = normalize_submission_filter($row['submission_id'] ?? null);
+        if ($submission_id !== $locked_submission_id) { return 'skipped'; }
+        if ($submission_id !== null) {
+            $existing_lead_id = find_promoted_lead_by_submission($submission_id);
+            if ($existing_lead_id > 0) {
+                link_audit_to_lead($audit_id, $existing_lead_id, 'promoted_existing_submission');
+                return 'skipped';
+            }
+        }
+
+        $data = [
+            'submission_id'    => $submission_id,
+            'name'             => (string)($row['name'] ?? ''),
+            'phone'            => $phone,
+            'email'            => $email,
+            'message'          => (string)($row['message'] ?? ''),
+            'source_block'     => (string)($row['source_block'] ?? ''),
+            'utm_source'       => (string)($row['utm_source'] ?? ''),
+            'utm_medium'       => (string)($row['utm_medium'] ?? ''),
+            'utm_campaign'     => (string)($row['utm_campaign'] ?? ''),
+            'utm_term'         => (string)($row['utm_term'] ?? ''),
+            'utm_content'      => (string)($row['utm_content'] ?? ''),
+            'roistat_visit'    => (string)($row['roistat_visit'] ?? ''),
+            'ip'               => (string)($row['ip'] ?? ''),
+            'user_agent'       => (string)($row['user_agent'] ?? ''),
+            'created_at'       => (string)($row['created_at'] ?? current_time('mysql', true)),
+            'processed_status' => 'pending',
+            'pd_consent_granted_at' => (string)($row['created_at'] ?? current_time('mysql', true)),
+            'recaptcha_score'  => null,
+        ];
+        $inserted = $wpdb->insert(get_leads_table_name(), $data);
+        $lead_id = (int)($wpdb->insert_id ?? 0);
+        if ($inserted === false || $inserted === 0 || $lead_id <= 0) {
+            error_log('[landing-config] audit_promote_insert_failed audit_id=' . $audit_id);
+            return 'skipped';
+        }
+        link_audit_to_lead($audit_id, $lead_id, 'promoted_manually');
+        queue_promoted_lead_delivery($lead_id);
+        do_action('landing_config_lead_received', $lead_id, $data);
+        return 'promoted';
+    } finally {
+        release_audit_promotion_lock($audit_id, $locked_submission_id);
+    }
+}
+
+/** @return array{promoted:int,skipped:int} */
+function promote_audit_rows(array $audit_ids): array {
+    $summary = ['promoted' => 0, 'skipped' => 0];
+    $audit_ids = array_values(array_unique(array_filter(array_map('intval', $audit_ids), static fn(int $id): bool => $id > 0)));
+    foreach ($audit_ids as $audit_id) {
+        $result = promote_one_audit_row($audit_id);
+        $summary[$result === 'promoted' ? 'promoted' : 'skipped']++;
+    }
+    return $summary;
+}
+
 /**
  * Bulk-перенос записей из аудит-лога в основную таблицу заявок.
  * Строки с уже заполненным lead_id пропускаются (не дублируем).
  */
 function handle_bulk_promote(): void {
+    if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') { wp_die('Method not allowed', 405); }
     if (!current_user_can('manage_options')) { wp_die('No.', 403); }
     check_admin_referer('landing_audit_bulk_promote');
 
@@ -223,8 +404,10 @@ function handle_bulk_promote(): void {
     $audit_ids   = array_map('intval', (array)($_POST['audit_ids'] ?? []));
     $audit_ids   = array_values(array_filter($audit_ids, fn($i) => $i > 0));
     $filter      = sanitize_key($_POST['filter'] ?? 'all');
+    $submission_id = normalize_submission_filter($_POST['submission_id'] ?? null);
 
     $back = admin_url('admin.php?page=landing-config-lead-audit&filter=' . $filter);
+    if ($submission_id !== null) { $back .= '&submission_id=' . rawurlencode($submission_id); }
 
     if ($bulk_action !== 'promote') {
         wp_safe_redirect($back);
@@ -235,62 +418,7 @@ function handle_bulk_promote(): void {
         exit;
     }
 
-    global $wpdb;
-    $audit_table = get_lead_audit_table_name();
-    $leads_table = get_leads_table_name();
-
-    $promoted = 0;
-    $skipped  = 0;
-
-    foreach ($audit_ids as $audit_id) {
-        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery
-        $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM `$audit_table` WHERE id = %d", $audit_id), ARRAY_A);
-        if (!$row) { $skipped++; continue; }
-
-        // Уже есть lead_id — пропускаем
-        if ($row['lead_id'] !== null && $row['lead_id'] !== '') {
-            $skipped++;
-            continue;
-        }
-
-        // Вставляем в основную таблицу
-        $inserted = $wpdb->insert($leads_table, [
-            'submission_id'    => (string)($row['submission_id'] ?? '') ?: null,
-            'name'             => (string)($row['name'] ?? ''),
-            'phone'            => (string)($row['phone'] ?? ''),
-            'email'            => (string)($row['email'] ?? ''),
-            'message'          => (string)($row['message'] ?? ''),
-            'source_block'     => (string)($row['source_block'] ?? ''),
-            'utm_source'       => (string)($row['utm_source'] ?? ''),
-            'utm_medium'       => (string)($row['utm_medium'] ?? ''),
-            'utm_campaign'     => (string)($row['utm_campaign'] ?? ''),
-            'utm_term'         => '',
-            'utm_content'      => '',
-            'roistat_visit'    => (string)($row['roistat_visit'] ?? ''),
-            'ip'               => (string)($row['ip'] ?? ''),
-            'user_agent'       => (string)($row['user_agent'] ?? ''),
-            'created_at'       => (string)($row['created_at']),
-            'processed_status' => 'pending',
-            'pd_consent_granted_at' => ($row['pd_consent'] === '1') ? (string)$row['created_at'] : null,
-            'recaptcha_score'  => null,
-        ]);
-
-        if ($inserted) {
-            $new_lead_id = (int)$wpdb->insert_id;
-            // Обновляем audit: теперь lead_id заполнен, blocked_by очищаем
-            $wpdb->update(
-                $audit_table,
-                ['lead_id' => $new_lead_id, 'blocked_by' => null, 'block_detail' => 'promoted_manually'],
-                ['id' => $audit_id],
-                ['%d', '%s', '%s'],
-                ['%d']
-            );
-            $promoted++;
-        } else {
-            error_log('[landing-config] audit promote: insert failed for audit_id=' . $audit_id . ' err=' . $wpdb->last_error);
-        }
-    }
-
-    wp_safe_redirect($back . '&promoted=' . $promoted . '&skipped=' . $skipped);
+    $summary = promote_audit_rows($audit_ids);
+    wp_safe_redirect($back . '&promoted=' . $summary['promoted'] . '&skipped=' . $summary['skipped']);
     exit;
 }

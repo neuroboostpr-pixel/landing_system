@@ -39,6 +39,8 @@ $alert_id = \LandingConfig\Monitoring\record_incident(
 );
 $row = queue_alert_row();
 lr_queue_row($row);
+lr_queue_row(null); // no optional form context
+lr_queue_row(['id' => 321]); // exact private audit pointer
 lr_set_http(['response' => ['code' => 200], 'body' => '{"ok":true,"result":{"message_id":987}}', 'headers' => []]);
 $observed_sending = false;
 $GLOBALS['_lr_before_http'] = static function () use (&$observed_sending, $alert_id): void {
@@ -56,6 +58,25 @@ $assert($observed_sending, 'row is durably sending with incremented attempts bef
 $assert(count($GLOBALS['_lr_http_requests']) === 1, 'one worker makes one Telegram POST');
 $assert(($sent['telegram_status'] ?? '') === 'sent' && (int)($sent['telegram_message_id'] ?? 0) === 987, 'only strict Telegram confirmation becomes sent');
 $assert(($summary['sent'] ?? 0) === 1, 'queue summary reports confirmed message');
+$first_message = (string)($GLOBALS['_lr_http_requests'][0]['args']['body']['text'] ?? '');
+$assert(str_contains($first_message, 'Аудит WordPress: #321'), 'missing-lead alert says the exact private audit row exists');
+$assert(str_contains($first_message, 'page=landing-config-lead-audit')
+    && str_contains($first_message, 'submission_id=11111111-1111-4111-8111-111111111111'),
+    'missing-lead alert links to the exact prepared UUID filter in WordPress admin');
+
+$no_audit_text = \LandingConfig\Monitoring\build_alert_text($row, ['audit_found' => false]);
+$assert(str_contains($no_audit_text, 'Контакт не дошёл в журнал WordPress')
+    && str_contains($no_audit_text, 'проверить резерв'),
+    'missing-lead alert without audit evidence honestly directs staff to fallback storage');
+$normal_wpdb = $GLOBALS['wpdb'];
+$GLOBALS['wpdb'] = new class extends MockWpdbInsert {
+    public function get_row($sql, $output = OBJECT) { throw new RuntimeException('sensitive database failure'); }
+};
+try { $db_error_context = \LandingConfig\Monitoring\safe_audit_context('11111111-1111-4111-8111-111111111111'); }
+catch (Throwable $ignored) { $db_error_context = null; }
+$GLOBALS['wpdb'] = $normal_wpdb;
+$assert($db_error_context === ['audit_found' => false],
+    'audit lookup failure degrades to no-pointer guidance without blocking the technical alert');
 
 // A second worker holding a stale pending snapshot loses the conditional claim.
 lr_queue_row($row);

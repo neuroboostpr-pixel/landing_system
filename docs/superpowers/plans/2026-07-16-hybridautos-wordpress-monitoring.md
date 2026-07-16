@@ -31,6 +31,9 @@
 - `landing_leads.processed_status` remains exclusively the business/CRM status. Delivery queue state exists only in `landing_lead_log` and cron state.
 - Status HMAC is lowercase hex `HMAC-SHA256("GET\n<path>\n<unix timestamp>\nhybridautos-ae", hex2bin(LP_FALLBACK_STATUS_SECRET))` with a maximum clock skew of `300` seconds; strict decoding must yield exactly 32 bytes.
 - Production release requires an exact server-side integration inventory: precisely one enabled lead Email recipient equal to `elapova00@gmail.com`, every prior Neuroboost Email/integration disabled, and the recorded Telegram plus Roistat/CRM integrations enabled. Admin/health evidence exposes booleans and IDs only, never the address or credentials; a mismatch blocks release.
+- A missing-lead Telegram alert contains no contact, but reports whether an exact private audit row exists, its numeric ID, and an authenticated admin URL using a prepared exact UUID filter. No audit row means the alert explicitly directs recovery to the independent fallback.
+- Manual audit promotion requires `pd_consent=1` and at least one phone/email, uses a named lock, reuses an existing valid submission UUID, and after a new insert reserves/schedules every exact enabled integration. Consentless, contactless, and repeated rows are skipped without delivery.
+- Status live-smoke is available only while `LP_FALLBACK_TEST_MODE===true`: nonce-protected `manage_options` POST body arms one exact UUID for at most 180 seconds. The first correctly HMAC-signed status request atomically returns generic no-store 503; the second follows the normal lookup. No public control route/query, raw UUID log/notification, or UUID-bearing redirect is allowed.
 
 ---
 
@@ -45,6 +48,7 @@
 | `skills/wp-landing-config/mu-plugin/landing-config/includes/rest-fallback-token.php` | Create | Uncached same-origin 12-hour fallback token bundle and safe rate limit. |
 | `skills/wp-landing-config/mu-plugin/landing-config/includes/rest-health.php` | Create | Public health, signed submission-status lookup, and signed Redis-health observation fallback. |
 | `skills/wp-landing-config/mu-plugin/landing-config/includes/admin-monitoring.php` | Create | Read-only Monitoring page and nonce-protected safe test-alert action. |
+| `skills/wp-landing-config/mu-plugin/landing-config/includes/admin-lead-audit.php` | Modify | Prepared exact UUID filter, safe audit pointer target, consent/contact-gated idempotent promotion and exact async integration reservations. |
 | `skills/wp-landing-config/mu-plugin/landing-config/landing-config.php` | Modify | Load modules in deterministic order. |
 | `skills/wp-landing-config/tests/fixtures/wp-bootstrap.php` | Modify | Header-aware REST request/response, GET HTTP mock, lock/query support. |
 | `skills/wp-landing-config/tests/fixtures/lead-reliability-bootstrap.php` | Modify | In-memory UUID lookup, alert rows, atomic claim controls. |
@@ -758,7 +762,7 @@ Run:
 
 ## Task 11: Backup, Disabled-first Deployment, Enablement and Rollback Proof
 
-**Files:** The production mutation allow-list is exactly nine paths: protected `/public_html/wp-config.php` plus eight plugin files: `landing-config.php`, `includes/db.php`, `includes/rest-lead.php`, `includes/lead-delivery-worker.php`, `includes/monitoring-alerts.php`, `includes/rest-fallback-token.php`, `includes/rest-health.php`, `includes/admin-monitoring.php`. The upload tool handles only the eight plugin files; `wp-config.php` is edited separately through the protected configuration step and is never downloaded or printed as plaintext.
+**Files:** The production mutation allow-list is exactly ten paths: protected `/public_html/wp-config.php` plus nine plugin files: `landing-config.php`, `includes/db.php`, `includes/rest-lead.php`, `includes/lead-delivery-worker.php`, `includes/monitoring-alerts.php`, `includes/rest-fallback-token.php`, `includes/rest-health.php`, `includes/admin-monitoring.php`, `includes/admin-lead-audit.php`. The upload tool handles only the nine plugin files; `wp-config.php` is edited separately through the protected configuration step and is never downloaded or printed as plaintext.
 
 - [ ] **Step 1: Tag rollback point**
 
@@ -782,11 +786,11 @@ If Task 6 has not completed, execute it exactly once and stop this WordPress rol
 
 Through Beget's protected editor, add the exact constant union from Global Constraints to `wp-config.php` before the “stop editing” line, without replacing or downloading the file. Deploy with monitor/fallback/test mode all false. `LP_FALLBACK_URL` is the full Vercel fallback POST URL; status URL is the Vercel base origin; site ID is `hybridautos-ae`; signing/status values are distinct literal lowercase 64-hex keys; Telegram ID is exact positive ID (use 0 only when exactly one enabled Telegram record exists). Record only the pre/post file hashes. Validate via WP-CLI checks that print only `CONFIG_OK`, never values; duplicate constants, wrong placement, regex failure, or role equality blocks deployment.
 
-- [ ] **Step 4: Deploy the eight allow-listed plugin files in a mixed-version-safe order**
+- [ ] **Step 4: Deploy the nine allow-listed plugin files in a mixed-version-safe order**
 
-First install and enable the once-per-minute Beget system cron under `flock` for `wp cron event run --due-now`; before hooks exist it is harmless. Then upload additive `db.php` plus the new worker/monitor/token/health/admin modules, but leave both the old synchronous `rest-lead.php` and old entrypoint active. Run the additive migration. Next upload the new `landing-config.php` entrypoint so it loads the worker/monitor modules while the old synchronous lead handler remains compatible; verify no fatal and prove one labeled synthetic due delivery row drains through cron. Only then upload the new asynchronous `rest-lead.php` last. This order guarantees it never calls an unloaded `LeadDelivery` function. Use `upload_allowlist_ftp.py`/atomic per-file replacement and verify every hash.
+First install and enable the once-per-minute Beget system cron under `flock` for `wp cron event run --due-now`; before hooks exist it is harmless. Then upload additive `db.php` plus the new worker/monitor/token/health/admin modules and `admin-lead-audit.php`, but leave both the old synchronous `rest-lead.php` and old entrypoint active. Run the additive migration. `admin-lead-audit.php` must therefore be present while all flags are still false and before monitoring is enabled. Next upload the new `landing-config.php` entrypoint so it loads the worker/monitor modules while the old synchronous lead handler remains compatible; verify no fatal and prove one labeled synthetic due delivery row drains through cron. Only then upload the new asynchronous `rest-lead.php` last. This order guarantees it never calls an unloaded `LeadDelivery` function. Use `upload_allowlist_ftp.py`/atomic per-file replacement and verify every hash.
 
-Expected: eight plugin remote paths/hashes plus the separately recorded protected `wp-config.php` hash; no other theme/content/upload/config changes. Keep monitor/fallback/test flags false, but keep the system cron active. During and for two minutes after the final handler switch, require queued due rows to fall rather than grow and no saved lead to remain without reservation beyond the one-minute reconciliation window.
+Expected: nine plugin remote paths/hashes plus the separately recorded protected `wp-config.php` hash; no other theme/content/upload/config changes. Keep monitor/fallback/test flags false, but keep the system cron active. During and for two minutes after the final handler switch, require queued due rows to fall rather than grow and no saved lead to remain without reservation beyond the one-minute reconciliation window.
 
 - [ ] **Step 5: Run migration and disabled health**
 
@@ -808,9 +812,11 @@ Send one admin test alert; prove the alert row is `sending` before the Telegram 
 
 First keep `LP_FALLBACK_ENABLED=false` and set only `LP_FALLBACK_TEST_MODE=true`. Prove an ordinary same-origin request still receives 404. Then log in as a `manage_options` administrator, obtain `testRestNonce` only from the no-store admin test bootstrap, send it only in `X-WP-Nonce`, and prove the token route returns a no-store signed `mode=test`; after the controlled primary failure the browser stores with Vercel immediately, and Vercel calls signed WordPress submission status about 45 seconds later before Telegram. Next enable live fallback and disable test mode. Expected: a normal primary success never reaches Vercel; a normal same-origin token request is signed `mode=live`; controlled primary absence produces one durable receipt/message; all normalized receipt states and watches work; only delivered/WordPress terminal recovery stops polling, while pending>10m, unknown, and expired/stored-false create the appropriate safe incident.
 
+For the mandatory live status smoke, while test mode is still true use only the nonce-protected admin POST body to arm the synthetic submission UUID. The first valid signed status request must return generic no-store 503, and the second must return the normal missing response. Prove the arm expires at 180 seconds, another UUID is unaffected, and two concurrent requests cannot both receive the injected 503. Disable test mode after the controlled checks.
+
 - [ ] **Step 10: Hash and rollback proof**
 
-Download the eight live plugin files and match reviewed hashes; verify `wp-config.php` only by its remote hash and `CONFIG_OK`, never by downloading/printing it. Inspect logs for no fatal/raw/exception hashes. On isolated staging, rehearse the safe reverse order: restore old synchronous `rest-lead.php` first while the new worker is still loaded, drain any queued/sending/retry-wait rows, then restore the old entrypoint and remaining modules while leaving additive DB schema. Submit an old-format request without UUID and require a positive lead ID. Production rollback removes only the nine allow-listed changes from the verified backup and never restores the database unless a separately approved data rollback is required. Record encrypted-backup hashes/retention date, plugin/config hashes, IDs, heartbeat, receipt states, Telegram message IDs and rollback result in README without PII/secrets.
+Download the nine live plugin files and match reviewed hashes; verify `wp-config.php` only by its remote hash and `CONFIG_OK`, never by downloading/printing it. Inspect logs for no fatal/raw/exception hashes. On isolated staging, rehearse the safe reverse order: restore old synchronous `rest-lead.php` first while the new worker is still loaded, drain any queued/sending/retry-wait rows, then restore the old entrypoint and remaining modules while leaving additive DB schema. Submit an old-format request without UUID and require a positive lead ID. Production rollback restores only the ten allow-listed paths from the verified backup and never restores the database unless a separately approved data rollback is required. Record encrypted-backup hashes/retention date, all nine plugin hashes plus the protected config hash, IDs, heartbeat, receipt states, Telegram message IDs and rollback result in README without PII/secrets.
 
 ## Final Acceptance Gate
 
@@ -825,7 +831,7 @@ Download the eight live plugin files and match reviewed hashes; verify `wp-confi
 - [ ] Cron/heartbeat, delivery reconciliation, unsigned public health, signed submission-status/external-observation, and 30/90-day retention behave exactly as specified.
 - [ ] Monitoring rows/messages/options/admin/logs contain no contacts or credentials.
 - [ ] No raw exception text or its hash appears in logs/rows/messages.
-- [ ] Fresh encrypted full-site/DB backup (0700 directory/0600 files, no plaintext, dated retention), Git tag, eight plugin hashes plus protected `wp-config.php` hash, and additive-schema rollback are verified.
+- [ ] Fresh encrypted full-site/DB backup (0700 directory/0600 files, no plaintext, dated retention), Git tag, nine plugin hashes plus protected `wp-config.php` hash, and additive-schema rollback are verified.
 
 ## Known Boundary
 

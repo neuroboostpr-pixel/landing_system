@@ -24,7 +24,7 @@ $modules = [
     'includes/rest-fallback-token.php', 'includes/monitoring-alerts.php',
     'includes/lead-delivery-worker.php', 'includes/rest-lead.php',
     'includes/rest-form-events.php', 'includes/rest-health.php',
-    'includes/admin-pages.php', 'includes/admin-monitoring.php',
+    'includes/admin-pages.php', 'includes/admin-lead-audit.php', 'includes/admin-monitoring.php',
 ];
 foreach ($modules as $module) {
     $assert(substr_count((string)$bootstrap, $module) === 1, "bootstrap loads {$module} exactly once");
@@ -61,7 +61,7 @@ $response = \LandingConfig\REST\handle_lead(new WP_REST_Request([
 $assert($response->get_status() === 200 && (int)($response->get_data()['lead_id'] ?? 0) > 0, 'saved lead stays HTTP 200 when reservation throws');
 
 $production = '';
-foreach (['rest-lead.php','lead-delivery-worker.php','monitoring-alerts.php','rest-fallback-token.php','rest-health.php','admin-monitoring.php'] as $new_file) {
+foreach (['rest-lead.php','lead-delivery-worker.php','monitoring-alerts.php','rest-fallback-token.php','rest-health.php','admin-monitoring.php','admin-lead-audit.php'] as $new_file) {
     $production .= file_get_contents(__DIR__ . '/../mu-plugin/landing-config/includes/' . $new_file);
 }
 foreach (['getMessage()', 'error_sha256', 'hash(\'sha256\', $e', 'hash("sha256", $e'] as $unsafe) {

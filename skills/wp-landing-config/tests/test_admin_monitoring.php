@@ -97,7 +97,9 @@ $source = file_get_contents($module);
 foreach (['check_admin_referer', 'current_user_can', 'Referrer-Policy: no-referrer', 'wp_safe_redirect', '303'] as $guard) {
     $assert(str_contains((string)$source, $guard), "admin action includes {$guard}");
 }
-$assert(!str_contains((string)$source, 'type="text" name="'), 'dashboard has no free-text technical alert input');
+$assert(substr_count((string)$source, 'type="text" name="') === 1
+    && str_contains((string)$source, 'name="smoke_submission_id"'),
+    'dashboard has only the exact UUID body field for authorized status smoke');
 
 echo $failures === 0 ? "PASS: monitoring admin\n" : "FAILURES: {$failures}\n";
 exit($failures === 0 ? 0 : 1);

@@ -100,6 +100,10 @@ function handle_submission_status_at($request, int $now) {
     if (!signed_headers_are_valid($request, 'GET', $path, $now)) {
         return no_store(['ok' => false, 'error' => 'unauthorized'], 401);
     }
+    if (function_exists('LandingConfig\\MonitoringAdmin\\consume_status_smoke_failure_at')
+        && \LandingConfig\MonitoringAdmin\consume_status_smoke_failure_at($submission_id, $now)) {
+        return no_store(['ok' => false, 'error' => 'temporarily_unavailable'], 503);
+    }
     global $wpdb;
     try {
         $exists = (int)$wpdb->get_var($wpdb->prepare(

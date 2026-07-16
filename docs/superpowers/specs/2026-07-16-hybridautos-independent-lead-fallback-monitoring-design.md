@@ -548,6 +548,10 @@ Changes required by this amendment:
 - treat only `delivered,stored=true` or a matching WordPress lead as terminal recovery, and treat `expired/stored=false` as missing/reopened;
 - provide the no-store token endpoint;
 - provide the signed `submission-status/{uuid}` endpoint;
+- for a `missing_lead` only, resolve the exact private WordPress audit row by prepared UUID equality and put only its numeric audit ID plus an authenticated admin URL with the exact UUID filter into the technical Telegram alert; if no audit row exists, state that the contact did not reach the WordPress journal and direct the operator to the independent fallback;
+- manual audit promotion accepts only `pd_consent=1` rows with a phone or email, serializes by a named audit lock, reuses an existing lead with the same valid submission UUID, and queues the promoted lead once for every exact enabled Email/Telegram/Roistat integration; it never promotes a consentless row or redispatches an existing submission;
+- the admin audit page applies the Telegram link through prepared exact UUID equality and never treats a partial UUID as a search;
+- when and only when `LP_FALLBACK_TEST_MODE===true`, a `manage_options` administrator may use nonce-protected POST body input to arm one exact UUID for at most 180 seconds; the first correctly signed status request atomically consumes that UUID-scoped state and returns generic no-store 503, while the second follows the normal missing/existing path. There is no public control/query route, and raw UUID values never enter logs, notifications, transient keys, or lock names;
 - keep public WordPress health PII-free;
 - never return contact to Vercel.
 
@@ -577,6 +581,7 @@ Backups:
 - no-store token endpoint;
 - unsigned public health plus signed submission-status and external-observation endpoints;
 - safe admin monitoring and tests.
+- safe exact-audit recovery pointer and consent/idempotency/async-dispatch promotion in `includes/admin-lead-audit.php`.
 
 ### Frontend `hybridautos-ae`
 

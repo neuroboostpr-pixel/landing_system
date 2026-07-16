@@ -6,6 +6,8 @@ if (!defined('ABSPATH')) { exit; }
 const PAGE_SLUG = 'landing-config-monitoring';
 const TEST_ALERT_ACTION = 'lp_monitor_test_alert';
 const CONTROLLED_FAILURE_ACTION = 'lp_fallback_arm_controlled_failure';
+const STATUS_SMOKE_ACTION = 'lp_fallback_arm_status_smoke';
+const STATUS_SMOKE_MAX_TTL = 180;
 
 add_action('admin_menu', static function (): void {
     add_submenu_page('landing-config', 'Мониторинг заявок', 'Мониторинг заявок',
@@ -13,6 +15,7 @@ add_action('admin_menu', static function (): void {
 });
 add_action('admin_post_' . TEST_ALERT_ACTION, __NAMESPACE__ . '\\handle_test_alert');
 add_action('admin_post_' . CONTROLLED_FAILURE_ACTION, __NAMESPACE__ . '\\handle_arm_controlled_failure');
+add_action('admin_post_' . STATUS_SMOKE_ACTION, __NAMESPACE__ . '\\handle_arm_status_smoke');
 
 function yes_no(bool $value): string { return $value ? 'yes' : 'no'; }
 
@@ -67,6 +70,15 @@ function render_page(): void {
         <input type="hidden" name="action" value="<?php echo esc_attr(CONTROLLED_FAILURE_ACTION); ?>">
         <button type="submit" class="button">lp_fallback_arm_controlled_failure</button>
       </form>
+      <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+        <?php wp_nonce_field(STATUS_SMOKE_ACTION); ?>
+        <input type="hidden" name="action" value="<?php echo esc_attr(STATUS_SMOKE_ACTION); ?>">
+        <label>Тестовый UUID для одноразового status 503
+          <input type="text" name="smoke_submission_id" required autocomplete="off"
+            pattern="[0-9a-fA-F-]{36}" maxlength="36">
+        </label>
+        <button type="submit" class="button">Вооружить status smoke на 180 секунд</button>
+      </form>
       <?php endif; ?>
     </div>
     <?php
@@ -100,6 +112,76 @@ function handle_arm_controlled_failure(): void {
     set_transient('lp_fallback_controlled_failure_' . $user_id, 'armed', 60);
     safe_admin_redirect();
     wp_safe_redirect(home_url('/'), 303);
+}
+
+function status_smoke_test_mode_enabled(): bool {
+    return defined('LP_FALLBACK_TEST_MODE') && LP_FALLBACK_TEST_MODE === true;
+}
+
+function normalized_status_smoke_uuid($value): ?string {
+    if (!is_scalar($value)) { return null; }
+    $uuid = strtolower(trim((string)$value));
+    return \LandingConfig\Monitoring\is_valid_submission_id($uuid) ? $uuid : null;
+}
+
+function status_smoke_scope(string $submission_id): ?array {
+    $uuid = normalized_status_smoke_uuid($submission_id);
+    if ($uuid === null) { return null; }
+    $scope = hash_hmac('sha256', $uuid, wp_salt('auth'));
+    return [
+        'key' => 'lp_status_smoke_' . substr($scope, 0, 48),
+        'lock' => 'lpss_' . get_current_blog_id() . '_' . substr($scope, 0, 32),
+    ];
+}
+
+function with_status_smoke_lock(string $submission_id, callable $callback) {
+    $scope = status_smoke_scope($submission_id);
+    if ($scope === null) { return false; }
+    global $wpdb;
+    if ((int)$wpdb->get_var($wpdb->prepare('SELECT GET_LOCK(%s, 0)', $scope['lock'])) !== 1) {
+        return false;
+    }
+    try { return $callback($scope['key']); }
+    finally { $wpdb->get_var($wpdb->prepare('SELECT RELEASE_LOCK(%s)', $scope['lock'])); }
+}
+
+function arm_status_smoke_at(string $submission_id, int $ttl, int $now): bool {
+    if (!status_smoke_test_mode_enabled() || normalized_status_smoke_uuid($submission_id) === null || $now <= 0) {
+        return false;
+    }
+    $ttl = max(1, min(STATUS_SMOKE_MAX_TTL, $ttl));
+    return with_status_smoke_lock($submission_id, static function (string $key) use ($ttl, $now): bool {
+        return set_transient($key, ['state' => 'armed', 'expires_at' => $now + $ttl], $ttl) === true;
+    }) === true;
+}
+
+function consume_status_smoke_failure_at(string $submission_id, int $now): bool {
+    if (!status_smoke_test_mode_enabled() || normalized_status_smoke_uuid($submission_id) === null || $now <= 0) {
+        return false;
+    }
+    return with_status_smoke_lock($submission_id, static function (string $key) use ($now): bool {
+        $state = get_transient($key);
+        if (!is_array($state) || ($state['state'] ?? '') !== 'armed'
+            || !is_int($state['expires_at'] ?? null) || (int)$state['expires_at'] <= $now) {
+            if ($state !== false) { delete_transient($key); }
+            return false;
+        }
+        $remaining = max(1, min(STATUS_SMOKE_MAX_TTL, (int)$state['expires_at'] - $now));
+        set_transient($key, ['state' => 'consumed', 'expires_at' => (int)$state['expires_at']], $remaining);
+        return true;
+    }) === true;
+}
+
+function handle_arm_status_smoke(): void {
+    require_admin_post(STATUS_SMOKE_ACTION);
+    if (!status_smoke_test_mode_enabled()) { wp_die('Not found', 404); }
+    $submission_id = normalized_status_smoke_uuid($_POST['smoke_submission_id'] ?? null);
+    if ($submission_id === null) { wp_die('Invalid submission id', 400); }
+    if (!arm_status_smoke_at($submission_id, STATUS_SMOKE_MAX_TTL, time())) {
+        wp_die('Temporarily unavailable', 503);
+    }
+    safe_admin_redirect();
+    wp_safe_redirect(admin_url('admin.php?page=' . PAGE_SLUG), 303);
 }
 
 function consume_controlled_failure_claim(?int $user_id = null): ?array {

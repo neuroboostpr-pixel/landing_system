@@ -523,6 +523,31 @@ function safe_form_context(?string $submission_id): array {
     ];
 }
 
+function safe_audit_context(?string $submission_id): array {
+    if ($submission_id === null || !is_valid_submission_id($submission_id)) {
+        return ['audit_found' => false];
+    }
+    global $wpdb;
+    try {
+        $row = $wpdb->get_row($wpdb->prepare(
+            "SELECT id FROM `" . \LandingConfig\DB\get_lead_audit_table_name()
+            . "` WHERE submission_id=%s ORDER BY id DESC LIMIT 1",
+            $submission_id
+        ), ARRAY_A);
+    } catch (\Throwable $ignored) {
+        return ['audit_found' => false];
+    }
+    $audit_id = is_array($row) ? max(0, (int)($row['id'] ?? 0)) : 0;
+    if ($audit_id <= 0) { return ['audit_found' => false]; }
+    return [
+        'audit_found' => true,
+        'audit_id' => $audit_id,
+        'audit_url' => admin_url(
+            'admin.php?page=landing-config-lead-audit&submission_id=' . rawurlencode($submission_id)
+        ),
+    ];
+}
+
 function build_alert_text(array $alert, array $context): string {
     $kind = (string)($alert['incident_kind'] ?? '');
     $lead_id = max(0, (int)($alert['lead_id'] ?? 0));
@@ -545,6 +570,17 @@ function build_alert_text(array $alert, array $context): string {
     if (!empty($context['page_path'])) { $lines[] = 'Страница: ' . esc_html((string)$context['page_path']); }
     if (!empty($context['form_id'])) { $lines[] = 'Форма: ' . esc_html((string)$context['form_id']); }
     if (!empty($context['cta_key'])) { $lines[] = 'CTA: ' . esc_html((string)$context['cta_key']); }
+    if ($kind === 'missing_lead') {
+        if (($context['audit_found'] ?? false) === true
+            && (int)($context['audit_id'] ?? 0) > 0
+            && (string)($context['audit_url'] ?? '') !== '') {
+            $audit_id = (int)$context['audit_id'];
+            $lines[] = 'Аудит WordPress: #' . $audit_id;
+            $lines[] = '<a href="' . esc_url((string)$context['audit_url']) . '">Открыть контакт в закрытом журнале</a>';
+        } else {
+            $lines[] = 'Контакт не дошёл в журнал WordPress — проверить резервное хранилище.';
+        }
+    }
     return implode("\n", $lines);
 }
 
@@ -561,7 +597,11 @@ function send_monitoring_alert(array $alert, int $now): array {
     if ($credentials === null) {
         return ['status' => 'failed', 'code' => null, 'message_id' => null, 'retry_after' => 60];
     }
-    $context = safe_form_context(isset($alert['submission_id']) ? (string)$alert['submission_id'] : null);
+    $submission_id = isset($alert['submission_id']) ? (string)$alert['submission_id'] : null;
+    $context = safe_form_context($submission_id);
+    if (($alert['incident_kind'] ?? '') === 'missing_lead') {
+        $context = array_merge($context, safe_audit_context($submission_id));
+    }
     $text = build_alert_text($alert, $context);
     try {
         $response = wp_remote_post('https://api.telegram.org/bot' . $credentials['token'] . '/sendMessage', [
