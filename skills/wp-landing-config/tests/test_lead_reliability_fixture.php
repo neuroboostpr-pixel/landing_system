@@ -31,5 +31,11 @@ lr_set_http(['response' => ['code' => 503], 'body' => 'busy', 'headers' => []]);
 $http = wp_remote_post('https://provider.invalid', []);
 $assert(wp_remote_retrieve_response_code($http) === 503, 'HTTP response is controllable');
 
+$request = new WP_REST_Request([], '', ['X-LP-Timestamp' => '1784190000']);
+$assert($request->get_header('x-lp-timestamp') === '1784190000', 'REST mock reads headers case-insensitively');
+lr_set_http(['response' => ['code' => 404], 'body' => '{"ok":true,"exists":false,"stored":false}', 'headers' => []]);
+$http = wp_remote_get('https://fallback.invalid/api/v1/receipts/uuid', []);
+$assert(wp_remote_retrieve_response_code($http) === 404, 'HTTP GET mock is controllable');
+
 echo $failures === 0 ? "PASS: lead reliability fixture\n" : "FAILURES: {$failures}\n";
 exit($failures === 0 ? 0 : 1);

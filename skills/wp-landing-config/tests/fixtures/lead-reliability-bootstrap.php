@@ -6,12 +6,7 @@ if (!defined('OBJECT')) { define('OBJECT', 'OBJECT'); }
 
 final class LeadReliabilityWpdb extends MockWpdbInsert {
     public array $tables = [];
-    public array $row_queue = [];
     public array $results_queue = [];
-    public array $query_count_queue = [];
-    public array $query_log = [];
-    public string $last_error = '';
-    public int $rows_affected = 0;
     private int $next_id = 1;
 
     public function insert($table, $data, $formats = null) {

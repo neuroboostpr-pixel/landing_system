@@ -173,6 +173,11 @@ function set_transient($key, $value, $ttl = 0) {
 
 class MockWpdbInsert extends MockWpdb {
     public $insert_id = 0;
+    public array $query_log = [];
+    public array $row_queue = [];
+    public array $query_count_queue = [];
+    public int $rows_affected = 0;
+    public string $last_error = '';
 
     public function insert($table, $data, $formats = null) {
         if (strpos($table, 'landing_lead_status_log') !== false) {
@@ -217,6 +222,7 @@ class MockWpdbInsert extends MockWpdb {
     }
 
     public function get_results($sql, $output = OBJECT) {
+        $this->query_log[] = (string) $sql;
         if (strpos($sql, 'landing_lead_status_log') !== false) {
             if (!isset($GLOBALS['_mock_status_log'])) { $GLOBALS['_mock_status_log'] = []; }
             if (preg_match('/WHERE\s+lead_id\s*=\s*(\d+)/i', $sql, $m)) {
@@ -230,6 +236,27 @@ class MockWpdbInsert extends MockWpdb {
             return $output === ARRAY_A ? $rows : array_map(fn($r) => (object) $r, $rows);
         }
         return [];
+    }
+
+    public function get_var($sql) {
+        $this->query_log[] = (string) $sql;
+        if (stripos((string) $sql, 'GET_LOCK(') !== false) {
+            return !empty($GLOBALS['_lr_force_lock_failure']) ? 0 : 1;
+        }
+        if (stripos((string) $sql, 'RELEASE_LOCK(') !== false) {
+            return 1;
+        }
+        $row = array_shift($this->row_queue);
+        if (is_array($row)) { return reset($row); }
+        if (is_object($row)) { $values = get_object_vars($row); return reset($values); }
+        return $row;
+    }
+
+    public function query($sql) {
+        $this->query_log[] = (string) $sql;
+        $count = array_shift($this->query_count_queue);
+        $this->rows_affected = $count === null ? 1 : (int) $count;
+        return $this->rows_affected;
     }
 
     public function prepare($sql, ...$args) {
@@ -248,30 +275,41 @@ $GLOBALS['wpdb'] = new MockWpdbInsert();
 
 // Mock REST response + request classes
 class WP_REST_Response {
-    public $data; public $status;
+    public $data; public $status; public array $headers = [];
     public function __construct($data, $status = 200) {
         $this->data = $data;
         $this->status = $status;
     }
     public function get_status() { return $this->status; }
     public function get_data() { return $this->data; }
+    public function header($key, $value) { $this->headers[strtolower((string)$key)] = (string)$value; }
 }
 
 class WP_REST_Request {
-    private $params = [];
-    private $body = '';
-    public function __construct(array $params = [], string $body = '') { $this->params = $params; $this->body = $body; }
+    private array $params = [];
+    private string $body = '';
+    private array $headers = [];
+    public function __construct(array $params = [], string $body = '', array $headers = []) {
+        $this->params = $params;
+        $this->body = $body;
+        $this->headers = array_change_key_case($headers, CASE_LOWER);
+    }
     public function get_params() { return $this->params; }
     public function get_param($key) { return $this->params[$key] ?? null; }
     public function get_body() { return $this->body; }
+    public function get_header($key) { return $this->headers[strtolower((string)$key)] ?? ''; }
 }
 
 function wp_remote_post($url, $args) {
     if (array_key_exists('_lr_http', $GLOBALS)) {
-        $GLOBALS['_lr_http_requests'][] = compact('url', 'args');
+        $GLOBALS['_lr_http_requests'][] = ['method' => 'POST', 'url' => $url, 'args' => $args];
         return $GLOBALS['_lr_http'];
     }
     return ['response' => ['code' => 200], 'body' => '{"ok":true}'];
+}
+function wp_remote_get($url, $args = []) {
+    $GLOBALS['_lr_http_requests'][] = ['method' => 'GET', 'url' => $url, 'args' => $args];
+    return $GLOBALS['_lr_http'] ?? ['response' => ['code' => 200], 'body' => '{"ok":true}', 'headers' => []];
 }
 if (!class_exists('WP_Error')) {
     class WP_Error {

@@ -6,6 +6,7 @@ use function LandingConfig\DB\maybe_install_or_migrate;
 use function LandingConfig\DB\get_leads_table_name;
 use function LandingConfig\DB\get_lead_log_table_name;
 use function LandingConfig\DB\get_form_events_table_name;
+use function LandingConfig\DB\get_monitor_alerts_table_name;
 
 $failures = 0;
 $tests = 0;
@@ -98,8 +99,8 @@ $GLOBALS['_mock_is_multisite'] = false;
 set_mock_current_blog_id(1);
 maybe_install_or_migrate();
 assert_test(
-    count($GLOBALS['_mock_dbdelta_calls']) === 5,
-    "single-site path calls dbDelta five times (including privacy-safe form events), got: " . count($GLOBALS['_mock_dbdelta_calls'])
+    count($GLOBALS['_mock_dbdelta_calls']) === 6,
+    "single-site path calls dbDelta six times (including privacy-safe monitoring), got: " . count($GLOBALS['_mock_dbdelta_calls'])
 );
 $GLOBALS['_mock_is_multisite'] = true; // reset
 
@@ -128,8 +129,8 @@ assert_test(
     'schema creates the standalone form events table'
 );
 assert_test(
-    substr_count($schema_sql, 'submission_id CHAR(36)') === 3,
-    'submission_id is present in leads, audit, and form events for correlation'
+    substr_count($schema_sql, 'submission_id CHAR(36)') === 4,
+    'submission_id is present in leads, audit, form events, and monitor incidents for correlation'
 );
 assert_test(
     !str_contains($schema_sql, 'UNIQUE KEY submission_id'),
@@ -148,9 +149,24 @@ assert_test(
     'form events schema indexes browser ordering within a submission'
 );
 assert_test(
-    \LandingConfig\DB\DB_VERSION === '1.0.3',
-    'DB version is bumped for event-sequence schema migration'
+    \LandingConfig\DB\DB_VERSION === '1.1.0',
+    'monitoring migration has version 1.1.0'
 );
+
+set_mock_current_blog_id(2);
+assert_test(get_monitor_alerts_table_name() === 'wp_2_landing_monitor_alerts', 'monitor incidents are isolated per blog');
+
+$schema_sql = implode("\n", $GLOBALS['_mock_dbdelta_calls']);
+assert_test(str_contains($schema_sql, 'integration_id BIGINT(20) UNSIGNED NOT NULL DEFAULT 0'), 'delivery rows store exact integration id');
+assert_test(str_contains($schema_sql, 'next_attempt_at DATETIME NULL'), 'delivery rows carry queue due time');
+assert_test(str_contains(implode("\n", $GLOBALS['wpdb']->query_log ?? []), 'UNIQUE KEY delivery_attempt (lead_id,integration_id,attempt)'), 'migration installs exact reservation key');
+assert_test(str_contains($schema_sql, 'UNIQUE KEY fingerprint (fingerprint)'), 'incident fingerprint is unique');
+assert_test(str_contains($schema_sql, 'fingerprint_scope BIGINT(20) UNSIGNED NOT NULL DEFAULT 0'), 'incident stores privacy-safe external generation');
+preg_match('/CREATE TABLE wp_landing_monitor_alerts \((.*?)\) DEFAULT CHARACTER SET/s', $schema_sql, $monitor_match);
+$monitor_sql = $monitor_match[1] ?? '';
+foreach (['name','phone','email','message','ip ','user_agent','response_body','error_text','token','webhook'] as $forbidden) {
+    assert_test(!preg_match('/\\b' . preg_quote(trim($forbidden), '/') . '\\b/i', $monitor_sql), "monitor schema excludes {$forbidden}");
+}
 
 echo "\n$tests tests, $failures failures\n";
 exit($failures > 0 ? 1 : 0);

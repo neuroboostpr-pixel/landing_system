@@ -3,7 +3,7 @@ namespace LandingConfig\DB;
 
 if (!defined('ABSPATH')) { exit; }
 
-const DB_VERSION = '1.0.3';
+const DB_VERSION = '1.1.0';
 const DB_VERSION_OPTION = 'landing_config_db_version';
 
 function get_leads_table_name(): string {
@@ -29,6 +29,11 @@ function get_form_events_table_name(): string {
 function get_lead_status_log_table_name(): string {
     global $wpdb;
     return $wpdb->get_blog_prefix() . 'landing_lead_status_log';
+}
+
+function get_monitor_alerts_table_name(): string {
+    global $wpdb;
+    return $wpdb->get_blog_prefix() . 'landing_monitor_alerts';
 }
 
 /**
@@ -220,6 +225,7 @@ function create_tables_for_current_blog(): void {
     $status_log = get_lead_status_log_table_name();
     $audit = get_lead_audit_table_name();
     $form_events = get_form_events_table_name();
+    $alerts = get_monitor_alerts_table_name();
 
     $leads_sql = "CREATE TABLE $leads (
         id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -251,14 +257,21 @@ function create_tables_for_current_blog(): void {
         id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
         lead_id BIGINT(20) UNSIGNED NOT NULL,
         adapter VARCHAR(64) NOT NULL,
+        integration_id BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
         attempt INT(11) NOT NULL DEFAULT 1,
-        status VARCHAR(32) NOT NULL DEFAULT 'pending',
+        status VARCHAR(32) NOT NULL DEFAULT 'queued',
         response_code INT(11) NULL,
         response_body TEXT NULL,
         error_text VARCHAR(500) NULL,
+        next_attempt_at DATETIME NULL,
+        locked_at DATETIME NULL,
+        finished_at DATETIME NULL,
+        provider_id BIGINT(20) UNSIGNED NULL,
         created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
         KEY lead_id (lead_id),
+        KEY delivery_queue (status,next_attempt_at),
+        KEY lead_integration (lead_id,integration_id),
         KEY status_adapter (status, adapter)
     ) $charset;";
 
@@ -325,6 +338,40 @@ function create_tables_for_current_blog(): void {
         KEY created_at (created_at)
     ) $charset;";
 
+    $alerts_sql = "CREATE TABLE $alerts (
+        id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+        fingerprint CHAR(64) NOT NULL,
+        incident_kind VARCHAR(32) NOT NULL,
+        severity VARCHAR(16) NOT NULL,
+        submission_id CHAR(36) NULL,
+        lead_id BIGINT(20) UNSIGNED NULL,
+        integration_id BIGINT(20) UNSIGNED NULL,
+        fingerprint_scope BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
+        adapter VARCHAR(64) NOT NULL DEFAULT '',
+        safe_status VARCHAR(32) NOT NULL DEFAULT '',
+        safe_category VARCHAR(64) NOT NULL DEFAULT '',
+        provider_response_code SMALLINT UNSIGNED NULL,
+        occurrence_count INT UNSIGNED NOT NULL DEFAULT 1,
+        first_seen_at DATETIME NOT NULL,
+        last_seen_at DATETIME NOT NULL,
+        due_at DATETIME NOT NULL,
+        locked_at DATETIME NULL,
+        lock_token CHAR(36) NULL,
+        sent_at DATETIME NULL,
+        resolved_at DATETIME NULL,
+        resolution VARCHAR(32) NOT NULL DEFAULT '',
+        telegram_status VARCHAR(32) NOT NULL DEFAULT 'pending',
+        send_attempts SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+        last_response_at DATETIME NULL,
+        telegram_response_code SMALLINT UNSIGNED NULL,
+        telegram_message_id BIGINT(20) UNSIGNED NULL,
+        PRIMARY KEY (id),
+        UNIQUE KEY fingerprint (fingerprint),
+        KEY queue_due (telegram_status,resolved_at,due_at),
+        KEY submission_id (submission_id),
+        KEY lead_integration (lead_id,integration_id)
+    ) $charset;";
+
     if (!function_exists('dbDelta')) {
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
     }
@@ -333,4 +380,20 @@ function create_tables_for_current_blog(): void {
     dbDelta($status_log_sql);
     dbDelta($audit_sql);
     dbDelta($form_events_sql);
+    dbDelta($alerts_sql);
+    ensure_delivery_reservation_index($log);
+}
+
+/**
+ * Preserve duplicate historical adapter-only rows before adding the exact
+ * per-integration reservation key used by the asynchronous worker.
+ */
+function ensure_delivery_reservation_index(string $log_table): void {
+    global $wpdb;
+    $safe_table = str_replace('`', '', $log_table);
+    $wpdb->query("UPDATE `{$safe_table}` SET attempt=id WHERE integration_id=0 AND attempt=1");
+    $indexes = $wpdb->get_results("SHOW INDEX FROM `{$safe_table}` WHERE Key_name='delivery_attempt'", ARRAY_A);
+    if (empty($indexes)) {
+        $wpdb->query("ALTER TABLE `{$safe_table}` ADD UNIQUE KEY delivery_attempt (lead_id,integration_id,attempt)");
+    }
 }
