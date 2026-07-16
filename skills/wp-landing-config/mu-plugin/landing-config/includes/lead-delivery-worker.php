@@ -10,8 +10,6 @@ const DELIVERY_HOOK = 'landing_config_deliver_lead';
 const MAX_ATTEMPTS = 3;
 const STALE_SENDING_SECONDS = 300;
 
-add_action(DELIVERY_HOOK, __NAMESPACE__ . '\\run_scheduled_delivery', 10, 1);
-
 function utc_mysql(int $timestamp): string {
     return gmdate('Y-m-d H:i:s', $timestamp);
 }
@@ -233,10 +231,6 @@ function run_delivery_worker(int $limit = 20, ?int $now = null): array {
         if (process_reservation((array)$row, $now)) { $processed++; }
     }
     return ['processed' => $processed];
-}
-
-function run_scheduled_delivery($lead_id = 0): void {
-    run_delivery_worker(20);
 }
 
 function mark_stale_sending_unknown(?int $now = null): int {

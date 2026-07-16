@@ -13,6 +13,8 @@ const RUN_STATUS_OPTION = 'landing_monitor_last_run_status';
 const EXTERNAL_HEALTH_OPTION = 'landing_monitor_last_external_health_result';
 const SCAN_HOOK = 'landing_config_monitor_scan';
 const QUEUE_HOOK = 'landing_config_monitor_queue';
+const CLEANUP_HOOK = 'landing_config_monitor_cleanup';
+const DELIVERY_HOOK = 'landing_config_deliver_lead';
 const GRACE_SECONDS = 300;
 const HEARTBEAT_STALE_SECONDS = 180;
 const LOCK_TTL_SECONDS = 120;
@@ -608,3 +610,110 @@ function mark_stale_alerts_unknown(?int $now = null): int {
     }
     return $changed;
 }
+
+function add_minute_schedule(array $schedules): array {
+    $schedules['landing_every_minute'] = ['interval' => 60, 'display' => 'Landing every minute'];
+    return $schedules;
+}
+
+function touch_heartbeat(bool $ok, ?int $now = null): void {
+    update_option(HEARTBEAT_OPTION, $now ?? time());
+    update_option(RUN_STATUS_OPTION, $ok ? 'ok' : 'failed');
+}
+
+function sync_monitoring_schedule(?int $now = null): void {
+    $now = $now ?? time();
+    $hooks = [DELIVERY_HOOK, SCAN_HOOK, QUEUE_HOOK, CLEANUP_HOOK];
+    if (!is_enabled()) {
+        foreach ($hooks as $hook) { wp_clear_scheduled_hook($hook); }
+        return;
+    }
+    if (!wp_next_scheduled(DELIVERY_HOOK)) {
+        wp_schedule_event($now + 5, 'landing_every_minute', DELIVERY_HOOK);
+    }
+    if (!wp_next_scheduled(SCAN_HOOK)) {
+        wp_schedule_event($now + 10, 'landing_every_minute', SCAN_HOOK);
+    }
+    if (!wp_next_scheduled(QUEUE_HOOK)) {
+        wp_schedule_event($now + 40, 'landing_every_minute', QUEUE_HOOK);
+    }
+    if (!wp_next_scheduled(CLEANUP_HOOK)) {
+        wp_schedule_event($now + 300, 'daily', CLEANUP_HOOK);
+    }
+}
+
+function run_delivery_cron(): void {
+    if (!is_enabled()) { return; }
+    try {
+        \LandingConfig\LeadDelivery\mark_stale_sending_unknown();
+        \LandingConfig\LeadDelivery\run_delivery_worker(20);
+    } catch (\Throwable $ignored) {
+        error_log('[landing-config] delivery_worker_failed');
+    }
+}
+
+function run_scan_cron(): void {
+    if (!is_enabled()) { return; }
+    try {
+        reconcile_delivery_rows();
+        run_missing_lead_scan();
+        if (function_exists(__NAMESPACE__ . '\\check_external_monitor_stale')) {
+            check_external_monitor_stale();
+        }
+        touch_heartbeat(true);
+    } catch (\Throwable $ignored) {
+        touch_heartbeat(false);
+        error_log('[landing-config] monitor_scan_failed');
+        record_incident('monitor_internal_failure', 'critical', null, null, null, '',
+            'failed', 'monitor_scan_failed');
+    }
+}
+
+function run_queue_cron(): void {
+    if (!is_enabled()) { return; }
+    try {
+        mark_stale_alerts_unknown();
+        run_alert_queue();
+    } catch (\Throwable $ignored) {
+        update_option(RUN_STATUS_OPTION, 'failed');
+        error_log('[landing-config] monitor_queue_failed');
+    }
+}
+
+function cleanup_expired_alerts(?int $now = null): array {
+    global $wpdb;
+    $now = $now ?? time();
+    $cutoff_30 = utc_mysql($now - 30 * DAY_IN_SECONDS);
+    $cutoff_90 = utc_mysql($now - 90 * DAY_IN_SECONDS);
+    $table = get_monitor_alerts_table_name();
+    $total = 0;
+    do {
+        $deleted = $wpdb->query($wpdb->prepare(
+            "DELETE FROM `{$table}` WHERE telegram_status NOT IN ('pending','retry_wait','sending') AND ("
+            . "(resolved_at IS NOT NULL AND resolved_at<%s) OR "
+            . "(telegram_status='sent' AND sent_at IS NOT NULL AND sent_at<%s) OR "
+            . "(telegram_status IN ('unknown','failed') AND COALESCE(last_response_at,last_seen_at)<%s)"
+            . ") LIMIT 1000",
+            $cutoff_30, $cutoff_30, $cutoff_90
+        ));
+        $deleted = is_int($deleted) && $deleted > 0 ? $deleted : 0;
+        $total += $deleted;
+    } while ($deleted === 1000);
+    return ['deleted' => $total];
+}
+
+function run_cleanup_cron(): void {
+    if (!is_enabled()) { return; }
+    try {
+        cleanup_expired_alerts();
+    } catch (\Throwable $ignored) {
+        error_log('[landing-config] monitor_cleanup_failed');
+    }
+}
+
+add_filter('cron_schedules', __NAMESPACE__ . '\\add_minute_schedule');
+add_action('init', __NAMESPACE__ . '\\sync_monitoring_schedule', 3);
+add_action(DELIVERY_HOOK, __NAMESPACE__ . '\\run_delivery_cron');
+add_action(SCAN_HOOK, __NAMESPACE__ . '\\run_scan_cron');
+add_action(QUEUE_HOOK, __NAMESPACE__ . '\\run_queue_cron');
+add_action(CLEANUP_HOOK, __NAMESPACE__ . '\\run_cleanup_cron');
