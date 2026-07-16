@@ -133,13 +133,13 @@ class RoistatAdapter implements AdapterInterface {
     }
 
     /**
-     * Roistat has returned both JSON {"status":"ok"} and the documented
+     * Roistat has returned JSON status values "ok" and "success", plus the
      * integration's plain-text confirmation in production. Accept only those
-     * two explicit success contracts, never an arbitrary HTTP 2xx body.
+     * explicit success contracts, never an arbitrary HTTP 2xx body.
      */
     private static function is_confirmed_success(int $code, string $body, $json): bool {
         if ($code < 200 || $code >= 300) return false;
-        if (is_array($json) && ($json['status'] ?? '') === 'ok') return true;
+        if (is_array($json) && in_array(($json['status'] ?? ''), ['ok', 'success'], true)) return true;
         return trim($body) === 'Lead was successfully created';
     }
 }

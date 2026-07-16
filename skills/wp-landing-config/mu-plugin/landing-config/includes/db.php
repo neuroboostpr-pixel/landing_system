@@ -3,7 +3,7 @@ namespace LandingConfig\DB;
 
 if (!defined('ABSPATH')) { exit; }
 
-const DB_VERSION = '1.0.0';
+const DB_VERSION = '1.0.3';
 const DB_VERSION_OPTION = 'landing_config_db_version';
 
 function get_leads_table_name(): string {
@@ -19,6 +19,11 @@ function get_lead_log_table_name(): string {
 function get_lead_audit_table_name(): string {
     global $wpdb;
     return $wpdb->get_blog_prefix() . 'landing_lead_audit';
+}
+
+function get_form_events_table_name(): string {
+    global $wpdb;
+    return $wpdb->get_blog_prefix() . 'landing_form_events';
 }
 
 function get_lead_status_log_table_name(): string {
@@ -214,15 +219,17 @@ function create_tables_for_current_blog(): void {
     $log = get_lead_log_table_name();
     $status_log = get_lead_status_log_table_name();
     $audit = get_lead_audit_table_name();
+    $form_events = get_form_events_table_name();
 
     $leads_sql = "CREATE TABLE $leads (
         id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
         created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        submission_id CHAR(36) NULL,
         name VARCHAR(191) NOT NULL DEFAULT '',
         phone VARCHAR(64) NOT NULL DEFAULT '',
         email VARCHAR(191) NOT NULL DEFAULT '',
         message TEXT NULL,
-        source_block VARCHAR(191) NOT NULL DEFAULT '',
+        source_block TEXT NOT NULL,
         utm_source VARCHAR(191) NOT NULL DEFAULT '',
         utm_medium VARCHAR(191) NOT NULL DEFAULT '',
         utm_campaign VARCHAR(191) NOT NULL DEFAULT '',
@@ -235,6 +242,7 @@ function create_tables_for_current_blog(): void {
         pd_consent_granted_at DATETIME NULL,
         recaptcha_score DECIMAL(3,2) NULL,
         PRIMARY KEY (id),
+        KEY submission_id (submission_id),
         KEY created_at (created_at),
         KEY processed_status (processed_status)
     ) $charset;";
@@ -270,13 +278,14 @@ function create_tables_for_current_blog(): void {
     $audit_sql = "CREATE TABLE $audit (
         id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
         created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        submission_id CHAR(36) NULL,
         ip VARCHAR(45) NOT NULL DEFAULT '',
         user_agent TEXT NULL,
         name VARCHAR(191) NOT NULL DEFAULT '',
         phone VARCHAR(64) NOT NULL DEFAULT '',
         email VARCHAR(191) NOT NULL DEFAULT '',
         message TEXT NULL,
-        source_block VARCHAR(191) NOT NULL DEFAULT '',
+        source_block TEXT NOT NULL,
         utm_source VARCHAR(191) NOT NULL DEFAULT '',
         utm_medium VARCHAR(191) NOT NULL DEFAULT '',
         utm_campaign VARCHAR(191) NOT NULL DEFAULT '',
@@ -287,9 +296,33 @@ function create_tables_for_current_blog(): void {
         block_detail VARCHAR(255) NULL,
         lead_id BIGINT(20) UNSIGNED NULL COMMENT 'id в landing_leads если заявка сохранена',
         PRIMARY KEY (id),
+        KEY submission_id (submission_id),
         KEY created_at (created_at),
         KEY blocked_by (blocked_by),
         KEY lead_id (lead_id)
+    ) $charset;";
+
+    // Deliberately contains only anonymous workflow metadata. Contact fields,
+    // raw network identifiers, referrers and full URLs do not belong here.
+    $form_events_sql = "CREATE TABLE $form_events (
+        id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        submission_id CHAR(36) NOT NULL,
+        event_sequence SMALLINT UNSIGNED NULL,
+        event_name VARCHAR(32) NOT NULL,
+        event_detail VARCHAR(32) NOT NULL DEFAULT '',
+        form_id VARCHAR(100) NOT NULL DEFAULT '',
+        brand VARCHAR(100) NOT NULL DEFAULT '',
+        cta_key VARCHAR(100) NOT NULL DEFAULT '',
+        page_path VARCHAR(255) NOT NULL DEFAULT '',
+        utm_source VARCHAR(191) NOT NULL DEFAULT '',
+        utm_medium VARCHAR(191) NOT NULL DEFAULT '',
+        utm_campaign VARCHAR(191) NOT NULL DEFAULT '',
+        PRIMARY KEY (id),
+        KEY submission_id (submission_id),
+        KEY submission_sequence (submission_id,event_sequence),
+        KEY event_name (event_name),
+        KEY created_at (created_at)
     ) $charset;";
 
     if (!function_exists('dbDelta')) {
@@ -299,4 +332,5 @@ function create_tables_for_current_blog(): void {
     dbDelta($log_sql);
     dbDelta($status_log_sql);
     dbDelta($audit_sql);
+    dbDelta($form_events_sql);
 }

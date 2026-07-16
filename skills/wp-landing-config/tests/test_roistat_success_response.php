@@ -44,6 +44,18 @@ $GLOBALS['_lr_http'] = [
 $json = $adapter->send($lead, $settings);
 $assert(($json['ok'] ?? false) === true, 'Roistat JSON status=ok remains accepted');
 
+// Exact response observed for live leads 101 and 102. Its SHA-256 and byte
+// length match the privacy-safe delivery evidence stored in production.
+$GLOBALS['_lr_http'] = [
+    'response' => ['code' => 200],
+    'body' => '{"status":"success","message":"Lead was successfully created"}',
+];
+$live_json = $adapter->send($lead, $settings);
+$assert(
+    ($live_json['ok'] ?? false) === true,
+    'live Roistat JSON status=success is accepted'
+);
+
 $GLOBALS['_lr_http'] = [
     'response' => ['code' => 200],
     'body' => 'Lead was not created',

@@ -26,6 +26,24 @@ add_action('rest_api_init', function () {
 });
 
 /**
+ * Correlation is optional and must never become another reason to lose a lead.
+ * Invalid client identifiers are discarded; valid browser UUIDv4 values are
+ * safe to copy into the audit and lead rows.
+ */
+function normalize_submission_id($value): ?string {
+    if (!is_scalar($value)) {
+        return null;
+    }
+
+    $submission_id = strtolower(trim((string) $value));
+    if (preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/', $submission_id) !== 1) {
+        return null;
+    }
+
+    return $submission_id;
+}
+
+/**
  * Insert one row into landing_lead_audit. Called at the very start of handle_lead
  * (before any checks) and updated with lead_id on success.
  * Returns the audit row id so the caller can update it later.
@@ -34,6 +52,7 @@ function audit_log_insert(array $params, string $ip): int {
     global $wpdb;
     $table = get_lead_audit_table_name();
     $wpdb->insert($table, [
+        'submission_id'         => normalize_submission_id($params['submission_id'] ?? null),
         'ip'                    => sanitize_text_field($ip),
         'user_agent'            => sanitize_text_field($_SERVER['HTTP_USER_AGENT'] ?? ''),
         'name'                  => sanitize_text_field(wp_unslash($params['name'] ?? '')),
@@ -187,6 +206,7 @@ function handle_lead($request) {
     }
 
     $data = [
+        'submission_id'    => normalize_submission_id($params['submission_id'] ?? null),
         'name'             => $name,
         'phone'            => $phone,
         'email'            => $email,

@@ -255,6 +255,7 @@ function handle_bulk_promote(): void {
 
         // Вставляем в основную таблицу
         $inserted = $wpdb->insert($leads_table, [
+            'submission_id'    => (string)($row['submission_id'] ?? '') ?: null,
             'name'             => (string)($row['name'] ?? ''),
             'phone'            => (string)($row['phone'] ?? ''),
             'email'            => (string)($row['email'] ?? ''),

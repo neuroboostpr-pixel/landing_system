@@ -109,9 +109,11 @@ $GLOBALS['_mock_rest_routes'] = [];
 $GLOBALS['_mock_inserted_leads'] = [];
 $GLOBALS['_mock_mail_sent'] = [];
 $GLOBALS['_mock_transients'] = [];
+$GLOBALS['_mock_transient_ttls'] = [];
 $GLOBALS['_mock_actions_fired'] = [];
 
 if (!defined('HOUR_IN_SECONDS')) { define('HOUR_IN_SECONDS', 3600); }
+if (!defined('DAY_IN_SECONDS')) { define('DAY_IN_SECONDS', 86400); }
 if (!defined('ARRAY_A')) { define('ARRAY_A', 'ARRAY_A'); }
 
 function register_rest_route($namespace, $route, $args) {
@@ -165,6 +167,7 @@ function get_transient($key) {
 
 function set_transient($key, $value, $ttl = 0) {
     $GLOBALS['_mock_transients'][$key] = $value;
+    $GLOBALS['_mock_transient_ttls'][$key] = (int) $ttl;
     return true;
 }
 
@@ -256,9 +259,11 @@ class WP_REST_Response {
 
 class WP_REST_Request {
     private $params = [];
-    public function __construct(array $params = []) { $this->params = $params; }
+    private $body = '';
+    public function __construct(array $params = [], string $body = '') { $this->params = $params; $this->body = $body; }
     public function get_params() { return $this->params; }
     public function get_param($key) { return $this->params[$key] ?? null; }
+    public function get_body() { return $this->body; }
 }
 
 function wp_remote_post($url, $args) {

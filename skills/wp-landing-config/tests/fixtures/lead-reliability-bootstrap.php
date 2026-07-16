@@ -88,6 +88,14 @@ final class LeadReliabilityWpdb extends MockWpdbInsert {
     }
 
     public function get_var($sql) {
+        if (stripos((string) $sql, 'GET_LOCK(') !== false) {
+            $this->query_log[] = (string) $sql;
+            return !empty($GLOBALS['_lr_force_lock_failure']) ? 0 : 1;
+        }
+        if (stripos((string) $sql, 'RELEASE_LOCK(') !== false) {
+            $this->query_log[] = (string) $sql;
+            return 1;
+        }
         $row = array_shift($this->row_queue);
         if (is_array($row)) { return reset($row); }
         if (is_object($row)) { $values = get_object_vars($row); return reset($values); }
@@ -110,6 +118,7 @@ function lr_reset_state(): void {
     $GLOBALS['_mock_inserted_leads'] = [];
     $GLOBALS['_mock_mail_sent'] = [];
     $GLOBALS['_mock_transients'] = [];
+    $GLOBALS['_mock_transient_ttls'] = [];
     $GLOBALS['_mock_actions_fired'] = [];
     $GLOBALS['_lr_http'] = ['response' => ['code' => 200], 'body' => '{"ok":true}', 'headers' => []];
     $GLOBALS['_lr_http_requests'] = [];
@@ -117,6 +126,7 @@ function lr_reset_state(): void {
     $GLOBALS['_lr_now'] = '2026-07-15 12:00:00';
     $GLOBALS['_lr_next_scheduled'] = [];
     $GLOBALS['_lr_uuid_counter'] = 0;
+    $GLOBALS['_lr_force_lock_failure'] = false;
     $GLOBALS['_mock_posts'] = [];
     $GLOBALS['_mock_post_meta'] = [];
     $GLOBALS['_mock_next_post_id'] = 1;

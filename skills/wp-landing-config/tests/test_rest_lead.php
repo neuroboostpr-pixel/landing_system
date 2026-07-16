@@ -238,6 +238,32 @@ $ts_after = time();
 assert_test($ts_granted >= $ts_before && $ts_granted <= $ts_after + 1,
     "T_PD_5 timestamp within range (ts_before=$ts_before, ts_granted=$ts_granted, ts_after=$ts_after)");
 
+// A browser-generated submission UUID links anonymous pre-submit events to the
+// early audit row and final lead without making telemetry required for capture.
+reset_pd();
+$submission_id = '44444444-4444-4444-8444-444444444444';
+$response = \LandingConfig\REST\handle_lead(pd_request(['submission_id' => $submission_id]));
+$audit_rows = array_values(array_filter(
+    $GLOBALS['_mock_inserted_leads'],
+    static fn(array $row): bool => str_ends_with((string) ($row['table'] ?? ''), 'landing_lead_audit')
+));
+$lead_rows = inserted_lead_rows();
+assert_test($response->get_status() === 200, 'submission UUID does not disrupt lead capture');
+assert_test(($audit_rows[0]['data']['submission_id'] ?? null) === $submission_id, 'audit row stores submission UUID');
+assert_test(($lead_rows[0]['data']['submission_id'] ?? null) === $submission_id, 'lead row stores the same submission UUID');
+
+// Telemetry is optional: a malformed optional UUID is discarded, never used as
+// a reason to lose an otherwise valid contact.
+reset_pd();
+$response = \LandingConfig\REST\handle_lead(pd_request(['submission_id' => 'broken-client-id']));
+$lead_rows = inserted_lead_rows();
+assert_test($response->get_status() === 200, 'malformed optional UUID never blocks a valid lead');
+assert_test(
+    array_key_exists('submission_id', $lead_rows[0]['data'] ?? [])
+        && $lead_rows[0]['data']['submission_id'] === null,
+    'malformed UUID is not stored'
+);
+
 // Active reCAPTCHA code is intentionally absent. Historical DB columns may remain
 // additive, but no Google verification or score-based rejection may run.
 $rest_source = file_get_contents(__DIR__ . '/../mu-plugin/landing-config/includes/rest-lead.php');
