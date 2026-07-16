@@ -853,16 +853,29 @@ function sync_monitoring_schedule(?int $now = null): void {
     }
 }
 
-function run_delivery_cron(): void {
+function run_delivery_cron_steps(callable $reconcile, callable $deliver): void {
     try {
-        // Reservation repair is part of delivery correctness and therefore
-        // runs even when optional incident alerts are staged off.
-        reconcile_delivery_rows();
-        \LandingConfig\LeadDelivery\mark_stale_sending_unknown();
-        \LandingConfig\LeadDelivery\run_delivery_worker(20);
+        $reconcile();
+    } catch (\Throwable $ignored) {
+        error_log('[landing-config] delivery_reconcile_failed');
+    }
+    try {
+        $deliver();
     } catch (\Throwable $ignored) {
         error_log('[landing-config] delivery_worker_failed');
     }
+}
+
+function run_delivery_cron(): void {
+    run_delivery_cron_steps(
+        // Reservation repair is part of delivery correctness and therefore
+        // runs even when optional incident alerts are staged off.
+        static function (): void { reconcile_delivery_rows(); },
+        static function (): void {
+            \LandingConfig\LeadDelivery\mark_stale_sending_unknown();
+            \LandingConfig\LeadDelivery\run_delivery_worker(20);
+        }
+    );
 }
 
 function run_scan_cron(): void {

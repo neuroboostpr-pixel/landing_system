@@ -57,6 +57,15 @@ $assert(count($disabled_delivery_rows) === 1
     && (int)($disabled_delivery_rows[0]['integration_id'] ?? 0) === $integration_id,
     'disabled alert monitoring still reconciles a saved lead into core delivery');
 
+$delivery_continued = false;
+if (function_exists('LandingConfig\\Monitoring\\run_delivery_cron_steps')) {
+    \LandingConfig\Monitoring\run_delivery_cron_steps(
+        static function (): void { throw new RuntimeException('sensitive reconciliation failure'); },
+        static function () use (&$delivery_continued): void { $delivery_continued = true; }
+    );
+}
+$assert($delivery_continued, 'reconciliation exception cannot prevent already queued lead delivery');
+
 lr_reset_state();
 \LandingConfig\Monitoring\touch_heartbeat(true, 1784190000);
 $assert((int)get_option(\LandingConfig\Monitoring\HEARTBEAT_OPTION, 0) === 1784190000, 'healthy wrapper writes integer heartbeat');
@@ -79,7 +88,7 @@ $source = file_get_contents(__DIR__ . '/../mu-plugin/landing-config/includes/mon
 foreach (['getMessage()', 'hash(\'sha256\', $e', 'hash("sha256", $e'] as $unsafe) {
     $assert(!str_contains((string)$source, $unsafe), "cron wrappers never log/hash exception text: {$unsafe}");
 }
-foreach (['delivery_worker_failed','monitor_scan_failed','monitor_queue_failed','monitor_cleanup_failed'] as $fixed) {
+foreach (['delivery_reconcile_failed','delivery_worker_failed','monitor_scan_failed','monitor_queue_failed','monitor_cleanup_failed'] as $fixed) {
     $assert(str_contains((string)$source, $fixed), "fixed safe failure category {$fixed} exists");
 }
 
