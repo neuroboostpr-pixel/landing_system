@@ -160,6 +160,10 @@ function lr_reset_state(): void {
     $GLOBALS['_lr_logged_in'] = false;
     $GLOBALS['_lr_capabilities'] = [];
     $GLOBALS['_lr_valid_nonces'] = [];
+    $GLOBALS['_lr_current_user_id'] = 0;
+    $GLOBALS['_lr_nonce_actions'] = [];
+    $GLOBALS['_lr_redirects'] = [];
+    $GLOBALS['_lr_nocache_headers'] = false;
     $GLOBALS['_mock_posts'] = [];
     $GLOBALS['_mock_post_meta'] = [];
     $GLOBALS['_mock_next_post_id'] = 1;

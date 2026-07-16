@@ -611,6 +611,60 @@ function mark_stale_alerts_unknown(?int $now = null): int {
     return $changed;
 }
 
+function configuration_status(): array {
+    $integrations = \LandingConfig\Integrations\list_integrations(get_current_blog_id());
+    $enabled_emails = [];
+    $neuroboost_enabled = false;
+    $enabled_telegrams = [];
+    $enabled_crm = [];
+    foreach ($integrations as $integration) {
+        if (($integration['enabled'] ?? false) !== true) { continue; }
+        $type = sanitize_key((string)($integration['adapter_type'] ?? ''));
+        $label = strtolower((string)($integration['label'] ?? '') . ' ' . (string)($integration['description'] ?? ''));
+        if (str_contains($label, 'neuroboost') || str_contains($label, 'нейробуст')) {
+            $neuroboost_enabled = true;
+        }
+        if ($type === 'email') { $enabled_emails[] = $integration; }
+        if ($type === 'telegram') { $enabled_telegrams[] = $integration; }
+        if (in_array($type, ['roistat','amocrm','bitrix24','hubspot'], true)) { $enabled_crm[] = $integration; }
+    }
+    $email_binding_ok = count($enabled_emails) === 1
+        && strtolower(trim((string)($enabled_emails[0]['settings']['to'] ?? ''))) === 'elapova00@gmail.com';
+    $telegram = null;
+    if (defined('LP_MONITOR_TELEGRAM_INTEGRATION_ID') && (int)LP_MONITOR_TELEGRAM_INTEGRATION_ID > 0) {
+        foreach ($enabled_telegrams as $candidate) {
+            if ((int)($candidate['id'] ?? 0) === (int)LP_MONITOR_TELEGRAM_INTEGRATION_ID) { $telegram = $candidate; break; }
+        }
+    } elseif (count($enabled_telegrams) === 1) {
+        $telegram = $enabled_telegrams[0];
+    }
+    $fallback_url = defined('LP_FALLBACK_URL') ? (string)LP_FALLBACK_URL : '';
+    $signing = defined('LP_FALLBACK_SIGNING_SECRET') ? (string)LP_FALLBACK_SIGNING_SECRET : '';
+    $status = defined('LP_FALLBACK_STATUS_SECRET') ? (string)LP_FALLBACK_STATUS_SECRET : '';
+    $signing_valid = \LandingConfig\FallbackSecurity\decode_hmac_hex_secret($signing) !== null;
+    $status_valid = \LandingConfig\FallbackSecurity\decode_hmac_hex_secret($status) !== null;
+    return [
+        'monitor_enabled' => is_enabled(),
+        'fallback_enabled' => defined('LP_FALLBACK_ENABLED') && LP_FALLBACK_ENABLED === true,
+        'test_mode_enabled' => defined('LP_FALLBACK_TEST_MODE') && LP_FALLBACK_TEST_MODE === true,
+        'fallback_url_configured' => $fallback_url !== '',
+        'fallback_url_valid' => filter_var($fallback_url, FILTER_VALIDATE_URL) !== false
+            && strtolower((string)parse_url($fallback_url, PHP_URL_SCHEME)) === 'https',
+        'signing_secret_configured' => $signing !== '',
+        'signing_secret_valid' => $signing_valid,
+        'status_secret_configured' => $status !== '',
+        'status_secret_valid' => $status_valid,
+        'secrets_distinct' => $signing_valid && $status_valid && $signing !== $status,
+        'email_binding_ok' => $email_binding_ok,
+        'neuroboost_disabled' => !$neuroboost_enabled && ($email_binding_ok || count($enabled_emails) === 0),
+        'telegram_enabled' => is_array($telegram),
+        'roistat_crm_enabled' => count($enabled_crm) >= 1,
+        'email_integration_id' => $email_binding_ok ? (int)$enabled_emails[0]['id'] : 0,
+        'telegram_integration_id' => is_array($telegram) ? (int)$telegram['id'] : 0,
+        'roistat_crm_integration_id' => count($enabled_crm) >= 1 ? (int)$enabled_crm[0]['id'] : 0,
+    ];
+}
+
 function add_minute_schedule(array $schedules): array {
     $schedules['landing_every_minute'] = ['interval' => 60, 'display' => 'Landing every minute'];
     return $schedules;

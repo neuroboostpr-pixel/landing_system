@@ -186,6 +186,25 @@ function wp_verify_nonce($nonce, $action) {
 function home_url($path = '/', $scheme = null) {
     return rtrim(function_exists('get_home_url') ? get_home_url() : 'https://hybridautos.test', '/') . '/' . ltrim((string)$path, '/');
 }
+function get_current_user_id() { return (int)($GLOBALS['_lr_current_user_id'] ?? 0); }
+function wp_create_nonce($action) { return 'nonce-' . (string)$action; }
+function wp_nonce_field($action, $name = '_wpnonce', $referer = true, $display = true) {
+    $html = '<input type="hidden" name="' . esc_attr($name) . '" value="' . esc_attr(wp_create_nonce($action)) . '">';
+    if ($display) { echo $html; }
+    return $html;
+}
+function check_admin_referer($action, $query_arg = '_wpnonce') {
+    if (!empty($GLOBALS['_lr_nonce_actions'][(string)$action])) { return 1; }
+    throw new RuntimeException('invalid_nonce');
+}
+function wp_safe_redirect($url, $status = 302, $x_redirect_by = 'WordPress') {
+    $GLOBALS['_lr_redirects'][] = ['url' => (string)$url, 'status' => (int)$status];
+    return true;
+}
+function nocache_headers() { $GLOBALS['_lr_nocache_headers'] = true; }
+function wp_die($message = '', $title = '', $args = []) { throw new RuntimeException('wp_die'); }
+function admin_url($path = '') { return 'https://hybridautos.test/wp-admin/' . ltrim((string)$path, '/'); }
+function add_submenu_page(...$args) { $GLOBALS['_lr_submenus'][] = $args; return 'hook'; }
 
 class MockWpdbInsert extends MockWpdb {
     public $insert_id = 0;
