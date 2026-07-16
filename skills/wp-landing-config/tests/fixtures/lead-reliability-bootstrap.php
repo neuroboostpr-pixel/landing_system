@@ -99,6 +99,40 @@ final class LeadReliabilityWpdb extends MockWpdbInsert {
 
     public function query($sql) {
         $this->query_log[] = (string)$sql;
+        if (preg_match('/INSERT\s+INTO\s+`?([^`\s]+landing_monitor_alerts)`?\s*\(([^)]+)\)\s*VALUES\s*\((.*?)\)\s*ON\s+DUPLICATE/s', (string)$sql, $m)) {
+            $table = $m[1];
+            $columns = array_map(static fn($v) => trim($v, " `\t\r\n"), explode(',', $m[2]));
+            $values = str_getcsv($m[3], ',', "'", '\\');
+            $row = [];
+            foreach ($columns as $index => $column) {
+                $value = trim((string)($values[$index] ?? ''));
+                if (strcasecmp($value, 'NULL') === 0) { $value = null; }
+                elseif (in_array($column, ['lead_id','integration_id','fingerprint_scope','provider_response_code','occurrence_count','send_attempts'], true)) {
+                    $value = (int)$value;
+                }
+                $row[$column] = $value;
+            }
+            foreach ($this->tables[$table] ?? [] as $index => $existing) {
+                if (($existing['fingerprint'] ?? '') !== ($row['fingerprint'] ?? '')) { continue; }
+                $this->tables[$table][$index]['occurrence_count'] = (int)($existing['occurrence_count'] ?? 1) + 1;
+                foreach (['last_seen_at','safe_status','safe_category','provider_response_code'] as $field) {
+                    $this->tables[$table][$index][$field] = $row[$field] ?? null;
+                }
+                if (($row['resolution'] ?? '') !== '') {
+                    $this->tables[$table][$index]['resolution'] = $row['resolution'];
+                    $this->tables[$table][$index]['resolved_at'] = $row['resolved_at'] ?? null;
+                }
+                $this->insert_id = (int)($existing['id'] ?? 0);
+                $this->rows_affected = 2;
+                return 2;
+            }
+            $id = $this->next_id++;
+            $row = ['id' => $id] + $row;
+            $this->tables[$table][] = $row;
+            $this->insert_id = $id;
+            $this->rows_affected = 1;
+            return 1;
+        }
         $count = array_shift($this->query_count_queue) ?? 0;
         $this->rows_affected = (int)$count;
         return (int)$count;
