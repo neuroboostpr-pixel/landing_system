@@ -44,41 +44,206 @@ function normalize_submission_id($value): ?string {
 }
 
 /**
+ * Cut a valid UTF-8 value to a database character limit without splitting a
+ * multibyte character. Lead input is sanitized before reaching this helper.
+ */
+function limit_utf8_characters(string $value, int $max_characters): string {
+    if ($max_characters <= 0 || $value === '') {
+        return '';
+    }
+    if (preg_match('//u', $value) !== 1) {
+        return '';
+    }
+    if (function_exists('mb_strlen') && function_exists('mb_substr')) {
+        return mb_strlen($value, 'UTF-8') <= $max_characters
+            ? $value
+            : mb_substr($value, 0, $max_characters, 'UTF-8');
+    }
+    if (function_exists('iconv_strlen') && function_exists('iconv_substr')) {
+        $length = iconv_strlen($value, 'UTF-8');
+        if ($length !== false && $length <= $max_characters) {
+            return $value;
+        }
+        $cut = iconv_substr($value, 0, $max_characters, 'UTF-8');
+        return is_string($cut) ? $cut : '';
+    }
+
+    preg_match_all('/./us', $value, $characters);
+    return implode('', array_slice($characters[0] ?? [], 0, $max_characters));
+}
+
+/**
+ * MySQL TEXT is limited by bytes (65,535), not by visible characters.
+ */
+function limit_utf8_bytes(string $value, int $max_bytes): string {
+    if ($max_bytes <= 0 || $value === '') {
+        return '';
+    }
+    if (preg_match('//u', $value) !== 1) {
+        return '';
+    }
+    if (strlen($value) <= $max_bytes) {
+        return $value;
+    }
+    if (function_exists('mb_strcut')) {
+        $cut = mb_strcut($value, 0, $max_bytes, 'UTF-8');
+        return is_string($cut) ? $cut : '';
+    }
+
+    $cut = substr($value, 0, $max_bytes);
+    while ($cut !== '' && preg_match('//u', $cut) !== 1) {
+        $cut = substr($cut, 0, -1);
+    }
+    return $cut;
+}
+
+/**
+ * Sanitize one submitted scalar and make it safe for its actual DB column.
+ */
+function normalize_lead_text($value, int $limit, string $unit = 'characters', bool $email = false): string {
+    if (!is_scalar($value)) {
+        return '';
+    }
+
+    $unslashed = wp_unslash((string) $value);
+    $sanitized = $email ? sanitize_email($unslashed) : sanitize_text_field($unslashed);
+    return $unit === 'bytes'
+        ? limit_utf8_bytes($sanitized, $limit)
+        : limit_utf8_characters($sanitized, $limit);
+}
+
+/**
+ * Single source of truth for both landing_lead_audit and landing_leads.
+ * Optional attribution must never make either complete INSERT fail.
+ */
+function normalize_lead_payload(array $params, string $ip, string $user_agent): array {
+    $recaptcha_token = $params['recaptcha_token'] ?? '';
+
+    return [
+        'submission_id' => normalize_submission_id($params['submission_id'] ?? null),
+        'ip' => normalize_lead_text($ip, 45),
+        'user_agent' => normalize_lead_text($user_agent, 65535, 'bytes'),
+        'name' => normalize_lead_text($params['name'] ?? '', 191),
+        'phone' => normalize_lead_text($params['phone'] ?? '', 64),
+        'email' => normalize_lead_text($params['email'] ?? '', 191, 'characters', true),
+        'message' => normalize_lead_text($params['message'] ?? '', 65535, 'bytes'),
+        'source_block' => normalize_lead_text($params['source_block'] ?? '', 65535, 'bytes'),
+        'utm_source' => normalize_lead_text($params['utm_source'] ?? '', 191),
+        'utm_medium' => normalize_lead_text($params['utm_medium'] ?? '', 191),
+        'utm_campaign' => normalize_lead_text($params['utm_campaign'] ?? '', 191),
+        'utm_term' => normalize_lead_text($params['utm_term'] ?? '', 191),
+        'utm_content' => normalize_lead_text($params['utm_content'] ?? '', 191),
+        'roistat_visit' => normalize_lead_text($params['roistat_visit'] ?? '', 64),
+        'pd_consent' => normalize_lead_text($params['pd_consent'] ?? '', 8),
+        'recaptcha_token_present' => is_scalar($recaptcha_token) && (string) $recaptcha_token !== '' ? 1 : 0,
+    ];
+}
+
+/**
+ * Keep the recoverable contact and consent, but remove data that is optional
+ * for contacting the person when the first database INSERT fails.
+ */
+function without_optional_lead_metadata(array $data): array {
+    foreach (optional_lead_metadata_fields() as $field) {
+        $data[$field] = '';
+    }
+    return $data;
+}
+
+function optional_lead_metadata_fields(): array {
+    return [
+        'source_block',
+        'utm_source',
+        'utm_medium',
+        'utm_campaign',
+        'utm_term',
+        'utm_content',
+        'roistat_visit',
+        'ip',
+        'user_agent',
+    ];
+}
+
+/**
+ * Retry only deterministic errors that name an optional metadata column.
+ * Generic connection errors are ambiguous and a blind retry could duplicate a
+ * row that MySQL committed before the connection was lost.
+ */
+function is_optional_metadata_storage_error(string $error): bool {
+    if ($error === '') {
+        return false;
+    }
+    $recognized_marker = false;
+    foreach ([
+        'Processing the value for the following field failed',
+        'Processing the values for the following fields failed',
+        'Data too long for column',
+        'Incorrect string value',
+    ] as $marker) {
+        if (stripos($error, $marker) !== false) {
+            $recognized_marker = true;
+            break;
+        }
+    }
+    if (!$recognized_marker) {
+        return false;
+    }
+    foreach (optional_lead_metadata_fields() as $field) {
+        $quoted_field = preg_quote($field, '/');
+        if (preg_match('/(?<![a-z0-9_])' . $quoted_field . '(?![a-z0-9_])/i', $error) === 1) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
  * Insert one row into landing_lead_audit. Called at the very start of handle_lead
  * (before any checks) and updated with lead_id on success.
  * Returns the audit row id so the caller can update it later.
  */
-function audit_log_insert(array $params, string $ip): int {
+function audit_log_insert(array $normalized): int {
     global $wpdb;
     $table = get_lead_audit_table_name();
-    $wpdb->insert($table, [
-        'submission_id'         => normalize_submission_id($params['submission_id'] ?? null),
-        'ip'                    => sanitize_text_field($ip),
-        'user_agent'            => sanitize_text_field($_SERVER['HTTP_USER_AGENT'] ?? ''),
-        'name'                  => sanitize_text_field(wp_unslash($params['name'] ?? '')),
-        'phone'                 => sanitize_text_field(wp_unslash($params['phone'] ?? '')),
-        'email'                 => sanitize_email(wp_unslash($params['email'] ?? '')),
-        'message'               => sanitize_text_field(wp_unslash($params['message'] ?? '')),
-        'source_block'          => sanitize_text_field(wp_unslash($params['source_block'] ?? '')),
-        'utm_source'            => sanitize_text_field(wp_unslash($params['utm_source'] ?? '')),
-        'utm_medium'            => sanitize_text_field(wp_unslash($params['utm_medium'] ?? '')),
-        'utm_campaign'          => sanitize_text_field(wp_unslash($params['utm_campaign'] ?? '')),
-        'roistat_visit'         => sanitize_text_field(wp_unslash($params['roistat_visit'] ?? '')),
-        'pd_consent'            => sanitize_text_field(wp_unslash($params['pd_consent'] ?? '')),
-        'recaptcha_token_present' => ($params['recaptcha_token'] ?? '') !== '' ? 1 : 0,
+    $inserted = $wpdb->insert($table, [
+        'submission_id'         => $normalized['submission_id'],
+        'ip'                    => $normalized['ip'],
+        'user_agent'            => $normalized['user_agent'],
+        'name'                  => $normalized['name'],
+        'phone'                 => $normalized['phone'],
+        'email'                 => $normalized['email'],
+        'message'               => $normalized['message'],
+        'source_block'          => $normalized['source_block'],
+        'utm_source'            => $normalized['utm_source'],
+        'utm_medium'            => $normalized['utm_medium'],
+        'utm_campaign'          => $normalized['utm_campaign'],
+        'roistat_visit'         => $normalized['roistat_visit'],
+        'pd_consent'            => $normalized['pd_consent'],
+        'recaptcha_token_present' => $normalized['recaptcha_token_present'],
         'blocked_by'            => null,
         'block_detail'          => null,
         'lead_id'               => null,
     ]);
+    if ($inserted === false || $inserted === 0 || (int) $wpdb->insert_id <= 0) {
+        $error = (string) ($wpdb->last_error ?? '');
+        error_log(sprintf(
+            '[landing-config] lead audit insert failed; error_sha256=%s; bytes=%d',
+            hash('sha256', $error),
+            strlen($error)
+        ));
+        return 0;
+    }
     return (int) $wpdb->insert_id;
 }
 
 function audit_log_block(int $audit_id, string $reason, string $detail = ''): void {
     if ($audit_id <= 0) return;
     global $wpdb;
+    $safe_reason = normalize_lead_text($reason, 64);
+    $safe_detail = normalize_lead_text($detail, 255);
     $wpdb->update(
         get_lead_audit_table_name(),
-        ['blocked_by' => $reason, 'block_detail' => $detail ?: null],
+        ['blocked_by' => $safe_reason, 'block_detail' => $safe_detail !== '' ? $safe_detail : null],
         ['id' => $audit_id],
         ['%s', '%s'],
         ['%d']
@@ -167,9 +332,14 @@ function log_delivery_attempt(int $lead_id, string $adapter, array $result): voi
 function handle_lead($request) {
     $params = $request->get_params();
     $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+    $normalized = normalize_lead_payload(
+        $params,
+        (string) $ip,
+        (string) ($_SERVER['HTTP_USER_AGENT'] ?? '')
+    );
 
     // Audit: записываем ВСЁ до любых проверок
-    $audit_id = audit_log_insert($params, $ip);
+    $audit_id = audit_log_insert($normalized);
 
     // Honeypot: field 'website' must be empty (real users don't fill it; bots do).
     if (!empty($params['website'])) {
@@ -179,7 +349,8 @@ function handle_lead($request) {
 
     // Consent must be an explicit affirmative value from a real checkbox.
     // The early audit above preserves the attempted contact for diagnosis.
-    if ((string) ($params['pd_consent'] ?? '') !== '1') {
+    $raw_consent = $params['pd_consent'] ?? null;
+    if (!is_scalar($raw_consent) || (string) $raw_consent !== '1') {
         audit_log_block($audit_id, 'pd_consent', 'explicit consent missing');
         return new \WP_REST_Response(['ok' => false, 'error' => 'pd_consent'], 400);
     }
@@ -194,9 +365,9 @@ function handle_lead($request) {
     set_transient($rl_key, $rl_count + 1, HOUR_IN_SECONDS);
 
     // Required: at least one of phone or email
-    $name = sanitize_text_field(wp_unslash($params['name'] ?? ''));
-    $phone = sanitize_text_field(wp_unslash($params['phone'] ?? ''));
-    $email = sanitize_email(wp_unslash($params['email'] ?? ''));
+    $name = $normalized['name'];
+    $phone = $normalized['phone'];
+    $email = $normalized['email'];
     if ($phone === '' && $email === '') {
         audit_log_block($audit_id, 'validation', 'phone and email both empty');
         return new \WP_REST_Response(
@@ -206,20 +377,20 @@ function handle_lead($request) {
     }
 
     $data = [
-        'submission_id'    => normalize_submission_id($params['submission_id'] ?? null),
+        'submission_id'    => $normalized['submission_id'],
         'name'             => $name,
         'phone'            => $phone,
         'email'            => $email,
-        'message'          => sanitize_text_field(wp_unslash($params['message'] ?? '')),
-        'source_block'     => sanitize_text_field(wp_unslash($params['source_block'] ?? '')),
-        'utm_source'       => sanitize_text_field(wp_unslash($params['utm_source'] ?? '')),
-        'utm_medium'       => sanitize_text_field(wp_unslash($params['utm_medium'] ?? '')),
-        'utm_campaign'     => sanitize_text_field(wp_unslash($params['utm_campaign'] ?? '')),
-        'utm_term'         => sanitize_text_field(wp_unslash($params['utm_term'] ?? '')),
-        'utm_content'      => sanitize_text_field(wp_unslash($params['utm_content'] ?? '')),
-        'roistat_visit'    => sanitize_text_field(wp_unslash($params['roistat_visit'] ?? '')),
-        'ip'               => sanitize_text_field($ip),
-        'user_agent'       => sanitize_text_field($_SERVER['HTTP_USER_AGENT'] ?? ''),
+        'message'          => $normalized['message'],
+        'source_block'     => $normalized['source_block'],
+        'utm_source'       => $normalized['utm_source'],
+        'utm_medium'       => $normalized['utm_medium'],
+        'utm_campaign'     => $normalized['utm_campaign'],
+        'utm_term'         => $normalized['utm_term'],
+        'utm_content'      => $normalized['utm_content'],
+        'roistat_visit'    => $normalized['roistat_visit'],
+        'ip'               => $normalized['ip'],
+        'user_agent'       => $normalized['user_agent'],
         'created_at'       => current_time('mysql'),
         'processed_status'      => 'pending',
         'pd_consent_granted_at' => current_time('mysql'),
@@ -229,8 +400,22 @@ function handle_lead($request) {
     global $wpdb;
     $inserted = $wpdb->insert(get_leads_table_name(), $data);
     if ($inserted === false || $inserted === 0) {
-        audit_log_block($audit_id, 'db_error', $wpdb->last_error);
-        return new \WP_REST_Response(['ok' => false, 'error' => 'db_error'], 500);
+        $first_error = (string) ($wpdb->last_error ?? '');
+        if (!is_optional_metadata_storage_error($first_error)) {
+            audit_log_block($audit_id, 'db_error', $first_error);
+            return new \WP_REST_Response(['ok' => false, 'error' => 'db_error'], 500);
+        }
+        $data = without_optional_lead_metadata($data);
+        $inserted = $wpdb->insert(get_leads_table_name(), $data);
+        if ($inserted === false || $inserted === 0) {
+            $fallback_error = (string) ($wpdb->last_error ?? '');
+            audit_log_block(
+                $audit_id,
+                'db_error',
+                'primary=' . $first_error . '; fallback=' . $fallback_error
+            );
+            return new \WP_REST_Response(['ok' => false, 'error' => 'db_error'], 500);
+        }
     }
     $lead_id = (int) $wpdb->insert_id;
     if ($lead_id <= 0) {
