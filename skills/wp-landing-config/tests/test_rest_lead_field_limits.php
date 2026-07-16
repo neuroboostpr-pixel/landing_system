@@ -257,6 +257,9 @@ assert_field_limit(
     (($received_actions[0]['args'][1]['utm_source'] ?? null) === ''),
     'integrations receive the metadata-free row that was actually saved'
 );
+\LandingConfig\REST\dispatch_all_integrations([
+    'id' => (int)($response->get_data()['lead_id'] ?? 0),
+] + (array)($received_actions[0]['args'][1] ?? []));
 assert_field_limit(count($GLOBALS['_mock_mail_sent']) === 1, 'active email integration receives fallback lead exactly once');
 $mail_body = (string) ($GLOBALS['_mock_mail_sent'][0]['body'] ?? '');
 assert_field_limit(str_contains($mail_body, '+971501111111'), 'integration receives the saved phone');

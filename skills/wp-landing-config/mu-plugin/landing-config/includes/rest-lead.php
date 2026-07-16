@@ -6,6 +6,8 @@ if (!defined('ABSPATH')) { exit; }
 use function LandingConfig\DB\get_leads_table_name;
 use function LandingConfig\DB\get_lead_audit_table_name;
 
+const SUBMISSION_LOCK_WAIT_SECONDS = 3;
+
 function get_rate_limit(): int {
     $from_db = get_option('lp_rate_limit_per_hour', false);
     if ($from_db !== false) {
@@ -225,12 +227,7 @@ function audit_log_insert(array $normalized): int {
         'lead_id'               => null,
     ]);
     if ($inserted === false || $inserted === 0 || (int) $wpdb->insert_id <= 0) {
-        $error = (string) ($wpdb->last_error ?? '');
-        error_log(sprintf(
-            '[landing-config] lead audit insert failed; error_sha256=%s; bytes=%d',
-            hash('sha256', $error),
-            strlen($error)
-        ));
+        error_log('[landing-config] audit_insert_failed');
         return 0;
     }
     return (int) $wpdb->insert_id;
@@ -329,6 +326,31 @@ function log_delivery_attempt(int $lead_id, string $adapter, array $result): voi
     ));
 }
 
+function submission_lock_name(string $submission_id): string {
+    return 'lpl_' . get_current_blog_id() . '_' . substr(hash('sha256', $submission_id), 0, 32);
+}
+
+function acquire_submission_lock(string $submission_id): bool {
+    global $wpdb;
+    return (int)$wpdb->get_var($wpdb->prepare(
+        'SELECT GET_LOCK(%s, %d)', submission_lock_name($submission_id), SUBMISSION_LOCK_WAIT_SECONDS
+    )) === 1;
+}
+
+function release_submission_lock(string $submission_id): void {
+    global $wpdb;
+    $wpdb->get_var($wpdb->prepare('SELECT RELEASE_LOCK(%s)', submission_lock_name($submission_id)));
+}
+
+function find_lead_id_by_submission(string $submission_id): int {
+    global $wpdb;
+    $row = $wpdb->get_row($wpdb->prepare(
+        'SELECT id FROM `' . get_leads_table_name() . '` WHERE submission_id=%s ORDER BY id ASC LIMIT 1',
+        $submission_id
+    ), ARRAY_A);
+    return is_array($row) ? max(0, (int)($row['id'] ?? 0)) : 0;
+}
+
 function handle_lead($request) {
     $params = $request->get_params();
     $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
@@ -354,6 +376,32 @@ function handle_lead($request) {
         audit_log_block($audit_id, 'pd_consent', 'explicit consent missing');
         return new \WP_REST_Response(['ok' => false, 'error' => 'pd_consent'], 400);
     }
+
+    $submission_id = $normalized['submission_id'];
+    if ($submission_id !== null) {
+        if (!acquire_submission_lock($submission_id)) {
+            audit_log_block($audit_id, 'idempotency_busy', 'submission lock busy');
+            return new \WP_REST_Response(['ok' => false, 'error' => 'temporarily_unavailable'], 503);
+        }
+        try {
+            $existing_lead_id = find_lead_id_by_submission($submission_id);
+            if ($existing_lead_id > 0) {
+                audit_log_success($audit_id, $existing_lead_id);
+                return new \WP_REST_Response([
+                    'ok' => true,
+                    'lead_id' => $existing_lead_id,
+                    'replayed' => true,
+                ], 200);
+            }
+            return store_new_lead($params, $normalized, $audit_id, (string)$ip);
+        } finally {
+            release_submission_lock($submission_id);
+        }
+    }
+    return store_new_lead($params, $normalized, $audit_id, (string)$ip);
+}
+
+function store_new_lead(array $params, array $normalized, int $audit_id, string $ip) {
 
     // Rate limit per IP — transient-based.
     $rl_key = 'landing_lead_rl_' . md5($ip);
@@ -402,18 +450,13 @@ function handle_lead($request) {
     if ($inserted === false || $inserted === 0) {
         $first_error = (string) ($wpdb->last_error ?? '');
         if (!is_optional_metadata_storage_error($first_error)) {
-            audit_log_block($audit_id, 'db_error', $first_error);
+            audit_log_block($audit_id, 'db_error', 'storage_write_failed');
             return new \WP_REST_Response(['ok' => false, 'error' => 'db_error'], 500);
         }
         $data = without_optional_lead_metadata($data);
         $inserted = $wpdb->insert(get_leads_table_name(), $data);
         if ($inserted === false || $inserted === 0) {
-            $fallback_error = (string) ($wpdb->last_error ?? '');
-            audit_log_block(
-                $audit_id,
-                'db_error',
-                'primary=' . $first_error . '; fallback=' . $fallback_error
-            );
+            audit_log_block($audit_id, 'db_error', 'metadata_fallback_failed');
             return new \WP_REST_Response(['ok' => false, 'error' => 'db_error'], 500);
         }
     }
@@ -426,8 +469,19 @@ function handle_lead($request) {
     // Audit: пометить как успешно сохранённую заявку
     audit_log_success($audit_id, $lead_id);
 
-    // Dispatch to all active integrations
-    dispatch_all_integrations(['id' => $lead_id] + $data);
+    // The durable lead is the success barrier. Delivery reservations and cron
+    // are best-effort and are reconciled by monitoring if scheduling fails.
+    try {
+        if (function_exists('LandingConfig\\LeadDelivery\\reserve_integrations')) {
+            \LandingConfig\LeadDelivery\reserve_integrations($lead_id);
+            if (function_exists('wp_schedule_single_event')) {
+                wp_schedule_single_event(time(), 'landing_config_deliver_lead', [$lead_id]);
+            }
+            if (function_exists('spawn_cron')) { spawn_cron(); }
+        }
+    } catch (\Throwable $ignored) {
+        error_log('[landing-config] delivery_schedule_failed');
+    }
 
     do_action('landing_config_lead_received', $lead_id, $data);
 

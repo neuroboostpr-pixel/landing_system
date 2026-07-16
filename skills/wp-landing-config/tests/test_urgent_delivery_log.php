@@ -7,6 +7,7 @@ require_once __DIR__ . '/../mu-plugin/landing-config/includes/cascade.php';
 require_once __DIR__ . '/../mu-plugin/landing-config/includes/integrations.php';
 require_once __DIR__ . '/../mu-plugin/landing-config/adapters/AdapterInterface.php';
 require_once __DIR__ . '/../mu-plugin/landing-config/adapters/EmailAdapter.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/includes/lead-delivery-worker.php';
 require_once __DIR__ . '/../mu-plugin/landing-config/includes/rest-lead.php';
 
 $failures = 0;
@@ -53,22 +54,31 @@ $response_data = $response->get_data();
 $assert(($response_data['ok'] ?? false) === true, 'saved lead returns ok=true');
 $assert(is_int($response_data['lead_id'] ?? null) && $response_data['lead_id'] > 0, 'saved lead returns a positive integer id');
 
-$assert(count($GLOBALS['_mock_mail_sent']) === 1, 'configured Email integration sends exactly once');
-$assert(($GLOBALS['_mock_mail_sent'][0]['to'] ?? '') === 'elapova00@gmail.com', 'only launch mailbox receives the email');
+$assert(count($GLOBALS['_mock_mail_sent']) === 0, 'primary response waits for no Email adapter');
 
 $log_rows = array_values(array_filter(
     $GLOBALS['_mock_inserted_leads'],
     static fn(array $row): bool => str_ends_with((string)($row['table'] ?? ''), 'landing_lead_log')
 ));
-$assert(count($log_rows) === 1, 'one delivery result row is stored');
+$assert(count($log_rows) === 1, 'one exact delivery reservation is stored');
 $log = $log_rows[0]['data'] ?? [];
 $assert(($log['lead_id'] ?? 0) === ($response_data['lead_id'] ?? -1), 'delivery row belongs to the saved lead');
 $assert(($log['adapter'] ?? '') === 'email', 'delivery row identifies Email');
-$assert(($log['status'] ?? '') === 'accepted', 'wp_mail=true is recorded as accepted, not inbox-delivered');
+$assert((int)($log['integration_id'] ?? 0) === $integration_id, 'delivery row identifies the exact Email record');
+$assert(($log['status'] ?? '') === 'queued', 'primary response stores a queued reservation');
 $safe_text = json_encode([$log['response_body'] ?? '', $log['error_text'] ?? '']);
 foreach (['PII-MARKER-NAME', '+971 50 111 2233', 'pii-marker@example.invalid', 'PII-MARKER-MESSAGE'] as $pii) {
     $assert(!str_contains((string)$safe_text, $pii), "delivery log excludes PII marker {$pii}");
 }
+
+// The worker test exercises the atomic queue claim. Here the legacy helper is
+// invoked only to preserve its exact-settings and privacy regression coverage.
+\LandingConfig\REST\dispatch_all_integrations(['id' => (int)$response_data['lead_id']] + $request->get_params() + [
+    'utm_medium' => '', 'utm_campaign' => '', 'utm_term' => '', 'utm_content' => '',
+    'roistat_visit' => '', 'created_at' => current_time('mysql'),
+]);
+$assert(count($GLOBALS['_mock_mail_sent']) === 1, 'configured Email integration sends once when delivery executes');
+$assert(($GLOBALS['_mock_mail_sent'][0]['to'] ?? '') === 'elapova00@gmail.com', 'only launch mailbox receives the email');
 
 // Each enabled record must use its own settings. This prevents two configured
 // mailboxes from both resolving to the first recipient.

@@ -1,0 +1,94 @@
+<?php
+require __DIR__ . '/fixtures/lead-reliability-bootstrap.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/includes/db.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/includes/encryption.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/includes/helpers.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/includes/cascade.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/includes/integrations.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/adapters/AdapterInterface.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/adapters/EmailAdapter.php';
+if (is_file(__DIR__ . '/../mu-plugin/landing-config/includes/lead-delivery-worker.php')) {
+    require_once __DIR__ . '/../mu-plugin/landing-config/includes/lead-delivery-worker.php';
+}
+require_once __DIR__ . '/../mu-plugin/landing-config/includes/rest-lead.php';
+
+use function LandingConfig\REST\handle_lead;
+
+$failures = 0;
+$assert = static function (bool $condition, string $message) use (&$failures): void {
+    if (!$condition) {
+        $failures++;
+        fwrite(STDERR, "FAIL: {$message}\n");
+    }
+};
+
+function idempotent_request(array $overrides = []): WP_REST_Request {
+    return new WP_REST_Request(array_merge([
+        'submission_id' => '11111111-1111-4111-8111-111111111111',
+        'name' => 'Reliability test',
+        'phone' => '+971501111111',
+        'email' => '',
+        'message' => '',
+        'source_block' => 'test',
+        'pd_consent' => '1',
+    ], $overrides));
+}
+
+function seed_email_integration(): int {
+    return \LandingConfig\Integrations\save_integration(
+        'email', 'Launch mailbox', '',
+        ['to' => 'elapova00@gmail.com', 'subject' => 'Lead'],
+        false, 1, [], true
+    );
+}
+
+lr_reset_state();
+$_SERVER['REMOTE_ADDR'] = '203.0.113.7';
+$_SERVER['HTTP_USER_AGENT'] = 'idempotency-test';
+$integration_id = seed_email_integration();
+$assert($integration_id > 0, 'integration fixture exists');
+lr_queue_row(null); // first UUID lookup: no existing lead
+$first = handle_lead(idempotent_request());
+$lead_id = (int)($first->get_data()['lead_id'] ?? 0);
+$lead_count = count(lr_rows(\LandingConfig\DB\get_leads_table_name()));
+$delivery_count = count(lr_rows(\LandingConfig\DB\get_lead_log_table_name()));
+$assert($first->get_status() === 200 && $lead_id > 0, 'first request durably saves a positive lead');
+$assert($delivery_count === 1, 'first request reserves one exact integration');
+$reservation = lr_rows(\LandingConfig\DB\get_lead_log_table_name())[0] ?? [];
+$assert((int)($reservation['integration_id'] ?? 0) === $integration_id, 'reservation stores exact integration id');
+$assert(($reservation['status'] ?? '') === 'queued', 'reservation starts queued');
+$assert(count($GLOBALS['_lr_http_requests']) === 0 && count($GLOBALS['_mock_mail_sent']) === 0, 'primary response waits for no adapter');
+
+lr_queue_row(['id' => $lead_id]);
+$replay = handle_lead(idempotent_request());
+$assert($replay->get_status() === 200, 'replay succeeds');
+$assert($replay->get_data() === ['ok' => true, 'lead_id' => $lead_id, 'replayed' => true], 'replay returns original lead');
+$assert(count(lr_rows(\LandingConfig\DB\get_leads_table_name())) === $lead_count, 'replay inserts no lead');
+$assert(count(lr_rows(\LandingConfig\DB\get_lead_log_table_name())) === $delivery_count, 'replay redelivers nothing');
+
+lr_reset_state();
+$_SERVER['REMOTE_ADDR'] = '203.0.113.7';
+$_SERVER['HTTP_USER_AGENT'] = 'idempotency-test';
+seed_email_integration();
+$GLOBALS['_lr_force_lock_failure'] = true;
+$busy = handle_lead(idempotent_request());
+$assert($busy->get_status() === 503, 'contended UUID returns retryable 503');
+$assert(lr_rows(\LandingConfig\DB\get_leads_table_name()) === [], 'contended UUID creates no duplicate');
+$assert(count(lr_rows(\LandingConfig\DB\get_lead_audit_table_name())) === 1, 'early recoverable audit survives contention');
+$lock_sql = implode("\n", $GLOBALS['wpdb']->query_log);
+$assert(str_contains($lock_sql, 'GET_LOCK'), 'UUID requests use a named lock');
+$assert(!str_contains($lock_sql, '+971501111111'), 'lock SQL contains no contact');
+
+lr_reset_state();
+$_SERVER['REMOTE_ADDR'] = '203.0.113.8';
+$_SERVER['HTTP_USER_AGENT'] = 'legacy-test';
+$legacy = handle_lead(idempotent_request(['submission_id' => null]));
+$assert($legacy->get_status() === 200, 'missing UUID keeps legacy insert path');
+lr_reset_state();
+$_SERVER['REMOTE_ADDR'] = '203.0.113.9';
+$_SERVER['HTTP_USER_AGENT'] = 'legacy-test';
+$invalid = handle_lead(idempotent_request(['submission_id' => 'not-a-uuid']));
+$assert($invalid->get_status() === 200, 'invalid optional UUID keeps legacy insert path');
+
+echo $failures === 0 ? "PASS: REST lead idempotency\n" : "FAILURES: {$failures}\n";
+exit($failures === 0 ? 0 : 1);

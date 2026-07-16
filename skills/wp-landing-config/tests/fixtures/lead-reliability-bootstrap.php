@@ -142,6 +142,12 @@ function wp_generate_uuid4() {
 function wp_is_uuid($uuid, $version = null) { return preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i', (string)$uuid) === 1; }
 function wp_next_scheduled($hook) { return $GLOBALS['_lr_next_scheduled'][$hook] ?? false; }
 function wp_schedule_event($timestamp, $recurrence, $hook, $args = [], $wp_error = false) { $GLOBALS['_lr_next_scheduled'][$hook] = $timestamp; return true; }
+function wp_schedule_single_event($timestamp, $hook, $args = [], $wp_error = false) {
+    $GLOBALS['_lr_next_scheduled'][$hook] = $timestamp;
+    $GLOBALS['_lr_scheduled_single'][] = ['timestamp' => (int)$timestamp, 'hook' => (string)$hook, 'args' => $args];
+    return true;
+}
+function spawn_cron($gmt_time = 0) { $GLOBALS['_lr_spawn_cron_calls'][] = $gmt_time; return true; }
 function wp_clear_scheduled_hook($hook) { unset($GLOBALS['_lr_next_scheduled'][$hook]); return 1; }
 function wp_remote_retrieve_header($response, $header) { return $response['headers'][strtolower($header)] ?? $response['headers'][$header] ?? ''; }
 function get_home_url() { return 'https://hybridautos.test'; }

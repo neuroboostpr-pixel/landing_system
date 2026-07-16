@@ -129,7 +129,13 @@ class RoistatAdapter implements AdapterInterface {
         $body = \wp_remote_retrieve_body($resp);
         $json = json_decode($body, true);
         $ok   = self::is_confirmed_success($code, $body, $json);
-        return ['ok' => $ok, 'response_code' => $code, 'response_body' => $body, 'error' => !$ok ? ($json['message'] ?? "HTTP {$code}") : null];
+        return [
+            'ok' => $ok,
+            'response_code' => $code,
+            'response_body' => $body,
+            'error' => !$ok ? ($json['message'] ?? "HTTP {$code}") : null,
+            'retry_after' => \wp_remote_retrieve_header($resp, 'retry-after'),
+        ];
     }
 
     /**

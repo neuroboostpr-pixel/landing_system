@@ -238,6 +238,13 @@ class MockWpdbInsert extends MockWpdb {
         return [];
     }
 
+    public function get_row($sql, $output = OBJECT) {
+        $this->query_log[] = (string) $sql;
+        $row = array_shift($this->row_queue);
+        if ($row === null) { return null; }
+        return $output === ARRAY_A ? (array)$row : (object)$row;
+    }
+
     public function get_var($sql) {
         $this->query_log[] = (string) $sql;
         if (stripos((string) $sql, 'GET_LOCK(') !== false) {
