@@ -621,6 +621,128 @@ function touch_heartbeat(bool $ok, ?int $now = null): void {
     update_option(RUN_STATUS_OPTION, $ok ? 'ok' : 'failed');
 }
 
+function external_health_state(): array {
+    $stored = get_option(EXTERNAL_HEALTH_OPTION, []);
+    $stored = is_array($stored) ? $stored : [];
+    return array_merge([
+        'last_processed_slot' => 0,
+        'accepted_at' => 0,
+        'last_status' => 'unknown',
+        'failure_count' => 0,
+        'episode_generation' => 0,
+        'outage_open' => false,
+        'monitoring_enabled_at' => 0,
+        'monitor_stale_generation' => 0,
+        'monitor_stale_open' => false,
+    ], array_intersect_key($stored, array_flip([
+        'last_processed_slot','accepted_at','last_status','failure_count','episode_generation',
+        'outage_open','monitoring_enabled_at','monitor_stale_generation','monitor_stale_open',
+    ])));
+}
+
+function save_external_health_state(array $state): void {
+    update_option(EXTERNAL_HEALTH_OPTION, [
+        'last_processed_slot' => max(0, (int)($state['last_processed_slot'] ?? 0)),
+        'accepted_at' => max(0, (int)($state['accepted_at'] ?? 0)),
+        'last_status' => in_array(($state['last_status'] ?? ''), ['unknown','ok','failed'], true) ? $state['last_status'] : 'unknown',
+        'failure_count' => max(0, min(2, (int)($state['failure_count'] ?? 0))),
+        'episode_generation' => max(0, (int)($state['episode_generation'] ?? 0)),
+        'outage_open' => ($state['outage_open'] ?? false) === true,
+        'monitoring_enabled_at' => max(0, (int)($state['monitoring_enabled_at'] ?? 0)),
+        'monitor_stale_generation' => max(0, (int)($state['monitor_stale_generation'] ?? 0)),
+        'monitor_stale_open' => ($state['monitor_stale_open'] ?? false) === true,
+    ]);
+}
+
+function note_monitoring_enabled(?int $now = null): void {
+    if (!is_enabled()) { return; }
+    $state = external_health_state();
+    if ((int)$state['monitoring_enabled_at'] <= 0) {
+        $state['monitoring_enabled_at'] = $now ?? time();
+        save_external_health_state($state);
+    }
+}
+
+function apply_external_health_observation(string $status, int $slot, ?int $accepted_at = null): array {
+    if (!in_array($status, ['ok','failed'], true) || $slot <= 0) {
+        return ['accepted' => false, 'duplicate' => false, 'outage' => false, 'recovery' => false];
+    }
+    global $wpdb;
+    $lock = 'lph_' . get_current_blog_id() . '_external_health';
+    if ((int)$wpdb->get_var($wpdb->prepare('SELECT GET_LOCK(%s, 1)', $lock)) !== 1) {
+        return ['accepted' => false, 'duplicate' => false, 'outage' => false, 'recovery' => false];
+    }
+    try {
+        $state = external_health_state();
+        if ($slot <= (int)$state['last_processed_slot']) {
+            return ['accepted' => true, 'duplicate' => true, 'outage' => false, 'recovery' => false];
+        }
+        $accepted_at = $accepted_at ?? time();
+        $outage = false;
+        $recovery = false;
+        if (($state['monitor_stale_open'] ?? false) === true && (int)$state['monitor_stale_generation'] > 0) {
+            record_external_incident('external_monitor_recovery', 'external_monitor_recovery',
+                (int)$state['monitor_stale_generation'], $accepted_at);
+            $state['monitor_stale_open'] = false;
+        }
+        if ($status === 'failed') {
+            if (($state['outage_open'] ?? false) === true) {
+                $state['failure_count'] = 2;
+            } elseif (($state['last_status'] ?? '') === 'failed'
+                && $slot === (int)$state['last_processed_slot'] + 1
+                && (int)$state['episode_generation'] > 0) {
+                $state['failure_count'] = min(2, (int)$state['failure_count'] + 1);
+            } else {
+                $state['failure_count'] = 1;
+                $state['episode_generation'] = $slot;
+            }
+            if ((int)$state['failure_count'] >= 2 && ($state['outage_open'] ?? false) !== true) {
+                record_external_incident('external_outage', 'redis_outage',
+                    (int)$state['episode_generation'], $accepted_at);
+                $state['outage_open'] = true;
+                $outage = true;
+            }
+        } else {
+            if (($state['outage_open'] ?? false) === true && (int)$state['episode_generation'] > 0) {
+                record_external_incident('external_recovery', 'redis_recovery',
+                    (int)$state['episode_generation'], $accepted_at);
+                $recovery = true;
+            }
+            $state['failure_count'] = 0;
+            $state['outage_open'] = false;
+        }
+        $state['last_status'] = $status;
+        $state['last_processed_slot'] = $slot;
+        $state['accepted_at'] = $accepted_at;
+        save_external_health_state($state);
+        return ['accepted' => true, 'duplicate' => false, 'outage' => $outage, 'recovery' => $recovery];
+    } finally {
+        $wpdb->get_var($wpdb->prepare('SELECT RELEASE_LOCK(%s)', $lock));
+    }
+}
+
+function check_external_monitor_stale(?int $now = null): array {
+    if (!is_enabled()) { return ['stale' => false, 'created' => false]; }
+    $now = $now ?? time();
+    $state = external_health_state();
+    $enabled_at = (int)$state['monitoring_enabled_at'];
+    if ($enabled_at <= 0) {
+        note_monitoring_enabled($now);
+        return ['stale' => false, 'created' => false];
+    }
+    $reference = (int)$state['accepted_at'] > 0 ? (int)$state['accepted_at'] : $enabled_at;
+    if ($now - $reference <= 900) { return ['stale' => false, 'created' => false]; }
+    if (($state['monitor_stale_open'] ?? false) === true) {
+        return ['stale' => true, 'created' => false];
+    }
+    $generation = max(1, intdiv($now, 300));
+    record_external_incident('external_monitor_stale', 'external_monitor_stale', $generation, $now);
+    $state['monitor_stale_generation'] = $generation;
+    $state['monitor_stale_open'] = true;
+    save_external_health_state($state);
+    return ['stale' => true, 'created' => true];
+}
+
 function sync_monitoring_schedule(?int $now = null): void {
     $now = $now ?? time();
     $hooks = [DELIVERY_HOOK, SCAN_HOOK, QUEUE_HOOK, CLEANUP_HOOK];
@@ -628,6 +750,7 @@ function sync_monitoring_schedule(?int $now = null): void {
         foreach ($hooks as $hook) { wp_clear_scheduled_hook($hook); }
         return;
     }
+    note_monitoring_enabled($now);
     if (!wp_next_scheduled(DELIVERY_HOOK)) {
         wp_schedule_event($now + 5, 'landing_every_minute', DELIVERY_HOOK);
     }
