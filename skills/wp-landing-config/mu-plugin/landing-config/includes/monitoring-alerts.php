@@ -211,3 +211,213 @@ function reconcile_delivery_rows(?int $now = null): array {
     }
     return ['reservations_recreated' => $reservations_recreated, 'stuck' => $stuck];
 }
+
+function classify_timeline(array $events): ?array {
+    usort($events, static function (array $left, array $right): int {
+        $left_sequence = isset($left['event_sequence']) ? (int)$left['event_sequence'] : PHP_INT_MAX;
+        $right_sequence = isset($right['event_sequence']) ? (int)$right['event_sequence'] : PHP_INT_MAX;
+        return $left_sequence <=> $right_sequence ?: (int)($left['id'] ?? 0) <=> (int)($right['id'] ?? 0);
+    });
+    $names = array_values(array_filter(array_map(
+        static fn(array $event): string => sanitize_key((string)($event['event_name'] ?? '')),
+        $events
+    )));
+    if (in_array('request_started', $names, true) || in_array('request_failed', $names, true)) {
+        return [
+            'kind' => 'missing_lead',
+            'severity' => 'critical',
+            'safe_status' => in_array('request_failed', $names, true) ? 'request_failed' : 'request_started',
+            'safe_category' => 'missing_wordpress_lead',
+        ];
+    }
+    if (in_array('submit_attempt', $names, true)) {
+        return [
+            'kind' => 'javascript_stall',
+            'severity' => 'warning',
+            'safe_status' => 'submit_attempt',
+            'safe_category' => 'browser_javascript_stall',
+        ];
+    }
+    return null;
+}
+
+function receipt_status_signature(string $path, int $timestamp): ?string {
+    if (!defined('LP_FALLBACK_STATUS_SECRET') || !defined('LP_FALLBACK_SITE_ID')
+        || LP_FALLBACK_SITE_ID !== 'hybridautos-ae') {
+        return null;
+    }
+    $key = \LandingConfig\FallbackSecurity\decode_hmac_hex_secret((string)LP_FALLBACK_STATUS_SECRET);
+    if ($key === null) { return null; }
+    return hash_hmac('sha256', "GET\n{$path}\n{$timestamp}\nhybridautos-ae", $key);
+}
+
+function empty_receipt_result(string $lookup): array {
+    return ['lookup' => $lookup, 'exists' => false, 'stored' => false, 'delivery_state' => null];
+}
+
+function fetch_external_receipt_status(string $submission_id, ?int $now = null): array {
+    if (!is_valid_submission_id($submission_id) || !defined('LP_FALLBACK_STATUS_URL')) {
+        return empty_receipt_result('disabled');
+    }
+    $base = rtrim((string)LP_FALLBACK_STATUS_URL, '/');
+    if (filter_var($base, FILTER_VALIDATE_URL) === false || strtolower((string)parse_url($base, PHP_URL_SCHEME)) !== 'https') {
+        return empty_receipt_result('disabled');
+    }
+    $path = '/api/v1/receipts/' . $submission_id;
+    $timestamp = $now ?? time();
+    $signature = receipt_status_signature($path, $timestamp);
+    if ($signature === null) { return empty_receipt_result('disabled'); }
+    try {
+        $response = wp_remote_get($base . $path, [
+            'timeout' => 4,
+            'redirection' => 0,
+            'headers' => [
+                'X-LP-Site-Id' => 'hybridautos-ae',
+                'X-LP-Timestamp' => (string)$timestamp,
+                'X-LP-Signature' => $signature,
+            ],
+        ]);
+    } catch (\Throwable $ignored) {
+        return empty_receipt_result('unknown');
+    }
+    if (is_wp_error($response)) { return empty_receipt_result('unknown'); }
+    $code = (int)wp_remote_retrieve_response_code($response);
+    if ($code === 404) { return empty_receipt_result('missing'); }
+    if ($code !== 200) { return empty_receipt_result('unknown'); }
+    $decoded = json_decode((string)wp_remote_retrieve_body($response), true);
+    $expected_keys = ['ok','submission_id','exists','stored','delivery_state'];
+    if (!is_array($decoded) || array_keys($decoded) !== $expected_keys
+        || ($decoded['ok'] ?? null) !== true
+        || ($decoded['submission_id'] ?? '') !== $submission_id
+        || !is_bool($decoded['exists'] ?? null)
+        || !is_bool($decoded['stored'] ?? null)
+        || !in_array($decoded['delivery_state'] ?? null, ['pending','delivered','unknown','expired'], true)) {
+        return empty_receipt_result('unknown');
+    }
+    return [
+        'lookup' => 'ok',
+        'exists' => $decoded['exists'],
+        'stored' => $decoded['stored'],
+        'delivery_state' => $decoded['delivery_state'],
+    ];
+}
+
+function update_incident_by_kind(string $kind, string $submission_id, array $changes): void {
+    global $wpdb;
+    $fingerprint = incident_fingerprint($kind, $submission_id, null, null, '', 0);
+    $wpdb->update(get_monitor_alerts_table_name(), $changes, ['fingerprint' => $fingerprint]);
+}
+
+function resolve_submission_incidents(string $submission_id, string $resolution, int $now): void {
+    if (!is_valid_submission_id($submission_id) || !in_array($resolution, ['external_recovered','wordpress_lead_saved'], true)) { return; }
+    foreach (['missing_lead','javascript_stall','fallback_receipt_watch','fallback_delivery_stuck','fallback_delivery_uncertain'] as $kind) {
+        update_incident_by_kind($kind, $submission_id, [
+            'resolved_at' => utc_mysql($now), 'resolution' => $resolution,
+        ]);
+    }
+}
+
+function close_receipt_watch(string $submission_id, int $now): void {
+    foreach (['fallback_receipt_watch','fallback_delivery_stuck','fallback_delivery_uncertain'] as $kind) {
+        update_incident_by_kind($kind, $submission_id, ['resolved_at' => utc_mysql($now)]);
+    }
+}
+
+function upsert_receipt_watch(string $submission_id, int $now): int {
+    $id = record_incident('fallback_receipt_watch', 'info', $submission_id, null, null, '',
+        'watching', 'fallback_receipt_watch', null, '', $now);
+    if ($id > 0) {
+        global $wpdb;
+        $wpdb->update(get_monitor_alerts_table_name(), [
+            'telegram_status' => 'watching',
+            'due_at' => utc_mysql($now + 300),
+        ], ['id' => $id]);
+    }
+    return $id;
+}
+
+function apply_receipt_lifecycle(string $submission_id, array $classification, array $receipt,
+    bool $wordpress_exists, int $now, ?int $watch_started_at): array {
+    if ($wordpress_exists) {
+        resolve_submission_incidents($submission_id, 'wordpress_lead_saved', $now);
+        return ['terminal' => true, 'result' => 'wordpress_lead_saved'];
+    }
+    $lookup = (string)($receipt['lookup'] ?? 'unknown');
+    $stored = ($receipt['stored'] ?? false) === true;
+    $state = $receipt['delivery_state'] ?? null;
+    if ($lookup === 'ok' && $stored && $state === 'delivered') {
+        resolve_submission_incidents($submission_id, 'external_recovered', $now);
+        return ['terminal' => true, 'result' => 'external_recovered'];
+    }
+    if ($lookup === 'ok' && $stored && in_array($state, ['pending','unknown'], true)) {
+        upsert_receipt_watch($submission_id, $now);
+        $watch_started_at = $watch_started_at ?? $now;
+        if ($state === 'pending' && $now - $watch_started_at >= 600) {
+            record_incident('fallback_delivery_stuck', 'critical', $submission_id, null, null, '',
+                'pending', 'fallback_delivery_stuck', null, '', $now);
+        }
+        if ($state === 'unknown') {
+            record_incident('fallback_delivery_uncertain', 'critical', $submission_id, null, null, '',
+                'unknown', 'fallback_delivery_uncertain', null, '', $now);
+        }
+        return ['terminal' => false, 'result' => $state];
+    }
+    if ($lookup === 'ok' && !$stored && $state === 'expired') {
+        close_receipt_watch($submission_id, $now);
+    }
+    $kind = (string)($classification['kind'] ?? '');
+    $severity = (string)($classification['severity'] ?? '');
+    $safe_status = (string)($classification['safe_status'] ?? '');
+    $safe_category = (string)($classification['safe_category'] ?? '');
+    $id = record_incident($kind, $severity, $submission_id, null, null, '',
+        $safe_status, $safe_category, null, '', $now);
+    return ['terminal' => false, 'result' => $id > 0 ? 'incident' : 'ignored'];
+}
+
+function mysql_timestamp(string $value): ?int {
+    if ($value === '') { return null; }
+    $date = \DateTimeImmutable::createFromFormat('!Y-m-d H:i:s', $value, new \DateTimeZone('UTC'));
+    return $date instanceof \DateTimeImmutable ? $date->getTimestamp() : null;
+}
+
+function run_missing_lead_scan(int $limit = 100, ?int $now = null): array {
+    global $wpdb;
+    $now = $now ?? time();
+    $limit = max(1, min(500, $limit));
+    $events = \LandingConfig\DB\get_form_events_table_name();
+    $leads = get_leads_table_name();
+    $alerts = get_monitor_alerts_table_name();
+    $candidates = $wpdb->get_results($wpdb->prepare(
+        "SELECT fe.submission_id,MAX(fe.created_at) AS last_event_at,"
+        . "MAX(CASE WHEN l.id IS NULL THEN 0 ELSE 1 END) AS wordpress_exists,"
+        . "MIN(w.first_seen_at) AS watch_started_at FROM `{$events}` fe LEFT JOIN `{$leads}` l "
+        . "ON l.submission_id=fe.submission_id LEFT JOIN `{$alerts}` w ON w.submission_id=fe.submission_id "
+        . "AND w.incident_kind='fallback_receipt_watch' AND w.resolved_at IS NULL "
+        . "WHERE fe.created_at<=%s AND (w.due_at IS NULL OR w.due_at<=%s) "
+        . "GROUP BY fe.submission_id ORDER BY MAX(fe.created_at) ASC LIMIT %d",
+        utc_mysql($now - GRACE_SECONDS), utc_mysql($now), $limit
+    ), ARRAY_A);
+    $classified = 0;
+    foreach (is_array($candidates) ? $candidates : [] as $candidate) {
+        $submission_id = strtolower((string)($candidate['submission_id'] ?? ''));
+        $last_event_at = mysql_timestamp((string)($candidate['last_event_at'] ?? ''));
+        if (!is_valid_submission_id($submission_id) || $last_event_at === null || $now - $last_event_at < GRACE_SECONDS) {
+            continue;
+        }
+        $timeline = $wpdb->get_results($wpdb->prepare(
+            "SELECT id,event_sequence,event_name,event_detail FROM `{$events}` WHERE submission_id=%s "
+            . "ORDER BY CASE WHEN event_sequence IS NULL THEN 1 ELSE 0 END,event_sequence,id",
+            $submission_id
+        ), ARRAY_A);
+        $classification = classify_timeline(is_array($timeline) ? $timeline : []);
+        if ($classification === null) { continue; }
+        $wordpress_exists = (int)($candidate['wordpress_exists'] ?? 0) === 1;
+        $receipt = $wordpress_exists ? empty_receipt_result('disabled')
+            : fetch_external_receipt_status($submission_id, $now);
+        $watch_started_at = mysql_timestamp((string)($candidate['watch_started_at'] ?? ''));
+        apply_receipt_lifecycle($submission_id, $classification, $receipt,
+            $wordpress_exists, $now, $watch_started_at);
+        $classified++;
+    }
+    return ['scanned' => is_array($candidates) ? count($candidates) : 0, 'classified' => $classified];
+}
