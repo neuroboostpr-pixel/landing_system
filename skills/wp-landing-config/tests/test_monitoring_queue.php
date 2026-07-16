@@ -83,6 +83,23 @@ lr_queue_row($row);
 \LandingConfig\Monitoring\run_alert_queue(1, 1784190000);
 $assert(count($GLOBALS['_lr_http_requests']) === 1, 'second worker cannot send the same alert');
 
+// Resolution can race between SELECT and conditional claim. The claim must
+// include resolved_at IS NULL so a recovered incident is never sent late.
+queue_reset();
+\LandingConfig\Monitoring\record_incident(
+    'missing_lead', 'critical', '99999999-9999-4999-8999-999999999999',
+    null, null, '', 'request_failed', 'missing_wordpress_lead', null, '', 1784190000
+);
+$resolved_snapshot = queue_alert_row();
+$GLOBALS['wpdb']->update(\LandingConfig\DB\get_monitor_alerts_table_name(), [
+    'resolved_at' => \LandingConfig\Monitoring\utc_mysql(1784190000),
+    'resolution' => 'wordpress_lead_saved',
+], ['id' => (int)$resolved_snapshot['id']]);
+lr_queue_row($resolved_snapshot);
+lr_set_http(['response' => ['code' => 200], 'body' => '{"ok":true,"result":{"message_id":988}}', 'headers' => []]);
+\LandingConfig\Monitoring\run_alert_queue(1, 1784190000);
+$assert($GLOBALS['_lr_http_requests'] === [], 'incident resolved between select and claim is never sent');
+
 queue_reset();
 \LandingConfig\Monitoring\record_incident(
     'integration_failure', 'critical', null, 42, 7, 'roistat',

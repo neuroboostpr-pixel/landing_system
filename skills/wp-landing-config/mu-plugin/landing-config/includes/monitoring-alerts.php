@@ -477,7 +477,12 @@ function claim_next_alert(?int $now = null): ?array {
         'locked_at' => utc_mysql($now),
         'lock_token' => $lock_token,
         'send_attempts' => $attempts + 1,
-    ], ['id' => $id, 'telegram_status' => $status, 'send_attempts' => $attempts]);
+    ], [
+        'id' => $id,
+        'telegram_status' => $status,
+        'send_attempts' => $attempts,
+        'resolved_at' => null,
+    ]);
     if ((int)$claimed !== 1) { return null; }
     return array_merge($row, [
         'telegram_status' => 'sending',
