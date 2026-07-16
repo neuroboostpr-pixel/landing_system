@@ -326,6 +326,9 @@ class WP_REST_Request {
 function wp_remote_post($url, $args) {
     if (array_key_exists('_lr_http', $GLOBALS)) {
         $GLOBALS['_lr_http_requests'][] = ['method' => 'POST', 'url' => $url, 'args' => $args];
+        if (isset($GLOBALS['_lr_before_http']) && is_callable($GLOBALS['_lr_before_http'])) {
+            ($GLOBALS['_lr_before_http'])($url, $args);
+        }
         return $GLOBALS['_lr_http'];
     }
     return ['response' => ['code' => 200], 'body' => '{"ok":true}'];

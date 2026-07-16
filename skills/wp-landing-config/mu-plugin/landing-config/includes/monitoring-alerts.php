@@ -421,3 +421,190 @@ function run_missing_lead_scan(int $limit = 100, ?int $now = null): array {
     }
     return ['scanned' => is_array($candidates) ? count($candidates) : 0, 'classified' => $classified];
 }
+
+function claim_next_alert(?int $now = null): ?array {
+    global $wpdb;
+    $now = $now ?? time();
+    $table = get_monitor_alerts_table_name();
+    $row = $wpdb->get_row($wpdb->prepare(
+        "SELECT * FROM `{$table}` WHERE telegram_status IN ('pending','retry_wait') "
+        . "AND resolved_at IS NULL AND due_at<=%s AND send_attempts<%d ORDER BY due_at,id LIMIT 1",
+        utc_mysql($now), MAX_SEND_ATTEMPTS
+    ), ARRAY_A);
+    if (!is_array($row)) { return null; }
+    $id = (int)($row['id'] ?? 0);
+    $status = (string)($row['telegram_status'] ?? '');
+    $attempts = (int)($row['send_attempts'] ?? 0);
+    if ($id <= 0 || !in_array($status, ['pending','retry_wait'], true) || $attempts >= MAX_SEND_ATTEMPTS) {
+        return null;
+    }
+    $lock_token = wp_generate_uuid4();
+    $claimed = $wpdb->update($table, [
+        'telegram_status' => 'sending',
+        'locked_at' => utc_mysql($now),
+        'lock_token' => $lock_token,
+        'send_attempts' => $attempts + 1,
+    ], ['id' => $id, 'telegram_status' => $status, 'send_attempts' => $attempts]);
+    if ((int)$claimed !== 1) { return null; }
+    return array_merge($row, [
+        'telegram_status' => 'sending',
+        'locked_at' => utc_mysql($now),
+        'lock_token' => $lock_token,
+        'send_attempts' => $attempts + 1,
+    ]);
+}
+
+function monitoring_telegram_integration(): ?array {
+    $integration = null;
+    if (defined('LP_MONITOR_TELEGRAM_INTEGRATION_ID') && (int)LP_MONITOR_TELEGRAM_INTEGRATION_ID > 0) {
+        $integration = \LandingConfig\Integrations\get_integration((int)LP_MONITOR_TELEGRAM_INTEGRATION_ID);
+        if (!is_array($integration) || ($integration['enabled'] ?? false) !== true
+            || ($integration['adapter_type'] ?? '') !== 'telegram') {
+            return null;
+        }
+    } else {
+        $matches = \LandingConfig\Integrations\list_integrations_by_type('telegram', get_current_blog_id());
+        if (count($matches) !== 1) { return null; }
+        $integration = $matches[0];
+    }
+    $settings = (array)($integration['settings'] ?? []);
+    $token = (string)($settings['bot_token'] ?? '');
+    if (str_starts_with($token, 'v1:')) { $token = \LandingConfig\Encryption\decrypt($token); }
+    $chat_id = (string)($settings['chat_id'] ?? '');
+    if ($token === '' || $chat_id === '') { return null; }
+    return ['id' => (int)$integration['id'], 'token' => $token, 'chat_id' => $chat_id];
+}
+
+function safe_form_context(?string $submission_id): array {
+    if ($submission_id === null || !is_valid_submission_id($submission_id)) { return []; }
+    global $wpdb;
+    $row = $wpdb->get_row($wpdb->prepare(
+        "SELECT page_path,form_id,cta_key FROM `" . \LandingConfig\DB\get_form_events_table_name()
+        . "` WHERE submission_id=%s ORDER BY id DESC LIMIT 1", $submission_id
+    ), ARRAY_A);
+    if (!is_array($row)) { return []; }
+    return [
+        'page_path' => sanitize_text_field((string)($row['page_path'] ?? '')),
+        'form_id' => sanitize_key((string)($row['form_id'] ?? '')),
+        'cta_key' => sanitize_key((string)($row['cta_key'] ?? '')),
+    ];
+}
+
+function build_alert_text(array $alert, array $context): string {
+    $kind = (string)($alert['incident_kind'] ?? '');
+    $lead_id = max(0, (int)($alert['lead_id'] ?? 0));
+    $headings = [
+        'missing_lead' => '🚨 Заявка не появилась',
+        'javascript_stall' => '⚠️ Форма остановилась до запроса',
+        'integration_failure' => '⚠️ Ошибка доставки заявки #' . $lead_id,
+        'delivery_stuck' => '⚠️ Ошибка доставки заявки #' . $lead_id,
+        'fallback_delivery_stuck' => '⚠️ Резервная заявка ожидает доставку',
+        'fallback_delivery_uncertain' => '🚨 Доставка резервной заявки неопределённа',
+        'external_outage' => '🚨 Резервное хранилище недоступно',
+        'external_recovery' => '✅ Резервное хранилище восстановлено',
+        'external_monitor_stale' => '🚨 Внешний мониторинг не отвечает',
+        'external_monitor_recovery' => '✅ Внешний мониторинг восстановлен',
+        'monitor_internal_failure' => '🚨 Внутренняя проверка заявок завершилась ошибкой',
+        'test_alert' => '[TEST — DO NOT CONTACT]',
+    ];
+    $heading = $headings[$kind] ?? '🚨 Техническое событие заявок';
+    $lines = [esc_html($heading), 'Сайт: hybridautos-ae', 'Инцидент: #' . max(0, (int)($alert['id'] ?? 0))];
+    if (!empty($context['page_path'])) { $lines[] = 'Страница: ' . esc_html((string)$context['page_path']); }
+    if (!empty($context['form_id'])) { $lines[] = 'Форма: ' . esc_html((string)$context['form_id']); }
+    if (!empty($context['cta_key'])) { $lines[] = 'CTA: ' . esc_html((string)$context['cta_key']); }
+    return implode("\n", $lines);
+}
+
+function normalized_monitor_retry_after($value): int {
+    if (is_array($value)) { $value = reset($value); }
+    if (is_int($value) || (is_string($value) && ctype_digit(trim($value)))) {
+        return max(1, min(3600, (int)$value));
+    }
+    return 60;
+}
+
+function send_monitoring_alert(array $alert, int $now): array {
+    $credentials = monitoring_telegram_integration();
+    if ($credentials === null) {
+        return ['status' => 'failed', 'code' => null, 'message_id' => null, 'retry_after' => 60];
+    }
+    $context = safe_form_context(isset($alert['submission_id']) ? (string)$alert['submission_id'] : null);
+    $text = build_alert_text($alert, $context);
+    try {
+        $response = wp_remote_post('https://api.telegram.org/bot' . $credentials['token'] . '/sendMessage', [
+            'timeout' => 8,
+            'redirection' => 0,
+            'body' => ['chat_id' => $credentials['chat_id'], 'text' => $text, 'parse_mode' => 'HTML'],
+        ]);
+    } catch (\Throwable $ignored) {
+        return ['status' => 'unknown', 'code' => null, 'message_id' => null, 'retry_after' => 60];
+    }
+    if (is_wp_error($response)) {
+        return ['status' => 'unknown', 'code' => null, 'message_id' => null, 'retry_after' => 60];
+    }
+    $code = (int)wp_remote_retrieve_response_code($response);
+    $decoded = json_decode((string)wp_remote_retrieve_body($response), true);
+    $message_id = is_array($decoded) ? ($decoded['result']['message_id'] ?? null) : null;
+    $confirmed = $code === 200 && is_array($decoded) && ($decoded['ok'] ?? null) === true
+        && (is_int($message_id) || (is_string($message_id) && ctype_digit($message_id)))
+        && (int)$message_id > 0;
+    if ($confirmed) {
+        return ['status' => 'sent', 'code' => 200, 'message_id' => (int)$message_id, 'retry_after' => 60];
+    }
+    if ($code === 429) {
+        $retry_after = is_array($decoded) ? ($decoded['parameters']['retry_after'] ?? null) : null;
+        return ['status' => 'retry_wait', 'code' => 429, 'message_id' => null,
+            'retry_after' => normalized_monitor_retry_after($retry_after)];
+    }
+    if ($code >= 400 && $code < 500) {
+        return ['status' => 'failed', 'code' => $code, 'message_id' => null, 'retry_after' => 60];
+    }
+    return ['status' => 'unknown', 'code' => $code > 0 ? $code : null, 'message_id' => null, 'retry_after' => 60];
+}
+
+function run_alert_queue(int $limit = 10, ?int $now = null): array {
+    global $wpdb;
+    $now = $now ?? time();
+    $limit = max(1, min(100, $limit));
+    $summary = ['processed' => 0, 'sent' => 0, 'retry_wait' => 0, 'unknown' => 0, 'failed' => 0];
+    for ($i = 0; $i < $limit; $i++) {
+        $alert = claim_next_alert($now);
+        if ($alert === null) { break; }
+        $summary['processed']++;
+        $outcome = send_monitoring_alert($alert, $now);
+        $status = (string)$outcome['status'];
+        if ($status === 'retry_wait' && (int)$alert['send_attempts'] >= MAX_SEND_ATTEMPTS) {
+            $status = 'failed';
+        }
+        $update = [
+            'telegram_status' => $status,
+            'last_response_at' => utc_mysql($now),
+            'telegram_response_code' => $outcome['code'],
+            'telegram_message_id' => $outcome['message_id'],
+        ];
+        if ($status === 'sent') { $update['sent_at'] = utc_mysql($now); }
+        if ($status === 'retry_wait') { $update['due_at'] = utc_mysql($now + (int)$outcome['retry_after']); }
+        $wpdb->update(get_monitor_alerts_table_name(), $update, [
+            'id' => (int)$alert['id'], 'telegram_status' => 'sending', 'lock_token' => (string)$alert['lock_token'],
+        ]);
+        $summary[$status]++;
+    }
+    return $summary;
+}
+
+function mark_stale_alerts_unknown(?int $now = null): int {
+    global $wpdb;
+    $now = $now ?? time();
+    $rows = $wpdb->get_results($wpdb->prepare(
+        "SELECT id FROM `" . get_monitor_alerts_table_name() . "` WHERE telegram_status='sending' AND locked_at<%s LIMIT 100",
+        utc_mysql($now - LOCK_TTL_SECONDS)
+    ), ARRAY_A);
+    $changed = 0;
+    foreach (is_array($rows) ? $rows : [] as $row) {
+        $updated = $wpdb->update(get_monitor_alerts_table_name(), [
+            'telegram_status' => 'unknown', 'last_response_at' => utc_mysql($now),
+        ], ['id' => (int)($row['id'] ?? 0), 'telegram_status' => 'sending']);
+        if ((int)$updated === 1) { $changed++; }
+    }
+    return $changed;
+}

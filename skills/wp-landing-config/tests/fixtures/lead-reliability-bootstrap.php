@@ -151,6 +151,7 @@ function lr_reset_state(): void {
     $GLOBALS['_mock_actions_fired'] = [];
     $GLOBALS['_lr_http'] = ['response' => ['code' => 200], 'body' => '{"ok":true}', 'headers' => []];
     $GLOBALS['_lr_http_requests'] = [];
+    unset($GLOBALS['_lr_before_http']);
     $GLOBALS['_lr_mail_result'] = true;
     $GLOBALS['_lr_now'] = '2026-07-15 12:00:00';
     $GLOBALS['_lr_next_scheduled'] = [];
