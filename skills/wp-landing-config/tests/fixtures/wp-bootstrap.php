@@ -171,6 +171,22 @@ function set_transient($key, $value, $ttl = 0) {
     return true;
 }
 
+function delete_transient($key) {
+    unset($GLOBALS['_mock_transients'][$key], $GLOBALS['_mock_transient_ttls'][$key]);
+    return true;
+}
+
+function is_user_logged_in() { return !empty($GLOBALS['_lr_logged_in']); }
+function current_user_can($capability) { return !empty($GLOBALS['_lr_capabilities'][(string)$capability]); }
+function wp_verify_nonce($nonce, $action) {
+    if ((string)$action !== 'wp_rest') { return false; }
+    $result = $GLOBALS['_lr_valid_nonces'][(string)$nonce] ?? false;
+    return in_array($result, [1, 2], true) ? $result : false;
+}
+function home_url($path = '/', $scheme = null) {
+    return rtrim(function_exists('get_home_url') ? get_home_url() : 'https://hybridautos.test', '/') . '/' . ltrim((string)$path, '/');
+}
+
 class MockWpdbInsert extends MockWpdb {
     public $insert_id = 0;
     public array $query_log = [];

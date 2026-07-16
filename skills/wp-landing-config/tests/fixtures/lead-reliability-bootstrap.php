@@ -156,6 +156,9 @@ function lr_reset_state(): void {
     $GLOBALS['_lr_next_scheduled'] = [];
     $GLOBALS['_lr_uuid_counter'] = 0;
     $GLOBALS['_lr_force_lock_failure'] = false;
+    $GLOBALS['_lr_logged_in'] = false;
+    $GLOBALS['_lr_capabilities'] = [];
+    $GLOBALS['_lr_valid_nonces'] = [];
     $GLOBALS['_mock_posts'] = [];
     $GLOBALS['_mock_post_meta'] = [];
     $GLOBALS['_mock_next_post_id'] = 1;
