@@ -85,6 +85,7 @@ $assert($bad_external === 0, 'external scope cannot be applied to another incide
 lr_reset_state();
 update_option('landing_monitor_enabled', '1');
 update_option('landing_delivery_async_boundary', '2026-07-15 11:30:00');
+update_option('landing_delivery_async_min_lead_id', 70);
 $integration_id = \LandingConfig\Integrations\save_integration(
     'email', 'Launch mailbox', '', ['to' => 'elapova00@gmail.com'], false, 1, [], true
 );
@@ -95,6 +96,9 @@ $roistat_id = \LandingConfig\Integrations\save_integration(
     'roistat', 'Launch CRM', '', ['webhook_url' => 'https://roistat.invalid'], false, 1, [], true
 );
 $delivery_table = \LandingConfig\DB\get_lead_log_table_name();
+$delivery_targets = \LandingConfig\LeadDelivery\encode_delivery_targets([
+    $integration_id => 'email', $telegram_id => 'telegram', $roistat_id => 'roistat',
+]);
 // A legacy row gets integration_id=0 during rollout. It must remain evidence
 // only and must never trigger a new delivery to every current integration.
 $GLOBALS['wpdb']->insert($delivery_table, [
@@ -108,9 +112,9 @@ foreach ([[$integration_id, 'email'], [$roistat_id, 'roistat']] as [$existing_id
     ]);
 }
 lr_queue_results([
-    ['id' => 69, 'created_at' => '2026-07-15 11:00:00'], // legacy, before boundary
-    ['id' => 70, 'created_at' => '2026-07-15 11:58:00'], // fresh, missing Telegram
-    ['id' => 71, 'created_at' => '2026-07-15 11:59:00'], // fresh, total reservation failure
+    ['id' => 69, 'delivery_targets' => $delivery_targets, 'delivery_reservations_ready' => 0], // legacy, before cutover id
+    ['id' => 70, 'delivery_targets' => $delivery_targets, 'delivery_reservations_ready' => 0], // fresh, missing Telegram
+    ['id' => 71, 'delivery_targets' => $delivery_targets, 'delivery_reservations_ready' => 0], // fresh, total reservation failure
 ]);
 lr_queue_results([[
     'id' => 80, 'lead_id' => 71, 'integration_id' => $integration_id,
@@ -149,8 +153,11 @@ $stuck = array_values(array_filter(lr_rows(\LandingConfig\DB\get_monitor_alerts_
 $assert(count($stuck) === 1, 'future valid retry successor does not add another stuck alert');
 
 $monitor_source = file_get_contents(__DIR__ . '/../mu-plugin/landing-config/includes/monitoring-alerts.php');
-$assert(str_contains((string)$monitor_source, 'COUNT(DISTINCT d.integration_id)'),
-    'reconciliation SQL detects a lead missing any enabled exact integration, not only leads with zero rows');
+$assert(str_contains((string)$monitor_source, 'delivery_targets IS NOT NULL')
+    && str_contains((string)$monitor_source, 'delivery_reservations_ready=0'),
+    'reconciliation uses the immutable delivery plan stored with each lead');
+$assert(str_contains((string)$monitor_source, 'WHERE id>=%d'),
+    'reconciliation excludes every lead created before the release cutover id');
 $assert(str_contains((string)$monitor_source, 'DELIVERY_ROLLOUT_BOUNDARY_OPTION'),
     'reconciliation is hard-bounded by the one-time asynchronous rollout timestamp');
 $worker_source = file_get_contents(__DIR__ . '/../mu-plugin/landing-config/includes/lead-delivery-worker.php');

@@ -35,9 +35,10 @@ update_option('landing_monitor_enabled', '0');
 // Delivery is a sales-critical service and must keep running while only the
 // optional monitoring/alert layer is disabled during staged rollout.
 $assert(isset($GLOBALS['_lr_next_scheduled'][\LandingConfig\LeadDelivery\DELIVERY_HOOK]), 'disabled monitor keeps asynchronous lead delivery scheduled');
-foreach ([\LandingConfig\Monitoring\SCAN_HOOK, \LandingConfig\Monitoring\QUEUE_HOOK, \LandingConfig\Monitoring\CLEANUP_HOOK] as $hook) {
+foreach ([\LandingConfig\Monitoring\SCAN_HOOK, \LandingConfig\Monitoring\QUEUE_HOOK] as $hook) {
     $assert(!isset($GLOBALS['_lr_next_scheduled'][$hook]), "disabled monitor clears {$hook}");
 }
+$assert(isset($GLOBALS['_lr_next_scheduled'][\LandingConfig\Monitoring\CLEANUP_HOOK]), 'disabled monitor keeps mandatory contact-retention cleanup scheduled');
 
 // Reservation repair belongs to core delivery too: staged rollout may keep
 // Telegram alerts disabled, but a saved lead still needs all delivery rows.
@@ -45,11 +46,14 @@ $integration_id = \LandingConfig\Integrations\save_integration(
     'email', 'Core delivery', '', ['to' => 'elapova00@gmail.com'], false, 1, [], true
 );
 update_option(\LandingConfig\Monitoring\DELIVERY_ROLLOUT_BOUNDARY_OPTION, '2026-07-15 11:30:00');
-lr_queue_results([['id' => 500, 'created_at' => '2026-07-15 11:59:00']]); // reservation reconciliation
-lr_queue_results([]); // old queued rows
-lr_queue_results([]); // retry rows
+update_option(\LandingConfig\Monitoring\DELIVERY_ROLLOUT_MIN_LEAD_ID_OPTION, 500);
 lr_queue_results([]); // stale sending rows
 lr_queue_results([]); // worker queue
+lr_queue_results([[
+    'id' => 500,
+    'delivery_targets' => \LandingConfig\LeadDelivery\encode_delivery_targets([$integration_id => 'email']),
+    'delivery_reservations_ready' => 0,
+]]); // reservation reconciliation runs after the existing queue
 \LandingConfig\Monitoring\run_delivery_cron();
 $disabled_delivery_rows = lr_rows(\LandingConfig\DB\get_lead_log_table_name());
 $assert(count($disabled_delivery_rows) === 1

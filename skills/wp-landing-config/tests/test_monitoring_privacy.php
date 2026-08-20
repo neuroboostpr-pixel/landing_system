@@ -39,8 +39,13 @@ $assert($adapter_position > 0 && $adapter_position < $token_position, 'all adapt
 
 // Reservation/scheduling failure can never revoke a durable lead success.
 final class ThrowingDeliveryLogWpdb extends MockWpdbInsert {
+    public int $delivery_log_attempts = 0;
+
     public function insert($table, $data, $formats = null) {
-        if (str_ends_with((string)$table, 'landing_lead_log')) { throw new RuntimeException('CONTACT-MARKER EXCEPTION'); }
+        if (str_ends_with((string)$table, 'landing_lead_log')) {
+            $this->delivery_log_attempts++;
+            throw new RuntimeException('CONTACT-MARKER EXCEPTION');
+        }
         return parent::insert($table, $data, $formats);
     }
 }
@@ -59,6 +64,7 @@ $response = \LandingConfig\REST\handle_lead(new WP_REST_Request([
     'message' => 'CONTACT-MARKER MESSAGE', 'source_block' => 'test', 'pd_consent' => '1',
 ]));
 $assert($response->get_status() === 200 && (int)($response->get_data()['lead_id'] ?? 0) > 0, 'saved lead stays HTTP 200 when reservation throws');
+$assert($GLOBALS['wpdb']->delivery_log_attempts === 1, 'reservation failure path is actually exercised');
 
 $production = '';
 foreach (['rest-lead.php','lead-delivery-worker.php','monitoring-alerts.php','rest-fallback-token.php','rest-health.php','admin-monitoring.php','admin-lead-audit.php'] as $new_file) {

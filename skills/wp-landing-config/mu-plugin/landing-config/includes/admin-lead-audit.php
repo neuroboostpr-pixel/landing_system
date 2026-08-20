@@ -32,6 +32,30 @@ function blocked_label(string $reason): string {
     return $labels[$reason] ?? esc_html($reason);
 }
 
+/**
+ * Build a character-safe UI excerpt even when the optional mbstring PHP
+ * extension is unavailable.
+ */
+function utf8_excerpt(string $value, int $max_characters): string {
+    if ($value === '' || $max_characters <= 0 || preg_match('//u', $value) !== 1) {
+        return '';
+    }
+    if (function_exists('mb_substr')) {
+        return mb_substr($value, 0, $max_characters, 'UTF-8');
+    }
+    if (function_exists('iconv_substr')) {
+        $excerpt = iconv_substr($value, 0, $max_characters, 'UTF-8');
+        if (is_string($excerpt)) {
+            return $excerpt;
+        }
+    }
+
+    $matched = preg_match_all('/./us', $value, $characters);
+    return is_int($matched)
+        ? implode('', array_slice($characters[0] ?? [], 0, $max_characters))
+        : '';
+}
+
 function normalize_submission_filter($value): ?string {
     if (!is_scalar($value)) { return null; }
     $submission_id = strtolower(trim((string)$value));
@@ -189,11 +213,11 @@ function render_page(): void {
                         <td><?php echo esc_html($r['name'] ?: '—'); ?></td>
                         <td style="white-space:nowrap;"><?php echo esc_html($r['phone'] ?: '—'); ?></td>
                         <td><?php echo esc_html($r['email'] ?: '—'); ?></td>
-                        <td><?php echo esc_html(mb_substr((string)($r['message'] ?? ''), 0, 60)); ?></td>
+                        <td><?php echo esc_html(utf8_excerpt((string)($r['message'] ?? ''), 60)); ?></td>
                         <td style="font-size:11px;">
                             <?php
                             $parts = array_filter([
-                                $r['source_block'] ? esc_html(mb_substr($r['source_block'], 0, 40)) : '',
+                                $r['source_block'] ? esc_html(utf8_excerpt((string)$r['source_block'], 40)) : '',
                                 $r['utm_source']   ? 'src=' . esc_html($r['utm_source']) : '',
                                 $r['utm_medium']   ? 'med=' . esc_html($r['utm_medium']) : '',
                             ]);
@@ -280,38 +304,59 @@ function audit_row_is_promotable(array $row): bool {
         && (trim((string)($row['phone'] ?? '')) !== '' || trim((string)($row['email'] ?? '')) !== '');
 }
 
-function find_promoted_lead_by_submission(string $submission_id): int {
-    if (!wp_is_uuid($submission_id, 4)) { return 0; }
+/** @return array{ok:bool,lead_id:int} */
+function find_promoted_lead_by_submission(string $submission_id): array {
+    if (!wp_is_uuid($submission_id, 4)) { return ['ok' => true, 'lead_id' => 0]; }
     global $wpdb;
+    if (isset($wpdb->last_error)) { $wpdb->last_error = ''; }
     $row = $wpdb->get_row($wpdb->prepare(
         'SELECT id FROM `' . get_leads_table_name() . '` WHERE submission_id=%s ORDER BY id ASC LIMIT 1',
         $submission_id
     ), ARRAY_A);
-    return is_array($row) ? max(0, (int)($row['id'] ?? 0)) : 0;
+    if ((string)($wpdb->last_error ?? '') !== '') { return ['ok' => false, 'lead_id' => 0]; }
+    return ['ok' => true, 'lead_id' => is_array($row) ? max(0, (int)($row['id'] ?? 0)) : 0];
 }
 
-function link_audit_to_lead(int $audit_id, int $lead_id, string $detail): void {
-    if ($audit_id <= 0 || $lead_id <= 0) { return; }
+/** @return array{ok:bool,lead_id:int} */
+function find_promoted_lead_by_audit(int $audit_id): array {
+    if ($audit_id <= 0) { return ['ok' => true, 'lead_id' => 0]; }
     global $wpdb;
-    $wpdb->update(
+    if (isset($wpdb->last_error)) { $wpdb->last_error = ''; }
+    $row = $wpdb->get_row($wpdb->prepare(
+        'SELECT id FROM `' . get_leads_table_name() . '` WHERE audit_origin_id=%d ORDER BY id ASC LIMIT 1',
+        $audit_id
+    ), ARRAY_A);
+    if ((string)($wpdb->last_error ?? '') !== '') { return ['ok' => false, 'lead_id' => 0]; }
+    return ['ok' => true, 'lead_id' => is_array($row) ? max(0, (int)($row['id'] ?? 0)) : 0];
+}
+
+function link_audit_to_lead(int $audit_id, int $lead_id, string $detail): bool {
+    if ($audit_id <= 0 || $lead_id <= 0) { return false; }
+    global $wpdb;
+    $updated = $wpdb->update(
         get_lead_audit_table_name(),
         ['lead_id' => $lead_id, 'blocked_by' => null, 'block_detail' => $detail],
         ['id' => $audit_id],
         ['%d', '%s', '%s'],
         ['%d']
     );
+    if ($updated === false) {
+        error_log('[landing-config] audit_promote_link_failed audit_id=' . $audit_id);
+        return false;
+    }
+    return true;
 }
 
-function queue_promoted_lead_delivery(int $lead_id): void {
+function queue_promoted_lead_delivery(int $lead_id, array $delivery_targets): void {
     if ($lead_id <= 0) { return; }
     try {
-        if (function_exists('LandingConfig\\LeadDelivery\\reserve_integrations')) {
-            \LandingConfig\LeadDelivery\reserve_integrations($lead_id);
+        if ($delivery_targets !== [] && function_exists('LandingConfig\\LeadDelivery\\ensure_delivery_reservations')) {
+            \LandingConfig\LeadDelivery\ensure_delivery_reservations($lead_id, $delivery_targets);
         }
-        if (function_exists('wp_schedule_single_event')) {
+        if ($delivery_targets !== [] && function_exists('wp_schedule_single_event')) {
             wp_schedule_single_event(time(), \LandingConfig\LeadDelivery\DELIVERY_HOOK, [$lead_id]);
         }
-        if (function_exists('spawn_cron')) { spawn_cron(); }
+        if ($delivery_targets !== [] && function_exists('spawn_cron')) { spawn_cron(); }
     } catch (\Throwable $ignored) {
         error_log('[landing-config] audit_promote_delivery_schedule_failed');
     }
@@ -337,12 +382,35 @@ function promote_one_audit_row(int $audit_id): string {
 
         $submission_id = normalize_submission_filter($row['submission_id'] ?? null);
         if ($submission_id !== $locked_submission_id) { return 'skipped'; }
+        $origin_lookup = find_promoted_lead_by_audit($audit_id);
+        if (!($origin_lookup['ok'] ?? false)) {
+            error_log('[landing-config] audit_promote_origin_lookup_failed audit_id=' . $audit_id);
+            return 'skipped';
+        }
+        if ((int)($origin_lookup['lead_id'] ?? 0) > 0) {
+            link_audit_to_lead($audit_id, (int)$origin_lookup['lead_id'], 'promoted_existing_audit');
+            return 'skipped';
+        }
         if ($submission_id !== null) {
-            $existing_lead_id = find_promoted_lead_by_submission($submission_id);
+            $submission_lookup = find_promoted_lead_by_submission($submission_id);
+            if (!($submission_lookup['ok'] ?? false)) {
+                error_log('[landing-config] audit_promote_submission_lookup_failed audit_id=' . $audit_id);
+                return 'skipped';
+            }
+            $existing_lead_id = (int)($submission_lookup['lead_id'] ?? 0);
             if ($existing_lead_id > 0) {
                 link_audit_to_lead($audit_id, $existing_lead_id, 'promoted_existing_submission');
                 return 'skipped';
             }
+        }
+
+        try {
+            $delivery_targets = \LandingConfig\LeadDelivery\snapshot_enabled_integrations();
+            $encoded_delivery_targets = \LandingConfig\LeadDelivery\encode_delivery_targets($delivery_targets);
+            if ($encoded_delivery_targets === '') { return 'skipped'; }
+        } catch (\Throwable $ignored) {
+            error_log('[landing-config] audit_promote_snapshot_failed audit_id=' . $audit_id);
+            return 'skipped';
         }
 
         $data = [
@@ -360,19 +428,27 @@ function promote_one_audit_row(int $audit_id): string {
             'roistat_visit'    => (string)($row['roistat_visit'] ?? ''),
             'ip'               => (string)($row['ip'] ?? ''),
             'user_agent'       => (string)($row['user_agent'] ?? ''),
-            'created_at'       => (string)($row['created_at'] ?? current_time('mysql', true)),
+            'delivery_targets' => $encoded_delivery_targets,
+            'delivery_reservations_ready' => $delivery_targets === [] ? 1 : 0,
+            'audit_origin_id'  => $audit_id,
+            'created_at'       => (string)($row['created_at'] ?? current_time('mysql')),
             'processed_status' => 'pending',
-            'pd_consent_granted_at' => (string)($row['created_at'] ?? current_time('mysql', true)),
+            'pd_consent_granted_at' => (string)($row['created_at'] ?? current_time('mysql')),
             'recaptcha_score'  => null,
         ];
         $inserted = $wpdb->insert(get_leads_table_name(), $data);
         $lead_id = (int)($wpdb->insert_id ?? 0);
         if ($inserted === false || $inserted === 0 || $lead_id <= 0) {
+            $origin_lookup = find_promoted_lead_by_audit($audit_id);
+            if (($origin_lookup['ok'] ?? false) && (int)($origin_lookup['lead_id'] ?? 0) > 0) {
+                link_audit_to_lead($audit_id, (int)$origin_lookup['lead_id'], 'promoted_existing_audit');
+                return 'skipped';
+            }
             error_log('[landing-config] audit_promote_insert_failed audit_id=' . $audit_id);
             return 'skipped';
         }
         link_audit_to_lead($audit_id, $lead_id, 'promoted_manually');
-        queue_promoted_lead_delivery($lead_id);
+        queue_promoted_lead_delivery($lead_id, $delivery_targets);
         do_action('landing_config_lead_received', $lead_id, $data);
         return 'promoted';
     } finally {

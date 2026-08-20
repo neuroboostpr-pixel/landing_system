@@ -4,6 +4,7 @@ namespace LandingConfig\Monitoring;
 if (!defined('ABSPATH')) { exit; }
 
 use function LandingConfig\DB\get_monitor_alerts_table_name;
+use function LandingConfig\DB\get_lead_audit_table_name;
 use function LandingConfig\DB\get_lead_log_table_name;
 use function LandingConfig\DB\get_leads_table_name;
 
@@ -17,6 +18,7 @@ const CLEANUP_HOOK = 'landing_config_monitor_cleanup';
 const DELIVERY_HOOK = 'landing_config_deliver_lead';
 const GRACE_SECONDS = 300;
 const DELIVERY_ROLLOUT_BOUNDARY_OPTION = 'landing_delivery_async_boundary';
+const DELIVERY_ROLLOUT_MIN_LEAD_ID_OPTION = 'landing_delivery_async_min_lead_id';
 const HEARTBEAT_STALE_SECONDS = 180;
 const LOCK_TTL_SECONDS = 120;
 const MAX_SEND_ATTEMPTS = 3;
@@ -39,7 +41,7 @@ function allowed_statuses(): array {
 }
 function allowed_categories(): array {
     return ['missing_wordpress_lead','browser_javascript_stall','external_receipt_confirmed',
-        'configuration_missing','unsupported_adapter','adapter_exception','invalid_adapter_result',
+        'configuration_missing','configuration_read_error','unsupported_adapter','adapter_exception','invalid_adapter_result',
         'transport_error','provider_4xx','provider_5xx','rate_limited','invalid_response',
         'delivery_rows_missing','delivery_queued_stuck','delivery_sending_stale',
         'fallback_receipt_watch','fallback_delivery_stuck','fallback_delivery_uncertain',
@@ -146,19 +148,25 @@ function resolve_integration_incident(int $lead_id, int $integration_id, string 
     string $resolution, ?int $now = null): void {
     if ($lead_id <= 0 || $integration_id <= 0 || !in_array($resolution, allowed_resolutions(), true)) { return; }
     global $wpdb;
-    $fingerprint = incident_fingerprint('integration_failure', null, $lead_id, $integration_id, sanitize_key($adapter), 0);
-    $wpdb->update(get_monitor_alerts_table_name(), [
-        'resolved_at' => utc_mysql($now ?? time()), 'resolution' => $resolution,
-    ], ['fingerprint' => $fingerprint]);
+    foreach (['integration_failure', 'delivery_stuck'] as $kind) {
+        $fingerprint = incident_fingerprint($kind, null, $lead_id, $integration_id, sanitize_key($adapter), 0);
+        $wpdb->update(get_monitor_alerts_table_name(), [
+            'resolved_at' => utc_mysql($now ?? time()), 'resolution' => $resolution,
+        ], ['fingerprint' => $fingerprint]);
+    }
 }
 
 function observe_delivery_result(int $lead_id, int $integration_id, string $adapter,
     string $status, string $safe_category, ?int $response_code): void {
-    if (!is_enabled() || $lead_id <= 0 || $integration_id <= 0) { return; }
+    if ($lead_id <= 0 || $integration_id <= 0) { return; }
+    // Delivery continues while optional alert sending is staged off. A
+    // confirmed success must therefore close any incident opened earlier,
+    // otherwise enabling monitoring later exposes a false critical alert.
     if (in_array($status, ['success','accepted'], true)) {
         resolve_integration_incident($lead_id, $integration_id, $adapter, 'delivery_recovered');
         return;
     }
+    if (!is_enabled()) { return; }
     if (!in_array($status, ['unknown','failed_permanent'], true)) { return; }
     record_incident('integration_failure', 'critical', null, $lead_id, $integration_id,
         sanitize_key($adapter), $status, $safe_category, $response_code);
@@ -167,41 +175,33 @@ function observe_delivery_result(int $lead_id, int $integration_id, string $adap
 function reconcile_delivery_rows(?int $now = null): array {
     global $wpdb;
     $now = $now ?? time();
-    $enabled_ids = [];
-    foreach (\LandingConfig\Integrations\list_integrations(get_current_blog_id()) as $integration) {
-        $integration_id = (int)($integration['id'] ?? 0);
-        if (($integration['enabled'] ?? false) === true && $integration_id > 0) {
-            $enabled_ids[$integration_id] = $integration_id;
-        }
-    }
     $missing = [];
     $boundary = (string)get_option(DELIVERY_ROLLOUT_BOUNDARY_OPTION, '');
+    $minimum_lead_id = (int)get_option(DELIVERY_ROLLOUT_MIN_LEAD_ID_OPTION, 0);
     $boundary_valid = function_exists('LandingConfig\\DB\\valid_mysql_utc_timestamp')
         && \LandingConfig\DB\valid_mysql_utc_timestamp($boundary);
-    if ($enabled_ids !== [] && $boundary_valid) {
-        // The IDs come from WordPress integration records and are cast to
-        // positive integers above, so the IN list cannot contain SQL input.
-        $enabled_id_sql = implode(',', $enabled_ids);
+    if ($boundary_valid && $minimum_lead_id > 0) {
+        // delivery_targets is the immutable channel plan written in the same
+        // lead row. Historical/in-flight legacy rows have NULL and newly
+        // enabled integrations can therefore never receive old contacts.
         $missing = $wpdb->get_results($wpdb->prepare(
-            "SELECT l.id,l.created_at FROM `" . get_leads_table_name() . "` l LEFT JOIN `" . get_lead_log_table_name()
-            . "` d ON d.lead_id=l.id AND d.integration_id IN ({$enabled_id_sql})"
-            . " WHERE l.created_at>=%s AND l.created_at<=%s GROUP BY l.id"
-            . " HAVING COUNT(DISTINCT d.integration_id)<%d ORDER BY l.id ASC LIMIT 100",
-            $boundary, utc_mysql($now - 60), count($enabled_ids)
+            "SELECT id,delivery_targets FROM `" . get_leads_table_name()
+            . "` WHERE id>=%d AND delivery_targets IS NOT NULL"
+            . " AND delivery_reservations_ready=0 ORDER BY id ASC LIMIT 100",
+            $minimum_lead_id
         ), ARRAY_A);
     }
     $reservations_recreated = 0;
     foreach (is_array($missing) ? $missing : [] as $lead) {
         $lead_id = (int)($lead['id'] ?? 0);
-        $created_at = (string)($lead['created_at'] ?? '');
-        // SQL owns the normal path; this second boundary check prevents a
-        // stale replica/mock/corrupt row from ever replaying a legacy lead.
-        if ($lead_id <= 0 || !$boundary_valid
-            || !\LandingConfig\DB\valid_mysql_utc_timestamp($created_at)
-            || strcmp($created_at, $boundary) < 0) {
+        $targets = \LandingConfig\LeadDelivery\decode_delivery_targets($lead['delivery_targets'] ?? null);
+        // SQL owns the normal path; these checks also protect a stale replica,
+        // mock, corrupt snapshot, or historical row supplied out of band.
+        if ($lead_id < $minimum_lead_id || !$boundary_valid || $targets === null) {
             continue;
         }
-        $created = \LandingConfig\LeadDelivery\reserve_integrations($lead_id);
+        $ensured = \LandingConfig\LeadDelivery\ensure_delivery_reservations($lead_id, $targets);
+        $created = (int)($ensured['created'] ?? 0);
         if ($created <= 0) { continue; }
         if (function_exists('wp_schedule_single_event')) {
             wp_schedule_single_event($now, \LandingConfig\LeadDelivery\DELIVERY_HOOK, [$lead_id]);
@@ -209,34 +209,48 @@ function reconcile_delivery_rows(?int $now = null): array {
         $reservations_recreated += $created;
     }
 
-    $queued = $wpdb->get_results($wpdb->prepare(
-        "SELECT id,lead_id,integration_id,adapter,attempt FROM `" . get_lead_log_table_name()
-        . "` WHERE status='queued' AND COALESCE(next_attempt_at,created_at)<=%s LIMIT 100",
-        utc_mysql($now - 300)
-    ), ARRAY_A);
     $stuck = 0;
-    foreach (is_array($queued) ? $queued : [] as $row) {
-        if (record_incident('delivery_stuck', 'critical', null, (int)($row['lead_id'] ?? 0),
-            (int)($row['integration_id'] ?? 0), sanitize_key((string)($row['adapter'] ?? '')),
-            'failed', 'delivery_queued_stuck', null, '', $now) > 0) { $stuck++; }
-    }
-
-    $retry_rows = $wpdb->get_results(
-        "SELECT id,lead_id,integration_id,adapter,attempt FROM `" . get_lead_log_table_name()
-        . "` WHERE status='retry_wait' ORDER BY id ASC LIMIT 100", ARRAY_A
-    );
-    foreach (is_array($retry_rows) ? $retry_rows : [] as $row) {
-        $successor = $wpdb->get_row($wpdb->prepare(
-            "SELECT id,status,next_attempt_at FROM `" . get_lead_log_table_name()
-            . "` WHERE lead_id=%d AND integration_id=%d AND attempt=%d LIMIT 1",
-            (int)($row['lead_id'] ?? 0), (int)($row['integration_id'] ?? 0), (int)($row['attempt'] ?? 0) + 1
+    // Reservation repair above is delivery correctness and always runs.
+    // Creating optional alert incidents is disabled with monitoring so a
+    // worker backlog cannot leave hidden false alarms for a later rollout.
+    if (is_enabled()) {
+        $queued = $wpdb->get_results($wpdb->prepare(
+            "SELECT id,lead_id,integration_id,adapter,attempt FROM `" . get_lead_log_table_name()
+            . "` WHERE status='queued' AND COALESCE(next_attempt_at,created_at)<=%s LIMIT 100",
+            utc_mysql($now - 300)
         ), ARRAY_A);
-        $healthy = is_array($successor) && ($successor['status'] ?? '') === 'queued'
-            && strtotime((string)($successor['next_attempt_at'] ?? '')) > $now - 300;
-        if ($healthy) { continue; }
-        if (record_incident('delivery_stuck', 'critical', null, (int)($row['lead_id'] ?? 0),
-            (int)($row['integration_id'] ?? 0), sanitize_key((string)($row['adapter'] ?? '')),
-            'retry_wait', 'delivery_queued_stuck', null, '', $now) > 0) { $stuck++; }
+        foreach (is_array($queued) ? $queued : [] as $row) {
+            if (record_incident('delivery_stuck', 'critical', null, (int)($row['lead_id'] ?? 0),
+                (int)($row['integration_id'] ?? 0), sanitize_key((string)($row['adapter'] ?? '')),
+                'failed', 'delivery_queued_stuck', null, '', $now) > 0) { $stuck++; }
+        }
+
+        $log_table = get_lead_log_table_name();
+        $alerts_table = get_monitor_alerts_table_name();
+        $retry_rows = $wpdb->get_results(
+            "SELECT r.id,r.lead_id,r.integration_id,r.adapter,r.attempt FROM `{$log_table}` r"
+            . " LEFT JOIN `{$log_table}` s ON s.lead_id=r.lead_id"
+            . " AND s.integration_id=r.integration_id AND s.attempt=r.attempt+1"
+            . " LEFT JOIN `{$alerts_table}` a ON a.incident_kind='delivery_stuck'"
+            . " AND a.lead_id=r.lead_id AND a.integration_id=r.integration_id AND a.adapter=r.adapter"
+            . " WHERE r.status='retry_wait' AND s.id IS NULL AND a.id IS NULL"
+            . " ORDER BY r.id ASC LIMIT 100",
+            ARRAY_A
+        );
+        foreach (is_array($retry_rows) ? $retry_rows : [] as $row) {
+            $successor = $wpdb->get_row($wpdb->prepare(
+                "SELECT id,status,next_attempt_at FROM `" . get_lead_log_table_name()
+                . "` WHERE lead_id=%d AND integration_id=%d AND attempt=%d LIMIT 1",
+                (int)($row['lead_id'] ?? 0), (int)($row['integration_id'] ?? 0), (int)($row['attempt'] ?? 0) + 1
+            ), ARRAY_A);
+            // Any exact next attempt proves that this retry_wait row was
+            // consumed. The successor is monitored by its own state.
+            $has_successor = is_array($successor) && (int)($successor['id'] ?? 0) > 0;
+            if ($has_successor) { continue; }
+            if (record_incident('delivery_stuck', 'critical', null, (int)($row['lead_id'] ?? 0),
+                (int)($row['integration_id'] ?? 0), sanitize_key((string)($row['adapter'] ?? '')),
+                'retry_wait', 'delivery_queued_stuck', null, '', $now) > 0) { $stuck++; }
+        }
     }
     return ['reservations_recreated' => $reservations_recreated, 'stuck' => $stuck];
 }
@@ -492,10 +506,18 @@ function claim_next_alert(?int $now = null): ?array {
     ]);
 }
 
+function configured_monitor_telegram_integration_id(): int {
+    if (defined('LP_MONITOR_TELEGRAM_INTEGRATION_ID')) {
+        return max(0, (int)LP_MONITOR_TELEGRAM_INTEGRATION_ID);
+    }
+    return max(0, (int)get_option('landing_monitor_telegram_integration_id', 0));
+}
+
 function monitoring_telegram_integration(): ?array {
     $integration = null;
-    if (defined('LP_MONITOR_TELEGRAM_INTEGRATION_ID') && (int)LP_MONITOR_TELEGRAM_INTEGRATION_ID > 0) {
-        $integration = \LandingConfig\Integrations\get_integration((int)LP_MONITOR_TELEGRAM_INTEGRATION_ID);
+    $configured_id = configured_monitor_telegram_integration_id();
+    if ($configured_id > 0) {
+        $integration = \LandingConfig\Integrations\get_integration($configured_id);
         if (!is_array($integration) || ($integration['enabled'] ?? false) !== true
             || ($integration['adapter_type'] ?? '') !== 'telegram') {
             return null;
@@ -707,9 +729,10 @@ function configuration_status(): array {
     $email_binding_ok = count($enabled_emails) === 1
         && strtolower(trim((string)($enabled_emails[0]['settings']['to'] ?? ''))) === 'elapova00@gmail.com';
     $telegram = null;
-    if (defined('LP_MONITOR_TELEGRAM_INTEGRATION_ID') && (int)LP_MONITOR_TELEGRAM_INTEGRATION_ID > 0) {
+    $configured_telegram_id = configured_monitor_telegram_integration_id();
+    if ($configured_telegram_id > 0) {
         foreach ($enabled_telegrams as $candidate) {
-            if ((int)($candidate['id'] ?? 0) === (int)LP_MONITOR_TELEGRAM_INTEGRATION_ID) { $telegram = $candidate; break; }
+            if ((int)($candidate['id'] ?? 0) === $configured_telegram_id) { $telegram = $candidate; break; }
         }
     } elseif (count($enabled_telegrams) === 1) {
         $telegram = $enabled_telegrams[0];
@@ -880,8 +903,13 @@ function sync_monitoring_schedule(?int $now = null): void {
     if (!wp_next_scheduled(DELIVERY_HOOK)) {
         wp_schedule_event($now + 5, 'landing_every_minute', DELIVERY_HOOK);
     }
+    // Audit retention protects stored contact data and is mandatory even when
+    // optional Telegram incident monitoring is staged off.
+    if (!wp_next_scheduled(CLEANUP_HOOK)) {
+        wp_schedule_event($now + 300, 'daily', CLEANUP_HOOK);
+    }
     if (!is_enabled()) {
-        foreach ([SCAN_HOOK, QUEUE_HOOK, CLEANUP_HOOK] as $hook) {
+        foreach ([SCAN_HOOK, QUEUE_HOOK] as $hook) {
             wp_clear_scheduled_hook($hook);
         }
         return;
@@ -893,21 +921,18 @@ function sync_monitoring_schedule(?int $now = null): void {
     if (!wp_next_scheduled(QUEUE_HOOK)) {
         wp_schedule_event($now + 40, 'landing_every_minute', QUEUE_HOOK);
     }
-    if (!wp_next_scheduled(CLEANUP_HOOK)) {
-        wp_schedule_event($now + 300, 'daily', CLEANUP_HOOK);
-    }
 }
 
 function run_delivery_cron_steps(callable $reconcile, callable $deliver): void {
     try {
-        $reconcile();
-    } catch (\Throwable $ignored) {
-        error_log('[landing-config] delivery_reconcile_failed');
-    }
-    try {
         $deliver();
     } catch (\Throwable $ignored) {
         error_log('[landing-config] delivery_worker_failed');
+    }
+    try {
+        $reconcile();
+    } catch (\Throwable $ignored) {
+        error_log('[landing-config] delivery_reconcile_failed');
     }
 }
 
@@ -957,7 +982,7 @@ function cleanup_expired_alerts(?int $now = null): array {
     $cutoff_30 = utc_mysql($now - 30 * DAY_IN_SECONDS);
     $cutoff_90 = utc_mysql($now - 90 * DAY_IN_SECONDS);
     $table = get_monitor_alerts_table_name();
-    $total = 0;
+    $alert_total = 0;
     do {
         $deleted = $wpdb->query($wpdb->prepare(
             "DELETE FROM `{$table}` WHERE telegram_status NOT IN ('pending','retry_wait','sending') AND ("
@@ -968,13 +993,62 @@ function cleanup_expired_alerts(?int $now = null): array {
             $cutoff_30, $cutoff_30, $cutoff_90
         ));
         $deleted = is_int($deleted) && $deleted > 0 ? $deleted : 0;
-        $total += $deleted;
+        $alert_total += $deleted;
     } while ($deleted === 1000);
-    return ['deleted' => $total];
+
+    // The audit table intentionally duplicates contact data for recovery.
+    // Keep a bounded 30-day recovery window, then remove those PII copies.
+    $audit_table = get_lead_audit_table_name();
+    $audit_total = 0;
+    do {
+        $deleted = $wpdb->query($wpdb->prepare(
+            "DELETE FROM `{$audit_table}` WHERE created_at<%s LIMIT 1000",
+            $cutoff_30
+        ));
+        $deleted = is_int($deleted) && $deleted > 0 ? $deleted : 0;
+        $audit_total += $deleted;
+    } while ($deleted === 1000);
+
+    // Durable fixed-hour rate counters/guards deliberately survive object
+    // cache eviction. Keep the current and previous bucket, then remove older
+    // option rows in bounded batches so that the protection itself cannot grow
+    // wp_options forever.
+    $options_table = str_replace('`', '', $wpdb->get_blog_prefix() . 'options');
+    $oldest_kept_bucket = intdiv($now, 3600) * 3600 - 3600;
+    $rate_total = 0;
+    do {
+        $names = $wpdb->get_col($wpdb->prepare(
+            "SELECT option_name FROM `{$options_table}` WHERE (option_name LIKE 'landing_lead_rl_bucket_%'"
+            . " OR option_name LIKE 'landing_lead_rl_audit_guard_%'"
+            . " OR option_name LIKE 'landing_lead_rl_audit_budget_%')"
+            . " AND CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(option_name,'_',-2),'_',1) AS UNSIGNED)<%d LIMIT 1000",
+            $oldest_kept_bucket
+        ));
+        $names = is_array($names) ? $names : [];
+        $deleted = 0;
+        foreach ($names as $name) {
+            if (!is_string($name)
+                || (!str_starts_with($name, 'landing_lead_rl_bucket_')
+                    && !str_starts_with($name, 'landing_lead_rl_audit_guard_')
+                    && !str_starts_with($name, 'landing_lead_rl_audit_budget_'))) {
+                continue;
+            }
+            // WordPress' API deletes both the database row and any persistent
+            // Redis/Memcached object-cache entry for this option.
+            if (delete_option($name)) { $deleted++; }
+        }
+        $rate_total += $deleted;
+    } while (count($names) === 1000 && $deleted > 0);
+
+    return [
+        'deleted' => $alert_total + $audit_total + $rate_total,
+        'deleted_alerts' => $alert_total,
+        'deleted_audits' => $audit_total,
+        'deleted_rate_buckets' => $rate_total,
+    ];
 }
 
 function run_cleanup_cron(): void {
-    if (!is_enabled()) { return; }
     try {
         cleanup_expired_alerts();
     } catch (\Throwable $ignored) {
@@ -983,7 +1057,7 @@ function run_cleanup_cron(): void {
 }
 
 add_filter('cron_schedules', __NAMESPACE__ . '\\add_minute_schedule');
-add_action('init', __NAMESPACE__ . '\\sync_monitoring_schedule', 3);
+add_action('init', __NAMESPACE__ . '\\sync_monitoring_schedule', 3, 0);
 add_action(DELIVERY_HOOK, __NAMESPACE__ . '\\run_delivery_cron');
 add_action(SCAN_HOOK, __NAMESPACE__ . '\\run_scan_cron');
 add_action(QUEUE_HOOK, __NAMESPACE__ . '\\run_queue_cron');

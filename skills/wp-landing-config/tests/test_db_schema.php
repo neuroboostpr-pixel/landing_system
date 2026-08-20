@@ -1,5 +1,88 @@
 <?php
 require_once __DIR__ . '/fixtures/wp-bootstrap.php';
+
+final class SchemaAwareWpdb extends MockWpdbInsert {
+    private function create_sql_for(string $table): string {
+        foreach ($GLOBALS['_mock_dbdelta_calls'] as $sql) {
+            if (preg_match('/CREATE TABLE\s+`?' . preg_quote($table, '/') . '`?\s*\(/i', (string)$sql)) {
+                return (string)$sql;
+            }
+        }
+        return '';
+    }
+
+    public function get_var($sql) {
+        $sql = (string)$sql;
+        $this->query_log[] = $sql;
+        if (stripos($sql, 'GET_LOCK(') !== false || stripos($sql, 'RELEASE_LOCK(') !== false) {
+            return 1;
+        }
+        if (preg_match("/SHOW TABLES LIKE ['\"]([^'\"]+)['\"]/i", $sql, $match)) {
+            return $this->create_sql_for($match[1]) !== '' ? $match[1] : null;
+        }
+        if (stripos($sql, 'SELECT COALESCE(MAX(id),0)') !== false) { return 0; }
+        return parent::get_var($sql);
+    }
+
+    public function get_row($sql, $output = OBJECT) {
+        $sql = (string)$sql;
+        if (preg_match("/SHOW COLUMNS FROM `?([^`\s]+)`? LIKE ['\"]([^'\"]+)['\"]/i", $sql, $match)) {
+            $this->query_log[] = $sql;
+            $create = $this->create_sql_for($match[1]);
+            $column = preg_quote($match[2], '/');
+            if (!preg_match('/^\s*`?' . $column . '`?\s+([A-Z]+(?:\(\d+(?:,\d+)?\))?(?:\s+UNSIGNED)?)(.*)$/mi', $create, $definition)) {
+                return null;
+            }
+            $tail = trim(rtrim($definition[2], ','));
+            $default = null;
+            if (preg_match("/\bDEFAULT\s+('(?:[^']|'')*'|[^\s,]+)/i", $tail, $default_match)) {
+                $default = trim($default_match[1], "'");
+            }
+            $row = [
+                'Field' => $match[2],
+                'Type' => strtolower($definition[1]),
+                'Null' => preg_match('/\bNOT NULL\b/i', $tail) ? 'NO' : 'YES',
+                'Default' => $default,
+                'Extra' => preg_match('/\bAUTO_INCREMENT\b/i', $tail) ? 'auto_increment' : '',
+            ];
+            return $output === ARRAY_A ? $row : (object)$row;
+        }
+        return parent::get_row($sql, $output);
+    }
+
+    public function get_results($sql, $output = OBJECT) {
+        $sql = (string)$sql;
+        if (preg_match("/SHOW INDEX FROM `?([^`\s]+)`? WHERE Key_name=['\"]([^'\"]+)['\"]/i", $sql, $match)) {
+            $this->query_log[] = $sql;
+            $table = preg_quote($match[1], '/');
+            $name = preg_quote($match[2], '/');
+            $sources = [$this->create_sql_for($match[1]), ...$this->query_log];
+            foreach ($sources as $source) {
+                $pattern = $match[2] === 'PRIMARY'
+                    ? '/PRIMARY\s+KEY\s*\(([^)]+)\)/i'
+                    : '/((?:UNIQUE\s+)?KEY)\s+`?' . $name . '`?\s*\(([^)]+)\)/i';
+                if (!preg_match($pattern, (string)$source, $index)) { continue; }
+                $columns = explode(',', $match[2] === 'PRIMARY' ? $index[1] : $index[2]);
+                $unique = $match[2] === 'PRIMARY' || stripos((string)($index[1] ?? ''), 'UNIQUE') !== false;
+                $rows = [];
+                foreach ($columns as $position => $column) {
+                    $rows[] = [
+                        'Key_name' => $match[2],
+                        'Non_unique' => $unique ? 0 : 1,
+                        'Seq_in_index' => $position + 1,
+                        'Column_name' => trim($column, " `\t\r\n"),
+                        'Sub_part' => null,
+                    ];
+                }
+                return $output === ARRAY_A ? $rows : array_map(static fn($row) => (object)$row, $rows);
+            }
+            return [];
+        }
+        return parent::get_results($sql, $output);
+    }
+}
+
+$GLOBALS['wpdb'] = new SchemaAwareWpdb();
 require_once __DIR__ . '/../mu-plugin/landing-config/includes/db.php';
 
 use function LandingConfig\DB\maybe_install_or_migrate;
@@ -169,8 +252,8 @@ assert_test(
     'form events schema indexes browser ordering within a submission'
 );
 assert_test(
-    \LandingConfig\DB\DB_VERSION === '1.1.0',
-    'monitoring migration has version 1.1.0'
+    \LandingConfig\DB\DB_VERSION === '1.3.0',
+    'restored reliability schema has version 1.3.0'
 );
 
 set_mock_current_blog_id(2);

@@ -7,6 +7,7 @@ require_once __DIR__ . '/../mu-plugin/landing-config/includes/cascade.php';
 require_once __DIR__ . '/../mu-plugin/landing-config/includes/integrations.php';
 require_once __DIR__ . '/../mu-plugin/landing-config/adapters/AdapterInterface.php';
 require_once __DIR__ . '/../mu-plugin/landing-config/adapters/EmailAdapter.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/includes/lead-delivery-worker.php';
 require_once __DIR__ . '/../mu-plugin/landing-config/includes/rest-lead.php';
 
 $failures = 0;
@@ -279,6 +280,7 @@ class RejectAmbiguousLeadInsertWpdb extends LengthAwareLeadWpdb {
             if ($this->lead_attempt_count === 1) {
                 $this->insert_attempts[] = ['table' => $table, 'data' => $data];
                 $this->last_error = 'Lost connection while writing source_block metadata';
+                $this->last_query = 'INSERT INTO `' . (string)$table . '`';
                 $this->insert_id = 0;
                 return false;
             }

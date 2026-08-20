@@ -100,9 +100,13 @@ $source = file_get_contents(__DIR__ . '/../mu-plugin/landing-config/includes/adm
 $handler_source = substr((string)$source, (int)strpos((string)$source, 'function handle_bulk_promote'));
 $assert(str_contains($handler_source, "REQUEST_METHOD") && str_contains($handler_source, "'POST'"),
     'bulk recovery mutation rejects GET before reading the action or selected rows');
-foreach (['$wpdb->last_error', 'getMessage()', '+971500000002', 'Recover me'] as $unsafe) {
+foreach (['getMessage()', '+971500000002', 'Recover me'] as $unsafe) {
     $assert(!str_contains((string)$source, $unsafe), "audit recovery logs/source exclude {$unsafe}");
 }
+$assert(
+    preg_match('/error_log\s*\([^;]*\$wpdb->last_error/s', (string)$source) !== 1,
+    'audit recovery never writes database error text to logs'
+);
 
 echo $failures === 0 ? "PASS: admin audit recovery\n" : "FAILURES: {$failures}\n";
 exit($failures === 0 ? 0 : 1);

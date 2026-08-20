@@ -7,9 +7,11 @@ if (!defined('OBJECT')) { define('OBJECT', 'OBJECT'); }
 final class LeadReliabilityWpdb extends MockWpdbInsert {
     public array $tables = [];
     public array $results_queue = [];
+    public array $col_queue = [];
     private int $next_id = 1;
 
     public function insert($table, $data, $formats = null) {
+        $this->last_query = 'INSERT INTO `' . (string)$table . '`';
         $this->last_error = '';
         $rows = $this->tables[$table] ?? [];
         if (str_ends_with($table, 'landing_leads') && !empty($data['submission_id'])) {
@@ -74,18 +76,86 @@ final class LeadReliabilityWpdb extends MockWpdbInsert {
     public function get_row($sql, $output = OBJECT) {
         $row = array_shift($this->row_queue);
         if ($row === null) { return null; }
-        return $output === ARRAY_A ? (array)$row : (object)$row;
+        $row = (array)$row;
+        if (preg_match('/^SELECT\s+(.+?)\s+FROM\s+`?[^`\s]*landing_leads`?\s+WHERE\s+submission_id=/i', (string)$sql, $match)) {
+            $selected = array_map(
+                static fn(string $field): string => trim($field, " `\t\n\r\0\x0B"),
+                explode(',', $match[1])
+            );
+            $row = array_intersect_key($row, array_fill_keys($selected, true));
+        }
+        return $output === ARRAY_A ? $row : (object)$row;
     }
 
     public function get_results($sql, $output = OBJECT) {
+        $sql = (string)$sql;
+        $this->query_log[] = $sql;
+        if (str_contains($sql, '/* landing_delivery_catalog */')) {
+            $rows = $this->integration_catalog_rows();
+            return $output === ARRAY_A ? $rows : array_map(static fn($row) => (object)$row, $rows);
+        }
+        if (str_contains($sql, '/* landing_delivery_integration */')) {
+            preg_match('/WHERE p\.ID=(\d+)/', $sql, $match);
+            $rows = $this->integration_catalog_rows((int)($match[1] ?? 0));
+            return $output === ARRAY_A ? $rows : array_map(static fn($row) => (object)$row, $rows);
+        }
+        if (str_contains($sql, 'SELECT integration_id,adapter FROM')
+            && preg_match('/WHERE lead_id=(\d+)/', $sql, $match)) {
+            $lead_id = (int)$match[1];
+            $rows = array_values(array_filter(
+                $this->tables[\LandingConfig\DB\get_lead_log_table_name()] ?? [],
+                static fn(array $row): bool => (int)($row['lead_id'] ?? 0) === $lead_id
+                    && (int)($row['attempt'] ?? 0) === 1
+            ));
+            $rows = array_map(static fn(array $row): array => [
+                'integration_id' => $row['integration_id'] ?? 0,
+                'adapter' => $row['adapter'] ?? '',
+            ], $rows);
+            return $output === ARRAY_A ? $rows : array_map(static fn($row) => (object)$row, $rows);
+        }
         $rows = array_shift($this->results_queue) ?? [];
         return $output === ARRAY_A ? array_map('get_object_vars', array_map(static fn($r) => (object)$r, $rows)) : array_map(static fn($r) => (object)$r, $rows);
+    }
+
+    private function integration_catalog_rows(?int $only_id = null): array {
+        $rows = [];
+        foreach ($GLOBALS['_mock_posts'] ?? [] as $id => $post) {
+            $post = is_object($post) ? get_object_vars($post) : (array)$post;
+            if ($only_id !== null && (int)$id !== $only_id) { continue; }
+            if (($post['post_type'] ?? '') !== 'lp_integration' || ($post['post_status'] ?? '') !== 'publish') { continue; }
+            if (isset($post['_mock_blog_id']) && (int)$post['_mock_blog_id'] !== get_current_blog_id()) { continue; }
+            $meta = $GLOBALS['_mock_post_meta'][$id] ?? [];
+            $rows[] = [
+                'ID' => (int)$id,
+                'post_title' => (string)($post['post_title'] ?? ''),
+                'post_type' => (string)($post['post_type'] ?? ''),
+                'post_status' => (string)($post['post_status'] ?? ''),
+                'adapter_type' => $meta['_lp_int_adapter_type'] ?? '',
+                'legacy_adapter_type' => $meta['_lp_int_adapter_name'] ?? '',
+                'label' => $meta['_lp_int_label'] ?? '',
+                'description' => $meta['_lp_int_description'] ?? '',
+                'settings' => $meta['_lp_int_settings'] ?? [],
+                'encrypted_fields' => $meta['_lp_int_encrypted_fields'] ?? [],
+                'is_network' => $meta['_lp_int_is_network'] ?? '0',
+                'enabled' => $meta['_lp_int_enabled'] ?? '0',
+            ];
+        }
+        usort($rows, static fn(array $left, array $right): int => (int)$left['ID'] <=> (int)$right['ID']);
+        return $rows;
+    }
+
+    public function get_col($sql) {
+        $this->query_log[] = (string)$sql;
+        return array_shift($this->col_queue) ?? [];
     }
 
     public function get_var($sql) {
         if (stripos((string) $sql, 'GET_LOCK(') !== false) {
             $this->query_log[] = (string) $sql;
-            return !empty($GLOBALS['_lr_force_lock_failure']) ? 0 : 1;
+            $pattern = (string)($GLOBALS['_lr_force_lock_failure_pattern'] ?? '');
+            $forced = !empty($GLOBALS['_lr_force_lock_failure'])
+                && ($pattern === '' || str_contains((string)$sql, $pattern));
+            return $forced ? 0 : 1;
         }
         if (stripos((string) $sql, 'RELEASE_LOCK(') !== false) {
             $this->query_log[] = (string) $sql;
@@ -141,6 +211,7 @@ final class LeadReliabilityWpdb extends MockWpdbInsert {
 
 function lr_reset_state(): void {
     $GLOBALS['wpdb'] = new LeadReliabilityWpdb();
+    $GLOBALS['_landing_config_schema_runtime_verified'] = true;
     $GLOBALS['_mock_options'] = [];
     $GLOBALS['_mock_site_meta'] = [];
     $GLOBALS['_mock_dbdelta_calls'] = [];
@@ -159,6 +230,7 @@ function lr_reset_state(): void {
     $GLOBALS['_lr_spawn_cron_calls'] = [];
     $GLOBALS['_lr_uuid_counter'] = 0;
     $GLOBALS['_lr_force_lock_failure'] = false;
+    $GLOBALS['_lr_force_lock_failure_pattern'] = '';
     $GLOBALS['_lr_logged_in'] = false;
     $GLOBALS['_lr_capabilities'] = [];
     $GLOBALS['_lr_valid_nonces'] = [];

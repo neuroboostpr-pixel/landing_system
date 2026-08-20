@@ -7,24 +7,71 @@ use function LandingConfig\DB\get_lead_log_table_name;
 use function LandingConfig\DB\get_leads_table_name;
 
 const DELIVERY_HOOK = 'landing_config_deliver_lead';
-const MAX_ATTEMPTS = 3;
+const MAX_ATTEMPTS = 5;
 const STALE_SENDING_SECONDS = 300;
 
 function utc_mysql(int $timestamp): string {
     return gmdate('Y-m-d H:i:s', $timestamp);
 }
 
-function reserve_integrations(int $lead_id): int {
+/** @return array<int,string> exact integration id => adapter */
+function normalize_delivery_targets(array $targets): array {
+    $normalized = [];
+    foreach ($targets as $integration_id => $adapter) {
+        if ((!is_int($integration_id) && !(is_string($integration_id) && ctype_digit($integration_id)))
+            || !is_string($adapter)) {
+            continue;
+        }
+        $integration_id = (int)$integration_id;
+        $safe_adapter = sanitize_key($adapter);
+        if ($integration_id <= 0 || $safe_adapter === '' || $safe_adapter !== $adapter) { continue; }
+        $normalized[$integration_id] = $safe_adapter;
+    }
+    ksort($normalized, SORT_NUMERIC);
+    return $normalized;
+}
+
+/** @return array<int,string> exact enabled targets at the instant of intake */
+function snapshot_enabled_integrations(): array {
+    if (!function_exists('LandingConfig\\Integrations\\read_delivery_targets_strict')) {
+        throw new \RuntimeException('integration catalog health service missing');
+    }
+    $targets = normalize_delivery_targets(
+        \LandingConfig\Integrations\read_delivery_targets_strict(get_current_blog_id())
+    );
+    // A dedicated Telegram integration can be reserved for operational
+    // failure alerts. It must not receive every sales lead in addition to the
+    // normal lead Telegram channel.
+    $monitor_id = defined('LP_MONITOR_TELEGRAM_INTEGRATION_ID')
+        ? (int)LP_MONITOR_TELEGRAM_INTEGRATION_ID
+        : (int)get_option('landing_monitor_telegram_integration_id', 0);
+    if ($monitor_id > 0 && ($targets[$monitor_id] ?? '') === 'telegram') {
+        unset($targets[$monitor_id]);
+    }
+    return $targets;
+}
+
+function encode_delivery_targets(array $targets): string {
+    $encoded = wp_json_encode(normalize_delivery_targets($targets), JSON_UNESCAPED_SLASHES);
+    return is_string($encoded) ? $encoded : '';
+}
+
+/** @return array<int,string>|null null means absent/corrupt, [] is a valid no-channel plan */
+function decode_delivery_targets($encoded): ?array {
+    if (!is_string($encoded) || $encoded === '') { return null; }
+    $decoded = json_decode($encoded, true);
+    if (!is_array($decoded)) { return null; }
+    $normalized = normalize_delivery_targets($decoded);
+    return count($normalized) === count($decoded) ? $normalized : null;
+}
+
+function reserve_integrations(int $lead_id, ?array $targets = null): int {
     if ($lead_id <= 0) { return 0; }
     global $wpdb;
     $count = 0;
     $now = current_time('mysql', true);
-    foreach (\LandingConfig\Integrations\list_integrations(get_current_blog_id()) as $integration) {
-        $integration_id = (int)($integration['id'] ?? 0);
-        $adapter = sanitize_key((string)($integration['adapter_type'] ?? ''));
-        if (($integration['enabled'] ?? false) !== true || $integration_id <= 0 || $adapter === '') {
-            continue;
-        }
+    $targets = $targets === null ? snapshot_enabled_integrations() : normalize_delivery_targets($targets);
+    foreach ($targets as $integration_id => $adapter) {
         $inserted = $wpdb->insert(get_lead_log_table_name(), [
             'lead_id' => $lead_id,
             'adapter' => $adapter,
@@ -45,6 +92,43 @@ function reserve_integrations(int $lead_id): int {
     return $count;
 }
 
+function delivery_snapshot_is_complete(int $lead_id, array $targets): bool {
+    if ($lead_id <= 0) { return false; }
+    $targets = normalize_delivery_targets($targets);
+    if ($targets === []) { return true; }
+    global $wpdb;
+    $ids = implode(',', array_map('intval', array_keys($targets)));
+    $rows = $wpdb->get_results($wpdb->prepare(
+        "SELECT integration_id,adapter FROM `" . get_lead_log_table_name()
+        . "` WHERE lead_id=%d AND attempt=1 AND integration_id IN ({$ids})",
+        $lead_id
+    ), ARRAY_A);
+    if (!is_array($rows)) { return false; }
+    $present = [];
+    foreach ($rows as $row) {
+        $id = (int)($row['integration_id'] ?? 0);
+        $adapter = sanitize_key((string)($row['adapter'] ?? ''));
+        if ($id > 0 && $adapter !== '') { $present[$id] = $adapter; }
+    }
+    ksort($present, SORT_NUMERIC);
+    return $present === $targets;
+}
+
+/** @return array{created:int,complete:bool} */
+function ensure_delivery_reservations(int $lead_id, array $targets): array {
+    $targets = normalize_delivery_targets($targets);
+    $created = reserve_integrations($lead_id, $targets);
+    $complete = delivery_snapshot_is_complete($lead_id, $targets);
+    if ($complete) {
+        global $wpdb;
+        $updated = $wpdb->update(get_leads_table_name(), [
+            'delivery_reservations_ready' => 1,
+        ], ['id' => $lead_id]);
+        if ($updated === false) { $complete = false; }
+    }
+    return ['created' => $created, 'complete' => $complete];
+}
+
 function delivery_lock_name(int $lead_id): string {
     return 'lpd_' . get_current_blog_id() . '_' . $lead_id;
 }
@@ -60,7 +144,6 @@ function release_lead_lock(int $lead_id): void {
 }
 
 function normalized_retry_after($value): int {
-    if (is_array($value)) { $value = reset($value); }
     if (is_int($value) || (is_string($value) && ctype_digit(trim($value)))) {
         return max(1, min(3600, (int)$value));
     }
@@ -81,25 +164,20 @@ function safe_delivery_error_category(array $result, ?int $code): string {
 function send_exact_integration(array $integration, array $lead): array {
     $type = sanitize_key((string)($integration['adapter_type'] ?? ''));
     try {
-        if ($type === 'telegram') {
-            $result = function_exists('LandingConfig\\REST\\_send_telegram')
-                ? \LandingConfig\REST\_send_telegram((array)($integration['settings'] ?? []), $lead)
-                : ['ok' => false, 'error' => 'configuration_missing'];
+        $map = [
+            'email' => '\\LandingConfig\\Adapters\\EmailAdapter',
+            'telegram' => '\\LandingConfig\\Adapters\\TelegramAdapter',
+            'whatsapp' => '\\LandingConfig\\Adapters\\WhatsAppAdapter',
+            'amocrm' => '\\LandingConfig\\Adapters\\AmoCRMAdapter',
+            'bitrix24' => '\\LandingConfig\\Adapters\\Bitrix24Adapter',
+            'hubspot' => '\\LandingConfig\\Adapters\\HubSpotAdapter',
+            'roistat' => '\\LandingConfig\\Adapters\\RoistatAdapter',
+        ];
+        if (empty($map[$type]) || !class_exists($map[$type])) {
+            $result = ['ok' => false, 'status' => 'failed_permanent', 'error' => 'unsupported_adapter'];
         } else {
-            $map = [
-                'email' => '\\LandingConfig\\Adapters\\EmailAdapter',
-                'whatsapp' => '\\LandingConfig\\Adapters\\WhatsAppAdapter',
-                'amocrm' => '\\LandingConfig\\Adapters\\AmoCRMAdapter',
-                'bitrix24' => '\\LandingConfig\\Adapters\\Bitrix24Adapter',
-                'hubspot' => '\\LandingConfig\\Adapters\\HubSpotAdapter',
-                'roistat' => '\\LandingConfig\\Adapters\\RoistatAdapter',
-            ];
-            if (empty($map[$type]) || !class_exists($map[$type])) {
-                $result = ['ok' => false, 'error' => 'unsupported_adapter'];
-            } else {
-                $adapter = new $map[$type]();
-                $result = $adapter->send($lead, (array)($integration['settings'] ?? []));
-            }
+            $adapter = new $map[$type]();
+            $result = $adapter->send($lead, (array)($integration['settings'] ?? []));
         }
     } catch (\Throwable $ignored) {
         $result = ['ok' => false, 'error' => 'adapter_exception'];
@@ -110,7 +188,14 @@ function send_exact_integration(array $integration, array $lead): array {
     $code = isset($result['response_code']) && is_numeric($result['response_code'])
         ? (int)$result['response_code'] : null;
     $ok = ($result['ok'] ?? false) === true;
-    if ($ok) {
+    $declared_status = is_string($result['status'] ?? null) ? $result['status'] : '';
+    if ($type === 'telegram' && $ok && in_array($declared_status, ['success', 'accepted'], true)) {
+        $status = $declared_status;
+        $category = '';
+    } elseif ($type === 'telegram' && !$ok && in_array($declared_status, ['retry_wait', 'failed_permanent', 'unknown'], true)) {
+        $status = $declared_status;
+        $category = safe_delivery_error_category($result, $code);
+    } elseif ($ok) {
         $status = $type === 'email' ? 'accepted' : 'success';
         $category = '';
     } elseif ($code === 429) {
@@ -123,20 +208,30 @@ function send_exact_integration(array $integration, array $lead): array {
         $status = 'failed_permanent';
         $category = safe_delivery_error_category($result, $code);
     }
+    $provider_id = null;
+    if (in_array($status, ['success', 'accepted'], true)
+        && (is_string($result['provider_id'] ?? null) || is_int($result['provider_id'] ?? null))) {
+        $candidate = trim((string)$result['provider_id']);
+        $provider_id = $candidate !== '' ? $candidate : null;
+    }
     return [
         'status' => $status,
         'safe_category' => $category,
         'response_code' => $code,
+        'provider_id' => $provider_id,
         'retry_after' => normalized_retry_after($result['retry_after'] ?? null),
     ];
 }
 
-function load_lead(int $lead_id): ?array {
+/** @return array{ok:bool,lead:?array} */
+function load_lead_checked(int $lead_id): array {
     global $wpdb;
+    if (isset($wpdb->last_error)) { $wpdb->last_error = ''; }
     $row = $wpdb->get_row($wpdb->prepare(
         'SELECT * FROM `' . get_leads_table_name() . '` WHERE id=%d LIMIT 1', $lead_id
     ), ARRAY_A);
-    return is_array($row) ? $row : null;
+    if ((string)($wpdb->last_error ?? '') !== '') { return ['ok' => false, 'lead' => null]; }
+    return ['ok' => true, 'lead' => is_array($row) ? $row : null];
 }
 
 function observe_worker_result(int $lead_id, int $integration_id, string $adapter,
@@ -149,6 +244,17 @@ function observe_worker_result(int $lead_id, int $integration_id, string $adapte
     } catch (\Throwable $ignored) {
         error_log('[landing-config] monitor_observe_failed');
     }
+}
+
+function find_exact_attempt(int $lead_id, int $integration_id, int $attempt): ?array {
+    if ($lead_id <= 0 || $integration_id <= 0 || $attempt <= 0) { return null; }
+    global $wpdb;
+    $row = $wpdb->get_row($wpdb->prepare(
+        "SELECT id,status,next_attempt_at FROM `" . get_lead_log_table_name()
+        . "` WHERE lead_id=%d AND integration_id=%d AND attempt=%d LIMIT 1",
+        $lead_id, $integration_id, $attempt
+    ), ARRAY_A);
+    return is_array($row) && (int)($row['id'] ?? 0) > 0 ? $row : null;
 }
 
 function process_reservation(array $row, int $now): bool {
@@ -167,9 +273,19 @@ function process_reservation(array $row, int $now): bool {
         ], ['id' => $row_id, 'status' => 'queued']);
         if ((int)$claimed !== 1) { return false; }
 
-        $lead = load_lead($lead_id);
-        $integration = \LandingConfig\Integrations\get_integration($integration_id);
-        if (!is_array($lead) || !is_array($integration) || ($integration['enabled'] ?? false) !== true
+        $lead_read = load_lead_checked($lead_id);
+        $integration_read = function_exists('LandingConfig\\Integrations\\get_delivery_integration_checked')
+            ? \LandingConfig\Integrations\get_delivery_integration_checked($integration_id)
+            : ['ok' => false, 'integration' => null];
+        $lead = $lead_read['lead'] ?? null;
+        $integration = $integration_read['integration'] ?? null;
+        if (!($lead_read['ok'] ?? false) || !($integration_read['ok'] ?? false)) {
+            // No provider was contacted. A bounded retry is safe and avoids
+            // permanently losing a channel because WordPress briefly could
+            // not read the lead or integration configuration.
+            $result = ['status' => 'retry_wait', 'safe_category' => 'configuration_read_error',
+                'response_code' => null, 'provider_id' => null, 'retry_after' => 60];
+        } elseif (!is_array($lead) || !is_array($integration) || ($integration['enabled'] ?? false) !== true
             || sanitize_key((string)($integration['adapter_type'] ?? '')) !== $adapter) {
             $result = ['status' => 'failed_permanent', 'safe_category' => 'configuration_missing', 'response_code' => null, 'retry_after' => 60];
         } else {
@@ -180,21 +296,14 @@ function process_reservation(array $row, int $now): bool {
         if ($status === 'retry_wait' && $attempt >= MAX_ATTEMPTS) {
             $status = 'failed_permanent';
         }
-        $wpdb->update(get_lead_log_table_name(), [
-            'status' => $status,
-            'response_code' => $result['response_code'],
-            'response_body' => null,
-            'error_text' => $result['safe_category'] !== '' ? $result['safe_category'] : null,
-            'finished_at' => utc_mysql($now),
-        ], ['id' => $row_id, 'status' => 'sending']);
-
         if ($status === 'retry_wait') {
             $due = $now + (int)$result['retry_after'];
-            $wpdb->insert(get_lead_log_table_name(), [
+            $next_attempt = $attempt + 1;
+            $inserted = $wpdb->insert(get_lead_log_table_name(), [
                 'lead_id' => $lead_id,
                 'adapter' => $adapter,
                 'integration_id' => $integration_id,
-                'attempt' => $attempt + 1,
+                'attempt' => $next_attempt,
                 'status' => 'queued',
                 'response_code' => null,
                 'response_body' => null,
@@ -205,9 +314,62 @@ function process_reservation(array $row, int $now): bool {
                 'provider_id' => null,
                 'created_at' => utc_mysql($now),
             ]);
+            $successor_exists = $inserted !== false && $inserted !== 0;
+            if (!$successor_exists) {
+                $successor_exists = find_exact_attempt($lead_id, $integration_id, $next_attempt) !== null;
+            }
+            if (!$successor_exists) {
+                // The provider explicitly asked us to retry, but the new row
+                // could not be persisted. Reuse the claimed row as the next
+                // bounded attempt so the contact cannot silently fall out of
+                // the delivery queue.
+                $recycled = $wpdb->update(get_lead_log_table_name(), [
+                    'attempt' => $next_attempt,
+                    'status' => 'queued',
+                    'response_code' => null,
+                    'response_body' => null,
+                    'error_text' => null,
+                    'next_attempt_at' => utc_mysql($due),
+                    'locked_at' => null,
+                    'finished_at' => null,
+                    'provider_id' => null,
+                ], ['id' => $row_id, 'status' => 'sending']);
+                if ((int)$recycled !== 1) {
+                    error_log('[landing-config] delivery_retry_persist_failed');
+                    return false;
+                }
+                if (function_exists('wp_schedule_single_event')) {
+                    wp_schedule_single_event($due, DELIVERY_HOOK, [$lead_id]);
+                }
+                return true;
+            }
+
+            $closed = $wpdb->update(get_lead_log_table_name(), [
+                'status' => 'retry_wait',
+                'response_code' => $result['response_code'],
+                'response_body' => null,
+                'error_text' => $result['safe_category'] !== '' ? $result['safe_category'] : null,
+                'provider_id' => $result['provider_id'] ?? null,
+                'finished_at' => utc_mysql($now),
+            ], ['id' => $row_id, 'status' => 'sending']);
+            if ((int)$closed !== 1) {
+                // The successor is already durable, so do not create another
+                // attempt. Stale recovery below will close this exact handoff
+                // after proving the successor exists.
+                error_log('[landing-config] delivery_retry_handoff_close_failed');
+            }
             if (function_exists('wp_schedule_single_event')) {
                 wp_schedule_single_event($due, DELIVERY_HOOK, [$lead_id]);
             }
+        } else {
+            $wpdb->update(get_lead_log_table_name(), [
+                'status' => $status,
+                'response_code' => $result['response_code'],
+                'response_body' => null,
+                'error_text' => $result['safe_category'] !== '' ? $result['safe_category'] : null,
+                'provider_id' => $result['provider_id'] ?? null,
+                'finished_at' => utc_mysql($now),
+            ], ['id' => $row_id, 'status' => 'sending']);
         }
         observe_worker_result($lead_id, $integration_id, $adapter, $status,
             (string)$result['safe_category'], $result['response_code']);
@@ -238,11 +400,26 @@ function mark_stale_sending_unknown(?int $now = null): int {
     $now = $now ?? time();
     $cutoff = utc_mysql($now - STALE_SENDING_SECONDS);
     $rows = $wpdb->get_results($wpdb->prepare(
-        "SELECT id,lead_id,integration_id,adapter FROM `" . get_lead_log_table_name()
+        "SELECT id,lead_id,integration_id,adapter,attempt FROM `" . get_lead_log_table_name()
         . "` WHERE status='sending' AND locked_at<%s LIMIT 100", $cutoff
     ), ARRAY_A);
     $changed = 0;
     foreach (is_array($rows) ? $rows : [] as $row) {
+        $attempt = max(1, (int)($row['attempt'] ?? 1));
+        $successor = find_exact_attempt(
+            (int)($row['lead_id'] ?? 0),
+            (int)($row['integration_id'] ?? 0),
+            $attempt + 1
+        );
+        if ($successor !== null) {
+            $updated = $wpdb->update(get_lead_log_table_name(), [
+                'status' => 'retry_wait',
+                'error_text' => 'delivery_retry_handoff_repaired',
+                'finished_at' => utc_mysql($now),
+            ], ['id' => (int)($row['id'] ?? 0), 'status' => 'sending']);
+            if ((int)$updated === 1) { $changed++; }
+            continue;
+        }
         $updated = $wpdb->update(get_lead_log_table_name(), [
             'status' => 'unknown', 'error_text' => 'delivery_sending_stale',
             'finished_at' => utc_mysql($now),

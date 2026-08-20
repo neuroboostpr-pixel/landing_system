@@ -111,6 +111,7 @@ $GLOBALS['_mock_mail_sent'] = [];
 $GLOBALS['_mock_transients'] = [];
 $GLOBALS['_mock_transient_ttls'] = [];
 $GLOBALS['_mock_actions_fired'] = [];
+$GLOBALS['_landing_config_schema_runtime_verified'] = true;
 
 if (!defined('HOUR_IN_SECONDS')) { define('HOUR_IN_SECONDS', 3600); }
 if (!defined('DAY_IN_SECONDS')) { define('DAY_IN_SECONDS', 86400); }
@@ -208,6 +209,7 @@ function add_submenu_page(...$args) { $GLOBALS['_lr_submenus'][] = $args; return
 
 class MockWpdbInsert extends MockWpdb {
     public $insert_id = 0;
+    public string $last_query = '';
     public array $query_log = [];
     public array $row_queue = [];
     public array $query_count_queue = [];
@@ -215,6 +217,7 @@ class MockWpdbInsert extends MockWpdb {
     public string $last_error = '';
 
     public function insert($table, $data, $formats = null) {
+        $this->last_query = 'INSERT INTO `' . (string)$table . '`';
         if (strpos($table, 'landing_lead_status_log') !== false) {
             if (!isset($GLOBALS['_mock_status_log'])) { $GLOBALS['_mock_status_log'] = []; }
             if (!isset($GLOBALS['_mock_next_status_log_id'])) { $GLOBALS['_mock_next_status_log_id'] = 1; }
@@ -258,6 +261,15 @@ class MockWpdbInsert extends MockWpdb {
 
     public function get_results($sql, $output = OBJECT) {
         $this->query_log[] = (string) $sql;
+        if (str_contains((string)$sql, '/* landing_delivery_catalog */')) {
+            $rows = $this->mock_integration_catalog_rows();
+            return $output === ARRAY_A ? $rows : array_map(static fn($row) => (object)$row, $rows);
+        }
+        if (str_contains((string)$sql, '/* landing_delivery_integration */')) {
+            preg_match('/WHERE p\.ID=(\d+)/', (string)$sql, $match);
+            $rows = $this->mock_integration_catalog_rows((int)($match[1] ?? 0));
+            return $output === ARRAY_A ? $rows : array_map(static fn($row) => (object)$row, $rows);
+        }
         if (strpos($sql, 'landing_lead_status_log') !== false) {
             if (!isset($GLOBALS['_mock_status_log'])) { $GLOBALS['_mock_status_log'] = []; }
             if (preg_match('/WHERE\s+lead_id\s*=\s*(\d+)/i', $sql, $m)) {
@@ -271,6 +283,33 @@ class MockWpdbInsert extends MockWpdb {
             return $output === ARRAY_A ? $rows : array_map(fn($r) => (object) $r, $rows);
         }
         return [];
+    }
+
+    private function mock_integration_catalog_rows(?int $only_id = null): array {
+        $rows = [];
+        foreach ($GLOBALS['_mock_posts'] ?? [] as $id => $post) {
+            $post = is_object($post) ? get_object_vars($post) : (array)$post;
+            if ($only_id !== null && (int)$id !== $only_id) { continue; }
+            if (($post['post_type'] ?? '') !== 'lp_integration' || ($post['post_status'] ?? '') !== 'publish') { continue; }
+            if (isset($post['_mock_blog_id']) && (int)$post['_mock_blog_id'] !== get_current_blog_id()) { continue; }
+            $meta = $GLOBALS['_mock_post_meta'][$id] ?? [];
+            $rows[] = [
+                'ID' => (int)$id,
+                'post_title' => (string)($post['post_title'] ?? ''),
+                'post_type' => (string)($post['post_type'] ?? ''),
+                'post_status' => (string)($post['post_status'] ?? ''),
+                'adapter_type' => $meta['_lp_int_adapter_type'] ?? '',
+                'legacy_adapter_type' => $meta['_lp_int_adapter_name'] ?? '',
+                'label' => $meta['_lp_int_label'] ?? '',
+                'description' => $meta['_lp_int_description'] ?? '',
+                'settings' => $meta['_lp_int_settings'] ?? [],
+                'encrypted_fields' => $meta['_lp_int_encrypted_fields'] ?? [],
+                'is_network' => $meta['_lp_int_is_network'] ?? '0',
+                'enabled' => $meta['_lp_int_enabled'] ?? '0',
+            ];
+        }
+        usort($rows, static fn(array $left, array $right): int => (int)$left['ID'] <=> (int)$right['ID']);
+        return $rows;
     }
 
     public function get_row($sql, $output = OBJECT) {

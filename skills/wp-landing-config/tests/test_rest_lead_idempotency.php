@@ -29,7 +29,13 @@ function idempotent_request(array $overrides = []): WP_REST_Request {
         'phone' => '+971501111111',
         'email' => '',
         'message' => '',
-        'source_block' => 'test',
+        'source_block' => 'hero',
+        'utm_source' => 'search',
+        'utm_medium' => 'cpc',
+        'utm_campaign' => 'synthetic-campaign',
+        'utm_term' => 'synthetic-term',
+        'utm_content' => 'synthetic-content',
+        'roistat_visit' => 'synthetic-visit',
         'pd_consent' => '1',
     ], $overrides));
 }
@@ -46,6 +52,8 @@ lr_reset_state();
 $_SERVER['REMOTE_ADDR'] = '203.0.113.7';
 $_SERVER['HTTP_USER_AGENT'] = 'idempotency-test';
 $integration_id = seed_email_integration();
+update_option('lp_rate_limit_per_hour', 100);
+update_option('lp_global_rate_limit_per_hour', 1000);
 $assert($integration_id > 0, 'integration fixture exists');
 lr_queue_row(null); // first UUID lookup: no existing lead
 $first = handle_lead(idempotent_request());
@@ -59,18 +67,42 @@ $assert((int)($reservation['integration_id'] ?? 0) === $integration_id, 'reserva
 $assert(($reservation['status'] ?? '') === 'queued', 'reservation starts queued');
 $assert(count($GLOBALS['_lr_http_requests']) === 0 && count($GLOBALS['_mock_mail_sent']) === 0, 'primary response waits for no adapter');
 
-lr_queue_row(['id' => $lead_id]);
+lr_queue_row(lr_rows(\LandingConfig\DB\get_leads_table_name())[0] ?? []);
 $replay = handle_lead(idempotent_request());
 $assert($replay->get_status() === 200, 'replay succeeds');
 $assert($replay->get_data() === ['ok' => true, 'lead_id' => $lead_id, 'replayed' => true], 'replay returns original lead');
 $assert(count(lr_rows(\LandingConfig\DB\get_leads_table_name())) === $lead_count, 'replay inserts no lead');
 $assert(count(lr_rows(\LandingConfig\DB\get_lead_log_table_name())) === $delivery_count, 'replay redelivers nothing');
 
+$stored_lead = lr_rows(\LandingConfig\DB\get_leads_table_name())[0] ?? [];
+$conflicting_changes = [
+    'name' => 'Changed name',
+    'phone' => '+15550100002',
+    'email' => 'changed@example.test',
+    'message' => 'Changed message',
+    'source_block' => 'footer',
+    'utm_source' => 'social',
+    'utm_medium' => 'organic',
+    'utm_campaign' => 'changed-campaign',
+    'utm_term' => 'changed-term',
+    'utm_content' => 'changed-content',
+    'roistat_visit' => 'changed-visit',
+];
+foreach ($conflicting_changes as $field => $changed_value) {
+    lr_queue_row($stored_lead);
+    $conflict = handle_lead(idempotent_request([$field => $changed_value]));
+    $assert($conflict->get_status() === 409, "changed {$field} returns a safe conflict");
+    $assert(($conflict->get_data()['error'] ?? '') === 'idempotency_conflict', "changed {$field} uses the stable conflict code");
+}
+$assert(count(lr_rows(\LandingConfig\DB\get_leads_table_name())) === $lead_count, 'conflicts insert no lead');
+$assert(count(lr_rows(\LandingConfig\DB\get_lead_log_table_name())) === $delivery_count, 'conflicts reserve no delivery');
+
 lr_reset_state();
 $_SERVER['REMOTE_ADDR'] = '203.0.113.7';
 $_SERVER['HTTP_USER_AGENT'] = 'idempotency-test';
 seed_email_integration();
 $GLOBALS['_lr_force_lock_failure'] = true;
+$GLOBALS['_lr_force_lock_failure_pattern'] = 'lpl_';
 $busy = handle_lead(idempotent_request());
 $assert($busy->get_status() === 503, 'contended UUID returns retryable 503');
 $assert(lr_rows(\LandingConfig\DB\get_leads_table_name()) === [], 'contended UUID creates no duplicate');
@@ -85,8 +117,13 @@ lr_reset_state();
 $_SERVER['REMOTE_ADDR'] = '203.0.113.77';
 $_SERVER['HTTP_USER_AGENT'] = 'rate-limit-recovery-test';
 update_option('lp_rate_limit_per_hour', 1);
-$rate_key = 'landing_lead_rl_' . md5('203.0.113.77');
-set_transient($rate_key, 1, HOUR_IN_SECONDS);
+$rate_bucket = \LandingConfig\REST\rate_bucket_start();
+update_option(\LandingConfig\REST\rate_option_name(
+    'landing_lead_rl_bucket_', '203.0.113.77', $rate_bucket
+), '1');
+update_option(\LandingConfig\REST\rate_option_name(
+    'landing_lead_rl_bucket_', '__site__', $rate_bucket, 'global'
+), '1');
 $limited = handle_lead(idempotent_request([
     'submission_id' => '22222222-2222-4222-8222-222222222222',
     'phone' => '+971509876543',

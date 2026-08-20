@@ -129,34 +129,127 @@ function save_integration(
     });
 }
 
-function get_integration(int $id): ?array {
+/** @return array{ok:bool,integration:?array} */
+function get_integration_checked(int $id): array {
+    global $wpdb;
+    if (isset($wpdb->last_error)) { $wpdb->last_error = ''; }
     $p = \get_post($id);
-    if (!$p || ($p->post_type ?? '') !== POST_TYPE) return null;
-    $settings = \get_post_meta($id, SETTINGS_META, true);
+    if ((string)($wpdb->last_error ?? '') !== '') { return ['ok' => false, 'integration' => null]; }
+    if (!$p || ($p->post_type ?? '') !== POST_TYPE) { return ['ok' => true, 'integration' => null]; }
+
+    $read_meta = static function (string $key, bool &$ok) use ($id, $wpdb) {
+        if (isset($wpdb->last_error)) { $wpdb->last_error = ''; }
+        $value = \get_post_meta($id, $key, true);
+        if ((string)($wpdb->last_error ?? '') !== '') { $ok = false; }
+        return $value;
+    };
+    $ok = true;
+    $settings = $read_meta(SETTINGS_META, $ok);
     $settings = is_array($settings) ? $settings : [];
-    $encrypted_fields = \get_post_meta($id, ENCRYPTED_FIELDS_META, true);
+    $encrypted_fields = $read_meta(ENCRYPTED_FIELDS_META, $ok);
     $encrypted_fields = is_array($encrypted_fields) ? $encrypted_fields : [];
 
-    $adapter_type = (string) \get_post_meta($id, ADAPTER_TYPE_META, true);
+    $adapter_type = (string)$read_meta(ADAPTER_TYPE_META, $ok);
     if ($adapter_type === '') {
-        $adapter_type = (string) \get_post_meta($id, NAME_META, true);
+        $adapter_type = (string)$read_meta(NAME_META, $ok);
     }
-    $label = (string) \get_post_meta($id, LABEL_META, true);
+    $label = (string)$read_meta(LABEL_META, $ok);
     if ($label === '') {
         $label = $p->post_title ?: $adapter_type;
     }
+    $description = (string)$read_meta(DESCRIPTION_META, $ok);
+    $is_network = (string)$read_meta(NETWORK_META, $ok) === '1';
+    $enabled = (string)$read_meta(ENABLED_META, $ok) === '1';
+    if (!$ok) { return ['ok' => false, 'integration' => null]; }
 
-    return [
+    return ['ok' => true, 'integration' => [
         'id'               => $id,
         'adapter_type'     => $adapter_type,
         'adapter_name'     => $adapter_type,
         'label'            => $label,
-        'description'      => (string) \get_post_meta($id, DESCRIPTION_META, true),
+        'description'      => $description,
         'settings'         => _decrypt_settings($settings, $encrypted_fields),
         'encrypted_fields' => $encrypted_fields,
-        'is_network'       => (string) \get_post_meta($id, NETWORK_META, true) === '1',
-        'enabled'          => (string) \get_post_meta($id, ENABLED_META, true) === '1',
-    ];
+        'is_network'       => $is_network,
+        'enabled'          => $enabled,
+    ]];
+}
+
+function get_integration(int $id): ?array {
+    $result = get_integration_checked($id);
+    return ($result['ok'] ?? false) && is_array($result['integration'] ?? null)
+        ? $result['integration'] : null;
+}
+
+/**
+ * Read one exact integration for the delivery worker directly from MySQL.
+ * WordPress may cache an empty post-meta array after a transient SQL failure;
+ * bypassing that cache prevents the next retry from treating a healthy
+ * Email/Telegram/CRM channel as permanently disabled.
+ *
+ * @return array{ok:bool,integration:?array}
+ */
+function get_delivery_integration_checked(int $id): array {
+    if ($id <= 0) { return ['ok' => true, 'integration' => null]; }
+    global $wpdb;
+    $posts = str_replace('`', '', $wpdb->get_blog_prefix() . 'posts');
+    $postmeta = str_replace('`', '', $wpdb->get_blog_prefix() . 'postmeta');
+    if (isset($wpdb->last_error)) { $wpdb->last_error = ''; }
+    $sql = $wpdb->prepare(
+        "/* landing_delivery_integration */ SELECT p.ID,p.post_title,p.post_type,p.post_status,"
+        . " MAX(CASE WHEN pm.meta_key=%s THEN pm.meta_value END) AS adapter_type,"
+        . " MAX(CASE WHEN pm.meta_key=%s THEN pm.meta_value END) AS legacy_adapter_type,"
+        . " MAX(CASE WHEN pm.meta_key=%s THEN pm.meta_value END) AS label,"
+        . " MAX(CASE WHEN pm.meta_key=%s THEN pm.meta_value END) AS description,"
+        . " MAX(CASE WHEN pm.meta_key=%s THEN pm.meta_value END) AS settings,"
+        . " MAX(CASE WHEN pm.meta_key=%s THEN pm.meta_value END) AS encrypted_fields,"
+        . " MAX(CASE WHEN pm.meta_key=%s THEN pm.meta_value END) AS is_network,"
+        . " MAX(CASE WHEN pm.meta_key=%s THEN pm.meta_value END) AS enabled"
+        . " FROM `{$posts}` p LEFT JOIN `{$postmeta}` pm ON pm.post_id=p.ID"
+        . " WHERE p.ID=%d GROUP BY p.ID,p.post_title,p.post_type,p.post_status LIMIT 1",
+        ADAPTER_TYPE_META, NAME_META, LABEL_META, DESCRIPTION_META,
+        SETTINGS_META, ENCRYPTED_FIELDS_META, NETWORK_META, ENABLED_META, $id
+    );
+    $rows = $wpdb->get_results($sql, ARRAY_A);
+    if (!is_array($rows) || (string)($wpdb->last_error ?? '') !== '') {
+        return ['ok' => false, 'integration' => null];
+    }
+    if ($rows === []) { return ['ok' => true, 'integration' => null]; }
+    $row = $rows[0] ?? null;
+    if (!is_array($row) || (int)($row['ID'] ?? 0) !== $id
+        || (string)($row['post_type'] ?? '') !== POST_TYPE
+        || (string)($row['post_status'] ?? '') !== 'publish') {
+        return ['ok' => true, 'integration' => null];
+    }
+
+    $decode = static function ($value) {
+        if (!is_string($value)) { return $value; }
+        return function_exists('maybe_unserialize') ? \maybe_unserialize($value) : $value;
+    };
+    $settings = $decode($row['settings'] ?? null);
+    $settings = is_array($settings) ? $settings : [];
+    $encrypted_fields = $decode($row['encrypted_fields'] ?? null);
+    $encrypted_fields = is_array($encrypted_fields) ? $encrypted_fields : [];
+    $enabled_raw = is_scalar($row['enabled'] ?? null) ? (string)$row['enabled'] : '';
+    if (!in_array($enabled_raw, ['0', '1'], true)) {
+        return ['ok' => false, 'integration' => null];
+    }
+    $adapter_type = trim((string)($row['adapter_type'] ?? ''));
+    if ($adapter_type === '') { $adapter_type = trim((string)($row['legacy_adapter_type'] ?? '')); }
+    $label = (string)($row['label'] ?? '');
+    if ($label === '') { $label = (string)($row['post_title'] ?? '') ?: $adapter_type; }
+
+    return ['ok' => true, 'integration' => [
+        'id' => $id,
+        'adapter_type' => $adapter_type,
+        'adapter_name' => $adapter_type,
+        'label' => $label,
+        'description' => (string)($row['description'] ?? ''),
+        'settings' => _decrypt_settings($settings, $encrypted_fields),
+        'encrypted_fields' => $encrypted_fields,
+        'is_network' => (string)($row['is_network'] ?? '') === '1',
+        'enabled' => $enabled_raw === '1',
+    ]];
 }
 
 function delete_integration(int $id): bool {
@@ -166,21 +259,96 @@ function delete_integration(int $id): bool {
 /**
  * List ALL integration records visible for a given blog (network + site-level).
  */
-function list_integrations(int $blog_id): array {
+/** @return array{ok:bool,integrations:array} */
+function list_integrations_checked(int $blog_id): array {
     return _with_blog($blog_id, function () {
+        global $wpdb;
+        if (isset($wpdb->last_error)) { $wpdb->last_error = ''; }
         $posts = \get_posts([
             'post_type'      => POST_TYPE,
             'post_status'    => 'publish',
             'posts_per_page' => -1,
             'orderby'        => 'date',
             'order'          => 'ASC',
+            // The intake snapshot must distinguish a genuine empty catalog
+            // from a transient SQL failure, not trust a stale query cache.
+            'cache_results'  => false,
+            'update_post_meta_cache' => false,
+            'update_post_term_cache' => false,
         ]);
+        if ((string)($wpdb->last_error ?? '') !== '') {
+            return ['ok' => false, 'integrations' => []];
+        }
         $out = [];
         foreach ($posts as $p) {
-            $entry = get_integration($p->ID);
+            $result = get_integration_checked((int)$p->ID);
+            if (!($result['ok'] ?? false)) { return ['ok' => false, 'integrations' => []]; }
+            $entry = $result['integration'] ?? null;
             if ($entry) $out[] = $entry;
         }
-        return $out;
+        return ['ok' => true, 'integrations' => $out];
+    });
+}
+
+function list_integrations(int $blog_id): array {
+    $result = list_integrations_checked($blog_id);
+    return ($result['ok'] ?? false) ? (array)($result['integrations'] ?? []) : [];
+}
+
+/**
+ * Read only the routing fields needed at intake, directly from MySQL. This is
+ * deliberately independent of WordPress query/meta caches so a cache or SQL
+ * failure cannot masquerade as a healthy empty Email/Telegram/CRM catalog.
+ *
+ * @return array<int,string> exact enabled integration id => adapter
+ * @throws \RuntimeException when catalog health or row integrity is unknown
+ */
+function read_delivery_targets_strict(int $blog_id): array {
+    return _with_blog($blog_id, function (): array {
+        global $wpdb;
+        $posts = str_replace('`', '', $wpdb->get_blog_prefix() . 'posts');
+        $postmeta = str_replace('`', '', $wpdb->get_blog_prefix() . 'postmeta');
+        if (isset($wpdb->last_error)) { $wpdb->last_error = ''; }
+        $sql = $wpdb->prepare(
+            "/* landing_delivery_catalog */ SELECT p.ID,"
+            . " MAX(CASE WHEN pm.meta_key=%s THEN pm.meta_value END) AS adapter_type,"
+            . " MAX(CASE WHEN pm.meta_key=%s THEN pm.meta_value END) AS legacy_adapter_type,"
+            . " MAX(CASE WHEN pm.meta_key=%s THEN pm.meta_value END) AS enabled"
+            . " FROM `{$posts}` p LEFT JOIN `{$postmeta}` pm ON pm.post_id=p.ID"
+            . " AND pm.meta_key IN (%s,%s,%s)"
+            . " WHERE p.post_type=%s AND p.post_status='publish'"
+            . " GROUP BY p.ID ORDER BY p.ID ASC",
+            ADAPTER_TYPE_META, NAME_META, ENABLED_META,
+            ADAPTER_TYPE_META, NAME_META, ENABLED_META, POST_TYPE
+        );
+        $rows = $wpdb->get_results($sql, ARRAY_A);
+        if (!is_array($rows) || (string)($wpdb->last_error ?? '') !== '') {
+            throw new \RuntimeException('integration_catalog_unavailable');
+        }
+
+        $targets = [];
+        $seen = [];
+        foreach ($rows as $row) {
+            if (!is_array($row) || !isset($row['ID']) || !is_numeric($row['ID'])) {
+                throw new \RuntimeException('integration_catalog_invalid');
+            }
+            $id = (int)$row['ID'];
+            $enabled = is_scalar($row['enabled'] ?? null) ? (string)$row['enabled'] : '';
+            if ($id <= 0 || isset($seen[$id]) || !in_array($enabled, ['0','1'], true)) {
+                throw new \RuntimeException('integration_catalog_invalid');
+            }
+            $seen[$id] = true;
+            if ($enabled !== '1') { continue; }
+            $adapter = trim((string)($row['adapter_type'] ?? ''));
+            if ($adapter === '') { $adapter = trim((string)($row['legacy_adapter_type'] ?? '')); }
+            if ($adapter === '' || sanitize_key($adapter) !== $adapter
+                || !in_array($adapter, VALID_ADAPTERS, true)) {
+                throw new \RuntimeException('integration_catalog_invalid');
+            }
+            $targets[$id] = $adapter;
+        }
+        ksort($targets, SORT_NUMERIC);
+        return $targets;
     });
 }
 

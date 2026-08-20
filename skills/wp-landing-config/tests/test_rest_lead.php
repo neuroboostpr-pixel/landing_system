@@ -5,6 +5,7 @@ require_once __DIR__ . '/../mu-plugin/landing-config/includes/encryption.php';
 require_once __DIR__ . '/../mu-plugin/landing-config/includes/helpers.php';
 require_once __DIR__ . '/../mu-plugin/landing-config/includes/cascade.php';
 require_once __DIR__ . '/../mu-plugin/landing-config/includes/integrations.php';
+require_once __DIR__ . '/../mu-plugin/landing-config/includes/lead-delivery-worker.php';
 require_once __DIR__ . '/../mu-plugin/landing-config/includes/rest-lead.php';
 
 use function LandingConfig\REST\handle_lead;
@@ -34,6 +35,7 @@ function reset_state() {
     $GLOBALS['_mock_mail_sent'] = [];
     $GLOBALS['_mock_transients'] = [];
     $GLOBALS['_mock_actions_fired'] = [];
+    $GLOBALS['_mock_options'] = [];
     $_SERVER['REMOTE_ADDR'] = '203.0.113.1';
     $_SERVER['HTTP_USER_AGENT'] = 'test-agent';
 }
@@ -154,9 +156,7 @@ set_mock_current_blog_id(1);
 for ($i = 0; $i < 10; $i++) {
     $req = new WP_REST_Request(['name' => "User$i", 'phone' => '+71000000' . sprintf('%03d', $i), 'pd_consent' => '1']);
     $resp = handle_lead($req);
-    if ($resp->get_status() !== 200) {
-        echo "Unexpected status on request $i: " . $resp->get_status() . "\n";
-    }
+    assert_test($resp->get_status() === 200, "request $i stays below the ten-per-hour limit");
 }
 $req = new WP_REST_Request(['name' => 'Eleventh', 'phone' => '+71000000011', 'pd_consent' => '1']);
 $resp = handle_lead($req);
@@ -179,6 +179,7 @@ assert_test(
 function reset_pd() {
     $GLOBALS['_mock_inserted_leads'] = [];
     $GLOBALS['_mock_transients'] = [];  // сброс rate limit
+    $GLOBALS['_mock_options'] = [];
     $_SERVER['REMOTE_ADDR'] = '10.0.0.1';
 }
 
@@ -267,6 +268,9 @@ assert_test(
 // Active reCAPTCHA code is intentionally absent. Historical DB columns may remain
 // additive, but no Google verification or score-based rejection may run.
 $rest_source = file_get_contents(__DIR__ . '/../mu-plugin/landing-config/includes/rest-lead.php');
+assert_test(\LandingConfig\REST\get_global_rate_limit() === 500, 'inherited global technical safeguard remains 500 per hour');
+assert_test(!str_contains($rest_source, "expected lead volume"), 'technical safeguard is not presented as validated business traffic');
+assert_test(str_contains($rest_source, 'inherited technical safeguard'), 'global ceiling is explicitly documented as a technical safeguard');
 assert_test(!str_contains($rest_source, 'function verify_recaptcha'), 'reCAPTCHA verifier is removed');
 assert_test(!str_contains($rest_source, 'google.com/recaptcha'), 'REST endpoint never calls Google reCAPTCHA');
 assert_test(!str_contains($rest_source, "'recaptcha_failed'"), 'REST endpoint has no reCAPTCHA rejection path');

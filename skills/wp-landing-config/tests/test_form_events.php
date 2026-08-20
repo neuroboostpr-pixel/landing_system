@@ -264,7 +264,12 @@ $assert($deleted === 10007, 'retention cleanup drains all expired batches');
 $cleanup_sql = implode("\n", $GLOBALS['wpdb']->query_log);
 $assert(str_contains($cleanup_sql, 'DELETE FROM `wp_landing_form_events`'), 'retention cleanup targets only form events');
 $assert(str_contains($cleanup_sql, 'created_at <'), 'retention cleanup deletes by age');
-$assert(count($GLOBALS['wpdb']->query_log) === 3, 'retention cleanup continues until the final partial batch');
+$delete_queries = array_values(array_filter(
+    $GLOBALS['wpdb']->query_log,
+    static fn(string $sql): bool => str_contains($sql, 'DELETE FROM `wp_landing_form_events`')
+));
+$assert(count($delete_queries) === 3, 'retention cleanup continues until the final partial batch');
+$assert(str_contains($cleanup_sql, 'landing_form_event_global_%'), 'retention also scans durable anonymous rate-limit buckets');
 
 \LandingConfig\FormEvents\ensure_cleanup_scheduled();
 $assert(isset($GLOBALS['_lr_next_scheduled']['landing_config_cleanup_form_events']), '30-day cleanup is scheduled');
