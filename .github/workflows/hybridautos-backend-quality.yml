@@ -1,0 +1,41 @@
+name: HybridAutos backend quality
+
+on:
+  push:
+    branches:
+      - main
+      - 'release/**'
+      - 'integration/**'
+      - 'hotfix/**'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hybridautos-backend-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend-quality:
+    name: Backend lead reliability
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out the audited source
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Use PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Verify all HybridAutos backend scenarios
+        run: find skills/wp-landing-config/tests -maxdepth 1 -type f -name 'test_*.php' -print0 | sort -z | xargs -0 -n1 php
+
+      - name: Verify PHP syntax
+        run: find skills/wp-landing-config -type f -name '*.php' -print0 | sort -z | xargs -0 -n1 php -l
