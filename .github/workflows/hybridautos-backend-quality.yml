@@ -35,7 +35,22 @@ jobs:
           coverage: none
 
       - name: Verify all HybridAutos backend scenarios
-        run: find skills/wp-landing-config/tests -maxdepth 1 -type f -name 'test_*.php' -print0 | sort -z | xargs -0 -n1 php
+        run: |
+          set -euo pipefail
+          critical_tests=(
+            skills/wp-landing-config/tests/test_rest_lead_field_limits.php
+            skills/wp-landing-config/tests/test_rest_lead_idempotency.php
+            skills/wp-landing-config/tests/test_form_events.php
+            skills/wp-landing-config/tests/test_urgent_delivery_log.php
+          )
+          for critical_test in "${critical_tests[@]}"; do test -f "$critical_test"; done
+          php_test_count="$(find skills/wp-landing-config/tests -maxdepth 1 -type f -name 'test_*.php' | wc -l | tr -d '[:space:]')"
+          test "$php_test_count" -ge 42
+          find skills/wp-landing-config/tests -maxdepth 1 -type f -name 'test_*.php' -print0 | sort -z | xargs -0 -n1 php
 
       - name: Verify PHP syntax
-        run: find skills/wp-landing-config -type f -name '*.php' -print0 | sort -z | xargs -0 -n1 php -l
+        run: |
+          set -euo pipefail
+          php_file_count="$(find skills/wp-landing-config -type f -name '*.php' | wc -l | tr -d '[:space:]')"
+          test "$php_file_count" -ge 111
+          find skills/wp-landing-config -type f -name '*.php' -print0 | sort -z | xargs -0 -n1 php -l
