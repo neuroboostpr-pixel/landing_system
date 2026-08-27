@@ -23,6 +23,17 @@ $assert(\LandingConfig\Monitoring\classify_timeline([
 $assert(\LandingConfig\Monitoring\classify_timeline([
     ['event_sequence' => 1, 'event_name' => 'validation_failed', 'event_detail' => 'phone'],
 ]) === null, 'validation failure without request is not an incident');
+$assert(\LandingConfig\Monitoring\classify_timeline([
+    ['event_sequence' => 1, 'event_name' => 'submit_attempt', 'event_detail' => ''],
+    ['event_sequence' => 2, 'event_name' => 'validation_failed', 'event_detail' => 'consent'],
+]) === null, 'real submit then validation failure sequence is not an incident');
+$retried_stall = \LandingConfig\Monitoring\classify_timeline([
+    ['event_sequence' => 1, 'event_name' => 'submit_attempt', 'event_detail' => ''],
+    ['event_sequence' => 2, 'event_name' => 'validation_failed', 'event_detail' => 'consent'],
+    ['event_sequence' => 3, 'event_name' => 'submit_attempt', 'event_detail' => ''],
+]);
+$assert(($retried_stall['kind'] ?? '') === 'javascript_stall',
+    'a later submit after validation is classified from the latest attempt');
 $stall = \LandingConfig\Monitoring\classify_timeline([
     ['event_sequence' => 1, 'event_name' => 'submit_attempt', 'event_detail' => ''],
 ]);
@@ -33,6 +44,13 @@ $missing = \LandingConfig\Monitoring\classify_timeline([
     ['event_sequence' => 3, 'event_name' => 'request_failed', 'event_detail' => 'network'],
 ]);
 $assert(($missing['kind'] ?? '') === 'missing_lead' && ($missing['safe_status'] ?? '') === 'request_failed', 'request without lead is critical missing lead');
+$mixed_missing = \LandingConfig\Monitoring\classify_timeline([
+    ['event_sequence' => 1, 'event_name' => 'submit_attempt', 'event_detail' => ''],
+    ['event_sequence' => 2, 'event_name' => 'validation_failed', 'event_detail' => 'phone'],
+    ['event_sequence' => 3, 'event_name' => 'request_started', 'event_detail' => ''],
+]);
+$assert(($mixed_missing['kind'] ?? '') === 'missing_lead',
+    'request evidence stays critical even when the same timeline contains a validation failure');
 
 $uuid = '11111111-1111-4111-8111-111111111111';
 $path = '/api/v1/receipts/' . $uuid;

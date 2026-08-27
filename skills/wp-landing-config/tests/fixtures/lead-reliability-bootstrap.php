@@ -74,6 +74,42 @@ final class LeadReliabilityWpdb extends MockWpdbInsert {
     }
 
     public function get_row($sql, $output = OBJECT) {
+        $sql = (string)$sql;
+        if (!empty($GLOBALS['_lr_execute_monitor_claim_sql'])
+            && preg_match('/SELECT\s+\*\s+FROM\s+`?([^`\s]+landing_monitor_alerts)`?.*LIMIT\s+1/is', $sql, $match)) {
+            $this->query_log[] = $sql;
+            $rows = $this->tables[$match[1]] ?? [];
+            preg_match("/telegram_status\s+IN\s+\(([^)]+)\)/i", $sql, $status_match);
+            $statuses = isset($status_match[1])
+                ? array_map(static fn(string $status): string => trim($status, " '\""), explode(',', $status_match[1]))
+                : [];
+            preg_match("/incident_kind\s*<>\s*'([^']+)'/i", $sql, $kind_match);
+            $excluded_kind = (string)($kind_match[1] ?? '');
+            preg_match("/due_at\s*<=\s*'([^']+)'/i", $sql, $due_match);
+            $due_cutoff = (string)($due_match[1] ?? '');
+            preg_match('/send_attempts\s*<\s*(\d+)/i', $sql, $attempt_match);
+            $attempt_limit = isset($attempt_match[1]) ? (int)$attempt_match[1] : PHP_INT_MAX;
+            $requires_unresolved = stripos($sql, 'resolved_at IS NULL') !== false;
+            $rows = array_values(array_filter($rows, static function (array $row) use (
+                $statuses, $excluded_kind, $due_cutoff, $attempt_limit, $requires_unresolved
+            ): bool {
+                if ($statuses !== [] && !in_array((string)($row['telegram_status'] ?? ''), $statuses, true)) {
+                    return false;
+                }
+                if ($excluded_kind !== '' && (string)($row['incident_kind'] ?? '') === $excluded_kind) {
+                    return false;
+                }
+                if ($requires_unresolved && !empty($row['resolved_at'])) { return false; }
+                if ($due_cutoff !== '' && (string)($row['due_at'] ?? '') > $due_cutoff) { return false; }
+                return (int)($row['send_attempts'] ?? 0) < $attempt_limit;
+            }));
+            usort($rows, static fn(array $left, array $right): int =>
+                strcmp((string)($left['due_at'] ?? ''), (string)($right['due_at'] ?? ''))
+                ?: (int)($left['id'] ?? 0) <=> (int)($right['id'] ?? 0));
+            $row = $rows[0] ?? null;
+            if (!is_array($row)) { return null; }
+            return $output === ARRAY_A ? $row : (object)$row;
+        }
         $row = array_shift($this->row_queue);
         if ($row === null) { return null; }
         $row = (array)$row;
@@ -169,6 +205,97 @@ final class LeadReliabilityWpdb extends MockWpdbInsert {
 
     public function query($sql) {
         $this->query_log[] = (string)$sql;
+        if (preg_match(
+            '/DELETE\s+FROM\s+`?([^`\s]+landing_monitor_alerts)`?\s+WHERE.*LIMIT\s+1000/is',
+            (string)$sql,
+            $match
+        )) {
+            preg_match_all(
+                "/'(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2})'/",
+                (string)$sql,
+                $date_matches
+            );
+            $dates = $date_matches[1] ?? [];
+            $cutoff_30 = (string)($dates[0] ?? '');
+            $cutoff_90 = (string)($dates[2] ?? '');
+            preg_match("/telegram_status\s+NOT\s+IN\s+\(([^)]+)\)/i", (string)$sql, $protected_match);
+            $protected_statuses = isset($protected_match[1])
+                ? array_map(static fn(string $status): string => trim($status, " '\""), explode(',', $protected_match[1]))
+                : [];
+            preg_match(
+                "/telegram_status='suppressed'\s+AND\s+last_seen_at\s*(<=|>=|<|>)\s*'([^']+)'/i",
+                (string)$sql,
+                $suppressed_match
+            );
+            $suppressed_operator = (string)($suppressed_match[1] ?? '');
+            $suppressed_cutoff = (string)($suppressed_match[2] ?? '');
+            $resolved_excludes_suppressed = preg_match(
+                "/telegram_status\s*<>\s*'suppressed'\s+AND\s+resolved_at\s+IS\s+NOT\s+NULL/i",
+                (string)$sql
+            ) === 1;
+            $table = $match[1];
+            $deleted = 0;
+            $remaining = [];
+            foreach ($this->tables[$table] ?? [] as $row) {
+                $status = (string)($row['telegram_status'] ?? '');
+                $resolved_at = (string)($row['resolved_at'] ?? '');
+                $sent_at = (string)($row['sent_at'] ?? '');
+                $last_seen_at = (string)($row['last_seen_at'] ?? '');
+                $last_response_at = (string)($row['last_response_at'] ?? '');
+                $terminal_time = $last_response_at !== '' ? $last_response_at : $last_seen_at;
+                $protected = in_array($status, $protected_statuses, true);
+                $resolved_expired = $resolved_at !== '' && $resolved_at < $cutoff_30
+                    && (!$resolved_excludes_suppressed || $status !== 'suppressed');
+                $suppressed_expired = $status === 'suppressed' && $suppressed_cutoff !== '' && match ($suppressed_operator) {
+                    '<' => $last_seen_at < $suppressed_cutoff,
+                    '<=' => $last_seen_at <= $suppressed_cutoff,
+                    '>' => $last_seen_at > $suppressed_cutoff,
+                    '>=' => $last_seen_at >= $suppressed_cutoff,
+                    default => false,
+                };
+                $expired = !$protected && (
+                    $resolved_expired
+                    || ($status === 'sent' && $sent_at !== '' && $sent_at < $cutoff_30)
+                    || (in_array($status, ['unknown','failed'], true) && $terminal_time < $cutoff_90)
+                    || $suppressed_expired
+                );
+                if ($expired && $deleted < 1000) {
+                    $deleted++;
+                    continue;
+                }
+                $remaining[] = $row;
+            }
+            $this->tables[$table] = $remaining;
+            $this->rows_affected = $deleted;
+            return $deleted;
+        }
+        if (preg_match(
+            "/UPDATE\\s+`?([^`\\s]+landing_monitor_alerts)`?\\s+SET\\s+telegram_status='suppressed',"
+            . ".*WHERE\\s+incident_kind='javascript_stall'.*LIMIT\\s+(\\d+)/is",
+            (string)$sql,
+            $match
+        )) {
+            $table = $match[1];
+            $limit = max(1, (int)$match[2]);
+            preg_match("/telegram_status\s+IN\s+\(([^)]+)\)/i", (string)$sql, $status_match);
+            $statuses = isset($status_match[1])
+                ? array_map(static fn(string $status): string => trim($status, " '\""), explode(',', $status_match[1]))
+                : [];
+            $changed = 0;
+            foreach ($this->tables[$table] ?? [] as $index => $row) {
+                if ($changed >= $limit) { break; }
+                if (($row['incident_kind'] ?? '') !== 'javascript_stall'
+                    || !in_array(($row['telegram_status'] ?? ''), $statuses, true)) {
+                    continue;
+                }
+                $this->tables[$table][$index]['telegram_status'] = 'suppressed';
+                $this->tables[$table][$index]['locked_at'] = null;
+                $this->tables[$table][$index]['lock_token'] = null;
+                $changed++;
+            }
+            $this->rows_affected = $changed;
+            return $changed;
+        }
         if (preg_match('/INSERT\s+INTO\s+`?([^`\s]+landing_monitor_alerts)`?\s*\(([^)]+)\)\s*VALUES\s*\((.*?)\)\s*ON\s+DUPLICATE/s', (string)$sql, $m)) {
             $table = $m[1];
             $columns = array_map(static fn($v) => trim($v, " `\t\r\n"), explode(',', $m[2]));
@@ -191,6 +318,16 @@ final class LeadReliabilityWpdb extends MockWpdbInsert {
                 if (($row['resolution'] ?? '') !== '') {
                     $this->tables[$table][$index]['resolution'] = $row['resolution'];
                     $this->tables[$table][$index]['resolved_at'] = $row['resolved_at'] ?? null;
+                }
+                $normalization_suffix =
+                    "telegram_status=IF(VALUES(telegram_status)='suppressed','suppressed',telegram_status),"
+                    . "locked_at=IF(VALUES(telegram_status)='suppressed',NULL,locked_at),"
+                    . "lock_token=IF(VALUES(telegram_status)='suppressed',NULL,lock_token)";
+                $normalizes_suppressed = str_ends_with((string)$sql, $normalization_suffix);
+                if (($row['telegram_status'] ?? '') === 'suppressed' && $normalizes_suppressed) {
+                    $this->tables[$table][$index]['telegram_status'] = 'suppressed';
+                    $this->tables[$table][$index]['locked_at'] = null;
+                    $this->tables[$table][$index]['lock_token'] = null;
                 }
                 $this->insert_id = (int)($existing['id'] ?? 0);
                 $this->rows_affected = 2;
@@ -231,6 +368,7 @@ function lr_reset_state(): void {
     $GLOBALS['_lr_uuid_counter'] = 0;
     $GLOBALS['_lr_force_lock_failure'] = false;
     $GLOBALS['_lr_force_lock_failure_pattern'] = '';
+    $GLOBALS['_lr_execute_monitor_claim_sql'] = false;
     $GLOBALS['_lr_logged_in'] = false;
     $GLOBALS['_lr_capabilities'] = [];
     $GLOBALS['_lr_valid_nonces'] = [];

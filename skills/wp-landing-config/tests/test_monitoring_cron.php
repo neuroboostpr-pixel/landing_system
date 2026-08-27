@@ -78,14 +78,43 @@ $assert(get_option(\LandingConfig\Monitoring\RUN_STATUS_OPTION, '') === 'ok', 'h
 $assert(get_option(\LandingConfig\Monitoring\RUN_STATUS_OPTION, '') === 'failed', 'failed wrapper writes fixed failed status');
 
 lr_reset_state();
-lr_queue_query_count(3);
-lr_queue_query_count(0);
+$alerts_table = \LandingConfig\DB\get_monitor_alerts_table_name();
+foreach (['2026-06-16 11:59:59', '2026-06-16 12:00:00', '2026-06-16 12:00:01'] as $last_seen_at) {
+    $GLOBALS['wpdb']->insert($alerts_table, [
+        'incident_kind' => 'javascript_stall',
+        'telegram_status' => 'suppressed',
+        'last_seen_at' => $last_seen_at,
+        'resolved_at' => null,
+        'sent_at' => null,
+        'last_response_at' => null,
+    ]);
+}
+$GLOBALS['wpdb']->insert($alerts_table, [
+    'incident_kind' => 'javascript_stall',
+    'telegram_status' => 'suppressed',
+    'last_seen_at' => '2026-07-15 12:00:00',
+    'resolved_at' => '2026-05-01 12:00:00',
+    'sent_at' => null,
+    'last_response_at' => null,
+]);
 $cleanup = \LandingConfig\Monitoring\cleanup_expired_alerts(strtotime('2026-07-16 12:00:00 UTC'));
-$assert(($cleanup['deleted'] ?? -1) === 3, 'retention drains deleted rows in bounded batches');
+$remaining_suppressed = lr_rows($alerts_table);
+$assert(($cleanup['deleted_alerts'] ?? -1) === 1,
+    'suppressed diagnostics are deleted only after the full 30-day window');
+$assert(array_column($remaining_suppressed, 'last_seen_at') === [
+    '2026-06-16 12:00:00', '2026-06-16 12:00:01', '2026-07-15 12:00:00',
+], 'the 30-day boundary, newer rows, and recently seen resolved diagnostics are retained');
 $sql = implode("\n", $GLOBALS['wpdb']->query_log);
 $assert(str_contains($sql, "2026-06-16 12:00:00"), 'resolved/sent cutoff is exactly 30 days');
 $assert(str_contains($sql, "2026-04-17 12:00:00"), 'terminal unknown/failed cutoff is exactly 90 days');
 $assert(str_contains($sql, "telegram_status NOT IN ('pending','retry_wait','sending')"), 'pending, retry and sending are never deleted regardless of age');
+$assert(str_contains($sql, "telegram_status<>'suppressed' AND resolved_at IS NOT NULL"),
+    'a stale resolution timestamp cannot shorten the 30-day suppressed retention window');
+$assert(str_contains($sql, "telegram_status='suppressed'"),
+    'non-Telegram diagnostic incidents are cleaned after the 30-day window');
+$assert(str_contains($sql,
+    "(telegram_status='suppressed' AND last_seen_at<'2026-06-16 12:00:00')"),
+    'suppressed retention uses the strict older-than operator at the exact cutoff');
 $assert(str_contains($sql, 'LIMIT 1000'), 'cleanup uses batches of 1000');
 
 $source = file_get_contents(__DIR__ . '/../mu-plugin/landing-config/includes/monitoring-alerts.php');

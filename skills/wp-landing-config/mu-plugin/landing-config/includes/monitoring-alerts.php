@@ -51,6 +51,13 @@ function allowed_categories(): array {
 function allowed_resolutions(): array { return ['','external_recovered','wordpress_lead_saved','delivery_recovered']; }
 function utc_mysql(int $timestamp): string { return gmdate('Y-m-d H:i:s', $timestamp); }
 
+function should_deliver_incident_to_telegram(string $kind): bool {
+    // Browser-only stalls are too ambiguous for the sales chat: ordinary
+    // validation and dropped telemetry can both produce the same timeline.
+    // Keep the safe incident for diagnostics, but do not notify Telegram.
+    return $kind !== 'javascript_stall';
+}
+
 function is_valid_submission_id(?string $submission_id): bool {
     return $submission_id === null
         || preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/', $submission_id) === 1;
@@ -101,6 +108,7 @@ function record_incident_scoped(string $kind, string $severity, ?string $submiss
     $fingerprint = incident_fingerprint($kind, $submission_id, $lead_id, $integration_id, $adapter, $fingerprint_scope);
     $resolved_at = $resolution === '' ? null : $at;
     $table = str_replace('`', '', get_monitor_alerts_table_name());
+    $telegram_status = should_deliver_incident_to_telegram($kind) ? 'pending' : 'suppressed';
     $sql = "INSERT INTO `{$table}` (fingerprint,incident_kind,severity,submission_id,lead_id,integration_id,"
         . "fingerprint_scope,adapter,safe_status,safe_category,provider_response_code,occurrence_count,"
         . "first_seen_at,last_seen_at,due_at,locked_at,lock_token,sent_at,resolved_at,resolution,"
@@ -110,13 +118,16 @@ function record_incident_scoped(string $kind, string $severity, ?string $submiss
             sql_nullable_int($lead_id), sql_nullable_int($integration_id), (string)$fingerprint_scope,
             sql_string($adapter), sql_string($safe_status), sql_string($safe_category),
             sql_nullable_int($provider_response_code), '1', sql_string($at), sql_string($at), sql_string($at),
-            'NULL','NULL','NULL',sql_nullable_string($resolved_at),sql_string($resolution),sql_string('pending'),
+            'NULL','NULL','NULL',sql_nullable_string($resolved_at),sql_string($resolution),sql_string($telegram_status),
             '0','NULL','NULL','NULL',
         ]) . ") ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id), occurrence_count=occurrence_count+1,"
         . "last_seen_at=VALUES(last_seen_at),safe_status=VALUES(safe_status),safe_category=VALUES(safe_category),"
         . "provider_response_code=VALUES(provider_response_code),"
         . "resolution=IF(VALUES(resolution)<>'',VALUES(resolution),resolution),"
-        . "resolved_at=IF(VALUES(resolution)<>'',VALUES(resolved_at),resolved_at)";
+        . "resolved_at=IF(VALUES(resolution)<>'',VALUES(resolved_at),resolved_at),"
+        . "telegram_status=IF(VALUES(telegram_status)='suppressed','suppressed',telegram_status),"
+        . "locked_at=IF(VALUES(telegram_status)='suppressed',NULL,locked_at),"
+        . "lock_token=IF(VALUES(telegram_status)='suppressed',NULL,lock_token)";
     $written = $wpdb->query($sql);
     return $written === false ? 0 : max(0, (int)$wpdb->insert_id);
 }
@@ -273,7 +284,17 @@ function classify_timeline(array $events): ?array {
             'safe_category' => 'missing_wordpress_lead',
         ];
     }
-    if (in_array('submit_attempt', $names, true)) {
+    $last_submit = null;
+    $last_validation = null;
+    foreach ($names as $index => $name) {
+        if ($name === 'submit_attempt') {
+            $last_submit = $index;
+        } elseif ($name === 'validation_failed') {
+            $last_validation = $index;
+        }
+    }
+    if ($last_submit !== null
+        && ($last_validation === null || $last_submit > $last_validation)) {
         return [
             'kind' => 'javascript_stall',
             'severity' => 'warning',
@@ -469,13 +490,27 @@ function run_missing_lead_scan(int $limit = 100, ?int $now = null): array {
     return ['scanned' => is_array($candidates) ? count($candidates) : 0, 'classified' => $classified];
 }
 
+function suppress_queued_non_telegram_alerts(int $limit = 100): int {
+    global $wpdb;
+    $limit = max(1, min(500, $limit));
+    $table = get_monitor_alerts_table_name();
+    $changed = $wpdb->query($wpdb->prepare(
+        "UPDATE `{$table}` SET telegram_status='suppressed',locked_at=NULL,lock_token=NULL "
+        . "WHERE incident_kind='javascript_stall' "
+        . "AND telegram_status IN ('pending','retry_wait') ORDER BY id LIMIT %d",
+        $limit
+    ));
+    return is_int($changed) && $changed > 0 ? $changed : 0;
+}
+
 function claim_next_alert(?int $now = null): ?array {
     global $wpdb;
     $now = $now ?? time();
     $table = get_monitor_alerts_table_name();
     $row = $wpdb->get_row($wpdb->prepare(
         "SELECT * FROM `{$table}` WHERE telegram_status IN ('pending','retry_wait') "
-        . "AND resolved_at IS NULL AND due_at<=%s AND send_attempts<%d ORDER BY due_at,id LIMIT 1",
+        . "AND incident_kind<>'javascript_stall' AND resolved_at IS NULL "
+        . "AND due_at<=%s AND send_attempts<%d ORDER BY due_at,id LIMIT 1",
         utc_mysql($now), MAX_SEND_ATTEMPTS
     ), ARRAY_A);
     if (!is_array($row)) { return null; }
@@ -483,6 +518,16 @@ function claim_next_alert(?int $now = null): ?array {
     $status = (string)($row['telegram_status'] ?? '');
     $attempts = (int)($row['send_attempts'] ?? 0);
     if ($id <= 0 || !in_array($status, ['pending','retry_wait'], true) || $attempts >= MAX_SEND_ATTEMPTS) {
+        return null;
+    }
+    // Defence in depth for unexpected/stale snapshots returned by a database
+    // proxy or test double. The real SELECT above already excludes this type.
+    if (!should_deliver_incident_to_telegram((string)($row['incident_kind'] ?? ''))) {
+        $wpdb->update($table, [
+            'telegram_status' => 'suppressed',
+            'locked_at' => null,
+            'lock_token' => null,
+        ], ['id' => $id, 'telegram_status' => $status]);
         return null;
     }
     $lock_token = wp_generate_uuid4();
@@ -620,6 +665,9 @@ function normalized_monitor_retry_after($value): int {
 }
 
 function send_monitoring_alert(array $alert, int $now): array {
+    if (!should_deliver_incident_to_telegram((string)($alert['incident_kind'] ?? ''))) {
+        return ['status' => 'suppressed', 'code' => null, 'message_id' => null, 'retry_after' => 60];
+    }
     $credentials = monitoring_telegram_integration();
     if ($credentials === null) {
         return ['status' => 'failed', 'code' => null, 'message_id' => null, 'retry_after' => 60];
@@ -666,7 +714,9 @@ function run_alert_queue(int $limit = 10, ?int $now = null): array {
     global $wpdb;
     $now = $now ?? time();
     $limit = max(1, min(100, $limit));
-    $summary = ['processed' => 0, 'sent' => 0, 'retry_wait' => 0, 'unknown' => 0, 'failed' => 0];
+    $suppressed = suppress_queued_non_telegram_alerts(100);
+    $summary = ['processed' => 0, 'sent' => 0, 'retry_wait' => 0,
+        'unknown' => 0, 'failed' => 0, 'suppressed' => $suppressed];
     for ($i = 0; $i < $limit; $i++) {
         $alert = claim_next_alert($now);
         if ($alert === null) { break; }
@@ -986,11 +1036,12 @@ function cleanup_expired_alerts(?int $now = null): array {
     do {
         $deleted = $wpdb->query($wpdb->prepare(
             "DELETE FROM `{$table}` WHERE telegram_status NOT IN ('pending','retry_wait','sending') AND ("
-            . "(resolved_at IS NOT NULL AND resolved_at<%s) OR "
+            . "(telegram_status<>'suppressed' AND resolved_at IS NOT NULL AND resolved_at<%s) OR "
             . "(telegram_status='sent' AND sent_at IS NOT NULL AND sent_at<%s) OR "
-            . "(telegram_status IN ('unknown','failed') AND COALESCE(last_response_at,last_seen_at)<%s)"
+            . "(telegram_status IN ('unknown','failed') AND COALESCE(last_response_at,last_seen_at)<%s) OR "
+            . "(telegram_status='suppressed' AND last_seen_at<%s)"
             . ") LIMIT 1000",
-            $cutoff_30, $cutoff_30, $cutoff_90
+            $cutoff_30, $cutoff_30, $cutoff_90, $cutoff_30
         ));
         $deleted = is_int($deleted) && $deleted > 0 ? $deleted : 0;
         $alert_total += $deleted;

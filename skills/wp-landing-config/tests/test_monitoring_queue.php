@@ -113,8 +113,12 @@ $retry = queue_alert_row();
 $assert(($retry['telegram_status'] ?? '') === 'retry_wait', 'only definite 429 becomes retry_wait');
 $assert(strtotime((string)($retry['due_at'] ?? '')) === 1784193600, 'Telegram retry_after is clamped to 3600 seconds on existing due_at');
 $source = file_get_contents(__DIR__ . '/../mu-plugin/landing-config/includes/monitoring-alerts.php');
-$queue_source = substr((string)$source, (int)strpos((string)$source, 'function claim_next_alert'));
+$claim_start = (int)strpos((string)$source, 'function claim_next_alert');
+$claim_end = (int)strpos((string)$source, 'function configured_monitor_telegram_integration_id', $claim_start);
+$queue_source = substr((string)$source, $claim_start, $claim_end - $claim_start);
 $assert(!str_contains($queue_source, 'next_attempt_at'), 'alert queue never references nonexistent next_attempt_at');
+$assert(str_contains($queue_source, "incident_kind<>'javascript_stall'"),
+    'the main Telegram claim skips browser-only stalls so critical alerts cannot wait behind them');
 
 // Third total call is terminal even when Telegram keeps returning 429.
 global $wpdb;
@@ -127,17 +131,199 @@ lr_queue_row($third);
 $terminal = queue_alert_row();
 $assert(($terminal['telegram_status'] ?? '') === 'failed' && (int)($terminal['send_attempts'] ?? 0) === 3, 'third 429 is terminal failed with no fourth call');
 
+// A malformed success response for an alert type that is still enabled must
+// remain terminal-unknown rather than being marked sent.
+queue_reset();
+\LandingConfig\Monitoring\record_incident(
+    'integration_failure', 'critical', null, 43, 8, 'roistat',
+    'failed_permanent', 'provider_4xx', 400, '', 1784190000
+);
+$malformed_success = queue_alert_row();
+lr_queue_row($malformed_success);
+lr_set_http(['response' => ['code' => 200], 'body' => '{"ok":true}', 'headers' => []]);
+\LandingConfig\Monitoring\run_alert_queue(1, 1784190000);
+$unknown = queue_alert_row();
+$assert(($unknown['telegram_status'] ?? '') === 'unknown',
+    'malformed empty 2xx is terminal unknown without resend');
+
 queue_reset();
 \LandingConfig\Monitoring\record_incident(
     'javascript_stall', 'warning', '22222222-2222-4222-8222-222222222222',
     null, null, '', 'submit_attempt', 'browser_javascript_stall', null, '', 1784190000
 );
 $row = queue_alert_row();
-lr_queue_row($row);
-lr_set_http(['response' => ['code' => 200], 'body' => '{"ok":true}', 'headers' => []]);
-\LandingConfig\Monitoring\run_alert_queue(1, 1784190000);
-$unknown = queue_alert_row();
-$assert(($unknown['telegram_status'] ?? '') === 'unknown', 'malformed empty 2xx is terminal unknown without resend');
+$assert(($row['telegram_status'] ?? '') === 'suppressed',
+    'browser-only stall is recorded for diagnostics but is not queued for Telegram');
+
+// A repeated fingerprint may belong to a historical row that was sent before
+// the new policy. The new occurrence must normalize that row to suppressed.
+$wpdb->update(\LandingConfig\DB\get_monitor_alerts_table_name(), [
+    'telegram_status' => 'sent',
+    'sent_at' => \LandingConfig\Monitoring\utc_mysql(1781598000),
+], ['id' => (int)$row['id']]);
+$GLOBALS['wpdb']->query_log = [];
+\LandingConfig\Monitoring\record_incident(
+    'javascript_stall', 'warning', '22222222-2222-4222-8222-222222222222',
+    null, null, '', 'submit_attempt', 'browser_javascript_stall', null, '', 1784190060
+);
+$duplicate_sql = implode("\n", $GLOBALS['wpdb']->query_log);
+$row = queue_alert_row();
+$assert(($row['telegram_status'] ?? '') === 'suppressed'
+    && strtotime((string)($row['last_seen_at'] ?? '')) === 1784190060,
+    'a repeated historical stall is normalized and retained from its latest occurrence');
+$expected_duplicate_suffix =
+    "telegram_status=IF(VALUES(telegram_status)='suppressed','suppressed',telegram_status),"
+    . "locked_at=IF(VALUES(telegram_status)='suppressed',NULL,locked_at),"
+    . "lock_token=IF(VALUES(telegram_status)='suppressed',NULL,lock_token)";
+$assert(str_ends_with($duplicate_sql, $expected_duplicate_suffix),
+    'duplicate normalization uses the exact safe status and lock expressions');
+
+// A stall that was already pending before this policy was deployed must also
+// be suppressed instead of leaking one final noisy Telegram message.
+$wpdb->update(\LandingConfig\DB\get_monitor_alerts_table_name(), [
+    'telegram_status' => 'pending',
+], ['id' => (int)$row['id']]);
+$legacy_pending = queue_alert_row();
+lr_queue_row($legacy_pending);
+lr_queue_row(null);
+lr_set_http(['response' => ['code' => 200], 'body' => '{"ok":true,"result":{"message_id":989}}', 'headers' => []]);
+$suppressed_summary = \LandingConfig\Monitoring\run_alert_queue(1, 1784190000);
+$suppressed = queue_alert_row();
+$assert(($suppressed['telegram_status'] ?? '') === 'suppressed',
+    'legacy pending browser-only stall is suppressed before Telegram delivery');
+$assert($GLOBALS['_lr_http_requests'] === [], 'suppressed browser-only stall makes no Telegram request');
+$assert(($suppressed_summary['processed'] ?? -1) === 0,
+    'suppressed browser-only stall is not counted as a Telegram delivery attempt');
+
+// Old rows can also be waiting for a future retry, already resolved, or have
+// exhausted their attempts. They still need to leave the Telegram queue.
+queue_reset();
+\LandingConfig\Monitoring\record_incident(
+    'javascript_stall', 'warning', '44444444-4444-4444-8444-444444444444',
+    null, null, '', 'submit_attempt', 'browser_javascript_stall', null, '', 1784190000
+);
+$legacy_retry = queue_alert_row();
+$wpdb->update(\LandingConfig\DB\get_monitor_alerts_table_name(), [
+    'telegram_status' => 'retry_wait',
+    'send_attempts' => 3,
+    'due_at' => \LandingConfig\Monitoring\utc_mysql(1784197200),
+    'resolved_at' => \LandingConfig\Monitoring\utc_mysql(1784190000),
+], ['id' => (int)$legacy_retry['id']]);
+$legacy_retry = queue_alert_row();
+$sweep_exists = function_exists('LandingConfig\\Monitoring\\suppress_queued_non_telegram_alerts');
+$assert($sweep_exists, 'a separate legacy suppression sweep exists');
+if ($sweep_exists) {
+    $GLOBALS['wpdb']->query_log = [];
+    $swept = \LandingConfig\Monitoring\suppress_queued_non_telegram_alerts(100);
+    $sweep_sql = implode("\n", $GLOBALS['wpdb']->query_log);
+    $assert($swept === 1 && (queue_alert_row()['telegram_status'] ?? '') === 'suppressed',
+        'legacy retry rows are suppressed even when future, resolved, or attempts are exhausted');
+    $assert(str_contains(
+        $sweep_sql,
+        "WHERE incident_kind='javascript_stall' AND telegram_status IN ('pending','retry_wait') ORDER BY id LIMIT 100"
+    ), 'legacy suppression SQL targets both and only pending/retry browser stalls');
+    $assert(!str_contains($sweep_sql, 'due_at<=')
+        && !str_contains($sweep_sql, 'resolved_at IS NULL')
+        && !str_contains($sweep_sql, 'send_attempts<'),
+        'legacy suppression does not leave unusual old rows stuck forever');
+}
+
+// Last line of defence: even a row that was already claimed before rollout
+// must not make a Telegram HTTP request.
+$GLOBALS['_lr_http_requests'] = [];
+lr_set_http(['response' => ['code' => 200], 'body' => '{"ok":true,"result":{"message_id":990}}', 'headers' => []]);
+$blocked_send = \LandingConfig\Monitoring\send_monitoring_alert($legacy_retry, 1784190000);
+$assert(($blocked_send['status'] ?? '') === 'suppressed'
+    && $GLOBALS['_lr_http_requests'] === [],
+    'a browser-only stall is rejected again immediately before Telegram');
+
+// Cleaning old noise and sending a critical alert happen in the same cron run.
+if ($sweep_exists) {
+    queue_reset();
+    \LandingConfig\Monitoring\record_incident(
+        'javascript_stall', 'warning', '55555555-5555-4555-8555-555555555555',
+        null, null, '', 'submit_attempt', 'browser_javascript_stall', null, '', 1784190000
+    );
+    $wpdb->update(\LandingConfig\DB\get_monitor_alerts_table_name(), [
+        'telegram_status' => 'pending',
+    ], ['id' => (int)queue_alert_row()['id']]);
+    \LandingConfig\Monitoring\record_incident(
+        'missing_lead', 'critical', '66666666-6666-4666-8666-666666666666',
+        null, null, '', 'request_failed', 'missing_wordpress_lead', null, '', 1784190000
+    );
+    $rows = lr_rows(\LandingConfig\DB\get_monitor_alerts_table_name());
+    $legacy_stall = array_values(array_filter($rows,
+        static fn(array $candidate): bool => ($candidate['incident_kind'] ?? '') === 'javascript_stall'))[0];
+    $critical = array_values(array_filter($rows,
+        static fn(array $candidate): bool => ($candidate['incident_kind'] ?? '') === 'missing_lead'))[0];
+    lr_queue_row($critical);
+    lr_queue_row(null); // no optional form context
+    lr_queue_row(null); // no private audit pointer
+    lr_set_http(['response' => ['code' => 200], 'body' => '{"ok":true,"result":{"message_id":991}}', 'headers' => []]);
+    $mixed_summary = \LandingConfig\Monitoring\run_alert_queue(1, 1784190000);
+    $rows = lr_rows(\LandingConfig\DB\get_monitor_alerts_table_name());
+    $statuses = array_column($rows, 'telegram_status', 'incident_kind');
+    $assert(($statuses['javascript_stall'] ?? '') === 'suppressed'
+        && ($statuses['missing_lead'] ?? '') === 'sent'
+        && ($mixed_summary['sent'] ?? 0) === 1,
+        'old browser noise never delays the next critical missing-lead alert');
+    $assert(count($GLOBALS['_lr_http_requests']) === 1,
+        'mixed queue sends only the critical Telegram message');
+
+    // More old rows than one cleanup batch must still not block a critical
+    // alert. The remaining noise is drained on the next run.
+    queue_reset();
+    for ($index = 1; $index <= 101; $index++) {
+        $submission_id = '70000000-0000-4000-8000-' . str_pad((string)$index, 12, '0', STR_PAD_LEFT);
+        \LandingConfig\Monitoring\record_incident(
+            'javascript_stall', 'warning', $submission_id,
+            null, null, '', 'submit_attempt', 'browser_javascript_stall', null, '', 1784190000
+        );
+    }
+    foreach (lr_rows(\LandingConfig\DB\get_monitor_alerts_table_name()) as $candidate) {
+        $wpdb->update(\LandingConfig\DB\get_monitor_alerts_table_name(), [
+            'telegram_status' => 'pending',
+        ], ['id' => (int)$candidate['id']]);
+    }
+    \LandingConfig\Monitoring\record_incident(
+        'missing_lead', 'critical', '77777777-7777-4777-8777-777777777777',
+        null, null, '', 'request_failed', 'missing_wordpress_lead', null, '', 1784190000
+    );
+    $GLOBALS['_lr_execute_monitor_claim_sql'] = true;
+    $GLOBALS['wpdb']->query_log = [];
+    lr_set_http(['response' => ['code' => 200], 'body' => '{"ok":true,"result":{"message_id":992}}', 'headers' => []]);
+    $large_backlog_summary = \LandingConfig\Monitoring\run_alert_queue(1, 1784190000);
+    \LandingConfig\Monitoring\run_alert_queue(1, 1784190000);
+    $claim_queries = array_values(array_filter(
+        $GLOBALS['wpdb']->query_log,
+        static fn(string $query): bool => str_starts_with($query, 'SELECT * FROM `')
+            && str_contains($query, 'landing_monitor_alerts')
+    ));
+    $GLOBALS['_lr_execute_monitor_claim_sql'] = false;
+    $rows = lr_rows(\LandingConfig\DB\get_monitor_alerts_table_name());
+    $remaining_noise = array_filter($rows, static fn(array $candidate): bool =>
+        ($candidate['incident_kind'] ?? '') === 'javascript_stall'
+        && ($candidate['telegram_status'] ?? '') !== 'suppressed');
+    $sent_critical = array_values(array_filter($rows,
+        static fn(array $candidate): bool => ($candidate['incident_kind'] ?? '') === 'missing_lead'))[0];
+    $assert(($large_backlog_summary['sent'] ?? 0) === 1
+        && ($sent_critical['telegram_status'] ?? '') === 'sent'
+        && $remaining_noise === [],
+        '101 old browser warnings cannot delay one critical alert and are drained safely');
+    $assert(count($GLOBALS['_lr_http_requests']) === 1,
+        'two queue workers still send the critical alert only once and no browser warning');
+    $expected_claim_sql = $wpdb->prepare(
+        "SELECT * FROM `" . \LandingConfig\DB\get_monitor_alerts_table_name()
+        . "` WHERE telegram_status IN ('pending','retry_wait') "
+        . "AND incident_kind<>'javascript_stall' AND resolved_at IS NULL "
+        . "AND due_at<=%s AND send_attempts<%d ORDER BY due_at,id LIMIT 1",
+        \LandingConfig\Monitoring\utc_mysql(1784190000),
+        \LandingConfig\Monitoring\MAX_SEND_ATTEMPTS
+    );
+    $assert($claim_queries !== []
+        && array_values(array_unique($claim_queries)) === [$expected_claim_sql],
+        'backlog test executes only the exact canonical critical-claim SQL');
+}
 
 queue_reset();
 \LandingConfig\Monitoring\record_incident(
