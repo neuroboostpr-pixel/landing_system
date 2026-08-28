@@ -52,10 +52,9 @@ function allowed_resolutions(): array { return ['','external_recovered','wordpre
 function utc_mysql(int $timestamp): string { return gmdate('Y-m-d H:i:s', $timestamp); }
 
 function should_deliver_incident_to_telegram(string $kind): bool {
-    // Browser-only stalls are too ambiguous for the sales chat: ordinary
-    // validation and dropped telemetry can both produce the same timeline.
-    // Keep the safe incident for diagnostics, but do not notify Telegram.
-    return $kind !== 'javascript_stall';
+    // The sales Telegram chat is reserved for real lead cards. Monitoring
+    // incidents remain in the private WordPress log for diagnostics.
+    return false;
 }
 
 function is_valid_submission_id(?string $submission_id): bool {
@@ -496,8 +495,7 @@ function suppress_queued_non_telegram_alerts(int $limit = 100): int {
     $table = get_monitor_alerts_table_name();
     $changed = $wpdb->query($wpdb->prepare(
         "UPDATE `{$table}` SET telegram_status='suppressed',locked_at=NULL,lock_token=NULL "
-        . "WHERE incident_kind='javascript_stall' "
-        . "AND telegram_status IN ('pending','retry_wait') ORDER BY id LIMIT %d",
+        . "WHERE telegram_status IN ('pending','retry_wait','sending') ORDER BY id LIMIT %d",
         $limit
     ));
     return is_int($changed) && $changed > 0 ? $changed : 0;
@@ -509,8 +507,8 @@ function claim_next_alert(?int $now = null): ?array {
     $table = get_monitor_alerts_table_name();
     $row = $wpdb->get_row($wpdb->prepare(
         "SELECT * FROM `{$table}` WHERE telegram_status IN ('pending','retry_wait') "
-        . "AND incident_kind<>'javascript_stall' AND resolved_at IS NULL "
-        . "AND due_at<=%s AND send_attempts<%d ORDER BY due_at,id LIMIT 1",
+        . "AND resolved_at IS NULL AND due_at<=%s AND send_attempts<%d "
+        . "ORDER BY due_at,id LIMIT 1",
         utc_mysql($now), MAX_SEND_ATTEMPTS
     ), ARRAY_A);
     if (!is_array($row)) { return null; }
@@ -520,8 +518,8 @@ function claim_next_alert(?int $now = null): ?array {
     if ($id <= 0 || !in_array($status, ['pending','retry_wait'], true) || $attempts >= MAX_SEND_ATTEMPTS) {
         return null;
     }
-    // Defence in depth for unexpected/stale snapshots returned by a database
-    // proxy or test double. The real SELECT above already excludes this type.
+    // Defence in depth: even an eligible legacy queue row is rejected by the
+    // current no-monitoring-in-Telegram policy before it can be claimed.
     if (!should_deliver_incident_to_telegram((string)($row['incident_kind'] ?? ''))) {
         $wpdb->update($table, [
             'telegram_status' => 'suppressed',
@@ -1018,8 +1016,8 @@ function run_scan_cron(): void {
 function run_queue_cron(): void {
     if (!is_enabled()) { return; }
     try {
-        mark_stale_alerts_unknown();
         run_alert_queue();
+        mark_stale_alerts_unknown();
     } catch (\Throwable $ignored) {
         update_option(RUN_STATUS_OPTION, 'failed');
         error_log('[landing-config] monitor_queue_failed');

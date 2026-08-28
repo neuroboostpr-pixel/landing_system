@@ -54,9 +54,11 @@ $GLOBALS['_lr_capabilities'] = ['manage_options' => true];
 ob_start();
 \LandingConfig\MonitoringAdmin\render_page();
 $html = (string)ob_get_clean();
-foreach (['email_binding_ok','neuroboost_disabled','roistat_crm_enabled','Отправить [TEST — DO NOT CONTACT]'] as $safe_label) {
+foreach (['email_binding_ok','neuroboost_disabled','roistat_crm_enabled','Записать тестовый инцидент (без Telegram)'] as $safe_label) {
     $assert(str_contains($html, $safe_label), "dashboard shows safe label {$safe_label}");
 }
+$assert(!str_contains($html, 'Отправить [TEST — DO NOT CONTACT]'),
+    'dashboard does not promise a technical Telegram test');
 foreach (['elapova00@gmail.com','old-neuroboost@example.com','SECRET-BOT','roistat.invalid/secret'] as $secret) {
     $assert(!str_contains($html, $secret), "dashboard never renders {$secret}");
 }

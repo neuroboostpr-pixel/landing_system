@@ -61,7 +61,7 @@ function render_page(): void {
       <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
         <?php wp_nonce_field(TEST_ALERT_ACTION); ?>
         <input type="hidden" name="action" value="<?php echo esc_attr(TEST_ALERT_ACTION); ?>">
-        <button type="submit" class="button">Отправить [TEST — DO NOT CONTACT]</button>
+        <button type="submit" class="button">Записать тестовый инцидент (без Telegram)</button>
       </form>
 
       <?php if (defined('LP_FALLBACK_TEST_MODE') && LP_FALLBACK_TEST_MODE === true): ?>

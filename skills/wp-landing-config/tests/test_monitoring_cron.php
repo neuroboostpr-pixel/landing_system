@@ -70,6 +70,30 @@ if (function_exists('LandingConfig\\Monitoring\\run_delivery_cron_steps')) {
 }
 $assert($delivery_continued, 'reconciliation exception cannot prevent already queued lead delivery');
 
+// The production cron must apply the no-Telegram policy before converting old
+// queue locks to another terminal state.
+lr_reset_state();
+update_option('landing_monitor_enabled', '1');
+$legacy_id = \LandingConfig\Monitoring\record_incident(
+    'missing_lead', 'critical', '88888888-8888-4888-8888-888888888888',
+    null, null, '', 'request_failed', 'missing_wordpress_lead', null, '', 1784190000
+);
+$alerts_table = \LandingConfig\DB\get_monitor_alerts_table_name();
+$GLOBALS['wpdb']->update($alerts_table, [
+    'telegram_status' => 'sending',
+    'locked_at' => \LandingConfig\Monitoring\utc_mysql(1784189800),
+    'lock_token' => 'legacy-lock',
+], ['id' => $legacy_id]);
+lr_queue_results([['id' => $legacy_id]]);
+\LandingConfig\Monitoring\run_queue_cron();
+$legacy_row = lr_rows($alerts_table)[0] ?? [];
+$assert(($legacy_row['telegram_status'] ?? '') === 'suppressed'
+    && empty($legacy_row['locked_at'])
+    && empty($legacy_row['lock_token']),
+    'production queue cron suppresses and unlocks an old technical send');
+$assert($GLOBALS['_lr_http_requests'] === [],
+    'production queue cron makes no technical Telegram request');
+
 lr_reset_state();
 \LandingConfig\Monitoring\touch_heartbeat(true, 1784190000);
 $assert((int)get_option(\LandingConfig\Monitoring\HEARTBEAT_OPTION, 0) === 1784190000, 'healthy wrapper writes integer heartbeat');

@@ -271,7 +271,7 @@ final class LeadReliabilityWpdb extends MockWpdbInsert {
         }
         if (preg_match(
             "/UPDATE\\s+`?([^`\\s]+landing_monitor_alerts)`?\\s+SET\\s+telegram_status='suppressed',"
-            . ".*WHERE\\s+incident_kind='javascript_stall'.*LIMIT\\s+(\\d+)/is",
+            . ".*WHERE\\s+.*LIMIT\\s+(\\d+)/is",
             (string)$sql,
             $match
         )) {
@@ -281,10 +281,12 @@ final class LeadReliabilityWpdb extends MockWpdbInsert {
             $statuses = isset($status_match[1])
                 ? array_map(static fn(string $status): string => trim($status, " '\""), explode(',', $status_match[1]))
                 : [];
+            preg_match("/incident_kind\\s*=\\s*'([^']+)'/i", (string)$sql, $kind_match);
+            $required_kind = (string)($kind_match[1] ?? '');
             $changed = 0;
             foreach ($this->tables[$table] ?? [] as $index => $row) {
                 if ($changed >= $limit) { break; }
-                if (($row['incident_kind'] ?? '') !== 'javascript_stall'
+                if (($required_kind !== '' && ($row['incident_kind'] ?? '') !== $required_kind)
                     || !in_array(($row['telegram_status'] ?? ''), $statuses, true)) {
                     continue;
                 }
